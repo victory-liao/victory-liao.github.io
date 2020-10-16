@@ -226,17 +226,12 @@ numyy:复制 光标所在行开始向下的num行<br><br>
 <p>numG:快速定位到第num行代码<br><br>G:快速回到整个代码的最后一行<br><br>gg:快速回到整个代码的第一行<br><br></p>
 <p>w:向后跳一个单词的长度<br><br>b：向前跳一个单词的长度<br><br></p>
 <p>u:撤销刚刚的操作<br><br>ctrl+r：反撤销<br><br></p>
-<p>选中一片代码<br><br>v:<br><br>V:<br></p>
-<blockquote>
-<blockquote>
-<p>:向右移动代码<br><br>&lt;&lt;:向左移动代码<br><br></p>
-</blockquote>
-</blockquote>
+<p>选中一片代码<br><br>v:<br><br>V:<br><br>‘&gt;&gt;:向右移动代码<br><br>&lt;&lt;:向左移动代码<br><br></p>
 <p>.:重复执行上一次的命令<br><br></p>
 <p>r:替换一个字符<br><br>R:替换光标以及后边的字符<br><br></p>
 <p>/string:查找 n:下一个 N：上一个<br><br></p>
 <p>shift+zz==wq<br><br></p>
-<p>末行模式：<br><br>w:save<br><br>q:exit<br><br>wq:save and exit<br><br></p>
+<p>末行模式：<br><br>w:保存<br><br>q:退出<br><br>wq:保存并退出<br><br><br>x:退出</p>
 <h1>vim三种命令模式</h1>
 <img src="../images/vim.jpg" alt="vim command mode">  
 
@@ -582,6 +577,88 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>系统编程</tag>
         <tag>多进程拷贝文件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Algorithms | chapter2</title>
+    <url>/2020/10/16/algorithms-chap2/</url>
+    <content><![CDATA[<h1 id="第二章-递归与分治策略"><a href="#第二章-递归与分治策略" class="headerlink" title="第二章 递归与分治策略"></a>第二章 递归与分治策略</h1><p><b style="color:red">分治与递归经常同时应用在算法设计中</b></p>
+<h2 id="递归（Recursion）"><a href="#递归（Recursion）" class="headerlink" title="递归（Recursion）"></a>递归（Recursion）</h2><p>递归算法—<b>直接或间接地调用自身</b>的较小模式的算法<br>递归函数—用函数自身的较小模式给出其定义的函数</p>
+<a id="more"></a>
+<h3 id="example1-Fibonacci-Series"><a href="#example1-Fibonacci-Series" class="headerlink" title="example1:Fibonacci Series"></a>example1:Fibonacci Series</h3><p>Code1:</p>
+<pre><code>fibonacci(int n)
+&#123;
+    if(n&lt;=1) return 1;//递归边界
+    else return fibonacci(n-1)+fibonacci(n-2);//递归方程
+&#125;</code></pre>
+<p>时间复杂度:T(n)=sqrt(2)^n<br>时间复杂度过高的原因：存在很多重复的计算</p>
+<p>Code2:</p>
+<pre><code>fibonacci(int n)
+&#123;
+    int f[3]=&#123;1,1&#125;;
+
+    for(i=0;i&lt;=n;i++)
+    &#123;
+        f[2]=f[0]+f[1]; f[0]=f[1]; f[1]=f[2];
+    &#125;
+
+    return f[2];
+&#125;</code></pre>
+<p>时间复杂度：O(n)</p>
+<p><b style="color:red">设计更快的算法！！！</b></p>
+<h3 id="example2-Hanoi塔"><a href="#example2-Hanoi塔" class="headerlink" title="example2:Hanoi塔"></a>example2:Hanoi塔</h3><p>Code:</p>
+<pre><code>hanoi(int n,char a,char b,char c)//T(n)=O(2^n)
+&#123;//将塔座a上的盘子移到塔座b上，塔座c为辅助塔座
+    if(n&gt;0)
+    &#123;
+        hanoi(n-1,a,c,b);
+        move(a,b);
+        hanoi(n-1,c,b,a);
+    &#125;
+&#125;</code></pre>
+<h3 id="递归小结"><a href="#递归小结" class="headerlink" title="递归小结"></a>递归小结</h3><p>优点：结构清晰、可读性强—&gt;设计算法、调试程序比较方便<br>确定：程序运行效率低</p>
+<h2 id="分治-Divide-and-Conquer"><a href="#分治-Divide-and-Conquer" class="headerlink" title="分治(Divide and Conquer)"></a>分治(Divide and Conquer)</h2><h3 id="适用条件："><a href="#适用条件：" class="headerlink" title="适用条件："></a>适用条件：</h3><ol>
+<li>该问题的规模缩小到一定程度就可以容易地解决</li>
+<li>该问题<b>可以分解为若干个规模较小的相同问题</b>，即该问题具有最优子结构性质</li>
+<li>该问题分解出的子问题的解可以<b>合并</b>为该问题的解</li>
+<li>该问题分解出的各个子问题是相互独立的（<b>子问题之间不包含公共的子问题</b>）</li>
+</ol>
+
+<h3 id="基本步骤："><a href="#基本步骤：" class="headerlink" title="基本步骤："></a>基本步骤：</h3><p>divide-and-conquer(p)<br>{<br>    if(|p|&lt;=n0) naive(p);//解决朴素问题<br>    divide p into smaller p1,p2…pa//分解问题<br>    for(i=1;i&lt;=a;i++)<br>    {<br>        yi=divide-and-conquer(pi);//递归的解各子问题<br>    }<br>    return merge(y1,y2…ya);将子问题的解合并为原问题解<br>}</p>
+<p><b style="color:yellow">Note:</b><br>在用分治法设计算法时，最好使子问题的规模大致相同(将一个问题分为大小相等的a个子问题的处理方法是行之有效的)。<br>这种做法出自<strong>平衡子问题</strong>的思想</p>
+<h3 id="example1-Binary-Search-Algorithm"><a href="#example1-Binary-Search-Algorithm" class="headerlink" title="example1:Binary Search Algorithm"></a>example1:Binary Search Algorithm</h3><p>Code:</p>
+<pre><code>binarySearch(int a[],int x)//T(n) = O(logn)
+&#123;
+    int n = sizeof(a),left = 0,right = n-1;
+
+    while (left&lt;=right)
+    &#123;
+        int middle = (left+right)/2;
+        if(x == a[middle]) return middle;
+        if(x&gt;a[middle]) left = middle + 1;
+        else right = middle-1;
+    &#125;
+
+    return -1;//x not found
+&#125;</code></pre>
+<h3 id="example2-Powering-a-number"><a href="#example2-Powering-a-number" class="headerlink" title="example2:Powering a number"></a>example2:Powering a number</h3><p><b>Problem:</b>Compute a^n,where n is subjected to N.<br><b>Naive algorithm:</b>O(n)<br><b>Divide-and-conquer algorithm:</b><br>Code:</p>
+<pre><code>power(int a,int n)//T(n)=O(logn)
+&#123;
+    if(n==1) return a;
+    else if(n%2==0) return power(a,n/2)*power(a,n/2);
+    else return power(a,(n-1)/2*power(a,(n-1)/2*a);
+&#125;</code></pre>
+]]></content>
+      <categories>
+        <category>Algorithms</category>
+      </categories>
+      <tags>
+        <tag>递归</tag>
+        <tag>分治</tag>
+        <tag>Fibonacci</tag>
+        <tag>Hanoi</tag>
+        <tag>Binary Search</tag>
+        <tag>Powering a number</tag>
       </tags>
   </entry>
 </search>
