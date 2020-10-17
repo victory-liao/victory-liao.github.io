@@ -570,9 +570,8 @@ if __name__ == &quot;__main__&quot;:
     main()</code></pre>
 ]]></content>
       <categories>
-        <category>python</category>
-        <category>python 小项目</category>
-        <category>系统编程-线程</category>
+        <category>Python</category>
+        <category>系统编程</category>
       </categories>
       <tags>
         <tag>系统编程</tag>
@@ -693,6 +692,68 @@ lib.sayHello()</code></pre>
       </categories>
       <tags>
         <tag>python中使用c</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python | 网络编程 | udp+多线程模拟QQ</title>
+    <url>/2020/10/17/udp-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E6%8B%9FQQ/</url>
+    <content><![CDATA[<h1 id="在linux环境下使用-udp-多线程-模拟QQ"><a href="#在linux环境下使用-udp-多线程-模拟QQ" class="headerlink" title="在linux环境下使用 udp+多线程 模拟QQ"></a>在linux环境下使用 <b>udp+多线程</b> 模拟QQ</h1><p>##分析<br><strong>程序主要的两个功能</strong>：</p>
+<ul>
+<li>发送数据（Send Data） </li>
+<li>接收数据（Reveive Data）</li>
+</ul>
+<p><strong>使用多线程的原因</strong><br>不使用多线程的情况下，在程序暂停等待发送方输入发送内容时，若发送方不输入内容，则程序一直卡在这里；此时另外一放发送数据由于程序暂时等待输入内容也不能打印消息。<br>使用了多线程，接收数据、发送数据的程序分别由一个线程来处理，且两个线程互不影响，发送方不输入内容时，另一方发送消息发送方就能接收到。<br>##Code</p>
+<pre><code># coding=utf-8
+# 1.receive data then print out
+from threading import Thread
+from socket import *
+
+def recvData():
+    while True:
+        recvInfo = udpSocket.recvfrom(1024)
+        print(&quot;&gt;&gt;%s:%s\n&lt;&lt;&quot;%(str(recvInfo[1]),recvInfo[0]),end=&quot;&quot;)
+
+# 2.detect the keyboard and send the data
+def sendData():
+    print(&quot;&lt;&lt;&quot;,end=&quot;&quot;)
+    while True:
+        sendInfo =  input(&quot;&quot;)
+        udpSocket.sendto(sendInfo.encode(&#39;gb2312&#39;),(destIp,destPort))
+
+udpSocket = None
+destIp = &quot;&quot;
+destPort = 0 
+
+def main():
+    global udpSocket
+    global destIp
+    global destPort
+
+    destIp = input(&quot;Destination ip:&quot;)
+    destPort = int(input(&quot;Destination port:&quot;))
+
+    udpSocket = socket(AF_INET,SOCK_DGRAM)
+    udpSocket.bind((&quot;&quot;,4567))
+
+    tr = Thread(target=recvData)
+    ts = Thread(target=sendData)
+
+    tr.start()
+    ts.start()
+
+    tr.join()
+    ts.join()
+
+if __name__ == &#39;__main__&#39;:
+    main()</code></pre>
+]]></content>
+      <categories>
+        <category>Python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>UDP</tag>
+        <tag>SOCKET</tag>
       </tags>
   </entry>
 </search>
