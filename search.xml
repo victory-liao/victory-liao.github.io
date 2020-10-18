@@ -753,4 +753,94 @@ if __name__ == &#39;__main__&#39;:
         <tag>SOCKET</tag>
       </tags>
   </entry>
+  <entry>
+    <title>使用tftp从服务器下载文件到客户端</title>
+    <url>/2020/10/18/%E4%BD%BF%E7%94%A8tftp%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E5%88%B0%E5%AE%A2%E6%88%B7%E7%AB%AF/</url>
+    <content><![CDATA[<h1 id="使用tftp协议从服务器下载文件到客户端"><a href="#使用tftp协议从服务器下载文件到客户端" class="headerlink" title="使用tftp协议从服务器下载文件到客户端"></a>使用tftp协议从服务器下载文件到客户端</h1><h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><pre><code>import struct
+from socket import *
+import time
+import os
+
+def main():
+
+
+    #0. 获取要下载的文件名字:
+    downloadFileName = raw_input(&quot;请输入要下载的文件名:&quot;)    
+
+    #1.创建socket
+    udpSocket = socket(AF_INET, SOCK_DGRAM)
+
+    requestFileData = struct.pack(&quot;!H%dsb5sb&quot;%len(downloadFileName), 1, downloadFileName, 0, &quot;octet&quot;, 0)
+
+    #2. 发送下载文件的请求
+    udpSocket.sendto(requestFileData, (&quot;192.168.119.215&quot;, 69))
+
+    flag = True #表示能够下载数据，即不擅长，如果是false那么就删除
+    num = 0
+    f = open(downloadFileName, &quot;w&quot;)
+
+    while True:
+        #3. 接收服务发送回来的应答数据
+        responseData = udpSocket.recvfrom(1024)
+
+        # print(responseData)
+        recvData, serverInfo = responseData
+
+        opNum = struct.unpack(&quot;!H&quot;, recvData[:2])
+
+        packetNum = struct.unpack(&quot;!H&quot;, recvData[2:4])
+
+        print(packetNum[0])
+
+        # print(&quot;opNum=%d&quot;%opNum)
+        # print(opNum)
+
+        # if 如果服务器发送过来的是文件的内容的话:
+        if opNum[0] == 3: #因为opNum此时是一个元组(3,)，所以需要使用下标来提取某个数据
+
+
+            #计算出这次应该接收到的文件的序号值，应该是上一次接收到的值的基础上+1
+            num = num + 1
+
+            # 如果一个下载的文件特别大，即接收到的数据包编号超过了2个字节的大小
+            # 那么会从0继续开始，所以这里需要判断，如果超过了65535 那么就改为0
+            if num==65536:
+                num = 0
+
+            # 判断这次接收到的数据的包编号是否是 上一次的包编号的下一个
+            # 如果是才会写入到文件中，否则不能写入（因为会重复）
+            if num == packetNum[0]:
+                # 把收到的数据写入到文件中
+                f.write(recvData[4:])
+                num = packetNum[0]
+
+            #整理ACK的数据包
+            ackData = struct.pack(&quot;!HH&quot;, 4, packetNum[0])
+            udpSocket.sendto(ackData, serverInfo)
+
+        elif opNum[0] == 5:
+            print(&quot;sorry，没有这个文件....&quot;)
+            flag = False
+
+        # time.sleep(0.1)
+
+        if len(recvData)&lt;516:
+            break
+
+    if flag == True:
+        f.close()
+    else:
+        os.unlink(downloadFileName)#如果没有要下载的文件，那么就需要把刚刚创建的文件进行删除
+
+if __name__ == &#39;__main__&#39;:
+    main()</code></pre>
+]]></content>
+      <categories>
+        <category>Python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>tftp</tag>
+      </tags>
+  </entry>
 </search>
