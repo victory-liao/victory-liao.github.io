@@ -843,4 +843,70 @@ if __name__ == &#39;__main__&#39;:
         <tag>tftp</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Python | 网络编程 | tcp的客户端/服务器端代码编写</title>
+    <url>/2020/10/22/tcp%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99/</url>
+    <content><![CDATA[<h1 id="tcp的客户端-服务器端代码编写"><a href="#tcp的客户端-服务器端代码编写" class="headerlink" title="tcp的客户端/服务器端代码编写"></a>tcp的客户端/服务器端代码编写</h1><h2 id="tcp服务器端代码编写"><a href="#tcp服务器端代码编写" class="headerlink" title="tcp服务器端代码编写"></a>tcp服务器端代码编写</h2><pre><code>#coding=utf-8
+from socket import *
+
+# 创建socket
+tcpSerSocket = socket(AF_INET, SOCK_STREAM)
+
+# 绑定本地信息
+address = (&#39;&#39;, 7788)
+tcpSerSocket.bind(address)
+
+# 使用socket创建的套接字默认的属性是主动的，使用listen将其变为被动的，这样就可以接收别人的链接了
+tcpSerSocket.listen(5)
+
+# 如果有新的客户端来链接服务器，那么就产生一个新的套接字专门为这个客户端服务器
+# newSocket用来为这个客户端服务
+# tcpSerSocket就可以省下来专门等待其他新客户端的链接
+newSocket, clientAddr = tcpSerSocket.accept()
+
+# 接收对方发送过来的数据，最大接收1024个字节
+recvData = newSocket.recv(1024)
+print(&#39;接收到的数据为:%s&#39;%recvData)
+
+# 发送一些数据到客户端
+newSocket.send(&quot;thank you !&quot;)
+
+# 关闭为这个客户端服务的套接字，只要关闭了，就意味着为不能再为这个客户端服务了，如果还需要服务，只能再次重新连接
+newSocket.close()
+
+# 关闭监听套接字，只要这个套接字关闭了，就意味着整个程序不能再接收任何新的客户端的连接
+tcpSerSocket.close()</code></pre>
+<a id="more"></a>
+<h2 id="tcp客户端代码编写"><a href="#tcp客户端代码编写" class="headerlink" title="tcp客户端代码编写"></a>tcp客户端代码编写</h2><pre><code>#coding=utf-8
+from socket import *
+
+# 创建socket
+tcpClientSocket = socket(AF_INET, SOCK_STREAM)
+
+# 链接服务器
+serAddr = (&#39;192.168.1.102&#39;, 7788)
+tcpClientSocket.connect(serAddr)
+
+# 提示用户输入数据
+sendData = input(&quot;请输入要发送的数据：&quot;)
+
+tcpClientSocket.send(sendData)
+
+# 接收对方发送过来的数据，最大接收1024个字节
+recvData = tcpClientSocket.recv(1024)
+print(&#39;接收到的数据为:%s&#39;%recvData)
+
+# 关闭套接字
+tcpClientSocket.close()</code></pre>
+]]></content>
+      <categories>
+        <category>Python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>tcp</tag>
+        <tag>tcp客户端</tag>
+        <tag>tcp服务器端</tag>
+      </tags>
+  </entry>
 </search>
