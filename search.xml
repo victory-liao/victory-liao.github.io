@@ -996,4 +996,35 @@ tcpClientSocket.close()</code></pre>
         <tag>Sacrifice</tag>
       </tags>
   </entry>
+  <entry>
+    <title>网络编程 | 单任务服务器的缺点</title>
+    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv</p>
+<a id="more"></a>
+
+<pre><code>import socket 
+
+serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverSocket.bind((&#39;&#39;,8080))
+serverSocket.listen(5)
+
+while True:
+    #如果没有客户端到来，程序将阻塞等待
+    clientSocket,clientAddr = serverSocket.accept()
+
+    while True:
+        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
+        recvData = newSocket.recv(1024)
+        if data:
+            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
+        else:
+            break</code></pre>
+]]></content>
+      <categories>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>单任务服务器</tag>
+      </tags>
+  </entry>
 </search>
