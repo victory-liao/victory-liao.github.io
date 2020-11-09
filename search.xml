@@ -1138,4 +1138,84 @@ Note:
         <tag>Protocol</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Web服务器</title>
+    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
+import socket
+import re
+
+from multiprocessing import Process
+
+# 设置静态文件根目录
+HTML_ROOT_DIR = &quot;./html&quot;
+
+
+def handle_client(client_socket):
+    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
+    # 获取客户端请求数据
+    request_data = client_socket.recv(1024)
+    print(&quot;request data:&quot;,request_data)
+    request_lines = request_data.splitlines()
+    for line in request_lines:
+        print(line)
+
+    # 解析请求报文
+    # &#39;GET / HTTP/1.1&#39;
+    request_start_line = request_lines[0]
+    #提取用户请求的文件名
+    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
+
+    if &quot;/&quot; == file_name:
+        file_name = &quot;/index.html&quot;
+    # 打开文件，读取内容
+    try:
+        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
+    except IOError:
+        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = &quot;the file is not found&quot;
+    else:
+        file_data = file.read()
+        file.close()
+
+        # 构造响应数据
+        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = file_data.decode(&quot;utf-8&quot;)
+
+    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
+    print(&quot;response:&quot;,response)
+
+    # 向客户端返回响应数据
+    client_socket.send(bytes(response,&quot;utf-8&quot;))
+
+    #关闭客户端链接
+    client_socket.close()
+
+def main():
+    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    #SOL_SOCKET:设置选项级别为SOCKET
+    #SO_REUSEADDR:1
+    server_socket.bind((&quot;&quot;,7788))
+    server_socket.listen(128)
+
+    while True:
+        client_socket,client_address= server_socket.accept()
+        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
+        handle_client_process = Process(target=handle_client,args=(client_socket,))
+        handle_client_process.start()
+        client_socket.close()
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre>
+<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
+<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
+]]></content>
+      <tags>
+        <tag>Web服务器</tag>
+      </tags>
+  </entry>
 </search>
