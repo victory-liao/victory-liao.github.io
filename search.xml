@@ -1586,87 +1586,30 @@ python3下的安装路径：
     <url>/2021/02/21/K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95-KNN/</url>
     <content><![CDATA[<h1 id="K近邻算法-KNN"><a href="#K近邻算法-KNN" class="headerlink" title="K近邻算法(KNN)"></a>K近邻算法(KNN)</h1><h2 id="KNN算法原理"><a href="#KNN算法原理" class="headerlink" title="KNN算法原理"></a>KNN算法原理</h2><p>k近邻法(k-nearest neighbor, k-NN)一种基本分类与回归方法。它的工作原理是：存在一个样本数据集合，也称作为训练样本集，并且样本集中每个数据都存在标签，即我们知道样本集中每一个数据与所属分类的对应关系。输入没有标签的新数据后，将新的数据的每个特征与样本集中数据对应的特征进行比较，然后算法提取样本最相似数据(最近邻)的分类标签。一般来说，我们只选择样本数据集中前k个最相似的数据，这就是k-近邻算法中k的出处，通常k是不大于20的整数。最后，选择k个最相似数据中出现次数最多的分类，作为新数据的分类。</p>
 <a id="more"></a>
-<h2 id="距离度量"><a href="#距离度量" class="headerlink" title="距离度量"></a>距离度量</h2><p>我们已经知道k-近邻算法根据特征比较，然后提取样本集中特征最相似数据（最近邻）的分类标签，那么如何进行比较？KNN算法通过距离（欧式距离）度量进行判断。</p>
+<h2 id="距离度量"><a href="#距离度量" class="headerlink" title="距离度量"></a>距离度量</h2><p>我们已经知道k-近邻算法根据特征比较，然后提取样本集中特征最相似数据（最近邻）的分类标签，那么如何进行比较？KNN算法通过距离（欧式距离）度量进行判断。<br><b>Note:</b>距离度量方法还有切比雪夫距离、马氏距离、巴氏距离等；</p>
 <h2 id="简单k-近邻算法步骤"><a href="#简单k-近邻算法步骤" class="headerlink" title="简单k-近邻算法步骤"></a>简单k-近邻算法步骤</h2><p>1.计算已知类别数据集中的点与当前点的距离<br>2.按照距离递增次序排序<br>3.选取与当前点距离最小的k个点<br>4.确定前k个点所在类别的出现频率<br>5.返回前k个点所出现频率最高的类别作为当前点的预测分类</p>
-<h2 id="简单KNN实战实例-电影分类：动作片or爱情片？"><a href="#简单KNN实战实例-电影分类：动作片or爱情片？" class="headerlink" title="简单KNN实战实例(电影分类：动作片or爱情片？)"></a>简单KNN实战实例(电影分类：动作片or爱情片？)</h2><pre><code># -*- coding: UTF-8 -*-
-import numpy as np
-import operator
-
-&quot;&quot;&quot;
-函数说明:创建数据集
-
-Parameters:
-    无
-Returns:
-    group - 数据集
-    labels - 分类标签
-Modify:
-    2017-07-13
-&quot;&quot;&quot;
-def createDataSet():
-    #四组二维特征
-    group = np.array([[1,101],[5,89],[108,5],[115,8]])
-    #四组特征的标签
-    labels = [&#39;爱情片&#39;,&#39;爱情片&#39;,&#39;动作片&#39;,&#39;动作片&#39;]
-    return group, labels
-
-&quot;&quot;&quot;
-函数说明:kNN算法,分类器
-
-Parameters:
-    inX - 用于分类的数据(测试集)
-    dataSet - 用于训练的数据(训练集)
-    labes - 分类标签
-    k - kNN算法参数,选择距离最小的k个点
-Returns:
-    sortedClassCount[0][0] - 分类结果
-
-Modify:
-    2017-07-13
-&quot;&quot;&quot;
-def classify0(inX, dataSet, labels, k):
-    #numpy函数shape[0]返回dataSet的行数
-    dataSetSize = dataSet.shape[0]
-    #在列向量方向上重复inX共1次(横向)，行向量方向上重复inX共dataSetSize次(纵向)
-    diffMat = np.tile(inX, (dataSetSize, 1)) - dataSet
-    #二维特征相减后平方
-    sqDiffMat = diffMat**2
-    #sum()所有元素相加，sum(0)列相加，sum(1)行相加
-    sqDistances = sqDiffMat.sum(axis=1)
-    #开方，计算出距离
-    distances = sqDistances**0.5
-    #返回distances中元素从小到大排序后的索引值
-    sortedDistIndices = distances.argsort()
-    #定一个记录类别次数的字典
-    classCount = &#123;&#125;
-    for i in range(k):
-        #取出前k个元素的类别
-        voteIlabel = labels[sortedDistIndices[i]]
-        #dict.get(key,default=None),字典的get()方法,返回指定键的值,如果值不在字典中返回默认值。
-        #计算类别次数
-        classCount[voteIlabel] = classCount.get(voteIlabel,0) + 1
-    #python3中用items()替换python2中的iteritems()
-    #key=operator.itemgetter(1)根据字典的值进行排序
-    #key=operator.itemgetter(0)根据字典的键进行排序
-    #reverse降序排序字典
-    sortedClassCount = sorted(classCount.items(),key=operator.itemgetter(1),reverse=True)
-    #返回次数最多的类别,即所要分类的类别
-    return sortedClassCount[0][0]
-
-if __name__ == &#39;__main__&#39;:
-    #创建数据集
-    group, labels = createDataSet()
-    #测试集
-    test = [101,20]
-    #kNN分类
-    test_class = classify0(test, group, labels, 3)
-    #打印分类结果
-    print(test_class)</code></pre>
-<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><hr>
+<hr>
 ## KNN的一般流程
-
-<p><a href="https://cuijiahua.com/blog/2017/11/ml_1_knn.html">KNN</a></p>
-]]></content>
+1.收集数据：爬虫/第三方提供的免费/收费数据。一般来讲，数据放在txt文本文件中，按照一定的格式进行存储，便于解析和处理。
+2.准备数据：使用python解析、预处理数据
+3.分析数据：可以使用很多方法对数据进行分析。例如使用Matplotlib将数据可视化
+4.测试算法：计算错误率
+5.使用算法：错误率在可接受范围内，就可以使用k-近邻算法进行分类
+## KNN的优缺点
+### 优点
+1.简单好用，容易理解，精度高，理论成熟，既可以用来做<b>分类</b>也可以用来做<b>回归</b>
+2.可用于数值型数据和离散型数据
+3.训练时间复杂度为O(n);无数据输入假定；
+4.对异常值不敏感
+### 缺点
+1.<b>计算复杂性高</b>；空间复杂性高
+2.样本不平衡问题（即有些类别的样本数量很多，而其他样本的数量很少）
+3.<b>一般数值很大的时候不用这个，计算量太大。但是单个样本也不能太少，否则容易发生误分。</b>
+4.最大的缺点是无法给出数据的内在含义
+## 实战代码地址
+<a href="https://github.com/victory-liao/Machine-Learning">Click here to look up code</a>
+## 参考资源
+<a href="https://cuijiahua.com/blog/2017/11/ml_1_knn.html">KNN</a>]]></content>
       <categories>
         <category>机器学习</category>
         <category>KNN</category>
