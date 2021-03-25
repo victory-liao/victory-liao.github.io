@@ -217,10 +217,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-03-20 18:10:16 / Modified: 18:19:21" itemprop="dateCreated datePublished" datetime="2021-03-20T18:10:16+08:00">2021-03-20</time>
+              <time title="Created: 2021-03-20 18:10:16" itemprop="dateCreated datePublished" datetime="2021-03-20T18:10:16+08:00">2021-03-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-25 11:31:35" itemprop="dateModified" datetime="2021-03-25T11:31:35+08:00">2021-03-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -261,6 +267,15 @@
 <p><b>SMO算法的目标:</b><br>求出一系列alpha和b，一旦求出了这些alpha，就很容易计算出权重向量w并得到分隔超平面。</p>
 <p><b>SMO算法的工作原理是：</b><br>每次循环中选择两个alpha进行优化处理。一旦找到了一对合适的alpha，那么就增大其中一个同时减小另一个。这里所谓的”合适”就是指两个alpha必须符合以下两个条件，条件之一就是两个alpha必须要在间隔边界之外，而且第二个条件则是这两个alpha还没有进行过区间化处理或者不在边界上。</p>
 <p><b>注意：</b><br>实际上，对于目标函数，是存在一个假设(数据100%线性可分)的，但现实中的数据都不那么干净，这时我们就可以通过引入松弛变量ξ(slack variable)和惩罚参数C来允许有些数据点可以处于超平面的错误的一侧—&gt;约束条件的改变—&gt;目标函数的改变</p>
+<h2 id="SMO算法优化"><a href="#SMO算法优化" class="headerlink" title="SMO算法优化"></a>SMO算法优化</h2><p>启发式选择第二个alpha值</p>
+<h2 id="非线性SVM"><a href="#非线性SVM" class="headerlink" title="非线性SVM"></a>非线性SVM</h2><h3 id="核技巧"><a href="#核技巧" class="headerlink" title="核技巧"></a>核技巧</h3><p>对于非线性情况：SVM的处理方式是选择一个核函数。简而言之：在线性不可分的情况下，SVM通过某种事先选择的非线性映射（核函数）将输入变量映到一个高维特征空间，将其变成在高维空间线性可分，在这个高维空间中构造最优分类超平面。</p>
+<h3 id="建立非线性学习器分为两步："><a href="#建立非线性学习器分为两步：" class="headerlink" title="建立非线性学习器分为两步："></a>建立非线性学习器分为两步：</h3><p>1.首先使用一个非线性映射将数据变换到一个特征空间F；<br>2.然后在特征空间使用线性学习器分类。</p>
+<h3 id="核函数方法"><a href="#核函数方法" class="headerlink" title="核函数方法"></a>核函数方法</h3><p>在特征空间中直接计算内积 &lt;ϕ(xi),ϕ(x)&gt;的方法称为核函数方法</p>
+<p>核是一个函数k，对所有x,z∈X，满足k(x,z)=&lt;ϕ(xi),ϕ(x)&gt;，这里ϕ(·)是从原始输入空间X到内积空间F的映射。</p>
+<p>简而言之：如果不是用核技术，就会先计算线性映ϕ(x1)和ϕ(x2)，然后计算这它们的内积，使用了核技术之后，先把ϕ(x1)和ϕ(x2)的一般表达式&lt;ϕ(x1),ϕ(x2)&gt;=k(&lt;ϕ(x1),ϕ(x2) &gt;)计算出来，这里的&lt;·，·&gt;表示内积，k(·，·)就是对应的核函数</p>
+<p>将内积替换成核函数的方式被称为核技巧(kernel trick)。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="SVM的优缺点"><a href="#SVM的优缺点" class="headerlink" title="SVM的优缺点"></a>SVM的优缺点</h3><p>优点：<br>1.可用于线性/非线性分类，也可以用于回归，泛化错误率低，也就是说具有良好的学习能力，且学到的结果具有很好的推广性。<br>2.可以解决小样本情况下的机器学习问题，可以解决高维问题，可以避免神经网络结构选择和局部极小点问题。<br>3.SVM是最好的现成的分类器，现成是指不加修改可直接使用。并且能够得到较低的错误率，SVM可以对训练集之外的数据点做很好的分类决策。</p>
+<p>缺点：对参数调节和和函数的选择敏感。</p>
 
       
     </div>
