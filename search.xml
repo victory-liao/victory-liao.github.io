@@ -613,83 +613,21 @@ print(TestPrivacy.__name) # Output: AttributeError: type object &#39;TestPrivacy
       </tags>
   </entry>
   <entry>
-    <title>Web服务器</title>
-    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
-<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
-import socket
-import re
-
-from multiprocessing import Process
-
-# 设置静态文件根目录
-HTML_ROOT_DIR = &quot;./html&quot;
-
-
-def handle_client(client_socket):
-    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
-    # 获取客户端请求数据
-    request_data = client_socket.recv(1024)
-    print(&quot;request data:&quot;,request_data)
-    request_lines = request_data.splitlines()
-    for line in request_lines:
-        print(line)
-
-    # 解析请求报文
-    # &#39;GET / HTTP/1.1&#39;
-    request_start_line = request_lines[0]
-    #提取用户请求的文件名
-    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
-
-    if &quot;/&quot; == file_name:
-        file_name = &quot;/index.html&quot;
-    # 打开文件，读取内容
-    try:
-        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
-    except IOError:
-        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
-        response_headers = &quot;Server: My server\r\n&quot;
-        response_body = &quot;the file is not found&quot;
-    else:
-        file_data = file.read()
-        file.close()
-
-        # 构造响应数据
-        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
-        response_headers = &quot;Server: My server\r\n&quot;
-        response_body = file_data.decode(&quot;utf-8&quot;)
-
-    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
-    print(&quot;response:&quot;,response)
-
-    # 向客户端返回响应数据
-    client_socket.send(bytes(response,&quot;utf-8&quot;))
-
-    #关闭客户端链接
-    client_socket.close()
-
-def main():
-    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-    #SOL_SOCKET:设置选项级别为SOCKET
-    #SO_REUSEADDR:1
-    server_socket.bind((&quot;&quot;,7788))
-    server_socket.listen(128)
-
-    while True:
-        client_socket,client_address= server_socket.accept()
-        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
-        handle_client_process = Process(target=handle_client,args=(client_socket,))
-        handle_client_process.start()
-        client_socket.close()
-
-if __name__ == &quot;__main__&quot;:
-    main()</code></pre>
-<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
-<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
+    <title>UML | UML中的事物分类</title>
+    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
+<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
+<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
+<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
+<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
+<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
 ]]></content>
+      <categories>
+        <category>UML</category>
+      </categories>
       <tags>
-        <tag>Web服务器</tag>
+        <tag>UML</tag>
+        <tag>事物</tag>
       </tags>
   </entry>
   <entry>
@@ -781,6 +719,86 @@ if __name__ == &quot;__main__&quot;:
         <tag>Hanoi</tag>
         <tag>Binary Search</tag>
         <tag>Powering a number</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web服务器</title>
+    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
+import socket
+import re
+
+from multiprocessing import Process
+
+# 设置静态文件根目录
+HTML_ROOT_DIR = &quot;./html&quot;
+
+
+def handle_client(client_socket):
+    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
+    # 获取客户端请求数据
+    request_data = client_socket.recv(1024)
+    print(&quot;request data:&quot;,request_data)
+    request_lines = request_data.splitlines()
+    for line in request_lines:
+        print(line)
+
+    # 解析请求报文
+    # &#39;GET / HTTP/1.1&#39;
+    request_start_line = request_lines[0]
+    #提取用户请求的文件名
+    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
+
+    if &quot;/&quot; == file_name:
+        file_name = &quot;/index.html&quot;
+    # 打开文件，读取内容
+    try:
+        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
+    except IOError:
+        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = &quot;the file is not found&quot;
+    else:
+        file_data = file.read()
+        file.close()
+
+        # 构造响应数据
+        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = file_data.decode(&quot;utf-8&quot;)
+
+    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
+    print(&quot;response:&quot;,response)
+
+    # 向客户端返回响应数据
+    client_socket.send(bytes(response,&quot;utf-8&quot;))
+
+    #关闭客户端链接
+    client_socket.close()
+
+def main():
+    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    #SOL_SOCKET:设置选项级别为SOCKET
+    #SO_REUSEADDR:1
+    server_socket.bind((&quot;&quot;,7788))
+    server_socket.listen(128)
+
+    while True:
+        client_socket,client_address= server_socket.accept()
+        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
+        handle_client_process = Process(target=handle_client,args=(client_socket,))
+        handle_client_process.start()
+        client_socket.close()
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre>
+<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
+<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
+]]></content>
+      <tags>
+        <tag>Web服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -1716,6 +1734,22 @@ lib.sayHello()</code></pre>
       </tags>
   </entry>
   <entry>
+    <title>Emotion Recognition | 基于脑电的音乐情绪识别</title>
+    <url>/2021/05/22/%E5%9F%BA%E4%BA%8E%E8%84%91%E7%94%B5%E7%9A%84%E9%9F%B3%E4%B9%90%E6%83%85%E7%BB%AA%E8%AF%86%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="Spatiotemporal-Emotion-Recognition-using-Deep-CNN-Based-on-EEG-during-Music-Listening"><a href="#Spatiotemporal-Emotion-Recognition-using-Deep-CNN-Based-on-EEG-during-Music-Listening" class="headerlink" title="Spatiotemporal Emotion Recognition using Deep CNN Based on EEG during Music Listening"></a>Spatiotemporal Emotion Recognition using Deep CNN Based on EEG during Music Listening</h1><p><b>Considerations:</b><br>1.explore the model’s capabilities in varied window sizes and electrode orders<br>2.model’s complexity:(3conv ~ 6conv)</p>
+<p><b>Results:</b><br>temporal information in distinct window sizes significantly affects recognition performance</p>
+<p><b>Used Megthod:CNN</b><br>without mannually extracting features</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>Emotion Recognition</category>
+      </categories>
+      <tags>
+        <tag>EEG</tag>
+        <tag>Emotion Recognition</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>可视化 | 多个坐标轴可视化主要代码python</title>
     <url>/2021/03/11/%E5%A4%9A%E4%B8%AA%E5%9D%90%E6%A0%87%E8%BD%B4%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81python/</url>
     <content><![CDATA[<h1 id="多个坐标轴可视化主要代码"><a href="#多个坐标轴可视化主要代码" class="headerlink" title="多个坐标轴可视化主要代码"></a>多个坐标轴可视化主要代码</h1><p>在机器学习算法的使用中，我们需要使用多个坐标轴对一些过程数据/预测结果等进行可视化以便于进一步的分析，它的主要python代码如下：</p>
@@ -1831,6 +1865,29 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>开发遇到问题的解决</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Algorithms | 折半查找</title>
+    <url>/2021/05/24/%E6%8A%98%E5%8D%8A%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<h1 id="递归折半查找算法"><a href="#递归折半查找算法" class="headerlink" title="递归折半查找算法"></a>递归折半查找算法</h1><pre><code>def recursive_binary_search(arr, low, high, key):
+        if low &lt;= high:
+                mid = (low + high) // 2
+            if arr[mid] == key:
+                    return mid
+            elif key &lt; arr[mid]:
+                    return recursive_binary_search(arr, low, mid-1, key)
+            else:
+                    return recursive_binary_search(arr, mid+1, high, key)
+
+        return -1</code></pre>
+]]></content>
+      <categories>
+        <category>Algorithms</category>
+      </categories>
+      <tags>
+        <tag>Algorithms</tag>
+        <tag>折半查找</tag>
       </tags>
   </entry>
   <entry>
@@ -1991,6 +2048,19 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 机器学习分类的一般步骤</title>
+    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>分类</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习基础知识</title>
     <url>/2020/10/08/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
     <content><![CDATA[<h1>机器学习（Machine Learning,ML）</h1>
@@ -2092,6 +2162,21 @@ Note:
       </categories>
       <tags>
         <tag>机器学习实现脑电分类</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习 | 机器学习常用的两种验证方法</title>
+    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="机器学习常用的两种验证方法"><a href="#机器学习常用的两种验证方法" class="headerlink" title="机器学习常用的两种验证方法"></a>机器学习常用的两种验证方法</h1><p>1.Leave One Subject Out<br>2.K Fold Cross Validation</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>验证方法</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>Leave One Subject Out</tag>
+        <tag>K Fold Cross Validation</tag>
       </tags>
   </entry>
   <entry>
@@ -2305,91 +2390,6 @@ Note:
       <tags>
         <tag>鸡尾酒宴会问题</tag>
         <tag>独立成分分析经典问题</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Emotion Recognition | 基于脑电的音乐情绪识别</title>
-    <url>/2021/05/22/%E5%9F%BA%E4%BA%8E%E8%84%91%E7%94%B5%E7%9A%84%E9%9F%B3%E4%B9%90%E6%83%85%E7%BB%AA%E8%AF%86%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="Spatiotemporal-Emotion-Recognition-using-Deep-CNN-Based-on-EEG-during-Music-Listening"><a href="#Spatiotemporal-Emotion-Recognition-using-Deep-CNN-Based-on-EEG-during-Music-Listening" class="headerlink" title="Spatiotemporal Emotion Recognition using Deep CNN Based on EEG during Music Listening"></a>Spatiotemporal Emotion Recognition using Deep CNN Based on EEG during Music Listening</h1><p><b>Considerations:</b><br>1.explore the model’s capabilities in varied window sizes and electrode orders<br>2.model’s complexity:(3conv ~ 6conv)</p>
-<p><b>Results:</b><br>temporal information in distinct window sizes significantly affects recognition performance</p>
-<p><b>Used Megthod:CNN</b><br>without mannually extracting features</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>Emotion Recognition</category>
-      </categories>
-      <tags>
-        <tag>EEG</tag>
-        <tag>Emotion Recognition</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>UML | UML中的事物分类</title>
-    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
-<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
-<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
-<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
-<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
-<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
-]]></content>
-      <categories>
-        <category>UML</category>
-      </categories>
-      <tags>
-        <tag>UML</tag>
-        <tag>事物</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Algorithms | 折半查找</title>
-    <url>/2021/05/24/%E6%8A%98%E5%8D%8A%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<h1 id="递归折半查找算法"><a href="#递归折半查找算法" class="headerlink" title="递归折半查找算法"></a>递归折半查找算法</h1><pre><code>def recursive_binary_search(arr, low, high, key):
-        if low &lt;= high:
-                mid = (low + high) // 2
-            if arr[mid] == key:
-                    return mid
-            elif key &lt; arr[mid]:
-                    return recursive_binary_search(arr, low, mid-1, key)
-            else:
-                    return recursive_binary_search(arr, mid+1, high, key)
-
-        return -1</code></pre>
-]]></content>
-      <categories>
-        <category>Algorithms</category>
-      </categories>
-      <tags>
-        <tag>Algorithms</tag>
-        <tag>折半查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 机器学习常用的两种验证方法</title>
-    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="机器学习常用的两种验证方法"><a href="#机器学习常用的两种验证方法" class="headerlink" title="机器学习常用的两种验证方法"></a>机器学习常用的两种验证方法</h1><p>1.Leave One Subject Out<br>2.K Fold Cross Validation</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>验证方法</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>Leave One Subject Out</tag>
-        <tag>K Fold Cross Validation</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 机器学习分类的一般步骤</title>
-    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
-    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>分类</tag>
       </tags>
   </entry>
 </search>
