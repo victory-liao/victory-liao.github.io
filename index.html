@@ -190,6 +190,130 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/01/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%85%83%E9%9F%B3%E5%AD%97%E6%AF%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/01/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%85%83%E9%9F%B3%E5%AD%97%E6%AF%8D/" class="post-title-link" itemprop="url">leetcode | 反转字符串中的元音字母</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-01 11:05:01 / Modified: 11:09:46" itemprop="dateCreated datePublished" datetime="2021-09-01T11:05:01+08:00">2021-09-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url" rel="index"><span itemprop="name">字符串</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="345-反转字符串中的元音字母"><a href="#345-反转字符串中的元音字母" class="headerlink" title="345.反转字符串中的元音字母"></a>345.反转字符串中的元音字母</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s ，仅反转字符串中的所有元音字母，并返回结果字符串。<br>元音字母包括 ‘a’、’e’、’i’、’o’、’u’，且可能以大小写两种形式出现。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reverse-vowels-of-a-string">题目链接</a>+</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.先将字符串中的元音字母的位置找出来，然后再将各元音字母反转<br>2.双指针<br>我们可以使用两个指针 i 和 j 对字符串相向地进行遍历。<br>具体地，指针 i 初始时指向字符串 s 的首位，指针 j 初始时指向字符串 s 的末位。在遍历的过程中，我们不停地将 i 向右移动，直到 i 指向一个元音字母（或者超出字符串的边界范围）；同时，我们不停地将 j 向左移动，直到 j 指向一个元音字母。此时，如果 i&lt;j，那么我们交换 i 和 j 指向的元音字母，否则说明所有的元音字母均已遍历过，就可以退出遍历的过程。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def reverseVowels(self, s: str) -&gt; str:
+        &quot;&quot;&quot;
+        find ans reverse
+        :param s:
+        :return:
+        &quot;&quot;&quot;
+        vowels = list()
+        s = list(s)
+        for i in range(len(s)):
+            ch = s[i].lower()
+            if ch == &#39;a&#39; or ch == &#39;e&#39; or ch == &#39;i&#39; or ch == &#39;o&#39; or ch == &#39;u&#39;:
+                vowels.append(i)
+
+        for i in range(len(vowels)//2):
+            s[vowels[i]], s[vowels[len(vowels) - i -1]] = s[vowels[len(vowels) - i -1]], s[vowels[i]]
+
+        return &#39;&#39;.join(s)
+
+    def reverseVowels1(self, s: str) -&gt; str:
+        &quot;&quot;&quot;双指针&quot;&quot;&quot;
+        def isVowel(ch: str) -&gt; bool:
+            return ch in &quot;aeiouAEIOU&quot;
+
+        n = len(s)
+        s = list(s)
+        i, j = 0, n - 1
+        while i &lt; j:
+            while i &lt; n and not isVowel(s[i]):
+                i += 1
+            while j &gt; 0 and not isVowel(s[j]):
+                j -= 1
+            if i &lt; j:
+                s[i], s[j] = s[j], s[i]
+                i += 1
+                j -= 1
+
+        return &#39;&#39;.join(s)
+
+
+if __name__ == &quot;__main__&quot;:
+    s = Solution()
+    string = &quot;hello&quot;
+    res = s.reverseVowels(string)
+    print(res)
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/30/hexo%E5%8D%9A%E5%AE%A2%E6%8D%A2%E7%94%B5%E8%84%91%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1127,98 +1251,6 @@ if __name__ == &quot;__main__&quot;:
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/27/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/" class="post-title-link" itemprop="url">leetcode | 删除链表中的节点</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-08-27 10:06:14 / Modified: 10:55:12" itemprop="dateCreated datePublished" datetime="2021-08-27T10:06:14+08:00">2021-08-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">链表</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="237-删除链表中的节点"><a href="#237-删除链表中的节点" class="headerlink" title="237.删除链表中的节点"></a>237.删除链表中的节点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请编写一个函数，使其可以删除某个链表中给定的（非末尾）节点。传入函数的唯一参数为 要被删除的节点 。<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/delete-node-in-a-linked-list/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>由于单链表不能直接访问当前节点的前一个节点，现要删除当前节点，我们可以将当前节点的下一个节点的值复制到当前节点，然后改变当前节点的next指针删除当前节点的下一个节点即可达到删除当前节点的效果。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    def deleteNode(self, node):
-        &quot;&quot;&quot;
-        :type node: ListNode
-        :rtype: void Do not return anything, modify node in-place instead.
-        &quot;&quot;&quot;
-        node.val = node.next.val
-        node.next = node.next.next
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1290,7 +1322,7 @@ class Solution(object):
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">166</span>
+          <span class="site-state-item-count">167</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
