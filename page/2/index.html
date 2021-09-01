@@ -305,10 +305,16 @@ class Solution(object):
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-08-27 10:05:58 / Modified: 11:00:29" itemprop="dateCreated datePublished" datetime="2021-08-27T10:05:58+08:00">2021-08-27</time>
+              <time title="Created: 2021-08-27 10:05:58" itemprop="dateCreated datePublished" datetime="2021-08-27T10:05:58+08:00">2021-08-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-01 11:17:41" itemprop="dateModified" datetime="2021-09-01T11:17:41+08:00">2021-09-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -338,183 +344,15 @@ class Solution(object):
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="234-回文链表"><a href="#234-回文链表" class="headerlink" title="234.回文链表"></a>234.回文链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/palindrome-linked-list/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.按照原链表构建一个反向链表，如果两个链表完全相同则为回文链表<br>2.将原链表中的所有节点的val顺序存储在数组中后使用双指针（array[::] == array[::-1]）<br>3.递归<br>4.快慢指针<br>将链表的后半部分反转，然后将前半部分和后半部分进行比较。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
-class Solution(object):
-
-    def isPalindrome(self, head):
-        &quot;&quot;&quot;
-        按照原链表构建一个反向链表，如果两个链表完全相同则为回文链表
-        :type head: ListNode
-        :rtype: bool
-        &quot;&quot;&quot;
-        # p = head
-        # reversed = ListNode()
-        # while p is not None:
-        #     node = ListNode(p.val)
-        #     node.next = reversed.next
-        #     reversed.next = node
-        #
-        #     p = p.next
-        #
-        # p1 = head
-        # p2 = reversed.next
-        # while p1 and p2:
-        #     if p1.val == p2.val:
-        #         p1 = p1.next
-        #         p2 = p2.next
-        #     else:
-        #         break
-        # if p1 is None and p2 is None:
-        #     return True
-        # else:
-        #     return False
-
-        reversed = self.reverseList(head)
-        p1 = head
-        p2 = reversed
-        while p1 and p2:
-            if p1.val == p2.val:
-                p1 = p1.next
-                p2 = p2.next
-            else:
-                break
-        if p1 is None and p2 is None:
-            return True
-        else:
-            return False
-
-    def isPalindrome1(self, head):
-        &quot;&quot;&quot;
-        将原链表中的所有节点的val顺序存储在数组中后使用双指针
-        :type head: ListNode
-        :rtype: bool
-        &quot;&quot;&quot;
-        p = head
-        vals = []
-        while p:
-            vals.append(p.val)
-            p = p.next
-        return vals[::] == vals[::-1]
-
-    def isPalindrome2(self, head):
-        &quot;&quot;&quot;
-        递归法
-
-        :type head: ListNode
-        :rtype: bool
-        &quot;&quot;&quot;
-        self.front_pointer = head
-
-        def recursively_check(current_node=head):
-            if current_node is not None:
-                if not recursively_check(current_node.next):
-                    return False
-                if self.front_pointer.val != current_node.val:
-                    return False
-                self.front_pointer = self.front_pointer.next
-
-            return True
-
-        return recursively_check()
-
-    def isPalindrome3(self, head):
-        &quot;&quot;&quot;
-        快慢指针
-        将链表的后半部分反转（修改链表结构），然后将前半部分和后半部分进行比较。
-
-        :type head: ListNode
-        :rtype: bool
-        &quot;&quot;&quot;
-        if head is None:
-            return True
-
-        # 找到前半部分链表的尾节点并反转后半部分链表
-        first_half_end = self.end_of_first_half(head)
-        second_half_start = self.reverseList(first_half_end.next)
-
-        # 判断是否回文
-        result = True
-        first_position = head
-        second_position =second_half_start
-
-        while result and second_position is not None:
-            if first_position.val != second_position.val:
-                result = False
-            first_position = first_position.next
-            second_position = second_position.next
-
-        # 还原链表并返回结果
-        first_half_end.next = self.reverseList((second_half_start))
-        return result
-
-    def end_of_first_half(self, head):
-        fast = head
-        slow = head
-
-        while fast.next is not None and fast.next.next is not None:
-            fast = fast.next.next
-            slow = slow.next
-
-        return slow
-
-    def reverseList(self, head):
-        &quot;&quot;&quot;
-        递归法反转链表
-
-        :type head: ListNode
-        :rtype: ListNode
-        &quot;&quot;&quot;
-        if not head or not head.next:
-            return head
-        new_head = self.reverseList(head.next)
-        head.next.next = head
-        head.next = None
-        return new_head
-
-    def create_linked_list(self, list):
-        &quot;&quot;&quot;根据list中的所有元素构建单链表&quot;&quot;&quot;
-        l = ListNode()  # 单链表头节点
-        r = l  # 起始尾指针r指向头节点
-        for e in list:
-            node = ListNode(e)
-            r.next = node
-            r = r.next
-
-        return l.next
-
-    def print_linked_list(self, linked_list) -&gt; None:
-        &quot;&quot;&quot;
-        打印单链表中的所有元素
-
-        :param linked_list: 单链表
-        :return: 无
-        &quot;&quot;&quot;
-        print(&quot;----------------------------------------&quot;)
-        pointer = linked_list
-        while pointer is not None:
-            print(pointer.val)
-            pointer = pointer.next
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-
-    linked_list = slt.create_linked_list([1, 2, 2, 1])
-
-    slt.print_linked_list(linked_list)
-
-    res = slt.isPalindrome3(linked_list)
-    print(res)
-</code></pre>
-
+          <h1 id="234-回文链表"><a href="#234-回文链表" class="headerlink" title="234.回文链表"></a>234.回文链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -564,7 +402,7 @@ if __name__ == &quot;__main__&quot;:
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-08-28 09:47:14" itemprop="dateModified" datetime="2021-08-28T09:47:14+08:00">2021-08-28</time>
+                <time title="Modified: 2021-09-01 11:15:54" itemprop="dateModified" datetime="2021-09-01T11:15:54+08:00">2021-09-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -595,75 +433,15 @@ if __name__ == &quot;__main__&quot;:
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="232-用栈实现队列"><a href="#232-用栈实现队列" class="headerlink" title="232.用栈实现队列"></a>232.用栈实现队列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：<br>实现 MyQueue 类：<br>    void push(int x) 将元素 x 推到队列的末尾<br>    int pop() 从队列的开头移除并返回元素<br>    int peek() 返回队列开头的元素<br>    boolean empty() 如果队列为空，返回 true ；否则，返回 false<br>说明：<br>    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。<br>    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/implement-queue-using-stacks/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用两个栈实现队列，一个栈作为输入栈（入队），一个对作为输出栈（出队/取队头元素）。<br>入队操作的实现：将元素压入输入栈<br>出队操作的实现：弹出输出栈栈顶元素，若输出栈为空，输入栈不为空，则将输入栈所有元素出栈并压入输出栈，接着再弹出输出栈栈顶元素。<br>队列判空：输入栈和输出栈同时为空时队列为空。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class MyQueue(object):
-    &quot;&quot;&quot;用2个栈实现队列&quot;&quot;&quot;
-    def __init__(self):
-        &quot;&quot;&quot;
-        Initialize your data structure here.
-        &quot;&quot;&quot;
-        self.stack1 = list()
-        self.stack2 = list()
-
-    def push(self, x):
-        &quot;&quot;&quot;
-        Push element x to the back of queue.
-        :type x: int
-        :rtype: None
-        &quot;&quot;&quot;
-        self.stack1.append(x)
-
-    def pop(self):
-        &quot;&quot;&quot;
-        Removes the element from in front of queue and returns that element.
-        :rtype: int
-        &quot;&quot;&quot;
-        if len(self.stack2) != 0:
-            return self.stack2.pop()
-        else:
-            for _ in range(len(self.stack1)):
-                self.stack2.append(self.stack1.pop())
-            return self.stack2.pop()
-
-    def peek(self):
-        &quot;&quot;&quot;
-        Get the front element.
-        :rtype: int
-        &quot;&quot;&quot;
-        if len(self.stack2) != 0:
-            return self.stack2[-1]
-        else:
-            for _ in range(len(self.stack1)):
-                self.stack2.append(self.stack1.pop())
-            return self.stack2[-1]
-
-
-    def empty(self):
-        &quot;&quot;&quot;
-        Returns whether the queue is empty.
-        :rtype: bool
-        &quot;&quot;&quot;
-        return not self.stack1 and not self.stack2
-
-
-# Your MyQueue object will be instantiated and called as such:
-# obj = MyQueue()
-# obj.push(x)
-# param_2 = obj.pop()
-# param_3 = obj.peek()
-# param_4 = obj.empty()
-
-
-if __name__ == &quot;__main__&quot;:
-    my_queue = MyQueue()
-    my_queue.push(1)
-    my_queue.push(2)
-    print(&quot;当前队头元素为：&#123;&#125;&quot;.format(my_queue.peek()))
-    print(&quot;当前出队元素为：&#123;&#125;&quot;.format(my_queue.pop()))
-    print(&quot;当前队列空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_queue.empty() is True else &quot;no&quot;))
-</code></pre>
-
+          <h1 id="232-用栈实现队列"><a href="#232-用栈实现队列" class="headerlink" title="232.用栈实现队列"></a>232.用栈实现队列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：<br>实现 MyQueue 类：<br>    void push(int x) 将元素 x 推到队列的末尾<br>    int pop() 从队列的开头移除并返回元素<br>    int peek() 返回队列开头的元素<br>    boolean empty() 如果队列为空，返回 true ；否则，返回 false<br>说明：<br>    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。<br>    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -705,10 +483,16 @@ if __name__ == &quot;__main__&quot;:
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-08-27 10:05:35 / Modified: 10:59:32" itemprop="dateCreated datePublished" datetime="2021-08-27T10:05:35+08:00">2021-08-27</time>
+              <time title="Created: 2021-08-27 10:05:35" itemprop="dateCreated datePublished" datetime="2021-08-27T10:05:35+08:00">2021-08-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-01 11:17:35" itemprop="dateModified" datetime="2021-09-01T11:17:35+08:00">2021-09-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -739,110 +523,15 @@ if __name__ == &quot;__main__&quot;:
 
       
           <h1 id="225-用队列实现栈"><a href="#225-用队列实现栈" class="headerlink" title="225.用队列实现栈"></a>225.用队列实现栈</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（push、top、pop 和 empty）。<br>实现 MyStack 类：<br>    void push(int x) 将元素 x 压入栈顶。<br>    int pop() 移除并返回栈顶元素。<br>    int top() 返回栈顶元素。<br>    boolean empty() 如果栈是空的，返回 true ；否则，返回 false 。</p>
-<p>注意：<br>    你只能使用队列的基本操作 —— 也就是 push to back、peek/pop from front、size 和 is empty 这些操作。<br>    你所使用的语言也许不支持队列。 你可以使用 list （列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/implement-stack-using-queues/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>1.使用两个队列实现栈</strong><br>使用两个队列实现栈的操作，其中 queue1 用于存储栈内的元素，queue2 作为入栈操作的辅助队列。<br>入栈操作时，首先将元素入队到 queue2，然后将 queue1 的全部元素依次出队并入队到 queue2，此时 queue2 的前端的元素即为新入栈的元素，再将 queue1 和 queue2 互换，则 queue1 的元素即为栈内的元素，queue1 的前端和后端分别对应栈顶和栈底。<br>由于每次入栈操作都确保 queue1 的前端元素为栈顶元素，因此出栈操作和获得栈顶元素操作都可以简单实现。出栈操作只需要移除 queue1 的前端元素并返回即可，获得栈顶元素操作只需要获得 queue1 的前端元素并返回即可（不移除元素）。<br>由于 queue1 用于存储栈内的元素，判断栈是否为空时，只需要判断 queue1 是否为空即可。<br><strong>2.使用一个队列实现栈</strong><br>使用一个队列时，为了满足栈的特性，即最后入栈的元素最先出栈，同样需要满足队列前端的元素是最后入栈的元素。<br>入栈操作时，首先获得入栈前的元素个数 n，然后将元素入队到队列，再将队列中的前 n 个元素（即除了新入栈的元素之外的全部元素）依次出队并入队到队列，此时队列的前端的元素即为新入栈的元素，且队列的前端和后端分别对应栈顶和栈底。<br>由于每次入栈操作都确保队列的前端元素为栈顶元素，因此出栈操作和获得栈顶元素操作都可以简单实现。出栈操作只需要移除队列的前端元素并返回即可，获得栈顶元素操作只需要获得队列的前端元素并返回即可（不移除元素）。<br>由于队列用于存储栈内的元素，判断栈是否为空时，只需要判断队列是否为空即可。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>import collections
-
-
-class MyStack(object):
-    &quot;&quot;&quot;使用两个队列实现栈&quot;&quot;&quot;
-    def __init__(self):
-        &quot;&quot;&quot;
-        Initialize your data structure here.
-        &quot;&quot;&quot;
-        self.queue1 = collections.deque()
-        self.queue2 = collections.deque()
-
-    def push(self, x):
-        &quot;&quot;&quot;
-        Push element x onto stack.
-        :type x: int
-        :rtype: None
-        &quot;&quot;&quot;
-        self.queue2.append(x)
-        while self.queue1:
-            self.queue2.append(self.queue1.popleft())
-        self.queue1, self.queue2 = self.queue2, self.queue1
-
-    def pop(self):
-        &quot;&quot;&quot;
-        Removes the element on top of the stack and returns that element.
-        :rtype: int
-        &quot;&quot;&quot;
-        return self.queue1.popleft()
-
-    def top(self):
-        &quot;&quot;&quot;
-        Get the top element.
-        :rtype: int
-        &quot;&quot;&quot;
-        return self.queue1[0]
-
-    def empty(self):
-        &quot;&quot;&quot;
-        Returns whether the stack is empty.
-        :rtype: bool
-        &quot;&quot;&quot;
-        return not self.queue1
-
-
-class MyStack1(object):
-    &quot;&quot;&quot;使用1个队列实现栈&quot;&quot;&quot;
-    def __init__(self):
-        &quot;&quot;&quot;
-        Initialize your data structure here.
-        &quot;&quot;&quot;
-        self.queue = collections.deque()
-
-    def push(self, x):
-        &quot;&quot;&quot;
-        Push element x onto stack.
-        :type x: int
-        :rtype: None
-        &quot;&quot;&quot;
-        n = len(self.queue)
-        self.queue.append(x)
-        for _ in range(n):
-            self.queue.append(self.queue.popleft())
-
-    def pop(self):
-        &quot;&quot;&quot;
-        Removes the element on top of the stack and returns that element.
-        :rtype: int
-        &quot;&quot;&quot;
-        return self.queue.popleft()
-
-    def top(self):
-        &quot;&quot;&quot;
-        Get the top element.
-        :rtype: int
-        &quot;&quot;&quot;
-        return self.queue[0]
-
-    def empty(self):
-        &quot;&quot;&quot;
-        Returns whether the stack is empty.
-        :rtype: bool
-        &quot;&quot;&quot;
-        return not self.queue
-# Your MyStack object will be instantiated and called as such:
-# obj = MyStack()
-# obj.push(x)
-# param_2 = obj.pop()
-# param_3 = obj.top()
-# param_4 = obj.empty()
-
-
-if __name__ == &quot;__main__&quot;:
-    my_stack = MyStack()
-    my_stack = MyStack1()
-    my_stack.push(1)
-    my_stack.push(2)
-    print(&quot;当前栈顶元素为: &#123;&#125;&quot;.format(my_stack.top()))
-    print(&quot;当前弹出的元素为: &#123;&#125;&quot;.format(my_stack.pop()))
-    print(&quot;当前栈空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_stack.empty() is True else &quot;no&quot;))
-</code></pre>
-
+<p>注意：<br>    你只能使用队列的基本操作 —— 也就是 push to back、peek/pop from front、size 和 is empty 这些操作。<br>    你所使用的语言也许不支持队列。 你可以使用 list （列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E7%94%A8%E4%B8%A4%E4%B8%AA%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1255,10 +944,16 @@ if __name__ == &quot;__main__&quot;:
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-08-27 10:04:55 / Modified: 11:05:31" itemprop="dateCreated datePublished" datetime="2021-08-27T10:04:55+08:00">2021-08-27</time>
+              <time title="Created: 2021-08-27 10:04:55" itemprop="dateCreated datePublished" datetime="2021-08-27T10:04:55+08:00">2021-08-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-01 11:17:47" itemprop="dateModified" datetime="2021-09-01T11:17:47+08:00">2021-09-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -1288,99 +983,15 @@ if __name__ == &quot;__main__&quot;:
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="160-环形链表"><a href="#160-环形链表" class="headerlink" title="160.环形链表"></a>160.环形链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/intersection-of-two-linked-lists/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.哈希表<br>判断两个链表是否相交，可以使用哈希集合存储链表节点。<br>首先遍历链表 headA，并将链表 headA 中的每个节点加入哈希集合中。然后遍历链表 headB，对于遍历到的每个节点，判断该节点是否在哈希集合中：<br>    如果当前节点不在哈希集合中，则继续遍历下一个节点；<br>    如果当前节点在哈希集合中，则后面的节点都在哈希集合中，即从当前节点开始的所有节点都在两个链表的相交部分，因此在链表 headB 中遍历到的第一个在哈希集合中的节点就是两个链表相交的节点，返回该节点。<br>如果链表 headB 中的所有节点都不在哈希集合中，则两个链表不相交，返回 null。<br>2.双指针<br>只有当链表 headA 和 headB 都不为空时，两个链表才可能相交。因此首先判断链表 headA 和 headB 是否为空，如果其中至少有一个链表为空，则两个链表一定不相交，返回 null。<br>当链表 headA 和 headB 都不为空时，创建两个指针 pA 和 pB，初始时分别指向两个链表的头节点 headA 和 headB，然后将两个指针依次遍历两个链表的每个节点。具体做法如下：<br>    每步操作需要同时更新指针 pA 和 pB。<br>    如果指针 pA 不为空，则将指针 pA 移到下一个节点；如果指针 pB 不为空，则将指针 pB 移到下一个节点。<br>    如果指针 pA 为空，则将指针 pA 移到链表 headB 的头节点；如果指针 pB 为空，则将指针 pB 移到链表 headA 的头节点。<br>    当指针 pA 和 pB 指向同一个节点或者都为空时，返回它们指向的节点或者 null。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
-
-
-class Solution(object):
-    def getIntersectionNode(self, headA, headB):
-        &quot;&quot;&quot;
-        哈希表
-
-        :type head1, head1: ListNode
-        :rtype: ListNode
-        &quot;&quot;&quot;
-        if not headA or not headB:
-            return None
-        seen = set()
-        p1 = headA
-        p2 = headB
-        while p1 is not None:
-            seen.add(p1)
-            p1 = p1.next
-
-        while p2 is not None:
-            if p2 in seen:
-                return p2.val
-            p2 = p2.next
-
-        return None
-
-    def getIntersectionNode1(self, headA, headB):
-        &quot;&quot;&quot;
-        双指针
-
-        :param headA:
-        :param headB:
-        :return:
-        &quot;&quot;&quot;
-        if not headA or not headB:
-            return None
-
-        p_A = headA
-        p_B = headB
-
-        while p_A != p_B:
-            p_A = headB if p_A is None else p_A.next
-            p_B = headA if p_B is None else p_B.next
-
-        return p_A
-
-
-    def create_linked_list(self):
-        &quot;&quot;&quot;
-        创建两个相交的单链表
-        :return:两个相交但表表的头指针
-        &quot;&quot;&quot;
-        a_node1 = ListNode(4)
-        a_node2 = ListNode(1)
-
-        b_node1 = ListNode(5)
-        b_node2 = ListNode(0)
-        b_node3 = ListNode(1)
-
-        common_node1 = ListNode(8)
-        common_node2 = ListNode(4)
-        common_node3 = ListNode(5)
-
-        a_node1.next = a_node2
-        a_node2.next = common_node1
-        common_node1.next = common_node2
-        common_node2.next = common_node3
-
-        b_node1.next = b_node2
-        b_node2.next = b_node3
-        b_node3.next = common_node1
-        common_node1.next = common_node2
-        common_node2.next = common_node3
-
-        return a_node1, b_node2
-
-
-if __name__ ==&quot;__main__&quot;:
-    slt = Solution()
-
-    head_a, head_b = slt.create_linked_list()
-
-    intersected_node = slt.getIntersectionNode1(head_a, head_b)
-    print(intersected_node.val)
-</code></pre>
-
+          <h1 id="160-环形链表"><a href="#160-环形链表" class="headerlink" title="160.环形链表"></a>160.环形链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E7%9B%B8%E4%BA%A4%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
