@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-02T04:13:05.464Z</updated>
+  <updated>2021-09-02T12:18:17.164Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 学生出勤记录1</title>
+    <link href="http://example.com/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/"/>
+    <id>http://example.com/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</id>
+    <published>2021-09-02T12:13:33.000Z</published>
+    <updated>2021-09-02T12:18:17.164Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p><span id="more"></span><p>示例 1：<br>输入：s = “PPALLP”<br>输出：true<br>解释：学生缺勤次数少于 2 次，且不存在 3 天或以上的连续迟到记录。</p><p><a href>题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.一次遍历<br>可奖励的出勤记录要求缺勤次数少于 2 和连续迟到次数少于 3。判断出勤记录是否可奖励，只需要遍历出勤记录，判断这两个条件是否同时满足即可。<br>遍历过程中，记录缺勤次数和连续迟到次数，根据遍历到的字符更新缺勤次数和连续迟到次数：<br>    如果遇到 ‘A’，即缺勤，则将缺勤次数加 1，否则缺勤次数不变；<br>    如果遇到 ‘L’，即迟到，则将连续迟到次数加 1，否则将连续迟到次数清零。<br>如果在更新缺勤次数和连续迟到次数之后，出现缺勤次数大于或等于 2 或者连续迟到次数大于或等于 3，则该出勤记录不满足可奖励的要求，返回 false。如果遍历结束时未出现出勤记录不满足可奖励的要求的情况，则返回 true。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:    def checkRecord(self, s: str) -&gt; bool:        # 统计字符串中出现‘A’的的次数        count_A = s.count(&#39;A&#39;)        # 字符串中是否有连续3个以上的‘L&#39;        for i in range(len(s)):            if i + 2 &lt; len(s) and s[i] == &#39;L&#39; and s[i+1] == &#39;L&#39; and s[i+2] == &#39;L&#39;:                    return False        return True if count_A &lt; 2 else False    def checkRecord1(self, s: str) -&gt; bool:        absents = lates = 0        for char in s:            if char == &quot;A&quot;:                absents += 1                lates = 0            elif char == &quot;L&quot;:                lates += 1            else:                lates = 0            if lates &gt;= 3 or absents &gt; 1:                return False        return True        # absents = lates = 0        # for i, c in enumerate(s):        #     if c == &quot;A&quot;:        #         absents += 1        #         if absents &gt;= 2:        #             return False        #        #     if c == &quot;L&quot;:        #         lates += 1        #         if lates &gt;= 3:        #             return False        #     else:        #         lates = 0        #        # return Trueif __name__ == &quot;__main__&quot;:    slt = Solution()    # res = slt.checkRecord2(&quot;PPALLL&quot;)    res = slt.checkRecord2(&quot;PPALLP&quot;)    print(res)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;551-学生出勤记录1&quot;&gt;&lt;a href=&quot;#551-学生出勤记录1&quot; class=&quot;headerlink&quot; title=&quot;551.学生出勤记录1&quot;&gt;&lt;/a&gt;551.学生出勤记录1&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：&lt;br&gt;    ‘A’：Absent，缺勤&lt;br&gt;    ‘L’：Late，迟到&lt;br&gt;    ‘P’：Present，到场&lt;br&gt;如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：&lt;br&gt;    按 总出勤 计，学生缺勤（’A’）严格 少于两天。&lt;br&gt;    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。&lt;br&gt;如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="字符串" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 反转字符串2</title>
@@ -510,31 +537,6 @@
     <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
     
     <category term="栈" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/"/>
-    
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 反转链表</title>
-    <link href="http://example.com/2021/08/27/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/"/>
-    <id>http://example.com/2021/08/27/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/</id>
-    <published>2021-08-27T02:05:20.000Z</published>
-    <updated>2021-09-01T03:21:43.289Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="206-反转链表"><a href="#206-反转链表" class="headerlink" title="206.反转链表"></a>206.反转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。</p><span id="more"></span><p><a href="https://leetcode-cn.com/problems/reverse-linked-list/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.递归<br>递：将大问题分解为小问题，将整个链表依次拆解直到只剩下一个节点<br>归：在链表只剩下一个节点时开始”归“，使用head.next.next = head,head.next = None这两行代码从后往前（从原链表的视角看）将链表中的每一个连接改为反向的<br>2.迭代<br>假设链表为 1→2→3→∅，我们想要把它改成 ∅←1←2←3。<br>在遍历链表时，将当前节点的 next 指针改为指向前一个节点。由于节点没有引用其前一个节点，因此必须事先存储其前一个节点。在更改引用之前，还需要存储后一个节点。最后返回新的头引用。<br>3.头插法<br>首先创建一个只有头节点的反转链表，从头到尾遍历原链表，将每次遍历到的节点按照头插法插入反转链表中，以此类推，当我们遍历完整个链表时就得到一个反转链表。<br>头插法：即每次都将将要插入的节点作为链表的首节点（不是头节点）<br>头插法代码实现：</p><pre><code>node.next = head.nexthead.next = node</code></pre><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.class ListNode(object):    def __init__(self, val=0, next=None):        self.val = val        self.next = nextclass Solution(object):    def reverseList(self, head):        &quot;&quot;&quot;        迭代法        :type head: ListNode        :rtype: ListNode        &quot;&quot;&quot;        # if not head:        #     return head        #        # p = head        #        # reversed = ListNode()        # while p is not None:        #     node = ListNode(p.val)        #     node.next = reversed.next        #     reversed.next = node        #        #     p = p.next        #        # return reversed.next        prev = None        curr = head        while curr is not None:            next = curr.next            curr.next = prev            prev = curr            curr = next        return prev    def reverseList1(self, head):        &quot;&quot;&quot;        递归法        :type head: ListNode        :rtype: ListNode        &quot;&quot;&quot;        if not head or not head.next:            return head        new_head = self.reverseList1(head.next)        head.next.next = head        head.next = None        return new_head    def reverseList2(self, head):        &quot;&quot;&quot;        头插法        :type head: ListNode        :rtype: ListNode        &quot;&quot;&quot;        if not head:            return head        p = head        reversed = ListNode()        while p is not None:            node = ListNode(p.val)            node.next = reversed.next            reversed.next = node            p = p.next        return reversed.next    def create_linked_list(self, list):        &quot;&quot;&quot;根据list中的所有元素构建单链表&quot;&quot;&quot;        l = ListNode()  # 单链表头节点        r = l  # 起始尾指针r指向头节点        for e in list:            node = ListNode(e)            r.next = node            r = r.next        return l.next    def print_linked_list(self, linked_list) -&gt; None:        &quot;&quot;&quot;        打印单链表中的所有元素        :param linked_list: 单链表        :return: 无        &quot;&quot;&quot;        print(&quot;----------------------------------------&quot;)        pointer = linked_list        while pointer is not None:            print(pointer.val)            pointer = pointer.nextif __name__ == &quot;__main__&quot;:    slt = Solution()    linked_list = slt.create_linked_list([1, 2, 3, 4, 5])    slt.print_linked_list(linked_list)    reversed_linked_list = slt.reverseList1(linked_list)    slt.print_linked_list(reversed_linked_list)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;206-反转链表&quot;&gt;&lt;a href=&quot;#206-反转链表&quot; class=&quot;headerlink&quot; title=&quot;206.反转链表&quot;&gt;&lt;/a&gt;206.反转链表&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="链表" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/"/>
     
     
     <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
