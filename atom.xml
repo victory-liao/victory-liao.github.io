@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-02T12:18:17.164Z</updated>
+  <updated>2021-09-03T03:14:41.093Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 反转字符串中的单词3</title>
+    <link href="http://example.com/2021/09/02/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D3/"/>
+    <id>http://example.com/2021/09/02/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D3/</id>
+    <published>2021-09-02T12:21:14.000Z</published>
+    <updated>2021-09-03T03:14:41.093Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="557-反转字符串中的单词3"><a href="#557-反转字符串中的单词3" class="headerlink" title="557.反转字符串中的单词3"></a>557.反转字符串中的单词3</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。</p><span id="more"></span><p>示例：<br>输入：”Let’s take LeetCode contest”<br>输出：”s’teL ekat edoCteeL tsetnoc”</p><p><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.将字符串按照空格划分开得到字符串中的每一个单词,然后将每个单词反转<br>，在将反转后的所有单词用空格拼接起来<br>2.使用额外空间<br>开辟一个新字符串。然后从头到尾遍历原字符串，直到找到空格为止，此时找到了一个单词，并能得到单词的起止位置。随后，根据单词的起止位置，可以将该单词逆序放到新字符串当中。如此循环多次，直到遍历完原字符串，就能得到翻转后的结果。<br>3.原地解法<br>此题也可以直接在原字符串上进行操作，避免额外的空间开销。当找到一个单词的时候，我们交换字符串第一个字符与倒数第一个字符，随后交换第二个字符与倒数第二个字符……如此反复，就可以在原空间上翻转单词。<br>需要注意的是，原地解法在某些语言（比如 Java，JavaScript，python）中不适用，因为在这些语言中 String 类型是一个不可变的类型。<br>在python中可以先将字符串转为列表然后进行算法设计。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:    def reverseWords(self, s: str) -&gt; str:        &quot;&quot;&quot;        将字符串按照空格划分开得到字符串中的每一个单词        将每个单词反转        将反转后的所有单词用空格拼接起来        &quot;&quot;&quot;        words = s.split(&#39; &#39;)        reversed_words = []        for word in words:            reversed_words.append(self.reverseStr(word))        return &#39; &#39;.join(reversed_words)    def reverseStr(self, s: str) -&gt; str:        s = list(s)        s[:] = s[::-1]        return &#39;&#39;.join(s)    def reverseWords2(self, s: str) -&gt; str:        &quot;&quot;&quot;使用额外空间&quot;&quot;&quot;        ret = &#39;&#39;        length = len(s)        i = 0        while i &lt; length:            start = i            # 遍历字符串找到空格位置（找到了一个单词）            while i &lt; length and s[i] != &#39; &#39;:                i += 1            # 根据单词的起止位置，可以将该单词逆序放到新字符串当中            for p in range(start, i):                ret += s[start + i - 1 - p]            # 拼上单词后的空格            while i &lt; length and s[i] == &#39; &#39;:                i += 1                ret += &#39; &#39;        return ret    def reverseWords3(self, s: str) -&gt; str:        s = list(s)  # python中字符串为不可变类型，不支持原地修改，可转列表        length = len(s)        i = 0        while i &lt; length:            start = i            while i &lt; length and s[i] != &#39; &#39;:                i += 1            left = start            right = i - 1            while left &lt; right:                s[left], s[right] = s[right], s[left]                left += 1                right -= 1            while i &lt; length and s[i] == &#39; &#39;:                i += 1        return &#39;&#39;.join(s)if __name__ == &quot;__main__&quot;:    slt = Solution()    s = &quot;Let&#39;s take LeetCode contest&quot;    res = slt.reverseWords3(s)    print(&quot;反转单词后的字符串：&quot;, res)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;557-反转字符串中的单词3&quot;&gt;&lt;a href=&quot;#557-反转字符串中的单词3&quot; class=&quot;headerlink&quot; title=&quot;557.反转字符串中的单词3&quot;&gt;&lt;/a&gt;557.反转字符串中的单词3&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="字符串" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 学生出勤记录1</title>
@@ -503,32 +530,6 @@
     
     
     <summary type="html">&lt;h1 id=&quot;232-用栈实现队列&quot;&gt;&lt;a href=&quot;#232-用栈实现队列&quot; class=&quot;headerlink&quot; title=&quot;232.用栈实现队列&quot;&gt;&lt;/a&gt;232.用栈实现队列&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：&lt;br&gt;实现 MyQueue 类：&lt;br&gt;    void push(int x) 将元素 x 推到队列的末尾&lt;br&gt;    int pop() 从队列的开头移除并返回元素&lt;br&gt;    int peek() 返回队列开头的元素&lt;br&gt;    boolean empty() 如果队列为空，返回 true ；否则，返回 false&lt;br&gt;说明：&lt;br&gt;    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。&lt;br&gt;    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="栈" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/"/>
-    
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 用两个队列实现栈</title>
-    <link href="http://example.com/2021/08/27/%E7%94%A8%E4%B8%A4%E4%B8%AA%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88/"/>
-    <id>http://example.com/2021/08/27/%E7%94%A8%E4%B8%A4%E4%B8%AA%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88/</id>
-    <published>2021-08-27T02:05:35.000Z</published>
-    <updated>2021-09-01T03:17:35.217Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="225-用队列实现栈"><a href="#225-用队列实现栈" class="headerlink" title="225.用队列实现栈"></a>225.用队列实现栈</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（push、top、pop 和 empty）。<br>实现 MyStack 类：<br>    void push(int x) 将元素 x 压入栈顶。<br>    int pop() 移除并返回栈顶元素。<br>    int top() 返回栈顶元素。<br>    boolean empty() 如果栈是空的，返回 true ；否则，返回 false 。</p><p>注意：<br>    你只能使用队列的基本操作 —— 也就是 push to back、peek/pop from front、size 和 is empty 这些操作。<br>    你所使用的语言也许不支持队列。 你可以使用 list （列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。</p><span id="more"></span><p><a href="https://leetcode-cn.com/problems/implement-stack-using-queues/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>1.使用两个队列实现栈</strong><br>使用两个队列实现栈的操作，其中 queue1 用于存储栈内的元素，queue2 作为入栈操作的辅助队列。<br>入栈操作时，首先将元素入队到 queue2，然后将 queue1 的全部元素依次出队并入队到 queue2，此时 queue2 的前端的元素即为新入栈的元素，再将 queue1 和 queue2 互换，则 queue1 的元素即为栈内的元素，queue1 的前端和后端分别对应栈顶和栈底。<br>由于每次入栈操作都确保 queue1 的前端元素为栈顶元素，因此出栈操作和获得栈顶元素操作都可以简单实现。出栈操作只需要移除 queue1 的前端元素并返回即可，获得栈顶元素操作只需要获得 queue1 的前端元素并返回即可（不移除元素）。<br>由于 queue1 用于存储栈内的元素，判断栈是否为空时，只需要判断 queue1 是否为空即可。<br><strong>2.使用一个队列实现栈</strong><br>使用一个队列时，为了满足栈的特性，即最后入栈的元素最先出栈，同样需要满足队列前端的元素是最后入栈的元素。<br>入栈操作时，首先获得入栈前的元素个数 n，然后将元素入队到队列，再将队列中的前 n 个元素（即除了新入栈的元素之外的全部元素）依次出队并入队到队列，此时队列的前端的元素即为新入栈的元素，且队列的前端和后端分别对应栈顶和栈底。<br>由于每次入栈操作都确保队列的前端元素为栈顶元素，因此出栈操作和获得栈顶元素操作都可以简单实现。出栈操作只需要移除队列的前端元素并返回即可，获得栈顶元素操作只需要获得队列的前端元素并返回即可（不移除元素）。<br>由于队列用于存储栈内的元素，判断栈是否为空时，只需要判断队列是否为空即可。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>import collectionsclass MyStack(object):    &quot;&quot;&quot;使用两个队列实现栈&quot;&quot;&quot;    def __init__(self):        &quot;&quot;&quot;        Initialize your data structure here.        &quot;&quot;&quot;        self.queue1 = collections.deque()        self.queue2 = collections.deque()    def push(self, x):        &quot;&quot;&quot;        Push element x onto stack.        :type x: int        :rtype: None        &quot;&quot;&quot;        self.queue2.append(x)        while self.queue1:            self.queue2.append(self.queue1.popleft())        self.queue1, self.queue2 = self.queue2, self.queue1    def pop(self):        &quot;&quot;&quot;        Removes the element on top of the stack and returns that element.        :rtype: int        &quot;&quot;&quot;        return self.queue1.popleft()    def top(self):        &quot;&quot;&quot;        Get the top element.        :rtype: int        &quot;&quot;&quot;        return self.queue1[0]    def empty(self):        &quot;&quot;&quot;        Returns whether the stack is empty.        :rtype: bool        &quot;&quot;&quot;        return not self.queue1class MyStack1(object):    &quot;&quot;&quot;使用1个队列实现栈&quot;&quot;&quot;    def __init__(self):        &quot;&quot;&quot;        Initialize your data structure here.        &quot;&quot;&quot;        self.queue = collections.deque()    def push(self, x):        &quot;&quot;&quot;        Push element x onto stack.        :type x: int        :rtype: None        &quot;&quot;&quot;        n = len(self.queue)        self.queue.append(x)        for _ in range(n):            self.queue.append(self.queue.popleft())    def pop(self):        &quot;&quot;&quot;        Removes the element on top of the stack and returns that element.        :rtype: int        &quot;&quot;&quot;        return self.queue.popleft()    def top(self):        &quot;&quot;&quot;        Get the top element.        :rtype: int        &quot;&quot;&quot;        return self.queue[0]    def empty(self):        &quot;&quot;&quot;        Returns whether the stack is empty.        :rtype: bool        &quot;&quot;&quot;        return not self.queue# Your MyStack object will be instantiated and called as such:# obj = MyStack()# obj.push(x)# param_2 = obj.pop()# param_3 = obj.top()# param_4 = obj.empty()if __name__ == &quot;__main__&quot;:    my_stack = MyStack()    my_stack = MyStack1()    my_stack.push(1)    my_stack.push(2)    print(&quot;当前栈顶元素为: &#123;&#125;&quot;.format(my_stack.top()))    print(&quot;当前弹出的元素为: &#123;&#125;&quot;.format(my_stack.pop()))    print(&quot;当前栈空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_stack.empty() is True else &quot;no&quot;))</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;225-用队列实现栈&quot;&gt;&lt;a href=&quot;#225-用队列实现栈&quot; class=&quot;headerlink&quot; title=&quot;225.用队列实现栈&quot;&gt;&lt;/a&gt;225.用队列实现栈&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（push、top、pop 和 empty）。&lt;br&gt;实现 MyStack 类：&lt;br&gt;    void push(int x) 将元素 x 压入栈顶。&lt;br&gt;    int pop() 移除并返回栈顶元素。&lt;br&gt;    int top() 返回栈顶元素。&lt;br&gt;    boolean empty() 如果栈是空的，返回 true ；否则，返回 false 。&lt;/p&gt;
-&lt;p&gt;注意：&lt;br&gt;    你只能使用队列的基本操作 —— 也就是 push to back、peek/pop from front、size 和 is empty 这些操作。&lt;br&gt;    你所使用的语言也许不支持队列。 你可以使用 list （列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。&lt;/p&gt;</summary>
     
     
     
