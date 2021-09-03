@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-03T08:38:31.369Z</updated>
+  <updated>2021-09-03T13:29:15.395Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 最长回文串</title>
+    <link href="http://example.com/2021/09/03/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2/"/>
+    <id>http://example.com/2021/09/03/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2/</id>
+    <published>2021-09-03T10:23:45.000Z</published>
+    <updated>2021-09-03T13:29:15.395Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="5-最长回文串"><a href="#5-最长回文串" class="headerlink" title="5.最长回文串"></a>5.最长回文串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s，找到 s 中最长的回文子串。</p><span id="more"></span><p>示例 1：<br>输入：s = “babad”<br>输出：”bab”<br>解释：”aba” 同样是符合题意的答案。</p><p><a href="https://leetcode-cn.com/problems/longest-palindromic-substring">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.暴力解法<br>2.动态规划<br>3.中心扩展算法<br>4.Manacher 算法<br>注：算法详情请参考leetcode题解</p><p><a href="https://writings.sh/post/algorithm-longest-palindromic-substring">几种方法的总结！！！强烈推荐！！！</a></p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:    def longestPalindrome(self, s: str) -&gt; str:        &quot;&quot;&quot;暴力解法（超出时间限制）&quot;&quot;&quot;        max_len = 0        longest_palindrome = &quot;&quot;        for i in range(0, len(s)):            for j in range(i+1, len(s)+1):                string = s[i:j]                # print(string)                if self.isPalindrome(string):                    if len(string) &gt; max_len:                        max_len = len(string)                        longest_palindrome = string        return longest_palindrome    def isPalindrome(self, s: str) -&gt; bool:        &quot;&quot;&quot;        筛选+判断（判断反转字符串是否与原字符串相同）        &quot;&quot;&quot;        new_s = &quot;&quot;.join(ch.lower() for ch in s if ch.isalnum())        return new_s == new_s[::-1]    def longestPalindrome1(self, s: str) -&gt; str:        &quot;&quot;&quot;动态规划算法&quot;&quot;&quot;        n = len(s)        if n &lt; 2:            return s        max_len = 1        begin = 0        # dp[i][j]表示s[i..j]是否是回文串        dp = [[False] * n for _ in range(n)]        for i in range(n):            dp[i][i] = True        # 递推开始        # 先枚举子串长度        for L in range(2, n + 1):            # 枚举左边界，左边界的上限设置可以宽松一些            for i in range(n):                # 由L和i可以确定右边界，即j - i + 1 = L得                j = L + i - 1                if j &gt;= n:                    break                if s[i] != s[j]:                    dp[i][j] = False                else:  # s[i] = s[j]                    if j - i &lt; 3:  # 长度为2且两个字符相等/长度为3且前后字符相等返回True                        dp[i][j] = True                    else:                        dp[i][j] = dp[i + 1][j - 1]                        # P(i,j)=P(i+1,j−1)∧(Si==Sj)                # 只要 dp[i][L] == true 成立，就表示子串 s[i..L] 是回文，此时记录回文长度和起始位置                if dp[i][j] and j - i + 1 &gt; max_len:                    max_len = j - i + 1                    begin = i        return s[begin:begin + max_len]    def longestPalindrome2(self, s: str) -&gt; str:        &quot;&quot;&quot;中心扩展算法&quot;&quot;&quot;        pass    def longestPalindrome3(self, s: str) -&gt; str:        &quot;&quot;&quot;Manacher 算法&quot;&quot;&quot;        passif __name__ == &#39;__main__&#39;:    slt = Solution()    s = &quot;abad&quot;    res = slt.longestPalindrome(s)    print(&quot;最长的回文串为：&quot;, res)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;5-最长回文串&quot;&gt;&lt;a href=&quot;#5-最长回文串&quot; class=&quot;headerlink&quot; title=&quot;5.最长回文串&quot;&gt;&lt;/a&gt;5.最长回文串&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你一个字符串 s，找到 s 中最长的回文子串。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="字符串" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 机器人能否返回原点</title>
@@ -507,31 +534,6 @@
     
     
     <summary type="html">&lt;h1 id=&quot;237-删除链表中的节点&quot;&gt;&lt;a href=&quot;#237-删除链表中的节点&quot; class=&quot;headerlink&quot; title=&quot;237.删除链表中的节点&quot;&gt;&lt;/a&gt;237.删除链表中的节点&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;请编写一个函数，使其可以删除某个链表中给定的（非末尾）节点。传入函数的唯一参数为 要被删除的节点 。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="链表" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/"/>
-    
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 回文链表</title>
-    <link href="http://example.com/2021/08/27/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/"/>
-    <id>http://example.com/2021/08/27/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/</id>
-    <published>2021-08-27T02:05:58.000Z</published>
-    <updated>2021-09-01T03:17:41.332Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="234-回文链表"><a href="#234-回文链表" class="headerlink" title="234.回文链表"></a>234.回文链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。</p><span id="more"></span><p><a href="https://leetcode-cn.com/problems/palindrome-linked-list/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.按照原链表构建一个反向链表，如果两个链表完全相同则为回文链表<br>2.将原链表中的所有节点的val顺序存储在数组中后使用双指针（array[::] == array[::-1]）<br>3.递归<br>4.快慢指针<br>将链表的后半部分反转，然后将前半部分和后半部分进行比较。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.class ListNode(object):    def __init__(self, val=0, next=None):        self.val = val        self.next = nextclass Solution(object):    def isPalindrome(self, head):        &quot;&quot;&quot;        按照原链表构建一个反向链表，如果两个链表完全相同则为回文链表        :type head: ListNode        :rtype: bool        &quot;&quot;&quot;        # p = head        # reversed = ListNode()        # while p is not None:        #     node = ListNode(p.val)        #     node.next = reversed.next        #     reversed.next = node        #        #     p = p.next        #        # p1 = head        # p2 = reversed.next        # while p1 and p2:        #     if p1.val == p2.val:        #         p1 = p1.next        #         p2 = p2.next        #     else:        #         break        # if p1 is None and p2 is None:        #     return True        # else:        #     return False        reversed = self.reverseList(head)        p1 = head        p2 = reversed        while p1 and p2:            if p1.val == p2.val:                p1 = p1.next                p2 = p2.next            else:                break        if p1 is None and p2 is None:            return True        else:            return False    def isPalindrome1(self, head):        &quot;&quot;&quot;        将原链表中的所有节点的val顺序存储在数组中后使用双指针        :type head: ListNode        :rtype: bool        &quot;&quot;&quot;        p = head        vals = []        while p:            vals.append(p.val)            p = p.next        return vals[::] == vals[::-1]    def isPalindrome2(self, head):        &quot;&quot;&quot;        递归法        :type head: ListNode        :rtype: bool        &quot;&quot;&quot;        self.front_pointer = head        def recursively_check(current_node=head):            if current_node is not None:                if not recursively_check(current_node.next):                    return False                if self.front_pointer.val != current_node.val:                    return False                self.front_pointer = self.front_pointer.next            return True        return recursively_check()    def isPalindrome3(self, head):        &quot;&quot;&quot;        快慢指针        将链表的后半部分反转（修改链表结构），然后将前半部分和后半部分进行比较。        :type head: ListNode        :rtype: bool        &quot;&quot;&quot;        if head is None:            return True        # 找到前半部分链表的尾节点并反转后半部分链表        first_half_end = self.end_of_first_half(head)        second_half_start = self.reverseList(first_half_end.next)        # 判断是否回文        result = True        first_position = head        second_position =second_half_start        while result and second_position is not None:            if first_position.val != second_position.val:                result = False            first_position = first_position.next            second_position = second_position.next        # 还原链表并返回结果        first_half_end.next = self.reverseList((second_half_start))        return result    def end_of_first_half(self, head):        fast = head        slow = head        while fast.next is not None and fast.next.next is not None:            fast = fast.next.next            slow = slow.next        return slow    def reverseList(self, head):        &quot;&quot;&quot;        递归法反转链表        :type head: ListNode        :rtype: ListNode        &quot;&quot;&quot;        if not head or not head.next:            return head        new_head = self.reverseList(head.next)        head.next.next = head        head.next = None        return new_head    def create_linked_list(self, list):        &quot;&quot;&quot;根据list中的所有元素构建单链表&quot;&quot;&quot;        l = ListNode()  # 单链表头节点        r = l  # 起始尾指针r指向头节点        for e in list:            node = ListNode(e)            r.next = node            r = r.next        return l.next    def print_linked_list(self, linked_list) -&gt; None:        &quot;&quot;&quot;        打印单链表中的所有元素        :param linked_list: 单链表        :return: 无        &quot;&quot;&quot;        print(&quot;----------------------------------------&quot;)        pointer = linked_list        while pointer is not None:            print(pointer.val)            pointer = pointer.nextif __name__ == &quot;__main__&quot;:    slt = Solution()    linked_list = slt.create_linked_list([1, 2, 2, 1])    slt.print_linked_list(linked_list)    res = slt.isPalindrome3(linked_list)    print(res)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;234-回文链表&quot;&gt;&lt;a href=&quot;#234-回文链表&quot; class=&quot;headerlink&quot; title=&quot;234.回文链表&quot;&gt;&lt;/a&gt;234.回文链表&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。&lt;/p&gt;</summary>
     
     
     
