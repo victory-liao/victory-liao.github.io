@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-05T04:01:46.612Z</updated>
+  <updated>2021-09-05T08:44:16.177Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 字符串相乘</title>
+    <link href="http://example.com/2021/09/05/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98/"/>
+    <id>http://example.com/2021/09/05/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98/</id>
+    <published>2021-09-05T08:37:34.000Z</published>
+    <updated>2021-09-05T08:44:16.177Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="43-字符串相乘"><a href="#43-字符串相乘" class="headerlink" title="43.字符串相乘"></a>43.字符串相乘</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。</p><p>示例 1:<br>输入: num1 = “2”, num2 = “3”<br>输出: “6”</p><span id="more"></span><p><a href="https://leetcode-cn.com/problems/multiply-strings">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.将num1、num2两个字符串转为整数相乘，然后将结果转为字符串返回<br>2.使用python内置函数eval()执行num1 * num2表达式，将eval函数返回结果转为字符串返回<br>3.做加法（<a href="https://leetcode-cn.com/problems/multiply-strings/solution/zi-fu-chuan-xiang-cheng-by-leetcode-solution/">详细思路见leetcode题解</a>）<br>4.做乘法（<a href="https://leetcode-cn.com/problems/multiply-strings/solution/zi-fu-chuan-xiang-cheng-by-leetcode-solution/">详细思路见leetcode题解</a>）</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    def multiply(self, num1, num2):        &quot;&quot;&quot;        将num1、num2两个字符串转为整数相乘，然后将结果转为字符串返回        :type num1: str        :type num2: str        :rtype: str        &quot;&quot;&quot;        return str(int(num1) * int(num2))    def multiply1(self, num1: str, num2: str) -&gt; str:        &quot;&quot;&quot;        将num1、num2两个字符串转为整数相乘，然后将结果转为字符串返回        :param num1:        :param num2:        :return:        &quot;&quot;&quot;        if num1 == &quot;0&quot; or num2 == &quot;0&quot;:            return &quot;0&quot;        num1_to_int = 0        num2_to_int = 0        t = 1        for i in range(1, len(num1)+1):            num1_to_int += int(num1[-i]) * t            t = t * 10        t = 1        for i in range(1, len(num2)+1):            num2_to_int += int(num2[-i]) * t            t = t * 10        return str(num1_to_int * num2_to_int)    def multiply2(self, num1: str, num2: str) -&gt; str:        &quot;&quot;&quot;使用python内置函数eval()执行num1 * num2表达式，将eval函数返回结果转为字符串返回&quot;&quot;&quot;        if num1 == &quot;0&quot; or num2 == &quot;0&quot;:            return &quot;0&quot;        return str(eval(num1 + &#39;*&#39; + num2))  # eval() 函数用来执行一个字符串表达式，并返回表达式的值。    def multiply3(self, num1: str, num2: str) -&gt; str:        &quot;&quot;&quot;做加法&quot;&quot;&quot;        if num1 == &quot;0&quot; or num2 == &quot;0&quot;:            return &quot;0&quot;        ans = &quot;0&quot;        m, n = len(num1), len(num2)        for i in range(n - 1, -1, -1):            add = 0            y = int(num2[i])            curr = [&quot;0&quot;] * (n - i - 1)  # num2除了最低位以外，其余的每一位的运算结果都需要补0            print(&quot;curr:&quot;, curr)            for j in range(m - 1, -1, -1):                product = int(num1[j]) * y + add                curr.append(str(product % 10))                add = product // 10            if add &gt; 0:                curr.append(str(add))            curr = &quot;&quot;.join(curr[::-1])            ans = self.addStrings(ans, curr)        return ans    def addStrings(self, num1: str, num2: str) -&gt; str:        i, j = len(num1) - 1, len(num2) - 1        add = 0        ans = list()        while i &gt;= 0 or j &gt;= 0 or add != 0:            x = int(num1[i]) if i &gt;= 0 else 0            y = int(num2[j]) if j &gt;= 0 else 0            result = x + y + add            ans.append(str(result % 10))            add = result // 10            i -= 1            j -= 1        return &#39;&#39;.join(ans[::-1])    def multiply4(self, num1: str, num2: str) -&gt; str:        &quot;&quot;&quot;做乘法&quot;&quot;&quot;        if num1 == &quot;0&quot; or num2 == &quot;0&quot;:            return &quot;0&quot;        m, n = len(num1), len(num2)        ansArr = [0] * (m + n)        for i in range(m - 1, -1, -1):            x = int(num1[i])            for j in range(n - 1, -1, -1):                ansArr[i + j + 1] += x * int(num2[j])        for i in range(m + n - 1, 0, -1):            ansArr[i-1] += ansArr[i] // 10            ansArr[i] %= 10        index = 1 if ansArr[0] == 0 else 0        ans = &quot;&quot;.join(str(x) for x in ansArr[index:])        return ansif __name__ == &quot;__main__&quot;:    slt = Solution()    result = slt.multiply4(&quot;12&quot;, &quot;34&quot;)    print(result)    print(type(result))</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;43-字符串相乘&quot;&gt;&lt;a href=&quot;#43-字符串相乘&quot; class=&quot;headerlink&quot; title=&quot;43.字符串相乘&quot;&gt;&lt;/a&gt;43.字符串相乘&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。&lt;/p&gt;
+&lt;p&gt;示例 1:&lt;br&gt;输入: num1 = “2”, num2 = “3”&lt;br&gt;输出: “6”&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="字符串" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 括号生成</title>
@@ -507,37 +535,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;1…-9&quot;&gt;&lt;a href=&quot;#1…-9&quot; class=&quot;headerlink&quot; title=&quot;\1…\9&quot;&gt;&lt;/a&gt;\1…\9&lt;/h1&gt;&lt;p&gt;\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用&lt;br&gt;例：在以下代码段中\2表示匹配第2个分组（一个</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="re" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/re/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="re" scheme="http://example.com/tags/re/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python | re sub的使用方法</title>
-    <link href="http://example.com/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"/>
-    <id>http://example.com/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</id>
-    <published>2021-08-27T12:20:52.000Z</published>
-    <updated>2021-08-27T12:28:57.692Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p><p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;re-sub的使用方法&quot;&gt;&lt;a href=&quot;#re-sub的使用方法&quot; class=&quot;headerlink&quot; title=&quot;re.sub的使用方法&quot;&gt;&lt;/a&gt;re.sub的使用方法&lt;/h1&gt;&lt;p&gt;re.sub()实现相对复杂的替换&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;</summary>
       
     
     
