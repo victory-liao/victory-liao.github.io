@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-05T08:44:16.177Z</updated>
+  <updated>2021-09-07T10:00:23.629Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 在系统中查找重复文件</title>
+    <link href="http://example.com/2021/09/05/%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%9F%A5%E6%89%BE%E9%87%8D%E5%A4%8D%E6%96%87%E4%BB%B6/"/>
+    <id>http://example.com/2021/09/05/%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%9F%A5%E6%89%BE%E9%87%8D%E5%A4%8D%E6%96%87%E4%BB%B6/</id>
+    <published>2021-09-05T08:48:33.000Z</published>
+    <updated>2021-09-07T10:00:23.629Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="609-在系统中查找重复文件"><a href="#609-在系统中查找重复文件" class="headerlink" title="609.在系统中查找重复文件"></a>609.在系统中查找重复文件</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个目录信息列表，包括目录路径，以及该目录中的所有包含内容的文件，您需要找到文件系统中的所有重复文件组的路径。一组重复的文件至少包括二个具有完全相同内容的文件。<br>输入列表中的单个目录信息字符串的格式如下：<br>“root/d1/d2/…/dm f1.txt(f1_content) f2.txt(f2_content) … fn.txt(fn_content)”<br>这意味着有 n 个文件（f1.txt, f2.txt … fn.txt 的内容分别是 f1_content, f2_content … fn_content）在目录 root/d1/d2/…/dm 下。注意：n&gt;=1 且 m&gt;=0。如果 m=0，则表示该目录是根目录。<br>该输出是重复文件路径组的列表。对于每个组，它包含具有相同内容的文件的所有文件路径。文件路径是具有下列格式的字符串：<br>“directory_path/file_name.txt”</p><span id="more"></span><p>示例 1：<br>输入：<br>[“root/a 1.txt(abcd) 2.txt(efgh)”, “root/c 3.txt(abcd)”, “root/c/d 4.txt(efgh)”, “root 4.txt(efgh)”]<br>输出：<br>[[“root/a/2.txt”,”root/c/d/4.txt”,”root/4.txt”],[“root/a/1.txt”,”root/c/3.txt”]]</p><p><a href="https://leetcode-cn.com/problems/find-duplicate-file-in-system">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.哈希表<br>首先我们通过字符串操作获取目录路径、文件名和文件内容。我们使用哈希映射（HashMap）来寻找重复文件，哈希映射中的键（key）是文件内容，值（value）是存储路径和文件名的列表。<br>我们遍历每一个文件，并把它加入哈希映射中。在这之后，我们遍历哈希映射，如果一个键对应的值列表的长度大于 1，说明我们找到了重复文件，可以把这个列表加入到答案中。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    def findDuplicate(self, paths):        &quot;&quot;&quot;        :type paths: List[str]        :rtype: List[List[str]]        &quot;&quot;&quot;        map = &#123;&#125;        for path in paths:            values = path.split(&quot; &quot;)            for i in range(1, len(values)):                name_cont = values[i].split(&#39;(&#39;)[-1]                name_cont = name_cont.replace(&#39;)&#39;, &#39;&#39;)                value_list = map.get(name_cont, [])                value_list.append(values[0] + &#39;/&#39; + values[i].split(&#39;(&#39;)[0])                map[name_cont] = value_list        res = []        for key in map.keys():            if len(map.get(key)) &gt; 1:                res.append(map.get(key))        return resif __name__ == &#39;__main__&#39;:    slt = Solution()    result = slt.findDuplicate([&quot;root/a 1.txt(abcd) 2.txt(efgh)&quot;, &quot;root/c 3.txt(abcd)&quot;, &quot;root/c/d 4.txt(efgh)&quot;, &quot;root 4.txt(efgh)&quot;])    print(result)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;609-在系统中查找重复文件&quot;&gt;&lt;a href=&quot;#609-在系统中查找重复文件&quot; class=&quot;headerlink&quot; title=&quot;609.在系统中查找重复文件&quot;&gt;&lt;/a&gt;609.在系统中查找重复文件&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一个目录信息列表，包括目录路径，以及该目录中的所有包含内容的文件，您需要找到文件系统中的所有重复文件组的路径。一组重复的文件至少包括二个具有完全相同内容的文件。&lt;br&gt;输入列表中的单个目录信息字符串的格式如下：&lt;br&gt;“root/d1/d2/…/dm f1.txt(f1_content) f2.txt(f2_content) … fn.txt(fn_content)”&lt;br&gt;这意味着有 n 个文件（f1.txt, f2.txt … fn.txt 的内容分别是 f1_content, f2_content … fn_content）在目录 root/d1/d2/…/dm 下。注意：n&amp;gt;=1 且 m&amp;gt;=0。如果 m=0，则表示该目录是根目录。&lt;br&gt;该输出是重复文件路径组的列表。对于每个组，它包含具有相同内容的文件的所有文件路径。文件路径是具有下列格式的字符串：&lt;br&gt;“directory_path/file_name.txt”&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="字符串" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 字符串相乘</title>
@@ -519,36 +546,6 @@
     
     
     <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python | 匹配第n个分组的内容</title>
-    <link href="http://example.com/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/"/>
-    <id>http://example.com/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/</id>
-    <published>2021-08-28T01:22:29.000Z</published>
-    <updated>2021-08-28T01:35:00.116Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="1…-9"><a href="#1…-9" class="headerlink" title="\1…\9"></a>\1…\9</h1><p>\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用<br>例：在以下代码段中\2表示匹配第2个分组（一个括号代表一个分组）的内容，即\2匹配”world”字符串</p><pre><code>import restring = &quot;helloworld world&quot;pattern = r&#39;^(\w+)(world) \2$&#39;print(re.search(pattern, string))</code></pre><p><a href="https://www.jianshu.com/p/8a4ce87ef4b2">参考资料</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;1…-9&quot;&gt;&lt;a href=&quot;#1…-9&quot; class=&quot;headerlink&quot; title=&quot;\1…\9&quot;&gt;&lt;/a&gt;\1…\9&lt;/h1&gt;&lt;p&gt;\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用&lt;br&gt;例：在以下代码段中\2表示匹配第2个分组（一个</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="re" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/re/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="re" scheme="http://example.com/tags/re/"/>
     
   </entry>
   
