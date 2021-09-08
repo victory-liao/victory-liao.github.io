@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-07T10:00:23.629Z</updated>
+  <updated>2021-09-08T02:58:26.337Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 单词规律</title>
+    <link href="http://example.com/2021/09/08/%E5%8D%95%E8%AF%8D%E8%A7%84%E5%BE%8B/"/>
+    <id>http://example.com/2021/09/08/%E5%8D%95%E8%AF%8D%E8%A7%84%E5%BE%8B/</id>
+    <published>2021-09-08T02:55:10.000Z</published>
+    <updated>2021-09-08T02:58:26.337Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="290-单词规律"><a href="#290-单词规律" class="headerlink" title="290.单词规律"></a>290.单词规律</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。<br>这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。</p><p>示例1:<br>输入: pattern = “abba”, str = “dog cat cat dog”<br>输出: true</p><span id="more"></span><p><a href="https://leetcode-cn.com/problems/word-pattern/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.哈希表<br>在本题中，我们需要判断字符与字符串之间是否恰好一一对应。即任意一个字符都对应着唯一的字符串，任意一个字符串也只被唯一的一个字符对应。在集合论中，这种关系被称为「双射」。<br>想要解决本题，我们可以利用哈希表记录每一个字符对应的字符串，以及每一个字符串对应的字符。然后我们枚举每一对字符与字符串的配对过程，不断更新哈希表，如果发生了冲突，则说明给定的输入不满足双射关系。<br>在实际代码中，我们枚举 pattern 中的每一个字符，利用双指针来均摊线性地找到该字符在 str 中对应的字符串。每次确定一个字符与字符串的组合，我们就检查是否出现冲突，最后我们再检查两字符串是否比较完毕即可。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    def wordPattern(self, pattern, s):        &quot;&quot;&quot;        :type pattern: str        :type s: str        :rtype: bool        &quot;&quot;&quot;        word2ch = dict()        ch2word = dict()        words = s.split()        if len(pattern) != len(words):            return False        for ch, word in zip(pattern, words):            if (word in word2ch and word2ch[word] != ch) or (ch in ch2word and ch2word[ch] != word):                return False            word2ch[word] = ch            ch2word[ch] = word        return True    def wordPattern(self, pattern, s):        dct = dict()        s = s.split(&#39; &#39;)        if len(s) != len(pattern):  # 两个字符串长度不相同，返回False            return False        for i in range(len(pattern)):            if pattern[i] not in dct:  # 如果pattern[i]不在字典中，此时要加入pattern[i]                if s[i] not in dct.values():  # 如果s[i]还未存在，则加入新的映射                    dct[pattern[i]] = s[i]                else:                    return False  # 但是如果与dct[pattern[i]]对应的s[i]已经存在字典的值中，说明不是唯一映射            else:                if dct[pattern[i]] != s[i]:  # 如果pattern[i]在字典中，但是dct[pattern[i]]的值不等于s[i]，说明已存在其他映射                    return False        return Trueif __name__ == &#39;__main__&#39;:    slt = Solution()    res = slt.wordPattern1(&quot;abba&quot;, &quot;dog cat cat dog&quot;)    print(res)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;290-单词规律&quot;&gt;&lt;a href=&quot;#290-单词规律&quot; class=&quot;headerlink&quot; title=&quot;290.单词规律&quot;&gt;&lt;/a&gt;290.单词规律&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。&lt;br&gt;这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。&lt;/p&gt;
+&lt;p&gt;示例1:&lt;br&gt;输入: pattern = “abba”, str = “dog cat cat dog”&lt;br&gt;输出: true&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="哈希表" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 在系统中查找重复文件</title>
@@ -510,31 +538,6 @@
     
     
     <summary type="html">&lt;h1 id=&quot;125-验证回文串&quot;&gt;&lt;a href=&quot;#125-验证回文串&quot; class=&quot;headerlink&quot; title=&quot;125.验证回文串&quot;&gt;&lt;/a&gt;125.验证回文串&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。&lt;br&gt;说明：本题中，我们将空字符串定义为有效的回文串。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="字符串" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
-    
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 外观数列</title>
-    <link href="http://example.com/2021/08/28/%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/"/>
-    <id>http://example.com/2021/08/28/%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/</id>
-    <published>2021-08-28T01:45:20.000Z</published>
-    <updated>2021-08-28T02:06:38.670Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="38-外观数列"><a href="#38-外观数列" class="headerlink" title="38.外观数列"></a>38.外观数列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个正整数 n ，输出外观数列的第 n 项。<br>「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。</p><span id="more"></span><p>你可以将其视作是由递归公式定义的数字字符串序列：<br>    countAndSay(1) = “1”<br>    countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。<br>前五项如下：</p><ol><li><pre><code>1</code></pre></li><li><pre><code>11</code></pre></li><li><pre><code>21</code></pre></li><li><pre><code>1211</code></pre></li><li><pre><code>111221</code></pre>第一项是数字 1<br>描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 “11”<br>描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 “21”<br>描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 “1211”<br>描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 “111221”<br>要 描述 一个数字字符串，首先要将字符串分割为 最小 数量的组，每个组都由连续的最多 相同字符 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。</li></ol><p><a href="https://leetcode-cn.com/problems/count-and-say/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.递归<br>递归出口为n == 1时，返回”1”；<br>当n &gt; 1时，我们只需要计算countAndSay(n - 1)中每个数字的个数：<br>对于计算字符串中每个数字出现的个数，使用双指针i, j，其中i表示当前字符，j则是计数指针，向后移动判断；<br>以求n = 5，lastStr = countAndSay(4) = “1211”为例，answer = “”，一开始让i = 0, j = 1，此时’1’ != ‘2’，<br>故answer += (j - i) + lastStr.charAt(i)，ans = “11”；然后让i = j（第二个不同字符起始位置），<br>然后j++往后移动；此时i = j = 1，j = j + 1 = 2，又’2’ != ‘1’，<br>所以answer += (j - i) + lastStr.charAt(i),ans = “1112”,重复i = j = 2， j = ++j = 3；此时’1’ = ‘1’；<br>故直接j = ++j = 4 == lastStr.length()，所以跳出循环，然后把最后一次的字符个数字符加上，即执行：<br>answer += (j - i) + lastStr.charAt(i),ans = “111221”，即countAndSay(5) = “111221”。<br>2.正则表达式<br>用正则表达式匹配一个数字的重复序列和数字本身，然后将匹配的序列的长度加上数字本身替换原字符串中重复序列，…，以此类推。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:    def countAndSay(self, n: int) -&gt; str:        &quot;&quot;&quot;        递归法        :param n:        :return:        &quot;&quot;&quot;        if n == 1:  # 递归出口            return &quot;1&quot;        else:            lastStr = self.countAndSay(n - 1)            ans = &quot;&quot;            i = 0            j = 1            while j &lt; len(lastStr):                if lastStr[i] != lastStr[j]:                    ans += str(j-i)                    ans += str(lastStr[i])                    i = j  # 下一个不同字符的起始位置                j += 1            ans += str(j - i)            ans += str(lastStr[i])            return str(ans)    def countAndSay1(self, n):        &quot;&quot;&quot;        :type n: int        :rtype: str        &quot;&quot;&quot;        import re        s = &#39;1&#39;        for _ in range(n - 1):            s = re.sub(r&#39;(.)\1*&#39;, lambda a: str(len(a.group(0))) + a.group(1), s)  # sub(pattern, repl, string)            # r&#39;(.)\1*&#39; (.)匹配一个任意字符作为一个分组 \1*匹配与第一个分组相同内容0次/多次        return sif __name__ == &#39;__main__&#39;:    s = Solution()    res = s.countAndSay1(5)    print(res)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;38-外观数列&quot;&gt;&lt;a href=&quot;#38-外观数列&quot; class=&quot;headerlink&quot; title=&quot;38.外观数列&quot;&gt;&lt;/a&gt;38.外观数列&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一个正整数 n ，输出外观数列的第 n 项。&lt;br&gt;「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。&lt;/p&gt;</summary>
     
     
     
