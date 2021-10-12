@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-11T09:08:40.332Z</updated>
+  <updated>2021-10-12T09:13:28.480Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>matplotlib | recorded EEG visualization</title>
+    <link href="http://example.com/2021/10/12/recorded-EEG-visualization/"/>
+    <id>http://example.com/2021/10/12/recorded-EEG-visualization/</id>
+    <published>2021-10-12T09:00:42.000Z</published>
+    <updated>2021-10-12T09:13:28.480Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="recorded-EEG-visualization"><a href="#recorded-EEG-visualization" class="headerlink" title="recorded EEG visualization"></a>recorded EEG visualization</h1><p>在做脑电（EEG）的相关研究时,通常我们需要使用公开的脑电数据集合，公开数据集包含了以及采集好的脑电数据。<br>我们可以使用python的第三方库matplotlib将数据集中的脑电数据进行可视化。</p><span id="more"></span><p>下面以绘制8个通道的脑电数据为例对脑电数据进行可视化：<br>注意：实例中使用公开数据集DEAP,详细信息可参考<a href="http://www.eecs.qmul.ac.uk/mmv/datasets/deap/">DEAP 官网</a></p><p><strong>示例代码：</strong></p><pre><code>import osimport globimport pickleimport matplotlib.pyplot as plt# 参数设置window_size = 1sampling_rate = 500# 获取数据文件列表并划分(训练文件/测试文件)data_dir = &quot;data_preprocessed_python/&quot;file_list = glob.glob(os.path.join(data_dir, &quot;*&quot;))  # 整个数据集包含32个subject的样本数据print(&quot;len(file_list):&quot;, len(file_list))def get_data_and_label(file_list):    &quot;&quot;&quot;    获得固定窗口大小的数据和对应的标签    Arrray name         Array shape         Array contents    ---------------------------------------------------------------------------------------------    data                40 x 40 x 8064      video/trial x channel x data    labels              40 x 4              videl/trial x label(valence,arousal,dominance,liking)    ---------------------------------------------------------------------------------------------    &quot;&quot;&quot;    data = []    valence_labels = []    arousal_labels = []    for file in file_list:        x = pickle.load(open(file, &#39;rb&#39;), encoding=&#39;latin1&#39;)  # type(x):dict &#123;&#39;labels&#39;:array(),&#39;data&#39;:array()&#125;        labels = x[&#39;labels&#39;]        valence_labels.extend(labels[:, 0])        arousal_labels.extend(labels[:, 1])        dat = x[&#39;data&#39;]        data.extend(dat[:, :, :window_size * sampling_rate])    return dataprint(&quot;开始获取脑电波数据...&quot;)data = get_data_and_label(file_list)print(&quot;脑电波数据已获取，开始绘制脑电波...&quot;)x = range(sampling_rate)fig, ax = plt.subplots(3, 3)ax[0][0].plot(x, list(data[0][0]))ax[0][0].set_title(&#39;Fp1&#39;)ax[0][1].plot(x, list(data[0][1]))ax[0][1].set_title(&#39;AF3&#39;)ax[0][2].plot(x, list(data[0][2]))ax[0][2].set_title(&#39;F3&#39;)ax[1][0].plot(x, list(data[0][3]))ax[1][0].set_title(&#39;F7&#39;)ax[1][1].plot(x, list(data[0][4]))ax[1][1].set_title(&#39;FC5&#39;)ax[1][2].plot(x, list(data[0][5]))ax[1][2].set_title(&#39;FC1&#39;)ax[2][0].plot(x, list(data[0][6]))ax[2][0].set_title(&#39;C3&#39;)ax[2][1].plot(x, list(data[0][7]))ax[2][1].set_title(&#39;T7&#39;)ax[2][2].plot(x, list(data[0][8]))ax[2][2].set_title(&#39;CP5&#39;)plt.show()print(&quot;脑电波绘制完成！&quot;)</code></pre><p><strong>绘制的脑电波：</strong></p><p><img src="/2021/10/12/recorded-EEG-visualization/500_brainwave.png"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;recorded-EEG-visualization&quot;&gt;&lt;a href=&quot;#recorded-EEG-visualization&quot; class=&quot;headerlink&quot; title=&quot;recorded EEG visualization&quot;&gt;&lt;/a&gt;recorded EEG visualization&lt;/h1&gt;&lt;p&gt;在做脑电（EEG）的相关研究时,通常我们需要使用公开的脑电数据集合，公开数据集包含了以及采集好的脑电数据。&lt;br&gt;我们可以使用python的第三方库matplotlib将数据集中的脑电数据进行可视化。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="matplotlib" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/matplotlib/"/>
+    
+    
+    <category term="matplotlib" scheme="http://example.com/tags/matplotlib/"/>
+    
+  </entry>
   
   <entry>
     <title>GPU | CPU和GPU的设计区别</title>
@@ -532,30 +557,6 @@
     <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>hexo | hexo博客换电脑了怎么办</title>
-    <link href="http://example.com/2021/08/30/hexo%E5%8D%9A%E5%AE%A2%E6%8D%A2%E7%94%B5%E8%84%91%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E/"/>
-    <id>http://example.com/2021/08/30/hexo%E5%8D%9A%E5%AE%A2%E6%8D%A2%E7%94%B5%E8%84%91%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E/</id>
-    <published>2021-08-30T18:41:12.000Z</published>
-    <updated>2021-10-09T08:21:09.287Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="hexo博客换电脑了怎么办"><a href="#hexo博客换电脑了怎么办" class="headerlink" title="hexo博客换电脑了怎么办"></a>hexo博客换电脑了怎么办</h1><p>我们搭建的hexo博客在更换电脑之后，如果重新搭建博客比较费时费力，可以按照以下资料快速在新的电脑上使用hexo博客发布内容。</p><p><a href="https://www.cnblogs.com/study-everyday/p/8902136.html">参考资料1</a><br><a href="https://www.cnblogs.com/study-everyday/p/8902136.html">参考资料2</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;hexo博客换电脑了怎么办&quot;&gt;&lt;a href=&quot;#hexo博客换电脑了怎么办&quot; class=&quot;headerlink&quot; title=&quot;hexo博客换电脑了怎么办&quot;&gt;&lt;/a&gt;hexo博客换电脑了怎么办&lt;/h1&gt;&lt;p&gt;我们搭建的hexo博客在更换电脑之后，如果重新搭建博</summary>
-      
-    
-    
-    
-    <category term="hexo" scheme="http://example.com/categories/hexo/"/>
-    
-    
-    <category term="hexo" scheme="http://example.com/tags/hexo/"/>
     
   </entry>
   
