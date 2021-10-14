@@ -34,38 +34,6 @@
       </tags>
   </entry>
   <entry>
-    <title>脑电分类 | 1D卷积和LSTM脑电信号识别</title>
-    <url>/2021/07/03/1D%E5%8D%B7%E7%A7%AF%E5%92%8CLSTM%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E8%AF%86%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="1D卷积和LSTM脑电信号识别"><a href="#1D卷积和LSTM脑电信号识别" class="headerlink" title="1D卷积和LSTM脑电信号识别"></a>1D卷积和LSTM脑电信号识别</h1><p>这是一个非常重要的文章！！！ This is a very important article!!!</p>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>框架</th>
-<th>准确率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CNN+LSTM</td>
-<td>TensorFlow</td>
-<td>70%</td>
-</tr>
-</tbody></table>
-<p><a href="https://blog.csdn.net/zyb228/article/details/109193128">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电分类</category>
-        <category>CNN+LSTM</category>
-      </categories>
-      <tags>
-        <tag>脑电分类</tag>
-        <tag>LSTM</tag>
-        <tag>CNN+LSTM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>设计模式 | 23种设计模式总结</title>
     <url>/2021/03/11/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h1 id="23种设计模式总结-未完成"><a href="#23种设计模式总结-未完成" class="headerlink" title="23种设计模式总结(未完成)"></a>23种设计模式总结(未完成)</h1><p>以下内容对23中设计模式进行简单介绍：</p>
@@ -102,6 +70,38 @@
       </categories>
       <tags>
         <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>脑电分类 | 1D卷积和LSTM脑电信号识别</title>
+    <url>/2021/07/03/1D%E5%8D%B7%E7%A7%AF%E5%92%8CLSTM%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E8%AF%86%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="1D卷积和LSTM脑电信号识别"><a href="#1D卷积和LSTM脑电信号识别" class="headerlink" title="1D卷积和LSTM脑电信号识别"></a>1D卷积和LSTM脑电信号识别</h1><p>这是一个非常重要的文章！！！ This is a very important article!!!</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>框架</th>
+<th>准确率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CNN+LSTM</td>
+<td>TensorFlow</td>
+<td>70%</td>
+</tr>
+</tbody></table>
+<p><a href="https://blog.csdn.net/zyb228/article/details/109193128">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电分类</category>
+        <category>CNN+LSTM</category>
+      </categories>
+      <tags>
+        <tag>脑电分类</tag>
+        <tag>LSTM</tag>
+        <tag>CNN+LSTM</tag>
       </tags>
   </entry>
   <entry>
@@ -865,6 +865,106 @@ def show(request, id1, id2):
       </tags>
   </entry>
   <entry>
+    <title>Django | Django模型查询</title>
+    <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
+    <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
+<pre><code>print([e.attr for e in Entry.objects.all()])
+print([e.attr for e in Entry.objects.all()])
+</code></pre>
+<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
+<pre><code>querylist=ExampleModel.objects.all()
+print([e.attr for e in querylist])
+print([e.attr for e in querylist])
+</code></pre>
+<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
+<pre><code>query=ExampleModel.objects.all()
+for ... in query[0:10]
+for ... in query[11:20]
+</code></pre>
+<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
+<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
+<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
+<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>脑电基础知识 | 简单了解EEG</title>
+    <url>/2020/10/11/EEG-introduction/</url>
+    <content><![CDATA[<h1 id="简单了解EEG"><a href="#简单了解EEG" class="headerlink" title="简单了解EEG"></a>简单了解EEG</h1><h2 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h2><p>EEG is the electrical response of brain cells in the cerebral cortex.</p>
+<h2 id="How-to-record"><a href="#How-to-record" class="headerlink" title="How to record?"></a>How to record?</h2><p>typically collected by an electrode collection system(10/20 system)placed on the head of the brain. </p>
+<span id="more"></span>
+<h2 id="characteristic"><a href="#characteristic" class="headerlink" title="characteristic"></a>characteristic</h2><ul>
+<li>a highly random <b>nonlinear non-stationary signal</b></li>
+<li>contains very <b>complex components</b></li>
+<li>the signal amplitude is microvolts,and the <b>intensity is very weak</b>.</li>
+<li>it is very <b>susceptible</b> to other <b>physiological signals</b> of the human body(<b>EOG/ECG/EMG</b>) or interference from non-physiological signals such as spatial electromagnetic noise.</li>
+</ul>
+<h2 id="Existed-problem"><a href="#Existed-problem" class="headerlink" title="Existed problem"></a>Existed problem</h2><p><b>Artifacts often mask the waveform characteristics of EEG</b>,which makes the reading of EEG signals more difficult<br>and bring great difficulties to the subsequent research and application of EEG signal.</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电基础知识</category>
+      </categories>
+      <tags>
+        <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
+    <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
+    <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
+<h1 id="Target-EEG-Pathology-Detection"><a href="#Target-EEG-Pathology-Detection" class="headerlink" title="Target: EEG Pathology Detection"></a>Target: EEG Pathology Detection</h1><h1 id="Proposed-Methonds"><a href="#Proposed-Methonds" class="headerlink" title="Proposed Methonds:"></a>Proposed Methonds:</h1><p>Method One:Shallow CNN Model<br>Method Two:Deep CNN Model(AlexNet)<br>Method Three:Fusion stategy based on a multiplayer perception<br>Fusion of CNN features of several distinct temporal segments of the EEG signal</p>
+<p><b style="color:red">In future study:investigate different fusion strategies</b></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+      </categories>
+      <tags>
+        <tag>CNN</tag>
+        <tag>论文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>urllib.request | GET请求</title>
+    <url>/2021/08/05/GET%E8%AF%B7%E6%B1%82/</url>
+    <content><![CDATA[<h1 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h1><p>使用urllib.request模块可以在python中访问互联网资源，以下是发送GET请求的示例代码。</p>
+<pre><code># coding=utf-8
+
+import urllib.request
+
+# url中？后的内容是请求参数，多个参数之间以&amp;分割
+url = &#39;http://localhost:8080/NoteWebService/note.do?action=query&amp;ID=10&#39;
+
+# 创建Request对象，默认是GET请求
+req = urllib.request.Request(url)
+
+with urllib.request.urlopen(req) as response:
+    data = response.read()  # 读取数据，为字节序列数据
+    json_data = data.decode()  # 将字节序列数据转换为字符串
+    print(json_data)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>urllib</category>
+      </categories>
+      <tags>
+        <tag>urllib</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | Django中使用MySQL数据库</title>
     <url>/2021/07/25/Django%E4%B8%AD%E4%BD%BF%E7%94%A8MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
     <content><![CDATA[<h1 id="Django中使用MySQL数据库"><a href="#Django中使用MySQL数据库" class="headerlink" title="Django中使用MySQL数据库"></a>Django中使用MySQL数据库</h1><p>1.在虚拟环境中安装mysql包</p>
@@ -918,106 +1018,6 @@ def show(request, id1, id2):
       </categories>
       <tags>
         <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | Django模型查询</title>
-    <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
-<pre><code>print([e.attr for e in Entry.objects.all()])
-print([e.attr for e in Entry.objects.all()])
-</code></pre>
-<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
-<pre><code>querylist=ExampleModel.objects.all()
-print([e.attr for e in querylist])
-print([e.attr for e in querylist])
-</code></pre>
-<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
-<pre><code>query=ExampleModel.objects.all()
-for ... in query[0:10]
-for ... in query[11:20]
-</code></pre>
-<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
-<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
-<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
-<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
-    <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
-    <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
-<h1 id="Target-EEG-Pathology-Detection"><a href="#Target-EEG-Pathology-Detection" class="headerlink" title="Target: EEG Pathology Detection"></a>Target: EEG Pathology Detection</h1><h1 id="Proposed-Methonds"><a href="#Proposed-Methonds" class="headerlink" title="Proposed Methonds:"></a>Proposed Methonds:</h1><p>Method One:Shallow CNN Model<br>Method Two:Deep CNN Model(AlexNet)<br>Method Three:Fusion stategy based on a multiplayer perception<br>Fusion of CNN features of several distinct temporal segments of the EEG signal</p>
-<p><b style="color:red">In future study:investigate different fusion strategies</b></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-      </categories>
-      <tags>
-        <tag>CNN</tag>
-        <tag>论文</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>脑电基础知识 | 简单了解EEG</title>
-    <url>/2020/10/11/EEG-introduction/</url>
-    <content><![CDATA[<h1 id="简单了解EEG"><a href="#简单了解EEG" class="headerlink" title="简单了解EEG"></a>简单了解EEG</h1><h2 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h2><p>EEG is the electrical response of brain cells in the cerebral cortex.</p>
-<h2 id="How-to-record"><a href="#How-to-record" class="headerlink" title="How to record?"></a>How to record?</h2><p>typically collected by an electrode collection system(10/20 system)placed on the head of the brain. </p>
-<span id="more"></span>
-<h2 id="characteristic"><a href="#characteristic" class="headerlink" title="characteristic"></a>characteristic</h2><ul>
-<li>a highly random <b>nonlinear non-stationary signal</b></li>
-<li>contains very <b>complex components</b></li>
-<li>the signal amplitude is microvolts,and the <b>intensity is very weak</b>.</li>
-<li>it is very <b>susceptible</b> to other <b>physiological signals</b> of the human body(<b>EOG/ECG/EMG</b>) or interference from non-physiological signals such as spatial electromagnetic noise.</li>
-</ul>
-<h2 id="Existed-problem"><a href="#Existed-problem" class="headerlink" title="Existed problem"></a>Existed problem</h2><p><b>Artifacts often mask the waveform characteristics of EEG</b>,which makes the reading of EEG signals more difficult<br>and bring great difficulties to the subsequent research and application of EEG signal.</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电基础知识</category>
-      </categories>
-      <tags>
-        <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>urllib.request | GET请求</title>
-    <url>/2021/08/05/GET%E8%AF%B7%E6%B1%82/</url>
-    <content><![CDATA[<h1 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h1><p>使用urllib.request模块可以在python中访问互联网资源，以下是发送GET请求的示例代码。</p>
-<pre><code># coding=utf-8
-
-import urllib.request
-
-# url中？后的内容是请求参数，多个参数之间以&amp;分割
-url = &#39;http://localhost:8080/NoteWebService/note.do?action=query&amp;ID=10&#39;
-
-# 创建Request对象，默认是GET请求
-req = urllib.request.Request(url)
-
-with urllib.request.urlopen(req) as response:
-    data = response.read()  # 读取数据，为字节序列数据
-    json_data = data.decode()  # 将字节序列数据转换为字符串
-    print(json_data)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>urllib</category>
-      </categories>
-      <tags>
-        <tag>urllib</tag>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -3301,6 +3301,21 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>伪迹移除 | 伪迹去除方法比较总结</title>
+    <url>/2021/02/25/%E4%BC%AA%E8%BF%B9%E5%8E%BB%E9%99%A4%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="伪迹去除方法比较总结"><a href="#伪迹去除方法比较总结" class="headerlink" title="伪迹去除方法比较总结"></a>伪迹去除方法比较总结</h1><p>1.(定性比较 or 定量比较)很难对不同伪迹去除方法基于它们去除伪迹的能力进行一个比较，通常只能做一个<b>定性(qualitative)</b>的比较<br>2.(自动 or 半自动)很多基于EEG的应用需要<b>自动信息处理</b>，尤其是一些对<b>在线/实时(需要效率很高的算法和足够低的计算复杂度)</b>有要求的应用。基于<b>BSS(盲源分离)</b>的方法通常是<b>半自动</b>的,因为伪迹成分的识别需要一些训练或参数选择/调整。涉及ICA的伪迹检测/去除方法需要另一个方法才能实现全过程的自动<br>3.(单通道 or 多通道)基于<b>盲源分离</b>的方法需要<b>多通道</b>才能起作用，通道数量越多，越能很好的分离出单个的源(这种方法不能用于低通道 e.g. 4-6或者基于单通道的应用)。基于<b>小波变换和经验模态分解</b>的方法可以通过将单个数据序列分解为多个成分进行<b>单通道</b>分析。<br>4.(参考信号)大多数方法需要参考信号。</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+        <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
     <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
@@ -3331,21 +3346,6 @@ if __name__ == &#39;__main__&#39;:
       </categories>
       <tags>
         <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | 伪迹去除方法比较总结</title>
-    <url>/2021/02/25/%E4%BC%AA%E8%BF%B9%E5%8E%BB%E9%99%A4%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="伪迹去除方法比较总结"><a href="#伪迹去除方法比较总结" class="headerlink" title="伪迹去除方法比较总结"></a>伪迹去除方法比较总结</h1><p>1.(定性比较 or 定量比较)很难对不同伪迹去除方法基于它们去除伪迹的能力进行一个比较，通常只能做一个<b>定性(qualitative)</b>的比较<br>2.(自动 or 半自动)很多基于EEG的应用需要<b>自动信息处理</b>，尤其是一些对<b>在线/实时(需要效率很高的算法和足够低的计算复杂度)</b>有要求的应用。基于<b>BSS(盲源分离)</b>的方法通常是<b>半自动</b>的,因为伪迹成分的识别需要一些训练或参数选择/调整。涉及ICA的伪迹检测/去除方法需要另一个方法才能实现全过程的自动<br>3.(单通道 or 多通道)基于<b>盲源分离</b>的方法需要<b>多通道</b>才能起作用，通道数量越多，越能很好的分离出单个的源(这种方法不能用于低通道 e.g. 4-6或者基于单通道的应用)。基于<b>小波变换和经验模态分解</b>的方法可以通过将单个数据序列分解为多个成分进行<b>单通道</b>分析。<br>4.(参考信号)大多数方法需要参考信号。</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -5623,8 +5623,8 @@ app.MainLoop()  # 进入主事件循环
       <tags>
         <tag>脑电分类</tag>
         <tag>深度学习</tag>
-        <tag>CNN</tag>
         <tag>EEG</tag>
+        <tag>CNN</tag>
         <tag>情绪识别</tag>
       </tags>
   </entry>
@@ -6182,21 +6182,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 最简单的神经网络</title>
-    <url>/2021/06/20/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
-    <content><![CDATA[<h1 id="最简单的神经网络"><a href="#最简单的神经网络" class="headerlink" title="最简单的神经网络"></a>最简单的神经网络</h1><p><img src="/2021/06/20/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/1.png"></p>
-<p>其中：X为神经网络的输入 Y为神经网络的输出<br>描述：输入X通过一个节点（一个单独的神经元），最终输出Y<br>例：把房屋的面积作为神经网络的输入，通过一个神经元，最终输出了房屋的价格</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>神经网络</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 最长公共前缀</title>
     <url>/2021/08/27/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/</url>
     <content><![CDATA[<h1 id="14-最长公共前缀"><a href="#14-最长公共前缀" class="headerlink" title="14.最长公共前缀"></a>14.最长公共前缀</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>编写一个函数来查找字符串数组中的最长公共前缀。<br>如果不存在公共前缀，返回空字符串 “”。</p>
@@ -6450,6 +6435,21 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 最简单的神经网络</title>
+    <url>/2021/06/20/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<h1 id="最简单的神经网络"><a href="#最简单的神经网络" class="headerlink" title="最简单的神经网络"></a>最简单的神经网络</h1><p><img src="/2021/06/20/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/1.png"></p>
+<p>其中：X为神经网络的输入 Y为神经网络的输出<br>描述：输入X通过一个节点（一个单独的神经元），最终输出Y<br>例：把房屋的面积作为神经网络的输入，通过一个神经元，最终输出了房屋的价格</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>神经网络</tag>
       </tags>
   </entry>
   <entry>
