@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-16T13:55:21.367Z</updated>
+  <updated>2021-10-16T13:57:32.208Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://example.com/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/"/>
     <id>http://example.com/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/</id>
     <published>2021-10-16T13:52:18.000Z</published>
-    <updated>2021-10-16T13:55:21.367Z</updated>
+    <updated>2021-10-16T13:57:32.208Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="批量生成PPT版荣誉证书"><a href="#批量生成PPT版荣誉证书" class="headerlink" title="批量生成PPT版荣誉证书"></a>批量生成PPT版荣誉证书</h1><p>以下代码实现了根据一个excel名单和一个荣誉证书模板批量生成名单中所有人的荣誉整数。</p><pre><code>import timefrom pptx import Presentationfrom openpyxl import load_workbookprs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)slide = prs.slides.add_slide(prs.slide_layouts[0])  # 第一个模板的第0个板式for ph in slide.placeholders:  # 遍历这页PPT的所有占位符    phf = ph.placeholder_format  # 获取占位符的格式    print(phf.idx)  # 打印其ID编号    ph.text = str(phf.idx)  # 将编号写入PPT对应的位置中，以便后面一一对应# 以上读取到占位符的ID方便后面调用prs.save(r&#39;data\荣誉证书模板-占位符编号.pptx&#39;)wb = load_workbook(r&quot;data\名单.xlsx&quot;)ws = wb.activedata = &#123;&#125;for row in range(2, ws.max_row + 1):    class_id = ws[&#39;A&#39; + str(row)].value    name = ws[&#39;B&#39; + str(row)].value    data.setdefault(class_id, [])    data[class_id].append(name)t0 = time.time()  # 程序开始运行的时间prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)slide_layout = prs.slide_layouts[0]  # 调用设置好的母版，因为是母版的第一版式，所以取[0]for class_id in data:    for name in data[class_id]:        slide = prs.slides.add_slide(slide_layout)  # 以母版的版式为基础新增一页幻灯片        # 往幻灯片中写入内容        slide.placeholders[10].text = &quot;&#123;&#125; 班 &#123;&#125; 同学：&quot;.format(class_id, name)  # 此处是班级和姓名        slide.placeholders[11].text = &quot;在2019-2020学年度第一学期获得&quot;        slide.placeholders[12].text = &quot;“好孩子”称号。&quot;        slide.placeholders[13].text = &quot;特发此证，以资鼓励。&quot;        slide.placeholders[14].text = &quot;市幼儿园&quot;        slide.placeholders[15].text = &quot;2020年1月&quot;prs.save(&#39;data\荣誉证书(总).pptx&#39;)t1 = time.time()print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)</code></pre>]]></content>
+    <content type="html"><![CDATA[<h1 id="批量生成PPT版荣誉证书"><a href="#批量生成PPT版荣誉证书" class="headerlink" title="批量生成PPT版荣誉证书"></a>批量生成PPT版荣誉证书</h1><p>以下代码实现了根据一个excel名单和一个荣誉证书模板批量生成名单中所有人的荣誉证书。</p><pre><code>import timefrom pptx import Presentationfrom openpyxl import load_workbookprs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)slide = prs.slides.add_slide(prs.slide_layouts[0])  # 第一个模板的第0个板式for ph in slide.placeholders:  # 遍历这页PPT的所有占位符    phf = ph.placeholder_format  # 获取占位符的格式    print(phf.idx)  # 打印其ID编号    ph.text = str(phf.idx)  # 将编号写入PPT对应的位置中，以便后面一一对应# 以上读取到占位符的ID方便后面调用prs.save(r&#39;data\荣誉证书模板-占位符编号.pptx&#39;)wb = load_workbook(r&quot;data\名单.xlsx&quot;)ws = wb.activedata = &#123;&#125;for row in range(2, ws.max_row + 1):    class_id = ws[&#39;A&#39; + str(row)].value    name = ws[&#39;B&#39; + str(row)].value    data.setdefault(class_id, [])    data[class_id].append(name)t0 = time.time()  # 程序开始运行的时间prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)slide_layout = prs.slide_layouts[0]  # 调用设置好的母版，因为是母版的第一版式，所以取[0]for class_id in data:    for name in data[class_id]:        slide = prs.slides.add_slide(slide_layout)  # 以母版的版式为基础新增一页幻灯片        # 往幻灯片中写入内容        slide.placeholders[10].text = &quot;&#123;&#125; 班 &#123;&#125; 同学：&quot;.format(class_id, name)  # 此处是班级和姓名        slide.placeholders[11].text = &quot;在2019-2020学年度第一学期获得&quot;        slide.placeholders[12].text = &quot;“好孩子”称号。&quot;        slide.placeholders[13].text = &quot;特发此证，以资鼓励。&quot;        slide.placeholders[14].text = &quot;市幼儿园&quot;        slide.placeholders[15].text = &quot;2020年1月&quot;prs.save(&#39;data\荣誉证书(总).pptx&#39;)t1 = time.time()print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)</code></pre>]]></content>
     
     
       
