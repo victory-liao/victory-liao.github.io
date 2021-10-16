@@ -190,6 +190,143 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">多线程 | 实现线程体的两种方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-08-05 20:13:03 / Modified: 04:15:38" itemprop="dateCreated datePublished" datetime="2021-08-05T20:13:03-08:00">2021-08-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/threading/" itemprop="url" rel="index"><span itemprop="name">threading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import threading
+import time
+
+
+# 线程体函数
+def thread_body():
+    # 当前线程对象
+    t = threading.current_thread()
+    for n in range(5):
+        # 当前线程名
+        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+        # 线程休眠
+        time.sleep(2)
+    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = threading.Thread(target=thread_body)
+# 创建线程对象t2
+t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+<p>2.自定义线程类实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import time
+import threading
+
+
+class SmallThread(threading.Thread):
+    def __init__(self, name=None):
+        super().__init__(name=name)
+
+    # 线程体函数
+    def run(self):
+        # 当前线程对象
+        t = threading.current_thread()
+        for n in range(5):
+            # 当前线程名
+            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+            # 线程休眠
+            time.sleep(2)
+        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = SmallThread()  # 通过自定义线程类，创建线程对象
+# 创建线程对象t2
+t2 = SmallThread(name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/05/%E8%A7%A3%E7%A0%81json%E6%95%B0%E6%8D%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1115,85 +1252,6 @@ show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/02/python%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E6%95%88%E6%9E%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/02/python%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E6%95%88%E6%9E%9C/" class="post-title-link" itemprop="url">python | python中如何实现函数重载的效果</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-08-02 16:45:11 / Modified: 00:52:35" itemprop="dateCreated datePublished" datetime="2021-08-02T16:45:11-08:00">2021-08-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="python中如何实现函数重载的效果"><a href="#python中如何实现函数重载的效果" class="headerlink" title="python中如何实现函数重载的效果"></a>python中如何实现函数重载的效果</h1><h2 id="什么是函数重载？"><a href="#什么是函数重载？" class="headerlink" title="什么是函数重载？"></a>什么是函数重载？</h2><p>函数重载，即可以定义多个同名函数，但是参数列表不同，这样在调用时可以传递不同的实参。</p>
-<h2 id="python中没有函数重载的概念"><a href="#python中没有函数重载的概念" class="headerlink" title="python中没有函数重载的概念"></a>python中没有函数重载的概念</h2><p>函数重载会增加代码量，所以在python中没有函数重载的概念，而是<strong>为函数的参数提供默认值</strong>实现的。</p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><pre><code># coding=utf-8
-
-def make_coffee(name=&#39;卡布奇诺&#39;)：
-    return &quot;制作一杯&#123;&#125;&quot;.format(name)
-    
-coffee1 = make_coffee(&#39;拿铁&#39;)  # 提供参数
-coffee2 = make_coffee()  # 没有提供参数，使用默认值
-print(coffee1)
-print(coffee2)
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1265,7 +1323,7 @@ print(coffee2)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-count">193</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1278,7 +1336,7 @@ print(coffee2)
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
