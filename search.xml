@@ -394,6 +394,273 @@ print(c)  # 5
       </tags>
   </entry>
   <entry>
+    <title>Algorithms | 算法基础</title>
+    <url>/2020/10/09/Algorithms-1/</url>
+    <content><![CDATA[<h1 id="算法基础"><a href="#算法基础" class="headerlink" title="算法基础"></a>算法基础</h1><h2 id="算法定义"><a href="#算法定义" class="headerlink" title="算法定义"></a>算法定义</h2><p><strong>解决一个具体问题的<strong style="color:red">方法</strong>称为一个算法</strong></p>
+<h2 id="算法的特征"><a href="#算法的特征" class="headerlink" title="算法的特征"></a>算法的特征</h2><p>1）确定性：组成算法的每条指令清晰、无歧义<br>2）有限性：算法中每条指令的执行次数有限<br>3）可行性：每条指令是简单的、具体的<br>4）输入：有零个或多个外部量作为算法的输入<br>5）输出：算法产生至少一个量作为输出</p>
+<p><strong style="color:blue">算法是程序之灵魂</strong></p>
+<span id="more"></span>
+<h2 id="算法的优劣"><a href="#算法的优劣" class="headerlink" title="算法的优劣"></a>算法的优劣</h2><ul>
+<li><blockquote>
+<p>时间复杂度：算法运行所需要的<strong>运算步骤</strong></p>
+<blockquote>
+<p>通常表示为问题规模n的函数T(n)</p>
+</blockquote>
+</blockquote>
+</li>
+<li><blockquote>
+<p>空间复杂度：算法运行所需要的<strong>内存单元</strong></p>
+<blockquote>
+<p>通常表示为问题规模n的函数S(n)</p>
+</blockquote>
+</blockquote>
+</li>
+<li><blockquote>
+<p>时空特性</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>稳定性</li>
+<li>健壮性（鲁棒性）</li>
+<li>可靠性</li>
+<li>实现难度</li>
+<li>模块化</li>
+</ul>
+<h2 id="算法的内容"><a href="#算法的内容" class="headerlink" title="算法的内容"></a>算法的内容</h2><ul>
+<li><blockquote>
+<p>算法设计</p>
+<blockquote>
+<p>针对具体问题，设计一个解决方案</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>正确</li>
+<li>步骤尽量少</li>
+<li>占用空间尽量少</li>
+<li>实现简单</li>
+<li>其他</li>
+</ul>
+</li>
+<li><blockquote>
+<p>算法分析</p>
+<blockquote>
+<p>正确性分析-证明（归纳法）<br>  时空效率分析-计数<br>  时空特性分析-经验</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>Example 1:时间效率分析-计数</p>
+<pre><code>for(i=1;i&lt;=n;i=2*i)
+&#123;
+    for(j=1;j&lt;=i;j++)
+    &#123;
+        laugh++;
+    &#125;
+&#125;
+</code></pre>
+<p>result:1+2+…+2^ceil(log2 n) = <strong>2^(ceil(log2 n)+1) - 1</strong></p>
+<p>Example 2:Horner 算法</p>
+<pre><code>Horner(int a[n],real x)
+&#123;
+    real p = 0;
+    for(i=0;i&lt;=n;i++)
+    &#123;   
+        p+=p*x*a[n-i];
+    &#125;
+    return p;
+&#125;
+</code></pre>
+<h2 id="算法时间复杂度分析"><a href="#算法时间复杂度分析" class="headerlink" title="算法时间复杂度分析"></a>算法时间复杂度分析</h2><ul>
+<li>最坏情况时间复杂度—T(n)表示算法对规模为n的任意输入所需要的<strong>最大步骤</strong></li>
+<li>平均时间复杂度——T(n)表示算法对规模为n的所有<strong>输入所需的步骤的平均值</strong></li>
+<li>最好情况时间复杂度—T(n)表示算法对规模为n的任意输入所需要的<strong>最小步骤</strong></li>
+<li><blockquote>
+<p><strong style="color:red">Big idea:</strong>渐进时间复杂度—当n增大时用T(n)的<strong>主要部分</strong>代替T(n)</p>
+<blockquote>
+<p>常用在理论分析中   理论分析与实际情况有可能不一致</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>e.g. 对a1 a2 … an-1 an 进行排序<br>最好情况：1 2 … n<br>最坏情况：n n-1 ..1<br>2 1 3 …n n-1</p>
+<h2 id="算法设计与分析的步骤"><a href="#算法设计与分析的步骤" class="headerlink" title="算法设计与分析的步骤"></a>算法设计与分析的步骤</h2><ol>
+<li>问题的描述（Description）</li>
+<li>数据结构的选择(Selection)</li>
+<li>算法设计(Design)</li>
+<li>算法分析(Analysis)</li>
+<li>算法的实现(Implement)</li>
+</ol>
+<p>Example 3:isPrime </p>
+<pre><code>isPrime(n)
+&#123;
+    for(i=2;i&lt;sqrt(n);i++)
+    &#123;
+        if(n%i==0) return false
+    &#125;
+    return true
+&#125;
+</code></pre>
+<p>Example 4:euclid</p>
+<pre><code>euclid(int a,int b)
+&#123;
+    if(b==0) return a;
+    else return euclid(b,a%b);
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Algorithms</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习 | AdaBoost</title>
+    <url>/2021/04/17/AdaBoost/</url>
+    <content><![CDATA[<h1 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h1><h2 id="集成方法"><a href="#集成方法" class="headerlink" title="集成方法"></a>集成方法</h2><p>集成方法(ensemble method)/元算法(meta-algorithm):将不同的分类器组合起来的组合结果</p>
+<p><b>集成方法的多种形式</b>：<br>1.不同算法的集成<br>2.同一种算法在不同设置下的集成<br>3.数据集不同部分分配给不同分类器之后的集成</p>
+<p>基分类器一般采用的是弱可学习（weakly learnable）分类器，通过集成方法，组合成一个强可学习（strongly learnable）分类器</p>
+<p><b>弱可学习：</b><br>是指学习的正确率仅略优于随机猜测的多项式学习算法</p>
+<p><b>强可学习：</b><br>指正确率较高的多项式学习算法。</p>
+<p>集成学习的泛化能力一般比单一的基分类器要好，这是因为大部分基分类器都分类错误的概率远低于单一基分类器的。</p>
+<p><b>集成方法主要包括Bagging和Boosting两种方法</b>，Bagging和Boosting都是将已有的分类或回归算法通过一定方式组合起来，形成一个性能更加强大的分类器，更准确的说这是一种分类算法的组装方法，即<b>将弱分类器组装成强分类器</b>的方法。</p>
+<h3 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h3><h3 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h3><h3 id="Bagging、boosting二者之间的区别"><a href="#Bagging、boosting二者之间的区别" class="headerlink" title="Bagging、boosting二者之间的区别"></a>Bagging、boosting二者之间的区别</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h2 id="AdaBoost-1"><a href="#AdaBoost-1" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><h2 id="分类器性能评价"><a href="#分类器性能评价" class="headerlink" title="分类器性能评价"></a>分类器性能评价</h2><h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2>]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>AdaBoost</category>
+      </categories>
+      <tags>
+        <tag>AdaBoost</tag>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Algorithms | 动态规划</title>
+    <url>/2020/11/06/Algorithms-3/</url>
+    <content><![CDATA[<h1 id="动态规划与分治"><a href="#动态规划与分治" class="headerlink" title="动态规划与分治"></a>动态规划与分治</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>利用问题的解与其子问题的解之间的关系（动态规划方程），以<strong>自底向上</strong>的方式递归地从子问题的<strong>最优解</strong>逐步构造出整个问题的解的算法</p>
+<h2 id="分治-Divide-and-Conquer"><a href="#分治-Divide-and-Conquer" class="headerlink" title="分治(Divide and Conquer)"></a>分治(Divide and Conquer)</h2><p>将一个问题<strong>分</strong>为若干个子问题，将这些子问题分别求解；将求出的小规模的子问题的解<strong>合并</strong>为一个更大规模的问题的解，自底向上求出原来问题的解</p>
+<h2 id="核心思想：大问题—-gt-小问题"><a href="#核心思想：大问题—-gt-小问题" class="headerlink" title="核心思想：大问题—&gt;小问题"></a>核心思想：大问题—&gt;小问题</h2><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>分治：自顶向下<br>动态规划：自底向上</p>
+<h2 id="动态规划的基本步骤"><a href="#动态规划的基本步骤" class="headerlink" title="动态规划的基本步骤"></a>动态规划的基本步骤</h2><ul>
+<li>找出最优解的性质，并刻画其结构特征</li>
+<li>建立动态规划方程</li>
+<li>以自底向上的方式解动态规划方程</li>
+<li>根据计算最优质的时得到的信息构造最优解</li>
+</ul> 
+
+<h2 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode:"></a>Pseudocode:</h2><pre><code>dynamic-program(P)
+&#123;
+    for(i=1;i&lt;=n;i++)
+    &#123;
+        compute(solution of each Pi);//解规模为i的各子问题
+        use(solution of each Pi) merge(solution of each Pi+1);
+        //将规模为i的各子问题的解合并为规模为i+1的问题的解
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Algorithms</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
+    <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
+    <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
+<span id="more"></span>
+<p><strong style="color:red">Empirical mode decomposition(EMD)</strong> technique is used to implement the <strong style="color:red">time domain filter</strong>.</p>
+<p><strong style="color:red">Fractional Gaussian noise(fGn)</strong> is used here as the <strong style="color:red">reference signal</strong> to detect the distinguish feature of EOG signal to be used to separate from EEG.</p>
+<p>EMD is applied to the raw EEG and fGn separately to produce a finite number band limited signals named <strong style="color:red">intrinsic mode functions(IMFs)</strong>.</p>
+<p>The energies of individual IMFs of fGn and that of raw EEG are compared to derive the energy based threshold for the suppression of EOG effects. </p>
+<p>The separation results using EMD based approach is also compared with wavelet thresholding technique. </p>
+<p><strong style="color:red">The experimental results show that the data adaptive filtering technique performs better than the wavelet based approach.</strong></p>
+<div style="background-color:yellowgreen;">
+<b backgroundclor="green">proposed method's advantages</b>
+<ul>
+<li>efficiently separates the EOG artifact <b>without changing the amplitude and other necessary properties of the EEG signals</b></li>
+<li><b>full data adaptive nature</b></li>
+</ul>
+</div>
+
+<p><strong style="color:yellow"><i>Note:</i></strong></p>
+<ul>
+<li>Frequency analysis or filtering —–&gt; deal with single channel signal</li>
+<li>Frequency regression analysis   —–&gt; suppress the eye-movement artifact</li>
+<li>Time-invariant band-pass filtering or Fourier transform(FT) —–&gt; extract the target frequency component(specific frequency range)</li>
+<li>classical time-frequency analyzers(FFT based filtering or short-time Fourier transform(STFT)) —–&gt; non-stationary signal<br>Note:will bring the spectral distrotion</li>
+<li>PCA:extracts and sort out the principal components according to the influence on the overall data space.<br>Note:It requires some priori knowledge to identify the PC as the artifact</li>
+<li>ICA:<br>key word:decompose<br>problem of using ICA:extracted components do not confirm the original scale and sequences.</li>
+<li>main limitation of the filtering method:introduce some spectral distortion </li>
+<li>EMD:<br>key benefit of using EMD: automatic decomposition and fully data adaptive<br>UEMD:<br>BEMD:suppress EOG artifacts<br>MEMD:multi-variate data analysis</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | Artifacts reduction algorithms&#39;s two main ways</title>
+    <url>/2020/10/11/Artifacts-reduction-algorithms-two-main-ways/</url>
+    <content><![CDATA[<h1 id="Artifacts-reduction-algorithms’s-two-main-ways"><a href="#Artifacts-reduction-algorithms’s-two-main-ways" class="headerlink" title="Artifacts reduction algorithms’s two main ways"></a>Artifacts reduction algorithms’s two main ways</h1><div style>
+    <h1 style="color:red">Regression and Filtering Methods</h1>
+    <h2 style="color:purple">Regression</h2>
+    The regression model use a function to fit the data to smooth the data.    <br>
+    Disadvantages:<br>
+    1.this method only works for reference channels that are available.<br>
+    2.EEG signal being non-linear and non-stationary process,linear regression is not the best choice for analysis in such applications.<br>
+    3.it can only be used to treat few particular types of artifact,not all types.
+    <h2 style="color:purple">Filtering</h2>
+    <h3 style="color:green">linear adaptive filters</h3>
+    Note:too sensitive and unstable to adjust the parameters<br>
+    <h3 style="color:green">non-linear adaptive filters(include Volterra filters and neural network based adptive filters)</h3>
+    Note:stronger processing capabilities and complex calculation<br>
+    Disadvantages:<br>
+    filters may eliminate useful EEG signals during artifact deletion.<br>
+</div>
+<span id="more"></span>
+<div style>
+    <h1 style="color:red">Separate or Decompose EEG Data and Noise Data into Other Domains</h1>
+    <h2 style="color:purple">EMD(Empiricla Mode Decomposition)</h2>
+    decompose the input signals into multiple empirical modes according to IMF. <br>
+    Note:EMD is an empirical and data-driven method<br>
+    Disadvantages:<br>
+    computationally complex<br>
+    may not be suitable for online application<br>
+    <h2 style="color:purple">ICA(developed from BSS)</h2>
+    separate the ideal signal and noise included in the EEG signal as independent components<br> 
+    Disadvantages:<br>
+    1.not automatic<br>
+    2.requiring human intervention makes results subjective and time 
+    consuming<br>
+    3.cannot operate on single-channel data<br>
+    4.high computational complexity<br>
+    <h2 style="color:purple">WT(wavelet transfrom)</h2>
+    maps the signal to the wavelet domain.<br>
+    According to the wavelet coefficients of signal and noise,they have different properties and mechanisms at different scales,eliminating the wavelet coefficients generated by noise and maximally retaining the coefficients fo real signals.
+</div>
+    ]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+        <tag>EMD</tag>
+        <tag>ICA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 68个python内置函数详解</title>
     <url>/2021/10/16/68%E4%B8%AApython%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="68个python内置函数详解"><a href="#68个python内置函数详解" class="headerlink" title="68个python内置函数详解"></a>68个python内置函数详解</h1><p>内置函数就是Python给你提供的，拿来直接用的函数，比如print.，input等。<br>截止到python版本3.6.2 ，python一共提供了68个内置函数，具体如下👇</p>
@@ -706,209 +973,35 @@ def f():
       </tags>
   </entry>
   <entry>
-    <title>机器学习 | AdaBoost</title>
-    <url>/2021/04/17/AdaBoost/</url>
-    <content><![CDATA[<h1 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h1><h2 id="集成方法"><a href="#集成方法" class="headerlink" title="集成方法"></a>集成方法</h2><p>集成方法(ensemble method)/元算法(meta-algorithm):将不同的分类器组合起来的组合结果</p>
-<p><b>集成方法的多种形式</b>：<br>1.不同算法的集成<br>2.同一种算法在不同设置下的集成<br>3.数据集不同部分分配给不同分类器之后的集成</p>
-<p>基分类器一般采用的是弱可学习（weakly learnable）分类器，通过集成方法，组合成一个强可学习（strongly learnable）分类器</p>
-<p><b>弱可学习：</b><br>是指学习的正确率仅略优于随机猜测的多项式学习算法</p>
-<p><b>强可学习：</b><br>指正确率较高的多项式学习算法。</p>
-<p>集成学习的泛化能力一般比单一的基分类器要好，这是因为大部分基分类器都分类错误的概率远低于单一基分类器的。</p>
-<p><b>集成方法主要包括Bagging和Boosting两种方法</b>，Bagging和Boosting都是将已有的分类或回归算法通过一定方式组合起来，形成一个性能更加强大的分类器，更准确的说这是一种分类算法的组装方法，即<b>将弱分类器组装成强分类器</b>的方法。</p>
-<h3 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h3><h3 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h3><h3 id="Bagging、boosting二者之间的区别"><a href="#Bagging、boosting二者之间的区别" class="headerlink" title="Bagging、boosting二者之间的区别"></a>Bagging、boosting二者之间的区别</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h2 id="AdaBoost-1"><a href="#AdaBoost-1" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><h2 id="分类器性能评价"><a href="#分类器性能评价" class="headerlink" title="分类器性能评价"></a>分类器性能评价</h2><h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2>]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>AdaBoost</category>
-      </categories>
-      <tags>
-        <tag>AdaBoost</tag>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Algorithms | 算法基础</title>
-    <url>/2020/10/09/Algorithms-1/</url>
-    <content><![CDATA[<h1 id="算法基础"><a href="#算法基础" class="headerlink" title="算法基础"></a>算法基础</h1><h2 id="算法定义"><a href="#算法定义" class="headerlink" title="算法定义"></a>算法定义</h2><p><strong>解决一个具体问题的<strong style="color:red">方法</strong>称为一个算法</strong></p>
-<h2 id="算法的特征"><a href="#算法的特征" class="headerlink" title="算法的特征"></a>算法的特征</h2><p>1）确定性：组成算法的每条指令清晰、无歧义<br>2）有限性：算法中每条指令的执行次数有限<br>3）可行性：每条指令是简单的、具体的<br>4）输入：有零个或多个外部量作为算法的输入<br>5）输出：算法产生至少一个量作为输出</p>
-<p><strong style="color:blue">算法是程序之灵魂</strong></p>
+    <title>伪迹移除 | Automatic artifacts removal</title>
+    <url>/2020/10/10/Automatic-removal-using-ICA-and-the-dipole-model/</url>
+    <content><![CDATA[<h1 id="Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model"><a href="#Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model" class="headerlink" title="Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model"></a>Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>In this study,we proposed and evaluated the use of <strong style="color:red"> Independent Component Analysis(ICA) combining the EEG dipole model</strong> to <strong style="color:red"> automatically remove</strong> eye movement artifacts from the EEG <strong style="color:red">without needing EOG as a reference</strong>.</p>
 <span id="more"></span>
-<h2 id="算法的优劣"><a href="#算法的优劣" class="headerlink" title="算法的优劣"></a>算法的优劣</h2><ul>
-<li><blockquote>
-<p>时间复杂度：算法运行所需要的<strong>运算步骤</strong></p>
-<blockquote>
-<p>通常表示为问题规模n的函数T(n)</p>
-</blockquote>
-</blockquote>
-</li>
-<li><blockquote>
-<p>空间复杂度：算法运行所需要的<strong>内存单元</strong></p>
-<blockquote>
-<p>通常表示为问题规模n的函数S(n)</p>
-</blockquote>
-</blockquote>
-</li>
-<li><blockquote>
-<p>时空特性</p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li>稳定性</li>
-<li>健壮性（鲁棒性）</li>
-<li>可靠性</li>
-<li>实现难度</li>
-<li>模块化</li>
-</ul>
-<h2 id="算法的内容"><a href="#算法的内容" class="headerlink" title="算法的内容"></a>算法的内容</h2><ul>
-<li><blockquote>
-<p>算法设计</p>
-<blockquote>
-<p>针对具体问题，设计一个解决方案</p>
-</blockquote>
-</blockquote>
-<ul>
-<li>正确</li>
-<li>步骤尽量少</li>
-<li>占用空间尽量少</li>
-<li>实现简单</li>
-<li>其他</li>
-</ul>
-</li>
-<li><blockquote>
-<p>算法分析</p>
-<blockquote>
-<p>正确性分析-证明（归纳法）<br>  时空效率分析-计数<br>  时空特性分析-经验</p>
-</blockquote>
-</blockquote>
-</li>
-</ul>
-<p>Example 1:时间效率分析-计数</p>
-<pre><code>for(i=1;i&lt;=n;i=2*i)
-&#123;
-    for(j=1;j&lt;=i;j++)
-    &#123;
-        laugh++;
-    &#125;
-&#125;
-</code></pre>
-<p>result:1+2+…+2^ceil(log2 n) = <strong>2^(ceil(log2 n)+1) - 1</strong></p>
-<p>Example 2:Horner 算法</p>
-<pre><code>Horner(int a[n],real x)
-&#123;
-    real p = 0;
-    for(i=0;i&lt;=n;i++)
-    &#123;   
-        p+=p*x*a[n-i];
-    &#125;
-    return p;
-&#125;
-</code></pre>
-<h2 id="算法时间复杂度分析"><a href="#算法时间复杂度分析" class="headerlink" title="算法时间复杂度分析"></a>算法时间复杂度分析</h2><ul>
-<li>最坏情况时间复杂度—T(n)表示算法对规模为n的任意输入所需要的<strong>最大步骤</strong></li>
-<li>平均时间复杂度——T(n)表示算法对规模为n的所有<strong>输入所需的步骤的平均值</strong></li>
-<li>最好情况时间复杂度—T(n)表示算法对规模为n的任意输入所需要的<strong>最小步骤</strong></li>
-<li><blockquote>
-<p><strong style="color:red">Big idea:</strong>渐进时间复杂度—当n增大时用T(n)的<strong>主要部分</strong>代替T(n)</p>
-<blockquote>
-<p>常用在理论分析中   理论分析与实际情况有可能不一致</p>
-</blockquote>
-</blockquote>
-</li>
-</ul>
-<p>e.g. 对a1 a2 … an-1 an 进行排序<br>最好情况：1 2 … n<br>最坏情况：n n-1 ..1<br>2 1 3 …n n-1</p>
-<h2 id="算法设计与分析的步骤"><a href="#算法设计与分析的步骤" class="headerlink" title="算法设计与分析的步骤"></a>算法设计与分析的步骤</h2><ol>
-<li>问题的描述（Description）</li>
-<li>数据结构的选择(Selection)</li>
-<li>算法设计(Design)</li>
-<li>算法分析(Analysis)</li>
-<li>算法的实现(Implement)</li>
-</ol>
-<p>Example 3:isPrime </p>
-<pre><code>isPrime(n)
-&#123;
-    for(i=2;i&lt;sqrt(n);i++)
-    &#123;
-        if(n%i==0) return false
-    &#125;
-    return true
-&#125;
-</code></pre>
-<p>Example 4:euclid</p>
-<pre><code>euclid(int a,int b)
-&#123;
-    if(b==0) return a;
-    else return euclid(b,a%b);
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Algorithms</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Algorithms | 动态规划</title>
-    <url>/2020/11/06/Algorithms-3/</url>
-    <content><![CDATA[<h1 id="动态规划与分治"><a href="#动态规划与分治" class="headerlink" title="动态规划与分治"></a>动态规划与分治</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>利用问题的解与其子问题的解之间的关系（动态规划方程），以<strong>自底向上</strong>的方式递归地从子问题的<strong>最优解</strong>逐步构造出整个问题的解的算法</p>
-<h2 id="分治-Divide-and-Conquer"><a href="#分治-Divide-and-Conquer" class="headerlink" title="分治(Divide and Conquer)"></a>分治(Divide and Conquer)</h2><p>将一个问题<strong>分</strong>为若干个子问题，将这些子问题分别求解；将求出的小规模的子问题的解<strong>合并</strong>为一个更大规模的问题的解，自底向上求出原来问题的解</p>
-<h2 id="核心思想：大问题—-gt-小问题"><a href="#核心思想：大问题—-gt-小问题" class="headerlink" title="核心思想：大问题—&gt;小问题"></a>核心思想：大问题—&gt;小问题</h2><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>分治：自顶向下<br>动态规划：自底向上</p>
-<h2 id="动态规划的基本步骤"><a href="#动态规划的基本步骤" class="headerlink" title="动态规划的基本步骤"></a>动态规划的基本步骤</h2><ul>
-<li>找出最优解的性质，并刻画其结构特征</li>
-<li>建立动态规划方程</li>
-<li>以自底向上的方式解动态规划方程</li>
-<li>根据计算最优质的时得到的信息构造最优解</li>
-</ul> 
 
-<h2 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode:"></a>Pseudocode:</h2><pre><code>dynamic-program(P)
-&#123;
-    for(i=1;i&lt;=n;i++)
-    &#123;
-        compute(solution of each Pi);//解规模为i的各子问题
-        use(solution of each Pi) merge(solution of each Pi+1);
-        //将规模为i的各子问题的解合并为规模为i+1的问题的解
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Algorithms</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>动态规划</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
-    <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
-    <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
-<span id="more"></span>
-<p><strong style="color:red">Empirical mode decomposition(EMD)</strong> technique is used to implement the <strong style="color:red">time domain filter</strong>.</p>
-<p><strong style="color:red">Fractional Gaussian noise(fGn)</strong> is used here as the <strong style="color:red">reference signal</strong> to detect the distinguish feature of EOG signal to be used to separate from EEG.</p>
-<p>EMD is applied to the raw EEG and fGn separately to produce a finite number band limited signals named <strong style="color:red">intrinsic mode functions(IMFs)</strong>.</p>
-<p>The energies of individual IMFs of fGn and that of raw EEG are compared to derive the energy based threshold for the suppression of EOG effects. </p>
-<p>The separation results using EMD based approach is also compared with wavelet thresholding technique. </p>
-<p><strong style="color:red">The experimental results show that the data adaptive filtering technique performs better than the wavelet based approach.</strong></p>
+<p>We <strong>separated</strong> the EEG data into independent components using the ICA method,and <strong>determined</strong> the source localization of these independent components with a single dipole model.</p>
+<p>The EEG signal was <strong>reconstructed</strong> by antomatically excluding those components localized within a preset eye model.</p>
+<p>The <strong>experimental results</strong> indicate that the dipole model is very efficient at automatically<br>substracting the eye movement artifacts,while retaining the EEG slow waves and making their<br>interpretation easier.</p>
+<h2 id="Methods-Comparison"><a href="#Methods-Comparison" class="headerlink" title="Methods Comparison"></a>Methods Comparison</h2><h3 id="other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG"><a href="#other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG" class="headerlink" title="other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)"></a>other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)</h3><ul>
+<li>used a simple <strong>filtering concept</strong>,simply <strong>ignoring very low frequencies</strong>(below 1.5 or 2 Hz)</li>
+<li>would not perform well in the context of a large amount of <strong>frontal slow waves</strong> (EOG recordingwould be contaminated by this slow wave activity)</li>
+</ul>
 <div style="background-color:yellowgreen;">
-<b backgroundclor="green">proposed method's advantages</b>
+<b backgroundclor="green">ICA's advantages:</b>
 <ul>
-<li>efficiently separates the EOG artifact <b>without changing the amplitude and other necessary properties of the EEG signals</b></li>
-<li><b>full data adaptive nature</b></li>
+<li>The ICA algorithm is computationally efficient.</li>
+<li>better noise suppression ability.</li>
+<li>ICA can simultaneously separate the EEG and artifacts into independent components without relying on the availability of reference artifacts.</li>
+<li>avoids the problem of mutual contamination between EEG and EOG channels that could not be solved with filters,regression and PCA.</li>  
+<li>The corrected EEG can easily be derived by a combination of the components without artifacts.</li>
 </ul>
 </div>
 
-<p><strong style="color:yellow"><i>Note:</i></strong></p>
+<h3 id="A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms"><a href="#A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms" class="headerlink" title="A crucial step for ocular artifact correction using ICA algorithms:"></a>A crucial step for ocular artifact correction using ICA algorithms:</h3><p>to correctly identify the artifact components among the decomposed indepent components.</p>
+<p>Manually identifying:</p>
 <ul>
-<li>Frequency analysis or filtering —–&gt; deal with single channel signal</li>
-<li>Frequency regression analysis   —–&gt; suppress the eye-movement artifact</li>
-<li>Time-invariant band-pass filtering or Fourier transform(FT) —–&gt; extract the target frequency component(specific frequency range)</li>
-<li>classical time-frequency analyzers(FFT based filtering or short-time Fourier transform(STFT)) —–&gt; non-stationary signal<br>Note:will bring the spectral distrotion</li>
-<li>PCA:extracts and sort out the principal components according to the influence on the overall data space.<br>Note:It requires some priori knowledge to identify the PC as the artifact</li>
-<li>ICA:<br>key word:decompose<br>problem of using ICA:extracted components do not confirm the original scale and sequences.</li>
-<li>main limitation of the filtering method:introduce some spectral distortion </li>
-<li>EMD:<br>key benefit of using EMD: automatic decomposition and fully data adaptive<br>UEMD:<br>BEMD:suppress EOG artifacts<br>MEMD:multi-variate data analysis</li>
+<li>subjective </li>
+<li>inconvenient </li>
+<li>time consuming</li>
 </ul>
 ]]></content>
       <categories>
@@ -918,58 +1011,44 @@ def f():
       </categories>
       <tags>
         <tag>伪迹移除</tag>
+        <tag>ICA</tag>
       </tags>
   </entry>
   <entry>
-    <title>伪迹移除 | Artifacts reduction algorithms&#39;s two main ways</title>
-    <url>/2020/10/11/Artifacts-reduction-algorithms-two-main-ways/</url>
-    <content><![CDATA[<h1 id="Artifacts-reduction-algorithms’s-two-main-ways"><a href="#Artifacts-reduction-algorithms’s-two-main-ways" class="headerlink" title="Artifacts reduction algorithms’s two main ways"></a>Artifacts reduction algorithms’s two main ways</h1><div style>
-    <h1 style="color:red">Regression and Filtering Methods</h1>
-    <h2 style="color:purple">Regression</h2>
-    The regression model use a function to fit the data to smooth the data.    <br>
-    Disadvantages:<br>
-    1.this method only works for reference channels that are available.<br>
-    2.EEG signal being non-linear and non-stationary process,linear regression is not the best choice for analysis in such applications.<br>
-    3.it can only be used to treat few particular types of artifact,not all types.
-    <h2 style="color:purple">Filtering</h2>
-    <h3 style="color:green">linear adaptive filters</h3>
-    Note:too sensitive and unstable to adjust the parameters<br>
-    <h3 style="color:green">non-linear adaptive filters(include Volterra filters and neural network based adptive filters)</h3>
-    Note:stronger processing capabilities and complex calculation<br>
-    Disadvantages:<br>
-    filters may eliminate useful EEG signals during artifact deletion.<br>
-</div>
-<span id="more"></span>
-<div style>
-    <h1 style="color:red">Separate or Decompose EEG Data and Noise Data into Other Domains</h1>
-    <h2 style="color:purple">EMD(Empiricla Mode Decomposition)</h2>
-    decompose the input signals into multiple empirical modes according to IMF. <br>
-    Note:EMD is an empirical and data-driven method<br>
-    Disadvantages:<br>
-    computationally complex<br>
-    may not be suitable for online application<br>
-    <h2 style="color:purple">ICA(developed from BSS)</h2>
-    separate the ideal signal and noise included in the EEG signal as independent components<br> 
-    Disadvantages:<br>
-    1.not automatic<br>
-    2.requiring human intervention makes results subjective and time 
-    consuming<br>
-    3.cannot operate on single-channel data<br>
-    4.high computational complexity<br>
-    <h2 style="color:purple">WT(wavelet transfrom)</h2>
-    maps the signal to the wavelet domain.<br>
-    According to the wavelet coefficients of signal and noise,they have different properties and mechanisms at different scales,eliminating the wavelet coefficients generated by noise and maximally retaining the coefficients fo real signals.
-</div>
-    ]]></content>
+    <title>脑电分类 | CNNLSTM混合分类脑电信号</title>
+    <url>/2021/07/01/CNNLSTM%E6%B7%B7%E5%90%88%E5%88%86%E7%B1%BB%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7/</url>
+    <content><![CDATA[<h1 id="使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号"><a href="#使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号" class="headerlink" title="使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号"></a>使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号</h1><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>Epochs</th>
+<th>训练集大小</th>
+<th>验证集大小</th>
+<th>训练集准确率</th>
+<th>验证集准确率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CNN+LSTM</td>
+<td>300</td>
+<td>90%</td>
+<td>10%</td>
+<td>98.6%</td>
+<td>96.5%</td>
+</tr>
+</tbody></table>
+<p><a href="https://blog.csdn.net/zyb228/article/details/109542063">参考资料 Click Here!</a><br><a href="https://ieeexplore.ieee.org/document/9155016">论文地址</a></p>
+]]></content>
       <categories>
         <category>Research and Paper</category>
         <category>EEG</category>
-        <category>伪迹移除</category>
+        <category>脑电分类</category>
+        <category>CNN+LSTM</category>
       </categories>
       <tags>
-        <tag>伪迹移除</tag>
-        <tag>EMD</tag>
-        <tag>ICA</tag>
+        <tag>脑电分类</tag>
+        <tag>LSTM</tag>
+        <tag>CNN+LSTM</tag>
       </tags>
   </entry>
   <entry>
@@ -1109,85 +1188,6 @@ namespace ConsoleApp1
       </tags>
   </entry>
   <entry>
-    <title>伪迹移除 | Automatic artifacts removal</title>
-    <url>/2020/10/10/Automatic-removal-using-ICA-and-the-dipole-model/</url>
-    <content><![CDATA[<h1 id="Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model"><a href="#Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model" class="headerlink" title="Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model"></a>Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>In this study,we proposed and evaluated the use of <strong style="color:red"> Independent Component Analysis(ICA) combining the EEG dipole model</strong> to <strong style="color:red"> automatically remove</strong> eye movement artifacts from the EEG <strong style="color:red">without needing EOG as a reference</strong>.</p>
-<span id="more"></span>
-
-<p>We <strong>separated</strong> the EEG data into independent components using the ICA method,and <strong>determined</strong> the source localization of these independent components with a single dipole model.</p>
-<p>The EEG signal was <strong>reconstructed</strong> by antomatically excluding those components localized within a preset eye model.</p>
-<p>The <strong>experimental results</strong> indicate that the dipole model is very efficient at automatically<br>substracting the eye movement artifacts,while retaining the EEG slow waves and making their<br>interpretation easier.</p>
-<h2 id="Methods-Comparison"><a href="#Methods-Comparison" class="headerlink" title="Methods Comparison"></a>Methods Comparison</h2><h3 id="other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG"><a href="#other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG" class="headerlink" title="other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)"></a>other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)</h3><ul>
-<li>used a simple <strong>filtering concept</strong>,simply <strong>ignoring very low frequencies</strong>(below 1.5 or 2 Hz)</li>
-<li>would not perform well in the context of a large amount of <strong>frontal slow waves</strong> (EOG recordingwould be contaminated by this slow wave activity)</li>
-</ul>
-<div style="background-color:yellowgreen;">
-<b backgroundclor="green">ICA's advantages:</b>
-<ul>
-<li>The ICA algorithm is computationally efficient.</li>
-<li>better noise suppression ability.</li>
-<li>ICA can simultaneously separate the EEG and artifacts into independent components without relying on the availability of reference artifacts.</li>
-<li>avoids the problem of mutual contamination between EEG and EOG channels that could not be solved with filters,regression and PCA.</li>  
-<li>The corrected EEG can easily be derived by a combination of the components without artifacts.</li>
-</ul>
-</div>
-
-<h3 id="A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms"><a href="#A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms" class="headerlink" title="A crucial step for ocular artifact correction using ICA algorithms:"></a>A crucial step for ocular artifact correction using ICA algorithms:</h3><p>to correctly identify the artifact components among the decomposed indepent components.</p>
-<p>Manually identifying:</p>
-<ul>
-<li>subjective </li>
-<li>inconvenient </li>
-<li>time consuming</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>ICA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>脑电分类 | CNNLSTM混合分类脑电信号</title>
-    <url>/2021/07/01/CNNLSTM%E6%B7%B7%E5%90%88%E5%88%86%E7%B1%BB%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7/</url>
-    <content><![CDATA[<h1 id="使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号"><a href="#使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号" class="headerlink" title="使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号"></a>使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号</h1><table>
-<thead>
-<tr>
-<th>模型</th>
-<th>Epochs</th>
-<th>训练集大小</th>
-<th>验证集大小</th>
-<th>训练集准确率</th>
-<th>验证集准确率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CNN+LSTM</td>
-<td>300</td>
-<td>90%</td>
-<td>10%</td>
-<td>98.6%</td>
-<td>96.5%</td>
-</tr>
-</tbody></table>
-<p><a href="https://blog.csdn.net/zyb228/article/details/109542063">参考资料 Click Here!</a><br><a href="https://ieeexplore.ieee.org/document/9155016">论文地址</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电分类</category>
-        <category>CNN+LSTM</category>
-      </categories>
-      <tags>
-        <tag>脑电分类</tag>
-        <tag>LSTM</tag>
-        <tag>CNN+LSTM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | CPU or GPU?</title>
     <url>/2021/06/21/CPU-or-GPU/</url>
     <content><![CDATA[<h1 id="CPU-or-GPU"><a href="#CPU-or-GPU" class="headerlink" title="CPU or GPU?"></a>CPU or GPU?</h1><p>与CPU相比，GPU擅长SIMD(Single Instruction Multiple Data)计算.<br><a href="https://blog.csdn.net/luoyajingfeng2/article/details/90752019">参考资料</a></p>
@@ -1212,6 +1212,115 @@ namespace ConsoleApp1
       <tags>
         <tag>GPU</tag>
         <tag>CPU</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django | DTL中的url反向解析</title>
+    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
+<span id="more"></span>
+
+<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
+<pre><code>INSTALLED_APPS = (
+    &#39;django.contrib.admin&#39;,
+    &#39;django.contrib.auth&#39;,
+    &#39;django.contrib.contenttypes&#39;,
+    &#39;django.contrib.sessions&#39;,
+    &#39;django.contrib.messages&#39;,
+    &#39;django.contrib.staticfiles&#39;,
+    &#39;app_name&#39;
+)
+</code></pre>
+<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
+<pre><code>from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r&#39;^admin/&#39;, include(admin.site.urls)),
+    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
+]
+/*
+app_name:创建的应用名，为项目下的应用文件夹
+app_name.urls:应用的urls，应用文件夹下的urls.py
+*/
+</code></pre>
+<p>2.配置应用url(app_anme/urls.py)</p>
+<pre><code>from django.conf.urls import url
+import views
+
+urlpatterns = [
+    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
+    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
+]
+</code></pre>
+<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
+<pre><code>from django.shortcuts import render
+from models import *
+
+
+def index(request):
+    context = &#123;&#125;
+
+    return render(request, &#39;app_name/index.html&#39;, context)
+
+
+def show(request, id1, id2):
+    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
+    return render(request, &#39;app_name/show.html&#39;, context)
+</code></pre>
+<p>4.定义模板<br>index.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
+&lt;hr&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>show.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&#123;&#123;id1&#125;&#125;
+&#123;&#123;id2&#125;&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
+<pre><code>TEMPLATES = [
+    &#123;
+        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
+        &#39;APP_DIRS&#39;: True,
+        &#39;OPTIONS&#39;: &#123;
+            &#39;context_processors&#39;: [
+                &#39;django.template.context_processors.debug&#39;,
+                &#39;django.template.context_processors.request&#39;,
+                &#39;django.contrib.auth.context_processors.auth&#39;,
+                &#39;django.contrib.messages.context_processors.messages&#39;,
+            ],
+        &#125;,
+    &#125;,
+]
+</code></pre>
+<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+        <tag>DTL</tag>
       </tags>
   </entry>
   <entry>
@@ -1357,115 +1466,6 @@ namespace ConsoleApp1
       </tags>
   </entry>
   <entry>
-    <title>Django | DTL中的url反向解析</title>
-    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
-    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
-<span id="more"></span>
-
-<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
-<pre><code>INSTALLED_APPS = (
-    &#39;django.contrib.admin&#39;,
-    &#39;django.contrib.auth&#39;,
-    &#39;django.contrib.contenttypes&#39;,
-    &#39;django.contrib.sessions&#39;,
-    &#39;django.contrib.messages&#39;,
-    &#39;django.contrib.staticfiles&#39;,
-    &#39;app_name&#39;
-)
-</code></pre>
-<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
-<pre><code>from django.conf.urls import include, url
-from django.contrib import admin
-
-urlpatterns = [
-    url(r&#39;^admin/&#39;, include(admin.site.urls)),
-    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
-]
-/*
-app_name:创建的应用名，为项目下的应用文件夹
-app_name.urls:应用的urls，应用文件夹下的urls.py
-*/
-</code></pre>
-<p>2.配置应用url(app_anme/urls.py)</p>
-<pre><code>from django.conf.urls import url
-import views
-
-urlpatterns = [
-    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
-    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
-]
-</code></pre>
-<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
-<pre><code>from django.shortcuts import render
-from models import *
-
-
-def index(request):
-    context = &#123;&#125;
-
-    return render(request, &#39;app_name/index.html&#39;, context)
-
-
-def show(request, id1, id2):
-    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
-    return render(request, &#39;app_name/show.html&#39;, context)
-</code></pre>
-<p>4.定义模板<br>index.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
-&lt;hr&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>show.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&#123;&#123;id1&#125;&#125;
-&#123;&#123;id2&#125;&#125;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
-<pre><code>TEMPLATES = [
-    &#123;
-        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
-        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
-        &#39;APP_DIRS&#39;: True,
-        &#39;OPTIONS&#39;: &#123;
-            &#39;context_processors&#39;: [
-                &#39;django.template.context_processors.debug&#39;,
-                &#39;django.template.context_processors.request&#39;,
-                &#39;django.contrib.auth.context_processors.auth&#39;,
-                &#39;django.contrib.messages.context_processors.messages&#39;,
-            ],
-        &#125;,
-    &#125;,
-]
-</code></pre>
-<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-        <tag>DTL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Django | Django中使用MySQL数据库</title>
     <url>/2021/07/25/Django%E4%B8%AD%E4%BD%BF%E7%94%A8MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
     <content><![CDATA[<h1 id="Django中使用MySQL数据库"><a href="#Django中使用MySQL数据库" class="headerlink" title="Django中使用MySQL数据库"></a>Django中使用MySQL数据库</h1><p>1.在虚拟环境中安装mysql包</p>
@@ -1522,22 +1522,6 @@ def show(request, id1, id2):
       </tags>
   </entry>
   <entry>
-    <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
-    <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
-    <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
-<h1 id="Target-EEG-Pathology-Detection"><a href="#Target-EEG-Pathology-Detection" class="headerlink" title="Target: EEG Pathology Detection"></a>Target: EEG Pathology Detection</h1><h1 id="Proposed-Methonds"><a href="#Proposed-Methonds" class="headerlink" title="Proposed Methonds:"></a>Proposed Methonds:</h1><p>Method One:Shallow CNN Model<br>Method Two:Deep CNN Model(AlexNet)<br>Method Three:Fusion stategy based on a multiplayer perception<br>Fusion of CNN features of several distinct temporal segments of the EEG signal</p>
-<p><b style="color:red">In future study:investigate different fusion strategies</b></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-      </categories>
-      <tags>
-        <tag>CNN</tag>
-        <tag>论文</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Django | Django模型查询</title>
     <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
     <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
@@ -1569,6 +1553,22 @@ for ... in query[11:20]
       </tags>
   </entry>
   <entry>
+    <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
+    <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
+    <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
+<h1 id="Target-EEG-Pathology-Detection"><a href="#Target-EEG-Pathology-Detection" class="headerlink" title="Target: EEG Pathology Detection"></a>Target: EEG Pathology Detection</h1><h1 id="Proposed-Methonds"><a href="#Proposed-Methonds" class="headerlink" title="Proposed Methonds:"></a>Proposed Methonds:</h1><p>Method One:Shallow CNN Model<br>Method Two:Deep CNN Model(AlexNet)<br>Method Three:Fusion stategy based on a multiplayer perception<br>Fusion of CNN features of several distinct temporal segments of the EEG signal</p>
+<p><b style="color:red">In future study:investigate different fusion strategies</b></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+      </categories>
+      <tags>
+        <tag>CNN</tag>
+        <tag>论文</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>脑电基础知识 | 简单了解EEG</title>
     <url>/2020/10/11/EEG-introduction/</url>
     <content><![CDATA[<h1 id="简单了解EEG"><a href="#简单了解EEG" class="headerlink" title="简单了解EEG"></a>简单了解EEG</h1><h2 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h2><p>EEG is the electrical response of brain cells in the cerebral cortex.</p>
@@ -1589,36 +1589,6 @@ for ... in query[11:20]
       </categories>
       <tags>
         <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>urllib.request | GET请求</title>
-    <url>/2021/08/05/GET%E8%AF%B7%E6%B1%82/</url>
-    <content><![CDATA[<h1 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h1><p>使用urllib.request模块可以在python中访问互联网资源，以下是发送GET请求的示例代码。</p>
-<pre><code># coding=utf-8
-
-import urllib.request
-
-# url中？后的内容是请求参数，多个参数之间以&amp;分割
-url = &#39;http://localhost:8080/NoteWebService/note.do?action=query&amp;ID=10&#39;
-
-# 创建Request对象，默认是GET请求
-req = urllib.request.Request(url)
-
-with urllib.request.urlopen(req) as response:
-    data = response.read()  # 读取数据，为字节序列数据
-    json_data = data.decode()  # 将字节序列数据转换为字符串
-    print(json_data)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>urllib</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>urllib</tag>
       </tags>
   </entry>
   <entry>
@@ -1678,16 +1648,33 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | I/O密集型和计算密集型</title>
-    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
-<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
+    <title>urllib.request | GET请求</title>
+    <url>/2021/08/05/GET%E8%AF%B7%E6%B1%82/</url>
+    <content><![CDATA[<h1 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h1><p>使用urllib.request模块可以在python中访问互联网资源，以下是发送GET请求的示例代码。</p>
+<pre><code># coding=utf-8
+
+import urllib.request
+
+# url中？后的内容是请求参数，多个参数之间以&amp;分割
+url = &#39;http://localhost:8080/NoteWebService/note.do?action=query&amp;ID=10&#39;
+
+# 创建Request对象，默认是GET请求
+req = urllib.request.Request(url)
+
+with urllib.request.urlopen(req) as response:
+    data = response.read()  # 读取数据，为字节序列数据
+    json_data = data.decode()  # 将字节序列数据转换为字符串
+    print(json_data)
+</code></pre>
 ]]></content>
       <categories>
-        <category>网络编程</category>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>urllib</category>
       </categories>
       <tags>
-        <tag>网络编程</tag>
+        <tag>python</tag>
+        <tag>urllib</tag>
       </tags>
   </entry>
   <entry>
@@ -1710,6 +1697,19 @@ with urllib.request.urlopen(req) as response:
       <tags>
         <tag>机器学习</tag>
         <tag>KNN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | I/O密集型和计算密集型</title>
+    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
+<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
+]]></content>
+      <categories>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -1753,60 +1753,6 @@ numyy:复制 光标所在行开始向下的num行<br><br>
       </tags>
   </entry>
   <entry>
-    <title>机器学习 | Logistic回归</title>
-    <url>/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/</url>
-    <content><![CDATA[<h1 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h1><p>Logistic回归是一种<b>分类</b>算法，通常用于<b>二分类</b>问题(例如：明天是否会下雨)，但也可以用于多分类问题。</p>
-<span id="more"></span>
-<h2 id="Logistic回归与梯度上升算法"><a href="#Logistic回归与梯度上升算法" class="headerlink" title="Logistic回归与梯度上升算法"></a>Logistic回归与梯度上升算法</h2><h3 id="Logistic回归-1"><a href="#Logistic回归-1" class="headerlink" title="Logistic回归"></a>Logistic回归</h3><p><b>回归：</b>利用一条直线对一些数据点进行拟合的过程。</p>
-<p>Logistic回归是分类方法，它利用的是Sigmoid函数阈值在[0,1]这个特性。</p>
-<p><b>Logistic回归进行分类的主要思想：</b>根据现有数据对分类边界线建立回归公式，以此进行分类</p>
-<p>其实，Logistic回归本质上是一个基于条件概率的判别模型(Discriminative Model)。</p>
-<p><b>Sigmoid函数(Logistic函数)：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/1.png"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/2.jpg"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/3.png"><br>整合成一个公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/5.jpg"></p>
-<p><b>Sigmoid函数的图像：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/6.png"><br>z是一个矩阵，θ是参数列向量(要求解的)，x是样本列向量(给定的数据集)。θ^T表示θ的转置。g(z)函数实现了任意实数到[0,1]的映射，这样我们的数据集([x0,x1,…,xn])，不管是大于1或者小于0，都可以映射到[0,1]区间进行分类。hθ(x)给出了输出为1的概率。比如当hθ(x)=0.7，那么说明有70%的概率输出为1。输出为0的概率是输出为1的补集，也就是30%。</p>
-<p>如果我们有合适的参数列向量θ([θ0,θ1,…θn]^T)，以及样本列向量x([x0,x1,…,xn])，那么我们对样本x分类就可以通过上述公式计算出一个概率，如果这个概率大于0.5，我们就可以说样本是正样本，否则样本是负样本。</p>
-<p><b>如何得到合适的参数向量θ？</b><br>根据sigmoid函数的特性，我们可以做出如下的假设：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/7.jpg"><br>两个概率公式合而为一：(损失函数-Loss Function)<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/8.jpg"><br>取对数：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/9.jpg"><br>这个损失函数，是对于一个样本而言的。给定一个样本，我们就可以通过这个损失函数求出，样本所属类别的概率，而这个概率越大越好，所以也就是求解这个损失函数的最大值。既然概率出来了，那么最大似然估计也该出场了。假定样本与样本之间相互独立，那么整个样本集生成的概率即为所有样本生成概率的乘积，再将公式对数化，便可得到如下公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/10.png"><br>其中，m为样本的总数，y(i)表示第i个样本的类别，x(i)表示第i个样本，需要注意的是θ是多维向量，x(i)也是多维向量。</p>
-<p>综上所述，满足J(θ)的最大的θ值即是我们需要求解的模型。</p>
-<p>怎么求解使J(θ)最大的θ值呢？因为是<b>求最大值</b>，所以我们需要使用<b>梯度上升算法</b>。如果面对的问题是求解使J(θ)<b>最小</b>的θ值，那么我们就需要使用<b>梯度下降算法</b>。面对我们这个问题，如果使<b>J(θ) := -J(θ)</b>，那么问题就从求极大值转换成求极小值了，使用的算法就从梯度上升算法变成了梯度下降算法，它们的思想都是相同的，学会其一，就也会了另一个。</p>
-<h3 id="梯度上升算法"><a href="#梯度上升算法" class="headerlink" title="梯度上升算法"></a>梯度上升算法</h3><p>爬坡这个动作用数学公式表达即为：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/11.png"><br>其中，α为步长，也就是学习速率，控制更新的幅度。<br>梯度上升迭代公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/12.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><b>Logistic回归的一般过程：</b><br>1.收集数据：采用任意方法收集数据。<br>2.准备数据：由于需要进行距离计算，因此要求数据类型为数值型。另外，结构化数据格式则最佳。<br>3.分析数据：采用任意方法对数据进行分析。<br>4.训练算法：大部分时间将用于训练，训练的目的是为了找到最佳的分类回归系数。<br>5.测试算法：一旦训练步骤完成，分类将会很快。<br>6.使用算法：首先，我们需要输入一些数据，并将其转换成对应的结构化数值；接着，基于训练好的回归系数，就可以对这些数值进行简单的回归计算，判定它们属于哪个类别；在这之后，我们就可以在输出的类别上做一些其他分析工作。</p>
-<p><b>Logistic回归的优缺点</b><br>优点：实现简单，易于理解和实现；计算代价不高，速度很快，存储资源低。<br>缺点：容易欠拟合，分类精度可能不高。</p>
-<p><b>其他</b><br>1.Logistic回归的目的是寻找一个非线性函数Sigmoid的最佳拟合参数，求解过程可以由最优化算法完成。<br><br>2.改进的一些最优化算法，比如sag。它可以在新数据到来时就完成参数更新，而不需要重新读取整个数据集来进行批量处理。<br><br>机器学习的一个重要问题就是如何处理缺失数据。这个问题没有标准答案，取决于实际应用中的需求。现有一些解决方案，每种方案都各有优缺点。<br><br>3.我们需要根据数据的情况，这是Sklearn的参数，以期达到更好的分类效果。</p>
-<p><a href="https://cuijiahua.com/blog/2017/11/ml_6_logistic_1.html">参考资料1</a><br><a href="https://cuijiahua.com/blog/2017/11/ml_7_logistic_2.html">参考资料2</a></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>Logistic Regression</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可视化 | Logistic回归可视化主要代码</title>
-    <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
-
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.scatter(xcord1,ycord1,s=20,c=&#39;red&#39;,marker=&#39;s&#39;,alpha=0.5)
-ax.plot(x,y)
-plt.title()
-plt.xlabel()
-plt.ylabel()
-plt.show()
-</code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>可视化(Visualization)</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL | MySQL常见的表操作语句</title>
     <url>/2021/10/14/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A1%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/</url>
     <content><![CDATA[<h1 id="MySQL常见的表操作语句"><a href="#MySQL常见的表操作语句" class="headerlink" title="MySQL常见的表操作语句"></a>MySQL常见的表操作语句</h1><p>1.表的创建</p>
@@ -1844,6 +1790,76 @@ insert into table_name() values(),(),()
       </tags>
   </entry>
   <entry>
+    <title>可视化 | Logistic回归可视化主要代码</title>
+    <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
+    <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(xcord1,ycord1,s=20,c=&#39;red&#39;,marker=&#39;s&#39;,alpha=0.5)
+ax.plot(x,y)
+plt.title()
+plt.xlabel()
+plt.ylabel()
+plt.show()
+</code></pre>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>可视化(Visualization)</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习 | Logistic回归</title>
+    <url>/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/</url>
+    <content><![CDATA[<h1 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h1><p>Logistic回归是一种<b>分类</b>算法，通常用于<b>二分类</b>问题(例如：明天是否会下雨)，但也可以用于多分类问题。</p>
+<span id="more"></span>
+<h2 id="Logistic回归与梯度上升算法"><a href="#Logistic回归与梯度上升算法" class="headerlink" title="Logistic回归与梯度上升算法"></a>Logistic回归与梯度上升算法</h2><h3 id="Logistic回归-1"><a href="#Logistic回归-1" class="headerlink" title="Logistic回归"></a>Logistic回归</h3><p><b>回归：</b>利用一条直线对一些数据点进行拟合的过程。</p>
+<p>Logistic回归是分类方法，它利用的是Sigmoid函数阈值在[0,1]这个特性。</p>
+<p><b>Logistic回归进行分类的主要思想：</b>根据现有数据对分类边界线建立回归公式，以此进行分类</p>
+<p>其实，Logistic回归本质上是一个基于条件概率的判别模型(Discriminative Model)。</p>
+<p><b>Sigmoid函数(Logistic函数)：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/1.png"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/2.jpg"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/3.png"><br>整合成一个公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/5.jpg"></p>
+<p><b>Sigmoid函数的图像：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/6.png"><br>z是一个矩阵，θ是参数列向量(要求解的)，x是样本列向量(给定的数据集)。θ^T表示θ的转置。g(z)函数实现了任意实数到[0,1]的映射，这样我们的数据集([x0,x1,…,xn])，不管是大于1或者小于0，都可以映射到[0,1]区间进行分类。hθ(x)给出了输出为1的概率。比如当hθ(x)=0.7，那么说明有70%的概率输出为1。输出为0的概率是输出为1的补集，也就是30%。</p>
+<p>如果我们有合适的参数列向量θ([θ0,θ1,…θn]^T)，以及样本列向量x([x0,x1,…,xn])，那么我们对样本x分类就可以通过上述公式计算出一个概率，如果这个概率大于0.5，我们就可以说样本是正样本，否则样本是负样本。</p>
+<p><b>如何得到合适的参数向量θ？</b><br>根据sigmoid函数的特性，我们可以做出如下的假设：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/7.jpg"><br>两个概率公式合而为一：(损失函数-Loss Function)<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/8.jpg"><br>取对数：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/9.jpg"><br>这个损失函数，是对于一个样本而言的。给定一个样本，我们就可以通过这个损失函数求出，样本所属类别的概率，而这个概率越大越好，所以也就是求解这个损失函数的最大值。既然概率出来了，那么最大似然估计也该出场了。假定样本与样本之间相互独立，那么整个样本集生成的概率即为所有样本生成概率的乘积，再将公式对数化，便可得到如下公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/10.png"><br>其中，m为样本的总数，y(i)表示第i个样本的类别，x(i)表示第i个样本，需要注意的是θ是多维向量，x(i)也是多维向量。</p>
+<p>综上所述，满足J(θ)的最大的θ值即是我们需要求解的模型。</p>
+<p>怎么求解使J(θ)最大的θ值呢？因为是<b>求最大值</b>，所以我们需要使用<b>梯度上升算法</b>。如果面对的问题是求解使J(θ)<b>最小</b>的θ值，那么我们就需要使用<b>梯度下降算法</b>。面对我们这个问题，如果使<b>J(θ) := -J(θ)</b>，那么问题就从求极大值转换成求极小值了，使用的算法就从梯度上升算法变成了梯度下降算法，它们的思想都是相同的，学会其一，就也会了另一个。</p>
+<h3 id="梯度上升算法"><a href="#梯度上升算法" class="headerlink" title="梯度上升算法"></a>梯度上升算法</h3><p>爬坡这个动作用数学公式表达即为：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/11.png"><br>其中，α为步长，也就是学习速率，控制更新的幅度。<br>梯度上升迭代公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/12.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><b>Logistic回归的一般过程：</b><br>1.收集数据：采用任意方法收集数据。<br>2.准备数据：由于需要进行距离计算，因此要求数据类型为数值型。另外，结构化数据格式则最佳。<br>3.分析数据：采用任意方法对数据进行分析。<br>4.训练算法：大部分时间将用于训练，训练的目的是为了找到最佳的分类回归系数。<br>5.测试算法：一旦训练步骤完成，分类将会很快。<br>6.使用算法：首先，我们需要输入一些数据，并将其转换成对应的结构化数值；接着，基于训练好的回归系数，就可以对这些数值进行简单的回归计算，判定它们属于哪个类别；在这之后，我们就可以在输出的类别上做一些其他分析工作。</p>
+<p><b>Logistic回归的优缺点</b><br>优点：实现简单，易于理解和实现；计算代价不高，速度很快，存储资源低。<br>缺点：容易欠拟合，分类精度可能不高。</p>
+<p><b>其他</b><br>1.Logistic回归的目的是寻找一个非线性函数Sigmoid的最佳拟合参数，求解过程可以由最优化算法完成。<br><br>2.改进的一些最优化算法，比如sag。它可以在新数据到来时就完成参数更新，而不需要重新读取整个数据集来进行批量处理。<br><br>机器学习的一个重要问题就是如何处理缺失数据。这个问题没有标准答案，取决于实际应用中的需求。现有一些解决方案，每种方案都各有优缺点。<br><br>3.我们需要根据数据的情况，这是Sklearn的参数，以期达到更好的分类效果。</p>
+<p><a href="https://cuijiahua.com/blog/2017/11/ml_6_logistic_1.html">参考资料1</a><br><a href="https://cuijiahua.com/blog/2017/11/ml_7_logistic_2.html">参考资料2</a></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>Logistic Regression</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GPU | NVIDIAGeForceGTX1650驱动安装</title>
+    <url>/2021/10/09/NVIDIAGeForceGTX1650%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<h1 id="NVIDIAGeForceGTX1650驱动安装"><a href="#NVIDIAGeForceGTX1650驱动安装" class="headerlink" title="NVIDIAGeForceGTX1650驱动安装"></a>NVIDIAGeForceGTX1650驱动安装</h1><p>当我们想使用GPU（可以用来加速）来跑深度学习代码前，需要进行显卡驱动安装，我的显卡是NVIDIA GeForce GTX 1650。</p>
+<p><strong>需要安装：</strong><br>1.Cuda<br>2.CuDNN<br><strong>下载地址：</strong><br><a href="https://developer.nvidia.com/cuda-toolkit">Cuda</a><br><a href=" https://developer.nvidia.com/cudnn">CuDNN</a><br><strong>我的显卡使用的Cuda、CuDNN版本：</strong><br>1.Cuda-10.1<br>2.CuDNN-7.6<br>3.Tensorflow-gpu-1.15.0(可选，在这里我是想用来加速Tensorflow代码的训练)</p>
+<p><strong>注意：深度学习框架、python、Cuda、CuDNN版本的对应以及Cuda与自己显卡的兼容性</strong><br><a href="https://blog.csdn.net/s_hikki/article/details/106107778">NVIDIA GeForce GTX 1650驱动安装</a><br><a href="https://tensorflow.google.cn/install/source_windows#configuration_options">版本对应参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>GPU</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>GPU</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>urllib.request | POST请求</title>
     <url>/2021/08/05/POST%E8%AF%B7%E6%B1%82/</url>
     <content><![CDATA[<h1 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h1><p>使用urllib.request模块可以在python中访问互联网资源，以下是发送POST请求的示例代码。</p>
@@ -1878,22 +1894,6 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
-    <title>GPU | NVIDIAGeForceGTX1650驱动安装</title>
-    <url>/2021/10/09/NVIDIAGeForceGTX1650%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<h1 id="NVIDIAGeForceGTX1650驱动安装"><a href="#NVIDIAGeForceGTX1650驱动安装" class="headerlink" title="NVIDIAGeForceGTX1650驱动安装"></a>NVIDIAGeForceGTX1650驱动安装</h1><p>当我们想使用GPU（可以用来加速）来跑深度学习代码前，需要进行显卡驱动安装，我的显卡是NVIDIA GeForce GTX 1650。</p>
-<p><strong>需要安装：</strong><br>1.Cuda<br>2.CuDNN<br><strong>下载地址：</strong><br><a href="https://developer.nvidia.com/cuda-toolkit">Cuda</a><br><a href=" https://developer.nvidia.com/cudnn">CuDNN</a><br><strong>我的显卡使用的Cuda、CuDNN版本：</strong><br>1.Cuda-10.1<br>2.CuDNN-7.6<br>3.Tensorflow-gpu-1.15.0(可选，在这里我是想用来加速Tensorflow代码的训练)</p>
-<p><strong>注意：深度学习框架、python、Cuda、CuDNN版本的对应以及Cuda与自己显卡的兼容性</strong><br><a href="https://blog.csdn.net/s_hikki/article/details/106107778">NVIDIA GeForce GTX 1650驱动安装</a><br><a href="https://tensorflow.google.cn/install/source_windows#configuration_options">版本对应参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>GPU</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>GPU</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Anaconda | ProxyError</title>
     <url>/2021/07/08/ProxyError/</url>
     <content><![CDATA[<p>在使用Anaconda创建虚拟环境时出错： ProxyError: Conda cannot proceed due to an error in your proxy configuration</p>
@@ -1925,23 +1925,6 @@ print(TestPrivacy.__name) # Output: AttributeError: type object &#39;TestPrivacy
       </categories>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>UML | UML中的事物分类</title>
-    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
-<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
-<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
-<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
-<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
-<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
-]]></content>
-      <categories>
-        <category>UML</category>
-      </categories>
-      <tags>
-        <tag>UML</tag>
       </tags>
   </entry>
   <entry>
@@ -2023,6 +2006,23 @@ if __name__ == &quot;__main__&quot;:
 ]]></content>
       <tags>
         <tag>Web服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>UML | UML中的事物分类</title>
+    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
+<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
+<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
+<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
+<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
+<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
+]]></content>
+      <categories>
+        <category>UML</category>
+      </categories>
+      <tags>
+        <tag>UML</tag>
       </tags>
   </entry>
   <entry>
@@ -2288,6 +2288,48 @@ ALLOWED_HOSTS = [&#39;*&#39;]
       </tags>
   </entry>
   <entry>
+    <title>脑电基础知识 | five major brain waves</title>
+    <url>/2020/12/07/five-major-brain-waves/</url>
+    <content><![CDATA[<h1 id="Five-Major-Brain-Waves"><a href="#Five-Major-Brain-Waves" class="headerlink" title="Five Major Brain Waves"></a>Five Major Brain Waves</h1><p>Five major brain waves can be distinguished by their frequency ranges:</p>
+<table>
+<thead>
+<tr>
+<th>frequency band</th>
+<th>frequency range</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>delta</td>
+<td>0.5-4Hz</td>
+</tr>
+<tr>
+<td>theta</td>
+<td>4-8Hz</td>
+</tr>
+<tr>
+<td>alpha</td>
+<td>8-13Hz</td>
+</tr>
+<tr>
+<td>beta</td>
+<td>13-30Hz</td>
+</tr>
+<tr>
+<td>gamma</td>
+<td>30-50Hz</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电基础知识</category>
+      </categories>
+      <tags>
+        <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>论文框架与写作技巧 | 论文框架</title>
     <url>/2021/02/10/framework-of-paper/</url>
     <content><![CDATA[<h1 id="Framework-of-Paper"><a href="#Framework-of-Paper" class="headerlink" title="Framework of Paper"></a>Framework of Paper</h1><div id="div1" style>
@@ -2364,48 +2406,6 @@ ALLOWED_HOSTS = [&#39;*&#39;]
       </tags>
   </entry>
   <entry>
-    <title>脑电基础知识 | five major brain waves</title>
-    <url>/2020/12/07/five-major-brain-waves/</url>
-    <content><![CDATA[<h1 id="Five-Major-Brain-Waves"><a href="#Five-Major-Brain-Waves" class="headerlink" title="Five Major Brain Waves"></a>Five Major Brain Waves</h1><p>Five major brain waves can be distinguished by their frequency ranges:</p>
-<table>
-<thead>
-<tr>
-<th>frequency band</th>
-<th>frequency range</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>delta</td>
-<td>0.5-4Hz</td>
-</tr>
-<tr>
-<td>theta</td>
-<td>4-8Hz</td>
-</tr>
-<tr>
-<td>alpha</td>
-<td>8-13Hz</td>
-</tr>
-<tr>
-<td>beta</td>
-<td>13-30Hz</td>
-</tr>
-<tr>
-<td>gamma</td>
-<td>30-50Hz</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电基础知识</category>
-      </categories>
-      <tags>
-        <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | getattr()函数</title>
     <url>/2021/05/20/getattr-%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="python-getattr-函数"><a href="#python-getattr-函数" class="headerlink" title="python getattr()函数"></a>python getattr()函数</h1><p>描述：getattr()函数用于返回一个对象属性值</p>
@@ -2434,6 +2434,18 @@ ALLOWED_HOSTS = [&#39;*&#39;]
       </tags>
   </entry>
   <entry>
+    <title>python | pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法</title>
+    <url>/2021/01/28/pip%E5%AE%89%E8%A3%85%E5%87%BA%E7%8E%B0Cannot-fetch-index-base-URL-http-pypi-python-org-simple-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法"><a href="#pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法" class="headerlink" title="pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法"></a>pip安装出现Cannot fetch index base URL <a href="http://pypi.python.org/simple/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">http://pypi.python.org/simple/解决方法</a></h1><p>1.sudo vi .pip/pip.conf<br>2.添加以下内容<br>[global]<br>index-url=<a href="http://pypi.doubanio.com/simple/">http://pypi.doubanio.com/simple/</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>itertools | product</title>
     <url>/2021/09/04/product/</url>
     <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
@@ -2454,18 +2466,6 @@ print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.p
       <tags>
         <tag>python</tag>
         <tag>itertools</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法</title>
-    <url>/2021/01/28/pip%E5%AE%89%E8%A3%85%E5%87%BA%E7%8E%B0Cannot-fetch-index-base-URL-http-pypi-python-org-simple-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法"><a href="#pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法" class="headerlink" title="pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法"></a>pip安装出现Cannot fetch index base URL <a href="http://pypi.python.org/simple/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">http://pypi.python.org/simple/解决方法</a></h1><p>1.sudo vi .pip/pip.conf<br>2.添加以下内容<br>[global]<br>index-url=<a href="http://pypi.doubanio.com/simple/">http://pypi.doubanio.com/simple/</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -2543,18 +2543,6 @@ print(t.num)
       </tags>
   </entry>
   <entry>
-    <title>python | python str 对象</title>
-    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | python zip()函数</title>
     <url>/2021/05/20/python-zip-%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="python-zip-函数"><a href="#python-zip-函数" class="headerlink" title="python zip()函数"></a>python zip()函数</h1><p>example:<br>1.zip() 压缩(zip)<br>case 1:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(list1)]) # ([1, 2, 3],), ([4, 5, 6],), ([7, 8, 9],)</p>
@@ -2596,6 +2584,18 @@ percentage = 100*A/cal.reshape(1,4)
 print(percentage)
 </code></pre>
 <p><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=21">参考吴恩达深度学习视频</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | python str 对象</title>
+    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -2687,6 +2687,48 @@ print(data2)
       </tags>
   </entry>
   <entry>
+    <title>python | python中的iter()与next()</title>
+    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
+    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
+<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
+<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python资源大全</title>
+    <url>/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | re.match与re.search的区别</title>
+    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
+re.match(r&quot;dogs&quot;,s)#匹配失败
+re.search(r&quot;dogs&quot;,s)#匹配成功
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | python可变参数</title>
     <url>/2021/08/02/python%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/</url>
     <content><![CDATA[<h1 id="python可变参数"><a href="#python可变参数" class="headerlink" title="python可变参数"></a>python可变参数</h1><p>python中的函数可以定义<strong>接受不确定数量的参数</strong>，这种参数被称为<strong>可变参数</strong>。</p>
@@ -2714,64 +2756,6 @@ def show_info(**info):
         
 show_info(name=&#39;Tony&#39;, age=18, sex=True)
 show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | python中的iter()与next()</title>
-    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
-    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
-<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
-<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>itchat | python微信轰炸</title>
-    <url>/2021/10/16/python%E5%BE%AE%E4%BF%A1%E8%BD%B0%E7%82%B8/</url>
-    <content><![CDATA[<h1 id="python微信轰炸"><a href="#python微信轰炸" class="headerlink" title="python微信轰炸"></a>python微信轰炸</h1><p><a href="https://www.bilibili.com/read/cv11064085/">python微信轰炸</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>itchat</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>itchat</tag>
-        <tag>微信轰炸</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python资源大全</title>
-    <url>/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | re.match与re.search的区别</title>
-    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
-re.match(r&quot;dogs&quot;,s)#匹配失败
-re.search(r&quot;dogs&quot;,s)#匹配成功
 </code></pre>
 ]]></content>
       <categories>
@@ -2896,6 +2880,22 @@ print(&quot;脑电波绘制完成！&quot;)
       </categories>
       <tags>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>itchat | python微信轰炸</title>
+    <url>/2021/10/16/python%E5%BE%AE%E4%BF%A1%E8%BD%B0%E7%82%B8/</url>
+    <content><![CDATA[<h1 id="python微信轰炸"><a href="#python微信轰炸" class="headerlink" title="python微信轰炸"></a>python微信轰炸</h1><p><a href="https://www.bilibili.com/read/cv11064085/">python微信轰炸</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>itchat</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>itchat</tag>
+        <tag>微信轰炸</tag>
       </tags>
   </entry>
   <entry>
@@ -3160,19 +3160,6 @@ tcpClientSocket.close()
       </tags>
   </entry>
   <entry>
-    <title>python | tensorflow安装遇到问题</title>
-    <url>/2021/05/13/tensorflow%E5%AE%89%E8%A3%85%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题"><a href="#Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题" class="headerlink" title="Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题"></a>Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题</h1><p><a href="https://blog.csdn.net/u012270544/article/details/96424907">点击这里查看问题解决方法</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>tensorflow</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | ubuntu下虚拟环境的安装与配置</title>
     <url>/2021/01/28/ubuntu%E4%B8%8B%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="ubuntu下虚拟环境的安装与配置"><a href="#ubuntu下虚拟环境的安装与配置" class="headerlink" title="ubuntu下虚拟环境的安装与配置"></a>ubuntu下虚拟环境的安装与配置</h1><h2 id="为什么要搭建虚拟环境"><a href="#为什么要搭建虚拟环境" class="headerlink" title="为什么要搭建虚拟环境?"></a>为什么要搭建虚拟环境?</h2><pre><code>如果在一台电脑上, 有不同项目, 需要用到同一个包的不同版本, 新版本会覆盖以前的版本, 其它的项目就可能无法正常运行了.。
@@ -3240,6 +3227,19 @@ python3下的安装路径：
         <tag>python</tag>
         <tag>虚拟环境</tag>
         <tag>ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | tensorflow安装遇到问题</title>
+    <url>/2021/05/13/tensorflow%E5%AE%89%E8%A3%85%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题"><a href="#Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题" class="headerlink" title="Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题"></a>Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题</h1><p><a href="https://blog.csdn.net/u012270544/article/details/96424907">点击这里查看问题解决方法</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>tensorflow</tag>
       </tags>
   </entry>
   <entry>
@@ -3702,6 +3702,20 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 为什么需要非线性激活函数</title>
+    <url>/2021/06/23/%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="为什么需要非线性激活函数"><a href="#为什么需要非线性激活函数" class="headerlink" title="为什么需要非线性激活函数?"></a>为什么需要非线性激活函数?</h1><p>为什么神经网络需要非线性激活函数？如果使用线性激活函数(恒等激励函数)，那么神经网络只是把输入线性组合<br>再输出。对于深度神经网络来说，如果使用了线性激活函数或者没有使用激活函数，那么无论你的神经网络有多少<br>层，它做的只是计算线性函数，这样的做法与直接去掉全部隐藏层无异。因此，必须通过非线性激活函数来引入非线性。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>激活函数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 两数相加</title>
     <url>/2021/08/27/%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0/</url>
     <content><![CDATA[<h1 id="2-两数相加"><a href="#2-两数相加" class="headerlink" title="2.两数相加"></a>2.两数相加</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。<br>请你将两个数相加，并以相同形式返回一个表示和的链表。<br>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
@@ -3816,20 +3830,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 为什么需要非线性激活函数</title>
-    <url>/2021/06/23/%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="为什么需要非线性激活函数"><a href="#为什么需要非线性激活函数" class="headerlink" title="为什么需要非线性激活函数?"></a>为什么需要非线性激活函数?</h1><p>为什么神经网络需要非线性激活函数？如果使用线性激活函数(恒等激励函数)，那么神经网络只是把输入线性组合<br>再输出。对于深度神经网络来说，如果使用了线性激活函数或者没有使用激活函数，那么无论你的神经网络有多少<br>层，它做的只是计算线性函数，这样的做法与直接去掉全部隐藏层无异。因此，必须通过非线性激活函数来引入非线性。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>激活函数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>伪迹移除 | 主成分分析</title>
     <url>/2021/02/23/%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h1 id="PCA"><a href="#PCA" class="headerlink" title="PCA"></a>PCA</h1><p><b style="color: red">PCA is a type of spatial filter that transforms the time domain datasets into a different space by rotating axes in an N-dimensional space(where n is the number of variables or EEG channels) such that each dimension in the new space has minimum variance and the axes are orthogonal to each other.</b></p>
@@ -3918,19 +3918,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>OS | 什么是操作系统</title>
-    <url>/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h1 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统?"></a>什么是操作系统?</h1><p>“操作系统（operating system，简称OS）是管理计算机硬件与软件资源的计算机程序,是硬件软件之间的一座桥梁。</p>
-<p><img src="/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.JPG"></p>
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
     <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
@@ -3961,6 +3948,19 @@ if __name__ == &#39;__main__&#39;:
       </categories>
       <tags>
         <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OS | 什么是操作系统</title>
+    <url>/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统?"></a>什么是操作系统?</h1><p>“操作系统（operating system，简称OS）是管理计算机硬件与软件资源的计算机程序,是硬件软件之间的一座桥梁。</p>
+<p><img src="/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.JPG"></p>
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>OS</tag>
       </tags>
   </entry>
   <entry>
@@ -4516,36 +4516,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>算法刷题 | 刷题笔记</title>
-    <url>/2021/06/24/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="刷题笔记"><a href="#刷题笔记" class="headerlink" title="刷题笔记"></a>刷题笔记</h1><p><a href="https://github.com/CyC2018/CS-Notes">刷题笔记1</a></p>
-<p><a href="https://github.com/Jack-Cherish/LeetCode">刷题笔记2</a></p>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>刷题笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>刷题</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 前向传播和反向传播中使用的cache</title>
-    <url>/2021/06/30/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84cache/</url>
-    <content><![CDATA[<h1 id="前向传播和反向传播中使用的cache"><a href="#前向传播和反向传播中使用的cache" class="headerlink" title="前向传播和反向传播中使用的cache"></a>前向传播和反向传播中使用的cache</h1><p>the “cache” records values from the forward propagation units and sends it to the backward<br>propagation units because it is needed to compute the chain rule derivatives.(“cache”记录<br>来自正向传播单元的值并将其发送到反向传播单元，因为需要链式计算导数。)</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>前向传播</tag>
-        <tag>反向传播</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | 匹配第n个分组的内容</title>
     <url>/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/</url>
     <content><![CDATA[<h1 id="1…-9"><a href="#1…-9" class="headerlink" title="\1…\9"></a>\1…\9</h1><p>\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用<br>例：在以下代码段中\2表示匹配第2个分组（一个括号代表一个分组）的内容，即\2匹配”world”字符串</p>
@@ -4564,39 +4534,6 @@ print(re.search(pattern, string))
       <tags>
         <tag>python</tag>
         <tag>re</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 单任务服务器的缺点</title>
-    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
-    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
-<span id="more"></span>
-
-<pre><code>import socket 
-
-serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-serverSocket.bind((&#39;&#39;,8080))
-serverSocket.listen(5)
-
-while True:
-    #如果没有客户端到来，程序将阻塞等待
-    clientSocket,clientAddr = serverSocket.accept()
-    
-    while True:
-        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
-        recvData = newSocket.recv(1024)
-        if data:
-            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
-        else:
-            break
-</code></pre>
-]]></content>
-      <categories>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -4661,6 +4598,54 @@ if __name__ == &#39;__main__&#39;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 前向传播和反向传播中使用的cache</title>
+    <url>/2021/06/30/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84cache/</url>
+    <content><![CDATA[<h1 id="前向传播和反向传播中使用的cache"><a href="#前向传播和反向传播中使用的cache" class="headerlink" title="前向传播和反向传播中使用的cache"></a>前向传播和反向传播中使用的cache</h1><p>the “cache” records values from the forward propagation units and sends it to the backward<br>propagation units because it is needed to compute the chain rule derivatives.(“cache”记录<br>来自正向传播单元的值并将其发送到反向传播单元，因为需要链式计算导数。)</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>前向传播</tag>
+        <tag>反向传播</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 单任务服务器的缺点</title>
+    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
+<span id="more"></span>
+
+<pre><code>import socket 
+
+serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverSocket.bind((&#39;&#39;,8080))
+serverSocket.listen(5)
+
+while True:
+    #如果没有客户端到来，程序将阻塞等待
+    clientSocket,clientAddr = serverSocket.accept()
+    
+    while True:
+        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
+        recvData = newSocket.recv(1024)
+        if data:
+            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
+        else:
+            break
+</code></pre>
+]]></content>
+      <categories>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -4809,6 +4794,21 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法刷题 | 刷题笔记</title>
+    <url>/2021/06/24/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="刷题笔记"><a href="#刷题笔记" class="headerlink" title="刷题笔记"></a>刷题笔记</h1><p><a href="https://github.com/CyC2018/CS-Notes">刷题笔记1</a></p>
+<p><a href="https://github.com/Jack-Cherish/LeetCode">刷题笔记2</a></p>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>刷题笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>刷题</tag>
       </tags>
   </entry>
   <entry>
@@ -5558,6 +5558,68 @@ plt.show()  # show the figure
       </tags>
   </entry>
   <entry>
+    <title>系统编程 | 多进程拷贝文件</title>
+    <url>/2020/10/14/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="多进程拷贝文件"><a href="#多进程拷贝文件" class="headerlink" title="多进程拷贝文件"></a>多进程拷贝文件</h1><h2 id="实现流程分析"><a href="#实现流程分析" class="headerlink" title="实现流程分析"></a>实现流程分析</h2><ol>
+<li>获取要copy的文件夹的名字</li>
+<li>创建一个文件夹</li>
+<li>获取old文件夹中的所有的文件名字</li>
+<li>使用多进程方式copy原文件夹中的所有文件到新的文件夹中</li>
+</ol>
+
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><pre><code>from multiprocessing import Pool,Manager
+import os
+import time
+
+def copyFileTask(name,oldFolderName,newFolderName,queue):
+    &quot;complete the function of coping a file&quot;
+    fr = open(oldFolderName+&quot;/&quot;+name)
+    fw = open(newFolderName+&quot;/&quot;+name,&quot;w&quot;)
+    content = fr.read()
+    fw.write(content)
+    fr.close()
+    fw.close()
+    queue.put(name)
+
+def main():
+    #0.get the file name you want to copy
+    oldFolderName = input(&quot;Please input the file name:&quot;)
+    #1.create a file directory
+    newFolderName = oldFolderName+&quot;-copy&quot;
+    #pmrint(newFolderName)
+    os.mkdir(newFolderName)
+    #2.get all file name of old file directory
+    fileNames = os.listdir(oldFolderName)
+    #print(fileNames)
+    #3.copy all file of old file directory to a new file directory
+    pool = Pool(5)
+    queue = Manager().Queue()
+    for name in fileNames:
+        pool.apply_async(copyFileTask,args=(name,oldFolderName,newFolderName,queue))
+    num = 0
+    allNum = len(fileNames)
+    while num &lt; allNum:
+        queue.get()
+        num += 1
+        copyRate = num/allNum
+        print(&quot;\rcopy process:%.2f%% &quot;%(copyRate*100),end=&quot;&quot;)
+        time.sleep(1)
+    print(&#39;\ncompleted&#39;)
+    pool.close()
+    pool.join()
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+]]></content>
+      <categories>
+        <category>系统编程</category>
+      </categories>
+      <tags>
+        <tag>系统编程</tag>
+        <tag>多进程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>多线程 | 多线程下载图片</title>
     <url>/2021/08/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/</url>
     <content><![CDATA[<h1 id="多线程下载图片"><a href="#多线程下载图片" class="headerlink" title="多线程下载图片"></a>多线程下载图片</h1><p>下面的代码是一个网络爬虫程序，可以定期下载图片。这个网络爬虫程序每隔一段时间都会执行一次下载图片任务，在下载任务完成后，休眠一段时间在执行。这样反复执行，知道爬虫程序停止。</p>
@@ -5626,68 +5688,6 @@ controlthread.start()
         <tag>python</tag>
         <tag>threading</tag>
         <tag>多线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>系统编程 | 多进程拷贝文件</title>
-    <url>/2020/10/14/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="多进程拷贝文件"><a href="#多进程拷贝文件" class="headerlink" title="多进程拷贝文件"></a>多进程拷贝文件</h1><h2 id="实现流程分析"><a href="#实现流程分析" class="headerlink" title="实现流程分析"></a>实现流程分析</h2><ol>
-<li>获取要copy的文件夹的名字</li>
-<li>创建一个文件夹</li>
-<li>获取old文件夹中的所有的文件名字</li>
-<li>使用多进程方式copy原文件夹中的所有文件到新的文件夹中</li>
-</ol>
-
-<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><pre><code>from multiprocessing import Pool,Manager
-import os
-import time
-
-def copyFileTask(name,oldFolderName,newFolderName,queue):
-    &quot;complete the function of coping a file&quot;
-    fr = open(oldFolderName+&quot;/&quot;+name)
-    fw = open(newFolderName+&quot;/&quot;+name,&quot;w&quot;)
-    content = fr.read()
-    fw.write(content)
-    fr.close()
-    fw.close()
-    queue.put(name)
-
-def main():
-    #0.get the file name you want to copy
-    oldFolderName = input(&quot;Please input the file name:&quot;)
-    #1.create a file directory
-    newFolderName = oldFolderName+&quot;-copy&quot;
-    #pmrint(newFolderName)
-    os.mkdir(newFolderName)
-    #2.get all file name of old file directory
-    fileNames = os.listdir(oldFolderName)
-    #print(fileNames)
-    #3.copy all file of old file directory to a new file directory
-    pool = Pool(5)
-    queue = Manager().Queue()
-    for name in fileNames:
-        pool.apply_async(copyFileTask,args=(name,oldFolderName,newFolderName,queue))
-    num = 0
-    allNum = len(fileNames)
-    while num &lt; allNum:
-        queue.get()
-        num += 1
-        copyRate = num/allNum
-        print(&quot;\rcopy process:%.2f%% &quot;%(copyRate*100),end=&quot;&quot;)
-        time.sleep(1)
-    print(&#39;\ncompleted&#39;)
-    pool.close()
-    pool.join()
-if __name__ == &quot;__main__&quot;:
-    main()
-</code></pre>
-]]></content>
-      <categories>
-        <category>系统编程</category>
-      </categories>
-      <tags>
-        <tag>系统编程</tag>
-        <tag>多进程</tag>
       </tags>
   </entry>
   <entry>
@@ -6287,20 +6287,6 @@ app.MainLoop()  # 进入主事件循环
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 感知机</title>
-    <url>/2021/06/24/%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
-    <content><![CDATA[<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><p><a href="https://mp.weixin.qq.com/s/OKUCFdBLuwkJMxRz-gvthQ">点这里查看更多关于感知机的知识！！！</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>感知机</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C# | 我的第一个CSharp程序</title>
     <url>/2021/07/03/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AACSharp%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="我的第一个CSharp程序"><a href="#我的第一个CSharp程序" class="headerlink" title="我的第一个CSharp程序"></a>我的第一个CSharp程序</h1><pre><code>using System;
@@ -6328,6 +6314,20 @@ namespace project1
       </categories>
       <tags>
         <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 感知机</title>
+    <url>/2021/06/24/%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
+    <content><![CDATA[<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><p><a href="https://mp.weixin.qq.com/s/OKUCFdBLuwkJMxRz-gvthQ">点这里查看更多关于感知机的知识！！！</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>感知机</tag>
       </tags>
   </entry>
   <entry>
@@ -6376,7 +6376,7 @@ t1 = time.time()
 
 print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)
 </code></pre>
-<p><img src="/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6%E6%A8%A1%E6%9D%BF.pptx"></p>
+<div class="pdfobject-container" data-target="./批量生成PPT版荣誉证书/荣誉证书模板.pptx" data-height="500px"></div>
 ]]></content>
       <categories>
         <category>python</category>
@@ -7258,21 +7258,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>本地与服务器互传文件</title>
-    <url>/2021/04/18/%E6%9C%AC%E5%9C%B0%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%92%E4%BC%A0%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="本地与服务器互传文件"><a href="#本地与服务器互传文件" class="headerlink" title="本地与服务器互传文件"></a>本地与服务器互传文件</h1><p>命令安装：yum install lrzsz</p>
-<p>从服务器发送文件到客户端： sz filename</p>
-<p>从客户端上传文件到服务端： rz</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机器学习 | 朴素贝叶斯</title>
     <url>/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/</url>
     <content><![CDATA[<h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>朴素贝叶斯算法(Naive Bayes)是<b>有监督(supervised)</b>的学习算法，解决的是<b>分类</b>问题(例如：客户是否流失、是否值得投资、信用等级评定等<b>多分类</b>问题)</p>
@@ -7392,6 +7377,21 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>本地与服务器互传文件</title>
+    <url>/2021/04/18/%E6%9C%AC%E5%9C%B0%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%92%E4%BC%A0%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="本地与服务器互传文件"><a href="#本地与服务器互传文件" class="headerlink" title="本地与服务器互传文件"></a>本地与服务器互传文件</h1><p>命令安装：yum install lrzsz</p>
+<p>从服务器发送文件到客户端： sz filename</p>
+<p>从客户端上传文件到服务端： rz</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习 | 机器学习分类的一般步骤</title>
     <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
     <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
@@ -7401,6 +7401,22 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>脑电分类 | 机器学习实现脑电分类</title>
+    <url>/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="机器学习实现脑电分类"><a href="#机器学习实现脑电分类" class="headerlink" title="机器学习实现脑电分类"></a>机器学习实现脑电分类</h1><p><img src="/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/1.jpg"></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电分类</category>
+      </categories>
+      <tags>
+        <tag>脑电分类</tag>
+        <tag>机器学习</tag>
+        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -7499,22 +7515,6 @@ Note:
       </categories>
       <tags>
         <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>脑电分类 | 机器学习实现脑电分类</title>
-    <url>/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="机器学习实现脑电分类"><a href="#机器学习实现脑电分类" class="headerlink" title="机器学习实现脑电分类"></a>机器学习实现脑电分类</h1><p><img src="/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/1.jpg"></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电分类</category>
-      </categories>
-      <tags>
-        <tag>脑电分类</tag>
-        <tag>机器学习</tag>
-        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -8161,26 +8161,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>伪迹移除 | 盲源分离和独立成分分析</title>
-    <url>/2021/02/21/%E7%9B%B2%E6%BA%90%E5%88%86%E7%A6%BB%E5%92%8C%E7%8B%AC%E7%AB%8B%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<h1 id="盲源分离-BSS-和独立成分分析-ICA"><a href="#盲源分离-BSS-和独立成分分析-ICA" class="headerlink" title="盲源分离(BSS)和独立成分分析(ICA)"></a>盲源分离(BSS)和独立成分分析(ICA)</h1><h2 id="BSS"><a href="#BSS" class="headerlink" title="BSS"></a>BSS</h2><p>盲源分离是最流行的伪迹检测/移除方法之一，其目的是提取混合信号中独立的未知的源信号；同时尽可能在对源信号和混合通道没有或者有非常有限的了解下尽可能仅通过在每一个通道的输出观测到的混合信号来估计未知的混合通道。盲源分离包括ICA(独立成分分析)、CCA(典型成分分析)、MCA(形态成分分析)三种方法。</p>
-<h3 id="数学表示式："><a href="#数学表示式：" class="headerlink" title="数学表示式："></a>数学表示式：</h3><p><b>X = AS + N</b><br><b>S’ = WX</b><br>其中,X表示观测到的信号(假设X为若干源信号和噪声信号的混合),N代表噪声信号，A为系数矩阵，W也为系数矩阵（需要对W矩阵进行估计），S’为S的估计<br><img src="/2021/02/21/%E7%9B%B2%E6%BA%90%E5%88%86%E7%A6%BB%E5%92%8C%E7%8B%AC%E7%AB%8B%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/bss.png"></p>
-<h2 id="ICA"><a href="#ICA" class="headerlink" title="ICA"></a>ICA</h2><p>独立成分分析是盲源分离的一个特例，它假设组成观测信号的若干源信号是线性独立的。</p>
-<h3 id="基于ICA的伪迹检测和去除方法存在的问题"><a href="#基于ICA的伪迹检测和去除方法存在的问题" class="headerlink" title="基于ICA的伪迹检测和去除方法存在的问题"></a>基于ICA的伪迹检测和去除方法存在的问题</h3><p>1.非自动的<br>2.需要人为介入去除观察到的伪迹</p>
-<h3 id="基于ICA的伪迹检测和去除方法的自动化"><a href="#基于ICA的伪迹检测和去除方法的自动化" class="headerlink" title="基于ICA的伪迹检测和去除方法的自动化"></a>基于ICA的伪迹检测和去除方法的自动化</h3><p><b style="color:red">1.ICA+WT(Wavelet Transform,小波变换)<br>2.ICA+EMD(Empirical Mode Decomposition,经验模态分解)<br>3.使用分类器，例如SVM(Support Vector Machine,支持向量机-一种机器学习算法)<br>4.参考信号辅助</b></p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>1.伪迹独立成分仍然可能包含残余的神经信号导致神经信号的失真<br>2.不能用于单通道数据<br>3.不适合实时应用</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>ICA</tag>
-        <tag>BSS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 相交链表</title>
     <url>/2021/08/27/%E7%9B%B8%E4%BA%A4%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="160-环形链表"><a href="#160-环形链表" class="headerlink" title="160.环形链表"></a>160.环形链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。</p>
@@ -8285,6 +8265,26 @@ if __name__ ==&quot;__main__&quot;:
       </categories>
       <tags>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | 盲源分离和独立成分分析</title>
+    <url>/2021/02/21/%E7%9B%B2%E6%BA%90%E5%88%86%E7%A6%BB%E5%92%8C%E7%8B%AC%E7%AB%8B%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="盲源分离-BSS-和独立成分分析-ICA"><a href="#盲源分离-BSS-和独立成分分析-ICA" class="headerlink" title="盲源分离(BSS)和独立成分分析(ICA)"></a>盲源分离(BSS)和独立成分分析(ICA)</h1><h2 id="BSS"><a href="#BSS" class="headerlink" title="BSS"></a>BSS</h2><p>盲源分离是最流行的伪迹检测/移除方法之一，其目的是提取混合信号中独立的未知的源信号；同时尽可能在对源信号和混合通道没有或者有非常有限的了解下尽可能仅通过在每一个通道的输出观测到的混合信号来估计未知的混合通道。盲源分离包括ICA(独立成分分析)、CCA(典型成分分析)、MCA(形态成分分析)三种方法。</p>
+<h3 id="数学表示式："><a href="#数学表示式：" class="headerlink" title="数学表示式："></a>数学表示式：</h3><p><b>X = AS + N</b><br><b>S’ = WX</b><br>其中,X表示观测到的信号(假设X为若干源信号和噪声信号的混合),N代表噪声信号，A为系数矩阵，W也为系数矩阵（需要对W矩阵进行估计），S’为S的估计<br><img src="/2021/02/21/%E7%9B%B2%E6%BA%90%E5%88%86%E7%A6%BB%E5%92%8C%E7%8B%AC%E7%AB%8B%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/bss.png"></p>
+<h2 id="ICA"><a href="#ICA" class="headerlink" title="ICA"></a>ICA</h2><p>独立成分分析是盲源分离的一个特例，它假设组成观测信号的若干源信号是线性独立的。</p>
+<h3 id="基于ICA的伪迹检测和去除方法存在的问题"><a href="#基于ICA的伪迹检测和去除方法存在的问题" class="headerlink" title="基于ICA的伪迹检测和去除方法存在的问题"></a>基于ICA的伪迹检测和去除方法存在的问题</h3><p>1.非自动的<br>2.需要人为介入去除观察到的伪迹</p>
+<h3 id="基于ICA的伪迹检测和去除方法的自动化"><a href="#基于ICA的伪迹检测和去除方法的自动化" class="headerlink" title="基于ICA的伪迹检测和去除方法的自动化"></a>基于ICA的伪迹检测和去除方法的自动化</h3><p><b style="color:red">1.ICA+WT(Wavelet Transform,小波变换)<br>2.ICA+EMD(Empirical Mode Decomposition,经验模态分解)<br>3.使用分类器，例如SVM(Support Vector Machine,支持向量机-一种机器学习算法)<br>4.参考信号辅助</b></p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>1.伪迹独立成分仍然可能包含残余的神经信号导致神经信号的失真<br>2.不能用于单通道数据<br>3.不适合实时应用</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>ICA</tag>
+        <tag>BSS</tag>
       </tags>
   </entry>
   <entry>
@@ -8650,38 +8650,6 @@ plt.show()
       </tags>
   </entry>
   <entry>
-    <title>绝对路径和相对路径</title>
-    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
-    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
-<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
-]]></content>
-      <tags>
-        <tag>绝对路径</tag>
-        <tag>相对路径</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 网络中常见的协议以及术语</title>
-    <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
-    <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
-<p>ARP(地址解析协议)—&gt;根据IP地址找MAC地址</p>
-<p>RARP(反向地址解析协议)—&gt;根据MAC地址找IP地址</p>
-<p>MAC(媒体访问控制地址)—&gt;网卡的编号</p>
-<p>IP:标记逻辑上的地址</p>
-<p>mac：标记实际转发数据时的设备地址</p>
-<p>DHCP(动态主机配置协议):发现当前局域网内没有IP的电脑，给这台电脑自动分配IP</p>
-<p>netmask:和ip地址一起来确定网络号</p>
-<p>默认网关：发送的ip不在同一个网段内，那么会把这个数据转发给默认网关<br><b>Note:</b><br>MAC地址在两个设备之间通信时在变化<br>IP地址在整个通信过程中都不会发生变化</p>
-]]></content>
-      <categories>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>协议</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Chicken Soup for the Soul | 罗曼罗兰英雄主义</title>
     <url>/2021/10/12/%E7%BD%97%E6%9B%BC%E7%BD%97%E5%85%B0%E8%8B%B1%E9%9B%84%E4%B8%BB%E4%B9%89/</url>
     <content><![CDATA[<h1 id="Chicken-Soup"><a href="#Chicken-Soup" class="headerlink" title="Chicken Soup"></a>Chicken Soup</h1><p>人生当中成功只是一时的，失败却是主旋律，但是如何面对失败，却把人分成了不同的样子，有的人会被失败击垮，有的人能够不断地爬起来继续向前，我想真正的成熟，并不是追求完美，而是直面自己的缺憾，这才是生活的本质。罗曼罗兰说过：这个世上只有一种真正的英雄注意，那就是认清生活的真相，并且依然热爱它。</p>
@@ -8791,6 +8759,27 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | 网络中常见的协议以及术语</title>
+    <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
+    <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
+<p>ARP(地址解析协议)—&gt;根据IP地址找MAC地址</p>
+<p>RARP(反向地址解析协议)—&gt;根据MAC地址找IP地址</p>
+<p>MAC(媒体访问控制地址)—&gt;网卡的编号</p>
+<p>IP:标记逻辑上的地址</p>
+<p>mac：标记实际转发数据时的设备地址</p>
+<p>DHCP(动态主机配置协议):发现当前局域网内没有IP的电脑，给这台电脑自动分配IP</p>
+<p>netmask:和ip地址一起来确定网络号</p>
+<p>默认网关：发送的ip不在同一个网段内，那么会把这个数据转发给默认网关<br><b>Note:</b><br>MAC地址在两个设备之间通信时在变化<br>IP地址在整个通信过程中都不会发生变化</p>
+]]></content>
+      <categories>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>协议</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>EEG | 脑电数据集下载网站</title>
     <url>/2021/04/17/%E8%84%91%E7%94%B5%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99/</url>
     <content><![CDATA[<h1 id="脑电数据集下载网站"><a href="#脑电数据集下载网站" class="headerlink" title="脑电数据集下载网站"></a>脑电数据集下载网站</h1><p><a href="www.physionet.org">网站1</a></p>
@@ -8803,6 +8792,17 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>EEG</tag>
         <tag>数据集</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>绝对路径和相对路径</title>
+    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
+    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
+<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
+]]></content>
+      <tags>
+        <tag>绝对路径</tag>
+        <tag>相对路径</tag>
       </tags>
   </entry>
   <entry>
