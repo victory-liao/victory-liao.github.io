@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-21T09:37:48.441Z</updated>
+  <updated>2021-10-21T09:55:56.693Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
+    <link href="http://example.com/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/"/>
+    <id>http://example.com/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</id>
+    <published>2021-10-21T09:53:10.000Z</published>
+    <updated>2021-10-21T09:55:56.693Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="合并word表格中上下行那内容相同的单元格"><a href="#合并word表格中上下行那内容相同的单元格" class="headerlink" title="合并word表格中上下行那内容相同的单元格"></a>合并word表格中上下行那内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p><span id="more"></span><pre><code>from docx import Document# 定义合并单元格的函数def Merge_cells(table, target_list, start_row, col):    &quot;&quot;&quot;    table: 是需要操作的表格    target_list: 是目标列表，即含有重复数据的列表    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）    col: 是需要处理数据的列    &quot;&quot;&quot;    start = 0  # 开始行计数    end = 0  # 结束行计数    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始    for i in range(len(target_list)):  # 遍历列表        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下            reference = target_list[i]  # 基准变成列表中下一个字符串            end = i - 1            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))            start = end + 1        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作            end = i            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))doc = Document(&quot;收货记录.docx&quot;)# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据table = doc.tables[0]  # 已确定是第一个表格，其索引是0supplier = []  # 存储供应商名称pn = []  # 存储物料编码max_row = len(table.rows)  # 获取第最大一行# 读取第二行到29行，第2，3列中的数据for i in range(1, max_row - 1):    supplier_name = table.rows[i].cells[1].text  # cells[1]指表格第二列    supplier.append(supplier_name)for i in range(1, max_row - 1):    material_pn = table.rows[i].cells[2].text  # cells[2]指表格第三列    pn.append(material_pn)Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2# 重新往第2和第3列写入数据，以覆盖之前重复的数据for row in range(1, len(supplier) + 1):    table.cell(row, 1).text = supplier[row - 2]    table.cell(row, 2).text = pn[row - 2]doc.save(&quot;收货记录-合并单元格.docx&quot;)</code></pre><p><a href="收货记录.docx">收货记录.docx</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;合并word表格中上下行那内容相同的单元格&quot;&gt;&lt;a href=&quot;#合并word表格中上下行那内容相同的单元格&quot; class=&quot;headerlink&quot; title=&quot;合并word表格中上下行那内容相同的单元格&quot;&gt;&lt;/a&gt;合并word表格中上下行那内容相同的单元格&lt;/h1&gt;&lt;p&gt;以下代码实现自动合并excel表格中上下行内容相同的单元格&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+  </entry>
   
   <entry>
     <title>openpyxl | 合并excel表格中上下行内容相同的单元格</title>
@@ -97,9 +124,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="python-pptx" scheme="http://example.com/tags/python-pptx/"/>
-    
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="python-pptx" scheme="http://example.com/tags/python-pptx/"/>
     
   </entry>
   
@@ -529,37 +556,9 @@ delattr()       hash()        memoryview()   set()
     <category term="GPU" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/GPU/"/>
     
     
-    <category term="GPU" scheme="http://example.com/tags/GPU/"/>
-    
     <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-  </entry>
-  
-  <entry>
-    <title>leetcode | 单词规律</title>
-    <link href="http://example.com/2021/09/08/%E5%8D%95%E8%AF%8D%E8%A7%84%E5%BE%8B/"/>
-    <id>http://example.com/2021/09/08/%E5%8D%95%E8%AF%8D%E8%A7%84%E5%BE%8B/</id>
-    <published>2021-09-08T18:55:10.000Z</published>
-    <updated>2021-09-08T02:58:26.337Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="290-单词规律"><a href="#290-单词规律" class="headerlink" title="290.单词规律"></a>290.单词规律</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。<br>这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。</p><p>示例1:<br>输入: pattern = “abba”, str = “dog cat cat dog”<br>输出: true</p><span id="more"></span><p><a href="https://leetcode-cn.com/problems/word-pattern/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.哈希表<br>在本题中，我们需要判断字符与字符串之间是否恰好一一对应。即任意一个字符都对应着唯一的字符串，任意一个字符串也只被唯一的一个字符对应。在集合论中，这种关系被称为「双射」。<br>想要解决本题，我们可以利用哈希表记录每一个字符对应的字符串，以及每一个字符串对应的字符。然后我们枚举每一对字符与字符串的配对过程，不断更新哈希表，如果发生了冲突，则说明给定的输入不满足双射关系。<br>在实际代码中，我们枚举 pattern 中的每一个字符，利用双指针来均摊线性地找到该字符在 str 中对应的字符串。每次确定一个字符与字符串的组合，我们就检查是否出现冲突，最后我们再检查两字符串是否比较完毕即可。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    def wordPattern(self, pattern, s):        &quot;&quot;&quot;        :type pattern: str        :type s: str        :rtype: bool        &quot;&quot;&quot;        word2ch = dict()        ch2word = dict()        words = s.split()        if len(pattern) != len(words):            return False        for ch, word in zip(pattern, words):            if (word in word2ch and word2ch[word] != ch) or (ch in ch2word and ch2word[ch] != word):                return False            word2ch[word] = ch            ch2word[ch] = word        return True    def wordPattern(self, pattern, s):        dct = dict()        s = s.split(&#39; &#39;)        if len(s) != len(pattern):  # 两个字符串长度不相同，返回False            return False        for i in range(len(pattern)):            if pattern[i] not in dct:  # 如果pattern[i]不在字典中，此时要加入pattern[i]                if s[i] not in dct.values():  # 如果s[i]还未存在，则加入新的映射                    dct[pattern[i]] = s[i]                else:                    return False  # 但是如果与dct[pattern[i]]对应的s[i]已经存在字典的值中，说明不是唯一映射            else:                if dct[pattern[i]] != s[i]:  # 如果pattern[i]在字典中，但是dct[pattern[i]]的值不等于s[i]，说明已存在其他映射                    return False        return Trueif __name__ == &#39;__main__&#39;:    slt = Solution()    res = slt.wordPattern1(&quot;abba&quot;, &quot;dog cat cat dog&quot;)    print(res)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;290-单词规律&quot;&gt;&lt;a href=&quot;#290-单词规律&quot; class=&quot;headerlink&quot; title=&quot;290.单词规律&quot;&gt;&lt;/a&gt;290.单词规律&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。&lt;br&gt;这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。&lt;/p&gt;
-&lt;p&gt;示例1:&lt;br&gt;输入: pattern = “abba”, str = “dog cat cat dog”&lt;br&gt;输出: true&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="哈希表" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
-    
-    
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    <category term="GPU" scheme="http://example.com/tags/GPU/"/>
     
   </entry>
   
