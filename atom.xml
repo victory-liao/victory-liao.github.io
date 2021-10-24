@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-21T09:55:56.693Z</updated>
+  <updated>2021-10-24T09:36:06.260Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python-docx | 向word中的表格写入数据</title>
+    <link href="http://example.com/2021/10/24/%E5%90%91word%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/"/>
+    <id>http://example.com/2021/10/24/%E5%90%91word%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/</id>
+    <published>2021-10-24T09:32:31.000Z</published>
+    <updated>2021-10-24T09:36:06.260Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="向word中的表格写入数据"><a href="#向word中的表格写入数据" class="headerlink" title="向word中的表格写入数据"></a>向word中的表格写入数据</h1><p>以下代码实现一键往word文档的表格中填写数据。</p><span id="more"></span><pre><code># 从Excel表中提取数据from openpyxl import load_workbookwb = load_workbook(&quot;收货数据.xlsx&quot;)ws = wb.activedata = []for row in range(2, ws.max_row + 1):    seq = ws[&quot;A&quot; + str(row)].value    supplier = ws[&quot;B&quot; + str(row)].value    material_pn = ws[&quot;C&quot; + str(row)].value    material_model = ws[&quot;D&quot; + str(row)].value    desp = ws[&quot;E&quot; + str(row)].value    qty = ws[&quot;F&quot; + str(row)].value    date = ws[&quot;G&quot; + str(row)].value.date()    info = [seq, supplier, material_pn, material_model, desp, qty, date]    data.append(info)# 定义数量加总函数def Sum_list(list):    s = 0    for i in list:  # 累加列表中的所有数        s += i    return s# 加总数量列的所有数字qty_list = []for i in data:    qty_list.append(i[5])  # 数量在内层列表的第6个位置，索引是5sum_qty = Sum_list(qty_list)  # 调用加总函数加总# 定义合并单元格的函数def Merge_cells(table, target_list, start_row, col):    &#39;&#39;&#39;    table: 是需要操作的表格    target_list: 是目标列表，即含有重复数据的列表    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）    col: 是需要处理数据的列    &#39;&#39;&#39;    start = 0  # 开始行计数    end = 0  # 结束行计数    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始    for i in range(len(target_list)):  # 遍历列表        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下            reference = target_list[i]  # 基准变成列表中下一个字符串            end = i - 1            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))            start = end + 1        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作            end = i            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))# 数据提取即处理完毕后，就可以往Word的表格中写入数据了from docx import Documentdoc = Document(&quot;收货记录模板.docx&quot;)# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据table = doc.tables[0]  # 已确定是第一个表格，其索引是0supplier = []  # 存储供应商名称pn = []  # 存储物料编码for i in data:    supplier.append(i[1])    pn.append(i[2])# 按需增加行，以便填写数据for i in range(len(supplier)):  # 模板中已经有一行了，所以总共只需增加len(supplier)行    table.add_row()# 增加好行后先做合并单元格操作Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2# 写入数据到表格for row in range(1, len(supplier) + 1):    for col in range(7):        table.cell(row, col).text = str(data[row - 1][col])max_row = len(table.rows)  # 获取最大一行qty_row = max_row - 1  # 确定需要写入加总数据的一行table.cell(qty_row, 5).merge(table.cell(qty_row, 6))  # 合并右下角用于填写数量的两个单元格table.cell(qty_row, 4).text = &#39;总数：&#39;table.cell(qty_row, 5).text = str(sum_qty)doc.save(&quot;收货记录3.docx&quot;)</code></pre><p><a href="收货数据.xlsx">收货数据.xlsx</a><br><a href="收货记录模板.docx">收货记录模板.docx</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;向word中的表格写入数据&quot;&gt;&lt;a href=&quot;#向word中的表格写入数据&quot; class=&quot;headerlink&quot; title=&quot;向word中的表格写入数据&quot;&gt;&lt;/a&gt;向word中的表格写入数据&lt;/h1&gt;&lt;p&gt;以下代码实现一键往word文档的表格中填写数据。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+  </entry>
   
   <entry>
     <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
@@ -529,34 +558,6 @@ delattr()       hash()        memoryview()   set()
     
     <category term="GPU" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/GPU/"/>
     
-    
-    <category term="GPU" scheme="http://example.com/tags/GPU/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>GPU | NVIDIAGeForceGTX1650驱动安装</title>
-    <link href="http://example.com/2021/10/09/NVIDIAGeForceGTX1650%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/"/>
-    <id>http://example.com/2021/10/09/NVIDIAGeForceGTX1650%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/</id>
-    <published>2021-10-10T03:03:51.000Z</published>
-    <updated>2021-10-10T03:21:27.603Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="NVIDIAGeForceGTX1650驱动安装"><a href="#NVIDIAGeForceGTX1650驱动安装" class="headerlink" title="NVIDIAGeForceGTX1650驱动安装"></a>NVIDIAGeForceGTX1650驱动安装</h1><p>当我们想使用GPU（可以用来加速）来跑深度学习代码前，需要进行显卡驱动安装，我的显卡是NVIDIA GeForce GTX 1650。</p><p><strong>需要安装：</strong><br>1.Cuda<br>2.CuDNN<br><strong>下载地址：</strong><br><a href="https://developer.nvidia.com/cuda-toolkit">Cuda</a><br><a href=" https://developer.nvidia.com/cudnn">CuDNN</a><br><strong>我的显卡使用的Cuda、CuDNN版本：</strong><br>1.Cuda-10.1<br>2.CuDNN-7.6<br>3.Tensorflow-gpu-1.15.0(可选，在这里我是想用来加速Tensorflow代码的训练)</p><p><strong>注意：深度学习框架、python、Cuda、CuDNN版本的对应以及Cuda与自己显卡的兼容性</strong><br><a href="https://blog.csdn.net/s_hikki/article/details/106107778">NVIDIA GeForce GTX 1650驱动安装</a><br><a href="https://tensorflow.google.cn/install/source_windows#configuration_options">版本对应参考资料</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;NVIDIAGeForceGTX1650驱动安装&quot;&gt;&lt;a href=&quot;#NVIDIAGeForceGTX1650驱动安装&quot; class=&quot;headerlink&quot; title=&quot;NVIDIAGeForceGTX1650驱动安装&quot;&gt;&lt;/a&gt;NVIDIAGeForceG</summary>
-      
-    
-    
-    
-    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="GPU" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/GPU/"/>
-    
-    
-    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
     <category term="GPU" scheme="http://example.com/tags/GPU/"/>
     
