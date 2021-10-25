@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-25T07:38:09.997Z</updated>
+  <updated>2021-10-25T07:59:58.914Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>PIL | 批量压缩图片</title>
+    <link href="http://example.com/2021/10/24/%E6%89%B9%E9%87%8F%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87/"/>
+    <id>http://example.com/2021/10/24/%E6%89%B9%E9%87%8F%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87/</id>
+    <published>2021-10-25T07:53:51.000Z</published>
+    <updated>2021-10-25T07:59:58.914Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="批量压缩图片"><a href="#批量压缩图片" class="headerlink" title="批量压缩图片"></a>批量压缩图片</h1><p>实现代码：</p><pre><code># 将图片按修改时间排序(这样才能与图片的描述一致)，将路径存入列表，以便后面逐个插入图片时调用import osfrom PIL import Imagefrom docx import Documentpath = &quot;6s_pictures&quot;list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间print(list_p)# 按比例缩小图片尺寸for infile in list_p:    im = Image.open(infile)    (x, y) = im.size  # 读取图片尺寸（像素）    x_s = 165  # 定义缩小后的标准宽度    y_s = int(y * x_s / x)  # 基于标准宽度计算缩小后的高度    out = im.resize((x_s, y_s), Image.ANTIALIAS)  # 改变尺寸，保持图片高品质    out.save(r&quot;6s_pictures_new\&#123;&#125;&quot;.format(infile.split(&quot;\\&quot;)[-1]))path = &quot;6s_pictures_new&quot;list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间doc = Document(&quot;6S稽查问题模板.docx&quot;)table = doc.tables[0]  # 已确定是第一个表格，其索引是0# 增加需要的行，以便足够填入数据for i in range(len(list_p) - 1):    table.add_row()# 写入数据及图片for row in range(1, len(list_p) + 1):    # 插入图片    run = table.cell(row, 2).paragraphs[0].add_run()  # 新增一个文字块    picture = run.add_picture(list_p[row - 1])  # 插入图片doc.save(&quot;6S稽查问题.docx&quot;)</code></pre><p><a href="6S稽查问题模板.docx">6S稽查问题模板.docx</a><br><a href="https://github.com/victory-liao/victory-liao.github.io/tree/master/source/images/6s_pictures">6s_pictures</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;批量压缩图片&quot;&gt;&lt;a href=&quot;#批量压缩图片&quot; class=&quot;headerlink&quot; title=&quot;批量压缩图片&quot;&gt;&lt;/a&gt;批量压缩图片&lt;/h1&gt;&lt;p&gt;实现代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 将图片按修改时间排序(这样才能与图片的描述一致)，将路径存入列</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="PIL" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/PIL/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="PIL" scheme="http://example.com/tags/PIL/"/>
+    
+  </entry>
   
   <entry>
     <title>matplotlib | 绘制双柱状图</title>
@@ -544,31 +577,6 @@ delattr()       hash()        memoryview()   set()
     
     
     <category term="Chicken Soup for the Soul" scheme="http://example.com/tags/Chicken-Soup-for-the-Soul/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>matplotlib | 绘制几个模型某性能指标在某个范围内的大小比较图</title>
-    <link href="http://example.com/2021/10/12/%E7%BB%98%E5%88%B6%E5%87%A0%E4%B8%AA%E6%A8%A1%E5%9E%8B%E6%9F%90%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%9C%A8%E6%9F%90%E4%B8%AA%E8%8C%83%E5%9B%B4%E5%86%85%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83%E5%9B%BE/"/>
-    <id>http://example.com/2021/10/12/%E7%BB%98%E5%88%B6%E5%87%A0%E4%B8%AA%E6%A8%A1%E5%9E%8B%E6%9F%90%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%9C%A8%E6%9F%90%E4%B8%AA%E8%8C%83%E5%9B%B4%E5%86%85%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83%E5%9B%BE/</id>
-    <published>2021-10-12T09:22:18.000Z</published>
-    <updated>2021-10-12T09:37:33.057Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="绘制几个模型某性能指标在某个范围内的大小比较图"><a href="#绘制几个模型某性能指标在某个范围内的大小比较图" class="headerlink" title="绘制几个模型某性能指标在某个范围内的大小比较图"></a>绘制几个模型某性能指标在某个范围内的大小比较图</h1><p>我们在做深度学习实验时，很多时候会需要对几个模型的性能进行对比并进行可视化，从而清楚地展示模型性能的大小关系。</p><span id="more"></span><p>下面以几个模型的精确度大小比较为例：</p><p><strong>代码：</strong></p><pre><code>import matplotlib.pyplot as pltCNNLSTM_valence_acc = [0.6885742, 0.690625, 0.69453126, 0.69277346, 0.69003904, 0.6965332, 0.6917969, 0.68652344, 0.6916992, 0.69140625, 0.6933594, 0.6972656, 0.69277346, 0.6941406, 0.69501954, 0.69257814, 0.6929687, 0.69208986, 0.6905273, 0.6930664, 0.69384766, 0.6856445, 0.6958984, 0.6929687, 0.693457, 0.69501954, 0.6893555, 0.7, 0.6904297, 0.69628906, 0.6921875, 0.6910156, 0.6988281, 0.69492185, 0.69541013, 0.69443357, 0.69257814, 0.6955078, 0.6942383, 0.69628906, 0.6933594, 0.6976563, 0.69267577, 0.6948242, 0.69277346, 0.6964844, 0.6923828, 0.6959961, 0.6993164, 0.6935547]CNN3Conv_valence_acc = [0.53, 0.57, 0.52, 0.55, 0.57, 0.53, 0.54, 0.55, 0.5, 0.49, 0.53, 0.45, 0.55, 0.56, 0.54, 0.49, 0.54, 0.55, 0.57, 0.52, 0.49, 0.54, 0.5, 0.49, 0.56, 0.52, 0.52, 0.55, 0.55, 0.57, 0.5, 0.5, 0.52, 0.55, 0.54, 0.57, 0.53, 0.55, 0.51, 0.54, 0.54, 0.53, 0.56, 0.52, 0.53, 0.53, 0.54, 0.53, 0.5, 0.54]CNN5Conv_valence_acc = [0.69, 0.6699999999999999, 0.6799999999999999, 0.66, 0.54, 0.57, 0.6699999999999999, 0.6699999999999999, 0.61, 0.61, 0.63, 0.62, 0.63, 0.62, 0.6699999999999999, 0.62, 0.66, 0.6699999999999999, 0.62, 0.58, 0.61, 0.66, 0.61, 0.65, 0.63, 0.62, 0.62, 0.59, 0.62, 0.63, 0.62, 0.63, 0.62, 0.62, 0.63, 0.61, 0.62, 0.62, 0.6699999999999999, 0.63, 0.64, 0.64, 0.65, 0.6699999999999999, 0.62, 0.69, 0.58, 0.59, 0.63, 0.61]print(len(CNNLSTM_valence_acc))print(len(CNN3Conv_valence_acc))print(len(CNN5Conv_valence_acc))x = range(len(CNN5Conv_valence_acc))plt.plot(x, CNNLSTM_valence_acc, label=u&#39;CNN-LSTM&#39;)plt.plot(x, CNN3Conv_valence_acc, label=u&#39;CNN3Conv&#39;)plt.plot(x, CNN5Conv_valence_acc, label=u&#39;CNN5Conv&#39;)plt.legend()plt.xlabel(u&quot;epoch&quot;)plt.ylabel(u&quot;accuracy&quot;)plt.show()</code></pre><p><strong>效果图：</strong><br><img src="/2021/10/12/%E7%BB%98%E5%88%B6%E5%87%A0%E4%B8%AA%E6%A8%A1%E5%9E%8B%E6%9F%90%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%9C%A8%E6%9F%90%E4%B8%AA%E8%8C%83%E5%9B%B4%E5%86%85%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83%E5%9B%BE/myplot.png"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;绘制几个模型某性能指标在某个范围内的大小比较图&quot;&gt;&lt;a href=&quot;#绘制几个模型某性能指标在某个范围内的大小比较图&quot; class=&quot;headerlink&quot; title=&quot;绘制几个模型某性能指标在某个范围内的大小比较图&quot;&gt;&lt;/a&gt;绘制几个模型某性能指标在某个范围内的大小比较图&lt;/h1&gt;&lt;p&gt;我们在做深度学习实验时，很多时候会需要对几个模型的性能进行对比并进行可视化，从而清楚地展示模型性能的大小关系。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="matplotlib" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/matplotlib/"/>
-    
-    
-    <category term="matplotlib" scheme="http://example.com/tags/matplotlib/"/>
     
   </entry>
   
