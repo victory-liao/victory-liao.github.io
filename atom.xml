@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-27T13:22:09.946Z</updated>
+  <updated>2021-10-27T13:37:33.340Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | sqrt</title>
+    <link href="http://example.com/2021/10/27/sqrt/"/>
+    <id>http://example.com/2021/10/27/sqrt/</id>
+    <published>2021-10-27T13:25:35.000Z</published>
+    <updated>2021-10-27T13:37:33.340Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="69-sqrt-x"><a href="#69-sqrt-x" class="headerlink" title="69.sqrt(x)"></a>69.sqrt(x)</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。<br>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。<br>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p><p><a href="https://leetcode-cn.com/problems/sqrtx/">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.二分法</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    @staticmethod    def my_sqrt1(a):        &quot;&quot;&quot;二分法开根号&quot;&quot;&quot;        # 初始化左右边界        left, right = 0, a        while left &lt;= right:            mid = (left + right) // 2            if mid ** 2 == a:                return mid            elif mid ** 2 &gt; a:                right = mid - 1            else:                left = mid + 1        return rightif __name__ == &quot;__main__&quot;:    a = 3    s = Solution()    sqrt_a = s.my_sqrt1(a)    print(sqrt_a)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;69-sqrt-x&quot;&gt;&lt;a href=&quot;#69-sqrt-x&quot; class=&quot;headerlink&quot; title=&quot;69.sqrt(x)&quot;&gt;&lt;/a&gt;69.sqrt(x)&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;header</summary>
+      
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>pypiwin32 | 批量发送不同内容的邮件给不同的收件人</title>
@@ -571,35 +599,6 @@
     
     
     <category term="hexo" scheme="http://example.com/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python-pptx | 批量生成PPT版荣誉证书</title>
-    <link href="http://example.com/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/"/>
-    <id>http://example.com/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/</id>
-    <published>2021-10-16T13:52:18.000Z</published>
-    <updated>2021-10-18T13:57:24.601Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="批量生成PPT版荣誉证书"><a href="#批量生成PPT版荣誉证书" class="headerlink" title="批量生成PPT版荣誉证书"></a>批量生成PPT版荣誉证书</h1><p>以下代码实现了根据一个excel名单和一个荣誉证书模板批量生成名单中所有人的荣誉证书。</p><span id="more"></span><pre><code>import timefrom pptx import Presentationfrom openpyxl import load_workbookprs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)slide = prs.slides.add_slide(prs.slide_layouts[0])  # 第一个模板的第0个板式for ph in slide.placeholders:  # 遍历这页PPT的所有占位符    phf = ph.placeholder_format  # 获取占位符的格式    print(phf.idx)  # 打印其ID编号    ph.text = str(phf.idx)  # 将编号写入PPT对应的位置中，以便后面一一对应# 以上读取到占位符的ID方便后面调用prs.save(r&#39;data\荣誉证书模板-占位符编号.pptx&#39;)wb = load_workbook(r&quot;data\名单.xlsx&quot;)ws = wb.activedata = &#123;&#125;for row in range(2, ws.max_row + 1):    class_id = ws[&#39;A&#39; + str(row)].value    name = ws[&#39;B&#39; + str(row)].value    data.setdefault(class_id, [])    data[class_id].append(name)t0 = time.time()  # 程序开始运行的时间prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)slide_layout = prs.slide_layouts[0]  # 调用设置好的母版，因为是母版的第一版式，所以取[0]for class_id in data:    for name in data[class_id]:        slide = prs.slides.add_slide(slide_layout)  # 以母版的版式为基础新增一页幻灯片        # 往幻灯片中写入内容        slide.placeholders[10].text = &quot;&#123;&#125; 班 &#123;&#125; 同学：&quot;.format(class_id, name)  # 此处是班级和姓名        slide.placeholders[11].text = &quot;在2019-2020学年度第一学期获得&quot;        slide.placeholders[12].text = &quot;“好孩子”称号。&quot;        slide.placeholders[13].text = &quot;特发此证，以资鼓励。&quot;        slide.placeholders[14].text = &quot;市幼儿园&quot;        slide.placeholders[15].text = &quot;2020年1月&quot;prs.save(&#39;data\荣誉证书(总).pptx&#39;)t1 = time.time()print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)</code></pre><p><a href="荣誉证书模板.pptx">荣誉证书模板.pptx</a><br><a href="名单.xlsx">下载名单.xlsx</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;批量生成PPT版荣誉证书&quot;&gt;&lt;a href=&quot;#批量生成PPT版荣誉证书&quot; class=&quot;headerlink&quot; title=&quot;批量生成PPT版荣誉证书&quot;&gt;&lt;/a&gt;批量生成PPT版荣誉证书&lt;/h1&gt;&lt;p&gt;以下代码实现了根据一个excel名单和一个荣誉证书模板批量生成名单中所有人的荣誉证书。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="python-pptx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-pptx/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
-    <category term="python-pptx" scheme="http://example.com/tags/python-pptx/"/>
     
   </entry>
   
