@@ -1217,115 +1217,6 @@ namespace ConsoleApp1
       </tags>
   </entry>
   <entry>
-    <title>Django | DTL中的url反向解析</title>
-    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
-    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
-<span id="more"></span>
-
-<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
-<pre><code>INSTALLED_APPS = (
-    &#39;django.contrib.admin&#39;,
-    &#39;django.contrib.auth&#39;,
-    &#39;django.contrib.contenttypes&#39;,
-    &#39;django.contrib.sessions&#39;,
-    &#39;django.contrib.messages&#39;,
-    &#39;django.contrib.staticfiles&#39;,
-    &#39;app_name&#39;
-)
-</code></pre>
-<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
-<pre><code>from django.conf.urls import include, url
-from django.contrib import admin
-
-urlpatterns = [
-    url(r&#39;^admin/&#39;, include(admin.site.urls)),
-    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
-]
-/*
-app_name:创建的应用名，为项目下的应用文件夹
-app_name.urls:应用的urls，应用文件夹下的urls.py
-*/
-</code></pre>
-<p>2.配置应用url(app_anme/urls.py)</p>
-<pre><code>from django.conf.urls import url
-import views
-
-urlpatterns = [
-    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
-    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
-]
-</code></pre>
-<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
-<pre><code>from django.shortcuts import render
-from models import *
-
-
-def index(request):
-    context = &#123;&#125;
-
-    return render(request, &#39;app_name/index.html&#39;, context)
-
-
-def show(request, id1, id2):
-    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
-    return render(request, &#39;app_name/show.html&#39;, context)
-</code></pre>
-<p>4.定义模板<br>index.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
-&lt;hr&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>show.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&#123;&#123;id1&#125;&#125;
-&#123;&#123;id2&#125;&#125;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
-<pre><code>TEMPLATES = [
-    &#123;
-        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
-        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
-        &#39;APP_DIRS&#39;: True,
-        &#39;OPTIONS&#39;: &#123;
-            &#39;context_processors&#39;: [
-                &#39;django.template.context_processors.debug&#39;,
-                &#39;django.template.context_processors.request&#39;,
-                &#39;django.contrib.auth.context_processors.auth&#39;,
-                &#39;django.contrib.messages.context_processors.messages&#39;,
-            ],
-        &#125;,
-    &#125;,
-]
-</code></pre>
-<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-        <tag>DTL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C# | CSharp参数传递</title>
     <url>/2021/07/03/CSharp%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/</url>
     <content><![CDATA[<h1 id="CSharp参数传递"><a href="#CSharp参数传递" class="headerlink" title="CSharp参数传递"></a>CSharp参数传递</h1><p>1.按值传递参数<br>Code:</p>
@@ -1465,6 +1356,115 @@ namespace ConsoleApp1
       </categories>
       <tags>
         <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django | DTL中的url反向解析</title>
+    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
+<span id="more"></span>
+
+<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
+<pre><code>INSTALLED_APPS = (
+    &#39;django.contrib.admin&#39;,
+    &#39;django.contrib.auth&#39;,
+    &#39;django.contrib.contenttypes&#39;,
+    &#39;django.contrib.sessions&#39;,
+    &#39;django.contrib.messages&#39;,
+    &#39;django.contrib.staticfiles&#39;,
+    &#39;app_name&#39;
+)
+</code></pre>
+<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
+<pre><code>from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r&#39;^admin/&#39;, include(admin.site.urls)),
+    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
+]
+/*
+app_name:创建的应用名，为项目下的应用文件夹
+app_name.urls:应用的urls，应用文件夹下的urls.py
+*/
+</code></pre>
+<p>2.配置应用url(app_anme/urls.py)</p>
+<pre><code>from django.conf.urls import url
+import views
+
+urlpatterns = [
+    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
+    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
+]
+</code></pre>
+<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
+<pre><code>from django.shortcuts import render
+from models import *
+
+
+def index(request):
+    context = &#123;&#125;
+
+    return render(request, &#39;app_name/index.html&#39;, context)
+
+
+def show(request, id1, id2):
+    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
+    return render(request, &#39;app_name/show.html&#39;, context)
+</code></pre>
+<p>4.定义模板<br>index.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
+&lt;hr&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>show.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&#123;&#123;id1&#125;&#125;
+&#123;&#123;id2&#125;&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
+<pre><code>TEMPLATES = [
+    &#123;
+        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
+        &#39;APP_DIRS&#39;: True,
+        &#39;OPTIONS&#39;: &#123;
+            &#39;context_processors&#39;: [
+                &#39;django.template.context_processors.debug&#39;,
+                &#39;django.template.context_processors.request&#39;,
+                &#39;django.contrib.auth.context_processors.auth&#39;,
+                &#39;django.contrib.messages.context_processors.messages&#39;,
+            ],
+        &#125;,
+    &#125;,
+]
+</code></pre>
+<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+        <tag>DTL</tag>
       </tags>
   </entry>
   <entry>
@@ -2927,22 +2927,6 @@ for picture in pictures:
       </tags>
   </entry>
   <entry>
-    <title>python | re sub的使用方法</title>
-    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
-<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>re</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>re</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | re.match与re.search的区别</title>
     <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
@@ -2956,6 +2940,22 @@ re.search(r&quot;dogs&quot;,s)#匹配成功
       </categories>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | re sub的使用方法</title>
+    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
+<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>re</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>re</tag>
       </tags>
   </entry>
   <entry>
@@ -3219,6 +3219,20 @@ login.html
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | tcp与udp的稳定性</title>
+    <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
+]]></content>
+      <categories>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>TCP</tag>
+        <tag>UDP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网络编程 | tcp的客户端/服务器端代码编写</title>
     <url>/2020/10/22/tcp%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99/</url>
     <content><![CDATA[<h1 id="tcp的客户端-服务器端代码编写"><a href="#tcp的客户端-服务器端代码编写" class="headerlink" title="tcp的客户端/服务器端代码编写"></a>tcp的客户端/服务器端代码编写</h1><h2 id="tcp服务器端代码编写"><a href="#tcp服务器端代码编写" class="headerlink" title="tcp服务器端代码编写"></a>tcp服务器端代码编写</h2><pre><code>#coding=utf-8
@@ -3283,20 +3297,6 @@ tcpClientSocket.close()
         <tag>网络编程</tag>
         <tag>tcp客户端</tag>
         <tag>tcp服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | tcp与udp的稳定性</title>
-    <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
-    <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
-]]></content>
-      <categories>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>TCP</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -4747,6 +4747,39 @@ print(re.search(pattern, string))
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | 单任务服务器的缺点</title>
+    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
+<span id="more"></span>
+
+<pre><code>import socket 
+
+serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverSocket.bind((&#39;&#39;,8080))
+serverSocket.listen(5)
+
+while True:
+    #如果没有客户端到来，程序将阻塞等待
+    clientSocket,clientAddr = serverSocket.accept()
+    
+    while True:
+        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
+        recvData = newSocket.recv(1024)
+        if data:
+            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
+        else:
+            break
+</code></pre>
+]]></content>
+      <categories>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 单词规律</title>
     <url>/2021/09/08/%E5%8D%95%E8%AF%8D%E8%A7%84%E5%BE%8B/</url>
     <content><![CDATA[<h1 id="290-单词规律"><a href="#290-单词规律" class="headerlink" title="290.单词规律"></a>290.单词规律</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。<br>这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。</p>
@@ -4895,6 +4928,71 @@ if __name__ == &#39;__main__&#39;:
     s = &quot;abcdefg&quot;
     k = 2
     res = slt.reverseStr(s, k)  # bacdfeg
+    print(res)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 反转字符串中的元音字母</title>
+    <url>/2021/09/01/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%85%83%E9%9F%B3%E5%AD%97%E6%AF%8D/</url>
+    <content><![CDATA[<h1 id="345-反转字符串中的元音字母"><a href="#345-反转字符串中的元音字母" class="headerlink" title="345.反转字符串中的元音字母"></a>345.反转字符串中的元音字母</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s ，仅反转字符串中的所有元音字母，并返回结果字符串。<br>元音字母包括 ‘a’、’e’、’i’、’o’、’u’，且可能以大小写两种形式出现。</p>
+<span id="more"></span>
+
+<p><a href="https://leetcode-cn.com/problems/reverse-vowels-of-a-string">题目链接</a>+</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.先将字符串中的元音字母的位置找出来，然后再将各元音字母反转<br>2.双指针<br>我们可以使用两个指针 i 和 j 对字符串相向地进行遍历。<br>具体地，指针 i 初始时指向字符串 s 的首位，指针 j 初始时指向字符串 s 的末位。在遍历的过程中，我们不停地将 i 向右移动，直到 i 指向一个元音字母（或者超出字符串的边界范围）；同时，我们不停地将 j 向左移动，直到 j 指向一个元音字母。此时，如果 i&lt;j，那么我们交换 i 和 j 指向的元音字母，否则说明所有的元音字母均已遍历过，就可以退出遍历的过程。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def reverseVowels(self, s: str) -&gt; str:
+        &quot;&quot;&quot;
+        find ans reverse
+        :param s:
+        :return:
+        &quot;&quot;&quot;
+        vowels = list()
+        s = list(s)
+        for i in range(len(s)):
+            ch = s[i].lower()
+            if ch == &#39;a&#39; or ch == &#39;e&#39; or ch == &#39;i&#39; or ch == &#39;o&#39; or ch == &#39;u&#39;:
+                vowels.append(i)
+
+        for i in range(len(vowels)//2):
+            s[vowels[i]], s[vowels[len(vowels) - i -1]] = s[vowels[len(vowels) - i -1]], s[vowels[i]]
+
+        return &#39;&#39;.join(s)
+
+    def reverseVowels1(self, s: str) -&gt; str:
+        &quot;&quot;&quot;双指针&quot;&quot;&quot;
+        def isVowel(ch: str) -&gt; bool:
+            return ch in &quot;aeiouAEIOU&quot;
+
+        n = len(s)
+        s = list(s)
+        i, j = 0, n - 1
+        while i &lt; j:
+            while i &lt; n and not isVowel(s[i]):
+                i += 1
+            while j &gt; 0 and not isVowel(s[j]):
+                j -= 1
+            if i &lt; j:
+                s[i], s[j] = s[j], s[i]
+                i += 1
+                j -= 1
+
+        return &#39;&#39;.join(s)
+
+
+if __name__ == &quot;__main__&quot;:
+    s = Solution()
+    string = &quot;hello&quot;
+    res = s.reverseVowels(string)
     print(res)
 </code></pre>
 ]]></content>
@@ -5451,104 +5549,6 @@ doc.save(&quot;6S稽查问题.docx&quot;)
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 单任务服务器的缺点</title>
-    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
-    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
-<span id="more"></span>
-
-<pre><code>import socket 
-
-serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-serverSocket.bind((&#39;&#39;,8080))
-serverSocket.listen(5)
-
-while True:
-    #如果没有客户端到来，程序将阻塞等待
-    clientSocket,clientAddr = serverSocket.accept()
-    
-    while True:
-        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
-        recvData = newSocket.recv(1024)
-        if data:
-            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
-        else:
-            break
-</code></pre>
-]]></content>
-      <categories>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 反转字符串中的元音字母</title>
-    <url>/2021/09/01/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%85%83%E9%9F%B3%E5%AD%97%E6%AF%8D/</url>
-    <content><![CDATA[<h1 id="345-反转字符串中的元音字母"><a href="#345-反转字符串中的元音字母" class="headerlink" title="345.反转字符串中的元音字母"></a>345.反转字符串中的元音字母</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s ，仅反转字符串中的所有元音字母，并返回结果字符串。<br>元音字母包括 ‘a’、’e’、’i’、’o’、’u’，且可能以大小写两种形式出现。</p>
-<span id="more"></span>
-
-<p><a href="https://leetcode-cn.com/problems/reverse-vowels-of-a-string">题目链接</a>+</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.先将字符串中的元音字母的位置找出来，然后再将各元音字母反转<br>2.双指针<br>我们可以使用两个指针 i 和 j 对字符串相向地进行遍历。<br>具体地，指针 i 初始时指向字符串 s 的首位，指针 j 初始时指向字符串 s 的末位。在遍历的过程中，我们不停地将 i 向右移动，直到 i 指向一个元音字母（或者超出字符串的边界范围）；同时，我们不停地将 j 向左移动，直到 j 指向一个元音字母。此时，如果 i&lt;j，那么我们交换 i 和 j 指向的元音字母，否则说明所有的元音字母均已遍历过，就可以退出遍历的过程。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def reverseVowels(self, s: str) -&gt; str:
-        &quot;&quot;&quot;
-        find ans reverse
-        :param s:
-        :return:
-        &quot;&quot;&quot;
-        vowels = list()
-        s = list(s)
-        for i in range(len(s)):
-            ch = s[i].lower()
-            if ch == &#39;a&#39; or ch == &#39;e&#39; or ch == &#39;i&#39; or ch == &#39;o&#39; or ch == &#39;u&#39;:
-                vowels.append(i)
-
-        for i in range(len(vowels)//2):
-            s[vowels[i]], s[vowels[len(vowels) - i -1]] = s[vowels[len(vowels) - i -1]], s[vowels[i]]
-
-        return &#39;&#39;.join(s)
-
-    def reverseVowels1(self, s: str) -&gt; str:
-        &quot;&quot;&quot;双指针&quot;&quot;&quot;
-        def isVowel(ch: str) -&gt; bool:
-            return ch in &quot;aeiouAEIOU&quot;
-
-        n = len(s)
-        s = list(s)
-        i, j = 0, n - 1
-        while i &lt; j:
-            while i &lt; n and not isVowel(s[i]):
-                i += 1
-            while j &gt; 0 and not isVowel(s[j]):
-                j -= 1
-            if i &lt; j:
-                s[i], s[j] = s[j], s[i]
-                i += 1
-                j -= 1
-
-        return &#39;&#39;.join(s)
-
-
-if __name__ == &quot;__main__&quot;:
-    s = Solution()
-    string = &quot;hello&quot;
-    res = s.reverseVowels(string)
-    print(res)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -7061,8 +7061,8 @@ for dept in address.keys():
 
 print(&quot;邮件发送完成。&quot;)
 </code></pre>
-<p><a href="邮件地址.xlsx">邮件地址.xlsx</a></p>
 <p>‘年假_按部门’文件夹包括以下内容：<br><a href="年假情况_人事部.xlsx">年假情况_人事部.xlsx</a><br><a href="年假情况_关务部.xlsx">年假情况_关务部.xlsx</a><br><a href="年假情况_品质部.xlsx">年假情况_品质部.xlsx</a><br><a href="年假情况_工程部.xlsx">年假情况_工程部.xlsx</a><br><a href="年假情况_总务部.xlsx">年假情况_总务部.xlsx</a><br><a href="年假情况_物料部.xlsx">年假情况_物料部.xlsx</a><br><a href="年假情况_生产部.xlsx">年假情况_生产部.xlsx</a><br><a href="年假情况_研发部.xlsx">年假情况_研发部.xlsx</a><br><a href="年假情况_船务部.xlsx">年假情况_船务部.xlsx</a><br><a href="年假情况_采购部.xlsx">年假情况_采购部.xlsx</a></p>
+<p><a href="邮件地址.xlsx">邮件地址.xlsx</a></p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -8158,6 +8158,18 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 机器学习分类的一般步骤</title>
+    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习 | 机器学习中分类标签次数统计代码模板</title>
     <url>/2021/02/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%88%86%E7%B1%BB%E6%A0%87%E7%AD%BE%E6%AC%A1%E6%95%B0%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h1 id="机器学习中分类标签次数统计代码模板"><a href="#机器学习中分类标签次数统计代码模板" class="headerlink" title="机器学习中分类标签次数统计代码模板"></a>机器学习中分类标签次数统计代码模板</h1><p>在使用机器学习的算法进行分类时，很多时候我们需要去统计各个分类标签在数据集中出现的次数，它的实现代码模板如下：</p>
@@ -8173,18 +8185,6 @@ if __name__ == &quot;__main__&quot;:
     sorted_class_count = sorted(class_counts.items(), key=operator.itemgetter(1), reverse=True)
     return sorted_class_count
 </code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 机器学习分类的一般步骤</title>
-    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
-    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
 ]]></content>
       <categories>
         <category>机器学习</category>
