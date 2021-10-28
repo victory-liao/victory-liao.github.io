@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-28T08:51:27.250Z</updated>
+  <updated>2021-10-28T13:42:04.922Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python-docx | python替换word文档中的文字</title>
+    <link href="http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/"/>
+    <id>http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/</id>
+    <published>2021-10-28T13:39:45.000Z</published>
+    <updated>2021-10-28T13:42:04.922Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="python替换word文档中的文字"><a href="#python替换word文档中的文字" class="headerlink" title="python替换word文档中的文字"></a>python替换word文档中的文字</h1><p>实现代码：</p><pre><code># -*- coding:utf-8 -*-import docx# # 定义函数替换文字块中的字符# def info_update(doc, old_info, new_info):#     for para in doc.paragraphs:  # 遍历段落#         for run in para.runs:  # 遍历文字块#             # run.text = run.text.replace(old_info, new_info)  # 替换#             print(run.text)### doc = docx.Document(&#39;替换前.docx&#39;)# info_update(doc, &#39;第四次&#39;, &#39;第五次&#39;)# info_update(doc, &#39;2019&#39;, &#39;2020&#39;)# info_update(doc, &#39;18&#39;, &#39;10&#39;)# doc.save(&#39;替换后.docx&#39;)# doc = docx.Document(&#39;替换前.docx&#39;)# for para in doc.paragraphs:  # 遍历段落#     for run in para.runs:  # 遍历文字块#         # run.text = run.text.replace(old_info, new_info)  # 替换#         print(run.text)# # 按段落查看文字# doc = docx.Document(&#39;替换前.docx&#39;)# for para in doc.paragraphs:#     print(para.text)import docxfrom docx.shared import Pt  # 用于设定字体大小(磅值)from docx.oxml.ns import qn  # 用于应用中文字体def info_update(doc, old_info, new_info):    for para in doc.paragraphs:        para.text = para.text.replace(old_info, new_info)    # 设置第一段（标题）的文字格式    for run in doc.paragraphs[0].runs:        run.font.size = Pt(14)  # 文字大小磅值        run.bold = True  # 加粗        run.font.name = &quot;微软雅黑&quot;  # 字体选择        # 中文字体应用，固定写法        r = run._element.rPr.rFonts  # 字体，固定写法        r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)  # 字体    # 设置第二及后续段落的文字格式    for para in doc.paragraphs[1:]:        for run in para.runs:            run.font.size = Pt(12)  # 文字大小            run.bold = False  # 不加粗            run.font.name = &quot;微软雅黑&quot;  # 字体选择            # 中文字体应用，固定写法            r = run._element.rPr.rFonts            r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)doc = docx.Document(&#39;替换前.docx&#39;)info_update(doc, &quot;第四次&quot;, &quot;第五次&quot;)info_update(doc, &quot;2019&quot;, &quot;2020&quot;)info_update(doc, &quot;18&quot;, &quot;10&quot;)doc.save(&#39;替换后_设置格式.docx&#39;)</code></pre><p><a href="替换前.docx">替换前.docx</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;python替换word文档中的文字&quot;&gt;&lt;a href=&quot;#python替换word文档中的文字&quot; class=&quot;headerlink&quot; title=&quot;python替换word文档中的文字&quot;&gt;&lt;/a&gt;python替换word文档中的文字&lt;/h1&gt;&lt;p&gt;实现代码：&lt;</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+  </entry>
   
   <entry>
     <title>wordcloud | 词云</title>
@@ -462,9 +492,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
     
   </entry>
   
@@ -518,9 +548,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
     
   </entry>
   
@@ -575,37 +605,6 @@
     <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openpyxl | 快速提取一串字符中的中文</title>
-    <link href="http://example.com/2021/10/21/%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8F%96%E4%B8%80%E4%B8%B2%E5%AD%97%E7%AC%A6%E4%B8%AD%E7%9A%84%E4%B8%AD%E6%96%87/"/>
-    <id>http://example.com/2021/10/21/%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8F%96%E4%B8%80%E4%B8%B2%E5%AD%97%E7%AC%A6%E4%B8%AD%E7%9A%84%E4%B8%AD%E6%96%87/</id>
-    <published>2021-10-21T09:11:03.000Z</published>
-    <updated>2021-10-21T09:14:24.025Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="快速提取一串字符中的中文"><a href="#快速提取一串字符中的中文" class="headerlink" title="快速提取一串字符中的中文"></a>快速提取一串字符中的中文</h1><p>以下代码实现了快速提取（正则表达式）一串字符串中的中文。</p><span id="more"></span><pre><code>import refrom openpyxl import load_workbookdata = []wb = load_workbook(&#39;data/data.xlsx&#39;)ws = wb.activefor row in range(2, ws.max_row + 1):  # 从第二行开始遍历excel文件所有行    info = ws[&#39;A&#39; + str(row)].value    data.append(info)chinese_list = []for i in data:    chinese = re.findall(&#39;[\u4e00-\u9fa5]&#39;, i)    chinese_list.append(&#39;&#39;.join(chinese))for row in range(2, ws.max_row + 1):    ws[&#39;B&#39; + str(row)].value = chinese_list[row - 2]wb.save(&quot;./data/data_chinese.xlsx&quot;)</code></pre><p><a href="data.xlsx">下载data.xlsx</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;快速提取一串字符中的中文&quot;&gt;&lt;a href=&quot;#快速提取一串字符中的中文&quot; class=&quot;headerlink&quot; title=&quot;快速提取一串字符中的中文&quot;&gt;&lt;/a&gt;快速提取一串字符中的中文&lt;/h1&gt;&lt;p&gt;以下代码实现了快速提取（正则表达式）一串字符串中的中文。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="openpyxl" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/openpyxl/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="re" scheme="http://example.com/tags/re/"/>
-    
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
-    <category term="正则表达式" scheme="http://example.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
     
   </entry>
   
