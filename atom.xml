@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-29T09:12:24.863Z</updated>
+  <updated>2021-10-29T09:27:34.839Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pandas | pandas提取指定数据并保存在原Excel工作簿中</title>
+    <link href="http://example.com/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/"/>
+    <id>http://example.com/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/</id>
+    <published>2021-10-29T09:25:17.000Z</published>
+    <updated>2021-10-29T09:27:34.839Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="pandas提取指定数据并保存在原Excel工作簿中"><a href="#pandas提取指定数据并保存在原Excel工作簿中" class="headerlink" title="pandas提取指定数据并保存在原Excel工作簿中"></a>pandas提取指定数据并保存在原Excel工作簿中</h1><p>实现代码：</p><pre><code>import pandas as pddf = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)# print(df)df500 = df[df[&quot;数量&quot;] &gt; 500]# print(df500)with pd.ExcelWriter(&#39;物料表.xlsx&#39;, mode=&#39;a&#39;, engine=&#39;openpyxl&#39;,                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:    df500.to_excel(writer, sheet_name=&#39;数量大于500&#39;, index=False)from openpyxl import load_workbookfrom openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignmentthin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色wb = load_workbook(&quot;物料表.xlsx&quot;)ws = wb[&quot;数量大于500&quot;]# 调整列宽ws.column_dimensions[&#39;A&#39;].width = 12ws.column_dimensions[&#39;C&#39;].width = 15.5ws.column_dimensions[&#39;G&#39;].width = 10# 设置字号，对齐，缩小字体填充，加边框for row_number in range(2, ws.max_row + 1):    for col_number in range(1, ws.max_column + 1):        c = ws.cell(row=row_number, column=col_number)        c.font = Font(size=10)        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)wb.save(&quot;物料表.xlsx&quot;)</code></pre><p><a href="物料表.xlsx">物料表.xlsx</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;pandas提取指定数据并保存在原Excel工作簿中&quot;&gt;&lt;a href=&quot;#pandas提取指定数据并保存在原Excel工作簿中&quot; class=&quot;headerlink&quot; title=&quot;pandas提取指定数据并保存在原Excel工作簿中&quot;&gt;&lt;/a&gt;pandas提取</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="pandas" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+  </entry>
   
   <entry>
     <title>random | python出数学练习题</title>
@@ -76,9 +108,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="pdfplumber" scheme="http://example.com/tags/pdfplumber/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="pdfplumber" scheme="http://example.com/tags/pdfplumber/"/>
     
   </entry>
   
@@ -223,11 +255,11 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
+    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
+    
     <category term="os" scheme="http://example.com/tags/os/"/>
     
     <category term="jieba" scheme="http://example.com/tags/jieba/"/>
-    
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
     
   </entry>
   
@@ -589,34 +621,7 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python-docx | 设置word文档里表格的格式</title>
-    <link href="http://example.com/2021/10/24/%E8%AE%BE%E7%BD%AEword%E6%96%87%E6%A1%A3%E9%87%8C%E8%A1%A8%E6%A0%BC%E7%9A%84%E6%A0%BC%E5%BC%8F/"/>
-    <id>http://example.com/2021/10/24/%E8%AE%BE%E7%BD%AEword%E6%96%87%E6%A1%A3%E9%87%8C%E8%A1%A8%E6%A0%BC%E7%9A%84%E6%A0%BC%E5%BC%8F/</id>
-    <published>2021-10-24T09:51:06.000Z</published>
-    <updated>2021-10-24T09:53:55.393Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="设置word文档里表格的格式"><a href="#设置word文档里表格的格式" class="headerlink" title="设置word文档里表格的格式"></a>设置word文档里表格的格式</h1><p>以下代码实现使用python-docx对word文档里表格的格式进行设置。</p><span id="more"></span><pre><code># 单元格边框设置函数from docx.table import _Cellfrom docx.oxml import OxmlElementfrom docx.oxml.ns import qndef Set_cell_border(cell: _Cell, **kwargs):    &quot;&quot;&quot;    设置单元格边框函数    使用方法:    Set_cell_border(        cell,        top=&#123;&quot;sz&quot;: 12, &quot;val&quot;: &quot;single&quot;, &quot;color&quot;: &quot;#FF0000&quot;, &quot;space&quot;: &quot;0&quot;&#125;,        bottom=&#123;&quot;sz&quot;: 12, &quot;color&quot;: &quot;#00FF00&quot;, &quot;val&quot;: &quot;single&quot;&#125;,        start=&#123;&quot;sz&quot;: 24, &quot;val&quot;: &quot;dashed&quot;, &quot;shadow&quot;: &quot;true&quot;&#125;,        end=&#123;&quot;sz&quot;: 12, &quot;val&quot;: &quot;dashed&quot;&#125;,    )    传入参数有cell, 即单元格；top指上边框；bottom指下边框；start指左边框；end指右边框。    &quot;sz&quot;指线的粗细程度；&quot;val&quot;指线型，比如单线，虚线等；&quot;color&quot;指颜色，颜色编码可百度；    &quot;space&quot;指间隔，一般不设置，设置的值大于0会导致线错开；&quot;shadow&quot;指边框阴影    &quot;&quot;&quot;    tc = cell._tc    tcPr = tc.get_or_add_tcPr()    tcBorders = tcPr.first_child_found_in(&quot;w:tcBorders&quot;)    if tcBorders is None:        tcBorders = OxmlElement(&#39;w:tcBorders&#39;)        tcPr.append(tcBorders)    for edge in (&#39;start&#39;, &#39;top&#39;, &#39;end&#39;, &#39;bottom&#39;, &#39;insideH&#39;, &#39;insideV&#39;):        edge_data = kwargs.get(edge)        if edge_data:            tag = &#39;w:&#123;&#125;&#39;.format(edge)            element = tcBorders.find(qn(tag))            if element is None:                element = OxmlElement(tag)                tcBorders.append(element)            for key in [&quot;sz&quot;, &quot;val&quot;, &quot;color&quot;, &quot;space&quot;, &quot;shadow&quot;]:                if key in edge_data:                    element.set(qn(&#39;w:&#123;&#125;&#39;.format(key)), str(edge_data[key]))# 定义单元格填充颜色函数from docx.oxml.ns import nsdeclsfrom docx.oxml import parse_xmldef Set_Background_Color(cell, rgbColor):    shading_elm = parse_xml(        r&#39;&lt;w:shd &#123;&#125; w:fill=&quot;&#123;color_value&#125;&quot;/&gt;&#39;.format(nsdecls(&#39;w&#39;), color_value=rgbColor))  # 固定写法，照抄即可    cell._tc.get_or_add_tcPr().append(shading_elm)from docx.enum.text import WD_ALIGN_PARAGRAPH  # 设置水平居中对齐需要用到的库from docx.enum.table import WD_ALIGN_VERTICAL  # 设置垂直居中对齐需要用到的库from docx.shared import Cm  # 长度单位（厘米cm用到的库)from docx import Documentdoc = Document(&quot;收货记录.docx&quot;)  # 打开word文件table = doc.tables[0]max_row = len(table.rows)  # 获取表格总行数# 1.最后一行中，“总数”两个字要加粗run = table.cell(max_row - 1, 4).paragraphs[0].runs[0]  # 获取最后一行第五列对应单元格中的文字块，即“总数”字样所在单元格run.font.bold = True  # 将文字块设置为粗体# 2.最后一行的行高要调大一点，现在这样扁扁的，难看table.rows[max_row - 1].height = Cm(1)  # 将最后一行的行高设置为1厘米# 3.最后一行那几个空单元格有框线，太碍眼，得去掉，将总数及左边两个cell左边框和下边框设成白色for i in range(3):    cell = table.cell(max_row - 1, i)    Set_cell_border(        cell,        bottom=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;,        start=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;,        end=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;    )cell_1 = table.cell(max_row - 1, 3)Set_cell_border(cell_1, start=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;, bottom=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;)cell_2 = table.cell(max_row - 1, 6)Set_cell_border(cell_2, end=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;, bottom=&#123;&quot;color&quot;: &quot;#FFFFFF&quot;&#125;)# 4.各单元格水平和垂直方向都要居中对齐for row in range(1, max_row):    for col in range(len(table.columns)):        table.cell(row, col).paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER        table.cell(row, col).vertical_alignment = WD_ALIGN_VERTICAL.CENTER# 5.数量列≥85的，底色设置为橙色qty = []  # 存储数量信息# 读取第二行到29行，第2，3列中的数据for i in range(1, max_row - 1):    qty_info = table.rows[i].cells[5].text  # cells[5]指表格第6列    qty.append(int(qty_info))# 将数量≥85的单元格填色row = 1  # 行计数器for i in qty:    if i &gt;= 85:        cell = table.cell(row, 5)  # 第6列数据为数量，列索引是5        Set_Background_Color(cell, &quot;98F5FF&quot;)  # 填充颜色，&quot;98F5FF&quot;是蓝色的编码    row += 1  # 跳转到下一行doc.save(&quot;收货记录-整理.docx&quot;)</code></pre><p><a href="收货记录.docx">收货记录.docx</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;设置word文档里表格的格式&quot;&gt;&lt;a href=&quot;#设置word文档里表格的格式&quot; class=&quot;headerlink&quot; title=&quot;设置word文档里表格的格式&quot;&gt;&lt;/a&gt;设置word文档里表格的格式&lt;/h1&gt;&lt;p&gt;以下代码实现使用python-docx对word文档里表格的格式进行设置。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
