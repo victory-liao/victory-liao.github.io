@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-29T09:38:14.476Z</updated>
+  <updated>2021-10-29T09:45:51.094Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>win32api | 批量打印文件</title>
+    <link href="http://example.com/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/"/>
+    <id>http://example.com/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</id>
+    <published>2021-10-29T09:44:23.000Z</published>
+    <updated>2021-10-29T09:45:51.094Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p><pre><code>import win32apidef Print(fileName):    win32api.ShellExecute(        0,  # 指定父窗口句柄，搞不懂        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序        fileName,  # 要打印的文件名        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0    )# 获取待打印文件的路径import ospath = &#39;文件&#39;  # 文件所在文件夹files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径# 批量打印for file in files:    Print(file)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;定义打印函数，以便重复调用&quot;&gt;&lt;a href=&quot;#定义打印函数，以便重复调用&quot; class=&quot;headerlink&quot; title=&quot;定义打印函数，以便重复调用&quot;&gt;&lt;/a&gt;定义打印函数，以便重复调用&lt;/h1&gt;&lt;p&gt;实现代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;impor</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="win32api" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/win32api/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
+    
+    <category term="win32api" scheme="http://example.com/tags/win32api/"/>
+    
+  </entry>
   
   <entry>
     <title>pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</title>
@@ -595,38 +628,6 @@
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
     <category term="PIL" scheme="http://example.com/tags/PIL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>matplotlib | 绘制双柱状图</title>
-    <link href="http://example.com/2021/10/24/matplotlib%E7%BB%98%E5%88%B6%E5%8F%8C%E6%9F%B1%E7%8A%B6%E5%9B%BE/"/>
-    <id>http://example.com/2021/10/24/matplotlib%E7%BB%98%E5%88%B6%E5%8F%8C%E6%9F%B1%E7%8A%B6%E5%9B%BE/</id>
-    <published>2021-10-25T07:36:09.000Z</published>
-    <updated>2021-10-25T07:38:09.997Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="使用matplotlib绘制双柱状图"><a href="#使用matplotlib绘制双柱状图" class="headerlink" title="使用matplotlib绘制双柱状图"></a>使用matplotlib绘制双柱状图</h1><p>实现代码：</p><pre><code>import matplotlib.pyplot as plt# 定义函数来显示柱状上的数值def autolabel(rects):    for rect in rects:        height = rect.get_height()        plt.text(rect.get_x() + rect.get_width() / 2. - 0.2, 1.03 * height, &#39;%s&#39; % float(height))if __name__ == &#39;__main__&#39;:    l1 = [75, 57, 59, 60, 60]    l2 = [68.39, 58, 54, 58, 55]    # l1 = [68.50, 53.13, 53.04, 52.64, 56.32]    # l2 = [66.31, 53.57, 50.54, 55.54, 47.72]    name = [&#39;CNN-LSTM&#39;, &#39;CNN3Conv&#39;, &#39;CNN5Conv&#39;, &#39;LeNet&#39;, &#39;EEGNet&#39;]    total_width, n = 0.8, 2    width = total_width / n    x = [0, 1, 2, 3, 4]    plt.rc(&#39;font&#39;, family=&#39;SimHei&#39;, size=12)  # 设置中文显示，否则出现乱码！    a = plt.bar(x, l1, width=width, label=&#39;Valence&#39;, fc=&#39;y&#39;)    for i in range(len(x)):        x[i] = x[i] + width    b = plt.bar(x, l2, width=width, label=&#39;Arousal&#39;, tick_label=name, fc=&#39;r&#39;)    autolabel(a)    autolabel(b)    plt.xlabel(&#39;Models&#39;)    plt.ylabel(&#39;Accuracy&#39;)    plt.title(&#39;Valence Accuracy and Arousal Accuracy&#39;)    plt.legend()    plt.show()    plt.savefig(&#39;accuracy.png&#39;)</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;使用matplotlib绘制双柱状图&quot;&gt;&lt;a href=&quot;#使用matplotlib绘制双柱状图&quot; class=&quot;headerlink&quot; title=&quot;使用matplotlib绘制双柱状图&quot;&gt;&lt;/a&gt;使用matplotlib绘制双柱状图&lt;/h1&gt;&lt;p&gt;实现代码：&lt;</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="matplotlib" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/matplotlib/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="matplotlib" scheme="http://example.com/tags/matplotlib/"/>
-    
-    <category term="双柱状图" scheme="http://example.com/tags/%E5%8F%8C%E6%9F%B1%E7%8A%B6%E5%9B%BE/"/>
     
   </entry>
   
