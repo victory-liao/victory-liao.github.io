@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-29T02:16:04.355Z</updated>
+  <updated>2021-10-29T08:32:01.003Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
+    <link href="http://example.com/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/"/>
+    <id>http://example.com/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</id>
+    <published>2021-10-29T02:28:29.000Z</published>
+    <updated>2021-10-29T08:32:01.003Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p><pre><code>import osimport pdfplumberfrom openpyxl import Workbookpath = &#39;PDF&#39;  # 文件所在文件夹files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径key_words = &quot;主要会计数据&quot;for file in files:    with pdfplumber.open(file) as p:        wb = Workbook()  # 新建excel工作簿        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表        # 获取关键词所在页及下一页的页码        pages_wanted = []        for index, page in enumerate(p.pages):  # 从0开始给所有页编号            if key_words in page.extract_text():                pages_wanted.append(index)                pages_wanted.append(index + 1)                break        # 提取指定页码里的表格        for i in pages_wanted:            page = p.pages[i]            tables = page.extract_tables()  # 读取表格            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致                for table in tables:  # 遍历所有列表                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据                        ws.append(row)  # 写入excel表        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))</code></pre><p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一键提取PDF中的表格到Excel&quot;&gt;&lt;a href=&quot;#一键提取PDF中的表格到Excel&quot; class=&quot;headerlink&quot; title=&quot;一键提取PDF中的表格到Excel&quot;&gt;&lt;/a&gt;一键提取PDF中的表格到Excel&lt;/h1&gt;&lt;p&gt;实现代码：&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="pdfplumber" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pdfplumber/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="pdfplumber" scheme="http://example.com/tags/pdfplumber/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+  </entry>
   
   <entry>
     <title>python-docx | 批量修改word文件中的段落格式</title>
@@ -582,33 +615,6 @@
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
-    <link href="http://example.com/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/"/>
-    <id>http://example.com/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</id>
-    <published>2021-10-21T09:53:10.000Z</published>
-    <updated>2021-10-21T09:55:56.693Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="合并word表格中上下行那内容相同的单元格"><a href="#合并word表格中上下行那内容相同的单元格" class="headerlink" title="合并word表格中上下行那内容相同的单元格"></a>合并word表格中上下行那内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p><span id="more"></span><pre><code>from docx import Document# 定义合并单元格的函数def Merge_cells(table, target_list, start_row, col):    &quot;&quot;&quot;    table: 是需要操作的表格    target_list: 是目标列表，即含有重复数据的列表    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）    col: 是需要处理数据的列    &quot;&quot;&quot;    start = 0  # 开始行计数    end = 0  # 结束行计数    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始    for i in range(len(target_list)):  # 遍历列表        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下            reference = target_list[i]  # 基准变成列表中下一个字符串            end = i - 1            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))            start = end + 1        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作            end = i            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))doc = Document(&quot;收货记录.docx&quot;)# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据table = doc.tables[0]  # 已确定是第一个表格，其索引是0supplier = []  # 存储供应商名称pn = []  # 存储物料编码max_row = len(table.rows)  # 获取第最大一行# 读取第二行到29行，第2，3列中的数据for i in range(1, max_row - 1):    supplier_name = table.rows[i].cells[1].text  # cells[1]指表格第二列    supplier.append(supplier_name)for i in range(1, max_row - 1):    material_pn = table.rows[i].cells[2].text  # cells[2]指表格第三列    pn.append(material_pn)Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2# 重新往第2和第3列写入数据，以覆盖之前重复的数据for row in range(1, len(supplier) + 1):    table.cell(row, 1).text = supplier[row - 2]    table.cell(row, 2).text = pn[row - 2]doc.save(&quot;收货记录-合并单元格.docx&quot;)</code></pre><p><a href="收货记录.docx">收货记录.docx</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;合并word表格中上下行那内容相同的单元格&quot;&gt;&lt;a href=&quot;#合并word表格中上下行那内容相同的单元格&quot; class=&quot;headerlink&quot; title=&quot;合并word表格中上下行那内容相同的单元格&quot;&gt;&lt;/a&gt;合并word表格中上下行那内容相同的单元格&lt;/h1&gt;&lt;p&gt;以下代码实现自动合并excel表格中上下行内容相同的单元格&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
   </entry>
   
