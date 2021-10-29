@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-29T10:27:08.631Z</updated>
+  <updated>2021-10-29T12:18:16.466Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,86 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>requests | 获取网站新文章</title>
+    <link href="http://example.com/2021/10/29/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E6%96%B0%E6%96%87%E7%AB%A0/"/>
+    <id>http://example.com/2021/10/29/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E6%96%B0%E6%96%87%E7%AB%A0/</id>
+    <published>2021-10-29T12:15:03.000Z</published>
+    <updated>2021-10-29T12:18:16.466Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Python爬虫-已爬取目标网站所有文章，后续如何只获取新文章"><a href="#Python爬虫-已爬取目标网站所有文章，后续如何只获取新文章" class="headerlink" title="Python爬虫~已爬取目标网站所有文章，后续如何只获取新文章?"></a>Python爬虫~已爬取目标网站所有文章，后续如何只获取新文章?</h1><p>代码：</p><pre><code>print(&quot;文章刷新中......&quot;)# 定义函数，获取想要的文章并批量写入word文件import requestsfrom bs4 import BeautifulSoupimport docxfrom docx.shared import Pt  # 用于设定字体大小（磅值）from docx.oxml.ns import qn  # 用于应用中文字体import randomimport timeimport osdef Get_article_to_word(url, date):    user_agent_list = [        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36&quot;,        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36&quot;,        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36&quot;,        &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36&quot;,        &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36&quot;,        &quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)&quot;,        &quot;Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10.5; en-US; rv:1.9.2.15) Gecko/20110303 Firefox/3.6.15&quot;        ]    header = &#123;&#39;User-Agent&#39;: random.choice(user_agent_list)&#125;    wb_data = requests.get(url, headers=header)    soup = BeautifulSoup(wb_data.content)    title = soup.select(&#39;.headword&#39;)[0].text.strip()  # 获得标题    content1 = soup.select(&quot;.MsoNormal&quot;)  # 针对正文布局为 class = &quot;MsoNormal&quot;    content2 = soup.select(&quot;#art_content&quot;)  # 针对正文布局为 id = &quot;art_content&quot;    doc = docx.Document()  # 新建空白word文档    # 设定全局字体    doc.styles[&#39;Normal&#39;].font.name = u&#39;宋体&#39;    doc.styles[&#39;Normal&#39;]._element.rPr.rFonts.set(qn(&#39;w:eastAsia&#39;), u&#39;宋体&#39;)    # 写入标题行，并设置字体格式    p = doc.add_paragraph()    r = p.add_run(title)    r.bold = True    r.font.size = Pt(18)    doc.add_paragraph(date)  # 写入日期    doc.add_paragraph(url)  # 写入文章链接    dirs = os.getcwd() + &quot;\\文章&quot;    if not os.path.exists(dirs):        os.makedirs(dirs)    # 写入正文    for i in content2:        doc.add_paragraph(i.text)    for i in content1:        doc.add_paragraph(i.text)    doc.save(f&quot;&#123;dirs&#125;\\&#123;title&#125;.docx&quot;)# 判断网站是否有新文章import requestsimport jsonheader = &#123;    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 &#39;                  &#39;Safari/537.36&#39;&#125;form_data = &#123;&#39;_q&#39;: &#39;Article.list&#39;,             &#39;siteId&#39;: &#39;7e0b3b27-2622-4aa7-b6f8-abfe5c5df922&#39;,             &#39;catalogId&#39;: &#39;34f92da3-d6d0-4e96-899f-d7f581c18162&#39;,             &#39;pub&#39;: &#39;true&#39;,             &#39;limit&#39;: 150,  # 网站更新速度较慢，每次查看是否有更新的时候，只获取前10页共150篇文章的信息             &#39;start&#39;: 1&#125;# 这是异步加载，请求方法是POSTurl = &quot;http://www.bicpa.org.cn/dtzj/zxgg/getArticles.action&quot;res = requests.post(url, data=form_data, headers=header)article_data0 = res.text.split(&quot;&#123;success:true,datas:&quot;)[1]  # 去掉字符串前面的无用信息“&#123;success:true,datas:”article_data = article_data0.split(&quot;,total:&quot;)[0]  # 去掉字符串后面的无用信息“,total:xxxx&#125;”obj = json.loads(article_data)# 载入数据库中的所有链接，作为判断基准f = open(os.getcwd() + &#39;\\links.txt&#39;, &#39;r&#39;)link_database = f.read()  # 读取成一个大字符串# 将所有新文章链接写入文本文件path = r&quot;http://www.bicpa.org.cn&quot;links_file = open(&#39;links.txt&#39;, &#39;a&#39;)  # 避免覆盖已有数据，用添加模式`a`写入counter_link = 0  # 新文章链接计数器counter_download = 0  # 新下载文章计数器for info in obj:    link = path + info[&#39;url&#39;] + info[&#39;primaryKey&#39;] + &quot;.html&quot;  # 拼接链接信息    if link in link_database:  # 判断新提取的链接是否已存在于数据库        pass    else:        links_file.write(link + &quot;\n&quot;)  # 写入链接信息        counter_link += 1        # 下载标题含有&quot;委员会专家提示&quot;的文章        if &quot;委员会专家提示&quot; in info[&#39;title&#39;]:            Get_article_to_word(link, info[&quot;publishDate&quot;])  # 调用写好的函数，下载文章到word文件            counter_download += 1  # 每下载一篇文章，计数器增加1links_file.close()  # 写完后关闭文件# 显示每次的结果if counter_link == 0:    print(&quot;没有文章更新！&quot;)else:    print(f&quot;共获取到 &#123;counter_link&#125; 篇新文章的链接，并加入数据库。&quot;)if counter_download == 0:    print(&quot;没有&#39;委员会专家提示&#39;文章更新！&quot;)else:    print(f&quot;共下载 &#123;counter_download&#125; 篇&#39;委员会专家提示&#39;新文章，请到文件夹查看。&quot;)print(&quot;程序运行完成，关闭窗口退出.&quot;)input()</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Python爬虫-已爬取目标网站所有文章，后续如何只获取新文章&quot;&gt;&lt;a href=&quot;#Python爬虫-已爬取目标网站所有文章，后续如何只获取新文章&quot; class=&quot;headerlink&quot; title=&quot;Python爬虫~已爬取目标网站所有文章，后续如何只获取新文</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="requests" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/"/>
+    
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="random" scheme="http://example.com/tags/random/"/>
+    
+    <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="json" scheme="http://example.com/tags/json/"/>
+    
+    <category term="time" scheme="http://example.com/tags/time/"/>
+    
+    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>requests | python爬虫爬取会计师网站的指定文章</title>
+    <link href="http://example.com/2021/10/29/python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%87%E7%AB%A0/"/>
+    <id>http://example.com/2021/10/29/python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%87%E7%AB%A0/</id>
+    <published>2021-10-29T10:52:51.000Z</published>
+    <updated>2021-10-29T12:05:14.698Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="python爬虫爬取会计师网站的指定文章"><a href="#python爬虫爬取会计师网站的指定文章" class="headerlink" title="python爬虫爬取会计师网站的指定文章"></a>python爬虫爬取会计师网站的指定文章</h1><p>还没学习爬虫，没看懂！有缘再见！后会有期！</p><p>贴上代码：</p><pre><code>import requestsimport osimport jsonprint(&quot;开始爬取文章......&quot;)header = &#123;    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 &#39;                  &#39;Safari/537.36&#39;&#125;form_data = &#123;&#39;_q&#39;: &#39;Article.list&#39;,             &#39;siteId&#39;: &#39;7e0b3b27-2622-4aa7-b6f8-abfe5c5df922&#39;,             &#39;catalogId&#39;: &#39;34f92da3-d6d0-4e96-899f-d7f581c18162&#39;,             &#39;pub&#39;: &#39;true&#39;,             &#39;limit&#39;: 5000,             &#39;start&#39;: 1&#125;# 这是异步加载，请求方法是POSTurl = &quot;http://www.bicpa.org.cn/dtzj/zxgg/getArticles.action&quot;res = requests.post(url, data=form_data, headers=header)article_data0 = res.text.split(&quot;&#123;success:true,datas:&quot;)[1]  # 去掉字符串前面的无用信息“&#123;success:true,datas:”article_data = article_data0.split(&quot;,total:&quot;)[0]  # 去掉字符串后面的无用信息“,total:4946&#125;”obj = json.loads(article_data)# 获取标题含有“委员会专家提示”的文章的标题，发布时间和链接path = r&quot;http://www.bicpa.org.cn&quot;articles = []for info in obj:    if &quot;委员会专家提示&quot; in info[&#39;title&#39;]:        article = &#123;            &quot;标题&quot;: info[&#39;title&#39;].strip(),  # strip()去除首尾空格            &quot;发布时间&quot;: info[&#39;publishDate&#39;],            &quot;链接&quot;: path + info[&#39;url&#39;] + info[&#39;primaryKey&#39;] + &quot;.html&quot;        &#125;        articles.append(article)import requestsfrom bs4 import BeautifulSoupimport docxfrom docx.shared import Pt  # 用于设定字体大小（磅值）from docx.oxml.ns import qn  # 用于应用中文字体import randomimport time# 获取想要的文章并批量写入word文件def Get_article_to_word(url, date):    user_agent_list = [        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36&quot;,        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36&quot;,        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36&quot;,        &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36&quot;,        &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36&quot;,        &quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)&quot;,        &quot;Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10.5; en-US; rv:1.9.2.15) Gecko/20110303 Firefox/3.6.15&quot;    ]    header = &#123;&#39;User-Agent&#39;: random.choice(user_agent_list)&#125;    wb_data = requests.get(url, headers=header)    soup = BeautifulSoup(wb_data.content)    title = soup.select(&#39;.headword&#39;)[0].text.strip()  # 获得标题    content1 = soup.select(&quot;.MsoNormal&quot;)  # 针对正文布局为 class = &quot;MsoNormal&quot;    content2 = soup.select(&quot;#art_content&quot;)  # 针对正文布局为 id = &quot;art_content&quot;    doc = docx.Document()  # 新建空白word文档    # 设定全局字体    doc.styles[&#39;Normal&#39;].font.name = u&#39;宋体&#39;    doc.styles[&#39;Normal&#39;]._element.rPr.rFonts.set(qn(&#39;w:eastAsia&#39;), u&#39;宋体&#39;)    # 写入标题行，并设置字体格式    p = doc.add_paragraph()    r = p.add_run(title)    r.bold = True    r.font.size = Pt(18)    doc.add_paragraph(date)  # 写入日期    doc.add_paragraph(url)  # 写入文章链接    dirs = os.getcwd() + &quot;\\文章&quot;    if not os.path.exists(dirs):        os.makedirs(dirs)    # 写入正文    for i in content2:        doc.add_paragraph(i.text)    for i in content1:        doc.add_paragraph(i.text)    doc.save(f&quot;&#123;dirs&#125;\\&#123;title&#125;.docx&quot;)# 遍历所有文章的链接，调用以上函数执行for art in articles:    Get_article_to_word(art[&quot;链接&quot;], art[&quot;发布时间&quot;])    print(&quot;&#123;&#125; 下载完成。&quot;.format(art[&#39;标题&#39;]))    if articles.index(art) % 30 == 29:  # 每获取30篇文章，暂停5秒，避免频繁请求被服务器切断连接        time.sleep(5)print(f&quot;共下载 &#123;len(articles)&#125; 篇文章。&quot;)print(&quot;程序运行完成，关闭窗口退出.&quot;)input()</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;python爬虫爬取会计师网站的指定文章&quot;&gt;&lt;a href=&quot;#python爬虫爬取会计师网站的指定文章&quot; class=&quot;headerlink&quot; title=&quot;python爬虫爬取会计师网站的指定文章&quot;&gt;&lt;/a&gt;python爬虫爬取会计师网站的指定文章&lt;/h1&gt;&lt;</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="requests" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/"/>
+    
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="random" scheme="http://example.com/tags/random/"/>
+    
+    <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="json" scheme="http://example.com/tags/json/"/>
+    
+    <category term="BeautifulSoup4" scheme="http://example.com/tags/BeautifulSoup4/"/>
+    
+    <category term="time" scheme="http://example.com/tags/time/"/>
+    
+  </entry>
   
   <entry>
     <title>os | os.listdir()和os.walk()</title>
@@ -72,9 +152,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="os" scheme="http://example.com/tags/os/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
     
   </entry>
   
@@ -417,9 +497,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="os" scheme="http://example.com/tags/os/"/>
-    
     <category term="pandas" scheme="http://example.com/tags/pandas/"/>
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
     
     <category term="jieba" scheme="http://example.com/tags/jieba/"/>
     
@@ -534,9 +614,9 @@
     
     <category term="os" scheme="http://example.com/tags/os/"/>
     
-    <category term="time" scheme="http://example.com/tags/time/"/>
-    
     <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="time" scheme="http://example.com/tags/time/"/>
     
     <category term="baidu-aip" scheme="http://example.com/tags/baidu-aip/"/>
     
@@ -569,69 +649,6 @@
     <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
     <category term="CNN" scheme="http://example.com/tags/CNN/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
-    <link href="http://example.com/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/"/>
-    <id>http://example.com/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</id>
-    <published>2021-10-27T02:10:04.000Z</published>
-    <updated>2021-10-27T03:30:46.457Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;卷积神经网络-一维卷积、二维卷积、三维卷积&quot;&gt;&lt;a href=&quot;#卷积神经网络-一维卷积、二维卷积、三维卷积&quot; class=&quot;headerlink&quot; title=&quot;卷积神经网络(一维卷积、二维卷积、三维卷积)&quot;&gt;&lt;/a&gt;卷积神经网络(一维卷积、二维卷积、三维卷积)</summary>
-      
-    
-    
-    
-    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="深度学习基础" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="CNN" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/"/>
-    
-    
-    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="一维卷积" scheme="http://example.com/tags/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF/"/>
-    
-    <category term="二维卷积" scheme="http://example.com/tags/%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF/"/>
-    
-    <category term="三维卷积" scheme="http://example.com/tags/%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pygame | 植物大战僵尸</title>
-    <link href="http://example.com/2021/10/25/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8/"/>
-    <id>http://example.com/2021/10/25/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8/</id>
-    <published>2021-10-25T13:54:30.000Z</published>
-    <updated>2021-10-27T01:53:06.110Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="植物大战僵尸"><a href="#植物大战僵尸" class="headerlink" title="植物大战僵尸"></a>植物大战僵尸</h1><p>python pygame 实现植物大战僵尸.<br><a href="https://blog.csdn.net/Gtieguo/article/details/112093640">植物大战僵尸</a></p><span id="more"></span><p>实现代码：</p><pre><code># 引入需要的模块import pygameimport random# 配置图片地址IMAGE_PATH = &#39;imgs/&#39;# 设置页面宽高scrrr_width = 800scrrr_height = 560# 创建控制游戏结束的状态GAMEOVER = False# 图片加载报错处理LOG = &#39;文件:&#123;&#125;中的方法:&#123;&#125;出错&#39;.format(__file__, __name__)# 创建地图类class Map():    map_names_list = [IMAGE_PATH + &#39;map1.png&#39;, IMAGE_PATH + &#39;map2.png&#39;]    # 初始化地图    def __init__(self, x, y, img_index):        self.image = pygame.image.load(Map.map_names_list[img_index])        self.position = (x, y)        # 是否能够种植        self.can_grow = True    # 加载地图    def load_map(self):        MainGame.window.blit(self.image, self.position)# 植物类class Plant(pygame.sprite.Sprite):    def __init__(self):        super(Plant, self).__init__()        self.live = True    def load_image(self):        if hasattr(self, &#39;image&#39;) and hasattr(self, &#39;rect&#39;):            MainGame.window.blit(self.image, self.rect)        else:            print(LOG)# 向日葵类class Sunflower(Plant):    def __init__(self, x, y):        super(Sunflower, self).__init__()        self.image = pygame.image.load(&#39;imgs/sunflower.png&#39;)        self.rect = self.image.get_rect()        self.rect.x = x        self.rect.y = y        self.price = 50        self.hp = 100        # 5 时间计数器        self.time_count = 0    # 新增功能：生成阳光    def produce_money(self):        self.time_count += 1        if self.time_count == 25:            MainGame.money += 5            self.time_count = 0    # 向日葵加入到窗口中    def display_sunflower(self):        MainGame.window.blit(self.image, self.rect)# 豌豆射手类class PeaShooter(Plant):    def __init__(self, x, y):        super(PeaShooter, self).__init__()        # self.image 为一个 surface        self.image = pygame.image.load(&#39;imgs/peashooter.png&#39;)        self.rect = self.image.get_rect()        self.rect.x = x        self.rect.y = y        self.price = 50        self.hp = 200        # 6 发射计数器        self.shot_count = 0    # 增加射击方法    def shot(self):        # 6 记录是否应该射击        should_fire = False        for zombie in MainGame.zombie_list:            if zombie.rect.y == self.rect.y and zombie.rect.x &lt; 800 and zombie.rect.x &gt; self.rect.x:                should_fire = True        # 6 如果活着        if self.live and should_fire:            self.shot_count += 1            # 6 计数器到25发射一次            if self.shot_count == 25:                # 6 基于当前豌豆射手的位置，创建子弹                peabullet = PeaBullet(self)                # 6 将子弹存储到子弹列表中                MainGame.peabullet_list.append(peabullet)                self.shot_count = 0    # 将豌豆射手加入到窗口中的方法    def display_peashooter(self):        MainGame.window.blit(self.image, self.rect)# 豌豆子弹类class PeaBullet(pygame.sprite.Sprite):    def __init__(self, peashooter):        self.live = True        self.image = pygame.image.load(&#39;imgs/peabullet.png&#39;)        self.damage = 50        self.speed = 10        self.rect = self.image.get_rect()        self.rect.x = peashooter.rect.x + 60        self.rect.y = peashooter.rect.y + 15    def move_bullet(self):        # 7 在屏幕范围内，实现往右移动        if self.rect.x &lt; scrrr_width:            self.rect.x += self.speed        else:            self.live = False    # 7 新增，子弹与僵尸的碰撞    def hit_zombie(self):        for zombie in MainGame.zombie_list:            if pygame.sprite.collide_rect(self, zombie):                # 打中僵尸之后，修改子弹的状态，                self.live = False                # 僵尸掉血                zombie.hp -= self.damage                if zombie.hp &lt;= 0:                    zombie.live = False                    self.nextLevel()    # 7闯关方法    def nextLevel(self):        MainGame.score += 20        MainGame.remnant_score -= 20        for i in range(1, 100):            if MainGame.score == 100 * i and MainGame.remnant_score == 0:                MainGame.remnant_score = 100 * i                MainGame.shaoguan += 1                MainGame.produce_zombie += 50    def display_peabullet(self):        MainGame.window.blit(self.image, self.rect)# 僵尸类class Zombie(pygame.sprite.Sprite):    def __init__(self, x, y):        super(Zombie, self).__init__()        self.image = pygame.image.load(&#39;imgs/zombie.png&#39;)        self.rect = self.image.get_rect()        self.rect.x = x        self.rect.y = y        self.hp = 1000        self.damage = 2        self.speed = 1        self.live = True        self.stop = False    # 9 僵尸的移动    def move_zombie(self):        if self.live and not self.stop:            self.rect.x -= self.speed            if self.rect.x &lt; -80:                # 8 调用游戏结束方法                MainGame().gameOver()    # 9 判断僵尸是否碰撞到植物，如果碰撞，调用攻击植物的方法    def hit_plant(self):        for plant in MainGame.plants_list:            if pygame.sprite.collide_rect(self, plant):                # 8  僵尸移动状态的修改                self.stop = True                self.eat_plant(plant)    # 9 僵尸攻击植物    def eat_plant(self, plant):        # 9 植物生命值减少        plant.hp -= self.damage        # 9 植物死亡后的状态修改，以及地图状态的修改        if plant.hp &lt;= 0:            a = plant.rect.y // 80 - 1            b = plant.rect.x // 80            map = MainGame.map_list[a][b]            map.can_grow = True            plant.live = False            # 8 修改僵尸的移动状态            self.stop = False    # 9 将僵尸加载到地图中    def display_zombie(self):        MainGame.window.blit(self.image, self.rect)# 主程序class MainGame():    # 2 创建关数，得分，剩余分数，钱数    shaoguan = 1    score = 0    remnant_score = 100    money = 200    # 3 存储所有地图坐标点    map_points_list = []    # 3 存储所有的地图块    map_list = []    # 4 存储所有植物的列表    plants_list = []    # 7 存储所有豌豆子弹的列表    peabullet_list = []    # 9 新增存储所有僵尸的列表    zombie_list = []    count_zombie = 0    produce_zombie = 100    # 1 加载游戏窗口    def init_window(self):        # 1 调用显示模块的初始化        pygame.display.init()        # 1 创建窗口        MainGame.window = pygame.display.set_mode([scrrr_width, scrrr_height])    # 2 文本绘制    def draw_text(self, content, size, color):        pygame.font.init()        font = pygame.font.SysFont(&#39;kaiti&#39;, size)        text = font.render(content, True, color)        return text    # 2 加载帮助提示    def load_help_text(self):        text1 = self.draw_text(&#39;1.按左键创建向日葵 2.按右键创建豌豆射手&#39;, 26, (255, 0, 0))        MainGame.window.blit(text1, (5, 5))    # 3 初始化坐标点    def init_plant_points(self):        for y in range(1, 7):            points = []            for x in range(10):                point = (x, y)                points.append(point)            MainGame.map_points_list.append(points)            print(&quot;MainGame.map_points_list&quot;, MainGame.map_points_list)    # 3 初始化地图    def init_map(self):        for points in MainGame.map_points_list:            temp_map_list = list()            for point in points:                # map = None                if (point[0] + point[1]) % 2 == 0:                    map = Map(point[0] * 80, point[1] * 80, 0)                else:                    map = Map(point[0] * 80, point[1] * 80, 1)                # 将地图块加入到窗口中                temp_map_list.append(map)                print(&quot;temp_map_list&quot;, temp_map_list)            MainGame.map_list.append(temp_map_list)        print(&quot;MainGame.map_list&quot;, MainGame.map_list)    # 3 将地图加载到窗口中    def load_map(self):        for temp_map_list in MainGame.map_list:            for map in temp_map_list:                map.load_map()    # 6 增加豌豆射手发射处理    def load_plants(self):        for plant in MainGame.plants_list:            # 6 优化加载植物的处理逻辑            if plant.live:                if isinstance(plant, Sunflower):                    plant.display_sunflower()                    plant.produce_money()                elif isinstance(plant, PeaShooter):                    plant.display_peashooter()                    plant.shot()            else:                MainGame.plants_list.remove(plant)    # 7 加载所有子弹的方法    def load_peabullets(self):        for b in MainGame.peabullet_list:            if b.live:                b.display_peabullet()                b.move_bullet()                # v1.9 调用子弹是否打中僵尸的方法                b.hit_zombie()            else:                MainGame.peabullet_list.remove(b)    # 8事件处理    def deal_events(self):        # 8 获取所有事件        eventList = pygame.event.get()        # 8 遍历事件列表，判断        for e in eventList:            if e.type == pygame.QUIT:                self.gameOver()            elif e.type == pygame.MOUSEBUTTONDOWN:                # print(&#39;按下鼠标按键&#39;)                print(e.pos)                # print(e.button)#左键1  按下滚轮2 上转滚轮为4 下转滚轮为5  右键 3                x = e.pos[0] // 80                y = e.pos[1] // 80                print(x, y)                map = MainGame.map_list[y - 1][x]                print(map.position)                # 8 增加创建时候的地图装填判断以及金钱判断                if e.button == 1:                    if map.can_grow and MainGame.money &gt;= 50:                        sunflower = Sunflower(map.position[0], map.position[1])                        MainGame.plants_list.append(sunflower)                        print(&#39;当前植物列表长度:&#123;&#125;&#39;.format(len(MainGame.plants_list)))                        map.can_grow = False                        MainGame.money -= 50                elif e.button == 3:                    if map.can_grow and MainGame.money &gt;= 50:                        peashooter = PeaShooter(                            map.position[0], map.position[1])                        MainGame.plants_list.append(peashooter)                        print(&#39;当前植物列表长度:&#123;&#125;&#39;.format(len(MainGame.plants_list)))                        map.can_grow = False                        MainGame.money -= 50    # 9 新增初始化僵尸的方法    def init_zombies(self):        for i in range(1, 7):            dis = random.randint(1, 5) * 200            zombie = Zombie(800 + dis, i * 80)            MainGame.zombie_list.append(zombie)    # 9将所有僵尸加载到地图中    def load_zombies(self):        for zombie in MainGame.zombie_list:            if zombie.live:                zombie.display_zombie()                zombie.move_zombie()                # v2.0 调用是否碰撞到植物的方法                zombie.hit_plant()            else:                MainGame.zombie_list.remove(zombie)    # 1 开始游戏    def start_game(self):        # 1 初始化窗口        self.init_window()        # 3 初始化坐标和地图        self.init_plant_points()        self.init_map()        # 9 调用初始化僵尸的方法        self.init_zombies()        # 1 只要游戏没结束，就一直循环        while not GAMEOVER:            # 1 渲染白色背景            MainGame.window.fill((255, 255, 255))            # 2 渲染的文字和坐标位置            MainGame.window.blit(                self.draw_text(                    &#39;当前钱数$: &#123;&#125;&#39;.format(                        MainGame.money), 26, (255, 0, 0)), (500, 40))            MainGame.window.blit(                self.draw_text(                    &#39;当前关数&#123;&#125;，得分&#123;&#125;,距离下关还差&#123;&#125;分&#39;.format(                        MainGame.shaoguan,                        MainGame.score,                        MainGame.remnant_score),                    26,                    (255,                     0,                     0)),                (5,                 40))            self.load_help_text()            # 3 需要反复加载地图            self.load_map()            # 6 调用加载植物的方法            self.load_plants()            # 7  调用加载所有子弹的方法            self.load_peabullets()            # 8 调用事件处理的方法            self.deal_events()            # 9 调用展示僵尸的方法            self.load_zombies()            # 9 计数器增长，每数到100，调用初始化僵尸的方法            MainGame.count_zombie += 1            if MainGame.count_zombie == MainGame.produce_zombie:                self.init_zombies()                MainGame.count_zombie = 0            pygame.time.wait(10)            pygame.display.update()    def gameOver(self):        MainGame.window.blit(            self.draw_text(                &#39;游戏结束&#39;, 50, (255, 0, 0)), (300, 200))        print(&#39;游戏结束&#39;)        pygame.time.wait(400)        global GAMEOVER        GAMEOVER = Trueif __name__ == &#39;__main__&#39;:    game = MainGame()    game.start_game()</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;植物大战僵尸&quot;&gt;&lt;a href=&quot;#植物大战僵尸&quot; class=&quot;headerlink&quot; title=&quot;植物大战僵尸&quot;&gt;&lt;/a&gt;植物大战僵尸&lt;/h1&gt;&lt;p&gt;python pygame 实现植物大战僵尸.&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/Gtieguo/article/details/112093640&quot;&gt;植物大战僵尸&lt;/a&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="pygame" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pygame/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="pygame" scheme="http://example.com/tags/pygame/"/>
-    
-    <category term="植物大战僵尸" scheme="http://example.com/tags/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8/"/>
     
   </entry>
   
