@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-29T12:18:16.466Z</updated>
+  <updated>2021-10-29T12:46:11.235Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python-docx | Python检查word文件中的特殊标记词是否与文件名中的一致</title>
+    <link href="http://example.com/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/"/>
+    <id>http://example.com/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/</id>
+    <published>2021-10-29T12:43:47.000Z</published>
+    <updated>2021-10-29T12:46:11.235Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Python检查word文件中的特殊标记词是否与文件名中的一致"><a href="#Python检查word文件中的特殊标记词是否与文件名中的一致" class="headerlink" title="Python检查word文件中的特殊标记词是否与文件名中的一致"></a>Python检查word文件中的特殊标记词是否与文件名中的一致</h1><p>公司的部分文件分为“内部”和“外部”。正常情况下，这个标识在文件名及文件首页左上角都有标注。然鹅，有时候操作一下，忘记改了，或者忘记标注了。就需要回头去一个一个地整理，非常麻烦。这种重复的，繁杂的操作，尽快冲Python来，人类还是应该多做做其它更有意思的事。</p><p>代码：</p><pre><code>import osfrom win32com import client as wc  # 导入模块import docxfrom docx.shared import Pt  # 用于设定字体大小（磅值）from docx.oxml.ns import qn  # 用于应用中文字体# 将文件夹内的所有doc转存为docx文件path = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径files = []for file in os.listdir(path):    if file.endswith(&quot;.doc&quot;):  # 排除文件夹内的其他干扰文件，只获取&quot;.doc&quot;后缀的word文件        files.append(path+file)word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序for file in files:    doc = word.Document(file)  # 打开word文件    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件    doc.Close()  # 关闭原来word文件word.Quit()for file in files:  # 删除doc文件    os.remove(file)# 获取所有docx文件路径docx_files = []for file in os.listdir(path):  # 排除文件夹内的其它干扰文件，只获取&quot;.doc&quot;后缀的word文件    if file.endswith(&quot;.docx&quot;):        docx_files.append(path+file)counter = 0  # 计数器，用于记录有多少文件没被处理for file in docx_files:    file_head = file.split(&#39;.&#39;)[0].rstrip()  # 文件名头，类似这样的“C:\\Users\\文件\\测试”    file_tail = file.split(&#39;\\&#39;)[-1]  # 文件名尾，类似这样“测试.docx”    mark_words = [&quot;公开&quot;, &quot;内部&quot;]    mark_fileName = file_head[-3:-1]  # 文件名中倒数第2,3个文字    doc = docx.Document(file)    mark_doc = doc.paragraphs[0].text  # 文件中首段文字    # 比对标记词    if mark_doc in mark_words:  # 判断文件中有无标记        if mark_fileName in mark_words:  # 判断文件名中有无标记            if mark_doc == mark_fileName:  # 如果二者标记相同                counter += 1                pass            else:  # 二者标记不同                os.rename(file, file.replace(mark_fileName, mark_doc))  # 重命名文件                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_doc&#125;】&quot;)        else:            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_doc&#125;）.docx&quot;)  # 文件名中无标记，则加标记            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_doc&#125;】&quot;)    else:        # 文中无标记，则在首段前插入一段，写入标记        p = doc.paragraphs[0]        pNew = p.insert_paragraph_before()        run = pNew.add_run(mark_words[0])  # 写为“公开”        # 字体设置        run.font.size = Pt(16)        run.font.name = &quot;黑体&quot;        r = run._element.rPr.rFonts        r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)        doc.save(file)        print(f&quot;【&#123;file_tail&#125;】内容增加标识为【&#123;mark_words[0]&#125;】&quot;)        if mark_fileName in mark_words:  # 查看文件名中是否有标记            if mark_fileName == mark_words[0]:  # 标记是否为“公开”                pass            else:  # 标记不是“公开”则替换                os.rename(file, file.replace(mark_fileName, mark_words[0]))  # 重命名文件                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_words[0]&#125;】&quot;)        else:            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_words[0]&#125;）.docx&quot;)  # 文件名中无标记，则加标记            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_words[0]&#125;】&quot;)print(f&quot;完成！共检查&#123;len(docx_files)&#125;个文件,处理了 &#123;len(docx_files) - counter&#125; 个文件。&quot;)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Python检查word文件中的特殊标记词是否与文件名中的一致&quot;&gt;&lt;a href=&quot;#Python检查word文件中的特殊标记词是否与文件名中的一致&quot; class=&quot;headerlink&quot; title=&quot;Python检查word文件中的特殊标记词是否与文件名中的一</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
+    
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
+    
+    <category term="win32com" scheme="http://example.com/tags/win32com/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+  </entry>
   
   <entry>
     <title>requests | 获取网站新文章</title>
@@ -152,9 +184,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
     <category term="os" scheme="http://example.com/tags/os/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
     
   </entry>
   
@@ -185,9 +217,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
     
     <category term="random" scheme="http://example.com/tags/random/"/>
     
@@ -497,9 +529,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
     <category term="os" scheme="http://example.com/tags/os/"/>
+    
+    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
     
     <category term="jieba" scheme="http://example.com/tags/jieba/"/>
     
@@ -619,36 +651,6 @@
     <category term="time" scheme="http://example.com/tags/time/"/>
     
     <category term="baidu-aip" scheme="http://example.com/tags/baidu-aip/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CNN | 卷积神经网络如何处理一维时间序列数据</title>
-    <link href="http://example.com/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/"/>
-    <id>http://example.com/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/</id>
-    <published>2021-10-27T03:28:20.000Z</published>
-    <updated>2021-10-27T03:31:42.930Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;卷积神经网络如何处理一维时间序列数据&quot;&gt;&lt;a href=&quot;#卷积神经网络如何处理一维时间序列数据&quot; class=&quot;headerlink&quot; title=&quot;卷积神经网络如何处理一维时间序列数据?&quot;&gt;&lt;/a&gt;卷积神经网络如何处理一维时间序列数据?&lt;/h1&gt;&lt;p&gt;&lt;a h</summary>
-      
-    
-    
-    
-    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="深度学习基础" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="CNN" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/"/>
-    
-    
-    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="CNN" scheme="http://example.com/tags/CNN/"/>
     
   </entry>
   
