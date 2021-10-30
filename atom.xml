@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-29T12:46:11.235Z</updated>
+  <updated>2021-10-30T02:16:40.064Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>xlrd | Python汇总各单位Excel档领料记录并加总每日领用次数</title>
+    <link href="http://example.com/2021/10/29/Python%E6%B1%87%E6%80%BB%E5%90%84%E5%8D%95%E4%BD%8DExcel%E6%A1%A3%E9%A2%86%E6%96%99%E8%AE%B0%E5%BD%95%E5%B9%B6%E5%8A%A0%E6%80%BB%E6%AF%8F%E6%97%A5%E9%A2%86%E7%94%A8%E6%AC%A1%E6%95%B0/"/>
+    <id>http://example.com/2021/10/29/Python%E6%B1%87%E6%80%BB%E5%90%84%E5%8D%95%E4%BD%8DExcel%E6%A1%A3%E9%A2%86%E6%96%99%E8%AE%B0%E5%BD%95%E5%B9%B6%E5%8A%A0%E6%80%BB%E6%AF%8F%E6%97%A5%E9%A2%86%E7%94%A8%E6%AC%A1%E6%95%B0/</id>
+    <published>2021-10-30T02:12:27.000Z</published>
+    <updated>2021-10-30T02:16:40.064Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Python汇总各单位Excel档领料记录并加总每日领用次数"><a href="#Python汇总各单位Excel档领料记录并加总每日领用次数" class="headerlink" title="Python汇总各单位Excel档领料记录并加总每日领用次数"></a>Python汇总各单位Excel档领料记录并加总每日领用次数</h1><p>代码：</p><pre><code>import timeimport xlrdimport datetime# 读取xls文件中的数据def Get_data(file):    wb = xlrd.open_workbook(file)  # 读取工作簿    ws = wb.sheets()[0]  # 选第一个工作表    data = &#123;&#125;    for row in range(7, ws.nrows - 2):        dept = ws.cell(2, 16).value  # 部门        dept_id = ws.cell(3, 16).value  # 部门编号        dt = ws.cell(row, 0).value  # 时间        if type(dt) is float:            date_time = xlrd.xldate.xldate_as_datetime(dt, 0)        else:            date_time = datetime.datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)        business = ws.cell(row, 2).value  # 业务类型        model = ws.cell(row, 3).value  # 品种        qty = ws.cell(row, 4).value  # 数量        unit_price = ws.cell(row, 6).value  # 单价        price = ws.cell(row, 8).value  # 总价        reward = ws.cell(row, 9).value  # 额外值        discount = ws.cell(row, 11).value  # 调整        balance = ws.cell(row, 13).value  # 剩余        location = str(ws.cell(row, 15).value).strip()  # 库位        operator = ws.cell(row, 17).value  # 操作员        date = date_time.date()  # 日期        time = date_time.time()  # 时间        info_list = [dept, dept_id, date_time, business, model, qty, unit_price, price, reward, discount,                     balance, location, operator, date, time]        data.setdefault(date, [])  # 以日期为键        if info_list[3] != &quot;备注&quot;:  # 不要业务类型为“备注”的数据            data[date].append(info_list)    # 增加当日领取次数    for key in data.keys():        for i in data[key]:            i.append(len(data[key]))    return dataimport os  # 用于获取目标文件所在路径path = os.getcwd() + &quot;\\记录\\&quot;  # 文件夹绝对路径files = []for file in os.listdir(path):    if file.endswith(&quot;.xls&quot;):  # 只获取&quot;.xls&quot;后缀的文件        files.append(path + file)# print(files)# Get_data(files[0])def Get_current_time():    time_stamp = time.time()  # 当前时间的时间戳    local_time = time.localtime(time_stamp)  #    str_time = time.strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)    return str_time# print(Get_current_time())# 汇总数据到主文件from openpyxl import Workbookfrom openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,         &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]wb = Workbook()ws = wb.activews.merge_cells(&quot;A1:P1&quot;)  # 合并首行单元格ws.cell(1, 1).value = &quot;领料明细汇总表&quot;ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)ws.row_dimensions[1].height = 22.2  # 设置首行行高ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)  # 设置对齐ws.append(title)  # 写入字段行# 写入各部门领料的数据for file in files:    data = Get_data(file)    for key in data.keys():        for i in data[key]:            ws.append(i)# 设置字号，对齐，缩小字体填充，加边框# Font(bold=True)可加粗字体for row_number in range(2, ws.max_row + 1):    for col_number in range(1, 17):        c = ws.cell(row=row_number, column=col_number)        c.font = Font(size=9)        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)# 设置列宽col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]for i in range(len(col_name)):    ws.column_dimensions[col_name[i]].width = col_width[i]# 分组隐藏列ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)</code></pre><p>记录：<br><a href="工程部领料明细.xls">工程部领料明细.xls</a><br><a href="生产部领料明细.xls">生产部领料明细.xls</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Python汇总各单位Excel档领料记录并加总每日领用次数&quot;&gt;&lt;a href=&quot;#Python汇总各单位Excel档领料记录并加总每日领用次数&quot; class=&quot;headerlink&quot; title=&quot;Python汇总各单位Excel档领料记录并加总每日领用次数&quot;&gt;</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="xlrd" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/xlrd/"/>
+    
+    
+    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="xlrd" scheme="http://example.com/tags/xlrd/"/>
+    
+  </entry>
   
   <entry>
     <title>python-docx | Python检查word文件中的特殊标记词是否与文件名中的一致</title>
@@ -184,9 +214,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="os" scheme="http://example.com/tags/os/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
     
   </entry>
   
@@ -217,9 +247,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
     <category term="random" scheme="http://example.com/tags/random/"/>
     
@@ -284,9 +314,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
     
   </entry>
   
@@ -316,9 +346,9 @@
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
+    
+    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
     
   </entry>
   
@@ -618,39 +648,6 @@
     <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="os" scheme="http://example.com/tags/os/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>baidu-aip | python调用人工智能识别表格</title>
-    <link href="http://example.com/2021/10/27/python%E8%B0%83%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC/"/>
-    <id>http://example.com/2021/10/27/python%E8%B0%83%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC/</id>
-    <published>2021-10-27T12:19:47.000Z</published>
-    <updated>2021-10-27T12:25:43.009Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="python调用人工智能识别表格"><a href="#python调用人工智能识别表格" class="headerlink" title="python调用人工智能识别表格"></a>python调用人工智能识别表格</h1><p>使用百度的OCR API识别表格中的文字。<br><a href="https://blog.csdn.net/weixin_39932611/article/details/112354147">参考资料1</a><br><a href="https://blog.csdn.net/weixin_44298740/article/details/117560495">参考资料2</a></p><span id="more"></span><pre><code># coding:utf-8# 获取路径下所有图片文件，并存入列表import oswork_path = &quot;图片\\&quot;pictures = []  # 存储文件夹内所有文件的路径（包括子目录内的文件）for root, dirs, files in os.walk(work_path):    path = [os.path.join(root, name) for name in files]    pictures.extend(path)from aip import AipOcr  # 导入AipOcr模块，用于做文字识别import time  # 时间模块import requests  # 用于HTTP请求APP_ID = &#39;25067363&#39;API_KEY = &#39;0PRCHim4nzLcDNEYR1hcSGGG&#39;SECRET_KEY = &#39;DFGtcTbhpD829q9GOUbjPYameEty7C6i&#39;client = AipOcr(APP_ID, API_KEY, SECRET_KEY)# 提交识别请求，并储存所有请求IDfor picture in pictures:    pic = open(picture, &#39;rb&#39;)  # 以二进制方式打开图片    img = pic.read()  # 读取    table = client.tableRecognitionAsync(img)  # 调用表格识别模块    print(table)    # request_id = table[&#39;result&#39;][0][&#39;request_id&#39;]    #    # # 判断识别是否完成，直到完成才根据请求ID获取Excel下载路径    # result = client.getTableRecognitionResult(request_id)  # 通过ID获取识别结果    # while result[&#39;result&#39;][&#39;ret_msg&#39;] != &#39;已完成&#39;:  # 如果状态是“已完成”，才能获取下载地址    #     time.sleep(2)  # 暂停2秒再刷新    #     result = client.getTableRecognitionResult(request_id)  # 持续刷新，直到满足条件    #    # download_path = result[&#39;result&#39;][&#39;result_data&#39;]    #    # # 下载并将Excel文件名设为图片名    # excel_name = picture.split(&quot;.&quot;)[0] + &quot;.xls&quot;  # 让excel文件的名字与图片相同    # excel = requests.get(download_path)  # 抓取下载链接    # file = open(excel_name, &#39;wb&#39;)  # 新建excel文件    # file.write(excel.content)  # 写入excel文件并保存    </code></pre><p><a href="论文.jpg">论文.jpg</a><br><a href="收货表.jpg">收货表.jpg</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;python调用人工智能识别表格&quot;&gt;&lt;a href=&quot;#python调用人工智能识别表格&quot; class=&quot;headerlink&quot; title=&quot;python调用人工智能识别表格&quot;&gt;&lt;/a&gt;python调用人工智能识别表格&lt;/h1&gt;&lt;p&gt;使用百度的OCR API识别表格中的文字。&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_39932611/article/details/112354147&quot;&gt;参考资料1&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_44298740/article/details/117560495&quot;&gt;参考资料2&lt;/a&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="baidu-aip" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/baidu-aip/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="os" scheme="http://example.com/tags/os/"/>
-    
-    <category term="requests" scheme="http://example.com/tags/requests/"/>
-    
-    <category term="time" scheme="http://example.com/tags/time/"/>
-    
-    <category term="baidu-aip" scheme="http://example.com/tags/baidu-aip/"/>
     
   </entry>
   
