@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-31T13:35:44.219Z</updated>
+  <updated>2021-10-31T14:09:22.349Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
+    <link href="http://example.com/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/"/>
+    <id>http://example.com/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</id>
+    <published>2021-10-31T14:07:12.000Z</published>
+    <updated>2021-10-31T14:09:22.349Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p><span id="more"></span><p>实现代码：</p><pre><code>import requestsfrom bs4 import BeautifulSoupurl = f&#39;http://blog.sina.com.cn/s/articlelist_5119330124_0_1.html&#39;wb_data = requests.get(url)soup = BeautifulSoup(wb_data.content)# 获取当页所有文章的标题和链接# print(soup.select(&#39;.atc_title&#39;))# 获取当页所有文章的发表时间# print(soup.select(&#39;.atc_tm&#39;))# print(soup.select(&#39;.atc_title&#39;)[0].select(&#39;a&#39;))# [&lt;a href=&quot;http://blog.sina.com.cn/s/blog_13122c74c0102zdsy.html&quot; target=&quot;_blank&quot; title=&quot;&quot;&gt;投资难在慢成毁于速成&lt;/a&gt;]# print(soup.select(&#39;.atc_title&#39;)[0].select(&#39;a&#39;)[0].get(&quot;href&quot;))# http://blog.sina.com.cn/s/blog_13122c74c0102zdsy.html# print(soup.select(&#39;.atc_title&#39;)[0].select(&#39;a&#39;)[0].text)# print(soup.select(&#39;.atc_tm&#39;)[0].text)# 获取所有博客文章的链接import requestsfrom bs4 import BeautifulSoupall_links = &#123;&#125;for i in range(1, 6):    url = f&#39;http://blog.sina.com.cn/s/articlelist_5119330124_0_&#123;i&#125;.html&#39;    wb_data = requests.get(url)    soup = BeautifulSoup(wb_data.content)    links = soup.select(&#39;.atc_title&#39;)    times = soup.select(&#39;.atc_tm&#39;)    for i in range(len(links)):        http_link = links[i].select(&#39;a&#39;)[0].get(&#39;href&#39;)        title = links[i].text.strip()        time = times[i].text        all_links[title] = [http_link, time]# print(len(all_links))# 获取单篇文章中的文字url = &#39;http://blog.sina.com.cn/s/blog_13122c74c0102zbt3.html&#39;wb_data = requests.get(url)soup = BeautifulSoup(wb_data.content)article = soup.select(&quot;.articalContent.newfont_family&quot;)# print(article)# print(article[0].text)# print(article[0].text.replace(&quot;\xa0&quot;, &quot;&quot;))# 获取单篇文章中的图片链接url = &#39;http://blog.sina.com.cn/s/blog_13122c74c0102zbud.html&#39;wb_data = requests.get(url)soup = BeautifulSoup(wb_data.content)img_link = soup.select(&quot;.articalContent.newfont_family&quot;)[0].find_all(&quot;img&quot;)[0].get(&quot;real_src&quot;)# 图片下载函数def downloadImg(img_url, file_path):    req = requests.get(url=img_url)    with open(file_path, &#39;wb&#39;) as f:        f.write(req.content)downloadImg(r&#39;http://s8.sinaimg.cn/middle/005AsbCIzy7vEfdM1M599&#39;,            r&#39;..\实例67_Python爬取博客的所有文章并存为带目录的word文档\1.jpg&#39;)# 写入标题，内容到word文件import docxfrom docx.oxml.ns import qn  # 用于应用中文字体def to_word(all_links):    header = &#123;        &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) &quot;                      &quot;Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0&quot;&#125;    doc = docx.Document()  # 新建word文档    doc.styles[&#39;Normal&#39;].font.name = u&#39;宋体&#39;    doc.styles[&#39;Normal&#39;]._element.rPr.rFonts.set(qn(&#39;w:eastAsia&#39;), u&#39;宋体&#39;)    counter = 0  # 计数器，用于记录写入word的文章数    for title in all_links.keys():        doc.add_heading(title, 1)        date = all_links[title][1][:10]  # 只取日期，不要时间        doc.add_paragraph(date)        wb_data = requests.get(all_links[title][0], headers=header)        soup = BeautifulSoup(wb_data.content)        article = soup.select(&quot;.articalContent.newfont_family&quot;)        # 有些文章被加密，获取不到内容，此时article为空，所以加个if语句判断        if article:            text = article[0].text.replace(&quot;\xa0&quot;, &quot;&quot;)            doc.add_paragraph(text)            print(f&quot;写入文章 &#123;title&#125; 。&quot;)            counter += 1    print(f&quot;共写入 &#123;counter&#125; 篇文章。&quot;)    doc.save(&quot;新浪微博文章.docx&quot;)to_word(all_links)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Python爬取博客的所有文章并存为带目录的word文档&quot;&gt;&lt;a href=&quot;#Python爬取博客的所有文章并存为带目录的word文档&quot; class=&quot;headerlink&quot; title=&quot;Python爬取博客的所有文章并存为带目录的word文档&quot;&gt;&lt;/a&gt;Python爬取博客的所有文章并存为带目录的word文档&lt;/h1&gt;&lt;p&gt;Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="requests" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
+    
+  </entry>
   
   <entry>
     <title>win32com | 识别加密word文件</title>
@@ -256,15 +285,15 @@
     
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
-    <category term="random" scheme="http://example.com/tags/random/"/>
-    
     <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
+    
+    <category term="random" scheme="http://example.com/tags/random/"/>
     
     <category term="json" scheme="http://example.com/tags/json/"/>
     
     <category term="time" scheme="http://example.com/tags/time/"/>
-    
-    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
     
   </entry>
   
@@ -296,9 +325,9 @@
     
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
     
-    <category term="random" scheme="http://example.com/tags/random/"/>
-    
     <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="random" scheme="http://example.com/tags/random/"/>
     
     <category term="json" scheme="http://example.com/tags/json/"/>
     
@@ -626,35 +655,6 @@
     <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>wordcloud | 词云</title>
-    <link href="http://example.com/2021/10/28/%E8%AF%8D%E4%BA%91/"/>
-    <id>http://example.com/2021/10/28/%E8%AF%8D%E4%BA%91/</id>
-    <published>2021-10-28T08:45:50.000Z</published>
-    <updated>2021-10-28T08:51:27.250Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h1><p>根据文章中的关键词的词频生成词云图。</p><span id="more"></span><p>实现代码：</p><pre><code>import numpy as np  # numpy数据处理库import wordcloud  # 词云库from PIL import Image  # 图像处理库，用于读取背景图片import matplotlib.pyplot as plt  # 图像展示库，以便在notebook中显示图片from openpyxl import load_workbook  # 读取词频Excel文件import os  # 获取词频Excel文件路径# 将存好的Excel词频表读取成字典path = &#39;词频&#39;  # 文件所在文件夹files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径maskImage = np.array(Image.open(&#39;background.png&#39;))  # 定义词频背景图for file in files:    # 将词频Excel文件读取为字典    wb = load_workbook(file)    ws = wb.active    wordFreq = &#123;&#125;    for i in range(2, ws.max_row + 1):        word = ws[&quot;A&quot; + str(i)].value        freq = ws[&quot;B&quot; + str(i)].value        wordFreq[word] = freq        # 定义词云样式    wc = wordcloud.WordCloud(        font_path=&#39;C:/Windows/Fonts/simhei.ttf&#39;,  # 设置字体        mask=maskImage,  # 设置背景图        max_words=500,  # 最多显示词数        max_font_size=100)  # 字号最大值    # 生成词云图    wc.generate_from_frequencies(wordFreq)  # 从字典生成词云    # 保存图片到指定文件夹    wc.to_file(&quot;词云图\\&#123;&#125;.png&quot;.format(file.split(&quot;\\&quot;)[1][:4]))    # 在notebook中显示词云图    plt.imshow(wc)  # 显示词云    plt.axis(&#39;off&#39;)  # 关闭坐标轴    plt.show()  # 显示图像</code></pre><p><a href="https://victory-liao.github.io/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/#more">词频文件夹</a><br><a href="background.PNG">background.PNG</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;词云&quot;&gt;&lt;a href=&quot;#词云&quot; class=&quot;headerlink&quot; title=&quot;词云&quot;&gt;&lt;/a&gt;词云&lt;/h1&gt;&lt;p&gt;根据文章中的关键词的词频生成词云图。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="wordcloud" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/wordcloud/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="wordcloud" scheme="http://example.com/tags/wordcloud/"/>
-    
-    <category term="词云" scheme="http://example.com/tags/%E8%AF%8D%E4%BA%91/"/>
     
   </entry>
   
