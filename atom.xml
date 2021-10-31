@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-31T03:23:28.366Z</updated>
+  <updated>2021-10-31T13:35:44.219Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>win32com | 识别加密word文件</title>
+    <link href="http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/"/>
+    <id>http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/</id>
+    <published>2021-10-31T13:32:56.000Z</published>
+    <updated>2021-10-31T13:35:44.219Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="识别加密word文件"><a href="#识别加密word文件" class="headerlink" title="识别加密word文件"></a>识别加密word文件</h1><p>Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。<br>因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。<br>如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。</p><span id="more"></span><p>实现代码：</p><pre><code>from win32com import client as wc  # 导入模块file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序doc = word.Documents.Open(file)  # 打开word文件doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件doc.Close()  # 关闭原来word文件word.Quit()# 增加异常处理语句import shutil  # 用于操作文件和文件夹from win32com import client as wcfile = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;try:    word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序    doc = word.Documents.Open(file)  # 打开word文件    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件    doc.Close()  # 关闭原来word文件    word.Quit()except:    # 将有密码的文件移动到专门的文件夹    shutil.move(file, r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\有密码文件&quot;)    print(f&quot;已移动加密文件 &#123;file&#125;&quot;)# #文件有“打开密码”的情况# import docx# doc = docx.Document(&#39;docx文件\\报告-有打开密码.docx&#39;)# PackageNotFoundError: Package not found at &#39;docx文件\报告-有打开密码.docx&#39;# 文件有“修改密码”的情况import docxdoc = docx.Document(&#39;docx文件\\报告-有修改密码.docx&#39;)p = doc.paragraphs[0]pNew = p.insert_paragraph_before()run = pNew.add_run(&quot;测试&quot;)doc.save(&quot;docx文件\\报告-有修改密码.docx&quot;)import docximport shutilfile = &quot;docx文件\\报告-有打开密码.docx&quot;try:    doc = docx.Document(file)    passexcept:    shutil.move(file, &#39;有密码文件&#39;)    print(f&quot;已移动加密文件 &#123;file&#125; 到指定文件夹&quot;)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;识别加密word文件&quot;&gt;&lt;a href=&quot;#识别加密word文件&quot; class=&quot;headerlink&quot; title=&quot;识别加密word文件&quot;&gt;&lt;/a&gt;识别加密word文件&lt;/h1&gt;&lt;p&gt;Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。&lt;br&gt;因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。&lt;br&gt;如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="win32com" scheme="http://example.com/categories/python/win32com/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="win32com" scheme="http://example.com/tags/win32com/"/>
+    
+    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="shutil" scheme="http://example.com/tags/shutil/"/>
+    
+  </entry>
   
   <entry>
     <title>python | 分块拆分txt文件中的数据</title>
@@ -626,34 +655,6 @@
     <category term="wordcloud" scheme="http://example.com/tags/wordcloud/"/>
     
     <category term="词云" scheme="http://example.com/tags/%E8%AF%8D%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>文档 | python文档</title>
-    <link href="http://example.com/2021/10/27/python%E6%96%87%E6%A1%A3/"/>
-    <id>http://example.com/2021/10/27/python%E6%96%87%E6%A1%A3/</id>
-    <published>2021-10-28T03:37:45.000Z</published>
-    <updated>2021-10-28T03:53:58.178Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;python文档&quot;&gt;&lt;a href=&quot;#python文档&quot; class=&quot;headerlink&quot; title=&quot;python文档&quot;&gt;&lt;/a&gt;python文档&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://www.bookstack.cn/read/explore</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="文档" scheme="http://example.com/categories/python/%E6%96%87%E6%A1%A3/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="python文档" scheme="http://example.com/tags/python%E6%96%87%E6%A1%A3/"/>
     
   </entry>
   
