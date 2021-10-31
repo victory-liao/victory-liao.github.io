@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-31T02:45:32.044Z</updated>
+  <updated>2021-10-31T03:23:28.366Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python | 分块拆分txt文件中的数据</title>
+    <link href="http://example.com/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/"/>
+    <id>http://example.com/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</id>
+    <published>2021-10-31T02:50:47.000Z</published>
+    <updated>2021-10-31T03:23:28.366Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p><pre><code># -*- coding:utf-8 -*-# 读取txt文件中的数据file = open(&quot;数据.txt&quot;)lines = file.readlines()# print(lines[:5])data = &#123;&#125;  # 储存分割的数据line_list = []  # 中转列表last_id = &quot;start&quot;  # 数据分块标识for line in lines:    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔    ID = row_data[0]  # 获得ID    if last_id == &quot;start&quot;:  # 用于处理数据第一行        line_list.append(line)  # 将第一行数据放入中转列表    else:  # 不是第一行数据，则按如下执行        if ID != last_id:  # 如果出现新的数据块            if last_id in data:  # 新的数据块的ID已存在字典data中                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中            else:  # 新的数据快的ID不在字典data中                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据        else:  # 没出现新的数据块            line_list.append(line)  # 将数据继续加入中转列表    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID# 将最后一个文字块的数据放入字典if last_id in data:    data[last_id].append(line_list)else:    data[last_id] = [line_list]# print(data[&#39;89031&#39;])# for i in data.keys():#     for block in data[i]:#         print(block)#         print(&quot;- -&quot;*50)# 写入数据函数def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)    for i in range(len(data_list)):        file.write(data_list[i])    file.close()  # 保存数据并关闭# 批量写入数据for ID in data.keys():    for i in range(len(data[ID])):        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])        </code></pre><p><a href="数据.txt">数据.txt</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;分块拆分txt文件中的数据&quot;&gt;&lt;a href=&quot;#分块拆分txt文件中的数据&quot; class=&quot;headerlink&quot; title=&quot;分块拆分txt文件中的数据&quot;&gt;&lt;/a&gt;分块拆分txt文件中的数据&lt;/h1&gt;&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# -*- c</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+  </entry>
   
   <entry>
     <title>tkinter | Tkinter制作python程序的图形化界面</title>
@@ -627,37 +654,6 @@
     <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="python文档" scheme="http://example.com/tags/python%E6%96%87%E6%A1%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>jieba | python词频分析</title>
-    <link href="http://example.com/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/"/>
-    <id>http://example.com/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/</id>
-    <published>2021-10-27T13:58:21.000Z</published>
-    <updated>2021-10-27T14:04:43.533Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="python词频分析"><a href="#python词频分析" class="headerlink" title="python词频分析"></a>python词频分析</h1><p>程序分析了”主要业务”文件夹的所有文件中的文本信息的词频(分别存储在”词频”文件夹中)</p><span id="more"></span><p>实现代码：</p><pre><code>import osimport jiebaimport pandas as pdpath = &#39;主要业务&#39;  # 文件所在文件夹files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径for file in files:    txt = open(file, &quot;r&quot;, encoding=&quot;utf-8&quot;).read()    words = jieba.lcut(txt)    wordsDict = &#123;&#125;  # 新建字典用于储存词及词频    for word in words:        if len(word) == 1:  # 单个的字符不作为词放入字典            continue        else:            wordsDict.setdefault(word, 0)  # 设置词的初始出现次数为0            wordsDict[word] += 1  # 对于重复出现的词，每出现一次，次数增加1    stopWords = [&quot;2019&quot;, &quot;不断&quot;, &quot;持续&quot;, &quot;主要&quot;, &quot;企业&quot;, &quot;产品&quot;, &quot;业务&quot;, &quot;公司&quot;, &quot;行业&quot;, &quot;000&quot;, &quot;用于&quot;, &quot;情况&quot;, &quot;方面&quot;, &quot;一种&quot;, &quot;要求&quot;, &quot;对于&quot;,                 &quot;进行&quot;, &quot;一般&quot;, &quot;212&quot;, &quot;实现&quot;, &quot;处理&quot;, &quot;通过&quot;, &quot;投入&quot;, &quot;随着&quot;]    for word in stopWords:        if word in wordsDict:            del wordsDict[word]    wordsDict_seq = sorted(wordsDict.items(), key=lambda x: x[1], reverse=True)  # 按字典的值降序排序    df = pd.DataFrame(wordsDict_seq, columns=[&#39;词&#39;, &#39;次数&#39;])    df.to_excel(&quot;词频//&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1][:-4]), index=False)  # 存为Excel时去掉index索引列  </code></pre><p>“主要业务”文件夹的所有文件:<br><a href="东旭蓝天：2019年年度报告.txt">东旭蓝天：2019年年度报告.txt</a><br><a href="保利地产：2018年年度报告.txt">保利地产：2018年年度报告.txt</a><br><a href="共达电声：2019年年度报告（更新后）.txt">共达电声：2019年年度报告（更新后）.txt</a><br><a href="华特气体：2019年年度报告（修订版）.txt">华特气体：2019年年度报告（修订版）.txt</a><br><a href="吉峰科技：2019年年度报告（更新后）.txt">吉峰科技：2019年年度报告（更新后）.txt</a><br><a href="引力传媒：2019年年度报告（修订版）.txt">引力传媒：2019年年度报告（修订版）.txt</a><br><a href="方正科技：2019年年度报告.txt">方正科技：2019年年度报告.txt</a><br><a href="湖北宜化：2019年年度报告（更新后）.txt">湖北宜化：2019年年度报告（更新后）.txt</a><br><a href="联创股份：2019年年度报告（更新后）.txt">联创股份：2019年年度报告（更新后）.txt</a><br><a href="高乐股份：2019年年度报告.txt">高乐股份：2019年年度报告.txt</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;python词频分析&quot;&gt;&lt;a href=&quot;#python词频分析&quot; class=&quot;headerlink&quot; title=&quot;python词频分析&quot;&gt;&lt;/a&gt;python词频分析&lt;/h1&gt;&lt;p&gt;程序分析了”主要业务”文件夹的所有文件中的文本信息的词频(分别存储在”词频”文件夹中)&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="jieba" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/jieba/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="os" scheme="http://example.com/tags/os/"/>
-    
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
-    <category term="jieba" scheme="http://example.com/tags/jieba/"/>
     
   </entry>
   
