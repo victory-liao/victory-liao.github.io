@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-31T14:09:22.349Z</updated>
+  <updated>2021-11-01T09:29:27.848Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>生成器 | 生成器输出质数</title>
+    <link href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/"/>
+    <id>http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/</id>
+    <published>2021-11-01T09:07:02.000Z</published>
+    <updated>2021-11-01T09:29:27.848Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="生成器输出小于max-num的质数"><a href="#生成器输出小于max-num的质数" class="headerlink" title="生成器输出小于max_num的质数"></a>生成器输出小于max_num的质数</h1><p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。<br>而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前<br>面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。</p><span id="more"></span><p>代码：</p><pre><code>def factor(max_num):    # 这是一个函数  用于输出所有小于max_num的质数    factor_list = []    n = 2    while n &lt; max_num:        find = False        for f in factor_list:            # 先看看列表里面有没有能整除它的            if n % f == 0:                find = True                break        if not find:            factor_list.append(n)            yield n        n += 1g = factor(10)for n in g:    print(n)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;生成器输出小于max-num的质数&quot;&gt;&lt;a href=&quot;#生成器输出小于max-num的质数&quot; class=&quot;headerlink&quot; title=&quot;生成器输出小于max_num的质数&quot;&gt;&lt;/a&gt;生成器输出小于max_num的质数&lt;/h1&gt;&lt;p&gt;通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。&lt;br&gt;而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前&lt;br&gt;面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="生成器" scheme="http://example.com/categories/python/%E7%94%9F%E6%88%90%E5%99%A8/"/>
+    
+    
+    <category term="生成器" scheme="http://example.com/tags/%E7%94%9F%E6%88%90%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
@@ -50,7 +73,7 @@
     <link href="http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/"/>
     <id>http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/</id>
     <published>2021-10-31T13:32:56.000Z</published>
-    <updated>2021-10-31T13:35:44.219Z</updated>
+    <updated>2021-11-01T09:04:03.208Z</updated>
     
     <content type="html"><![CDATA[<h1 id="识别加密word文件"><a href="#识别加密word文件" class="headerlink" title="识别加密word文件"></a>识别加密word文件</h1><p>Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。<br>因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。<br>如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。</p><span id="more"></span><p>实现代码：</p><pre><code>from win32com import client as wc  # 导入模块file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序doc = word.Documents.Open(file)  # 打开word文件doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件doc.Close()  # 关闭原来word文件word.Quit()# 增加异常处理语句import shutil  # 用于操作文件和文件夹from win32com import client as wcfile = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;try:    word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序    doc = word.Documents.Open(file)  # 打开word文件    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件    doc.Close()  # 关闭原来word文件    word.Quit()except:    # 将有密码的文件移动到专门的文件夹    shutil.move(file, r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\有密码文件&quot;)    print(f&quot;已移动加密文件 &#123;file&#125;&quot;)# #文件有“打开密码”的情况# import docx# doc = docx.Document(&#39;docx文件\\报告-有打开密码.docx&#39;)# PackageNotFoundError: Package not found at &#39;docx文件\报告-有打开密码.docx&#39;# 文件有“修改密码”的情况import docxdoc = docx.Document(&#39;docx文件\\报告-有修改密码.docx&#39;)p = doc.paragraphs[0]pNew = p.insert_paragraph_before()run = pNew.add_run(&quot;测试&quot;)doc.save(&quot;docx文件\\报告-有修改密码.docx&quot;)import docximport shutilfile = &quot;docx文件\\报告-有打开密码.docx&quot;try:    doc = docx.Document(file)    passexcept:    shutil.move(file, &#39;有密码文件&#39;)    print(f&quot;已移动加密文件 &#123;file&#125; 到指定文件夹&quot;)</code></pre>]]></content>
     
@@ -61,7 +84,9 @@
     
     <category term="python" scheme="http://example.com/categories/python/"/>
     
-    <category term="win32com" scheme="http://example.com/categories/python/win32com/"/>
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="win32com" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/win32com/"/>
     
     
     <category term="python" scheme="http://example.com/tags/python/"/>
@@ -611,36 +636,6 @@
       
     <summary type="html">&lt;h1 id=&quot;批量修改word文件中的段落格式&quot;&gt;&lt;a href=&quot;#批量修改word文件中的段落格式&quot; class=&quot;headerlink&quot; title=&quot;批量修改word文件中的段落格式&quot;&gt;&lt;/a&gt;批量修改word文件中的段落格式&lt;/h1&gt;&lt;p&gt;实现代码：&lt;/p&gt;
 &lt;pre</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="python-docx" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python-docx | python替换word文档中的文字</title>
-    <link href="http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/"/>
-    <id>http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/</id>
-    <published>2021-10-28T13:39:45.000Z</published>
-    <updated>2021-10-28T13:42:04.922Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="python替换word文档中的文字"><a href="#python替换word文档中的文字" class="headerlink" title="python替换word文档中的文字"></a>python替换word文档中的文字</h1><p>实现代码：</p><pre><code># -*- coding:utf-8 -*-import docx# # 定义函数替换文字块中的字符# def info_update(doc, old_info, new_info):#     for para in doc.paragraphs:  # 遍历段落#         for run in para.runs:  # 遍历文字块#             # run.text = run.text.replace(old_info, new_info)  # 替换#             print(run.text)### doc = docx.Document(&#39;替换前.docx&#39;)# info_update(doc, &#39;第四次&#39;, &#39;第五次&#39;)# info_update(doc, &#39;2019&#39;, &#39;2020&#39;)# info_update(doc, &#39;18&#39;, &#39;10&#39;)# doc.save(&#39;替换后.docx&#39;)# doc = docx.Document(&#39;替换前.docx&#39;)# for para in doc.paragraphs:  # 遍历段落#     for run in para.runs:  # 遍历文字块#         # run.text = run.text.replace(old_info, new_info)  # 替换#         print(run.text)# # 按段落查看文字# doc = docx.Document(&#39;替换前.docx&#39;)# for para in doc.paragraphs:#     print(para.text)import docxfrom docx.shared import Pt  # 用于设定字体大小(磅值)from docx.oxml.ns import qn  # 用于应用中文字体def info_update(doc, old_info, new_info):    for para in doc.paragraphs:        para.text = para.text.replace(old_info, new_info)    # 设置第一段（标题）的文字格式    for run in doc.paragraphs[0].runs:        run.font.size = Pt(14)  # 文字大小磅值        run.bold = True  # 加粗        run.font.name = &quot;微软雅黑&quot;  # 字体选择        # 中文字体应用，固定写法        r = run._element.rPr.rFonts  # 字体，固定写法        r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)  # 字体    # 设置第二及后续段落的文字格式    for para in doc.paragraphs[1:]:        for run in para.runs:            run.font.size = Pt(12)  # 文字大小            run.bold = False  # 不加粗            run.font.name = &quot;微软雅黑&quot;  # 字体选择            # 中文字体应用，固定写法            r = run._element.rPr.rFonts            r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)doc = docx.Document(&#39;替换前.docx&#39;)info_update(doc, &quot;第四次&quot;, &quot;第五次&quot;)info_update(doc, &quot;2019&quot;, &quot;2020&quot;)info_update(doc, &quot;18&quot;, &quot;10&quot;)doc.save(&#39;替换后_设置格式.docx&#39;)</code></pre><p><a href="替换前.docx">替换前.docx</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;python替换word文档中的文字&quot;&gt;&lt;a href=&quot;#python替换word文档中的文字&quot; class=&quot;headerlink&quot; title=&quot;python替换word文档中的文字&quot;&gt;&lt;/a&gt;python替换word文档中的文字&lt;/h1&gt;&lt;p&gt;实现代码：&lt;</summary>
       
     
     
