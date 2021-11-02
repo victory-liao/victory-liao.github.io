@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-02T02:29:10.162Z</updated>
+  <updated>2021-11-02T03:45:00.988Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pandas | 一键更新Excel中的图表</title>
+    <link href="http://example.com/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/"/>
+    <id>http://example.com/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/</id>
+    <published>2021-11-02T03:41:37.000Z</published>
+    <updated>2021-11-02T03:45:00.988Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p><span id="more"></span><p><strong>代码实现：</strong></p><pre><code>import pandas as pdfile = &#39;生产订单.xlsx&#39;df = pd.read_excel(file)df.fillna(0, inplace=True)df[&quot;数量&quot;] = df[&quot;数量&quot;].astype(&#39;int&#39;)# 增加周数字段df[&quot;周数&quot;] = df[&quot;日期&quot;].dt.weekdf[&quot;年份&quot;] = df[&quot;日期&quot;].dt.year# print(df.head())# 获取当前周数import datetimeyear, current_week, day = datetime.datetime.now().isocalendar()# print(current_week)# 只获取最近12周的数据df_required = df[(df[&quot;周数&quot;] &gt;= (current_week - 36)) &amp; (df[&quot;周数&quot;] &lt;= (current_week - 24))]# print(df_required[&#39;年份&#39;])result = df_required.groupby([&quot;周数&quot;, &quot;年份&quot;])[&#39;数量&#39;].sum().reset_index()  # reset后才是DF，不然是Series# print(result)## # print(result[result[&quot;年份&quot;]==2019][&quot;数量&quot;])## 如果有中文，需要配置中文字体，不然会显示成方框import matplotlib as mplimport matplotlib.pyplot as pltimport numpy as npplt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签# 数据和标签qty_2019 = result[result[&quot;年份&quot;] == 2019][&quot;数量&quot;]qty_2020 = result[result[&quot;年份&quot;] == 2020][&quot;数量&quot;]print(qty_2020)x_label = result[result[&quot;年份&quot;] == 2019][&quot;周数&quot;]# 设置字体大小mpl.rcParams[&#39;font.size&#39;] = 12# 设置图片大小plt.figure(figsize=(12, 6))# 设置柱形图宽度bar_width = 0.45index = np.arange(13)qty_2019_list = [qty for qty in qty_2019]qty_2020_list = [qty for qty in qty_2020]print(f&quot;index: &#123;len(index)&#125;&quot;)print(len(qty_2019_list))print(len(qty_2020_list))# 绘制2019年数据qty1 = plt.bar(index, qty_2019, bar_width, color=&#39;#336633&#39;, label=&quot;2019&quot;)# 绘制2020年数据qty2 = plt.bar(index + bar_width, qty_2020, bar_width, color=&#39;#6666CC&#39;, label=&quot;2020&quot;)# X,Y轴标题plt.xticks(index + bar_width, x_label)plt.xlabel(&quot;周数&quot;, fontsize=14)plt.ylabel(&quot;产品数量/台&quot;, fontsize=14)# 图表标题plt.title(u&#39;每周生产订单对比&#39;, fontsize=20)# 图例显示plt.legend()# 添加数据标签def add_labels(qtys):    for qty in qtys:        height = qty.get_height()        plt.text(qty.get_x() + qty.get_width() / 2, height, height, ha=&#39;center&#39;, va=&#39;bottom&#39;)        # 柱形图边缘用白色填充        qty.set_edgecolor(&#39;white&#39;)add_labels(qty1)add_labels(qty2)plt.savefig(&#39;prod_order.png&#39;)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一键更新Excel中的图表&quot;&gt;&lt;a href=&quot;#一键更新Excel中的图表&quot; class=&quot;headerlink&quot; title=&quot;一键更新Excel中的图表&quot;&gt;&lt;/a&gt;一键更新Excel中的图表&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;场景：&lt;/strong&gt; 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="pandas" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/"/>
+    
+    
+    <category term="matplotlib" scheme="http://example.com/tags/matplotlib/"/>
+    
+    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
+    
+    <category term="numpy" scheme="http://example.com/tags/numpy/"/>
+    
+    <category term="datetime" scheme="http://example.com/tags/datetime/"/>
+    
+  </entry>
   
   <entry>
     <title>生成器 | 生成器输出小于maxnum的偶数或奇数</title>
@@ -605,39 +636,6 @@
     <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
     
     <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>random | python出数学练习题</title>
-    <link href="http://example.com/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/"/>
-    <id>http://example.com/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/</id>
-    <published>2021-10-29T09:09:35.000Z</published>
-    <updated>2021-10-29T09:12:24.863Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="python出数学练习题"><a href="#python出数学练习题" class="headerlink" title="python出数学练习题"></a>python出数学练习题</h1><p>实现代码：</p><pre><code># import random## for i in range(5):#     num1 = random.randint(1, 9)#     num2 = random.randint(1, 9)#     print(f&quot;&#123;num1&#125; + &#123;num2&#125; = &quot;)# 加法、乘法题import randomdata = []  # 储存题目的列表group = []  # 中转列表while len(data) &lt; 20:  # 题目个数，20行x4列共80个题，刚好放入word文档中的1页    num1 = random.randint(0, 9)  # 随机整数1，从0-9中选取    num2 = random.randint(0, 9)  # 随机整数2，从0-9中选取    group.append(f&quot;&#123;num1&#125; + &#123;num2&#125; = &quot;)  # 数据放入中转列表    if len(group) == 4:  # 按四道题分一组        data.append(group)  # 数据放入总列表        group = []  # 清空中转列表print(data)# # 减法题# import random## data = []# group = []# while len(data) &lt; 20:#     num1 = random.randint(1, 9)#     num2 = random.randint(1, 9)#     if num1 &gt; num2:#         group.append(f&quot;&#123;num1&#125; - &#123;num2&#125; = &quot;)#         if len(group) == 4:#             data.append(group)#             group = []## # print(data)# # 除法题# import random## data = []  # 储存题目的列表# group = []  # 中转列表# while len(data) &lt; 20:#     num1 = random.randint(1, 19)#     num2 = random.randint(1, 19)#     if num1 &gt;= num2 and num1 % num2 == 0:#         group.append(f&quot;&#123;num1&#125; ÷ &#123;num2&#125; = &quot;)  # 数据放入中转列表#         if len(group) == 4:  # 按四道题分一组#             data.append(group)  # 数据放入总列表#             group = []  # 清空中转列表## print(data)# 输出到word文件def To_word(data, file_name):    &quot;&quot;&quot;    data:需要传入的列表    file_name:word文件的文件名    &quot;&quot;&quot;    from docx import Document    from docx.shared import Pt  # 用于设定字体大小（磅值）    doc = Document()    for i in data:        # print(i)        row = &quot;\t\t&quot;.join(i)        # print(row)        doc.add_paragraph(row)    # 设置字号    for para in doc.paragraphs:        for run in para.runs:            run.font.size = Pt(16)  # 文字大小磅值    doc.save(f&quot;&#123;file_name&#125;.docx&quot;)To_word(data, &quot;加法题&quot;)# To_word(data, &quot;减法题&quot;)# To_word(data, &quot;乘法题&quot;)# To_word(data, &quot;除法题&quot;)</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;python出数学练习题&quot;&gt;&lt;a href=&quot;#python出数学练习题&quot; class=&quot;headerlink&quot; title=&quot;python出数学练习题&quot;&gt;&lt;/a&gt;python出数学练习题&lt;/h1&gt;&lt;p&gt;实现代码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# import </summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="内置模块" scheme="http://example.com/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/"/>
-    
-    <category term="random" scheme="http://example.com/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/random/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
-    
-    <category term="random" scheme="http://example.com/tags/random/"/>
     
   </entry>
   
