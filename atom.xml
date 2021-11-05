@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-05T02:08:35.614Z</updated>
+  <updated>2021-11-05T02:24:08.537Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>os | 批量新建文件夹</title>
+    <link href="http://example.com/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/"/>
+    <id>http://example.com/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</id>
+    <published>2021-11-05T02:22:22.000Z</published>
+    <updated>2021-11-05T02:24:08.537Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p><span id="more"></span><p>代码：</p><pre><code>import osfrom datetime import datetimefrom time import time, localtime, strftimefrom tkinter import Tk, Entry, Button, Listbox, X, Y, END, Scrollbar, RIGHT, BOTTOM, HORIZONTAL, StringVar, Labelfrom tkinter.filedialog import askdirectoryclass MainGUI():    def __init__(self):        myWindow = Tk()        myWindow.title(&quot;批量新建文件夹&quot;)        # 设置窗口大小        myWindow.geometry(&#39;590x400&#39;)        # 增加标签        self.label_1 = Label(myWindow, text=&#39; 目标目录:&#39;)        self.label_1.place(x=10, y=10, width=70, height=30)        self.label_2 = Label(myWindow, text=&#39;文件夹数量:&#39;)        self.label_2.place(x=10, y=50, width=70, height=30)        # 增加文本框        addr = StringVar(value=&#39;C:\\Users\\xxxx\\Desktop&#39;)  # 文本框默认显示的内容        self.input_entry = Entry(myWindow, highlightcolor=&#39;red&#39;, highlightthickness=1, textvariable=addr)        self.input_entry.place(x=80, y=10, width=410, height=30)        self.btn_in = Button(myWindow, text=&#39;选择目录&#39;, command=self.select_dir1, width=10, height=1)        self.btn_in.place(x=500, y=10)        folder_quantity = str(self.get_folder_qty())  # 从日志文件`log.txt`中读取最近使用过的文件夹数量        def_qty = StringVar(value=folder_quantity)        self.folderQty_entry = Entry(myWindow, highlightcolor=&#39;blue&#39;, highlightthickness=1, textvariable=def_qty)        self.folderQty_entry.place(x=80, y=50, width=410, height=30)        self.btn_exe = Button(myWindow, text=&#39;执行新建&#39;, command=self.create_folders, width=10, height=1)        self.btn_exe.place(x=500, y=50)        # 增加列表框        self.result_show = Listbox(myWindow, bg=&#39;Azure&#39;)        self.result_show.place(x=10, y=100, width=570, height=290)        self.sbY = Scrollbar(self.result_show, command=self.result_show.yview)  # 在列表框中增加Y轴滚动条        self.sbY.pack(side=RIGHT, fill=Y)        self.result_show.config(yscrollcommand=self.sbY.set)        self.sbX = Scrollbar(self.result_show, command=self.result_show.xview, orient=HORIZONTAL)  # 在列表框中增加X轴滚动条        self.sbX.pack(side=BOTTOM, fill=X)        self.result_show.config(xscrollcommand=self.sbX.set)        myWindow.mainloop()    def select_dir1(self):        self.input_entry.delete(0, END)        self.input_entry.insert(0, askdirectory(initialdir=&quot;D:\\&quot;))    def create_folders(self):        date = self.get_current_date()  # 获取日期        qty = int(self.folderQty_entry.get())  # 获取文本框中文件夹数量，并转为整数        for i in range(1, qty + 1):            folder = self.input_entry.get() + &quot;\\&quot; + date + &#39;-&#39; + str(i)            # 判断是否已经存在该目录            if not os.path.exists(folder):                # 目录不存在，进行创建操作                os.makedirs(folder)  # 使用os.makedirs()方法创建目录                f = f&quot;目录新建成功：&#123;folder&#125;&quot;  # 创建一个显示项                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中            else:                f = f&quot;目录已存在：&#123;folder&#125;&quot;  # 创建一个显示项                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中        f = &quot;-&quot; * 100  # 创建分割线        self.result_show.insert(&quot;end&quot;, f)  # 将分割线添加到列表框        f = f&quot;程序运行完成，请关闭窗口退出.&quot;  # 创建一个显示项        self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框        f = &quot; &quot; * 100        self.result_show.insert(&quot;end&quot;, f)  # 将以上空格添加到列表框        self.save_recent_folder_qty()  # 保存最新的文件夹数量    @staticmethod    def get_current_date():        time_stamp = time()        local_time = localtime(time_stamp)        str_time_month = int(strftime(&#39;%m&#39;, local_time))        str_time_day = int(strftime(&#39;%d&#39;, local_time))        return str(str_time_month) + &quot;.&quot; + str(str_time_day)    @staticmethod    def get_folder_qty():        &#39;&#39;&#39;从log.txt文件中获取最近的文件夹数量，若没有则返回0&#39;&#39;&#39;        log_file = os.getcwd() + &quot;\\log.txt&quot;        if os.path.exists(log_file):            with open(log_file, &quot;r&quot;) as f:                qty = f.readline()                return int(qty)        else:            return 0    def save_recent_folder_qty(self):        &quot;&quot;&quot;保存最近的文件夹数量&quot;&quot;&quot;        log_file = os.getcwd() + &quot;\\log.txt&quot;        with open(log_file, &quot;w&quot;) as f:            recent_qty = str(self.folderQty_entry.get())            f.write(recent_qty)if __name__ == &quot;__main__&quot;:    MainGUI()</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;批量新建文件夹&quot;&gt;&lt;a href=&quot;#批量新建文件夹&quot; class=&quot;headerlink&quot; title=&quot;批量新建文件夹&quot;&gt;&lt;/a&gt;批量新建文件夹&lt;/h1&gt;&lt;p&gt;程序实现在指定目录下批量生成文件夹。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="内置模块" scheme="http://example.com/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/"/>
+    
+    <category term="os" scheme="http://example.com/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/os/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="os" scheme="http://example.com/tags/os/"/>
+    
+  </entry>
   
   <entry>
     <title>pandas | 一键更新Excel中的图表</title>
@@ -389,13 +416,13 @@
     <category term="requests" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/"/>
     
     
-    <category term="requests" scheme="http://example.com/tags/requests/"/>
-    
-    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
-    
     <category term="os" scheme="http://example.com/tags/os/"/>
     
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="requests" scheme="http://example.com/tags/requests/"/>
+    
+    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
     
     <category term="random" scheme="http://example.com/tags/random/"/>
     
@@ -429,11 +456,11 @@
     <category term="requests" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/"/>
     
     
-    <category term="requests" scheme="http://example.com/tags/requests/"/>
-    
     <category term="os" scheme="http://example.com/tags/os/"/>
     
     <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
+    
+    <category term="requests" scheme="http://example.com/tags/requests/"/>
     
     <category term="random" scheme="http://example.com/tags/random/"/>
     
@@ -588,38 +615,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;从原Excel表中抽出数据存入同一文件的新的Sheet&quot;&gt;&lt;a href=&quot;#从原Excel表中抽出数据存入同一文件的新的Sheet&quot; class=&quot;headerlink&quot; title=&quot;从原Excel表中抽出数据存入同一文件的新的Sheet&quot;&gt;&lt;/a&gt;从原Exc</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="pandas" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="openpyxl" scheme="http://example.com/tags/openpyxl/"/>
-    
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pandas | pandas提取指定数据并保存在原Excel工作簿中</title>
-    <link href="http://example.com/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/"/>
-    <id>http://example.com/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/</id>
-    <published>2021-10-29T09:25:17.000Z</published>
-    <updated>2021-10-29T09:27:34.839Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="pandas提取指定数据并保存在原Excel工作簿中"><a href="#pandas提取指定数据并保存在原Excel工作簿中" class="headerlink" title="pandas提取指定数据并保存在原Excel工作簿中"></a>pandas提取指定数据并保存在原Excel工作簿中</h1><p>实现代码：</p><pre><code>import pandas as pddf = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)# print(df)df500 = df[df[&quot;数量&quot;] &gt; 500]# print(df500)with pd.ExcelWriter(&#39;物料表.xlsx&#39;, mode=&#39;a&#39;, engine=&#39;openpyxl&#39;,                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:    df500.to_excel(writer, sheet_name=&#39;数量大于500&#39;, index=False)from openpyxl import load_workbookfrom openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignmentthin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色wb = load_workbook(&quot;物料表.xlsx&quot;)ws = wb[&quot;数量大于500&quot;]# 调整列宽ws.column_dimensions[&#39;A&#39;].width = 12ws.column_dimensions[&#39;C&#39;].width = 15.5ws.column_dimensions[&#39;G&#39;].width = 10# 设置字号，对齐，缩小字体填充，加边框for row_number in range(2, ws.max_row + 1):    for col_number in range(1, ws.max_column + 1):        c = ws.cell(row=row_number, column=col_number)        c.font = Font(size=10)        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)wb.save(&quot;物料表.xlsx&quot;)</code></pre><p><a href="物料表.xlsx">物料表.xlsx</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;pandas提取指定数据并保存在原Excel工作簿中&quot;&gt;&lt;a href=&quot;#pandas提取指定数据并保存在原Excel工作簿中&quot; class=&quot;headerlink&quot; title=&quot;pandas提取指定数据并保存在原Excel工作簿中&quot;&gt;&lt;/a&gt;pandas提取</summary>
       
     
     
