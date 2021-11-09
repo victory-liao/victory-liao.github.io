@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-07T03:41:46.075Z</updated>
+  <updated>2021-11-09T02:36:55.180Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,220 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python | 对象转json</title>
+    <link href="http://example.com/2021/11/08/python%E5%AF%B9%E8%B1%A1%E8%BD%ACjson/"/>
+    <id>http://example.com/2021/11/08/python%E5%AF%B9%E8%B1%A1%E8%BD%ACjson/</id>
+    <published>2021-11-08T12:22:28.000Z</published>
+    <updated>2021-11-09T02:36:55.180Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="python对象转json"><a href="#python对象转json" class="headerlink" title="python对象转json"></a>python对象转json</h1><p>程序将python的对象转为json格式。</p><span id="more"></span><p><strong>train_data_cor.txt文件包含以下内容：</strong><br>james.txt 2-34,3:21,2,34,2.45,3.01,2:01,2:01,3:10,2-22<br>sarah.txt 2:58,2.58,2:39,2-25,2:55,2:54,2.18,2:55,2:55<br>julie.txt 2.59,2.11,2:11,2:23,3-10,2-23,3:10,3.21,3-21<br>mikey.txt 2:22,3.01,3:01,3.02,3:02,3.02,3:22,2.49,2:38</p><p><strong>code:</strong></p><pre><code>import jsonclass Athlete(json.JSONEncoder):    def __init__(self,a_name,a_dob=None,a_times=[]):        self.name = a_name        self.dob = a_dob        self.times = a_times    def top3(self):        return sorted(set([self.sanitize(t) for t in self.times]))[0:3]    def sanitize(self,time_string):        if &#39;-&#39; in time_string:            splitter = &#39;-&#39;        elif &#39;:&#39; in time_string:            splitter = &#39;:&#39;        else:            return (time_string)        (mins,secs) = time_string.split(splitter)        return (mins+&#39;.&#39;+secs)with open(&#39;train_data_cor.txt&#39;) as f:    data = f.readline().strip().split(&#39;,&#39;)    ath = Athlete(data.pop(0),data.pop(0),data)    print(ath)ath_json = json.dumps(ath.__dict__)# 将json形式变量保存到文件中with open(&#39;json.txt&#39;,&#39;w&#39;) as f:    json.dump(ath_json,f)    # 读取json文件内容    with open(&#39;json.txt&#39;) as f:    ath = json.load(f)    print(ath)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;python对象转json&quot;&gt;&lt;a href=&quot;#python对象转json&quot; class=&quot;headerlink&quot; title=&quot;python对象转json&quot;&gt;&lt;/a&gt;python对象转json&lt;/h1&gt;&lt;p&gt;程序将python的对象转为json格式。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | 命名空间查找顺序</title>
+    <link href="http://example.com/2021/11/07/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F/"/>
+    <id>http://example.com/2021/11/07/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F/</id>
+    <published>2021-11-08T03:03:45.000Z</published>
+    <updated>2021-11-09T02:44:44.025Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="命名空间查找顺序"><a href="#命名空间查找顺序" class="headerlink" title="命名空间查找顺序"></a>命名空间查找顺序</h1><h2 id="命名空间的三种形式"><a href="#命名空间的三种形式" class="headerlink" title="命名空间的三种形式"></a>命名空间的三种形式</h2><p>1.内置命名空间（Built-in names）： 用于存放Python 的内置函数的空间，比如，print，input等不需要定义即可使用的函数就处在内置命名空间。<br>2.全局命名空间（Global names）：模块中定义的名称，记录了模块的变量，包括函数、类、其它导入的模块、模块级的变量和常量。<br>3.局部命名空间（Local names）：函数中定义的名称，记录了函数的变量，包括函数的参数和局部定义的变量。在函数内定义的局部变量，在函数执行结束后就会失效，即无法在函数外直接调用函数内定义的变量。<br><img src="/2021/11/07/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F/namespace.png"></p><span id="more"></span><p>##命名空间查找顺序<br>局部命名空间→全局命名空间→内置命名空间。</p><h2 id="命名空间的生命周期"><a href="#命名空间的生命周期" class="headerlink" title="命名空间的生命周期"></a>命名空间的生命周期</h2><p>命名空间的生命周期取决于对象的作用域，如果对象执行完成，则该命名空间的生命周期就结束。</p><h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><pre><code># 在全局命名空间中给变量a赋值，令a=1。a = 1# 在定义函数“function1”的同时就为其创建了一个独立的局部命名空间。def function1():    # 变量b在局部命名空间中被赋值“a+1”。    b = a + 1    # 此处所使用的print函数就是源自Python的内置命名空间。    print(b)    # 执行function1时，计算机会优先找到function1局部命名空间中的“b=a+1”，然后再找到全局命名空间中的“a=1”，最后找到内置命名空间中的print将b的值打印出来。function1()   </code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;命名空间查找顺序&quot;&gt;&lt;a href=&quot;#命名空间查找顺序&quot; class=&quot;headerlink&quot; title=&quot;命名空间查找顺序&quot;&gt;&lt;/a&gt;命名空间查找顺序&lt;/h1&gt;&lt;h2 id=&quot;命名空间的三种形式&quot;&gt;&lt;a href=&quot;#命名空间的三种形式&quot; class=&quot;headerlink&quot; title=&quot;命名空间的三种形式&quot;&gt;&lt;/a&gt;命名空间的三种形式&lt;/h2&gt;&lt;p&gt;1.内置命名空间（Built-in names）： 用于存放Python 的内置函数的空间，比如，print，input等不需要定义即可使用的函数就处在内置命名空间。&lt;br&gt;2.全局命名空间（Global names）：模块中定义的名称，记录了模块的变量，包括函数、类、其它导入的模块、模块级的变量和常量。&lt;br&gt;3.局部命名空间（Local names）：函数中定义的名称，记录了函数的变量，包括函数的参数和局部定义的变量。在函数内定义的局部变量，在函数执行结束后就会失效，即无法在函数外直接调用函数内定义的变量。&lt;br&gt;&lt;img src=&quot;/2021/11/07/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F/namespace.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="命名空间" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="命名空间" scheme="http://example.com/tags/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | 偏函数</title>
+    <link href="http://example.com/2021/11/07/%E5%81%8F%E5%87%BD%E6%95%B0/"/>
+    <id>http://example.com/2021/11/07/%E5%81%8F%E5%87%BD%E6%95%B0/</id>
+    <published>2021-11-08T02:58:37.000Z</published>
+    <updated>2021-11-09T02:25:34.092Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h1><p><strong>作用：</strong> 通过设定参数的默认值，降低函数调用的难度<br>函数在执行时，要带上所有必要的参数进行调用。但是，有时参数可以在函数被调用之前提前获知。这种情况下，一个函数有一个或多个参数预先就能用上，以便函数能用更少的参数进行调用。<br>偏函数是将所要承载的函数作为partial()函数的第一个参数，原函数的各个参数依次作为partial()函数后续的参数，除非使用关键字参数。</p><span id="more"></span><p><strong>示例1：</strong></p><h2 id="一般函数调用"><a href="#一般函数调用" class="headerlink" title="一般函数调用"></a>一般函数调用</h2><pre><code>def student_info(name, age, city):    print(f&#39;我的名字叫&#123;name&#125;, 今年&#123;age&#125;岁，来自&#123;city&#125;&#39;)student_info(&#39;Molly&#39;,18,&#39;北京&#39;)</code></pre><h2 id="带关键字参数函数的调用"><a href="#带关键字参数函数的调用" class="headerlink" title="带关键字参数函数的调用"></a>带关键字参数函数的调用</h2><pre><code>def student_info(name, age, city=&#39;北京&#39;):    print(f&#39;我的名字叫&#123;name&#125;, 今年&#123;age&#125;岁，来自&#123;city&#125;&#39;)student_info(&#39;Molly&#39;,18)</code></pre><h2 id="使用偏函数"><a href="#使用偏函数" class="headerlink" title="使用偏函数"></a>使用偏函数</h2><pre><code>from functools import partialdef student_info(name, age, city):    print(f&#39;我的名字叫&#123;name&#125;, 今年&#123;age&#125;岁，来自&#123;city&#125;&#39;)student_info_beijing = partial(student_info, city=&#39;北京&#39;)student_info_beijing(&#39;Molly&#39;,18)student_info_beijing(&#39;Molly&#39;,18, city=&#39;上海&#39;)</code></pre><p><strong>示例2：</strong></p><pre><code>def add_xy(x,y):    return x+yadd_100 = partial(add_xy, y=100)add_100(10)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;偏函数&quot;&gt;&lt;a href=&quot;#偏函数&quot; class=&quot;headerlink&quot; title=&quot;偏函数&quot;&gt;&lt;/a&gt;偏函数&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;作用：&lt;/strong&gt; 通过设定参数的默认值，降低函数调用的难度&lt;br&gt;函数在执行时，要带上所有必要的参数进行调用。但是，有时参数可以在函数被调用之前提前获知。这种情况下，一个函数有一个或多个参数预先就能用上，以便函数能用更少的参数进行调用。&lt;br&gt;偏函数是将所要承载的函数作为partial()函数的第一个参数，原函数的各个参数依次作为partial()函数后续的参数，除非使用关键字参数。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="偏函数" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%87%BD%E6%95%B0/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="偏函数" scheme="http://example.com/tags/%E5%81%8F%E5%87%BD%E6%95%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | 闭包</title>
+    <link href="http://example.com/2021/11/07/%E9%97%AD%E5%8C%85/"/>
+    <id>http://example.com/2021/11/07/%E9%97%AD%E5%8C%85/</id>
+    <published>2021-11-08T02:49:47.000Z</published>
+    <updated>2021-11-09T02:16:52.616Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>python中的闭包从表现形式上定义（解释）为：如果在一个内部函数里，对在外部作用域（但不是在全局作用域）的变量进行引用，那么内部函数就被认为是闭包(closure).<br><strong>返回闭包时牢记一点：返回函数不要引用任何循环变量，或者后续会发生变化的变量。</strong></p><span id="more"></span><p><strong>闭包示例：</strong></p><pre><code># 示例1def create_pointer(my_string):    def pointer(n):        return my_string[n]    return pointerpointer = create_pointer(&#39;my name is Molly&#39;)pointer(5)# 示例2def count():fs = []for i in range(1, 4):    def f():        # print(id(i))        return i*i    fs.append(f)return fsf1, f2, f3 = count()print(f1())print(f2())print(f3())# 返回闭包时牢记一点：返回函数不要引用任何循环变量，或者后续会发生变化的变量。def count():def f(j):    def g():        # print(id(j))        return j*j    return gfs = []for i in range(1, 4):    fs.append(f(i)) # f(i)立刻被执行，因此i的当前值被传入f()return fsf1, f2, f3 = count()print(f1())print(f2())print(f3())</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;闭包&quot;&gt;&lt;a href=&quot;#闭包&quot; class=&quot;headerlink&quot; title=&quot;闭包&quot;&gt;&lt;/a&gt;闭包&lt;/h1&gt;&lt;p&gt;python中的闭包从表现形式上定义（解释）为：如果在一个内部函数里，对在外部作用域（但不是在全局作用域）的变量进行引用，那么内部函数就被认为是闭包(closure).&lt;br&gt;&lt;strong&gt;返回闭包时牢记一点：返回函数不要引用任何循环变量，或者后续会发生变化的变量。&lt;/strong&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="闭包" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E9%97%AD%E5%8C%85/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="闭包" scheme="http://example.com/tags/%E9%97%AD%E5%8C%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | 装饰器</title>
+    <link href="http://example.com/2021/11/07/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
+    <id>http://example.com/2021/11/07/%E8%A3%85%E9%A5%B0%E5%99%A8/</id>
+    <published>2021-11-08T02:48:41.000Z</published>
+    <updated>2021-11-08T13:02:07.760Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h1><p>顾名思义，从字面意思就可以理解，它是用来”装饰”Python的工具，使得代码更具有Python简洁的风格。换句话说，它是一种函数的函数，因为装饰器传入的参数就是一个函数，然后通过实现各种功能来对这个函数的功能进行增强。<br><strong>注：装饰器输入一个函数，输出一个函数</strong><br><strong>装饰器最大的优势</strong>是用于<strong>解决重复性</strong>的操作，其主要使用的场景有如下几个：<br>1.计算函数运行时间<br>2.给函数打日志<br>3.类型检查<br>当然，如果遇到其他重复操作的场景也可以类比使用装饰器。</p><span id="more"></span><pre><code># 1.原始需求def worker1():    print(&#39;我是一个勤劳的工作者！&#39;)def worker2():    print(&#39;我是一个勤劳的工作者！&#39;)def worker3():    print(&#39;我是一个勤劳的工作者！&#39;)# 2.我现在想要打印一些日志信息def worker1():    print(&#39;worker1 is working...&#39;)    print(&#39;我是一个勤劳的工作者！&#39;)worker1()# 3.装饰器输入一个函数，输出一个函数def print_working(func):    def wrapper():        print(f&#39;&#123;func.__name__&#125; is working...&#39;)        func()    return wrapperdef worker1():    print(&#39;我是一个勤劳的工作者！&#39;)def worker2():    print(&#39;我是一个勤劳的工作者！&#39;)def worker3():    print(&#39;我是一个勤劳的工作者！&#39;)worker1 = print_working(worker1)worker1()worker2= print_working(worker2)worker2()# 4.装饰器@print_workingdef worker1():    print(&#39;我是一个勤劳的工作者！&#39;)@print_workingdef worker2():    print(&#39;我是一个勤劳的工作者！&#39;)@print_workingdef worker3():    print(&#39;我是一个勤劳的工作者！&#39;)worker1()worker2()worker3()# 5.装饰器示例def arg_decorator(func):def wrapper(*args, **kw):    print(f&#39;&#123;func.__name__&#125; is working...&#39;)    func(*args, **kw)return wrapper# 带参数的装饰器@arg_decoratordef student_info(name, age=18, *books, **kw):    print(f&#39;我的名字叫&#123;name&#125;, 今年&#123;age&#125;岁，我有很多本书：&#39;)    for book in books:        print(book)    print(kw)student_info(&#39;Molly&#39;,18, &#39;语文书&#39;,&#39;数学书&#39;,height=170)    </code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;装饰器&quot;&gt;&lt;a href=&quot;#装饰器&quot; class=&quot;headerlink&quot; title=&quot;装饰器&quot;&gt;&lt;/a&gt;装饰器&lt;/h1&gt;&lt;p&gt;顾名思义，从字面意思就可以理解，它是用来”装饰”Python的工具，使得代码更具有Python简洁的风格。换句话说，它是一种函数的函数，因为装饰器传入的参数就是一个函数，然后通过实现各种功能来对这个函数的功能进行增强。&lt;br&gt;&lt;strong&gt;注：装饰器输入一个函数，输出一个函数&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;装饰器最大的优势&lt;/strong&gt;是用于&lt;strong&gt;解决重复性&lt;/strong&gt;的操作，其主要使用的场景有如下几个：&lt;br&gt;1.计算函数运行时间&lt;br&gt;2.给函数打日志&lt;br&gt;3.类型检查&lt;br&gt;当然，如果遇到其他重复操作的场景也可以类比使用装饰器。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="装饰器" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="装饰器" scheme="http://example.com/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | sorted</title>
+    <link href="http://example.com/2021/11/07/sorted/"/>
+    <id>http://example.com/2021/11/07/sorted/</id>
+    <published>2021-11-08T02:46:29.000Z</published>
+    <updated>2021-11-08T12:51:21.694Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="sorted"><a href="#sorted" class="headerlink" title="sorted"></a>sorted</h1><p>sorted() 函数对所有可迭代的对象进行排序操作。<br><strong>sort 与 sorted 区别：</strong><br>sort 是应用在 list 上的方法，sorted 可以对所有可迭代的对象进行排序操作。<br>list 的 sort 方法返回的是对已经存在的列表进行操作，而内建函数 sorted 方法返回的是一个新的 list，而不是在原来的基础上进行的操作。</p><span id="more"></span><p><strong>sorted 语法：</strong><br>sorted(iterable, key=None, reverse=False)<br>参数说明：<br>    iterable – 可迭代对象。<br>    key – 主要是用来进行比较的元素，只有一个参数，具体的函数的参数就是取自于可迭代对象中，指定可迭代对象中的一个元素来进行排序。<br>    reverse – 排序规则，reverse = True 降序 ， reverse = False 升序（默认）。<br>返回值:返回重新排序的列表。<br><strong>示例：</strong><br>sorted([36, 5, -12, 9, -21])</p><p>sorted([36, 5, -12, 9, -21], reverse=True)</p><p>sorted([36, 5, -12, 9, -21], key=abs)   # 按绝对值排序key指定的函数将作用于list的每一个元素上，并根据key函数返回的结果进行排序</p><p>list(map(abs, [36, 5, -12, 9, -21]))</p><p>points = [(5,2), (7,3), (3,4),(1,1),(2,6)]  # 按x坐标排序 y坐标排序 和0点距离排序</p><p>f_x = lambda x:x[0]<br>sorted(points, key=f_x)</p><p>f_y = lambda x:x[1]<br>sorted(points, key=f_y)</p><p>f_r = lambda x:x[0]**2+x[1]**2<br>sorted(points, key=f_r)</p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;sorted&quot;&gt;&lt;a href=&quot;#sorted&quot; class=&quot;headerlink&quot; title=&quot;sorted&quot;&gt;&lt;/a&gt;sorted&lt;/h1&gt;&lt;p&gt;sorted() 函数对所有可迭代的对象进行排序操作。&lt;br&gt;&lt;strong&gt;sort 与 sorted 区别：&lt;/strong&gt;&lt;br&gt;sort 是应用在 list 上的方法，sorted 可以对所有可迭代的对象进行排序操作。&lt;br&gt;list 的 sort 方法返回的是对已经存在的列表进行操作，而内建函数 sorted 方法返回的是一个新的 list，而不是在原来的基础上进行的操作。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="sorted" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/sorted/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="sorted" scheme="http://example.com/tags/sorted/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | MapReduce</title>
+    <link href="http://example.com/2021/11/07/MapReduce/"/>
+    <id>http://example.com/2021/11/07/MapReduce/</id>
+    <published>2021-11-08T02:44:47.000Z</published>
+    <updated>2021-11-08T12:47:47.806Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="map-and-reduce"><a href="#map-and-reduce" class="headerlink" title="map and reduce"></a>map and reduce</h1><p>1.map()<br>map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。</p><span id="more"></span><p><strong>例1：</strong></p><pre><code>ls = [1,2,3,4,5,6,7,8,9]fx = lambda x:x**2rst = map(fx, ls)print(list(rst))</code></pre><p><strong>例2：</strong>   </p><pre><code>int2str = lambda x : str(x)rst = map(int2str, ls)list(rst)</code></pre><p>2.reduce()<br>reduce: 用传给 reduce 中的函数 function（有两个参数）先对集合中的第 1、2 个元素进行操作，得到的结果再与第三个数据用 function 函数运算，依此类推，最后得到一个结果。<br><strong>例1：</strong></p><pre><code>from functools import reduce# 从python3开始，reduce函数移动到了functools这个包，每次使用前要先importmul_xy = lambda x, y: x*yreduce(mul_xy, [1, 3, 5, 7, 9])</code></pre><p><strong>例2：</strong>  </p><pre><code># 求n的阶乘from functools import reducen = int(input(&quot;请输入一个数：&quot;))jiecheng = lambda x, y: x * yreduce(jiecheng, [i for i in range(1, n+1)])</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;map-and-reduce&quot;&gt;&lt;a href=&quot;#map-and-reduce&quot; class=&quot;headerlink&quot; title=&quot;map and reduce&quot;&gt;&lt;/a&gt;map and reduce&lt;/h1&gt;&lt;p&gt;1.map()&lt;br&gt;map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="map reduce" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/map-reduce/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="map" scheme="http://example.com/tags/map/"/>
+    
+    <category term="reduce" scheme="http://example.com/tags/reduce/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python | 高阶函数</title>
+    <link href="http://example.com/2021/11/07/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/"/>
+    <id>http://example.com/2021/11/07/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</id>
+    <published>2021-11-08T02:41:28.000Z</published>
+    <updated>2021-11-08T12:42:14.930Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h1><p>高阶函数：一个函数可以接收另一个函数作为参数，这种函数就称为高阶函数</p><span id="more"></span><h1 id="print本身是一个内建函数"><a href="#print本身是一个内建函数" class="headerlink" title="print本身是一个内建函数"></a>print本身是一个内建函数</h1><pre><code>print(&#39;hello!&#39;)</code></pre><h1 id="函数名其实就是指向函数的变量！"><a href="#函数名其实就是指向函数的变量！" class="headerlink" title="函数名其实就是指向函数的变量！"></a>函数名其实就是指向函数的变量！</h1><pre><code>my_print = print my_print(&#39;a&#39;)</code></pre><h1 id="那么，函数的名字也可以作为一个变量，传入其它函数"><a href="#那么，函数的名字也可以作为一个变量，传入其它函数" class="headerlink" title="那么，函数的名字也可以作为一个变量，传入其它函数"></a>那么，函数的名字也可以作为一个变量，传入其它函数</h1><pre><code>def func_x(x, f):    return f(x)func_x(-1, abs)</code></pre><h1 id="一个函数可以接收另一个函数作为参数，这种函数就称之为高阶函数。"><a href="#一个函数可以接收另一个函数作为参数，这种函数就称之为高阶函数。" class="headerlink" title="一个函数可以接收另一个函数作为参数，这种函数就称之为高阶函数。"></a>一个函数可以接收另一个函数作为参数，这种函数就称之为高阶函数。</h1><pre><code>int2str = lambda x : str(x)func_x(-112, int2str)</code></pre><h1 id="一个更复杂的例子"><a href="#一个更复杂的例子" class="headerlink" title="一个更复杂的例子"></a>一个更复杂的例子</h1><pre><code>def func_xy(x, y, f):    return f(x,y)add = lambda x,y : x+y mul = lambda x,y : x*y SS = lambda x,y : x**2 + y**2print(func_xy(1,2,add))print(func_xy(1,2,mul))print(func_xy(1,2,SS))</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;高阶函数&quot;&gt;&lt;a href=&quot;#高阶函数&quot; class=&quot;headerlink&quot; title=&quot;高阶函数&quot;&gt;&lt;/a&gt;高阶函数&lt;/h1&gt;&lt;p&gt;高阶函数：一个函数可以接收另一个函数作为参数，这种函数就称为高阶函数&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="高阶函数" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="高阶函数" scheme="http://example.com/tags/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>pandas | 文本数据处理</title>
@@ -341,226 +555,6 @@
     <category term="requests" scheme="http://example.com/tags/requests/"/>
     
     <category term="爬虫" scheme="http://example.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>win32com | 汇总excel表</title>
-    <link href="http://example.com/2021/11/04/%E6%B1%87%E6%80%BBexcel%E8%A1%A8/"/>
-    <id>http://example.com/2021/11/04/%E6%B1%87%E6%80%BBexcel%E8%A1%A8/</id>
-    <published>2021-11-05T02:41:31.000Z</published>
-    <updated>2021-11-05T02:43:31.691Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="汇总excel表"><a href="#汇总excel表" class="headerlink" title="汇总excel表"></a>汇总excel表</h1><p>程序实现汇总多个excel表格并生成目录。</p><span id="more"></span><p>代码：</p><pre><code>import os  # 用于获取目标文件所在路径import win32comimport win32compath = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径files = []for file in os.listdir(path):    if file.endswith(&quot;.xls&quot;) or file.endswith(&quot;.xlsx&quot;):  # 只获取&quot;.xls&quot;后缀的文件        files.append(path + file)# print(files)excel_app = win32com.client.Dispatch(&quot;Excel.Application&quot;)excel_app.Visible = False  # 不显示Excel文件excel_app.DisplayAlerts = False# 新建excel工作簿wb = excel_app.Workbooks.Add()wb.SaveAs(os.getcwd() + &quot;\\汇总.xlsx&quot;)ws = wb.Worksheets(1)ws.Name = &quot;目录&quot;for i in range(len(files)):    file_name = files[i].split(&quot;\\&quot;)[-1].split(&quot;.&quot;)[0]    ws.Range(&quot;A&quot; + str(i + 1)).Value = file_name    # 读取子文件    wb_sub = excel_app.Workbooks.Open(files[i])    ws_sub = wb_sub.ActiveSheet  # #获取活动工作表    ws_sub.Copy(ws)  # 复制工作表到汇总表    wb.ActiveSheet.Name = file_name  # 更改工作表名    wb_sub.Close()    print(f&quot;已复制文件 &#123;file_name&#125;&quot;)# 将“目录”工作表移动到最前面first_sheet = files[0].split(&quot;\\&quot;)[-1].split(&quot;.&quot;)[0]wb.Worksheets(&quot;目录&quot;).Move(wb.Worksheets(first_sheet))wb.Save()wb.Close()excel_app.Quit()</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;汇总excel表&quot;&gt;&lt;a href=&quot;#汇总excel表&quot; class=&quot;headerlink&quot; title=&quot;汇总excel表&quot;&gt;&lt;/a&gt;汇总excel表&lt;/h1&gt;&lt;p&gt;程序实现汇总多个excel表格并生成目录。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="win32com" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/win32com/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="win32com" scheme="http://example.com/tags/win32com/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>os | 批量新建文件夹</title>
-    <link href="http://example.com/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/"/>
-    <id>http://example.com/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</id>
-    <published>2021-11-05T02:22:22.000Z</published>
-    <updated>2021-11-05T02:24:08.537Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p><span id="more"></span><p>代码：</p><pre><code>import osfrom datetime import datetimefrom time import time, localtime, strftimefrom tkinter import Tk, Entry, Button, Listbox, X, Y, END, Scrollbar, RIGHT, BOTTOM, HORIZONTAL, StringVar, Labelfrom tkinter.filedialog import askdirectoryclass MainGUI():    def __init__(self):        myWindow = Tk()        myWindow.title(&quot;批量新建文件夹&quot;)        # 设置窗口大小        myWindow.geometry(&#39;590x400&#39;)        # 增加标签        self.label_1 = Label(myWindow, text=&#39; 目标目录:&#39;)        self.label_1.place(x=10, y=10, width=70, height=30)        self.label_2 = Label(myWindow, text=&#39;文件夹数量:&#39;)        self.label_2.place(x=10, y=50, width=70, height=30)        # 增加文本框        addr = StringVar(value=&#39;C:\\Users\\xxxx\\Desktop&#39;)  # 文本框默认显示的内容        self.input_entry = Entry(myWindow, highlightcolor=&#39;red&#39;, highlightthickness=1, textvariable=addr)        self.input_entry.place(x=80, y=10, width=410, height=30)        self.btn_in = Button(myWindow, text=&#39;选择目录&#39;, command=self.select_dir1, width=10, height=1)        self.btn_in.place(x=500, y=10)        folder_quantity = str(self.get_folder_qty())  # 从日志文件`log.txt`中读取最近使用过的文件夹数量        def_qty = StringVar(value=folder_quantity)        self.folderQty_entry = Entry(myWindow, highlightcolor=&#39;blue&#39;, highlightthickness=1, textvariable=def_qty)        self.folderQty_entry.place(x=80, y=50, width=410, height=30)        self.btn_exe = Button(myWindow, text=&#39;执行新建&#39;, command=self.create_folders, width=10, height=1)        self.btn_exe.place(x=500, y=50)        # 增加列表框        self.result_show = Listbox(myWindow, bg=&#39;Azure&#39;)        self.result_show.place(x=10, y=100, width=570, height=290)        self.sbY = Scrollbar(self.result_show, command=self.result_show.yview)  # 在列表框中增加Y轴滚动条        self.sbY.pack(side=RIGHT, fill=Y)        self.result_show.config(yscrollcommand=self.sbY.set)        self.sbX = Scrollbar(self.result_show, command=self.result_show.xview, orient=HORIZONTAL)  # 在列表框中增加X轴滚动条        self.sbX.pack(side=BOTTOM, fill=X)        self.result_show.config(xscrollcommand=self.sbX.set)        myWindow.mainloop()    def select_dir1(self):        self.input_entry.delete(0, END)        self.input_entry.insert(0, askdirectory(initialdir=&quot;D:\\&quot;))    def create_folders(self):        date = self.get_current_date()  # 获取日期        qty = int(self.folderQty_entry.get())  # 获取文本框中文件夹数量，并转为整数        for i in range(1, qty + 1):            folder = self.input_entry.get() + &quot;\\&quot; + date + &#39;-&#39; + str(i)            # 判断是否已经存在该目录            if not os.path.exists(folder):                # 目录不存在，进行创建操作                os.makedirs(folder)  # 使用os.makedirs()方法创建目录                f = f&quot;目录新建成功：&#123;folder&#125;&quot;  # 创建一个显示项                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中            else:                f = f&quot;目录已存在：&#123;folder&#125;&quot;  # 创建一个显示项                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中        f = &quot;-&quot; * 100  # 创建分割线        self.result_show.insert(&quot;end&quot;, f)  # 将分割线添加到列表框        f = f&quot;程序运行完成，请关闭窗口退出.&quot;  # 创建一个显示项        self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框        f = &quot; &quot; * 100        self.result_show.insert(&quot;end&quot;, f)  # 将以上空格添加到列表框        self.save_recent_folder_qty()  # 保存最新的文件夹数量    @staticmethod    def get_current_date():        time_stamp = time()        local_time = localtime(time_stamp)        str_time_month = int(strftime(&#39;%m&#39;, local_time))        str_time_day = int(strftime(&#39;%d&#39;, local_time))        return str(str_time_month) + &quot;.&quot; + str(str_time_day)    @staticmethod    def get_folder_qty():        &#39;&#39;&#39;从log.txt文件中获取最近的文件夹数量，若没有则返回0&#39;&#39;&#39;        log_file = os.getcwd() + &quot;\\log.txt&quot;        if os.path.exists(log_file):            with open(log_file, &quot;r&quot;) as f:                qty = f.readline()                return int(qty)        else:            return 0    def save_recent_folder_qty(self):        &quot;&quot;&quot;保存最近的文件夹数量&quot;&quot;&quot;        log_file = os.getcwd() + &quot;\\log.txt&quot;        with open(log_file, &quot;w&quot;) as f:            recent_qty = str(self.folderQty_entry.get())            f.write(recent_qty)if __name__ == &quot;__main__&quot;:    MainGUI()</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;批量新建文件夹&quot;&gt;&lt;a href=&quot;#批量新建文件夹&quot; class=&quot;headerlink&quot; title=&quot;批量新建文件夹&quot;&gt;&lt;/a&gt;批量新建文件夹&lt;/h1&gt;&lt;p&gt;程序实现在指定目录下批量生成文件夹。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="内置模块" scheme="http://example.com/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/"/>
-    
-    <category term="os" scheme="http://example.com/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/os/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="os" scheme="http://example.com/tags/os/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pandas | 一键更新Excel中的图表</title>
-    <link href="http://example.com/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/"/>
-    <id>http://example.com/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/</id>
-    <published>2021-11-02T03:41:37.000Z</published>
-    <updated>2021-11-05T02:08:35.614Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p><span id="more"></span><p><strong>代码实现：</strong></p><pre><code>import pandas as pdfile = &#39;生产订单.xlsx&#39;df = pd.read_excel(file)df.fillna(0, inplace=True)df[&quot;数量&quot;] = df[&quot;数量&quot;].astype(&#39;int&#39;)# 增加周数字段df[&quot;周数&quot;] = df[&quot;日期&quot;].dt.weekdf[&quot;年份&quot;] = df[&quot;日期&quot;].dt.year# print(df.head())# 获取当前周数import datetimeyear, current_week, day = datetime.datetime.now().isocalendar()# print(current_week)# 只获取最近12周的数据df_required = df[(df[&quot;周数&quot;] &gt;= (current_week - 36)) &amp; (df[&quot;周数&quot;] &lt;= (current_week - 24))]# print(df_required[&#39;年份&#39;])result = df_required.groupby([&quot;周数&quot;, &quot;年份&quot;])[&#39;数量&#39;].sum().reset_index()  # reset后才是DF，不然是Series# print(result)## # print(result[result[&quot;年份&quot;]==2019][&quot;数量&quot;])## 如果有中文，需要配置中文字体，不然会显示成方框import matplotlib as mplimport matplotlib.pyplot as pltimport numpy as npplt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签# 数据和标签qty_2019 = result[result[&quot;年份&quot;] == 2019][&quot;数量&quot;]qty_2020 = result[result[&quot;年份&quot;] == 2020][&quot;数量&quot;]print(qty_2020)x_label = result[result[&quot;年份&quot;] == 2019][&quot;周数&quot;]# 设置字体大小mpl.rcParams[&#39;font.size&#39;] = 12# 设置图片大小plt.figure(figsize=(12, 6))# 设置柱形图宽度bar_width = 0.45index = np.arange(13)qty_2019_list = [qty for qty in qty_2019]qty_2020_list = [qty for qty in qty_2020]print(f&quot;index: &#123;len(index)&#125;&quot;)print(len(qty_2019_list))print(len(qty_2020_list))# 绘制2019年数据qty1 = plt.bar(index, qty_2019, bar_width, color=&#39;#336633&#39;, label=&quot;2019&quot;)# 绘制2020年数据qty2 = plt.bar(index + bar_width, qty_2020, bar_width, color=&#39;#6666CC&#39;, label=&quot;2020&quot;)# X,Y轴标题plt.xticks(index + bar_width, x_label)plt.xlabel(&quot;周数&quot;, fontsize=14)plt.ylabel(&quot;产品数量/台&quot;, fontsize=14)# 图表标题plt.title(u&#39;每周生产订单对比&#39;, fontsize=20)# 图例显示plt.legend()# 添加数据标签def add_labels(qtys):    for qty in qtys:        height = qty.get_height()        plt.text(qty.get_x() + qty.get_width() / 2, height, height, ha=&#39;center&#39;, va=&#39;bottom&#39;)        # 柱形图边缘用白色填充        qty.set_edgecolor(&#39;white&#39;)add_labels(qty1)add_labels(qty2)plt.savefig(&#39;prod_order.png&#39;)# 按部门计算订单数量order_2019 = df_required[df_required[&quot;年份&quot;] == 2019]# print(order_2019)dept_2019 = order_2019[&quot;部门&quot;].value_counts()# print(dept_2019)order_2020 = df_required[df_required[&quot;年份&quot;] == 2020]# print(order_2020)dept_2020 = order_2020[&quot;部门&quot;].value_counts()# print(dept_2020)# 绘制饼图import matplotlib as mplimport numpy as npplt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签mpl.rcParams[&#39;font.size&#39;] = 12fig = plt.figure(figsize=(12, 6))axl = fig.add_subplot(1, 2, 1)def my_label(pct, allvals):    absolute = int(pct / 100. * np.sum(allvals))    return &quot;&#123;:.1f&#125;%\n(&#123;:d&#125;)&quot;.format(pct, absolute)explode = (0.1, 0, 0, 0, 0)plt.pie(dept_2019, autopct=lambda x: my_label(x, dept_2019), explode=explode, labels=dept_2019.index, shadow=True,        startangle=150)plt.title(&quot;各部门订单比例\n(最近12周)_2019&quot;, fontsize=20)# plt.label(&quot;2019&quot;,fontsize = 14)ax2 = fig.add_subplot(1, 2, 2)plt.pie(dept_2020, autopct=lambda x: my_label(x, dept_2020), explode=explode, labels=dept_2020.index, shadow=True,        startangle=150)plt.title(&quot;各部门订单比例\n(最近12周)_2020&quot;, fontsize=20)plt.savefig(&#39;order_byDept.png&#39;)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;一键更新Excel中的图表&quot;&gt;&lt;a href=&quot;#一键更新Excel中的图表&quot; class=&quot;headerlink&quot; title=&quot;一键更新Excel中的图表&quot;&gt;&lt;/a&gt;一键更新Excel中的图表&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;场景：&lt;/strong&gt; 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="pandas" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/"/>
-    
-    
-    <category term="matplotlib" scheme="http://example.com/tags/matplotlib/"/>
-    
-    <category term="pandas" scheme="http://example.com/tags/pandas/"/>
-    
-    <category term="numpy" scheme="http://example.com/tags/numpy/"/>
-    
-    <category term="datetime" scheme="http://example.com/tags/datetime/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>生成器 | 生成器输出小于maxnum的偶数或奇数</title>
-    <link href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E5%B0%8F%E4%BA%8Emaxnum%E7%9A%84%E5%81%B6%E6%95%B0%E6%88%96%E5%A5%87%E6%95%B0/"/>
-    <id>http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E5%B0%8F%E4%BA%8Emaxnum%E7%9A%84%E5%81%B6%E6%95%B0%E6%88%96%E5%A5%87%E6%95%B0/</id>
-    <published>2021-11-01T09:51:53.000Z</published>
-    <updated>2021-11-02T02:29:10.162Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="生成器输出小于max-num的偶数或奇数"><a href="#生成器输出小于max-num的偶数或奇数" class="headerlink" title="生成器输出小于max_num的偶数或奇数"></a>生成器输出小于max_num的偶数或奇数</h1><p>代码：</p><pre><code># 1.输出小于max_num的偶数或奇数def odd(max_num):        i = 1    while i &lt; max_num:        if i % 2 == 0:  # if % 2 == 1可生成奇数            yield i        i += 1g = odd(10)for n in g:    print(n)# 2.输出任意个偶数或奇数def odd():i = 2while i:    if i % 2 == 0:  # if % 2 == 1可生成奇数        yield i    i += 1g = odd()for i in range(100):    print(next(g))</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;生成器输出小于max-num的偶数或奇数&quot;&gt;&lt;a href=&quot;#生成器输出小于max-num的偶数或奇数&quot; class=&quot;headerlink&quot; title=&quot;生成器输出小于max_num的偶数或奇数&quot;&gt;&lt;/a&gt;生成器输出小于max_num的偶数或奇数&lt;/h1&gt;&lt;</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="生成器" scheme="http://example.com/categories/python/%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    
-    
-    <category term="生成器" scheme="http://example.com/tags/%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>生成器 | 生成器输出fibonacci数列</title>
-    <link href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BAfibonacci%E6%95%B0%E5%88%97/"/>
-    <id>http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BAfibonacci%E6%95%B0%E5%88%97/</id>
-    <published>2021-11-01T09:47:51.000Z</published>
-    <updated>2021-11-01T09:49:36.831Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="生成器输出小于max-num的fibonacci数列"><a href="#生成器输出小于max-num的fibonacci数列" class="headerlink" title="生成器输出小于max_num的fibonacci数列"></a>生成器输出小于max_num的fibonacci数列</h1><p>代码：</p><pre><code>def feb(max_num):    n_1 = 1    n_2 = 1    n = 0    while n &lt; max_num:        if n == 0 or n == 1:            yield 1            n += 1        else:            yield n_1 + n_2            new_n_2 = n_1            n_1 = n_1 + n_2            n_2 = new_n_2            n += 1g = feb(5)for n in g:    print(n)</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;生成器输出小于max-num的fibonacci数列&quot;&gt;&lt;a href=&quot;#生成器输出小于max-num的fibonacci数列&quot; class=&quot;headerlink&quot; title=&quot;生成器输出小于max_num的fibonacci数列&quot;&gt;&lt;/a&gt;生成器输出小于m</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="生成器" scheme="http://example.com/categories/python/%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    
-    
-    <category term="生成器" scheme="http://example.com/tags/%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>生成器 | 生成器输出质数</title>
-    <link href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/"/>
-    <id>http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/</id>
-    <published>2021-11-01T09:07:02.000Z</published>
-    <updated>2021-11-01T09:29:27.848Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="生成器输出小于max-num的质数"><a href="#生成器输出小于max-num的质数" class="headerlink" title="生成器输出小于max_num的质数"></a>生成器输出小于max_num的质数</h1><p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。<br>而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前<br>面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。</p><span id="more"></span><p>代码：</p><pre><code>def factor(max_num):    # 这是一个函数  用于输出所有小于max_num的质数    factor_list = []    n = 2    while n &lt; max_num:        find = False        for f in factor_list:            # 先看看列表里面有没有能整除它的            if n % f == 0:                find = True                break        if not find:            factor_list.append(n)            yield n        n += 1g = factor(10)for n in g:    print(n)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;生成器输出小于max-num的质数&quot;&gt;&lt;a href=&quot;#生成器输出小于max-num的质数&quot; class=&quot;headerlink&quot; title=&quot;生成器输出小于max_num的质数&quot;&gt;&lt;/a&gt;生成器输出小于max_num的质数&lt;/h1&gt;&lt;p&gt;通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。&lt;br&gt;而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前&lt;br&gt;面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="生成器" scheme="http://example.com/categories/python/%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    
-    
-    <category term="生成器" scheme="http://example.com/tags/%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
-    <link href="http://example.com/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/"/>
-    <id>http://example.com/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</id>
-    <published>2021-10-31T14:07:12.000Z</published>
-    <updated>2021-10-31T14:09:22.349Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p><span id="more"></span><p>实现代码：</p><pre><code>import requestsfrom bs4 import BeautifulSoupurl = f&#39;http://blog.sina.com.cn/s/articlelist_5119330124_0_1.html&#39;wb_data = requests.get(url)soup = BeautifulSoup(wb_data.content)# 获取当页所有文章的标题和链接# print(soup.select(&#39;.atc_title&#39;))# 获取当页所有文章的发表时间# print(soup.select(&#39;.atc_tm&#39;))# print(soup.select(&#39;.atc_title&#39;)[0].select(&#39;a&#39;))# [&lt;a href=&quot;http://blog.sina.com.cn/s/blog_13122c74c0102zdsy.html&quot; target=&quot;_blank&quot; title=&quot;&quot;&gt;投资难在慢成毁于速成&lt;/a&gt;]# print(soup.select(&#39;.atc_title&#39;)[0].select(&#39;a&#39;)[0].get(&quot;href&quot;))# http://blog.sina.com.cn/s/blog_13122c74c0102zdsy.html# print(soup.select(&#39;.atc_title&#39;)[0].select(&#39;a&#39;)[0].text)# print(soup.select(&#39;.atc_tm&#39;)[0].text)# 获取所有博客文章的链接import requestsfrom bs4 import BeautifulSoupall_links = &#123;&#125;for i in range(1, 6):    url = f&#39;http://blog.sina.com.cn/s/articlelist_5119330124_0_&#123;i&#125;.html&#39;    wb_data = requests.get(url)    soup = BeautifulSoup(wb_data.content)    links = soup.select(&#39;.atc_title&#39;)    times = soup.select(&#39;.atc_tm&#39;)    for i in range(len(links)):        http_link = links[i].select(&#39;a&#39;)[0].get(&#39;href&#39;)        title = links[i].text.strip()        time = times[i].text        all_links[title] = [http_link, time]# print(len(all_links))# 获取单篇文章中的文字url = &#39;http://blog.sina.com.cn/s/blog_13122c74c0102zbt3.html&#39;wb_data = requests.get(url)soup = BeautifulSoup(wb_data.content)article = soup.select(&quot;.articalContent.newfont_family&quot;)# print(article)# print(article[0].text)# print(article[0].text.replace(&quot;\xa0&quot;, &quot;&quot;))# 获取单篇文章中的图片链接url = &#39;http://blog.sina.com.cn/s/blog_13122c74c0102zbud.html&#39;wb_data = requests.get(url)soup = BeautifulSoup(wb_data.content)img_link = soup.select(&quot;.articalContent.newfont_family&quot;)[0].find_all(&quot;img&quot;)[0].get(&quot;real_src&quot;)# 图片下载函数def downloadImg(img_url, file_path):    req = requests.get(url=img_url)    with open(file_path, &#39;wb&#39;) as f:        f.write(req.content)downloadImg(r&#39;http://s8.sinaimg.cn/middle/005AsbCIzy7vEfdM1M599&#39;,            r&#39;..\实例67_Python爬取博客的所有文章并存为带目录的word文档\1.jpg&#39;)# 写入标题，内容到word文件import docxfrom docx.oxml.ns import qn  # 用于应用中文字体def to_word(all_links):    header = &#123;        &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) &quot;                      &quot;Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0&quot;&#125;    doc = docx.Document()  # 新建word文档    doc.styles[&#39;Normal&#39;].font.name = u&#39;宋体&#39;    doc.styles[&#39;Normal&#39;]._element.rPr.rFonts.set(qn(&#39;w:eastAsia&#39;), u&#39;宋体&#39;)    counter = 0  # 计数器，用于记录写入word的文章数    for title in all_links.keys():        doc.add_heading(title, 1)        date = all_links[title][1][:10]  # 只取日期，不要时间        doc.add_paragraph(date)        wb_data = requests.get(all_links[title][0], headers=header)        soup = BeautifulSoup(wb_data.content)        article = soup.select(&quot;.articalContent.newfont_family&quot;)        # 有些文章被加密，获取不到内容，此时article为空，所以加个if语句判断        if article:            text = article[0].text.replace(&quot;\xa0&quot;, &quot;&quot;)            doc.add_paragraph(text)            print(f&quot;写入文章 &#123;title&#125; 。&quot;)            counter += 1    print(f&quot;共写入 &#123;counter&#125; 篇文章。&quot;)    doc.save(&quot;新浪微博文章.docx&quot;)to_word(all_links)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Python爬取博客的所有文章并存为带目录的word文档&quot;&gt;&lt;a href=&quot;#Python爬取博客的所有文章并存为带目录的word文档&quot; class=&quot;headerlink&quot; title=&quot;Python爬取博客的所有文章并存为带目录的word文档&quot;&gt;&lt;/a&gt;Python爬取博客的所有文章并存为带目录的word文档&lt;/h1&gt;&lt;p&gt;Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="requests" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="requests" scheme="http://example.com/tags/requests/"/>
-    
-    <category term="BeautifulSoup" scheme="http://example.com/tags/BeautifulSoup/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>win32com | 识别加密word文件</title>
-    <link href="http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/"/>
-    <id>http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/</id>
-    <published>2021-10-31T13:32:56.000Z</published>
-    <updated>2021-11-01T09:04:03.208Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="识别加密word文件"><a href="#识别加密word文件" class="headerlink" title="识别加密word文件"></a>识别加密word文件</h1><p>Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。<br>因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。<br>如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。</p><span id="more"></span><p>实现代码：</p><pre><code>from win32com import client as wc  # 导入模块file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序doc = word.Documents.Open(file)  # 打开word文件doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件doc.Close()  # 关闭原来word文件word.Quit()# 增加异常处理语句import shutil  # 用于操作文件和文件夹from win32com import client as wcfile = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;try:    word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序    doc = word.Documents.Open(file)  # 打开word文件    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件    doc.Close()  # 关闭原来word文件    word.Quit()except:    # 将有密码的文件移动到专门的文件夹    shutil.move(file, r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\有密码文件&quot;)    print(f&quot;已移动加密文件 &#123;file&#125;&quot;)# #文件有“打开密码”的情况# import docx# doc = docx.Document(&#39;docx文件\\报告-有打开密码.docx&#39;)# PackageNotFoundError: Package not found at &#39;docx文件\报告-有打开密码.docx&#39;# 文件有“修改密码”的情况import docxdoc = docx.Document(&#39;docx文件\\报告-有修改密码.docx&#39;)p = doc.paragraphs[0]pNew = p.insert_paragraph_before()run = pNew.add_run(&quot;测试&quot;)doc.save(&quot;docx文件\\报告-有修改密码.docx&quot;)import docximport shutilfile = &quot;docx文件\\报告-有打开密码.docx&quot;try:    doc = docx.Document(file)    passexcept:    shutil.move(file, &#39;有密码文件&#39;)    print(f&quot;已移动加密文件 &#123;file&#125; 到指定文件夹&quot;)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;识别加密word文件&quot;&gt;&lt;a href=&quot;#识别加密word文件&quot; class=&quot;headerlink&quot; title=&quot;识别加密word文件&quot;&gt;&lt;/a&gt;识别加密word文件&lt;/h1&gt;&lt;p&gt;Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。&lt;br&gt;因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。&lt;br&gt;如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    
-    <category term="win32com" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/win32com/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="win32com" scheme="http://example.com/tags/win32com/"/>
-    
-    <category term="python-docx" scheme="http://example.com/tags/python-docx/"/>
-    
-    <category term="shutil" scheme="http://example.com/tags/shutil/"/>
     
   </entry>
   

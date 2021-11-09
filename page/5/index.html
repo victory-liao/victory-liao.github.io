@@ -190,6 +190,1003 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/" class="post-title-link" itemprop="url">pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 01:36:52 / Modified: 01:38:14" itemprop="dateCreated datePublished" datetime="2021-10-29T01:36:52-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
+<pre><code>import pandas as pd
+
+df = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)
+df.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03
+
+df[&#39;月份&#39;] = df[&#39;日期&#39;].dt.month
+df.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
+
+df5 = df[df[&#39;月份&#39;] == 5]
+df5.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 9649     A19X9280200     EA     36012XR0413200     LC009650     PC09650     66     2019-05-03     5
+# 9650     A19X9280200     EA     60022XR2298300     LC009651     PC09651     66     2019-05-03     5
+# 9651     A19X9280561     EA     72004XR2000001     LC009652     PC09652     604     2019-05-03     5
+# 9652     A19X9286759     EA     62010XR0161048     LC009653     PC09653     50     2019-05-03     5
+# 9653     A19X9286759     EA     62010XR0502208     LC009654     PC09654     100     2019-05-03     5
+
+df8 = df[df[&#39;月份&#39;] == 8]
+df8.head()
+
+
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 17213     A19X9317364     EA     62010XR0500126     LC017214     PC17214     230     2019-08-01     8
+# 17214     A19X9317364     EA     61010XR1120100     LC017215     PC17215     230     2019-08-01     8
+# 17215     A19X9317364     EA     62012XR0102262     LC017216     PC17216     230     2019-08-01     8
+# 17216     A19X9317364     EA     62010XR050150A     LC017217     PC17217     950     2019-08-01     8
+# 17217     A19X9317364     EA     61011XR1150500     LC017218     PC17218     230     2019-08-01     8
+
+
+# 去掉不需要的月份的数据
+def Remove_data(df, month=[]):
+    for i in month:
+        df = df[df[&#39;月份&#39;] != i]
+    return df
+
+
+df_rest = Remove_data(df, [5, 8])
+df_rest.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
+
+with pd.ExcelWriter(&#39;物料表_1.xlsx&#39;, engine=&#39;openpyxl&#39;,
+                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:
+    df5.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;5月&#39;, index=False)
+    df8.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;8月&#39;, index=False)
+    df_rest.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;剩余月份&#39;, index=False)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+wb = load_workbook(&quot;物料表_1.xlsx&quot;)
+for sheetname in wb.sheetnames:
+    ws = wb[sheetname]
+
+    # 调整列宽
+    ws.column_dimensions[&#39;A&#39;].width = 12
+    ws.column_dimensions[&#39;C&#39;].width = 15.5
+    ws.column_dimensions[&#39;G&#39;].width = 10
+
+    # 设置字号，对齐，缩小字体填充，加边框
+    for row_number in range(2, ws.max_row + 1):
+        for col_number in range(1, ws.max_column + 1):
+            c = ws.cell(row=row_number, column=col_number)
+            c.font = Font(size=10)
+            c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+            c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+wb.save(&quot;物料表_1.xlsx&quot;)
+</code></pre>
+<p><a href="物料表.xlsx">物料表.xlsx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/" class="post-title-link" itemprop="url">pandas | pandas提取指定数据并保存在原Excel工作簿中</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 01:25:17 / Modified: 01:27:34" itemprop="dateCreated datePublished" datetime="2021-10-29T01:25:17-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="pandas提取指定数据并保存在原Excel工作簿中"><a href="#pandas提取指定数据并保存在原Excel工作簿中" class="headerlink" title="pandas提取指定数据并保存在原Excel工作簿中"></a>pandas提取指定数据并保存在原Excel工作簿中</h1><p>实现代码：</p>
+<pre><code>import pandas as pd
+
+df = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)
+# print(df)
+
+df500 = df[df[&quot;数量&quot;] &gt; 500]
+# print(df500)
+
+with pd.ExcelWriter(&#39;物料表.xlsx&#39;, mode=&#39;a&#39;, engine=&#39;openpyxl&#39;,
+                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:
+    df500.to_excel(writer, sheet_name=&#39;数量大于500&#39;, index=False)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+
+wb = load_workbook(&quot;物料表.xlsx&quot;)
+ws = wb[&quot;数量大于500&quot;]
+
+# 调整列宽
+ws.column_dimensions[&#39;A&#39;].width = 12
+ws.column_dimensions[&#39;C&#39;].width = 15.5
+ws.column_dimensions[&#39;G&#39;].width = 10
+
+# 设置字号，对齐，缩小字体填充，加边框
+for row_number in range(2, ws.max_row + 1):
+    for col_number in range(1, ws.max_column + 1):
+        c = ws.cell(row=row_number, column=col_number)
+        c.font = Font(size=10)
+        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+wb.save(&quot;物料表.xlsx&quot;)
+</code></pre>
+<p><a href="物料表.xlsx">物料表.xlsx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/" class="post-title-link" itemprop="url">random | python出数学练习题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 01:09:35 / Modified: 01:12:24" itemprop="dateCreated datePublished" datetime="2021-10-29T01:09:35-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/random/" itemprop="url" rel="index"><span itemprop="name">random</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python出数学练习题"><a href="#python出数学练习题" class="headerlink" title="python出数学练习题"></a>python出数学练习题</h1><p>实现代码：</p>
+<pre><code># import random
+#
+# for i in range(5):
+#     num1 = random.randint(1, 9)
+#     num2 = random.randint(1, 9)
+#     print(f&quot;&#123;num1&#125; + &#123;num2&#125; = &quot;)
+
+
+# 加法、乘法题
+import random
+data = []  # 储存题目的列表
+group = []  # 中转列表
+while len(data) &lt; 20:  # 题目个数，20行x4列共80个题，刚好放入word文档中的1页
+    num1 = random.randint(0, 9)  # 随机整数1，从0-9中选取
+    num2 = random.randint(0, 9)  # 随机整数2，从0-9中选取
+    group.append(f&quot;&#123;num1&#125; + &#123;num2&#125; = &quot;)  # 数据放入中转列表
+    if len(group) == 4:  # 按四道题分一组
+        data.append(group)  # 数据放入总列表
+        group = []  # 清空中转列表
+print(data)
+
+# # 减法题
+# import random
+#
+# data = []
+# group = []
+# while len(data) &lt; 20:
+#     num1 = random.randint(1, 9)
+#     num2 = random.randint(1, 9)
+#     if num1 &gt; num2:
+#         group.append(f&quot;&#123;num1&#125; - &#123;num2&#125; = &quot;)
+#         if len(group) == 4:
+#             data.append(group)
+#             group = []
+#
+# # print(data)
+
+# # 除法题
+# import random
+#
+# data = []  # 储存题目的列表
+# group = []  # 中转列表
+# while len(data) &lt; 20:
+#     num1 = random.randint(1, 19)
+#     num2 = random.randint(1, 19)
+#     if num1 &gt;= num2 and num1 % num2 == 0:
+#         group.append(f&quot;&#123;num1&#125; ÷ &#123;num2&#125; = &quot;)  # 数据放入中转列表
+#         if len(group) == 4:  # 按四道题分一组
+#             data.append(group)  # 数据放入总列表
+#             group = []  # 清空中转列表
+#
+# print(data)
+
+# 输出到word文件
+def To_word(data, file_name):
+    &quot;&quot;&quot;
+    data:需要传入的列表
+    file_name:word文件的文件名
+    &quot;&quot;&quot;
+    from docx import Document
+    from docx.shared import Pt  # 用于设定字体大小（磅值）
+
+    doc = Document()
+    for i in data:
+        # print(i)
+        row = &quot;\t\t&quot;.join(i)
+        # print(row)
+        doc.add_paragraph(row)
+    # 设置字号
+    for para in doc.paragraphs:
+        for run in para.runs:
+            run.font.size = Pt(16)  # 文字大小磅值
+    doc.save(f&quot;&#123;file_name&#125;.docx&quot;)
+
+To_word(data, &quot;加法题&quot;)
+# To_word(data, &quot;减法题&quot;)
+# To_word(data, &quot;乘法题&quot;)
+# To_word(data, &quot;除法题&quot;)
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/" class="post-title-link" itemprop="url">pdfplumber | 一键提取PDF中的表格到Excel</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-28 18:28:29" itemprop="dateCreated datePublished" datetime="2021-10-28T18:28:29-08:00">2021-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-29 00:32:01" itemprop="dateModified" datetime="2021-10-29T00:32:01-08:00">2021-10-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pdfplumber/" itemprop="url" rel="index"><span itemprop="name">pdfplumber</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
+<pre><code>import os
+import pdfplumber
+from openpyxl import Workbook
+
+path = &#39;PDF&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+key_words = &quot;主要会计数据&quot;
+
+for file in files:
+    with pdfplumber.open(file) as p:
+        wb = Workbook()  # 新建excel工作簿
+        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
+
+        # 获取关键词所在页及下一页的页码
+        pages_wanted = []
+        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
+            if key_words in page.extract_text():
+                pages_wanted.append(index)
+                pages_wanted.append(index + 1)
+                break
+
+        # 提取指定页码里的表格
+        for i in pages_wanted:
+            page = p.pages[i]
+            tables = page.extract_tables()  # 读取表格
+            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
+                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
+                for table in tables:  # 遍历所有列表
+                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
+                        ws.append(row)  # 写入excel表
+        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
+</code></pre>
+<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/" class="post-title-link" itemprop="url">python-docx | 批量修改word文件中的段落格式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-28 18:09:27 / Modified: 18:16:04" itemprop="dateCreated datePublished" datetime="2021-10-28T18:09:27-08:00">2021-10-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/" itemprop="url" rel="index"><span itemprop="name">python-docx</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="批量修改word文件中的段落格式"><a href="#批量修改word文件中的段落格式" class="headerlink" title="批量修改word文件中的段落格式"></a>批量修改word文件中的段落格式</h1><p>实现代码：</p>
+<pre><code>import os
+import docx
+# 定义字体格式
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+
+def F_title(run):
+    # 标题文字
+    run.font.size = Pt(22)  # 文字大小磅值
+    run.bold = True  # 加粗
+    run.font.name = &quot;方正小标宋_GBK&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;方正小标宋_GBK&quot;)  # 字体
+
+
+def F_name_dept(run):
+    # 姓名，部门，日期
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;楷体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
+
+
+def F_main(run):
+    # 正文的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;仿宋&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;仿宋&quot;)  # 字体
+
+
+def F_title1(run):
+    # 标题一的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;黑体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)  # 字体
+
+
+def F_title2(run):
+    # 标题二的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = True  # 加粗
+    run.font.name = &quot;楷体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
+
+
+# 获取待处理的文件的路径
+path = &#39;待处理文件&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+# print(files)
+# 逐个提取文件，设置字体格式
+for file in files:
+    doc = docx.Document(file)
+    for run in doc.paragraphs[0].runs:  # 总标题字体格式
+        F_title(run)
+
+    for para in doc.paragraphs[1:3]:  # 部门、姓名及日期字体格式
+        for run in para.runs:
+            F_name_dept(run)
+
+    title1 = [&quot;一、&quot;, &quot;二、&quot;, &quot;三、&quot;, &quot;四、&quot;]  # 标题一的唯一特征字符串
+    title2 = [&quot;1、&quot;, &quot;2、&quot;, &quot;3、&quot;, &quot;4、&quot;]  # 标题二的唯一特征字符串
+    for para in doc.paragraphs[3:]:
+        if any(i in para.text for i in title1):  # 若该段落是标题一，则应用标题一的字体格式
+            for run in para.runs:
+                F_title1(run)
+        elif any(j in para.text for j in title2):  # 若该段落是标题二，则应用标题二的字体格式
+            for run in para.runs:
+                F_title2(run)
+        else:
+            for run in para.runs:  # 其余都应用正文的字体格式
+                F_main(run)
+    doc.save(&#39;已处理文件\\&#123;&#125;&#39;.format(file.split(&quot;\\&quot;)[1]))
+    
+</code></pre>
+<p>已处理文件：<br><a href="报告-何十.docx">报告-何十.docx</a><br><a href="报告-刘七.docx">报告-刘七.docx</a><br><a href="报告-张三.docx">报告-张三.docx</a><br><a href="报告-朱八.docx">报告-朱八</a><br><a href="报告-李四.docx">报告-李四.docx</a><br><a href="报告-猪八戒.docx">报告-猪八戒.docx</a><br><a href="报告-王五.docx">报告-王五.docx</a><br><a href="报告-秦九.docx">报告-秦九.docx</a><br><a href="报告-赵六.docx">报告-赵六.docx</a><br><a href="报告-黄二.docx">报告-黄二.docx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/" class="post-title-link" itemprop="url">python-docx | python替换word文档中的文字</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-28 05:39:45 / Modified: 05:42:04" itemprop="dateCreated datePublished" datetime="2021-10-28T05:39:45-08:00">2021-10-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/" itemprop="url" rel="index"><span itemprop="name">python-docx</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python替换word文档中的文字"><a href="#python替换word文档中的文字" class="headerlink" title="python替换word文档中的文字"></a>python替换word文档中的文字</h1><p>实现代码：</p>
+<pre><code># -*- coding:utf-8 -*-
+import docx
+
+
+# # 定义函数替换文字块中的字符
+# def info_update(doc, old_info, new_info):
+#     for para in doc.paragraphs:  # 遍历段落
+#         for run in para.runs:  # 遍历文字块
+#             # run.text = run.text.replace(old_info, new_info)  # 替换
+#             print(run.text)
+#
+#
+# doc = docx.Document(&#39;替换前.docx&#39;)
+# info_update(doc, &#39;第四次&#39;, &#39;第五次&#39;)
+# info_update(doc, &#39;2019&#39;, &#39;2020&#39;)
+# info_update(doc, &#39;18&#39;, &#39;10&#39;)
+# doc.save(&#39;替换后.docx&#39;)
+
+# doc = docx.Document(&#39;替换前.docx&#39;)
+# for para in doc.paragraphs:  # 遍历段落
+#     for run in para.runs:  # 遍历文字块
+#         # run.text = run.text.replace(old_info, new_info)  # 替换
+#         print(run.text)
+
+# # 按段落查看文字
+# doc = docx.Document(&#39;替换前.docx&#39;)
+# for para in doc.paragraphs:
+#     print(para.text)
+
+import docx
+from docx.shared import Pt  # 用于设定字体大小(磅值)
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+
+def info_update(doc, old_info, new_info):
+    for para in doc.paragraphs:
+        para.text = para.text.replace(old_info, new_info)
+
+    # 设置第一段（标题）的文字格式
+    for run in doc.paragraphs[0].runs:
+        run.font.size = Pt(14)  # 文字大小磅值
+        run.bold = True  # 加粗
+        run.font.name = &quot;微软雅黑&quot;  # 字体选择
+        # 中文字体应用，固定写法
+        r = run._element.rPr.rFonts  # 字体，固定写法
+        r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)  # 字体
+
+    # 设置第二及后续段落的文字格式
+    for para in doc.paragraphs[1:]:
+        for run in para.runs:
+            run.font.size = Pt(12)  # 文字大小
+            run.bold = False  # 不加粗
+            run.font.name = &quot;微软雅黑&quot;  # 字体选择
+            # 中文字体应用，固定写法
+            r = run._element.rPr.rFonts
+            r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)
+
+
+doc = docx.Document(&#39;替换前.docx&#39;)
+info_update(doc, &quot;第四次&quot;, &quot;第五次&quot;)
+info_update(doc, &quot;2019&quot;, &quot;2020&quot;)
+info_update(doc, &quot;18&quot;, &quot;10&quot;)
+doc.save(&#39;替换后_设置格式.docx&#39;)
+</code></pre>
+<p><a href="替换前.docx">替换前.docx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E8%AF%8D%E4%BA%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/28/%E8%AF%8D%E4%BA%91/" class="post-title-link" itemprop="url">wordcloud | 词云</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-28 00:45:50 / Modified: 00:51:27" itemprop="dateCreated datePublished" datetime="2021-10-28T00:45:50-08:00">2021-10-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/wordcloud/" itemprop="url" rel="index"><span itemprop="name">wordcloud</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h1><p>根据文章中的关键词的词频生成词云图。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/10/28/%E8%AF%8D%E4%BA%91/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/python%E6%96%87%E6%A1%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/27/python%E6%96%87%E6%A1%A3/" class="post-title-link" itemprop="url">文档 | python文档</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-27 19:37:45 / Modified: 19:53:58" itemprop="dateCreated datePublished" datetime="2021-10-27T19:37:45-08:00">2021-10-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">文档</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a target="_blank" rel="noopener" href="https://github.com/ethan-funny/explore-python">github地址</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -366,758 +1363,10 @@ if __name__ == &quot;__main__&quot;:
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/" class="post-title-link" itemprop="url">pypiwin32 | 批量发送不同内容的邮件给不同的收件人</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-27 04:54:32 / Modified: 05:22:09" itemprop="dateCreated datePublished" datetime="2021-10-27T04:54:32-08:00">2021-10-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pypiwin32/" itemprop="url" rel="index"><span itemprop="name">pypiwin32</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="批量发送不同内容的邮件给不同的收件人"><a href="#批量发送不同内容的邮件给不同的收件人" class="headerlink" title="批量发送不同内容的邮件给不同的收件人"></a>批量发送不同内容的邮件给不同的收件人</h1><p>程序实现自动将’年假_按部门’下各个部门的年假情况Excel表格发送给’邮件地址.xlsx’中各个部门的负责人。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/27/python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">os | python批量重命名文件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-27 04:37:41 / Modified: 05:19:21" itemprop="dateCreated datePublished" datetime="2021-10-27T04:37:41-08:00">2021-10-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/os/" itemprop="url" rel="index"><span itemprop="name">os</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="python批量重命名文件"><a href="#python批量重命名文件" class="headerlink" title="python批量重命名文件"></a>python批量重命名文件</h1><p>程序将’文件’文件夹下的所有文件重命名。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/27/python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/python%E8%B0%83%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/27/python%E8%B0%83%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC/" class="post-title-link" itemprop="url">baidu-aip | python调用人工智能识别表格</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-27 04:19:47 / Modified: 04:25:43" itemprop="dateCreated datePublished" datetime="2021-10-27T04:19:47-08:00">2021-10-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/baidu-aip/" itemprop="url" rel="index"><span itemprop="name">baidu-aip</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="python调用人工智能识别表格"><a href="#python调用人工智能识别表格" class="headerlink" title="python调用人工智能识别表格"></a>python调用人工智能识别表格</h1><p>使用百度的OCR API识别表格中的文字。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39932611/article/details/112354147">参考资料1</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44298740/article/details/117560495">参考资料2</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/27/python%E8%B0%83%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">CNN | 卷积神经网络如何处理一维时间序列数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-26 19:28:20 / Modified: 19:31:42" itemprop="dateCreated datePublished" datetime="2021-10-26T19:28:20-08:00">2021-10-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/" itemprop="url" rel="index"><span itemprop="name">CNN</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/" class="post-title-link" itemprop="url">CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-26 18:10:04 / Modified: 19:30:46" itemprop="dateCreated datePublished" datetime="2021-10-26T18:10:04-08:00">2021-10-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/" itemprop="url" rel="index"><span itemprop="name">CNN</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/25/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/25/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8/" class="post-title-link" itemprop="url">pygame | 植物大战僵尸</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-10-25 05:54:30" itemprop="dateCreated datePublished" datetime="2021-10-25T05:54:30-08:00">2021-10-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-10-26 17:53:06" itemprop="dateModified" datetime="2021-10-26T17:53:06-08:00">2021-10-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pygame/" itemprop="url" rel="index"><span itemprop="name">pygame</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="植物大战僵尸"><a href="#植物大战僵尸" class="headerlink" title="植物大战僵尸"></a>植物大战僵尸</h1><p>python pygame 实现植物大战僵尸.<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Gtieguo/article/details/112093640">植物大战僵尸</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/25/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/25/%E5%9C%A8Excel%E4%B8%AD%E6%8C%89%E6%9D%A1%E4%BB%B6%E7%AD%9B%E9%80%89%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E7%9A%84%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/25/%E5%9C%A8Excel%E4%B8%AD%E6%8C%89%E6%9D%A1%E4%BB%B6%E7%AD%9B%E9%80%89%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E7%9A%84%E8%A1%A8/" class="post-title-link" itemprop="url">openpyxl | 在Excel中按条件筛选数据并存入新的表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-25 01:20:44 / Modified: 01:23:19" itemprop="dateCreated datePublished" datetime="2021-10-25T01:20:44-08:00">2021-10-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/openpyxl/" itemprop="url" rel="index"><span itemprop="name">openpyxl</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="在Excel中按条件筛选数据并存入新的表"><a href="#在Excel中按条件筛选数据并存入新的表" class="headerlink" title="在Excel中按条件筛选数据并存入新的表"></a>在Excel中按条件筛选数据并存入新的表</h1><p>实现代码：</p>
-<pre><code># 1.获取满足条件的数据
-from openpyxl import load_workbook
-
-wb = load_workbook(&quot;每月物料表.xlsx&quot;)
-data = &#123;&#125;  # 储存所有工作表中满足条件的数据，以工作表名称为键
-sheet_names = wb.sheetnames
-for sheet_name in sheet_names:
-    ws = wb[sheet_name]
-    qty_list = []
-    # 获取G列的数据，并用enumrate给其对应的元素编号
-    for row in range(2, ws.max_row + 1):
-        qty = ws[&#39;G&#39; + str(row)].value
-        qty_list.append(qty)
-    # print(qty_list)
-
-    qty_idx = list(enumerate(qty_list))  # 用于编号
-
-    # 判断数据是否大于1000，然后返回大于1000的数据所对应的行数
-    row_idx = []  # 用于储存数量大于1000所对应的的行号
-    for i in range(len(qty_idx)):
-        if qty_idx[i][1] &gt; 1000:
-            row_idx.append(qty_idx[i][0] + 2)
-    # print(row_idx)
-
-    # 获取满足条件的数据
-    data_morethan1K = []
-    for i in row_idx:
-        data_morethan1K.append(ws[&#39;A&#39; + str(i) + &quot;:&quot; + &#39;I&#39; + str(i)])
-
-    # print(data_morethan1K)
-
-    data[sheet_name] = data_morethan1K
-
-# 2.写入获取的数据
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-
-wb = load_workbook(&quot;模板.xlsx&quot;)
-ws = wb.active
-for month in data.keys():
-    ws_new = wb.copy_worksheet(ws)  # 复制模板中的工作表
-    ws_new.title = month
-    print(ws_new.title)
-    # 将每个月的数据条数逐个取出并写入新的工作表
-    for i in range(len(data[month])):  # 按数据行数计数，每行数据对应9列，所以每行需分别写入9个单元格
-        ws_new.cell(row=i + 2, column=1).value = data[month][i][0][0].value
-        ws_new.cell(row=i + 2, column=2).value = data[month][i][0][1].value
-        ws_new.cell(row=i + 2, column=3).value = data[month][i][0][2].value
-        ws_new.cell(row=i + 2, column=4).value = data[month][i][0][3].value.date()
-        ws_new.cell(row=i + 2, column=5).value = data[month][i][0][4].value
-        ws_new.cell(row=i + 2, column=6).value = data[month][i][0][5].value
-        ws_new.cell(row=i + 2, column=7).value = data[month][i][0][6].value
-        ws_new.cell(row=i + 2, column=8).value = data[month][i][0][7].value
-        ws_new.cell(row=i + 2, column=9).value = data[month][i][0][8].value
-
-    # 设置字号，对齐，缩小字体填充，加边框
-    # Font(bold=True)可加粗字体
-
-    for row_number in range(2, ws_new.max_row + 1):
-        for col_number in range(1, 10):
-            c = ws_new.cell(row=row_number, column=col_number)
-            c.font = Font(size=10)
-            c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-            c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;, shrink_to_fit=True)
-wb.save(&quot;每月(大于1K).xlsx&quot;)
-</code></pre>
-<p><a href="模板.xlsx">模板.xlsx</a><br><a href="每月物料表.xlsx">每月物料表.xlsx</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/25/%E7%94%A8Python%E5%9C%A8Excel%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%B9%B6%E6%9B%BF%E6%8D%A2%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/25/%E7%94%A8Python%E5%9C%A8Excel%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%B9%B6%E6%9B%BF%E6%8D%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">openpyxl | 用Python在Excel中查找并替换数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-10-25 00:10:48" itemprop="dateCreated datePublished" datetime="2021-10-25T00:10:48-08:00">2021-10-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-10-27 05:17:02" itemprop="dateModified" datetime="2021-10-27T05:17:02-08:00">2021-10-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/openpyxl/" itemprop="url" rel="index"><span itemprop="name">openpyxl</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="用Python在Excel中查找并替换数据"><a href="#用Python在Excel中查找并替换数据" class="headerlink" title="用Python在Excel中查找并替换数据"></a>用Python在Excel中查找并替换数据</h1><p>实现代码：</p>
-<pre><code>from openpyxl import load_workbook  # 用于读取Excel中的信息
-
-# 获取Excel表格中的数据
-wb = load_workbook(&#39;查找替换.xlsx&#39;)  # 读取工作簿
-ws = wb.active  # 读取活动工作表
-data = &#123;&#125;  # 新建字典，用于储存数据
-
-for row in range(2, ws.max_row + 1):
-    chazhao = str(ws[&#39;A&#39; + str(row)].value)  # 转换成字符串，以免后续比对时出现数据类型冲突
-    tihuan = str(ws[&#39;B&#39; + str(row)].value)  # 转换成字符串，以免后续比对时出现数据类型冲突
-    data[chazhao] = tihuan  # 键值对应存入字典
-
-wb = load_workbook(&#39;原表.xlsx&#39;)  # 读取目标工作簿
-ws = wb.active
-ID_list = []  # 新建一个列表，用于储存原表D列的信息
-for row in range(2, ws.max_row + 1):
-    ID = ws[&#39;D&#39; + str(row)].value  # 遍历整个工作表，将D列的数据逐个存入ID变量
-    ID_list.append(ID)  # 将读取到的结果存入列表
-
-code = []
-for i in ID_list:
-    if i is None:  # 如果是None，则放入None占位，以保持列表的值的顺序与原表一致
-        code.append(None)
-    else:
-        code.append(i.split(&quot;：&quot;)[-1])  # 不是None,则按&quot;：&quot;符号分割，并放分割后的最后一个值进入新列表code
-
-for i in range(len(code)):
-    if code[i] in data:
-        ws.cell(row=i + 2, column=4).value = ID_list[i].split(&quot;：&quot;)[0] + &quot;：&quot; + data[code[i]]
-wb.save(&#39;原表-替换.xlsx&#39;)
-</code></pre>
-<p><a href="查找替换.xlsx">查找替换.xlsx</a><br><a href="原表.xlsx">原表.xlsx</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1185,20 +1434,20 @@ wb.save(&#39;原表-替换.xlsx&#39;)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">257</span>
+          <span class="site-state-item-count">265</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-count">103</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">148</span>
+        <span class="site-state-item-count">156</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
