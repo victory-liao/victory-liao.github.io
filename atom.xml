@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-15T12:31:58.186Z</updated>
+  <updated>2021-11-15T13:06:48.166Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,68 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>深度学习 | 模型存储的5种方法</title>
+    <link href="http://example.com/2021/11/15/%E6%A8%A1%E5%9E%8B%E5%AD%98%E5%82%A8%E7%9A%845%E4%B8%AD%E6%96%B9%E6%B3%95/"/>
+    <id>http://example.com/2021/11/15/%E6%A8%A1%E5%9E%8B%E5%AD%98%E5%82%A8%E7%9A%845%E4%B8%AD%E6%96%B9%E6%B3%95/</id>
+    <published>2021-11-15T13:01:09.000Z</published>
+    <updated>2021-11-15T13:06:48.166Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="模型存储的5种方法"><a href="#模型存储的5种方法" class="headerlink" title="模型存储的5种方法"></a>模型存储的5种方法</h1><p><strong>方法1：csv/txt</strong><br>存储为csv、text或者json是最为简单的存储格式，阅读和解析起来非常方便。<br>如果使用Pandas则可以在存储的过程中设置压缩方法，对磁盘比较友好。</p><p><strong>·</strong> 场景：通用<br><strong>·</strong> 数据：表格、文本<br><strong>·</strong> 文件大小：压缩后较少<br><strong>·</strong> 读取速度：较慢</p><pre><code>compression_opts = dict(method=&#39;zip&#39;,                        archive_name=&#39;out.csv&#39;)  df.to_csv(&#39;out.zip&#39;, index=False,          compression=compression_opts) </code></pre><p><strong>方法2：hdf</strong><br>HDF(Hierarchical Data File)是能满足各种领域研究需求而研制的一种能高效存储和分发科学数据的新型数据格式。<br>HDF格式支持分层存储，可以将多个变量同时存在一个HDF文件中，同时在读取速度上也比较快。</p><p><strong>·</strong> 场景：通用<br><strong>·</strong> 数据：表格、文本<br><strong>·</strong> 文件大小：较大<br><strong>·</strong> 读取速度：较快</p><pre><code>df = pd.DataFrame(&#123;&#39;A&#39;: [1, 2, 3], &#39;B&#39;: [4, 5, 6]&#125;,                  index=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])df.to_hdf(&#39;data.h5&#39;, key=&#39;df&#39;, mode=&#39;w&#39;)</code></pre><p><strong>方法3：npy</strong><br>如果将特征和数据处理为Numpy格式，则可以考虑存储为Numpy中的npy或npz格式。</p><p><strong>·</strong> 场景：文件存储<br><strong>·</strong> 数据：矩阵<br><strong>·</strong> 文件大小：适中<br><strong>·</strong> 读取速度：较快</p><ol><li>npy文件：二进制格式<br>np.load()和np.save()是读写磁盘数组数据的两个重要函数。使用时数组会以未压缩的原始二进制格式保存在扩展名为.npy的文件中。</li></ol><pre><code>import numpy as nparr=np.arange(5)np.save(&#39;test&#39;,arr)print(np.load(&#39;test.npy&#39;))</code></pre><p>2.npz文件：压缩文件<br>使用np.savez()函数可以将多个数组保存到同一个文件中。读取.npz文件时使用np.load()函数，返回的是一个类似于字典的对象，因此可以通过数组名作为关键字对多个数组进行访问。</p><pre><code>import numpy as npa = np.arange(5)b = np.arange(6)c = np.arange(7)np.savez(&#39;test&#39;, a, b, c_array=c)  # c_array是数组c的命名data = np.load(&#39;test.npz&#39;)print(&#39;arr_0 : &#39;, data[&#39;arr_0&#39;])print(&#39;arr_1 : &#39;, data[&#39;arr_1&#39;])print(&#39;c_array : &#39;, data[&#39;c_array&#39;])</code></pre><p><strong>方法4：memmap</strong><br>NumPy实现了一个类似于ndarray的memmap对象，它允许将大文件分成小段进行读写，而不是一次性将整个数组读入内存。</p><p>如果需要存储的对象大于内存，则可以选择memmap进行存储。</p><p><strong>·</strong> 场景：大文件存储<br><strong>·</strong> 数据：矩阵<br><strong>·</strong> 文件大小：较大、特别大<br><strong>·</strong> 读取速度：适中</p><pre><code>newfp = np.memmap(filename, dtype=&#39;float32&#39;, mode=&#39;r&#39;, shape=(3,4))fpc[0,:] = 0</code></pre><p><strong>方法5：joblib</strong><br>类似于pkl存储，joblib.dump可以将任意的Python对象持久化到一个文件中，并使用joblib.load进行读取。</p><p><strong>·</strong> 场景：任意<br><strong>·</strong> 数据：任意<br><strong>·</strong> 文件大小：适中<br><strong>·</strong> 读取速度：适中</p><pre><code>from joblib import load, dumpX = [[0, 0], [1, 1]]Y = [1, 0]dump((X, Y), &quot;data.pkl&quot;)X, Y = load(&quot;data.pkl&quot;)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;模型存储的5种方法&quot;&gt;&lt;a href=&quot;#模型存储的5种方法&quot; class=&quot;headerlink&quot; title=&quot;模型存储的5种方法&quot;&gt;&lt;/a&gt;模型存储的5种方法&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;方法1：csv/txt&lt;/strong&gt;&lt;br&gt;存储为csv、tex</summary>
+      
+    
+    
+    
+    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="模型存储" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%A8%A1%E5%9E%8B%E5%AD%98%E5%82%A8/"/>
+    
+    
+    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="模型存储" scheme="http://example.com/tags/%E6%A8%A1%E5%9E%8B%E5%AD%98%E5%82%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CNN | 卷积神经网络之卷积计算作用与思想</title>
+    <link href="http://example.com/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/"/>
+    <id>http://example.com/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/</id>
+    <published>2021-11-15T12:57:16.000Z</published>
+    <updated>2021-11-15T12:58:41.489Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="卷积神经网络之卷积计算作用与思想"><a href="#卷积神经网络之卷积计算作用与思想" class="headerlink" title="卷积神经网络之卷积计算作用与思想"></a>卷积神经网络之卷积计算作用与思想</h1><p><a href="https://www.cnblogs.com/shine-lee/p/9932226.html">卷积神经网络之卷积计算、作用与思想</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;卷积神经网络之卷积计算作用与思想&quot;&gt;&lt;a href=&quot;#卷积神经网络之卷积计算作用与思想&quot; class=&quot;headerlink&quot; title=&quot;卷积神经网络之卷积计算作用与思想&quot;&gt;&lt;/a&gt;卷积神经网络之卷积计算作用与思想&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https</summary>
+      
+    
+    
+    
+    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="深度学习基础" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="CNN" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/"/>
+    
+    <category term="卷积" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/%E5%8D%B7%E7%A7%AF/"/>
+    
+    
+    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="CNN" scheme="http://example.com/tags/CNN/"/>
+    
+    <category term="卷积" scheme="http://example.com/tags/%E5%8D%B7%E7%A7%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>CNN | 卷积和卷积核</title>
@@ -542,60 +604,6 @@
     <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="闭包" scheme="http://example.com/tags/%E9%97%AD%E5%8C%85/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python | 装饰器</title>
-    <link href="http://example.com/2021/11/07/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
-    <id>http://example.com/2021/11/07/%E8%A3%85%E9%A5%B0%E5%99%A8/</id>
-    <published>2021-11-08T02:48:41.000Z</published>
-    <updated>2021-11-08T13:02:07.760Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h1><p>顾名思义，从字面意思就可以理解，它是用来”装饰”Python的工具，使得代码更具有Python简洁的风格。换句话说，它是一种函数的函数，因为装饰器传入的参数就是一个函数，然后通过实现各种功能来对这个函数的功能进行增强。<br><strong>注：装饰器输入一个函数，输出一个函数</strong><br><strong>装饰器最大的优势</strong>是用于<strong>解决重复性</strong>的操作，其主要使用的场景有如下几个：<br>1.计算函数运行时间<br>2.给函数打日志<br>3.类型检查<br>当然，如果遇到其他重复操作的场景也可以类比使用装饰器。</p><span id="more"></span><pre><code># 1.原始需求def worker1():    print(&#39;我是一个勤劳的工作者！&#39;)def worker2():    print(&#39;我是一个勤劳的工作者！&#39;)def worker3():    print(&#39;我是一个勤劳的工作者！&#39;)# 2.我现在想要打印一些日志信息def worker1():    print(&#39;worker1 is working...&#39;)    print(&#39;我是一个勤劳的工作者！&#39;)worker1()# 3.装饰器输入一个函数，输出一个函数def print_working(func):    def wrapper():        print(f&#39;&#123;func.__name__&#125; is working...&#39;)        func()    return wrapperdef worker1():    print(&#39;我是一个勤劳的工作者！&#39;)def worker2():    print(&#39;我是一个勤劳的工作者！&#39;)def worker3():    print(&#39;我是一个勤劳的工作者！&#39;)worker1 = print_working(worker1)worker1()worker2= print_working(worker2)worker2()# 4.装饰器@print_workingdef worker1():    print(&#39;我是一个勤劳的工作者！&#39;)@print_workingdef worker2():    print(&#39;我是一个勤劳的工作者！&#39;)@print_workingdef worker3():    print(&#39;我是一个勤劳的工作者！&#39;)worker1()worker2()worker3()# 5.装饰器示例def arg_decorator(func):def wrapper(*args, **kw):    print(f&#39;&#123;func.__name__&#125; is working...&#39;)    func(*args, **kw)return wrapper# 带参数的装饰器@arg_decoratordef student_info(name, age=18, *books, **kw):    print(f&#39;我的名字叫&#123;name&#125;, 今年&#123;age&#125;岁，我有很多本书：&#39;)    for book in books:        print(book)    print(kw)student_info(&#39;Molly&#39;,18, &#39;语文书&#39;,&#39;数学书&#39;,height=170)    </code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;装饰器&quot;&gt;&lt;a href=&quot;#装饰器&quot; class=&quot;headerlink&quot; title=&quot;装饰器&quot;&gt;&lt;/a&gt;装饰器&lt;/h1&gt;&lt;p&gt;顾名思义，从字面意思就可以理解，它是用来”装饰”Python的工具，使得代码更具有Python简洁的风格。换句话说，它是一种函数的函数，因为装饰器传入的参数就是一个函数，然后通过实现各种功能来对这个函数的功能进行增强。&lt;br&gt;&lt;strong&gt;注：装饰器输入一个函数，输出一个函数&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;装饰器最大的优势&lt;/strong&gt;是用于&lt;strong&gt;解决重复性&lt;/strong&gt;的操作，其主要使用的场景有如下几个：&lt;br&gt;1.计算函数运行时间&lt;br&gt;2.给函数打日志&lt;br&gt;3.类型检查&lt;br&gt;当然，如果遇到其他重复操作的场景也可以类比使用装饰器。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="装饰器" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="装饰器" scheme="http://example.com/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python | sorted</title>
-    <link href="http://example.com/2021/11/07/sorted/"/>
-    <id>http://example.com/2021/11/07/sorted/</id>
-    <published>2021-11-08T02:46:29.000Z</published>
-    <updated>2021-11-08T12:51:21.694Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="sorted"><a href="#sorted" class="headerlink" title="sorted"></a>sorted</h1><p>sorted() 函数对所有可迭代的对象进行排序操作。<br><strong>sort 与 sorted 区别：</strong><br>sort 是应用在 list 上的方法，sorted 可以对所有可迭代的对象进行排序操作。<br>list 的 sort 方法返回的是对已经存在的列表进行操作，而内建函数 sorted 方法返回的是一个新的 list，而不是在原来的基础上进行的操作。</p><span id="more"></span><p><strong>sorted 语法：</strong><br>sorted(iterable, key=None, reverse=False)<br>参数说明：<br>    iterable – 可迭代对象。<br>    key – 主要是用来进行比较的元素，只有一个参数，具体的函数的参数就是取自于可迭代对象中，指定可迭代对象中的一个元素来进行排序。<br>    reverse – 排序规则，reverse = True 降序 ， reverse = False 升序（默认）。<br>返回值:返回重新排序的列表。<br><strong>示例：</strong><br>sorted([36, 5, -12, 9, -21])</p><p>sorted([36, 5, -12, 9, -21], reverse=True)</p><p>sorted([36, 5, -12, 9, -21], key=abs)   # 按绝对值排序key指定的函数将作用于list的每一个元素上，并根据key函数返回的结果进行排序</p><p>list(map(abs, [36, 5, -12, 9, -21]))</p><p>points = [(5,2), (7,3), (3,4),(1,1),(2,6)]  # 按x坐标排序 y坐标排序 和0点距离排序</p><p>f_x = lambda x:x[0]<br>sorted(points, key=f_x)</p><p>f_y = lambda x:x[1]<br>sorted(points, key=f_y)</p><p>f_r = lambda x:x[0]**2+x[1]**2<br>sorted(points, key=f_r)</p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;sorted&quot;&gt;&lt;a href=&quot;#sorted&quot; class=&quot;headerlink&quot; title=&quot;sorted&quot;&gt;&lt;/a&gt;sorted&lt;/h1&gt;&lt;p&gt;sorted() 函数对所有可迭代的对象进行排序操作。&lt;br&gt;&lt;strong&gt;sort 与 sorted 区别：&lt;/strong&gt;&lt;br&gt;sort 是应用在 list 上的方法，sorted 可以对所有可迭代的对象进行排序操作。&lt;br&gt;list 的 sort 方法返回的是对已经存在的列表进行操作，而内建函数 sorted 方法返回的是一个新的 list，而不是在原来的基础上进行的操作。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="sorted" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/sorted/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="sorted" scheme="http://example.com/tags/sorted/"/>
     
   </entry>
   
