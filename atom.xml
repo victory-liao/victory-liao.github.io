@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-15T04:27:26.593Z</updated>
+  <updated>2021-11-15T04:33:04.457Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>深度学习 | 深度学习基础问题</title>
+    <link href="http://example.com/2021/11/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/2021/11/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/</id>
+    <published>2021-11-15T04:31:53.000Z</published>
+    <updated>2021-11-15T04:33:04.457Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="深度学习基础问题"><a href="#深度学习基础问题" class="headerlink" title="深度学习基础问题"></a>深度学习基础问题</h1><p><a href="https://mp.weixin.qq.com/s/KcIlkLyNROxC_TUbCDhEmg">深度学习基础问题</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;深度学习基础问题&quot;&gt;&lt;a href=&quot;#深度学习基础问题&quot; class=&quot;headerlink&quot; title=&quot;深度学习基础问题&quot;&gt;&lt;/a&gt;深度学习基础问题&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/KcIlkLyNRO</summary>
+      
+    
+    
+    
+    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
   
   <entry>
     <title>CNN | 卷积的三种模式</title>
@@ -555,33 +581,6 @@
     
     
     <category term="装系统" scheme="http://example.com/tags/%E8%A3%85%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>多进程 | python实现多任务进程</title>
-    <link href="http://example.com/2021/11/06/python%E5%AE%9E%E7%8E%B0%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%BF%9B%E7%A8%8B/"/>
-    <id>http://example.com/2021/11/06/python%E5%AE%9E%E7%8E%B0%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%BF%9B%E7%A8%8B/</id>
-    <published>2021-11-06T12:15:07.000Z</published>
-    <updated>2021-11-06T12:19:54.407Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="python实现多任务进程"><a href="#python实现多任务进程" class="headerlink" title="python实现多任务进程"></a>python实现多任务进程</h1><p>以下内容主要阐述了python实现多进程的两种方式、进程间如何通信、进程池以及一个多进程案例：批量复制文件。</p><span id="more"></span><p><strong>Show You the Code:</strong></p><pre><code># 实现多进程# 1.使用process类import multiprocessingdef process(index):    print(f&#39;Process:&#123;index&#125;&#39;)if __name__ == &quot;__main__&quot;:    for i in range(5):        p = multiprocessing.Process(target=process, args=(i,))        p.start()# 2.继承process类import timefrom multiprocessing import Processclass MyProcess(Process):    def __init__(self, loop):        Process.__init__()        self.loop = loop    def run(self):        for count in range(self.loop):            time.sleep(1)            print(f&#39;Pid:&#123;self.pid&#125; LoopCount:&#123;count&#125;&#39;)if __name__ == &#39;__main__&#39;:    for i in range(2, 5):        p = MyProcess(i)        p.start()# 进程间的通信# 1、Queue-队列 先进先出from multiprocessing import Queueimport multiprocessingdef download(p):  # download the data    lst = [11, 22, 33, 44]    for item in lst:        p.put(item)    print(&quot;successfully downloaded data!&quot;)def save_data(p):    lst = []    while True:        data = p.get()        lst.append(data)        if p.empty():            break    print(lst)    print(&quot;successfully saved data!&quot;)def main():    p1 = Queue()    t1 = multiprocessing.Process(target=download, args=(p1,))    t2 = multiprocessing.Process(target=save_data, args=(p1,))    t1.start()    t2.start()if __name__ == &quot;__main__&quot;:    main()# 2、共享全局变量不适用于多进程编程import multiprocessinga = 1  # 全局变量def demo1():    global a    a += 1def demo2():    print(a)def main():    t1 = multiprocessing.Process(target=demo1)    t2 = multiprocessing.Process(target=demo2)    t1.start()    t2.start()if __name__ == &quot;__main__&quot;:    main()# 进程池之间的通信from multiprocessing import Poolimport os, time, randomdef worker(a):    t_start = time.time()    print(&#39;%s开始执行，进程号为%d&#39; % (a, os.getpid()))    time.sleep(random.random() * 2)    t_stop = time.time()    print(a, &#39;执行完成，耗时%0.2f&#39; % (t_stop - t_start))if __name__ == &#39;__main__&#39;:    po = Pool(3)  # 定义一个进程池    for i in range(0, 10):        po.apply_async(worker, (i,))  # 向进程池中添加worker任务    print(&quot;--start--&quot;)    po.close()    po.join()    print(&quot;--end--&quot;)# 案例：文件批量复制import osimport timeimport multiprocessingdef copy_file(Q, oldfolderName, newfolderName, file_name):    # 文件复制,不需要返回    time.sleep(0.5)    # print(&#39;\r从%s文件夹复制到%s文件夹的%s文件&#39;%(oldfolderName,newfolderName,file_name),end=&#39;&#39;)    old_file = open(oldfolderName + &#39;/&#39; + file_name, &#39;rb&#39;)  # 待复制文件    content = old_file.read()    old_file.close()    new_file = open(newfolderName + &#39;/&#39; + file_name, &#39;wb&#39;)  # 复制出的新文件    new_file.write(content)    new_file.close()    Q.put(file_name)  # 向Q队列中添加文件def main():    oldfolderName = input(&#39;请输入要复制的文件夹名字:&#39;)  # 步骤1获取要复制文件夹的名字(可以手动创建,也可以通过代码创建,这里我们手动创建)    newfolderName = oldfolderName + &#39;复件&#39;    # 步骤二 创建一个新的文件夹    if not os.path.exists(newfolderName):        os.mkdir(newfolderName)    filenames = os.listdir(oldfolderName)  # 3.获取文件夹里面所有待复制的文件名    # print(filenames)    pool = multiprocessing.Pool(5)  # 4.创建进程池    Q = multiprocessing.Manager().Queue()  # 创建队列,进行通信    for file_name in filenames:        pool.apply_async(copy_file, args=(Q, oldfolderName, newfolderName, file_name))  # 5.向进程池添加任务    pool.close()    copy_file_num = 0    file_count = len(filenames)    # 不知道什么时候完成,所以定义一个死循环    while True:        file_name = Q.get()        print(f&quot;&#123;file_name&#125;已经复制！&quot;)        copy_file_num += 1        time.sleep(0.2)        print(&#39;\r拷贝进度%.2f %%&#39; % (copy_file_num * 100 / file_count), end=&#39;&#39;)  # 做一个拷贝进度条        if copy_file_num &gt;= file_count:            breakif __name__ == &#39;__main__&#39;:    main()</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;python实现多任务进程&quot;&gt;&lt;a href=&quot;#python实现多任务进程&quot; class=&quot;headerlink&quot; title=&quot;python实现多任务进程&quot;&gt;&lt;/a&gt;python实现多任务进程&lt;/h1&gt;&lt;p&gt;以下内容主要阐述了python实现多进程的两种方式、进程间如何通信、进程池以及一个多进程案例：批量复制文件。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="多进程" scheme="http://example.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
-    
-    <category term="multiprocessing" scheme="http://example.com/tags/multiprocessing/"/>
     
   </entry>
   
