@@ -106,6 +106,318 @@
       </tags>
   </entry>
   <entry>
+    <title>python | 68个python内置函数详解</title>
+    <url>/2021/10/16/68%E4%B8%AApython%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="68个python内置函数详解"><a href="#68个python内置函数详解" class="headerlink" title="68个python内置函数详解"></a>68个python内置函数详解</h1><p>内置函数就是Python给你提供的，拿来直接用的函数，比如print.，input等。<br>截止到python版本3.6.2 ，python一共提供了68个内置函数，具体如下👇</p>
+<pre><code>abs()           dict()        help()         min()         setattr()
+all()           dir()         hex()          next()        slice() 
+any()           divmod()      id()           object()      sorted() 
+ascii()         enumerate()   input()        oct()         staticmethod() 
+bin()           eval()        int()          open()        str() 
+bool()          exec()        isinstance()   ord()         sum() 
+bytearray()     ﬁlter()       issubclass()   pow()         super() 
+bytes()         ﬂoat()        iter()         print()       tuple() 
+callable()      format()      len()          property()    type() 
+chr()           frozenset()   list()         range()       vars() 
+classmethod()   getattr()     locals()       repr()        zip() 
+compile()       globals()     map()          reversed()    __import__() 
+complex()       hasattr()     max()          round() 
+delattr()       hash()        memoryview()   set()
+</code></pre>
+<span id="more"></span>
+<p>本文将这68个内置函数综合整理为12大类，正在学习Python基础的读者一定不要错过，建议收藏学习！<br>和数字相关</p>
+<ol>
+<li>数据类型</li>
+</ol>
+<p>bool : 布尔型(True,False)<br>int : 整型(整数)<br>float : 浮点型(小数)<br>complex : 复数</p>
+<ol start="2">
+<li>进制转换</li>
+</ol>
+<p>bin() 将给的参数转换成二进制<br>otc() 将给的参数转换成八进制<br>hex() 将给的参数转换成十六进制</p>
+<pre><code>print(bin(10))  # 二进制:0b1010
+print(hex(10))  # 十六进制:0xa
+print(oct(10))  # 八进制:0o12
+</code></pre>
+<ol start="3">
+<li>数学运算</li>
+</ol>
+<p>abs() 返回绝对值<br>divmode() 返回商和余数<br>round() 四舍五入<br>pow(a, b) 求a的b次幂, 如果有三个参数. 则求完次幂后对第三个数取余<br>sum() 求和<br>min() 求最小值<br>max() 求最大值</p>
+<pre><code>print(abs(-2))  # 绝对值:2
+print(divmod(20,3)) # 求商和余数:(6,2)
+print(round(4.50))   # 五舍六入:4
+print(round(4.51))   #5
+print(pow(10,2,3))  # 如果给了第三个参数. 表示最后取余:1
+print(sum([1,2,3,4,5,6,7,8,9,10]))  # 求和:55
+print(min(5,3,9,12,7,2))  #求最小值:2
+print(max(7,3,15,9,4,13))  #求最大值:15
+</code></pre>
+<p>和数据结构相关</p>
+<ol>
+<li>序列</li>
+</ol>
+<p>（1）列表和元组</p>
+<p>list() 将一个可迭代对象转换成列表<br>tuple() 将一个可迭代对象转换成元组</p>
+<pre><code>print(list((1,2,3,4,5,6)))  #[1, 2, 3, 4, 5, 6]
+print(tuple([1,2,3,4,5,6]))  #(1, 2, 3, 4, 5, 6)
+</code></pre>
+<p>（2）相关内置函数</p>
+<p>reversed() 将一个序列翻转, 返回翻转序列的迭代器<br>slice() 列表的切片</p>
+<pre><code>lst = &quot;你好啊&quot;
+it = reversed(lst)   # 不会改变原列表. 返回一个迭代器, 设计上的一个规则
+print(list(it))  #[&#39;啊&#39;, &#39;好&#39;, &#39;你&#39;]
+lst = [1, 2, 3, 4, 5, 6, 7]
+print(lst[1:3:1])  #[2,3]
+s = slice(1, 3, 1)  #  切片用的
+print(lst[s])  #[2,3]
+</code></pre>
+<p>（3）字符串</p>
+<p>str() 将数据转化成字符串</p>
+<pre><code>print(str(123)+&#39;456&#39;)  #123456
+</code></pre>
+<p>format() 与具体数据相关, 用于计算各种小数, 精算等.</p>
+<pre><code>s = &quot;hello world!&quot;
+print(format(s, &quot;^20&quot;))  #剧中
+print(format(s, &quot;&lt;20&quot;))  #左对齐
+print(format(s, &quot;&gt;20&quot;))  #右对齐
+#     hello world!    
+# hello world!        
+#         hello world!
+print(format(3, &#39;b&#39; ))    # 二进制:11
+print(format(97, &#39;c&#39; ))   # 转换成unicode字符:a
+print(format(11, &#39;d&#39; ))   # ⼗进制:11
+print(format(11, &#39;o&#39; ))   # 八进制:13 
+print(format(11, &#39;x&#39; ))   # 十六进制(⼩写字母):b
+print(format(11, &#39;X&#39; ))   # 十六进制(大写字母):B
+print(format(11, &#39;n&#39; ))   # 和d⼀样:11
+print(format(11))         # 和d⼀样:11
+
+print(format(123456789, &#39;e&#39; ))      # 科学计数法. 默认保留6位小数:1.234568e+08
+print(format(123456789, &#39;0.2e&#39; ))   # 科学计数法. 保留2位小数(小写):1.23e+08
+print(format(123456789, &#39;0.2E&#39; ))   # 科学计数法. 保留2位小数(大写):1.23E+08
+print(format(1.23456789, &#39;f&#39; ))     # 小数点计数法. 保留6位小数:1.234568
+print(format(1.23456789, &#39;0.2f&#39; ))  # 小数点计数法. 保留2位小数:1.23
+print(format(1.23456789, &#39;0.10f&#39;))  # 小数点计数法. 保留10位小数:1.2345678900
+print(format(1.23456789e+3, &#39;F&#39;))   # 小数点计数法. 很大的时候输出INF:1234.567890
+</code></pre>
+<p>bytes() 把字符串转化成bytes类型</p>
+<pre><code>bs = bytes(&quot;今天吃饭了吗&quot;, encoding=&quot;utf-8&quot;)
+print(bs)  #b&#39;\xe4\xbb\x8a\xe5\xa4\xa9\xe5\x90\x83\xe9\xa5\xad\xe4\xba\x86\xe5\x90\x97&#39;
+</code></pre>
+<p>bytearray()    返回一个新字节数组. 这个数字的元素是可变的, 并且每个元素的值得范围是[0,256)</p>
+<pre><code>ret = bytearray(&quot;alex&quot; ,encoding =&#39;utf-8&#39;)
+print(ret[0])  #97
+print(ret)  #bytearray(b&#39;alex&#39;)
+ret[0] = 65  #把65的位置A赋值给ret[0]
+print(str(ret))  #bytearray(b&#39;Alex&#39;)
+</code></pre>
+<p>ord() 输入字符找带字符编码的位置<br>chr() 输入位置数字找出对应的字符<br>ascii() 是ascii码中的返回该值 不是就返回u</p>
+<pre><code>print(ord(&#39;a&#39;))  # 字母a在编码表中的码位:97
+print(ord(&#39;中&#39;))  # &#39;中&#39;字在编码表中的位置:20013
+
+print(chr(65))  # 已知码位,求字符是什么:A
+print(chr(19999))  #丟
+
+for i in range(65536):  #打印出0到65535的字符
+    print(chr(i), end=&quot; &quot;)
+
+print(ascii(&quot;@&quot;))  #&#39;@&#39;
+</code></pre>
+<p>repr() 返回一个对象的string形式</p>
+<pre><code>s = &quot;今天\n吃了%s顿\t饭&quot; % 3
+print(s)#今天# 吃了3顿    饭
+print(repr(s))   # 原样输出,过滤掉转义字符 \n \t \r 不管百分号%
+#&#39;今天\n吃了3顿\t饭&#39;
+</code></pre>
+<ol start="2">
+<li>数据集合</li>
+</ol>
+<p>字典：dict 创建一个字典</p>
+<p>集合：set 创建一个集合</p>
+<p>frozenset() 创建一个冻结的集合，冻结的集合不能进行添加和删除操作。<br>3. 相关内置函数</p>
+<p>len() 返回一个对象中的元素的个数<br>sorted() 对可迭代对象进行排序操作 (lamda)</p>
+<p>语法：sorted(Iterable, key=函数(排序规则), reverse=False)</p>
+<p>Iterable: 可迭代对象<br>key: 排序规则(排序函数), 在sorted内部会将可迭代对象中的每一个元素传递给这个函数的参数. 根据函数运算的结果进行排序<br>reverse: 是否是倒叙. True: 倒叙, False: 正序</p>
+<pre><code>lst = [5,7,6,12,1,13,9,18,5]
+lst.sort()  # sort是list里面的一个方法
+print(lst)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
+
+ll = sorted(lst) # 内置函数. 返回给你一个新列表  新列表是被排序的
+print(ll)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
+
+l2 = sorted(lst,reverse=True)  #倒序
+print(l2)  #[18, 13, 12, 9, 7, 6, 5, 5, 1]
+</code></pre>
+<p>#根据字符串长度给列表排序<br>    lst = [‘one’, ‘two’, ‘three’, ‘four’, ‘five’, ‘six’]<br>    def f(s):<br>        return len(s)<br>    l1 = sorted(lst, key=f, )<br>    print(l1)  #[‘one’, ‘two’, ‘six’, ‘four’, ‘five’, ‘three’]</p>
+<p>enumerate() 获取集合的枚举对象</p>
+<pre><code>lst = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;,&#39;five&#39;]
+for index, el in enumerate(lst,1):    # 把索引和元素一起获取,索引默认从0开始. 可以更改
+    print(index)
+    print(el)
+# 1
+# one
+# 2
+# two
+# 3
+# three
+# 4
+# four
+# 5
+# five
+</code></pre>
+<p>all() 可迭代对象中全部是True, 结果才是True<br>any() 可迭代对象中有一个是True, 结果就是True</p>
+<pre><code>print(all([1,&#39;hello&#39;,True,9]))  #True
+print(any([0,0,0,False,1,&#39;good&#39;]))  #True
+</code></pre>
+<p>zip() 函数用于将可迭代的对象作为参数, 将对象中对应的元素打包成一个元组, 然后返回由这些元组组成的列表. 如果各个迭代器的元素个数不一致, 则返回列表长度与最短的对象相同</p>
+<pre><code>lst1 = [1, 2, 3, 4, 5, 6]
+lst2 = [&#39;醉乡民谣&#39;, &#39;驴得水&#39;, &#39;放牛班的春天&#39;, &#39;美丽人生&#39;, &#39;辩护人&#39;, &#39;被嫌弃的松子的一生&#39;]
+lst3 = [&#39;美国&#39;, &#39;中国&#39;, &#39;法国&#39;, &#39;意大利&#39;, &#39;韩国&#39;, &#39;日本&#39;]
+print(zip(lst1, lst1, lst3))  #&lt;zip object at 0x00000256CA6C7A88&gt;
+for el in zip(lst1, lst2, lst3):
+    print(el)
+# (1, &#39;醉乡民谣&#39;, &#39;美国&#39;)
+# (2, &#39;驴得水&#39;, &#39;中国&#39;)
+# (3, &#39;放牛班的春天&#39;, &#39;法国&#39;)
+# (4, &#39;美丽人生&#39;, &#39;意大利&#39;)
+# (5, &#39;辩护人&#39;, &#39;韩国&#39;)
+# (6, &#39;被嫌弃的松子的一生&#39;, &#39;日本&#39;)
+</code></pre>
+<p>fiter() 过滤 (lamda)</p>
+<p>语法：fiter(function. Iterable)</p>
+<p>function: 用来筛选的函数. 在ﬁlter中会自动的把iterable中的元素传递给function. 然后根据function返回的True或者False来判断是否保留留此项数据 , Iterable: 可迭代对象</p>
+<pre><code>def func(i):    # 判断奇数
+    return i % 2 == 1
+    lst = [1,2,3,4,5,6,7,8,9]
+l1 = filter(func, lst)  #l1是迭代器
+print(l1)  #&lt;filter object at 0x000001CE3CA98AC8&gt;
+print(list(l1))  #[1, 3, 5, 7, 9]
+</code></pre>
+<p>map() 会根据提供的函数对指定序列列做映射(lamda)</p>
+<p>语法 : map(function, iterable)</p>
+<p>可以对可迭代对象中的每一个元素进行映射. 分别去执行 function</p>
+<pre><code>def f(i):    return i
+lst = [1,2,3,4,5,6,7,]
+it = map(f, lst) # 把可迭代对象中的每一个元素传递给前面的函数进行处理. 处理的结果会返回成迭代器print(list(it))  #[1, 2, 3, 4, 5, 6, 7]
+</code></pre>
+<p>和作用域相关</p>
+<p>locals() 返回当前作用域中的名字<br>globals() 返回全局作用域中的名字</p>
+<pre><code>def func():
+    a = 10
+    print(locals())  # 当前作用域中的内容
+    print(globals())  # 全局作用域中的内容
+    print(&quot;今天内容很多&quot;)
+func()
+# &#123;&#39;a&#39;: 10&#125;
+# &#123;&#39;__name__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None, &#39;__loader__&#39;: 
+# &lt;_frozen_importlib_external.SourceFileLoader object at 0x0000026F8D566080&gt;, 
+# &#39;__spec__&#39;: None, &#39;__annotations__&#39;: &#123;&#125;, &#39;__builtins__&#39;: &lt;module &#39;builtins&#39; 
+# (built-in)&gt;, &#39;__file__&#39;: &#39;D:/pycharm/练习/week03/new14.py&#39;, &#39;__cached__&#39;: None,
+#  &#39;func&#39;: &lt;function func at 0x0000026F8D6B97B8&gt;&#125;
+# 今天内容很多
+</code></pre>
+<p>和迭代器生成器相关</p>
+<p>range() 生成数据<br>next() 迭代器向下执行一次, 内部实际使⽤用了__ next__()⽅方法返回迭代器的下一个项目<br>iter() 获取迭代器, 内部实际使用的是__ iter__()⽅方法来获取迭代器</p>
+<pre><code>for i in range(15,-1,-5):
+    print(i)
+# 15
+# 10
+# 5
+# 0
+lst = [1,2,3,4,5]
+it = iter(lst)  #  __iter__()获得迭代器
+print(it.__next__())  #1
+print(next(it)) #2  __next__()  
+print(next(it))  #3
+print(next(it))  #4
+</code></pre>
+<p>字符串类型代码的执行</p>
+<p>eval() 执行字符串类型的代码. 并返回最终结果<br>exec() 执行字符串类型的代码<br>compile() 将字符串类型的代码编码. 代码对象能够通过exec语句来执行或者eval()进行求值</p>
+<pre><code>s1 = input(&quot;请输入a+b:&quot;)  #输入:8+9
+print(eval(s1))  # 17 可以动态的执行代码. 代码必须有返回值
+s2 = &quot;for i in range(5): print(i)&quot;
+a = exec(s2) # exec 执行代码不返回任何内容
+
+# 0
+# 1
+# 2
+# 3
+# 4
+print(a)  #None
+
+# 动态执行代码
+exec(&quot;&quot;&quot;
+def func():
+    print(&quot; 我是周杰伦&quot;)
+&quot;&quot;&quot; )
+func()  #我是周杰伦
+
+code1 = &quot;for i in range(3): print(i)&quot;
+com = compile(code1, &quot;&quot;, mode=&quot;exec&quot;)   # compile并不会执行你的代码.只是编译
+exec(com)   # 执行编译的结果
+# 0
+# 1
+# 2
+
+code2 = &quot;5+6+7&quot;
+com2 = compile(code2, &quot;&quot;, mode=&quot;eval&quot;)
+print(eval(com2))  # 18
+
+code3 = &quot;name = input(&#39;请输入你的名字:&#39;)&quot;  #输入:hello
+com3 = compile(code3, &quot;&quot;, mode=&quot;single&quot;)
+exec(com3)
+print(name)  #hello
+</code></pre>
+<p>输入输出</p>
+<p>print() : 打印输出<br>input() : 获取用户输出的内容</p>
+<pre><code>print(&quot;hello&quot;, &quot;world&quot;, sep=&quot;*&quot;, end=&quot;@&quot;) # sep:打印出的内容用什么连接,end:以什么为结尾
+#hello*world@
+</code></pre>
+<p>内存相关</p>
+<p>hash() : 获取到对象的哈希值(int, str, bool, tuple). hash算法:(1) 目的是唯一性 (2) dict 查找效率非常高, hash表.用空间换的时间 比较耗费内存</p>
+<pre><code>s = &#39;alex&#39;print(hash(s))  #-168324845050430382lst = [1, 2, 3, 4, 5]print(hash(lst))  #报错,列表是不可哈希的  id() :  获取到对象的内存地址s = &#39;alex&#39;print(id(s))  #2278345368944
+</code></pre>
+<p>文件操作相关</p>
+<p>open() : 用于打开一个文件, 创建一个文件句柄</p>
+<pre><code>f = open(&#39;file&#39;,mode=&#39;r&#39;,encoding=&#39;utf-8&#39;)
+f.read()
+f.close()
+</code></pre>
+<p>模块相关</p>
+<p>__ import__() : 用于动态加载类和函数</p>
+<pre><code># 让用户输入一个要导入的模块
+import os
+name = input(&quot;请输入你要导入的模块:&quot;)
+__import__(name)    # 可以动态导入模块
+</code></pre>
+<p>帮 助</p>
+<p>help() : 函数用于查看函数或模块用途的详细说明</p>
+<pre><code>print(help(str))  #查看字符串的用途
+</code></pre>
+<p>调用相关</p>
+<p>callable() : 用于检查一个对象是否是可调用的. 如果返回True, object有可能调用失败, 但如果返回False. 那调用绝对不会成功</p>
+<pre><code>a = 10
+print(callable(a))  #False  变量a不能被调用
+#
+def f():
+    print(&quot;hello&quot;)
+    print(callable(f))   # True 函数是可以被调用的
+</code></pre>
+<p>查看内置属性</p>
+<p>dir() : 查看对象的内置属性, 访问的是对象中的<strong>dir</strong>()方法</p>
+<pre><code>print(dir(tuple))  #查看元组的方法
+</code></pre>
+<p><a href="https://mp.weixin.qq.com/s/RE07ReitUyQDwG2yYcugPQ">68个python内置函数详解!!!</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>内置函数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 50条有趣的python一行代码</title>
     <url>/2021/10/16/50%E6%9D%A1%E6%9C%89%E8%B6%A3%E7%9A%84python%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81/</url>
     <content><![CDATA[<h1 id="50条有趣的python一行代码！"><a href="#50条有趣的python一行代码！" class="headerlink" title="50条有趣的python一行代码！"></a>50条有趣的python一行代码！</h1><p><a href="https://mp.weixin.qq.com/s/LVEPw7QAPqfLvi151aproQ">50条有趣的python一行代码！</a></p>
@@ -572,318 +884,6 @@ print(c)  # 5
       </tags>
   </entry>
   <entry>
-    <title>python | 68个python内置函数详解</title>
-    <url>/2021/10/16/68%E4%B8%AApython%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="68个python内置函数详解"><a href="#68个python内置函数详解" class="headerlink" title="68个python内置函数详解"></a>68个python内置函数详解</h1><p>内置函数就是Python给你提供的，拿来直接用的函数，比如print.，input等。<br>截止到python版本3.6.2 ，python一共提供了68个内置函数，具体如下👇</p>
-<pre><code>abs()           dict()        help()         min()         setattr()
-all()           dir()         hex()          next()        slice() 
-any()           divmod()      id()           object()      sorted() 
-ascii()         enumerate()   input()        oct()         staticmethod() 
-bin()           eval()        int()          open()        str() 
-bool()          exec()        isinstance()   ord()         sum() 
-bytearray()     ﬁlter()       issubclass()   pow()         super() 
-bytes()         ﬂoat()        iter()         print()       tuple() 
-callable()      format()      len()          property()    type() 
-chr()           frozenset()   list()         range()       vars() 
-classmethod()   getattr()     locals()       repr()        zip() 
-compile()       globals()     map()          reversed()    __import__() 
-complex()       hasattr()     max()          round() 
-delattr()       hash()        memoryview()   set()
-</code></pre>
-<span id="more"></span>
-<p>本文将这68个内置函数综合整理为12大类，正在学习Python基础的读者一定不要错过，建议收藏学习！<br>和数字相关</p>
-<ol>
-<li>数据类型</li>
-</ol>
-<p>bool : 布尔型(True,False)<br>int : 整型(整数)<br>float : 浮点型(小数)<br>complex : 复数</p>
-<ol start="2">
-<li>进制转换</li>
-</ol>
-<p>bin() 将给的参数转换成二进制<br>otc() 将给的参数转换成八进制<br>hex() 将给的参数转换成十六进制</p>
-<pre><code>print(bin(10))  # 二进制:0b1010
-print(hex(10))  # 十六进制:0xa
-print(oct(10))  # 八进制:0o12
-</code></pre>
-<ol start="3">
-<li>数学运算</li>
-</ol>
-<p>abs() 返回绝对值<br>divmode() 返回商和余数<br>round() 四舍五入<br>pow(a, b) 求a的b次幂, 如果有三个参数. 则求完次幂后对第三个数取余<br>sum() 求和<br>min() 求最小值<br>max() 求最大值</p>
-<pre><code>print(abs(-2))  # 绝对值:2
-print(divmod(20,3)) # 求商和余数:(6,2)
-print(round(4.50))   # 五舍六入:4
-print(round(4.51))   #5
-print(pow(10,2,3))  # 如果给了第三个参数. 表示最后取余:1
-print(sum([1,2,3,4,5,6,7,8,9,10]))  # 求和:55
-print(min(5,3,9,12,7,2))  #求最小值:2
-print(max(7,3,15,9,4,13))  #求最大值:15
-</code></pre>
-<p>和数据结构相关</p>
-<ol>
-<li>序列</li>
-</ol>
-<p>（1）列表和元组</p>
-<p>list() 将一个可迭代对象转换成列表<br>tuple() 将一个可迭代对象转换成元组</p>
-<pre><code>print(list((1,2,3,4,5,6)))  #[1, 2, 3, 4, 5, 6]
-print(tuple([1,2,3,4,5,6]))  #(1, 2, 3, 4, 5, 6)
-</code></pre>
-<p>（2）相关内置函数</p>
-<p>reversed() 将一个序列翻转, 返回翻转序列的迭代器<br>slice() 列表的切片</p>
-<pre><code>lst = &quot;你好啊&quot;
-it = reversed(lst)   # 不会改变原列表. 返回一个迭代器, 设计上的一个规则
-print(list(it))  #[&#39;啊&#39;, &#39;好&#39;, &#39;你&#39;]
-lst = [1, 2, 3, 4, 5, 6, 7]
-print(lst[1:3:1])  #[2,3]
-s = slice(1, 3, 1)  #  切片用的
-print(lst[s])  #[2,3]
-</code></pre>
-<p>（3）字符串</p>
-<p>str() 将数据转化成字符串</p>
-<pre><code>print(str(123)+&#39;456&#39;)  #123456
-</code></pre>
-<p>format() 与具体数据相关, 用于计算各种小数, 精算等.</p>
-<pre><code>s = &quot;hello world!&quot;
-print(format(s, &quot;^20&quot;))  #剧中
-print(format(s, &quot;&lt;20&quot;))  #左对齐
-print(format(s, &quot;&gt;20&quot;))  #右对齐
-#     hello world!    
-# hello world!        
-#         hello world!
-print(format(3, &#39;b&#39; ))    # 二进制:11
-print(format(97, &#39;c&#39; ))   # 转换成unicode字符:a
-print(format(11, &#39;d&#39; ))   # ⼗进制:11
-print(format(11, &#39;o&#39; ))   # 八进制:13 
-print(format(11, &#39;x&#39; ))   # 十六进制(⼩写字母):b
-print(format(11, &#39;X&#39; ))   # 十六进制(大写字母):B
-print(format(11, &#39;n&#39; ))   # 和d⼀样:11
-print(format(11))         # 和d⼀样:11
-
-print(format(123456789, &#39;e&#39; ))      # 科学计数法. 默认保留6位小数:1.234568e+08
-print(format(123456789, &#39;0.2e&#39; ))   # 科学计数法. 保留2位小数(小写):1.23e+08
-print(format(123456789, &#39;0.2E&#39; ))   # 科学计数法. 保留2位小数(大写):1.23E+08
-print(format(1.23456789, &#39;f&#39; ))     # 小数点计数法. 保留6位小数:1.234568
-print(format(1.23456789, &#39;0.2f&#39; ))  # 小数点计数法. 保留2位小数:1.23
-print(format(1.23456789, &#39;0.10f&#39;))  # 小数点计数法. 保留10位小数:1.2345678900
-print(format(1.23456789e+3, &#39;F&#39;))   # 小数点计数法. 很大的时候输出INF:1234.567890
-</code></pre>
-<p>bytes() 把字符串转化成bytes类型</p>
-<pre><code>bs = bytes(&quot;今天吃饭了吗&quot;, encoding=&quot;utf-8&quot;)
-print(bs)  #b&#39;\xe4\xbb\x8a\xe5\xa4\xa9\xe5\x90\x83\xe9\xa5\xad\xe4\xba\x86\xe5\x90\x97&#39;
-</code></pre>
-<p>bytearray()    返回一个新字节数组. 这个数字的元素是可变的, 并且每个元素的值得范围是[0,256)</p>
-<pre><code>ret = bytearray(&quot;alex&quot; ,encoding =&#39;utf-8&#39;)
-print(ret[0])  #97
-print(ret)  #bytearray(b&#39;alex&#39;)
-ret[0] = 65  #把65的位置A赋值给ret[0]
-print(str(ret))  #bytearray(b&#39;Alex&#39;)
-</code></pre>
-<p>ord() 输入字符找带字符编码的位置<br>chr() 输入位置数字找出对应的字符<br>ascii() 是ascii码中的返回该值 不是就返回u</p>
-<pre><code>print(ord(&#39;a&#39;))  # 字母a在编码表中的码位:97
-print(ord(&#39;中&#39;))  # &#39;中&#39;字在编码表中的位置:20013
-
-print(chr(65))  # 已知码位,求字符是什么:A
-print(chr(19999))  #丟
-
-for i in range(65536):  #打印出0到65535的字符
-    print(chr(i), end=&quot; &quot;)
-
-print(ascii(&quot;@&quot;))  #&#39;@&#39;
-</code></pre>
-<p>repr() 返回一个对象的string形式</p>
-<pre><code>s = &quot;今天\n吃了%s顿\t饭&quot; % 3
-print(s)#今天# 吃了3顿    饭
-print(repr(s))   # 原样输出,过滤掉转义字符 \n \t \r 不管百分号%
-#&#39;今天\n吃了3顿\t饭&#39;
-</code></pre>
-<ol start="2">
-<li>数据集合</li>
-</ol>
-<p>字典：dict 创建一个字典</p>
-<p>集合：set 创建一个集合</p>
-<p>frozenset() 创建一个冻结的集合，冻结的集合不能进行添加和删除操作。<br>3. 相关内置函数</p>
-<p>len() 返回一个对象中的元素的个数<br>sorted() 对可迭代对象进行排序操作 (lamda)</p>
-<p>语法：sorted(Iterable, key=函数(排序规则), reverse=False)</p>
-<p>Iterable: 可迭代对象<br>key: 排序规则(排序函数), 在sorted内部会将可迭代对象中的每一个元素传递给这个函数的参数. 根据函数运算的结果进行排序<br>reverse: 是否是倒叙. True: 倒叙, False: 正序</p>
-<pre><code>lst = [5,7,6,12,1,13,9,18,5]
-lst.sort()  # sort是list里面的一个方法
-print(lst)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
-
-ll = sorted(lst) # 内置函数. 返回给你一个新列表  新列表是被排序的
-print(ll)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
-
-l2 = sorted(lst,reverse=True)  #倒序
-print(l2)  #[18, 13, 12, 9, 7, 6, 5, 5, 1]
-</code></pre>
-<p>#根据字符串长度给列表排序<br>    lst = [‘one’, ‘two’, ‘three’, ‘four’, ‘five’, ‘six’]<br>    def f(s):<br>        return len(s)<br>    l1 = sorted(lst, key=f, )<br>    print(l1)  #[‘one’, ‘two’, ‘six’, ‘four’, ‘five’, ‘three’]</p>
-<p>enumerate() 获取集合的枚举对象</p>
-<pre><code>lst = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;,&#39;five&#39;]
-for index, el in enumerate(lst,1):    # 把索引和元素一起获取,索引默认从0开始. 可以更改
-    print(index)
-    print(el)
-# 1
-# one
-# 2
-# two
-# 3
-# three
-# 4
-# four
-# 5
-# five
-</code></pre>
-<p>all() 可迭代对象中全部是True, 结果才是True<br>any() 可迭代对象中有一个是True, 结果就是True</p>
-<pre><code>print(all([1,&#39;hello&#39;,True,9]))  #True
-print(any([0,0,0,False,1,&#39;good&#39;]))  #True
-</code></pre>
-<p>zip() 函数用于将可迭代的对象作为参数, 将对象中对应的元素打包成一个元组, 然后返回由这些元组组成的列表. 如果各个迭代器的元素个数不一致, 则返回列表长度与最短的对象相同</p>
-<pre><code>lst1 = [1, 2, 3, 4, 5, 6]
-lst2 = [&#39;醉乡民谣&#39;, &#39;驴得水&#39;, &#39;放牛班的春天&#39;, &#39;美丽人生&#39;, &#39;辩护人&#39;, &#39;被嫌弃的松子的一生&#39;]
-lst3 = [&#39;美国&#39;, &#39;中国&#39;, &#39;法国&#39;, &#39;意大利&#39;, &#39;韩国&#39;, &#39;日本&#39;]
-print(zip(lst1, lst1, lst3))  #&lt;zip object at 0x00000256CA6C7A88&gt;
-for el in zip(lst1, lst2, lst3):
-    print(el)
-# (1, &#39;醉乡民谣&#39;, &#39;美国&#39;)
-# (2, &#39;驴得水&#39;, &#39;中国&#39;)
-# (3, &#39;放牛班的春天&#39;, &#39;法国&#39;)
-# (4, &#39;美丽人生&#39;, &#39;意大利&#39;)
-# (5, &#39;辩护人&#39;, &#39;韩国&#39;)
-# (6, &#39;被嫌弃的松子的一生&#39;, &#39;日本&#39;)
-</code></pre>
-<p>fiter() 过滤 (lamda)</p>
-<p>语法：fiter(function. Iterable)</p>
-<p>function: 用来筛选的函数. 在ﬁlter中会自动的把iterable中的元素传递给function. 然后根据function返回的True或者False来判断是否保留留此项数据 , Iterable: 可迭代对象</p>
-<pre><code>def func(i):    # 判断奇数
-    return i % 2 == 1
-    lst = [1,2,3,4,5,6,7,8,9]
-l1 = filter(func, lst)  #l1是迭代器
-print(l1)  #&lt;filter object at 0x000001CE3CA98AC8&gt;
-print(list(l1))  #[1, 3, 5, 7, 9]
-</code></pre>
-<p>map() 会根据提供的函数对指定序列列做映射(lamda)</p>
-<p>语法 : map(function, iterable)</p>
-<p>可以对可迭代对象中的每一个元素进行映射. 分别去执行 function</p>
-<pre><code>def f(i):    return i
-lst = [1,2,3,4,5,6,7,]
-it = map(f, lst) # 把可迭代对象中的每一个元素传递给前面的函数进行处理. 处理的结果会返回成迭代器print(list(it))  #[1, 2, 3, 4, 5, 6, 7]
-</code></pre>
-<p>和作用域相关</p>
-<p>locals() 返回当前作用域中的名字<br>globals() 返回全局作用域中的名字</p>
-<pre><code>def func():
-    a = 10
-    print(locals())  # 当前作用域中的内容
-    print(globals())  # 全局作用域中的内容
-    print(&quot;今天内容很多&quot;)
-func()
-# &#123;&#39;a&#39;: 10&#125;
-# &#123;&#39;__name__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None, &#39;__loader__&#39;: 
-# &lt;_frozen_importlib_external.SourceFileLoader object at 0x0000026F8D566080&gt;, 
-# &#39;__spec__&#39;: None, &#39;__annotations__&#39;: &#123;&#125;, &#39;__builtins__&#39;: &lt;module &#39;builtins&#39; 
-# (built-in)&gt;, &#39;__file__&#39;: &#39;D:/pycharm/练习/week03/new14.py&#39;, &#39;__cached__&#39;: None,
-#  &#39;func&#39;: &lt;function func at 0x0000026F8D6B97B8&gt;&#125;
-# 今天内容很多
-</code></pre>
-<p>和迭代器生成器相关</p>
-<p>range() 生成数据<br>next() 迭代器向下执行一次, 内部实际使⽤用了__ next__()⽅方法返回迭代器的下一个项目<br>iter() 获取迭代器, 内部实际使用的是__ iter__()⽅方法来获取迭代器</p>
-<pre><code>for i in range(15,-1,-5):
-    print(i)
-# 15
-# 10
-# 5
-# 0
-lst = [1,2,3,4,5]
-it = iter(lst)  #  __iter__()获得迭代器
-print(it.__next__())  #1
-print(next(it)) #2  __next__()  
-print(next(it))  #3
-print(next(it))  #4
-</code></pre>
-<p>字符串类型代码的执行</p>
-<p>eval() 执行字符串类型的代码. 并返回最终结果<br>exec() 执行字符串类型的代码<br>compile() 将字符串类型的代码编码. 代码对象能够通过exec语句来执行或者eval()进行求值</p>
-<pre><code>s1 = input(&quot;请输入a+b:&quot;)  #输入:8+9
-print(eval(s1))  # 17 可以动态的执行代码. 代码必须有返回值
-s2 = &quot;for i in range(5): print(i)&quot;
-a = exec(s2) # exec 执行代码不返回任何内容
-
-# 0
-# 1
-# 2
-# 3
-# 4
-print(a)  #None
-
-# 动态执行代码
-exec(&quot;&quot;&quot;
-def func():
-    print(&quot; 我是周杰伦&quot;)
-&quot;&quot;&quot; )
-func()  #我是周杰伦
-
-code1 = &quot;for i in range(3): print(i)&quot;
-com = compile(code1, &quot;&quot;, mode=&quot;exec&quot;)   # compile并不会执行你的代码.只是编译
-exec(com)   # 执行编译的结果
-# 0
-# 1
-# 2
-
-code2 = &quot;5+6+7&quot;
-com2 = compile(code2, &quot;&quot;, mode=&quot;eval&quot;)
-print(eval(com2))  # 18
-
-code3 = &quot;name = input(&#39;请输入你的名字:&#39;)&quot;  #输入:hello
-com3 = compile(code3, &quot;&quot;, mode=&quot;single&quot;)
-exec(com3)
-print(name)  #hello
-</code></pre>
-<p>输入输出</p>
-<p>print() : 打印输出<br>input() : 获取用户输出的内容</p>
-<pre><code>print(&quot;hello&quot;, &quot;world&quot;, sep=&quot;*&quot;, end=&quot;@&quot;) # sep:打印出的内容用什么连接,end:以什么为结尾
-#hello*world@
-</code></pre>
-<p>内存相关</p>
-<p>hash() : 获取到对象的哈希值(int, str, bool, tuple). hash算法:(1) 目的是唯一性 (2) dict 查找效率非常高, hash表.用空间换的时间 比较耗费内存</p>
-<pre><code>s = &#39;alex&#39;print(hash(s))  #-168324845050430382lst = [1, 2, 3, 4, 5]print(hash(lst))  #报错,列表是不可哈希的  id() :  获取到对象的内存地址s = &#39;alex&#39;print(id(s))  #2278345368944
-</code></pre>
-<p>文件操作相关</p>
-<p>open() : 用于打开一个文件, 创建一个文件句柄</p>
-<pre><code>f = open(&#39;file&#39;,mode=&#39;r&#39;,encoding=&#39;utf-8&#39;)
-f.read()
-f.close()
-</code></pre>
-<p>模块相关</p>
-<p>__ import__() : 用于动态加载类和函数</p>
-<pre><code># 让用户输入一个要导入的模块
-import os
-name = input(&quot;请输入你要导入的模块:&quot;)
-__import__(name)    # 可以动态导入模块
-</code></pre>
-<p>帮 助</p>
-<p>help() : 函数用于查看函数或模块用途的详细说明</p>
-<pre><code>print(help(str))  #查看字符串的用途
-</code></pre>
-<p>调用相关</p>
-<p>callable() : 用于检查一个对象是否是可调用的. 如果返回True, object有可能调用失败, 但如果返回False. 那调用绝对不会成功</p>
-<pre><code>a = 10
-print(callable(a))  #False  变量a不能被调用
-#
-def f():
-    print(&quot;hello&quot;)
-    print(callable(f))   # True 函数是可以被调用的
-</code></pre>
-<p>查看内置属性</p>
-<p>dir() : 查看对象的内置属性, 访问的是对象中的<strong>dir</strong>()方法</p>
-<pre><code>print(dir(tuple))  #查看元组的方法
-</code></pre>
-<p><a href="https://mp.weixin.qq.com/s/RE07ReitUyQDwG2yYcugPQ">68个python内置函数详解!!!</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>内置函数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
     <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
     <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
@@ -1243,20 +1243,6 @@ namespace ConsoleApp1
       </tags>
   </entry>
   <entry>
-    <title>GPU | CPU和GPU的设计区别</title>
-    <url>/2021/10/11/CPU%E5%92%8CGPU%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="CPU和GPU的设计区别"><a href="#CPU和GPU的设计区别" class="headerlink" title="CPU和GPU的设计区别"></a>CPU和GPU的设计区别</h1><p><a href="https://www.cnblogs.com/biglucky/p/4223565.html">点击链接查看CPU和GPU的设计区别！！！</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>GPU</category>
-      </categories>
-      <tags>
-        <tag>GPU</tag>
-        <tag>CPU</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C# | CSharp参数传递</title>
     <url>/2021/07/03/CSharp%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/</url>
     <content><![CDATA[<h1 id="CSharp参数传递"><a href="#CSharp参数传递" class="headerlink" title="CSharp参数传递"></a>CSharp参数传递</h1><p>1.按值传递参数<br>Code:</p>
@@ -1396,6 +1382,20 @@ namespace ConsoleApp1
       </categories>
       <tags>
         <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GPU | CPU和GPU的设计区别</title>
+    <url>/2021/10/11/CPU%E5%92%8CGPU%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="CPU和GPU的设计区别"><a href="#CPU和GPU的设计区别" class="headerlink" title="CPU和GPU的设计区别"></a>CPU和GPU的设计区别</h1><p><a href="https://www.cnblogs.com/biglucky/p/4223565.html">点击链接查看CPU和GPU的设计区别！！！</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>GPU</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+        <tag>CPU</tag>
       </tags>
   </entry>
   <entry>
@@ -1621,6 +1621,20 @@ for ... in query[11:20]
       </categories>
       <tags>
         <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Computer Vision | DogsVSCats</title>
+    <url>/2021/11/16/DogsVSCats/</url>
+    <content><![CDATA[<h1 id="Dogs-VS-Cats"><a href="#Dogs-VS-Cats" class="headerlink" title="Dogs VS Cats"></a>Dogs VS Cats</h1>]]></content>
+      <categories>
+        <category>项目经历</category>
+        <category>Deep Learning</category>
+        <category>Computer Vision</category>
+        <category>Dogs VS Cats</category>
+      </categories>
+      <tags>
+        <tag>Dogs VS Cats</tag>
       </tags>
   </entry>
   <entry>
@@ -2415,6 +2429,23 @@ to_word(all_links)
       </tags>
   </entry>
   <entry>
+    <title>UML | UML中的事物分类</title>
+    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
+<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
+<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
+<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
+<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
+<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
+]]></content>
+      <categories>
+        <category>UML</category>
+      </categories>
+      <tags>
+        <tag>UML</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>tkinter | Tkinter制作python程序的图形化界面</title>
     <url>/2021/10/30/Tkinter%E5%88%B6%E4%BD%9Cpython%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2/</url>
     <content><![CDATA[<h1 id="Tkinter制作python程序的图形化界面"><a href="#Tkinter制作python程序的图形化界面" class="headerlink" title="Tkinter制作python程序的图形化界面"></a>Tkinter制作python程序的图形化界面</h1><p>代码：</p>
@@ -2584,23 +2615,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>UML | UML中的事物分类</title>
-    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
-<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
-<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
-<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
-<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
-<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
-]]></content>
-      <categories>
-        <category>UML</category>
-      </categories>
-      <tags>
-        <tag>UML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>VGG | 使用3x3卷积核的优点</title>
     <url>/2021/11/15/VGG3x3%E5%8D%B7%E7%A7%AF%E6%A0%B8%E7%9A%84%E4%BC%98%E7%82%B9/</url>
     <content><![CDATA[<h1 id="VGG使用3x3卷积核的优点"><a href="#VGG使用3x3卷积核的优点" class="headerlink" title="VGG使用3x3卷积核的优点"></a>VGG使用3x3卷积核的优点</h1><p>2个3x3的卷积核串联和一个5x5的卷积核拥有相同的感受野，但是，2个3x3的卷积核拥有更少的参数，<br>对于通道为1的5x5特征图得到通道为1的输出特征图，前者有3x3x2=18个参数，后者5x5=25个参数，<br>其次，多个3x3的卷积核比一个较大的尺寸的卷积核加入了更多的非线性函数，增强了模型的非线性表达能力。<br><strong>1x1卷积核的作用：</strong> 改变通道数目，保持尺度不变情况下增强非线性表达能力，可以实现跨通道的信息交互。</p>
@@ -2696,6 +2710,99 @@ if __name__ == &quot;__main__&quot;:
 ]]></content>
       <tags>
         <tag>Web服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法基础 | 递归与分治</title>
+    <url>/2020/10/16/algorithms-2/</url>
+    <content><![CDATA[<h1 id="递归与分治策略"><a href="#递归与分治策略" class="headerlink" title="递归与分治策略"></a>递归与分治策略</h1><p><b style="color:red">分治与递归经常同时应用在算法设计中</b></p>
+<h2 id="递归（Recursion）"><a href="#递归（Recursion）" class="headerlink" title="递归（Recursion）"></a>递归（Recursion）</h2><p>递归算法—<b>直接或间接地调用自身</b>的较小模式的算法<br>递归函数—用函数自身的较小模式给出其定义的函数</p>
+<span id="more"></span>
+<h3 id="example1-Fibonacci-Series"><a href="#example1-Fibonacci-Series" class="headerlink" title="example1:Fibonacci Series"></a>example1:Fibonacci Series</h3><p>Code1:</p>
+<pre><code>fibonacci(int n)
+&#123;
+    if(n&lt;=1) return 1;//递归边界
+    else return fibonacci(n-1)+fibonacci(n-2);//递归方程
+&#125;
+</code></pre>
+<p>时间复杂度:T(n)=sqrt(2)^n<br>时间复杂度过高的原因：存在很多重复的计算</p>
+<p>Code2:</p>
+<pre><code>fibonacci(int n)
+&#123;
+    int f[3]=&#123;1,1&#125;;
+    
+    for(i=0;i&lt;=n;i++)
+    &#123;
+        f[2]=f[0]+f[1]; f[0]=f[1]; f[1]=f[2];
+    &#125;
+    
+    return f[2];
+&#125;
+</code></pre>
+<p>时间复杂度：O(n)</p>
+<p><b style="color:red">设计更快的算法！！！</b></p>
+<h3 id="example2-Hanoi塔"><a href="#example2-Hanoi塔" class="headerlink" title="example2:Hanoi塔"></a>example2:Hanoi塔</h3><p>Code:</p>
+<pre><code>hanoi(int n,char a,char b,char c)//T(n)=O(2^n)
+&#123;//将塔座a上的盘子移到塔座b上，塔座c为辅助塔座
+    if(n&gt;0)
+    &#123;
+        hanoi(n-1,a,c,b);
+        move(a,b);
+        hanoi(n-1,c,b,a);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="递归小结"><a href="#递归小结" class="headerlink" title="递归小结"></a>递归小结</h3><p>优点：结构清晰、可读性强—&gt;设计算法、调试程序比较方便<br>缺点：程序运行效率低</p>
+<h2 id="分治-Divide-and-Conquer"><a href="#分治-Divide-and-Conquer" class="headerlink" title="分治(Divide and Conquer)"></a>分治(Divide and Conquer)</h2><h3 id="适用条件："><a href="#适用条件：" class="headerlink" title="适用条件："></a>适用条件：</h3><ol>
+<li>该问题的规模缩小到一定程度就可以容易地解决</li>
+<li>该问题<b>可以分解为若干个规模较小的相同问题</b>，即该问题具有最优子结构性质</li>
+<li>该问题分解出的子问题的解可以<b>合并</b>为该问题的解</li>
+<li>该问题分解出的各个子问题是相互独立的（<b>子问题之间不包含公共的子问题</b>）</li>
+</ol>
+
+<h3 id="基本步骤："><a href="#基本步骤：" class="headerlink" title="基本步骤："></a>基本步骤：</h3><pre><code>divide-and-conquer(p)
+&#123;
+    if(|p|&lt;=n0) naive(p);//解决朴素问题
+    divide p into smaller p1,p2...pa//分解问题
+    for(i=1;i&lt;=a;i++)
+    &#123;
+        yi=divide-and-conquer(pi);//递归的解各子问题
+    &#125;
+    return merge(y1,y2...ya);将子问题的解合并为原问题解
+&#125;
+</code></pre>
+<p><b style="color:yellow">Note:</b><br>在用分治法设计算法时，最好使子问题的规模大致相同(将一个问题分为大小相等的a个子问题的处理方法是行之有效的)。<br>这种做法出自<strong>平衡子问题</strong>的思想</p>
+<h3 id="example1-Binary-Search-Algorithm"><a href="#example1-Binary-Search-Algorithm" class="headerlink" title="example1:Binary Search Algorithm"></a>example1:Binary Search Algorithm</h3><p>Code:</p>
+<pre><code>binarySearch(int a[],int x)//T(n) = O(logn)
+&#123;
+    int n = sizeof(a),left = 0,right = n-1;
+    
+    while (left&lt;=right)
+    &#123;
+        int middle = (left+right)/2;
+        if(x == a[middle]) return middle;
+        if(x&gt;a[middle]) left = middle + 1;
+        else right = middle-1;
+    &#125;
+    
+    return -1;//x not found
+&#125;
+</code></pre>
+<h3 id="example2-Powering-a-number"><a href="#example2-Powering-a-number" class="headerlink" title="example2:Powering a number"></a>example2:Powering a number</h3><p><b>Problem:</b>Compute a^n,where n is subjected to N.<br><b>Naive algorithm:</b>O(n)<br><b>Divide-and-conquer algorithm:</b><br>Code:</p>
+<pre><code>power(int a,int n)//T(n)=O(logn)
+&#123;
+    if(n==1) return a;
+    else if(n%2==0) return power(a,n/2)*power(a,n/2);
+    else return power(a,(n-1)/2*power(a,(n-1)/2*a);
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>算法基础</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -2854,99 +2961,6 @@ for link in all_links:
         <tag>python</tag>
         <tag>requests</tag>
         <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法基础 | 递归与分治</title>
-    <url>/2020/10/16/algorithms-2/</url>
-    <content><![CDATA[<h1 id="递归与分治策略"><a href="#递归与分治策略" class="headerlink" title="递归与分治策略"></a>递归与分治策略</h1><p><b style="color:red">分治与递归经常同时应用在算法设计中</b></p>
-<h2 id="递归（Recursion）"><a href="#递归（Recursion）" class="headerlink" title="递归（Recursion）"></a>递归（Recursion）</h2><p>递归算法—<b>直接或间接地调用自身</b>的较小模式的算法<br>递归函数—用函数自身的较小模式给出其定义的函数</p>
-<span id="more"></span>
-<h3 id="example1-Fibonacci-Series"><a href="#example1-Fibonacci-Series" class="headerlink" title="example1:Fibonacci Series"></a>example1:Fibonacci Series</h3><p>Code1:</p>
-<pre><code>fibonacci(int n)
-&#123;
-    if(n&lt;=1) return 1;//递归边界
-    else return fibonacci(n-1)+fibonacci(n-2);//递归方程
-&#125;
-</code></pre>
-<p>时间复杂度:T(n)=sqrt(2)^n<br>时间复杂度过高的原因：存在很多重复的计算</p>
-<p>Code2:</p>
-<pre><code>fibonacci(int n)
-&#123;
-    int f[3]=&#123;1,1&#125;;
-    
-    for(i=0;i&lt;=n;i++)
-    &#123;
-        f[2]=f[0]+f[1]; f[0]=f[1]; f[1]=f[2];
-    &#125;
-    
-    return f[2];
-&#125;
-</code></pre>
-<p>时间复杂度：O(n)</p>
-<p><b style="color:red">设计更快的算法！！！</b></p>
-<h3 id="example2-Hanoi塔"><a href="#example2-Hanoi塔" class="headerlink" title="example2:Hanoi塔"></a>example2:Hanoi塔</h3><p>Code:</p>
-<pre><code>hanoi(int n,char a,char b,char c)//T(n)=O(2^n)
-&#123;//将塔座a上的盘子移到塔座b上，塔座c为辅助塔座
-    if(n&gt;0)
-    &#123;
-        hanoi(n-1,a,c,b);
-        move(a,b);
-        hanoi(n-1,c,b,a);
-    &#125;
-&#125;
-</code></pre>
-<h3 id="递归小结"><a href="#递归小结" class="headerlink" title="递归小结"></a>递归小结</h3><p>优点：结构清晰、可读性强—&gt;设计算法、调试程序比较方便<br>缺点：程序运行效率低</p>
-<h2 id="分治-Divide-and-Conquer"><a href="#分治-Divide-and-Conquer" class="headerlink" title="分治(Divide and Conquer)"></a>分治(Divide and Conquer)</h2><h3 id="适用条件："><a href="#适用条件：" class="headerlink" title="适用条件："></a>适用条件：</h3><ol>
-<li>该问题的规模缩小到一定程度就可以容易地解决</li>
-<li>该问题<b>可以分解为若干个规模较小的相同问题</b>，即该问题具有最优子结构性质</li>
-<li>该问题分解出的子问题的解可以<b>合并</b>为该问题的解</li>
-<li>该问题分解出的各个子问题是相互独立的（<b>子问题之间不包含公共的子问题</b>）</li>
-</ol>
-
-<h3 id="基本步骤："><a href="#基本步骤：" class="headerlink" title="基本步骤："></a>基本步骤：</h3><pre><code>divide-and-conquer(p)
-&#123;
-    if(|p|&lt;=n0) naive(p);//解决朴素问题
-    divide p into smaller p1,p2...pa//分解问题
-    for(i=1;i&lt;=a;i++)
-    &#123;
-        yi=divide-and-conquer(pi);//递归的解各子问题
-    &#125;
-    return merge(y1,y2...ya);将子问题的解合并为原问题解
-&#125;
-</code></pre>
-<p><b style="color:yellow">Note:</b><br>在用分治法设计算法时，最好使子问题的规模大致相同(将一个问题分为大小相等的a个子问题的处理方法是行之有效的)。<br>这种做法出自<strong>平衡子问题</strong>的思想</p>
-<h3 id="example1-Binary-Search-Algorithm"><a href="#example1-Binary-Search-Algorithm" class="headerlink" title="example1:Binary Search Algorithm"></a>example1:Binary Search Algorithm</h3><p>Code:</p>
-<pre><code>binarySearch(int a[],int x)//T(n) = O(logn)
-&#123;
-    int n = sizeof(a),left = 0,right = n-1;
-    
-    while (left&lt;=right)
-    &#123;
-        int middle = (left+right)/2;
-        if(x == a[middle]) return middle;
-        if(x&gt;a[middle]) left = middle + 1;
-        else right = middle-1;
-    &#125;
-    
-    return -1;//x not found
-&#125;
-</code></pre>
-<h3 id="example2-Powering-a-number"><a href="#example2-Powering-a-number" class="headerlink" title="example2:Powering a number"></a>example2:Powering a number</h3><p><b>Problem:</b>Compute a^n,where n is subjected to N.<br><b>Naive algorithm:</b>O(n)<br><b>Divide-and-conquer algorithm:</b><br>Code:</p>
-<pre><code>power(int a,int n)//T(n)=O(logn)
-&#123;
-    if(n==1) return a;
-    else if(n%2==0) return power(a,n/2)*power(a,n/2);
-    else return power(a,(n-1)/2*power(a,(n-1)/2*a);
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>算法基础</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -3251,21 +3265,6 @@ ALLOWED_HOSTS = [&#39;*&#39;]
       </tags>
   </entry>
   <entry>
-    <title>os | os.listdir()和os.walk()</title>
-    <url>/2021/10/29/listdir%E5%92%8Cwalk/</url>
-    <content><![CDATA[<h1 id="os-listdir-和os-walk"><a href="#os-listdir-和os-walk" class="headerlink" title="os.listdir()和os.walk()"></a>os.listdir()和os.walk()</h1><p><a href="https://www.jianshu.com/p/5c3b45d672d5">os.listdir()和os.walk()</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>os</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>os</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>matplotlib | 绘制双柱状图</title>
     <url>/2021/10/24/matplotlib%E7%BB%98%E5%88%B6%E5%8F%8C%E6%9F%B1%E7%8A%B6%E5%9B%BE/</url>
     <content><![CDATA[<h1 id="使用matplotlib绘制双柱状图"><a href="#使用matplotlib绘制双柱状图" class="headerlink" title="使用matplotlib绘制双柱状图"></a>使用matplotlib绘制双柱状图</h1><p>实现代码：</p>
@@ -3316,18 +3315,18 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>pandas | 文本数据处理</title>
-    <url>/2021/11/06/pandas%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="pandas文本数据处理"><a href="#pandas文本数据处理" class="headerlink" title="pandas文本数据处理"></a>pandas文本数据处理</h1><p><a href="https://mp.weixin.qq.com/s/xmG8QizkbXJIBcqdT3nN-g">参考资料</a></p>
+    <title>os | os.listdir()和os.walk()</title>
+    <url>/2021/10/29/listdir%E5%92%8Cwalk/</url>
+    <content><![CDATA[<h1 id="os-listdir-和os-walk"><a href="#os-listdir-和os-walk" class="headerlink" title="os.listdir()和os.walk()"></a>os.listdir()和os.walk()</h1><p><a href="https://www.jianshu.com/p/5c3b45d672d5">os.listdir()和os.walk()</a></p>
 ]]></content>
       <categories>
         <category>python</category>
-        <category>第三方库</category>
-        <category>pandas</category>
+        <category>内置模块</category>
+        <category>os</category>
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>pandas</tag>
+        <tag>os</tag>
       </tags>
   </entry>
   <entry>
@@ -3378,6 +3377,21 @@ wb.save(&quot;物料表.xlsx&quot;)
       <tags>
         <tag>python</tag>
         <tag>openpyxl</tag>
+        <tag>pandas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pandas | 文本数据处理</title>
+    <url>/2021/11/06/pandas%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="pandas文本数据处理"><a href="#pandas文本数据处理" class="headerlink" title="pandas文本数据处理"></a>pandas文本数据处理</h1><p><a href="https://mp.weixin.qq.com/s/xmG8QizkbXJIBcqdT3nN-g">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pandas</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
         <tag>pandas</tag>
       </tags>
   </entry>
@@ -4991,22 +5005,6 @@ for picture in pictures:
       </tags>
   </entry>
   <entry>
-    <title>python | re sub的使用方法</title>
-    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
-<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>re</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>re</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | re.match与re.search的区别</title>
     <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
@@ -5020,6 +5018,22 @@ re.search(r&quot;dogs&quot;,s)#匹配成功
       </categories>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | re sub的使用方法</title>
+    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
+<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>re</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>re</tag>
       </tags>
   </entry>
   <entry>
@@ -5324,6 +5338,45 @@ print(&#39;标签：&#39;, y )
       </tags>
   </entry>
   <entry>
+    <title>leetcode | sqrt</title>
+    <url>/2021/10/27/sqrt/</url>
+    <content><![CDATA[<h1 id="69-sqrt-x"><a href="#69-sqrt-x" class="headerlink" title="69.sqrt(x)"></a>69.sqrt(x)</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。<br>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。<br>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p>
+<p><a href="https://leetcode-cn.com/problems/sqrtx/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.二分法</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
+    @staticmethod
+    def my_sqrt1(a):
+        &quot;&quot;&quot;二分法开根号&quot;&quot;&quot;
+        # 初始化左右边界
+        left, right = 0, a
+        while left &lt;= right:
+            mid = (left + right) // 2
+            if mid ** 2 == a:
+                return mid
+            elif mid ** 2 &gt; a:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return right
+
+
+if __name__ == &quot;__main__&quot;:
+    a = 3
+    s = Solution()
+    sqrt_a = s.my_sqrt1(a)
+    print(sqrt_a)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网络编程 | tcp三次握手四次挥手</title>
     <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
     <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
@@ -5419,45 +5472,6 @@ tcpClientSocket.close()
         <tag>网络编程</tag>
         <tag>tcp客户端</tag>
         <tag>tcp服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | sqrt</title>
-    <url>/2021/10/27/sqrt/</url>
-    <content><![CDATA[<h1 id="69-sqrt-x"><a href="#69-sqrt-x" class="headerlink" title="69.sqrt(x)"></a>69.sqrt(x)</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。<br>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。<br>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p>
-<p><a href="https://leetcode-cn.com/problems/sqrtx/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.二分法</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    @staticmethod
-    def my_sqrt1(a):
-        &quot;&quot;&quot;二分法开根号&quot;&quot;&quot;
-        # 初始化左右边界
-        left, right = 0, a
-        while left &lt;= right:
-            mid = (left + right) // 2
-            if mid ** 2 == a:
-                return mid
-            elif mid ** 2 &gt; a:
-                right = mid - 1
-            else:
-                left = mid + 1
-        return right
-
-
-if __name__ == &quot;__main__&quot;:
-    a = 3
-    s = Solution()
-    sqrt_a = s.my_sqrt1(a)
-    print(sqrt_a)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -5876,6 +5890,23 @@ app.MainLoop()
       </tags>
   </entry>
   <entry>
+    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
+    <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
+    <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>一维卷积</tag>
+        <tag>二维卷积</tag>
+        <tag>三维卷积</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
     <url>/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</url>
     <content><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
@@ -5922,23 +5953,6 @@ for file in files:
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pdfplumber</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
-    <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
-    <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>一维卷积</tag>
-        <tag>二维卷积</tag>
-        <tag>三维卷积</tag>
       </tags>
   </entry>
   <entry>
@@ -6404,19 +6418,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>OS | 什么是操作系统</title>
-    <url>/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h1 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统?"></a>什么是操作系统?</h1><p>“操作系统（operating system，简称OS）是管理计算机硬件与软件资源的计算机程序,是硬件软件之间的一座桥梁。</p>
-<p><img src="/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.JPG"></p>
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 二进制求和</title>
     <url>/2021/08/29/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B1%82%E5%92%8C/</url>
     <content><![CDATA[<h1 id="67-二进制求和"><a href="#67-二进制求和" class="headerlink" title="67.二进制求和"></a>67.二进制求和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个二进制字符串，返回它们的和（用二进制表示）。<br>输入为 非空 字符串且只包含数字 1 和 0。</p>
@@ -6483,6 +6484,19 @@ if __name__ == &#39;__main__&#39;:
       </categories>
       <tags>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OS | 什么是操作系统</title>
+    <url>/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统?"></a>什么是操作系统?</h1><p>“操作系统（operating system，简称OS）是管理计算机硬件与软件资源的计算机程序,是硬件软件之间的一座桥梁。</p>
+<p><img src="/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.JPG"></p>
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>OS</tag>
       </tags>
   </entry>
   <entry>
@@ -6650,55 +6664,6 @@ wb.save(&quot;物料表_1.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
-    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
-<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
-<li>1.先要解析出baidu.com对应的ip地址</li>
-<ol>
-<li>1.先要知道默认网关的MAC地址</li>
-<ol>
-<li>1.使用ARP获取默认网关的MAC地址</li>
-</ol>
-<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
-<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
-<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
-<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
-<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
-</ol>
-<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
-<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
-<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
-<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
-<li>6.浏览器关闭TCP连接，即4次挥手</li>
-</ol>
-
-
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | 伪迹去除方法比较总结</title>
-    <url>/2021/02/25/%E4%BC%AA%E8%BF%B9%E5%8E%BB%E9%99%A4%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="伪迹去除方法比较总结"><a href="#伪迹去除方法比较总结" class="headerlink" title="伪迹去除方法比较总结"></a>伪迹去除方法比较总结</h1><p>1.(定性比较 or 定量比较)很难对不同伪迹去除方法基于它们去除伪迹的能力进行一个比较，通常只能做一个<b>定性(qualitative)</b>的比较<br>2.(自动 or 半自动)很多基于EEG的应用需要<b>自动信息处理</b>，尤其是一些对<b>在线/实时(需要效率很高的算法和足够低的计算复杂度)</b>有要求的应用。基于<b>BSS(盲源分离)</b>的方法通常是<b>半自动</b>的,因为伪迹成分的识别需要一些训练或参数选择/调整。涉及ICA的伪迹检测/去除方法需要另一个方法才能实现全过程的自动<br>3.(单通道 or 多通道)基于<b>盲源分离</b>的方法需要<b>多通道</b>才能起作用，通道数量越多，越能很好的分离出单个的源(这种方法不能用于低通道 e.g. 4-6或者基于单通道的应用)。基于<b>小波变换和经验模态分解</b>的方法可以通过将单个数据序列分解为多个成分进行<b>单通道</b>分析。<br>4.(参考信号)大多数方法需要参考信号。</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
     <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
@@ -6771,6 +6736,55 @@ print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len
         <tag>python</tag>
         <tag>os</tag>
         <tag>openpyxl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
+    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
+<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
+<li>1.先要解析出baidu.com对应的ip地址</li>
+<ol>
+<li>1.先要知道默认网关的MAC地址</li>
+<ol>
+<li>1.使用ARP获取默认网关的MAC地址</li>
+</ol>
+<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
+<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
+<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
+<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
+<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
+</ol>
+<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
+<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
+<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
+<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
+<li>6.浏览器关闭TCP连接，即4次挥手</li>
+</ol>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | 伪迹去除方法比较总结</title>
+    <url>/2021/02/25/%E4%BC%AA%E8%BF%B9%E5%8E%BB%E9%99%A4%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="伪迹去除方法比较总结"><a href="#伪迹去除方法比较总结" class="headerlink" title="伪迹去除方法比较总结"></a>伪迹去除方法比较总结</h1><p>1.(定性比较 or 定量比较)很难对不同伪迹去除方法基于它们去除伪迹的能力进行一个比较，通常只能做一个<b>定性(qualitative)</b>的比较<br>2.(自动 or 半自动)很多基于EEG的应用需要<b>自动信息处理</b>，尤其是一些对<b>在线/实时(需要效率很高的算法和足够低的计算复杂度)</b>有要求的应用。基于<b>BSS(盲源分离)</b>的方法通常是<b>半自动</b>的,因为伪迹成分的识别需要一些训练或参数选择/调整。涉及ICA的伪迹检测/去除方法需要另一个方法才能实现全过程的自动<br>3.(单通道 or 多通道)基于<b>盲源分离</b>的方法需要<b>多通道</b>才能起作用，通道数量越多，越能很好的分离出单个的源(这种方法不能用于低通道 e.g. 4-6或者基于单通道的应用)。基于<b>小波变换和经验模态分解</b>的方法可以通过将单个数据序列分解为多个成分进行<b>单通道</b>分析。<br>4.(参考信号)大多数方法需要参考信号。</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -7017,6 +7031,22 @@ a = a.reshape((5,1))
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | 几种web服务器的比较</title>
+    <url>/2020/10/31/%E5%87%A0%E7%A7%8Dweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%AF%94%E8%BE%83/</url>
+    <content><![CDATA[<h1 id="几种web服务器的比较"><a href="#几种web服务器的比较" class="headerlink" title="几种web服务器的比较"></a>几种web服务器的比较</h1><h2 id="select版服务器"><a href="#select版服务器" class="headerlink" title="select版服务器"></a>select版服务器</h2><p>优点：跨平台<br>缺点：<br>单个进程能够监视的文件描述符的数量存在最大限制（1024）<br>轮询检测，效率较低</p>
+<h2 id="poll版服务器"><a href="#poll版服务器" class="headerlink" title="poll版服务器"></a>poll版服务器</h2><p>优点：解决了套接字有上限的问题<br>缺点：轮询检测</p>
+<h2 id="epoll版服务器"><a href="#epoll版服务器" class="headerlink" title="epoll版服务器"></a>epoll版服务器</h2><p>优点：<br>没有1024的最大限制<br>事件通知机制，效率较高</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 函数</title>
     <url>/2021/08/05/%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="python中的函数"><a href="#python中的函数" class="headerlink" title="python中的函数"></a>python中的函数</h1><p>python中的三种函数<br>1.函数：定义在模块中类之外的函数<br><strong>示例：</strong></p>
@@ -7049,22 +7079,6 @@ a = a.reshape((5,1))
       </categories>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 几种web服务器的比较</title>
-    <url>/2020/10/31/%E5%87%A0%E7%A7%8Dweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%AF%94%E8%BE%83/</url>
-    <content><![CDATA[<h1 id="几种web服务器的比较"><a href="#几种web服务器的比较" class="headerlink" title="几种web服务器的比较"></a>几种web服务器的比较</h1><h2 id="select版服务器"><a href="#select版服务器" class="headerlink" title="select版服务器"></a>select版服务器</h2><p>优点：跨平台<br>缺点：<br>单个进程能够监视的文件描述符的数量存在最大限制（1024）<br>轮询检测，效率较低</p>
-<h2 id="poll版服务器"><a href="#poll版服务器" class="headerlink" title="poll版服务器"></a>poll版服务器</h2><p>优点：解决了套接字有上限的问题<br>缺点：轮询检测</p>
-<h2 id="epoll版服务器"><a href="#epoll版服务器" class="headerlink" title="epoll版服务器"></a>epoll版服务器</h2><p>优点：<br>没有1024的最大限制<br>事件通知机制，效率较高</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -7376,21 +7390,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 前向传播和反向传播中使用的cache</title>
-    <url>/2021/06/30/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84cache/</url>
-    <content><![CDATA[<h1 id="前向传播和反向传播中使用的cache"><a href="#前向传播和反向传播中使用的cache" class="headerlink" title="前向传播和反向传播中使用的cache"></a>前向传播和反向传播中使用的cache</h1><p>the “cache” records values from the forward propagation units and sends it to the backward<br>propagation units because it is needed to compute the chain rule derivatives.(“cache”记录<br>来自正向传播单元的值并将其发送到反向传播单元，因为需要链式计算导数。)</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>前向传播</tag>
-        <tag>反向传播</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | 动态查找列表中的第二个number</title>
     <url>/2021/11/05/%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AAnumber/</url>
     <content><![CDATA[<h1 id="动态查找列表中的第二个number"><a href="#动态查找列表中的第二个number" class="headerlink" title="动态查找列表中的第二个number"></a>动态查找列表中的第二个number</h1><p>方法：先找到第一个2所在位置fist_index，切片new_list=names[index+1:]得到新的列表，<br>再从新列表中找第一个2的位置second_index.最终第二个2的位置为first_index+second_index+1</p>
@@ -7413,6 +7412,21 @@ print(&#39;第二个2 的位置为：&#39;, second_loction)
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 前向传播和反向传播中使用的cache</title>
+    <url>/2021/06/30/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84cache/</url>
+    <content><![CDATA[<h1 id="前向传播和反向传播中使用的cache"><a href="#前向传播和反向传播中使用的cache" class="headerlink" title="前向传播和反向传播中使用的cache"></a>前向传播和反向传播中使用的cache</h1><p>the “cache” records values from the forward propagation units and sends it to the backward<br>propagation units because it is needed to compute the chain rule derivatives.(“cache”记录<br>来自正向传播单元的值并将其发送到反向传播单元，因为需要链式计算导数。)</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>前向传播</tag>
+        <tag>反向传播</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 匹配第n个分组的内容</title>
     <url>/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/</url>
     <content><![CDATA[<h1 id="1…-9"><a href="#1…-9" class="headerlink" title="\1…\9"></a>\1…\9</h1><p>\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用<br>例：在以下代码段中\2表示匹配第2个分组（一个括号代表一个分组）的内容，即\2匹配”world”字符串</p>
@@ -7431,6 +7445,40 @@ print(re.search(pattern, string))
       <tags>
         <tag>python</tag>
         <tag>re</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 单任务服务器的缺点</title>
+    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
+<span id="more"></span>
+
+<pre><code>import socket 
+
+serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverSocket.bind((&#39;&#39;,8080))
+serverSocket.listen(5)
+
+while True:
+    #如果没有客户端到来，程序将阻塞等待
+    clientSocket,clientAddr = serverSocket.accept()
+    
+    while True:
+        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
+        recvData = newSocket.recv(1024)
+        if data:
+            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
+        else:
+            break
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -7511,40 +7559,6 @@ if __name__ == &#39;__main__&#39;:
         <tag>CNN</tag>
         <tag>卷积</tag>
         <tag>卷积核</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 单任务服务器的缺点</title>
-    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
-    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
-<span id="more"></span>
-
-<pre><code>import socket 
-
-serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-serverSocket.bind((&#39;&#39;,8080))
-serverSocket.listen(5)
-
-while True:
-    #如果没有客户端到来，程序将阻塞等待
-    clientSocket,clientAddr = serverSocket.accept()
-    
-    while True:
-        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
-        recvData = newSocket.recv(1024)
-        if data:
-            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
-        else:
-            break
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -7749,92 +7763,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 反转字符串中的单词3</title>
-    <url>/2021/09/02/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D3/</url>
-    <content><![CDATA[<h1 id="557-反转字符串中的单词3"><a href="#557-反转字符串中的单词3" class="headerlink" title="557.反转字符串中的单词3"></a>557.反转字符串中的单词3</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。</p>
-<span id="more"></span>
-<p>示例：<br>输入：”Let’s take LeetCode contest”<br>输出：”s’teL ekat edoCteeL tsetnoc”</p>
-<p><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.将字符串按照空格划分开得到字符串中的每一个单词,然后将每个单词反转<br>，在将反转后的所有单词用空格拼接起来<br>2.使用额外空间<br>开辟一个新字符串。然后从头到尾遍历原字符串，直到找到空格为止，此时找到了一个单词，并能得到单词的起止位置。随后，根据单词的起止位置，可以将该单词逆序放到新字符串当中。如此循环多次，直到遍历完原字符串，就能得到翻转后的结果。<br>3.原地解法<br>此题也可以直接在原字符串上进行操作，避免额外的空间开销。当找到一个单词的时候，我们交换字符串第一个字符与倒数第一个字符，随后交换第二个字符与倒数第二个字符……如此反复，就可以在原空间上翻转单词。<br>需要注意的是，原地解法在某些语言（比如 Java，JavaScript，python）中不适用，因为在这些语言中 String 类型是一个不可变的类型。<br>在python中可以先将字符串转为列表然后进行算法设计。</p>
-<p><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/solution/python-fan-zhuan-zi-fu-chuan-zhong-dan-ci-si-lu-xi/">更多思路参考“一行流”，简直牛逼！！！</a></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def reverseWords(self, s: str) -&gt; str:
-        &quot;&quot;&quot;
-        将字符串按照空格划分开得到字符串中的每一个单词
-        将每个单词反转
-        将反转后的所有单词用空格拼接起来
-        &quot;&quot;&quot;
-        words = s.split(&#39; &#39;)
-        reversed_words = []
-        for word in words:
-            reversed_words.append(self.reverseStr(word))
-        return &#39; &#39;.join(reversed_words)
-
-    def reverseStr(self, s: str) -&gt; str:
-        s = list(s)
-        s[:] = s[::-1]
-        return &#39;&#39;.join(s)
-
-    def reverseWords2(self, s: str) -&gt; str:
-        &quot;&quot;&quot;使用额外空间&quot;&quot;&quot;
-        ret = &#39;&#39;
-        length = len(s)
-        i = 0
-        while i &lt; length:
-            start = i
-            # 遍历字符串找到空格位置（找到了一个单词）
-            while i &lt; length and s[i] != &#39; &#39;:
-                i += 1
-            # 根据单词的起止位置，可以将该单词逆序放到新字符串当中
-            for p in range(start, i):
-                ret += s[start + i - 1 - p]
-            # 拼上单词后的空格
-            while i &lt; length and s[i] == &#39; &#39;:
-                i += 1
-                ret += &#39; &#39;
-
-        return ret
-
-    def reverseWords3(self, s: str) -&gt; str:
-        s = list(s)  # python中字符串为不可变类型，不支持原地修改，可转列表
-        length = len(s)
-        i = 0
-        while i &lt; length:
-            start = i
-
-            while i &lt; length and s[i] != &#39; &#39;:
-                i += 1
-
-            left = start
-            right = i - 1
-            while left &lt; right:
-                s[left], s[right] = s[right], s[left]
-                left += 1
-                right -= 1
-
-            while i &lt; length and s[i] == &#39; &#39;:
-                i += 1
-        return &#39;&#39;.join(s)
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    s = &quot;Let&#39;s take LeetCode contest&quot;
-    res = slt.reverseWords3(s)
-    print(&quot;反转单词后的字符串：&quot;, res)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 反转链表</title>
     <url>/2021/08/27/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="206-反转链表"><a href="#206-反转链表" class="headerlink" title="206.反转链表"></a>206.反转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。</p>
@@ -7966,65 +7894,89 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>openpyxl | 合并excel表格中上下行内容相同的单元格</title>
-    <url>/2021/10/21/%E5%90%88%E5%B9%B6excel%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
-    <content><![CDATA[<h1 id="合并excel表格中上下行内容相同的单元格"><a href="#合并excel表格中上下行内容相同的单元格" class="headerlink" title="合并excel表格中上下行内容相同的单元格"></a>合并excel表格中上下行内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
+    <title>leetcode | 反转字符串中的单词3</title>
+    <url>/2021/09/02/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D3/</url>
+    <content><![CDATA[<h1 id="557-反转字符串中的单词3"><a href="#557-反转字符串中的单词3" class="headerlink" title="557.反转字符串中的单词3"></a>557.反转字符串中的单词3</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。</p>
 <span id="more"></span>
-<pre><code># 获取Excel表格中的数据
-from openpyxl import load_workbook  # 用于读取Excel中的信息
+<p>示例：<br>输入：”Let’s take LeetCode contest”<br>输出：”s’teL ekat edoCteeL tsetnoc”</p>
+<p><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.将字符串按照空格划分开得到字符串中的每一个单词,然后将每个单词反转<br>，在将反转后的所有单词用空格拼接起来<br>2.使用额外空间<br>开辟一个新字符串。然后从头到尾遍历原字符串，直到找到空格为止，此时找到了一个单词，并能得到单词的起止位置。随后，根据单词的起止位置，可以将该单词逆序放到新字符串当中。如此循环多次，直到遍历完原字符串，就能得到翻转后的结果。<br>3.原地解法<br>此题也可以直接在原字符串上进行操作，避免额外的空间开销。当找到一个单词的时候，我们交换字符串第一个字符与倒数第一个字符，随后交换第二个字符与倒数第二个字符……如此反复，就可以在原空间上翻转单词。<br>需要注意的是，原地解法在某些语言（比如 Java，JavaScript，python）中不适用，因为在这些语言中 String 类型是一个不可变的类型。<br>在python中可以先将字符串转为列表然后进行算法设计。</p>
+<p><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string-iii/solution/python-fan-zhuan-zi-fu-chuan-zhong-dan-ci-si-lu-xi/">更多思路参考“一行流”，简直牛逼！！！</a></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def reverseWords(self, s: str) -&gt; str:
+        &quot;&quot;&quot;
+        将字符串按照空格划分开得到字符串中的每一个单词
+        将每个单词反转
+        将反转后的所有单词用空格拼接起来
+        &quot;&quot;&quot;
+        words = s.split(&#39; &#39;)
+        reversed_words = []
+        for word in words:
+            reversed_words.append(self.reverseStr(word))
+        return &#39; &#39;.join(reversed_words)
+
+    def reverseStr(self, s: str) -&gt; str:
+        s = list(s)
+        s[:] = s[::-1]
+        return &#39;&#39;.join(s)
+
+    def reverseWords2(self, s: str) -&gt; str:
+        &quot;&quot;&quot;使用额外空间&quot;&quot;&quot;
+        ret = &#39;&#39;
+        length = len(s)
+        i = 0
+        while i &lt; length:
+            start = i
+            # 遍历字符串找到空格位置（找到了一个单词）
+            while i &lt; length and s[i] != &#39; &#39;:
+                i += 1
+            # 根据单词的起止位置，可以将该单词逆序放到新字符串当中
+            for p in range(start, i):
+                ret += s[start + i - 1 - p]
+            # 拼上单词后的空格
+            while i &lt; length and s[i] == &#39; &#39;:
+                i += 1
+                ret += &#39; &#39;
+
+        return ret
+
+    def reverseWords3(self, s: str) -&gt; str:
+        s = list(s)  # python中字符串为不可变类型，不支持原地修改，可转列表
+        length = len(s)
+        i = 0
+        while i &lt; length:
+            start = i
+
+            while i &lt; length and s[i] != &#39; &#39;:
+                i += 1
+
+            left = start
+            right = i - 1
+            while left &lt; right:
+                s[left], s[right] = s[right], s[left]
+                left += 1
+                right -= 1
+
+            while i &lt; length and s[i] == &#39; &#39;:
+                i += 1
+        return &#39;&#39;.join(s)
 
 
-def merge_cells(ws, target_list, start_row, col):
-    &quot;&quot;&quot;
-    ws: 是需要操作的工作表
-    target_list: 是目标列表，即含有重复数据的列表
-    start_row: 是开始行，即工作表中开始比对数据的行（需要将标题除开）
-    col: 是需要处理数据的列
-    &quot;&quot;&quot;
-    start = 0  # 开始行计数，初试值为0，对应列表中的第1个元素的位置0
-    end = 0  # 结束行计数，初试值为0，对应列表中的第1个元素的位置0
-    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始
-    for i in range(len(target_list)):  # 遍历列表
-        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下
-            reference = target_list[i]  # 基准变成列表中下一个字符串
-            end = i - 1  # 列计数器
-            ws.merge_cells(col + str(start + start_row) + &quot;:&quot; + col + str(end + start_row))
-            start = end + 1
-        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作
-            end = i
-            ws.merge_cells(col + str(start + start_row) + &quot;:&quot; + col + str(end + start_row))
-
-
-wb = load_workbook(&#39;产品清单.xlsx&#39;)
-sheet_names = wb.get_sheet_names()
-for sheet_name in sheet_names:  # 遍历每个工作表，抓取数据，并根据要求合并单元格
-    ws = wb[sheet_name]
-    customer_list = []  # 客户名称
-    pn_list = []  # 产品编码
-
-    for row in range(6, ws.max_row - 2):
-        customer = ws[&#39;B&#39; + str(row)].value
-        pn = ws[&#39;C&#39; + str(row)].value
-        customer_list.append(customer)
-        pn_list.append(pn)
-
-    # 调用以上定义的合并单元格函数`Merge_cells`做单元格合并操作
-    start_row = 6  # 开始行是第六行
-    merge_cells(ws, customer_list, start_row, &quot;B&quot;)  # &quot;B&quot; - 客户名称是在B列
-    merge_cells(ws, pn_list, start_row, &quot;C&quot;)  # &quot;C&quot; - 产品编码是在C列
-
-wb.save(&quot;产品清单-合并单元.xlsx&quot;)
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    s = &quot;Let&#39;s take LeetCode contest&quot;
+    res = slt.reverseWords3(s)
+    print(&quot;反转单词后的字符串：&quot;, res)
 </code></pre>
-<p><a href="产品清单.xlsx">产品清单.xlsx</a></p>
 ]]></content>
       <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>openpyxl</category>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
       </categories>
       <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -8092,6 +8044,68 @@ doc.save(&quot;收货记录-合并单元格.docx&quot;)
       <tags>
         <tag>python</tag>
         <tag>python-docx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>openpyxl | 合并excel表格中上下行内容相同的单元格</title>
+    <url>/2021/10/21/%E5%90%88%E5%B9%B6excel%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
+    <content><![CDATA[<h1 id="合并excel表格中上下行内容相同的单元格"><a href="#合并excel表格中上下行内容相同的单元格" class="headerlink" title="合并excel表格中上下行内容相同的单元格"></a>合并excel表格中上下行内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
+<span id="more"></span>
+<pre><code># 获取Excel表格中的数据
+from openpyxl import load_workbook  # 用于读取Excel中的信息
+
+
+def merge_cells(ws, target_list, start_row, col):
+    &quot;&quot;&quot;
+    ws: 是需要操作的工作表
+    target_list: 是目标列表，即含有重复数据的列表
+    start_row: 是开始行，即工作表中开始比对数据的行（需要将标题除开）
+    col: 是需要处理数据的列
+    &quot;&quot;&quot;
+    start = 0  # 开始行计数，初试值为0，对应列表中的第1个元素的位置0
+    end = 0  # 结束行计数，初试值为0，对应列表中的第1个元素的位置0
+    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始
+    for i in range(len(target_list)):  # 遍历列表
+        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下
+            reference = target_list[i]  # 基准变成列表中下一个字符串
+            end = i - 1  # 列计数器
+            ws.merge_cells(col + str(start + start_row) + &quot;:&quot; + col + str(end + start_row))
+            start = end + 1
+        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作
+            end = i
+            ws.merge_cells(col + str(start + start_row) + &quot;:&quot; + col + str(end + start_row))
+
+
+wb = load_workbook(&#39;产品清单.xlsx&#39;)
+sheet_names = wb.get_sheet_names()
+for sheet_name in sheet_names:  # 遍历每个工作表，抓取数据，并根据要求合并单元格
+    ws = wb[sheet_name]
+    customer_list = []  # 客户名称
+    pn_list = []  # 产品编码
+
+    for row in range(6, ws.max_row - 2):
+        customer = ws[&#39;B&#39; + str(row)].value
+        pn = ws[&#39;C&#39; + str(row)].value
+        customer_list.append(customer)
+        pn_list.append(pn)
+
+    # 调用以上定义的合并单元格函数`Merge_cells`做单元格合并操作
+    start_row = 6  # 开始行是第六行
+    merge_cells(ws, customer_list, start_row, &quot;B&quot;)  # &quot;B&quot; - 客户名称是在B列
+    merge_cells(ws, pn_list, start_row, &quot;C&quot;)  # &quot;C&quot; - 产品编码是在C列
+
+wb.save(&quot;产品清单-合并单元.xlsx&quot;)
+</code></pre>
+<p><a href="产品清单.xlsx">产品清单.xlsx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>openpyxl</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
       </tags>
   </entry>
   <entry>
@@ -8294,6 +8308,21 @@ doc.save(&quot;6S稽查问题.docx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 吴恩达课后作业</title>
+    <url>/2021/06/23/%E5%90%B4%E6%81%A9%E8%BE%BE%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A/</url>
+    <content><![CDATA[<h1 id="吴恩达课后作业"><a href="#吴恩达课后作业" class="headerlink" title="吴恩达课后作业"></a>吴恩达课后作业</h1><p>这是在b站学习吴恩达深度学习课程时发现的课后作业实现，非常详细！！！点赞！！！</p>
+<p><a href="https://blog.csdn.net/u013733326/article/details/79827273">链接：吴恩达深度学习课后作业</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>学习资料</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>吴恩达</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python-docx | 向word中的表格写入数据</title>
     <url>/2021/10/24/%E5%90%91word%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="向word中的表格写入数据"><a href="#向word中的表格写入数据" class="headerlink" title="向word中的表格写入数据"></a>向word中的表格写入数据</h1><p>以下代码实现一键往word文档的表格中填写数据。</p>
@@ -8396,21 +8425,6 @@ doc.save(&quot;收货记录3.docx&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>openpyxl</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 吴恩达课后作业</title>
-    <url>/2021/06/23/%E5%90%B4%E6%81%A9%E8%BE%BE%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A/</url>
-    <content><![CDATA[<h1 id="吴恩达课后作业"><a href="#吴恩达课后作业" class="headerlink" title="吴恩达课后作业"></a>吴恩达课后作业</h1><p>这是在b站学习吴恩达深度学习课程时发现的课后作业实现，非常详细！！！点赞！！！</p>
-<p><a href="https://blog.csdn.net/u013733326/article/details/79827273">链接：吴恩达深度学习课后作业</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>学习资料</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>吴恩达</tag>
       </tags>
   </entry>
   <entry>
@@ -8719,36 +8733,6 @@ wb.save(&quot;每月(大于1K).xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>python | 在python代码中使用c语言编写的函数</title>
-    <url>/2020/10/16/%E5%9C%A8python%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E7%BC%96%E5%86%99%E7%9A%84%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="在python代码中使用c语言编写的函数-以输出Hello-World为例"><a href="#在python代码中使用c语言编写的函数-以输出Hello-World为例" class="headerlink" title="在python代码中使用c语言编写的函数-以输出Hello World为例"></a>在python代码中使用c语言编写的函数-以输出Hello World为例</h1><p><b style="color:red">linux环境下！！！</b></p>
-<h2 id="Step-1-编写c语言代码-sayHello-c"><a href="#Step-1-编写c语言代码-sayHello-c" class="headerlink" title="Step 1:编写c语言代码-sayHello.c"></a>Step 1:编写c语言代码-sayHello.c</h2><pre><code>include&lt;stdio.h&gt;
-void sayHello()
-&#123;
-    printf(&quot;Hello World!&quot;);
-&#125;
-</code></pre>
-<h2 id="Step-2-把c语言文件编译成一个动态库"><a href="#Step-2-把c语言文件编译成一个动态库" class="headerlink" title="Step 2:把c语言文件编译成一个动态库"></a>Step 2:把c语言文件编译成一个动态库</h2><pre><code>gcc sayHello.c -shared -o lib-sayHello.so
-</code></pre>
-<h2 id="Step-3-编写python代码-main-py"><a href="#Step-3-编写python代码-main-py" class="headerlink" title="Step 3:编写python代码-main.py"></a>Step 3:编写python代码-main.py</h2><pre><code>from ctypes import *
-
-#加载动态库
-lib = cdll.LoadLibrary(&quot;./lib-sayHello.so&quot;)
-#调用sayHello函数
-lib.sayHello()
-</code></pre>
-<h2 id="Step-4-运行python代码"><a href="#Step-4-运行python代码" class="headerlink" title="Step 4:运行python代码"></a>Step 4:运行python代码</h2><pre><code>python3 main.py
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>c</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 在系统中查找重复文件</title>
     <url>/2021/09/05/%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%9F%A5%E6%89%BE%E9%87%8D%E5%A4%8D%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h1 id="609-在系统中查找重复文件"><a href="#609-在系统中查找重复文件" class="headerlink" title="609.在系统中查找重复文件"></a>609.在系统中查找重复文件</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个目录信息列表，包括目录路径，以及该目录中的所有包含内容的文件，您需要找到文件系统中的所有重复文件组的路径。一组重复的文件至少包括二个具有完全相同内容的文件。<br>输入列表中的单个目录信息字符串的格式如下：<br>“root/d1/d2/…/dm f1.txt(f1_content) f2.txt(f2_content) … fn.txt(fn_content)”<br>这意味着有 n 个文件（f1.txt, f2.txt … fn.txt 的内容分别是 f1_content, f2_content … fn_content）在目录 root/d1/d2/…/dm 下。注意：n&gt;=1 且 m&gt;=0。如果 m=0，则表示该目录是根目录。<br>该输出是重复文件路径组的列表。对于每个组，它包含具有相同内容的文件的所有文件路径。文件路径是具有下列格式的字符串：<br>“directory_path/file_name.txt”</p>
@@ -8794,6 +8778,50 @@ if __name__ == &#39;__main__&#39;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 在python代码中使用c语言编写的函数</title>
+    <url>/2020/10/16/%E5%9C%A8python%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E7%BC%96%E5%86%99%E7%9A%84%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="在python代码中使用c语言编写的函数-以输出Hello-World为例"><a href="#在python代码中使用c语言编写的函数-以输出Hello-World为例" class="headerlink" title="在python代码中使用c语言编写的函数-以输出Hello World为例"></a>在python代码中使用c语言编写的函数-以输出Hello World为例</h1><p><b style="color:red">linux环境下！！！</b></p>
+<h2 id="Step-1-编写c语言代码-sayHello-c"><a href="#Step-1-编写c语言代码-sayHello-c" class="headerlink" title="Step 1:编写c语言代码-sayHello.c"></a>Step 1:编写c语言代码-sayHello.c</h2><pre><code>include&lt;stdio.h&gt;
+void sayHello()
+&#123;
+    printf(&quot;Hello World!&quot;);
+&#125;
+</code></pre>
+<h2 id="Step-2-把c语言文件编译成一个动态库"><a href="#Step-2-把c语言文件编译成一个动态库" class="headerlink" title="Step 2:把c语言文件编译成一个动态库"></a>Step 2:把c语言文件编译成一个动态库</h2><pre><code>gcc sayHello.c -shared -o lib-sayHello.so
+</code></pre>
+<h2 id="Step-3-编写python代码-main-py"><a href="#Step-3-编写python代码-main-py" class="headerlink" title="Step 3:编写python代码-main.py"></a>Step 3:编写python代码-main.py</h2><pre><code>from ctypes import *
+
+#加载动态库
+lib = cdll.LoadLibrary(&quot;./lib-sayHello.so&quot;)
+#调用sayHello函数
+lib.sayHello()
+</code></pre>
+<h2 id="Step-4-运行python代码"><a href="#Step-4-运行python代码" class="headerlink" title="Step 4:运行python代码"></a>Step 4:运行python代码</h2><pre><code>python3 main.py
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>c</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Computer Vision | 基于ResNet的CIFAER10图像分类</title>
+    <url>/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="基于ResNet的CIFAER-10图像分类"><a href="#基于ResNet的CIFAER-10图像分类" class="headerlink" title="基于ResNet的CIFAER-10图像分类"></a>基于ResNet的CIFAER-10图像分类</h1>]]></content>
+      <categories>
+        <category>项目经历</category>
+        <category>Deep Learning</category>
+        <category>Computer Vision</category>
+        <category>基于ResNet的CIFAER-10图像分类</category>
+      </categories>
+      <tags>
+        <tag>基于ResNet的CIFAER-10图像分类</tag>
       </tags>
   </entry>
   <entry>
@@ -9625,6 +9653,19 @@ app.MainLoop()  # 进入主事件循环
       </categories>
   </entry>
   <entry>
+    <title>装系统 | 微软官网工具安装纯净win10</title>
+    <url>/2021/11/06/%E5%BE%AE%E8%BD%AF%E5%AE%98%E7%BD%91%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E7%BA%AF%E5%87%80win10/</url>
+    <content><![CDATA[<h1 id="微软官网工具安装纯净win10"><a href="#微软官网工具安装纯净win10" class="headerlink" title="微软官网工具安装纯净win10"></a>微软官网工具安装纯净win10</h1><p><a href="https://zhuanlan.zhihu.com/p/92129617">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>电脑使用小技巧</category>
+        <category>装系统</category>
+      </categories>
+      <tags>
+        <tag>装系统</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基础知识 | 归一化</title>
     <url>/2021/02/21/%E5%BD%92%E4%B8%80%E5%8C%96/</url>
     <content><![CDATA[<h1 id="归一化-Normalization"><a href="#归一化-Normalization" class="headerlink" title="归一化(Normalization)"></a>归一化(Normalization)</h1><p>在使用机器学习算法进行分类工作时，有时候我们发现某个特征对计算结果的影响最大，然而本质上用于分类的几个特征是同等重要的，而某个特征对计算结果影响大这一现象的原因仅仅是因为这个特征的特征值值比其他特征值大。因此<b style="color:red">在处理这种不同范围的特征值时，我们通常采用的方法是将数值归一化</b>，如将取值范围处理为0到1/-1到1之间。<br><b>例</b>：将任意取值范围的特征值转化为0到1区间内的值:<br><b style="red">newValue = (oldValue - min)/(max-min)</b><br>其中min和max分别是数据集中的最小特征值和最大特征值<br><b>Note:改变数值范围增加了分类器的复杂度</b></p>
@@ -9636,19 +9677,6 @@ app.MainLoop()  # 进入主事件循环
       <tags>
         <tag>机器学习</tag>
         <tag>归一化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>装系统 | 微软官网工具安装纯净win10</title>
-    <url>/2021/11/06/%E5%BE%AE%E8%BD%AF%E5%AE%98%E7%BD%91%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E7%BA%AF%E5%87%80win10/</url>
-    <content><![CDATA[<h1 id="微软官网工具安装纯净win10"><a href="#微软官网工具安装纯净win10" class="headerlink" title="微软官网工具安装纯净win10"></a>微软官网工具安装纯净win10</h1><p><a href="https://zhuanlan.zhihu.com/p/92129617">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>电脑使用小技巧</category>
-        <category>装系统</category>
-      </categories>
-      <tags>
-        <tag>装系统</tag>
       </tags>
   </entry>
   <entry>
@@ -9740,6 +9768,36 @@ wb.save(&quot;./data/data_chinese.xlsx&quot;)
       <tags>
         <tag>深度学习</tag>
         <tag>感知机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C# | 我的第一个CSharp程序</title>
+    <url>/2021/07/03/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AACSharp%E7%A8%8B%E5%BA%8F/</url>
+    <content><![CDATA[<h1 id="我的第一个CSharp程序"><a href="#我的第一个CSharp程序" class="headerlink" title="我的第一个CSharp程序"></a>我的第一个CSharp程序</h1><pre><code>using System;
+/*包含 System 命名空间*/
+
+/*声明命名空间*/
+namespace project1
+&#123;
+    /*定义一个名为HelloWorld的类*/
+    class HelloWorld
+    &#123;
+        /*我的第一个C#程序*/
+        static void Main(String[] args)
+        &#123;/*Main方法：C#程序的入口*/
+            /*WriteLine 是一个定义在 System 命名空间中的 Console 类的一个方法*/
+            Console.WriteLine(&quot;Hello World&quot;);
+            Console.ReadKey();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>C#</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
       </tags>
   </entry>
   <entry>
@@ -9837,36 +9895,6 @@ for file in files:
       <tags>
         <tag>python</tag>
         <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C# | 我的第一个CSharp程序</title>
-    <url>/2021/07/03/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AACSharp%E7%A8%8B%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="我的第一个CSharp程序"><a href="#我的第一个CSharp程序" class="headerlink" title="我的第一个CSharp程序"></a>我的第一个CSharp程序</h1><pre><code>using System;
-/*包含 System 命名空间*/
-
-/*声明命名空间*/
-namespace project1
-&#123;
-    /*定义一个名为HelloWorld的类*/
-    class HelloWorld
-    &#123;
-        /*我的第一个C#程序*/
-        static void Main(String[] args)
-        &#123;/*Main方法：C#程序的入口*/
-            /*WriteLine 是一个定义在 System 命名空间中的 Console 类的一个方法*/
-            Console.WriteLine(&quot;Hello World&quot;);
-            Console.ReadKey();
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>C#</category>
-      </categories>
-      <tags>
-        <tag>C#</tag>
       </tags>
   </entry>
   <entry>
@@ -9987,46 +10015,6 @@ print(&quot;邮件发送完成。&quot;)
       </tags>
   </entry>
   <entry>
-    <title>win32api | 批量打印文件</title>
-    <url>/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p>
-<pre><code>import win32api
-
-
-def Print(fileName):
-    win32api.ShellExecute(
-        0,  # 指定父窗口句柄，搞不懂
-        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序
-        fileName,  # 要打印的文件名
-        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机
-        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂
-        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0
-    )
-
-
-# 获取待打印文件的路径
-import os
-
-path = &#39;文件&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-
-# 批量打印
-for file in files:
-    Print(file)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>win32api</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>os</tag>
-        <tag>win32api</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>os | 批量新建文件夹</title>
     <url>/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
     <content><![CDATA[<h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p>
@@ -10142,6 +10130,46 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>python</tag>
         <tag>os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32api | 批量打印文件</title>
+    <url>/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p>
+<pre><code>import win32api
+
+
+def Print(fileName):
+    win32api.ShellExecute(
+        0,  # 指定父窗口句柄，搞不懂
+        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序
+        fileName,  # 要打印的文件名
+        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机
+        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂
+        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0
+    )
+
+
+# 获取待打印文件的路径
+import os
+
+path = &#39;文件&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+
+# 批量打印
+for file in files:
+    Print(file)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>win32api</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+        <tag>win32api</tag>
       </tags>
   </entry>
   <entry>
@@ -10350,6 +10378,44 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>支持向量机</title>
+    <url>/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/</url>
+    <content><![CDATA[<h1 id="支持向量机-Support-Vector-Machine-SVM"><a href="#支持向量机-Support-Vector-Machine-SVM" class="headerlink" title="支持向量机(Support Vector Machine,SVM)"></a>支持向量机(Support Vector Machine,SVM)</h1><p>支持向量机是我们用于分类的一种算法。</p>
+<h2 id="小故事理解SVM"><a href="#小故事理解SVM" class="headerlink" title="小故事理解SVM:"></a>小故事理解SVM:</h2><p>当一个分类问题，数据是线性可分的，也就是用一根棍就可以将两种小球分开的时候，我们只要将棍的位置放在让小球距离棍的距离最大化的位置即可，寻找这个最大间隔的过程，就叫做最优化。但是，现实往往是很残酷的，一般的数据是线性不可分的，也就是找不到一个棍将两种小球很好的分类。这个时候，我们就需要像大侠一样，将小球拍起，用一张纸代替小棍将小球进行分类。想要让数据飞起，我们需要的东西就是核函数(kernel)，用于切分小球的纸，就是超平面。<br>问题是从线性可分延伸到线性不可分的</p>
+<h2 id="线性SVM"><a href="#线性SVM" class="headerlink" title="线性SVM"></a>线性SVM</h2><p><img src="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/1.png"><br>上图中的(a)是已有的数据，红色和蓝色分别代表两个不同的类别。数据显然是线性可分的，但是将两类数据点分开的直线显然不止一条。上图的(b)和(c)分别给出了B、C两种不同的分类方案，其中黑色实线为分界线，术语称为“决策面”。每个决策面对应了一个线性分类器。虽然从分类结果上看，分类器A和分类器B的效果是相同的。但是他们的性能是有差距的，看下图：<br><img src="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/2.png"><br>在”决策面”不变的情况下，我又添加了一个红点。可以看到，分类器B依然能很好的分类结果，而分类器C则出现了分类错误。显然分类器B的”决策面”放置的位置优于分类器C的”决策面”放置的位置，SVM算法也是这么认为的，它的依据就是分类器B的分类间隔比分类器C的分类间隔大。这里涉及到第一个SVM独有的概念”分类间隔”。在保证决策面方向不变且不会出现错分样本的情况下移动决策面，会在原来的决策面两侧找到两个极限位置（越过该位置就会产生错分现象），如虚线所示。虚线的位置由决策面的方向和距离原决策面最近的几个样本的位置决定。而这两条平行虚线正中间的分界线就是在保持当前决策面方向不变的前提下的最优决策面。两条虚线之间的垂直距离就是这个最优决策面对应的分类间隔。显然每一个可能把数据集正确分开的方向都有一个最优决策面（有些方向无论如何移动决策面的位置也不可能将两类样本完全分开），而不同方向的最优决策面的分类间隔通常是不同的，那个具有“最大间隔”的决策面就是SVM要寻找的最优解。而这个真正的最优解对应的两侧虚线所穿过的样本点，就是SVM中的支持样本点，称为”支持向量”。</p>
+<h2 id="数学建模"><a href="#数学建模" class="headerlink" title="数学建模"></a>数学建模</h2><p>决策面方程<br>分类间隔方程<br>约束条件</p>
+<h2 id="最优化问题的两个基本因素："><a href="#最优化问题的两个基本因素：" class="headerlink" title="最优化问题的两个基本因素："></a>最优化问题的两个基本因素：</h2><p>1.目标函数 你希望什么东西的什么指标达到最好<br>2.优化对象 你期望通过改变哪些因素来使你的目标函数达到最优<br>Example:<br>在线性SVM算法中，目标函数就是分类间隔，优化对象就是决策面</p>
+<h2 id="最优化问题的分类："><a href="#最优化问题的分类：" class="headerlink" title="最优化问题的分类："></a>最优化问题的分类：</h2><p>1.无约束优化问题 min f(x)<br>求解方法：费马大定理(求f(x)的导数，令其为0，求得候选最优值，再在这些候选值中验证；如果是凸函数，可以保证是最优解)<br>2.有等式约束的优化问题<br>min f(x)<br>s.t. hi(x)=0,i=1,2,…,n<br>求解方法：拉格朗日乘子法(把等式约束hi(x)用一个系数与f(x)写成一个式子，称为拉格朗日函数，而系数称为拉格朗日乘子。通过拉格朗日函数对各个变量求导，令其为0，求得候选值集合，然后验证求得最优值)<br>3.有不等式约束的优化问题<br>min f(x)<br>s.t. gi(x)&lt;=0,i=1,2,…,n<br>hj(x)=0,j=1,2,…,m<br>求解方法：拉格朗日+KKT条件 把所有的等式、不等式约束与f(x)写成一个式子，也叫拉格朗日函数，系数也称为拉格朗日乘子，通过一些条件可以求出最优值的必要条件，这个条件称为KKT条件。</p>
+<p>KKT条件的全称是Karush-Kuhn-Tucker条件，KKT条件是说最优值条件必须满足以下条件：<br>条件一：经过拉格朗日函数处理之后的新目标函数L(w,b,α)对x求导为零：<br>条件二：h(x) = 0；<br>条件三：α*g(x) = 0；</p>
+<p><b>使用拉格朗日方程的目的：</b><br>将约束条件放到目标函数中，将有约束优化问题转换为无约束优化问题（我们知道我们要求解的是最小化问题，所以一个直观的想法是如果我能够构造一个函数，使得该函数在可行解区域内与原目标函数完全一致，而在可行解区域外的数值非常大，甚至是无穷大，那么这个没有约束条件的新目标函数的优化问题就与原来有约束条件的原始目标函数的优化问题是等价的问题。）</p>
+<p>使用拉格朗日获得的函数使用求导方法求解依然困难，进而需要对问题进行一次转换，即使用一个数学技巧：拉格朗日对偶(将最小值和最大值的计算位置交换)</p>
+<p><b>拉个朗日优化问题的两个步骤：</b><br>1.将有约束的原始目标函数转换为无约束的新构造的拉格朗日目标函数<br>2.使用拉格朗日对偶性，将不易求解的优化问题转化为容易求解的优化问题</p>
+<p><b>求解对偶问题的三个步骤：</b><br>1.首先要让L(w,b,α)关于w和b最小化<br>2.求对α的极大<br>3.利用SMO算法求解对偶问题中的拉格朗日乘子</p>
+<h2 id="SMO算法"><a href="#SMO算法" class="headerlink" title="SMO算法"></a>SMO算法</h2><p>1996年，John Platt发布了一个称为SMO的强大算法，用于训练SVM。SMO表示序列最小化(Sequential Minimal Optimizaion)。Platt的SMO算法是将大优化问题分解为多个小优化问题来求解的。这些小优化问题往往很容易求解，并且对它们进行顺序求解的结果与将它们作为整体来求解的结果完全一致的。在结果完全相同的同时，SMO算法的求解时间短很多。</p>
+<p><b>SMO算法的目标:</b><br>求出一系列alpha和b，一旦求出了这些alpha，就很容易计算出权重向量w并得到分隔超平面。</p>
+<p><b>SMO算法的工作原理是：</b><br>每次循环中选择两个alpha进行优化处理。一旦找到了一对合适的alpha，那么就增大其中一个同时减小另一个。这里所谓的”合适”就是指两个alpha必须符合以下两个条件，条件之一就是两个alpha必须要在间隔边界之外，而且第二个条件则是这两个alpha还没有进行过区间化处理或者不在边界上。</p>
+<p><b>注意：</b><br>实际上，对于目标函数，是存在一个假设(数据100%线性可分)的，但现实中的数据都不那么干净，这时我们就可以通过引入松弛变量ξ(slack variable)和惩罚参数C来允许有些数据点可以处于超平面的错误的一侧—&gt;约束条件的改变—&gt;目标函数的改变</p>
+<h2 id="SMO算法优化"><a href="#SMO算法优化" class="headerlink" title="SMO算法优化"></a>SMO算法优化</h2><p>启发式选择第二个alpha值</p>
+<h2 id="非线性SVM"><a href="#非线性SVM" class="headerlink" title="非线性SVM"></a>非线性SVM</h2><h3 id="核技巧"><a href="#核技巧" class="headerlink" title="核技巧"></a>核技巧</h3><p>对于非线性情况：SVM的处理方式是选择一个核函数。简而言之：在线性不可分的情况下，SVM通过某种事先选择的非线性映射（核函数）将输入变量映到一个高维特征空间，将其变成在高维空间线性可分，在这个高维空间中构造最优分类超平面。</p>
+<h3 id="建立非线性学习器分为两步："><a href="#建立非线性学习器分为两步：" class="headerlink" title="建立非线性学习器分为两步："></a>建立非线性学习器分为两步：</h3><p>1.首先使用一个非线性映射将数据变换到一个特征空间F；<br>2.然后在特征空间使用线性学习器分类。</p>
+<h3 id="核函数方法"><a href="#核函数方法" class="headerlink" title="核函数方法"></a>核函数方法</h3><p>在特征空间中直接计算内积 &lt;ϕ(xi),ϕ(x)&gt;的方法称为核函数方法</p>
+<p>核是一个函数k，对所有x,z∈X，满足k(x,z)=&lt;ϕ(xi),ϕ(x)&gt;，这里ϕ(·)是从原始输入空间X到内积空间F的映射。</p>
+<p>简而言之：如果不是用核技术，就会先计算线性映ϕ(x1)和ϕ(x2)，然后计算这它们的内积，使用了核技术之后，先把ϕ(x1)和ϕ(x2)的一般表达式&lt;ϕ(x1),ϕ(x2)&gt;=k(&lt;ϕ(x1),ϕ(x2) &gt;)计算出来，这里的&lt;·，·&gt;表示内积，k(·，·)就是对应的核函数</p>
+<p>将内积替换成核函数的方式被称为核技巧(kernel trick)。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="SVM的优缺点"><a href="#SVM的优缺点" class="headerlink" title="SVM的优缺点"></a>SVM的优缺点</h3><p>优点：<br>1.可用于线性/非线性分类，也可以用于回归，泛化错误率低，也就是说具有良好的学习能力，且学到的结果具有很好的推广性。<br>2.可以解决小样本情况下的机器学习问题，可以解决高维问题，可以避免神经网络结构选择和局部极小点问题。<br>3.SVM是最好的现成的分类器，现成是指不加修改可直接使用。并且能够得到较低的错误率，SVM可以对训练集之外的数据点做很好的分类决策。</p>
+<p>缺点：对参数调节和和函数的选择敏感。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>SVM</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>SVM</tag>
+        <tag>支持向量机</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python-pptx | 提取ppt中的文字到word中</title>
     <url>/2021/10/21/%E6%8F%90%E5%8F%96ppt%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97%E5%88%B0word%E4%B8%AD/</url>
     <content><![CDATA[<h1 id="提取ppt中的文字到word中"><a href="#提取ppt中的文字到word中" class="headerlink" title="提取ppt中的文字到word中"></a>提取ppt中的文字到word中</h1><p>以下代码实现了将ppt中的所有文字提取到word中。</p>
@@ -10389,44 +10455,6 @@ doc.save(&#39;data\制造业必修课.docx&#39;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>python-pptx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>支持向量机</title>
-    <url>/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/</url>
-    <content><![CDATA[<h1 id="支持向量机-Support-Vector-Machine-SVM"><a href="#支持向量机-Support-Vector-Machine-SVM" class="headerlink" title="支持向量机(Support Vector Machine,SVM)"></a>支持向量机(Support Vector Machine,SVM)</h1><p>支持向量机是我们用于分类的一种算法。</p>
-<h2 id="小故事理解SVM"><a href="#小故事理解SVM" class="headerlink" title="小故事理解SVM:"></a>小故事理解SVM:</h2><p>当一个分类问题，数据是线性可分的，也就是用一根棍就可以将两种小球分开的时候，我们只要将棍的位置放在让小球距离棍的距离最大化的位置即可，寻找这个最大间隔的过程，就叫做最优化。但是，现实往往是很残酷的，一般的数据是线性不可分的，也就是找不到一个棍将两种小球很好的分类。这个时候，我们就需要像大侠一样，将小球拍起，用一张纸代替小棍将小球进行分类。想要让数据飞起，我们需要的东西就是核函数(kernel)，用于切分小球的纸，就是超平面。<br>问题是从线性可分延伸到线性不可分的</p>
-<h2 id="线性SVM"><a href="#线性SVM" class="headerlink" title="线性SVM"></a>线性SVM</h2><p><img src="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/1.png"><br>上图中的(a)是已有的数据，红色和蓝色分别代表两个不同的类别。数据显然是线性可分的，但是将两类数据点分开的直线显然不止一条。上图的(b)和(c)分别给出了B、C两种不同的分类方案，其中黑色实线为分界线，术语称为“决策面”。每个决策面对应了一个线性分类器。虽然从分类结果上看，分类器A和分类器B的效果是相同的。但是他们的性能是有差距的，看下图：<br><img src="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/2.png"><br>在”决策面”不变的情况下，我又添加了一个红点。可以看到，分类器B依然能很好的分类结果，而分类器C则出现了分类错误。显然分类器B的”决策面”放置的位置优于分类器C的”决策面”放置的位置，SVM算法也是这么认为的，它的依据就是分类器B的分类间隔比分类器C的分类间隔大。这里涉及到第一个SVM独有的概念”分类间隔”。在保证决策面方向不变且不会出现错分样本的情况下移动决策面，会在原来的决策面两侧找到两个极限位置（越过该位置就会产生错分现象），如虚线所示。虚线的位置由决策面的方向和距离原决策面最近的几个样本的位置决定。而这两条平行虚线正中间的分界线就是在保持当前决策面方向不变的前提下的最优决策面。两条虚线之间的垂直距离就是这个最优决策面对应的分类间隔。显然每一个可能把数据集正确分开的方向都有一个最优决策面（有些方向无论如何移动决策面的位置也不可能将两类样本完全分开），而不同方向的最优决策面的分类间隔通常是不同的，那个具有“最大间隔”的决策面就是SVM要寻找的最优解。而这个真正的最优解对应的两侧虚线所穿过的样本点，就是SVM中的支持样本点，称为”支持向量”。</p>
-<h2 id="数学建模"><a href="#数学建模" class="headerlink" title="数学建模"></a>数学建模</h2><p>决策面方程<br>分类间隔方程<br>约束条件</p>
-<h2 id="最优化问题的两个基本因素："><a href="#最优化问题的两个基本因素：" class="headerlink" title="最优化问题的两个基本因素："></a>最优化问题的两个基本因素：</h2><p>1.目标函数 你希望什么东西的什么指标达到最好<br>2.优化对象 你期望通过改变哪些因素来使你的目标函数达到最优<br>Example:<br>在线性SVM算法中，目标函数就是分类间隔，优化对象就是决策面</p>
-<h2 id="最优化问题的分类："><a href="#最优化问题的分类：" class="headerlink" title="最优化问题的分类："></a>最优化问题的分类：</h2><p>1.无约束优化问题 min f(x)<br>求解方法：费马大定理(求f(x)的导数，令其为0，求得候选最优值，再在这些候选值中验证；如果是凸函数，可以保证是最优解)<br>2.有等式约束的优化问题<br>min f(x)<br>s.t. hi(x)=0,i=1,2,…,n<br>求解方法：拉格朗日乘子法(把等式约束hi(x)用一个系数与f(x)写成一个式子，称为拉格朗日函数，而系数称为拉格朗日乘子。通过拉格朗日函数对各个变量求导，令其为0，求得候选值集合，然后验证求得最优值)<br>3.有不等式约束的优化问题<br>min f(x)<br>s.t. gi(x)&lt;=0,i=1,2,…,n<br>hj(x)=0,j=1,2,…,m<br>求解方法：拉格朗日+KKT条件 把所有的等式、不等式约束与f(x)写成一个式子，也叫拉格朗日函数，系数也称为拉格朗日乘子，通过一些条件可以求出最优值的必要条件，这个条件称为KKT条件。</p>
-<p>KKT条件的全称是Karush-Kuhn-Tucker条件，KKT条件是说最优值条件必须满足以下条件：<br>条件一：经过拉格朗日函数处理之后的新目标函数L(w,b,α)对x求导为零：<br>条件二：h(x) = 0；<br>条件三：α*g(x) = 0；</p>
-<p><b>使用拉格朗日方程的目的：</b><br>将约束条件放到目标函数中，将有约束优化问题转换为无约束优化问题（我们知道我们要求解的是最小化问题，所以一个直观的想法是如果我能够构造一个函数，使得该函数在可行解区域内与原目标函数完全一致，而在可行解区域外的数值非常大，甚至是无穷大，那么这个没有约束条件的新目标函数的优化问题就与原来有约束条件的原始目标函数的优化问题是等价的问题。）</p>
-<p>使用拉格朗日获得的函数使用求导方法求解依然困难，进而需要对问题进行一次转换，即使用一个数学技巧：拉格朗日对偶(将最小值和最大值的计算位置交换)</p>
-<p><b>拉个朗日优化问题的两个步骤：</b><br>1.将有约束的原始目标函数转换为无约束的新构造的拉格朗日目标函数<br>2.使用拉格朗日对偶性，将不易求解的优化问题转化为容易求解的优化问题</p>
-<p><b>求解对偶问题的三个步骤：</b><br>1.首先要让L(w,b,α)关于w和b最小化<br>2.求对α的极大<br>3.利用SMO算法求解对偶问题中的拉格朗日乘子</p>
-<h2 id="SMO算法"><a href="#SMO算法" class="headerlink" title="SMO算法"></a>SMO算法</h2><p>1996年，John Platt发布了一个称为SMO的强大算法，用于训练SVM。SMO表示序列最小化(Sequential Minimal Optimizaion)。Platt的SMO算法是将大优化问题分解为多个小优化问题来求解的。这些小优化问题往往很容易求解，并且对它们进行顺序求解的结果与将它们作为整体来求解的结果完全一致的。在结果完全相同的同时，SMO算法的求解时间短很多。</p>
-<p><b>SMO算法的目标:</b><br>求出一系列alpha和b，一旦求出了这些alpha，就很容易计算出权重向量w并得到分隔超平面。</p>
-<p><b>SMO算法的工作原理是：</b><br>每次循环中选择两个alpha进行优化处理。一旦找到了一对合适的alpha，那么就增大其中一个同时减小另一个。这里所谓的”合适”就是指两个alpha必须符合以下两个条件，条件之一就是两个alpha必须要在间隔边界之外，而且第二个条件则是这两个alpha还没有进行过区间化处理或者不在边界上。</p>
-<p><b>注意：</b><br>实际上，对于目标函数，是存在一个假设(数据100%线性可分)的，但现实中的数据都不那么干净，这时我们就可以通过引入松弛变量ξ(slack variable)和惩罚参数C来允许有些数据点可以处于超平面的错误的一侧—&gt;约束条件的改变—&gt;目标函数的改变</p>
-<h2 id="SMO算法优化"><a href="#SMO算法优化" class="headerlink" title="SMO算法优化"></a>SMO算法优化</h2><p>启发式选择第二个alpha值</p>
-<h2 id="非线性SVM"><a href="#非线性SVM" class="headerlink" title="非线性SVM"></a>非线性SVM</h2><h3 id="核技巧"><a href="#核技巧" class="headerlink" title="核技巧"></a>核技巧</h3><p>对于非线性情况：SVM的处理方式是选择一个核函数。简而言之：在线性不可分的情况下，SVM通过某种事先选择的非线性映射（核函数）将输入变量映到一个高维特征空间，将其变成在高维空间线性可分，在这个高维空间中构造最优分类超平面。</p>
-<h3 id="建立非线性学习器分为两步："><a href="#建立非线性学习器分为两步：" class="headerlink" title="建立非线性学习器分为两步："></a>建立非线性学习器分为两步：</h3><p>1.首先使用一个非线性映射将数据变换到一个特征空间F；<br>2.然后在特征空间使用线性学习器分类。</p>
-<h3 id="核函数方法"><a href="#核函数方法" class="headerlink" title="核函数方法"></a>核函数方法</h3><p>在特征空间中直接计算内积 &lt;ϕ(xi),ϕ(x)&gt;的方法称为核函数方法</p>
-<p>核是一个函数k，对所有x,z∈X，满足k(x,z)=&lt;ϕ(xi),ϕ(x)&gt;，这里ϕ(·)是从原始输入空间X到内积空间F的映射。</p>
-<p>简而言之：如果不是用核技术，就会先计算线性映ϕ(x1)和ϕ(x2)，然后计算这它们的内积，使用了核技术之后，先把ϕ(x1)和ϕ(x2)的一般表达式&lt;ϕ(x1),ϕ(x2)&gt;=k(&lt;ϕ(x1),ϕ(x2) &gt;)计算出来，这里的&lt;·，·&gt;表示内积，k(·，·)就是对应的核函数</p>
-<p>将内积替换成核函数的方式被称为核技巧(kernel trick)。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="SVM的优缺点"><a href="#SVM的优缺点" class="headerlink" title="SVM的优缺点"></a>SVM的优缺点</h3><p>优点：<br>1.可用于线性/非线性分类，也可以用于回归，泛化错误率低，也就是说具有良好的学习能力，且学到的结果具有很好的推广性。<br>2.可以解决小样本情况下的机器学习问题，可以解决高维问题，可以避免神经网络结构选择和局部极小点问题。<br>3.SVM是最好的现成的分类器，现成是指不加修改可直接使用。并且能够得到较低的错误率，SVM可以对训练集之外的数据点做很好的分类决策。</p>
-<p>缺点：对参数调节和和函数的选择敏感。</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>SVM</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>SVM</tag>
-        <tag>支持向量机</tag>
       </tags>
   </entry>
   <entry>
@@ -10646,23 +10674,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>伪迹移除 | 时频表示</title>
-    <url>/2021/02/23/%E6%97%B6%E9%A2%91%E8%A1%A8%E7%A4%BA/</url>
-    <content><![CDATA[<h1 id="时频表示-Time-Frequency-Representation"><a href="#时频表示-Time-Frequency-Representation" class="headerlink" title="时频表示(Time Frequency Representation)"></a>时频表示(Time Frequency Representation)</h1><p>时频表示基于短时傅里叶变换(Short-Time Fourier Transfrom,STFT)。</p>
-<h2 id="同时使用时间、频率域分析的原因："><a href="#同时使用时间、频率域分析的原因：" class="headerlink" title="同时使用时间、频率域分析的原因："></a>同时使用时间、频率域分析的原因：</h2><p>脑电信号的非稳定特性</p>
-<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>在所有的频率范围有统一的时频分辨率，然而我们感兴趣的脑电的频率通常小于30Hz,很多伪迹的频率小于10Hz，这就需要在低频范围有STFT(短时傅里叶变换)不能提供的高频分辨率。</p>
-<h2 id="问题的解决"><a href="#问题的解决" class="headerlink" title="问题的解决"></a>问题的解决</h2><p>采用基于小波的方法-小波变换（适合为脑电信号的每一个频带提供相应的分辨率）</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 最小栈</title>
     <url>/2021/08/27/%E6%9C%80%E5%B0%8F%E6%A0%88/</url>
     <content><![CDATA[<h1 id="155-最小栈"><a href="#155-最小栈" class="headerlink" title="155.最小栈"></a>155.最小栈</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。<br>    push(x) —— 将元素 x 推入栈中。<br>    pop() —— 删除栈顶的元素。<br>    top() —— 获取栈顶元素。<br>    getMin() —— 检索栈中的最小元素。</p>
@@ -10758,6 +10769,23 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>伪迹移除 | 时频表示</title>
+    <url>/2021/02/23/%E6%97%B6%E9%A2%91%E8%A1%A8%E7%A4%BA/</url>
+    <content><![CDATA[<h1 id="时频表示-Time-Frequency-Representation"><a href="#时频表示-Time-Frequency-Representation" class="headerlink" title="时频表示(Time Frequency Representation)"></a>时频表示(Time Frequency Representation)</h1><p>时频表示基于短时傅里叶变换(Short-Time Fourier Transfrom,STFT)。</p>
+<h2 id="同时使用时间、频率域分析的原因："><a href="#同时使用时间、频率域分析的原因：" class="headerlink" title="同时使用时间、频率域分析的原因："></a>同时使用时间、频率域分析的原因：</h2><p>脑电信号的非稳定特性</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>在所有的频率范围有统一的时频分辨率，然而我们感兴趣的脑电的频率通常小于30Hz,很多伪迹的频率小于10Hz，这就需要在低频范围有STFT(短时傅里叶变换)不能提供的高频分辨率。</p>
+<h2 id="问题的解决"><a href="#问题的解决" class="headerlink" title="问题的解决"></a>问题的解决</h2><p>采用基于小波的方法-小波变换（适合为脑电信号的每一个频带提供相应的分辨率）</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深度学习 | 最简单的神经网络</title>
     <url>/2021/06/20/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
     <content><![CDATA[<h1 id="最简单的神经网络"><a href="#最简单的神经网络" class="headerlink" title="最简单的神经网络"></a>最简单的神经网络</h1><p><img src="/2021/06/20/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/1.png"></p>
@@ -10833,6 +10861,40 @@ if __name__ == &quot;__main__&quot;:
         <category>字符串</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 最长特殊序列</title>
+    <url>/2021/09/01/%E6%9C%80%E9%95%BF%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97/</url>
+    <content><![CDATA[<h1 id="521-最长特殊序列"><a href="#521-最长特殊序列" class="headerlink" title="521.最长特殊序列"></a>521.最长特殊序列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个字符串，请你从这两个字符串中找出最长的特殊序列。<br>「最长特殊序列」定义如下：该序列为某字符串独有的最长子序列（即不能是其他字符串的子序列）。<br>子序列 可以通过删去字符串中的某些字符实现，但不能改变剩余字符的相对顺序。空序列为所有字符串的子序列，任何字符串为其自身的子序列。<br>输入为两个字符串，输出最长特殊序列的长度。如果不存在，则返回 -1。</p>
+<span id="more"></span>
+<p>刷到这道题目时我表示有点没看懂，然后就看了leetcode的评论，也有许多人没看懂，最后就看了题解。。。<br>我认为，本题按照leetcode官方题解解法二的解决方案容易理解。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-uncommon-subsequence-i/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>字符串 aaa 和 bbb 共有 3 种情况：<br>    a=b。如果两个字符串相同，则没有特殊子序列，返回 -1。<br>    length(a)=length(b) 且 a≠b。例如：abc 和 abd。这种情况下，一个字符串一定不会是另外一个字符串的子序列，因此可以将任意一个字符串看作是特殊子序列，返回 length(a) 或 length(b)。<br>    length(a)≠length(b)。例如：abcd 和 abc。这种情况下，长的字符串一定不会是短字符串的子序列，因此可以将长字符串看作是特殊子序列，返回 max(length(a),length(b))。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def findLUSlength(self, a: str, b: str) -&gt; int:
+        if a == b:
+            return -1
+
+        return max(len(a), len(b))
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    a = &quot;aaa&quot;
+    b = &quot;bbb&quot;
+    res = slt.findLUSlength(a, b)
+    print(res)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
         <tag>leetcode</tag>
       </tags>
   </entry>
@@ -10982,40 +11044,6 @@ if __name__ == &#39;__main__&#39;:
     s = &quot;abad&quot;
     res = slt.longestPalindrome(s)
     print(&quot;最长的回文串为：&quot;, res)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 最长特殊序列</title>
-    <url>/2021/09/01/%E6%9C%80%E9%95%BF%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97/</url>
-    <content><![CDATA[<h1 id="521-最长特殊序列"><a href="#521-最长特殊序列" class="headerlink" title="521.最长特殊序列"></a>521.最长特殊序列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个字符串，请你从这两个字符串中找出最长的特殊序列。<br>「最长特殊序列」定义如下：该序列为某字符串独有的最长子序列（即不能是其他字符串的子序列）。<br>子序列 可以通过删去字符串中的某些字符实现，但不能改变剩余字符的相对顺序。空序列为所有字符串的子序列，任何字符串为其自身的子序列。<br>输入为两个字符串，输出最长特殊序列的长度。如果不存在，则返回 -1。</p>
-<span id="more"></span>
-<p>刷到这道题目时我表示有点没看懂，然后就看了leetcode的评论，也有许多人没看懂，最后就看了题解。。。<br>我认为，本题按照leetcode官方题解解法二的解决方案容易理解。</p>
-<p><a href="https://leetcode-cn.com/problems/longest-uncommon-subsequence-i/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>字符串 aaa 和 bbb 共有 3 种情况：<br>    a=b。如果两个字符串相同，则没有特殊子序列，返回 -1。<br>    length(a)=length(b) 且 a≠b。例如：abc 和 abd。这种情况下，一个字符串一定不会是另外一个字符串的子序列，因此可以将任意一个字符串看作是特殊子序列，返回 length(a) 或 length(b)。<br>    length(a)≠length(b)。例如：abcd 和 abc。这种情况下，长的字符串一定不会是短字符串的子序列，因此可以将长字符串看作是特殊子序列，返回 max(length(a),length(b))。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def findLUSlength(self, a: str, b: str) -&gt; int:
-        if a == b:
-            return -1
-
-        return max(len(a), len(b))
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    a = &quot;aaa&quot;
-    b = &quot;bbb&quot;
-    res = slt.findLUSlength(a, b)
-    print(res)
 </code></pre>
 ]]></content>
       <categories>
@@ -11251,6 +11279,18 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 机器学习分类的一般步骤</title>
+    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习基础知识</title>
     <url>/2020/10/08/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
     <content><![CDATA[<h1>机器学习（Machine Learning,ML）</h1>
@@ -11352,18 +11392,6 @@ Note:
       </tags>
   </entry>
   <entry>
-    <title>机器学习 | 机器学习分类的一般步骤</title>
-    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
-    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机器学习 | 机器学习常用的两种验证方法</title>
     <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="机器学习常用的两种验证方法"><a href="#机器学习常用的两种验证方法" class="headerlink" title="机器学习常用的两种验证方法"></a>机器学习常用的两种验证方法</h1><p>1.Leave One Subject Out<br>2.K Fold Cross Validation</p>
@@ -11374,6 +11402,19 @@ Note:
       </categories>
       <tags>
         <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Research and Paper | 查找论文代码的两个网站</title>
+    <url>/2021/07/03/%E6%9F%A5%E6%89%BE%E8%AE%BA%E6%96%87%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%BD%91%E7%AB%99/</url>
+    <content><![CDATA[<h1 id="查找论文代码的两个网站"><a href="#查找论文代码的两个网站" class="headerlink" title="查找论文代码的两个网站"></a>查找论文代码的两个网站</h1><p><a href="https://www.paperswithcode.com/">网址1</a></p>
+<p><a href="https://researchcode.com/">网址2</a></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+      </categories>
+      <tags>
+        <tag>论文代码</tag>
       </tags>
   </entry>
   <entry>
@@ -11390,19 +11431,6 @@ Note:
       </categories>
       <tags>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Research and Paper | 查找论文代码的两个网站</title>
-    <url>/2021/07/03/%E6%9F%A5%E6%89%BE%E8%AE%BA%E6%96%87%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%BD%91%E7%AB%99/</url>
-    <content><![CDATA[<h1 id="查找论文代码的两个网站"><a href="#查找论文代码的两个网站" class="headerlink" title="查找论文代码的两个网站"></a>查找论文代码的两个网站</h1><p><a href="https://www.paperswithcode.com/">网址1</a></p>
-<p><a href="https://researchcode.com/">网址2</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-      </categories>
-      <tags>
-        <tag>论文代码</tag>
       </tags>
   </entry>
   <entry>
@@ -12053,19 +12081,6 @@ excel_app.Quit()
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 深度学习基础问题</title>
-    <url>/2021/11/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="深度学习基础问题"><a href="#深度学习基础问题" class="headerlink" title="深度学习基础问题"></a>深度学习基础问题</h1><p><a href="https://mp.weixin.qq.com/s/KcIlkLyNROxC_TUbCDhEmg">深度学习基础问题</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>requests | 爬取精美壁纸</title>
     <url>/2021/11/06/%E7%88%AC%E5%8F%96%E7%B2%BE%E7%BE%8E%E5%A3%81%E7%BA%B8/</url>
     <content><![CDATA[<h1 id="爬取精美壁纸"><a href="#爬取精美壁纸" class="headerlink" title="爬取精美壁纸"></a>爬取精美壁纸</h1><p><strong>爬取目标：</strong> Wallhaven网站中Toplist标签下前50页共1196张精美壁纸。<br><a href="https://mp.weixin.qq.com/s/BiJKm4SnL6qCLEK91xcDIQ">参考资料</a></p>
@@ -12133,6 +12148,19 @@ if __name__ == &#39;__main__&#39;:
       <tags>
         <tag>requests</tag>
         <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 深度学习基础问题</title>
+    <url>/2021/11/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="深度学习基础问题"><a href="#深度学习基础问题" class="headerlink" title="深度学习基础问题"></a>深度学习基础问题</h1><p><a href="https://mp.weixin.qq.com/s/KcIlkLyNROxC_TUbCDhEmg">深度学习基础问题</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -12835,6 +12863,20 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 神经网络中的超参数</title>
+    <url>/2021/06/30/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E8%B6%85%E5%8F%82%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="神经网络中的超参数"><a href="#神经网络中的超参数" class="headerlink" title="神经网络中的超参数"></a>神经网络中的超参数</h1><p><b>神经网络中常见的超参数：</b><br>1.隐藏层的大小n^[l](size of hidden layers)<br>2.学习率 alpha(learning rate)<br>3.迭代次数(number of iterations)<br>4.神经网络中的层数L(number of layers L in the neral network)</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>超参数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 相交链表</title>
     <url>/2021/08/27/%E7%9B%B8%E4%BA%A4%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="160-环形链表"><a href="#160-环形链表" class="headerlink" title="160.环形链表"></a>160.环形链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。</p>
@@ -12942,20 +12984,6 @@ if __name__ ==&quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 神经网络中的超参数</title>
-    <url>/2021/06/30/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E8%B6%85%E5%8F%82%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="神经网络中的超参数"><a href="#神经网络中的超参数" class="headerlink" title="神经网络中的超参数"></a>神经网络中的超参数</h1><p><b>神经网络中常见的超参数：</b><br>1.隐藏层的大小n^[l](size of hidden layers)<br>2.学习率 alpha(learning rate)<br>3.迭代次数(number of iterations)<br>4.神经网络中的层数L(number of layers L in the neral network)</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>超参数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习基础 | 神经网络模型概览</title>
     <url>/2021/11/05/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%A7%88/</url>
     <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s/ds5YWmyIZTHW55Tkdf3pww">一文概览神经网络模型</a></p>
@@ -12967,22 +12995,6 @@ if __name__ ==&quot;__main__&quot;:
       <tags>
         <tag>深度学习</tag>
         <tag>神经网络模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>研究 | 科研方法分享</title>
-    <url>/2021/11/05/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95%E5%88%86%E4%BA%AB/</url>
-    <content><![CDATA[<h1 id="科研方法分享"><a href="#科研方法分享" class="headerlink" title="科研方法分享"></a>科研方法分享</h1><h2 id="科研基本流程"><a href="#科研基本流程" class="headerlink" title="科研基本流程"></a>科研基本流程</h2><p><strong>选题 –&gt; 模型/算法设计 –&gt; 实验验证 –&gt; 论文写作</strong></p>
-<p>论文=50% technique + 50% paper writing</p>
-<p>关注技术、工作的价值、insight.</p>
-<p><a href="https://mp.weixin.qq.com/s/n0Tl6dM7QCM07Ae01Edl4A">上海交大吴齐天的科研思考！</a></p>
-]]></content>
-      <categories>
-        <category>Rsearch and Paper</category>
-        <category>科研方法</category>
-      </categories>
-      <tags>
-        <tag>科研方法</tag>
       </tags>
   </entry>
   <entry>
@@ -13034,6 +13046,22 @@ if __name__ ==&quot;__main__&quot;:
       </categories>
       <tags>
         <tag>程序员必备的8大学习网站</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>研究 | 科研方法分享</title>
+    <url>/2021/11/05/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95%E5%88%86%E4%BA%AB/</url>
+    <content><![CDATA[<h1 id="科研方法分享"><a href="#科研方法分享" class="headerlink" title="科研方法分享"></a>科研方法分享</h1><h2 id="科研基本流程"><a href="#科研基本流程" class="headerlink" title="科研基本流程"></a>科研基本流程</h2><p><strong>选题 –&gt; 模型/算法设计 –&gt; 实验验证 –&gt; 论文写作</strong></p>
+<p>论文=50% technique + 50% paper writing</p>
+<p>关注技术、工作的价值、insight.</p>
+<p><a href="https://mp.weixin.qq.com/s/n0Tl6dM7QCM07Ae01Edl4A">上海交大吴齐天的科研思考！</a></p>
+]]></content>
+      <categories>
+        <category>Rsearch and Paper</category>
+        <category>科研方法</category>
+      </categories>
+      <tags>
+        <tag>科研方法</tag>
       </tags>
   </entry>
   <entry>
@@ -13297,17 +13325,6 @@ controlthread.start()
       </tags>
   </entry>
   <entry>
-    <title>绝对路径和相对路径</title>
-    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
-    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
-<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
-]]></content>
-      <tags>
-        <tag>绝对路径</tag>
-        <tag>相对路径</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>matplotlib | 绘制几个模型某性能指标在某个范围内的大小比较图</title>
     <url>/2021/10/12/%E7%BB%98%E5%88%B6%E5%87%A0%E4%B8%AA%E6%A8%A1%E5%9E%8B%E6%9F%90%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%9C%A8%E6%9F%90%E4%B8%AA%E8%8C%83%E5%9B%B4%E5%86%85%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83%E5%9B%BE/</url>
     <content><![CDATA[<h1 id="绘制几个模型某性能指标在某个范围内的大小比较图"><a href="#绘制几个模型某性能指标在某个范围内的大小比较图" class="headerlink" title="绘制几个模型某性能指标在某个范围内的大小比较图"></a>绘制几个模型某性能指标在某个范围内的大小比较图</h1><p>我们在做深度学习实验时，很多时候会需要对几个模型的性能进行对比并进行可视化，从而清楚地展示模型性能的大小关系。</p>
@@ -13342,6 +13359,17 @@ plt.show()
       </categories>
       <tags>
         <tag>matplotlib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>绝对路径和相对路径</title>
+    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
+    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
+<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
+]]></content>
+      <tags>
+        <tag>绝对路径</tag>
+        <tag>相对路径</tag>
       </tags>
   </entry>
   <entry>
@@ -14002,6 +14030,49 @@ except:
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 赎金信</title>
+    <url>/2021/09/01/%E8%B5%8E%E9%87%91%E4%BF%A1/</url>
+    <content><![CDATA[<h1 id="383-赎金信"><a href="#383-赎金信" class="headerlink" title="383.赎金信"></a>383.赎金信</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。<br>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/ransom-note/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>遍历ransomNote中的每一个元素，并查找这个元素是否在magazine中，如果没有查找到，则返回False，如果查找到了，则将这个元素在magazine中移除，以此类推，直到遍历完ransomNote中的每一个元素。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -&gt; bool:
+        ransomNote = list(ransomNote)
+        magazine = list(magazine)
+
+        for i in range(len(ransomNote)):
+            if ransomNote[i] in magazine:
+                magazine.remove(ransomNote[i])
+                print(ransomNote)
+            else:
+                return False
+
+        if i == len(ransomNote)-1:
+            return True
+
+
+if __name__ == &#39;__main__&#39;:
+    s = Solution()
+    res = s.canConstruct(&#39;aa&#39;, &#39;aab&#39;)
+    print(res)
+
+    # list1 = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;]
+    # list1.remove(&#39;a&#39;)
+    # print(list1)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>wordcloud | 词云</title>
     <url>/2021/10/28/%E8%AF%8D%E4%BA%91/</url>
     <content><![CDATA[<h1 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h1><p>根据文章中的关键词的词频生成词云图。</p>
@@ -14057,49 +14128,6 @@ for file in files:
         <tag>python</tag>
         <tag>wordcloud</tag>
         <tag>词云</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 赎金信</title>
-    <url>/2021/09/01/%E8%B5%8E%E9%87%91%E4%BF%A1/</url>
-    <content><![CDATA[<h1 id="383-赎金信"><a href="#383-赎金信" class="headerlink" title="383.赎金信"></a>383.赎金信</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。<br>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/ransom-note/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>遍历ransomNote中的每一个元素，并查找这个元素是否在magazine中，如果没有查找到，则返回False，如果查找到了，则将这个元素在magazine中移除，以此类推，直到遍历完ransomNote中的每一个元素。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def canConstruct(self, ransomNote: str, magazine: str) -&gt; bool:
-        ransomNote = list(ransomNote)
-        magazine = list(magazine)
-
-        for i in range(len(ransomNote)):
-            if ransomNote[i] in magazine:
-                magazine.remove(ransomNote[i])
-                print(ransomNote)
-            else:
-                return False
-
-        if i == len(ransomNote)-1:
-            return True
-
-
-if __name__ == &#39;__main__&#39;:
-    s = Solution()
-    res = s.canConstruct(&#39;aa&#39;, &#39;aab&#39;)
-    print(res)
-
-    # list1 = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;]
-    # list1.remove(&#39;a&#39;)
-    # print(list1)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -14257,20 +14285,6 @@ print(f3())
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 防止模型过拟合的6种必备方法</title>
-    <url>/2021/07/03/%E9%98%B2%E6%AD%A2%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88%E7%9A%846%E7%A7%8D%E5%BF%85%E5%A4%87%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="防止模型过拟合的6种必备方法"><a href="#防止模型过拟合的6种必备方法" class="headerlink" title="防止模型过拟合的6种必备方法"></a>防止模型过拟合的6种必备方法</h1><p>在训练机器学习模型时常常会遇到模型过拟合的情况，即模型在训练集上的表现良好，但是在验证集或者<br>测试集上表现相对较差；<br><b>常见的防止过拟合的方法：</b><br>1.使用K重交叉验证方法或者留一验证方法<br>2.数据增强<br>3.正则化<br>4.早停<br>5.Dropout<br>6.移除特征<br><a href="https://mp.weixin.qq.com/s/RP9iFbyw-aNMKx-UAOe-aA">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>过拟合</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | 飞桨推出的深度学习资料一站式获取平台项目</title>
     <url>/2021/06/23/%E9%A3%9E%E6%A1%A8%E6%8E%A8%E5%87%BA%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E4%B8%80%E7%AB%99%E5%BC%8F%E8%8E%B7%E5%8F%96%E5%B9%B3%E5%8F%B0%E9%A1%B9%E7%9B%AE/</url>
     <content><![CDATA[<h1 id="飞桨推出的深度学习资料一站式获取平台项目"><a href="#飞桨推出的深度学习资料一站式获取平台项目" class="headerlink" title="飞桨推出的深度学习资料一站式获取平台项目"></a>飞桨推出的深度学习资料一站式获取平台项目</h1><p>这是飞桨推出的深度学习资料一站式获取平台项目，可以看看有没有符合自己的资料哈~~</p>
@@ -14283,6 +14297,20 @@ print(f3())
       <tags>
         <tag>深度学习</tag>
         <tag>飞桨</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 防止模型过拟合的6种必备方法</title>
+    <url>/2021/07/03/%E9%98%B2%E6%AD%A2%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88%E7%9A%846%E7%A7%8D%E5%BF%85%E5%A4%87%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="防止模型过拟合的6种必备方法"><a href="#防止模型过拟合的6种必备方法" class="headerlink" title="防止模型过拟合的6种必备方法"></a>防止模型过拟合的6种必备方法</h1><p>在训练机器学习模型时常常会遇到模型过拟合的情况，即模型在训练集上的表现良好，但是在验证集或者<br>测试集上表现相对较差；<br><b>常见的防止过拟合的方法：</b><br>1.使用K重交叉验证方法或者留一验证方法<br>2.数据增强<br>3.正则化<br>4.早停<br>5.Dropout<br>6.移除特征<br><a href="https://mp.weixin.qq.com/s/RP9iFbyw-aNMKx-UAOe-aA">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>过拟合</tag>
       </tags>
   </entry>
   <entry>
