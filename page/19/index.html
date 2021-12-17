@@ -190,6 +190,529 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/" class="post-title-link" itemprop="url">Django | session实现用户登录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-07-29 11:47:36 / Modified: 17:35:31" itemprop="dateCreated datePublished" datetime="2021-07-29T11:47:36-08:00">2021-07-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="session实现用户登录"><a href="#session实现用户登录" class="headerlink" title="session实现用户登录"></a>session实现用户登录</h1><p>下面将使用session实现用户登录，如下图所示效果：<br><img src="/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/login.gif"></p>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><p>1.在views.py文件中创建视图(假定我们创建了一个名为booktest的应用)</p>
+<pre><code>def index(request):
+    uname = request.session.get(&#39;myname&#39;, default=&#39;未登录&#39;)
+    context = &#123;&#39;uname&#39;: uname&#125;
+    return render(request, &#39;booktest/index.html&#39;, context)
+
+
+def login(request):
+    return render(request, &#39;booktest/login.html&#39;)
+
+
+def login_handle(request):
+    uname = request.POST[&#39;uname&#39;]
+    request.session[&#39;myname&#39;] = uname
+    return redirect(&#39;/booktest/index/&#39;)
+
+
+def logout(request):
+    # del request.session[&#39;myname&#39;]  # 删除会话
+    # request.session.clear()  # 清除所有会话
+    request.session.flush()  # 删除当前的会话数据并删除会话的Cookie
+    return redirect(&#39;/booktest/index/&#39;)
+</code></pre>
+<p>2.配置url</p>
+<pre><code>主url:
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r&#39;^booktest/&#39;, include(&quot;booktest.urls&quot;, namespace=&#39;booktest&#39;)),
+]
+应用url:
+from django.conf.urls import include, url
+import views
+
+
+urlpatterns = [
+    url(r&#39;^index/$&#39;, views.index),
+    url(r&#39;^login/$&#39;, views.login),
+    url(r&#39;^login_handle/$&#39;, views.login_handle),
+    url(r&#39;^logout/$&#39;, views.logout3),
+
+]
+</code></pre>
+<p>3.创建模板</p>
+<pre><code>index.html
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+你好：&#123;&#123; uname &#125;&#125;
+&lt;br&gt;
+&lt;a href=&quot;/booktest/session2/&quot;&gt;登录&lt;/a&gt;
+&lt;br&gt;
+&lt;a href=&quot;/booktest/session3/&quot;&gt;退出&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+login.html
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form method=&quot;post&quot; action=&quot;/booktest/session2_handle/&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;uname&quot;&gt;
+    &lt;input type=&quot;submit&quot; name=&quot;登录&quot;&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>4.配置模板路径DIRS<br>注：templates为和应用同级的文件夹，本应用的模板存在templates/booktest/下</p>
+<pre><code>TEMPLATES = [
+    &#123;
+        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
+        &#39;APP_DIRS&#39;: True,
+        &#39;OPTIONS&#39;: &#123;
+            &#39;context_processors&#39;: [
+                &#39;django.template.context_processors.debug&#39;,
+                &#39;django.template.context_processors.request&#39;,
+                &#39;django.contrib.auth.context_processors.auth&#39;,
+                &#39;django.contrib.messages.context_processors.messages&#39;,
+            ],
+        &#125;,
+    &#125;,
+]
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/29/cookie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/29/cookie/" class="post-title-link" itemprop="url">cookie | cookie</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-29 10:02:01" itemprop="dateCreated datePublished" datetime="2021-07-29T10:02:01-08:00">2021-07-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-28 18:15:49" itemprop="dateModified" datetime="2021-07-28T18:15:49-08:00">2021-07-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cookie/" itemprop="url" rel="index"><span itemprop="name">cookie</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在基于HTTP的请求当中，客户端发送请求到服务器端，服务器端响应请求返回一些信息（包含cookie）。<br>1.cookie是什么？<br>cookie:存储在浏览器当中的文本信息，存储格式：键值对，一旦你访问某个网站，存储了这个键值对，后面再次请求这个服务器时，cookie会自动加到请求报文的头里面发送到服务器。<br><img src="/2021/07/29/cookie/cookie1.png"><br>2.cookie是怎么来的？<br>我们在服务器端设置（set_cookie()）的，通过response返回到浏览器，浏览器将cookie存储下来<br><strong>注：cookie是区别于域名的，跨域名不能共享cookie信息</strong><br>3.一种常见的场景<br>假设我们在淘宝网站浏览了运动鞋商品，在我们浏览其他网站时会看到与我们之前浏览的运动鞋类似的商品推荐，<br>“cookie是区别于域名的”，这句话似乎错了？？<br>答：此时的现象并不是其他网站读取了淘宝网站的cookie，而是在其他网站内嵌了淘宝网站，即此时的运动鞋商品<br>推荐的信息是从淘宝网站本身读取到的，原理如下图所示：<br><img src="/2021/07/29/cookie/cookie.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/" class="post-title-link" itemprop="url">Django | django中模板文件中的链接地址怎么写</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-07-28 19:55:49 / Modified: 04:09:07" itemprop="dateCreated datePublished" datetime="2021-07-28T19:55:49-08:00">2021-07-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="django中模板文件中的链接地址怎么写"><a href="#django中模板文件中的链接地址怎么写" class="headerlink" title="django中模板文件中的链接地址怎么写?"></a>django中模板文件中的链接地址怎么写?</h1><p>在进行django项目开发中，通常会遇到一个场景：我们在当前页面点击一个链接，跳转到其他的页面，<br>那么在当前页面中的这个标签中的地址我们应该如何去写？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/" class="post-title-link" itemprop="url">Django | django自定义错误页面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-07-28 15:55:51 / Modified: 03:57:21" itemprop="dateCreated datePublished" datetime="2021-07-28T15:55:51-08:00">2021-07-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="django自定义错误页面"><a href="#django自定义错误页面" class="headerlink" title="django自定义错误页面"></a>django自定义错误页面</h1><p>在进行django项目开发时，如果用户请求一个不存在的页面，将会显示以下界面：<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/1.png"><br>我们可以自定义一个错误页面来展示提示信息。</p>
+<p>django版本：1.8.2</p>
+<p><strong>步骤：</strong><br>1.修改settings.py</p>
+<pre><code>DEBUG = False
+ALLOWED_HOSTS = [&#39;*&#39;]
+</code></pre>
+<p>2.在templates文件夹下创建404.html页面</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+找不到了
+&lt;hr/&gt;
+&#123;&#123; request_path &#125;&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.运行服务器，访问一个不存在的页面，将显示自定义的错误页面<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/2.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">Django | Django模型查询</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-26 11:20:20" itemprop="dateCreated datePublished" datetime="2021-07-26T11:20:20-08:00">2021-07-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-28 03:57:14" itemprop="dateModified" datetime="2021-07-28T03:57:14-08:00">2021-07-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E6%A1%86%E6%9E%B6/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
+<pre><code>print([e.attr for e in Entry.objects.all()])
+print([e.attr for e in Entry.objects.all()])
+</code></pre>
+<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
+<pre><code>querylist=ExampleModel.objects.all()
+print([e.attr for e in querylist])
+print([e.attr for e in querylist])
+</code></pre>
+<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
+<pre><code>query=ExampleModel.objects.all()
+for ... in query[0:10]
+for ... in query[11:20]
+</code></pre>
+<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
+<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
+<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
+<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/26/%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -635,448 +1158,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/07/%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%B7%A5%E4%BD%9C%E9%9D%A2%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/07/%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%B7%A5%E4%BD%9C%E9%9D%A2%E8%AF%95/" class="post-title-link" itemprop="url">人生经历 | 第一次工作面试</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-07-07 11:00:35" itemprop="dateCreated datePublished" datetime="2021-07-07T11:00:35-08:00">2021-07-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-07-16 00:35:52" itemprop="dateModified" datetime="2021-07-16T00:35:52-08:00">2021-07-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BA%BA%E7%94%9F%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">人生经历</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BA%BA%E7%94%9F%E7%BB%8F%E5%8E%86/%E5%B7%A5%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">工作</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Here's something encrypted, password is required to continue reading.
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/07/%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%B7%A5%E4%BD%9C%E9%9D%A2%E8%AF%95/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/03/%E6%9F%A5%E6%89%BE%E8%AE%BA%E6%96%87%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%BD%91%E7%AB%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/03/%E6%9F%A5%E6%89%BE%E8%AE%BA%E6%96%87%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%BD%91%E7%AB%99/" class="post-title-link" itemprop="url">Research and Paper | 查找论文代码的两个网站</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-07-03 20:59:35 / Modified: 05:02:02" itemprop="dateCreated datePublished" datetime="2021-07-03T20:59:35-08:00">2021-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="查找论文代码的两个网站"><a href="#查找论文代码的两个网站" class="headerlink" title="查找论文代码的两个网站"></a>查找论文代码的两个网站</h1><p><a target="_blank" rel="noopener" href="https://www.paperswithcode.com/">网址1</a></p>
-<p><a target="_blank" rel="noopener" href="https://researchcode.com/">网址2</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/" class="post-title-link" itemprop="url">python资源大全</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-07-03 20:39:22 / Modified: 04:41:09" itemprop="dateCreated datePublished" datetime="2021-07-03T20:39:22-08:00">2021-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a target="_blank" rel="noopener" href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/03/CSharp%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/03/CSharp%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/" class="post-title-link" itemprop="url">C# | CSharp参数传递</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-07-03 19:36:42 / Modified: 03:40:09" itemprop="dateCreated datePublished" datetime="2021-07-03T19:36:42-08:00">2021-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C#</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="CSharp参数传递"><a href="#CSharp参数传递" class="headerlink" title="CSharp参数传递"></a>CSharp参数传递</h1><p>1.按值传递参数<br>Code:</p>
-<pre><code>using System;
-namespace ConsoleApp1
-&#123;
-    class ValueParameterPassTest
-    &#123;
-        public void swap(int x, int y)
-        &#123;
-            int temp;
-
-            temp = x;
-            x = y;
-            y = temp;
-        &#125;
-
-        /*static void Main()
-        &#123;
-            int a = 100;
-            int b = 200;
-
-            Console.WriteLine(&quot;在交换之前，a 的值： &#123;0&#125;&quot;, a);
-            Console.WriteLine(&quot;在交换之前，b 的值： &#123;0&#125;&quot;, b);
-
-            ValueParameterPassTest v = new ValueParameterPassTest();
-
-            //按值传递参数
-            //v.swap(a, b);
-
-            Console.WriteLine(&quot;在交换之后，a 的值： &#123;0&#125;&quot;, a);
-            Console.WriteLine(&quot;在交换之后，b 的值： &#123;0&#125;&quot;, b);
-
-        &#125;*/
-    &#125;
-&#125;
-</code></pre>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/03/CSharp%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/03/C-%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/03/C-%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6/" class="post-title-link" itemprop="url">C# | C#中的访问修饰符</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-07-03 17:30:51 / Modified: 01:36:48" itemprop="dateCreated datePublished" datetime="2021-07-03T17:30:51-08:00">2021-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C#</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="C-中的访问修饰符"><a href="#C-中的访问修饰符" class="headerlink" title="C#中的访问修饰符"></a>C#中的访问修饰符</h1><p><b>public:</b>任何公有成员可以被外部的类访问<br><b>Code:</b></p>
-<pre><code>using System;
-
-namespace ConsoleApp1
-&#123;   
-    class Rectangles
-    &#123;
-        //成员变量
-        public double length;
-        public double width;
-
-        public double GetArea()
-        &#123;
-            return length * width;
-        &#125;
-
-        public void Display()
-        &#123;
-            Console.WriteLine(&quot;Length: &#123;0&#125;&quot;, length);
-            Console.WriteLine(&quot;Width: &#123;0&#125;&quot;, width);
-            Console.WriteLine(&quot;Area: &#123;0&#125;&quot;, GetArea());
-        &#125;
-    &#125;
-    class PublicTest
-    &#123;
-        static void Main(string[] args)
-        &#123;
-            Rectangles r = new Rectangles();
-            //另一个类中用internal修饰的变量在这里可以访问
-            r.length = 4.5;
-            r.width = 3.5;
-            r.Display();
-            Console.ReadLine();
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/03/C-%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1148,20 +1229,20 @@ namespace ConsoleApp1
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">294</span>
+          <span class="site-state-item-count">299</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">131</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">184</span>
+        <span class="site-state-item-count">185</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
