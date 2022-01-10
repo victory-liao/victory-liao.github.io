@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-10T12:34:49.284Z</updated>
+  <updated>2022-01-10T13:13:53.178Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>基于Java Web的网上购物商城 | request域对象</title>
+    <link href="http://example.com/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://example.com/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/</id>
+    <published>2022-01-10T12:56:14.000Z</published>
+    <updated>2022-01-10T13:13:53.178Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="request域对象"><a href="#request域对象" class="headerlink" title="request域对象"></a>request域对象</h1><p><strong>场景</strong>：有时候我们发送一个请求然后由一个对应的servlet处理请求，接着我们需要将当前的request对象的一些信息传递到<br>另一个servlet或者jsp页面。<br><strong>方法</strong>：</p><ol><li>请求转发<br>假设当前处理请求的是Demo2Servlet(/demo2)，需要传递信息到Demo3Servlet(/demo3)中。</li></ol><pre><code>request.getRequestDispatcher(&quot;/demo3&quot;).forward(request, response);</code></pre><p>然后我们就可以在Demo3Servlet中获取request中的信息。</p><pre><code>package com.oracle;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;public class Demo3Servlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        String username = request.getParameter(&quot;username&quot;);        System.out.println(username);    &#125;    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        // TODO Auto-generated method stub        doGet(request, response);    &#125;&#125;</code></pre><ol start="2"><li>使用request域对象（使用request的setAttribute()方法设置其他信息并传递到Demo3Servlet中）</li></ol><pre><code>package com.oracle;import java.io.IOException;import java.util.Map;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;public class Demo2Servlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        request.setAttribute(&quot;flag&quot;, 1);        request.getRequestDispatcher(&quot;/demo3&quot;).forward(request, response);    &#125;    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        // TODO Auto-generated method stub        doGet(request, response);    &#125;&#125;</code></pre><ol start="3"><li>在Demo3Servlet中获取请求中的信息或者在Demo2Servlet中设置的新信息）</li></ol><pre><code>package com.oracle;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;public class Demo3Servlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        String username = request.getParameter(&quot;username&quot;);        System.out.println(username);                //request.removeAttribute(&quot;flag&quot;);//如果在获取设置的属性前将其删除，后面将获取不到该属性        Integer a = (Integer)request.getAttribute(&quot;flag&quot;);        System.out.println(a);    &#125;    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        // TODO Auto-generated method stub        doGet(request, response);    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;request域对象&quot;&gt;&lt;a href=&quot;#request域对象&quot; class=&quot;headerlink&quot; title=&quot;request域对象&quot;&gt;&lt;/a&gt;request域对象&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：有时候我们发送一个请求然后由一个对应</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="项目" scheme="http://example.com/categories/Java/%E9%A1%B9%E7%9B%AE/"/>
+    
+    <category term="基于Java Web的网上购物商城" scheme="http://example.com/categories/Java/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EJava-Web%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+    <category term="request域对象" scheme="http://example.com/categories/Java/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EJava-Web%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/"/>
+    
+    
+    <category term="request域对象" scheme="http://example.com/tags/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>基于Java Web的网上购物商城 | request获取各种形式的数据、请求转发</title>
@@ -549,40 +579,6 @@
     <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
     <category term="模型存储" scheme="http://example.com/tags/%E6%A8%A1%E5%9E%8B%E5%AD%98%E5%82%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CNN | 卷积神经网络之卷积计算作用与思想</title>
-    <link href="http://example.com/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/"/>
-    <id>http://example.com/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/</id>
-    <published>2021-11-15T12:57:16.000Z</published>
-    <updated>2021-11-15T12:58:41.489Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="卷积神经网络之卷积计算作用与思想"><a href="#卷积神经网络之卷积计算作用与思想" class="headerlink" title="卷积神经网络之卷积计算作用与思想"></a>卷积神经网络之卷积计算作用与思想</h1><p><a href="https://www.cnblogs.com/shine-lee/p/9932226.html">卷积神经网络之卷积计算、作用与思想</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;卷积神经网络之卷积计算作用与思想&quot;&gt;&lt;a href=&quot;#卷积神经网络之卷积计算作用与思想&quot; class=&quot;headerlink&quot; title=&quot;卷积神经网络之卷积计算作用与思想&quot;&gt;&lt;/a&gt;卷积神经网络之卷积计算作用与思想&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https</summary>
-      
-    
-    
-    
-    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="深度学习基础" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="CNN" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/"/>
-    
-    <category term="卷积" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/%E5%8D%B7%E7%A7%AF/"/>
-    
-    
-    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="CNN" scheme="http://example.com/tags/CNN/"/>
-    
-    <category term="卷积" scheme="http://example.com/tags/%E5%8D%B7%E7%A7%AF/"/>
     
   </entry>
   
