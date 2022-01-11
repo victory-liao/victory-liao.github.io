@@ -190,6 +190,168 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/" class="post-title-link" itemprop="url">pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 01:36:52 / Modified: 01:38:14" itemprop="dateCreated datePublished" datetime="2021-10-29T01:36:52-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
+<pre><code>import pandas as pd
+
+df = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)
+df.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03
+
+df[&#39;月份&#39;] = df[&#39;日期&#39;].dt.month
+df.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
+
+df5 = df[df[&#39;月份&#39;] == 5]
+df5.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 9649     A19X9280200     EA     36012XR0413200     LC009650     PC09650     66     2019-05-03     5
+# 9650     A19X9280200     EA     60022XR2298300     LC009651     PC09651     66     2019-05-03     5
+# 9651     A19X9280561     EA     72004XR2000001     LC009652     PC09652     604     2019-05-03     5
+# 9652     A19X9286759     EA     62010XR0161048     LC009653     PC09653     50     2019-05-03     5
+# 9653     A19X9286759     EA     62010XR0502208     LC009654     PC09654     100     2019-05-03     5
+
+df8 = df[df[&#39;月份&#39;] == 8]
+df8.head()
+
+
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 17213     A19X9317364     EA     62010XR0500126     LC017214     PC17214     230     2019-08-01     8
+# 17214     A19X9317364     EA     61010XR1120100     LC017215     PC17215     230     2019-08-01     8
+# 17215     A19X9317364     EA     62012XR0102262     LC017216     PC17216     230     2019-08-01     8
+# 17216     A19X9317364     EA     62010XR050150A     LC017217     PC17217     950     2019-08-01     8
+# 17217     A19X9317364     EA     61011XR1150500     LC017218     PC17218     230     2019-08-01     8
+
+
+# 去掉不需要的月份的数据
+def Remove_data(df, month=[]):
+    for i in month:
+        df = df[df[&#39;月份&#39;] != i]
+    return df
+
+
+df_rest = Remove_data(df, [5, 8])
+df_rest.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
+
+with pd.ExcelWriter(&#39;物料表_1.xlsx&#39;, engine=&#39;openpyxl&#39;,
+                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:
+    df5.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;5月&#39;, index=False)
+    df8.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;8月&#39;, index=False)
+    df_rest.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;剩余月份&#39;, index=False)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+wb = load_workbook(&quot;物料表_1.xlsx&quot;)
+for sheetname in wb.sheetnames:
+    ws = wb[sheetname]
+
+    # 调整列宽
+    ws.column_dimensions[&#39;A&#39;].width = 12
+    ws.column_dimensions[&#39;C&#39;].width = 15.5
+    ws.column_dimensions[&#39;G&#39;].width = 10
+
+    # 设置字号，对齐，缩小字体填充，加边框
+    for row_number in range(2, ws.max_row + 1):
+        for col_number in range(1, ws.max_column + 1):
+            c = ws.cell(row=row_number, column=col_number)
+            c.font = Font(size=10)
+            c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+            c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+wb.save(&quot;物料表_1.xlsx&quot;)
+</code></pre>
+<p><a href="物料表.xlsx">物料表.xlsx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1201,89 +1363,6 @@ if __name__ == &quot;__main__&quot;:
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/" class="post-title-link" itemprop="url">pypiwin32 | 批量发送不同内容的邮件给不同的收件人</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-27 04:54:32 / Modified: 05:22:09" itemprop="dateCreated datePublished" datetime="2021-10-27T04:54:32-08:00">2021-10-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pypiwin32/" itemprop="url" rel="index"><span itemprop="name">pypiwin32</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="批量发送不同内容的邮件给不同的收件人"><a href="#批量发送不同内容的邮件给不同的收件人" class="headerlink" title="批量发送不同内容的邮件给不同的收件人"></a>批量发送不同内容的邮件给不同的收件人</h1><p>程序实现自动将’年假_按部门’下各个部门的年假情况Excel表格发送给’邮件地址.xlsx’中各个部门的负责人。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1355,20 +1434,20 @@ if __name__ == &quot;__main__&quot;:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">304</span>
+          <span class="site-state-item-count">305</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">138</span>
+        <span class="site-state-item-count">139</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">190</span>
+        <span class="site-state-item-count">191</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
