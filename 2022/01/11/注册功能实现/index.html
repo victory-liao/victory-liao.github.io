@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="注册功能实现 实现原理当用户输入完注册信息，点击提交，浏览器向服务器发出请求，然后由服务器中的servlet来处理请求，将前台用户输入的信息保存到数据库当中。 安装MySQL并创建需要的数据库和表(假设创建的数据库为test3，创建表user)，表结构如下图所示。 在eclipse中导入数据库配置文件 导入注册所需的jar包 导入DataSourceUtils.java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaWeb项目开发 | 注册功能实现">
+<meta property="og:url" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Victory&#39;s Blog">
+<meta property="og:description" content="注册功能实现 实现原理当用户输入完注册信息，点击提交，浏览器向服务器发出请求，然后由服务器中的servlet来处理请求，将前台用户输入的信息保存到数据库当中。 安装MySQL并创建需要的数据库和表(假设创建的数据库为test3，创建表user)，表结构如下图所示。 在eclipse中导入数据库配置文件 导入注册所需的jar包 导入DataSourceUtils.java">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/1.PNG">
+<meta property="og:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/2.PNG">
+<meta property="og:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/3.PNG">
+<meta property="og:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/4.PNG">
+<meta property="og:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/6.PNG">
+<meta property="og:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/5.PNG">
+<meta property="article:published_time" content="2022-01-11T08:05:06.000Z">
+<meta property="article:modified_time" content="2022-01-11T08:32:35.538Z">
+<meta property="article:author" content="victory-liao">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="注册">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/1.PNG">
+
+<link rel="canonical" href="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>JavaWeb项目开发 | 注册功能实现 | Victory's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Victory's Blog" type="application/atom+xml">
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+    <div class="headband"></div>
+	<a target="_blank" rel="noopener" href="https://github.com/victory-liao/" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Victory's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">非淡泊无以明志，非宁静无以致远</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+    
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaWeb项目开发 | 注册功能实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-11 00:05:06 / Modified: 00:32:35" itemprop="dateCreated datePublished" datetime="2022-01-11T00:05:06-08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">注册功能实现</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="注册功能实现"><a href="#注册功能实现" class="headerlink" title="注册功能实现"></a>注册功能实现</h1><ol>
+<li>实现原理<br>当用户输入完注册信息，点击提交，浏览器向服务器发出请求，然后由服务器中的servlet来处理请求，将前台用户输入的信息保存到数据库当中。<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/1.PNG"></li>
+<li>安装MySQL并创建需要的数据库和表(假设创建的数据库为test3，创建表user)，表结构如下图所示。<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/2.PNG"></li>
+<li>在eclipse中导入数据库配置文件<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/3.PNG"></li>
+<li>导入注册所需的jar包<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/4.PNG"></li>
+<li>导入DataSourceUtils.java<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/6.PNG"><span id="more"></span></li>
+<li>准备注册页面</li>
+</ol>
+<p><strong>页面效果：</strong><br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/5.PNG"></p>
+<p><strong>代码：</strong></p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt;&lt;/head&gt;
+        &lt;meta charset=&quot;utf-8&quot; /&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+        &lt;title&gt;会员登录&lt;/title&gt;
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;css/bootstrap.min.css&quot; type=&quot;text/css&quot; /&gt;
+        &lt;script src=&quot;js/jquery-1.11.3.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+        &lt;script src=&quot;js/bootstrap.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;!-- 引入自定义css文件 style.css --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot; type=&quot;text/css&quot;/&gt;
+
+&lt;style&gt;
+  body&#123;
+   margin-top:20px;
+   margin:0 auto;
+ &#125;
+ .carousel-inner .item img&#123;
+     width:100%;
+     height:300px;
+ &#125;
+ .container .row div&#123; 
+     /* position:relative;
+     float:left; */
+ &#125;
+ 
+font &#123;
+    color: #3164af;
+    font-size: 18px;
+    font-weight: normal;
+    padding: 0 10px;
+&#125;
+ &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+            &lt;!--
+                时间：2015-12-30
+                描述：菜单栏
+            --&gt;
+            &lt;div class=&quot;container-fluid&quot;&gt;
+                &lt;div class=&quot;col-md-4&quot;&gt;
+                    &lt;img src=&quot;img/logo2.png&quot; height=&quot;50px&quot;/&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;col-md-5&quot;&gt;
+                    &lt;img src=&quot;img/header.png&quot; /&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;
+                    &lt;ol class=&quot;list-inline&quot;&gt;
+                        &lt;li&gt;&lt;a href=&quot;login.htm&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href=&quot;register.htm&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href=&quot;cart.htm&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ol&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;!--
+                时间：2015-12-30
+                描述：导航条
+            --&gt;
+            &lt;div class=&quot;container-fluid&quot;&gt;
+                &lt;nav class=&quot;navbar navbar-inverse&quot;&gt;
+                    &lt;div class=&quot;container-fluid&quot;&gt;
+                        &lt;!-- Brand and toggle get grouped for better mobile display --&gt;
+                        &lt;div class=&quot;navbar-header&quot;&gt;
+                            &lt;button type=&quot;button&quot; class=&quot;navbar-toggle collapsed&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#bs-example-navbar-collapse-1&quot; aria-expanded=&quot;false&quot;&gt;
+                                &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
+                                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                            &lt;/button&gt;
+                            &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;首页&lt;/a&gt;
+                        &lt;/div&gt;
+
+                        &lt;!-- Collect the nav links, forms, and other content for toggling --&gt;
+                        &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;bs-example-navbar-collapse-1&quot;&gt;
+                            &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+                                &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;#&quot;&gt;手机数码&lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                            &lt;/ul&gt;
+                            &lt;form class=&quot;navbar-form navbar-right&quot; role=&quot;search&quot;&gt;
+                                &lt;div class=&quot;form-group&quot;&gt;
+                                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;button type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;Submit&lt;/button&gt;
+                            &lt;/form&gt;
+
+                        &lt;/div&gt;
+                        &lt;!-- /.navbar-collapse --&gt;
+                    &lt;/div&gt;
+                    &lt;!-- /.container-fluid --&gt;
+                &lt;/nav&gt;
+            &lt;/div&gt;
+
+
+
+
+
+&lt;div class=&quot;container&quot; style=&quot;width:100%;background:url(&#39;image/regist_bg.jpg&#39;);&quot;&gt;
+&lt;div class=&quot;row&quot;&gt; 
+
+    &lt;div class=&quot;col-md-2&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;col-md-8&quot; style=&quot;background:#fff;padding:40px 80px;margin:30px;border:7px solid #ccc;&quot;&gt;
+        &lt;font&gt;会员注册&lt;/font&gt;USER REGISTER
+        &lt;form class=&quot;form-horizontal&quot; style=&quot;margin-top:5px;&quot; action=&quot;/register/user&quot;&gt;
+             &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;username&quot; class=&quot;col-sm-2 control-label&quot;&gt;用户名&lt;/label&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                  &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;username&quot; id=&quot;username&quot; placeholder=&quot;请输入用户名&quot;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+               &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;inputPassword3&quot; class=&quot;col-sm-2 control-label&quot;&gt;密码&lt;/label&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                  &lt;input type=&quot;password&quot; class=&quot;form-control&quot; name=&quot;password&quot; id=&quot;inputPassword3&quot; placeholder=&quot;请输入密码&quot;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+               &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;confirmpwd&quot; class=&quot;col-sm-2 control-label&quot;&gt;确认密码&lt;/label&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                  &lt;input type=&quot;password&quot; class=&quot;form-control&quot; id=&quot;confirmpwd&quot; placeholder=&quot;请输入确认密码&quot;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;inputEmail3&quot; class=&quot;col-sm-2 control-label&quot;&gt;Email&lt;/label&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                  &lt;input type=&quot;email&quot; class=&quot;form-control&quot; name=&quot;email&quot; id=&quot;inputEmail3&quot; placeholder=&quot;Email&quot;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+             &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;usercaption&quot; class=&quot;col-sm-2 control-label&quot;&gt;姓名&lt;/label&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                  &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;name&quot; id=&quot;usercaption&quot; placeholder=&quot;请输入姓名&quot;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;form-group opt&quot;&gt;  
+              &lt;label for=&quot;inlineRadio1&quot; class=&quot;col-sm-2 control-label&quot;&gt;性别&lt;/label&gt;  
+              &lt;div class=&quot;col-sm-6&quot;&gt;
+                &lt;label class=&quot;radio-inline&quot;&gt;
+              &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;inlineRadio1&quot; value=&quot;1&quot;&gt; 男
+            &lt;/label&gt;
+            &lt;label class=&quot;radio-inline&quot;&gt;
+              &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;inlineRadio2&quot; value=&quot;0&quot;&gt; 女
+            &lt;/label&gt;
+            &lt;/div&gt;
+              &lt;/div&gt;        
+              &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;date&quot; class=&quot;col-sm-2 control-label&quot;&gt;出生日期&lt;/label&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                  &lt;input type=&quot;date&quot; name=&quot;birthday&quot; class=&quot;form-control&quot;  &gt;              
+                &lt;/div&gt;
+              &lt;/div&gt;
+              
+              &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;date&quot; class=&quot;col-sm-2 control-label&quot;&gt;验证码&lt;/label&gt;
+                &lt;div class=&quot;col-sm-3&quot;&gt;
+                  &lt;input type=&quot;text&quot; class=&quot;form-control&quot;  &gt;
+                  
+                &lt;/div&gt;
+                &lt;div class=&quot;col-sm-2&quot;&gt;
+                &lt;img src=&quot;./image/captcha.jhtml&quot;/&gt;
+                &lt;/div&gt;
+                
+              &lt;/div&gt;
+             
+              &lt;div class=&quot;form-group&quot;&gt;
+                &lt;div class=&quot;col-sm-offset-2 col-sm-10&quot;&gt;
+                  &lt;input type=&quot;submit&quot;  width=&quot;100&quot; value=&quot;注册&quot; name=&quot;submit&quot; border=&quot;0&quot;
+                    style=&quot;background: url(&#39;./images/register.gif&#39;) no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+                    height:35px;width:100px;color:white;&quot;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/form&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&quot;col-md-2&quot;&gt;&lt;/div&gt;
+  
+&lt;/div&gt;
+&lt;/div&gt;
+    &lt;div style=&quot;margin-top:50px;&quot;&gt;
+            &lt;img src=&quot;./image/footer.jpg&quot; width=&quot;100%&quot; height=&quot;78&quot; alt=&quot;我们的优势&quot; title=&quot;我们的优势&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;text-align: center;margin-top: 5px;&quot;&gt;
+            &lt;ul class=&quot;list-inline&quot;&gt;
+                &lt;li&gt;&lt;a&gt;关于我们&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a&gt;联系我们&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a&gt;招贤纳士&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a&gt;法律声明&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a&gt;友情链接&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a target=&quot;_blank&quot;&gt;支付方式&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a target=&quot;_blank&quot;&gt;配送方式&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a&gt;服务声明&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a&gt;广告声明&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;text-align: center;margin-top: 5px;margin-bottom:20px;&quot;&gt;
+            Copyright &amp;copy; 2005-2016 oracle商城 版权所有
+        &lt;/div&gt;
+
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+<ol start="7">
+<li>创建UserServlet</li>
+</ol>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.dbutils.QueryRunner;
+
+import com.oracle.bean.User;
+import com.oracle.utils.DataSourceUtils;
+
+public class UserServlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        try &#123;
+            //接收请求数据
+            Map&lt;String, String[]&gt; map = request.getParameterMap();
+            //创建user
+            User user = new User();
+            //把map中的数据映射到user中
+            BeanUtils.populate(user, map);
+            System.out.println(user.getBirthday());
+            //把当前user中的数据插入到数据库中
+            //创建QueryRunner对象 
+            QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+            //编写sql
+            String sql = &quot;insert into user(id,username,password,email,name,sex,birthday)values(?,?,?,?,?,?,?)&quot;;
+            //执行sql
+            System.out.println(user.getUsername());
+            qr.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getName(), user.getSex(), user.getBirthday());
+            System.out.println(&quot;haahahahha&quot;);
+            
+        &#125; catch (Exception e) &#123;
+            e.printStackTrace();
+        &#125; 
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="8">
+<li>创建数据库user表对应的JavaBean(user bean)</li>
+</ol>
+<pre><code>package com.oracle.bean;
+
+public class User &#123;
+    private int id;
+    private String username;
+    private String password;
+    private String email;
+    private String name;
+    private String sex;
+    private String birthday;
+    
+    public int getId() &#123;
+        return id;
+    &#125;
+    public void setId(int id) &#123;
+        this.id = id;
+    &#125;
+    public String getUsername() &#123;
+        return username;
+    &#125;
+    public void setUsername(String username) &#123;
+        this.username = username;
+    &#125;
+    public String getPassword() &#123;
+        return password;
+    &#125;
+    public void setPassword(String password) &#123;
+        this.password = password;
+    &#125;
+    public String getEmail() &#123;
+        return email;
+    &#125;
+    public void setEmail(String email) &#123;
+        this.email = email;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    public String getBirthday() &#123;
+        return birthday;
+    &#125;
+    public void setBirthday(String birthday) &#123;
+        this.birthday = birthday;
+    &#125;
+    public User(int id, String username, String password, String email, String name, String sex, String birthday) &#123;
+        super();
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.sex = sex;
+        this.birthday = birthday;
+    &#125;
+    public User() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+&#125;
+</code></pre>
+<ol start="9">
+<li>访问页面输入用户信息进行登录</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E6%B3%A8%E5%86%8C/" rel="tag"># 注册</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/" rel="prev" title="JavaWeb项目开发 | request域对象">
+      <i class="fa fa-chevron-left"></i> JavaWeb项目开发 | request域对象
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">注册功能实现</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="victory-liao"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">victory-liao</p>
+  <div class="site-description" itemprop="description">保持理智 相信未来</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">301</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">135</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">187</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/victory-liao" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;victory-liao" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="E-Mail → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="WeChat → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="QQ → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">victory-liao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+</html>
