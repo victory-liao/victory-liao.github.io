@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-11T08:32:35.538Z</updated>
+  <updated>2022-01-11T10:09:45.726Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaWeb项目开发 | session</title>
+    <link href="http://example.com/2022/01/11/session/"/>
+    <id>http://example.com/2022/01/11/session/</id>
+    <published>2022-01-11T09:53:44.000Z</published>
+    <updated>2022-01-11T10:09:45.726Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><h2 id="session-1"><a href="#session-1" class="headerlink" title="session"></a>session</h2><ol><li>什么是session?<br>服务器端会话技术</li><li>api</li></ol><p><strong>(1)session的获取</strong></p><pre><code>HttpSession session=request.getSession()</code></pre><p><strong>(2)session属性操作</strong></p><pre><code>session.setAttribute(&quot;attr_name&quot;, attr_value);//设置属性session.getAttribute(attr_name);//获取属性</code></pre><ol start="3"><li>作用范围<br>一次会话中<h2 id="session-测试（其他的servlet可以共享一次请求中的数据）"><a href="#session-测试（其他的servlet可以共享一次请求中的数据）" class="headerlink" title="session 测试（其他的servlet可以共享一次请求中的数据）"></a>session 测试（其他的servlet可以共享一次请求中的数据）</h2></li><li>项目目录<br><img src="/2022/01/11/session/1.PNG"></li><li>代码</li></ol><p><strong>a.html</strong></p><pre><code>&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;a href=&quot;/sessiontest/demo1&quot;&gt;访问demo1&lt;/a&gt;    &lt;a href=&quot;/sessiontest/demo2&quot;&gt;访问demo2&lt;/a&gt;    &lt;a href=&quot;/sessiontest/demo3&quot;&gt;访问demo3&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p><strong>Demo1Servlet</strong></p><pre><code>package com.oracle;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import javax.servlet.http.HttpSession;public class Demo1Servlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        //request.setAttribute(&quot;username&quot;, &quot;zhangsan&quot;);                //请求转发        //request.getRequestDispatcher(&quot;/demo2&quot;).forward(request, response);                //创建session        HttpSession session = request.getSession();        System.out.println(&quot;Demo1Servlet增加username属性，值为lisi&quot;);        session.setAttribute(&quot;username&quot;, &quot;lisi&quot;);    &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><p><strong>Demo2Servlet</strong></p><pre><code>package com.oracle;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import javax.servlet.http.HttpSession;public class Demo2Servlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        //String username = (String)request.getAttribute(&quot;username&quot;);        //System.out.println(username);//null 一次会话当中的第二次请求不能得到第一次请求的数据                HttpSession session = request.getSession();        String username = (String)session.getAttribute(&quot;username&quot;);        System.out.println(&quot;Demo2Servlet:&quot; + username);            &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><p><strong>Demo3Servlet</strong></p><pre><code>package com.oracle;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import javax.servlet.http.HttpSession;public class Demo3Servlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        HttpSession session = request.getSession();        String username = (String)session.getAttribute(&quot;username&quot;);        System.out.println(&quot;Demo2Servlet:&quot; + username);    &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2022/01/11/session/2.PNG"></p><p><img src="/2022/01/11/session/3.PNG"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;session&quot;&gt;&lt;a href=&quot;#session&quot; class=&quot;headerlink&quot; title=&quot;session&quot;&gt;&lt;/a&gt;session&lt;/h1&gt;&lt;h2 id=&quot;session-1&quot;&gt;&lt;a href=&quot;#session-1&quot; class=&quot;header</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="session" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/session/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="session" scheme="http://example.com/tags/session/"/>
+    
+  </entry>
   
   <entry>
     <title>JavaWeb项目开发 | 注册功能实现</title>
@@ -551,38 +581,6 @@
     
     
     <category term="Dogs VS Cats" scheme="http://example.com/tags/Dogs-VS-Cats/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>脑电伪迹降噪方法整理</title>
-    <link href="http://example.com/2021/11/15/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/"/>
-    <id>http://example.com/2021/11/15/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</id>
-    <published>2021-11-15T13:31:27.000Z</published>
-    <updated>2021-11-15T13:33:18.619Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="脑电伪迹降噪方法整理"><a href="#脑电伪迹降噪方法整理" class="headerlink" title="脑电伪迹降噪方法整理"></a>脑电伪迹降噪方法整理</h1><p><a href="https://mp.weixin.qq.com/s/gRIP-fuYsZv2p92qptOmew">脑电伪迹降噪方法整理</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;脑电伪迹降噪方法整理&quot;&gt;&lt;a href=&quot;#脑电伪迹降噪方法整理&quot; class=&quot;headerlink&quot; title=&quot;脑电伪迹降噪方法整理&quot;&gt;&lt;/a&gt;脑电伪迹降噪方法整理&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/gR</summary>
-      
-    
-    
-    
-    <category term="Research and Paper" scheme="http://example.com/categories/Research-and-Paper/"/>
-    
-    <category term="EEG" scheme="http://example.com/categories/Research-and-Paper/EEG/"/>
-    
-    <category term="伪迹移除" scheme="http://example.com/categories/Research-and-Paper/EEG/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/"/>
-    
-    <category term="脑电伪迹降噪方法整理" scheme="http://example.com/categories/Research-and-Paper/EEG/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/"/>
-    
-    
-    <category term="伪迹移除" scheme="http://example.com/tags/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/"/>
-    
-    <category term="EEG" scheme="http://example.com/tags/EEG/"/>
     
   </entry>
   
