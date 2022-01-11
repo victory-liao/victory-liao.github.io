@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-11T11:09:04.930Z</updated>
+  <updated>2022-01-11T11:48:14.848Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaWeb项目开发 | 使用filter解决项目编码问题</title>
+    <link href="http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</id>
+    <published>2022-01-11T11:31:44.000Z</published>
+    <updated>2022-01-11T11:48:14.848Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用filter解决项目编码问题"><a href="#使用filter解决项目编码问题" class="headerlink" title="使用filter解决项目编码问题"></a>使用filter解决项目编码问题</h1><p>在开发JavaWeb项目时，前端的编码使用的时utf-8编码方式，服务器端使用的是ISO-8859-1编码方式，故在开发中会出现乱码。</p><h2 id="解决方案（使用filter）"><a href="#解决方案（使用filter）" class="headerlink" title="解决方案（使用filter）"></a>解决方案（使用filter）</h2><p>实现EncodingFilter来解决项目乱码问题</p><p><strong>乱码情形举例：</strong></p><ol><li>写一个b.html文件</li></ol><pre><code>&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;a href=&quot;/filtertest/demox?username=张三&quot;&gt;向服务器发送请求&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><ol start="2"><li>再写一个servlet处理请求</li></ol><pre><code>package com.oracle.servlet;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;public class DemoxServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        String username = request.getParameter(&quot;username&quot;);        System.out.println(username);                response.getWriter().println(&quot;王五&quot;);    &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><ol start="3"><li>servlet写到浏览器的内容和servlet从浏览器接收到的请求数据会出现乱码<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/1.PNG"><br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/2.PNG"></li></ol><p><strong>EncodingFilter:</strong></p><pre><code>package com.oracle.filter;import java.io.IOException;import java.io.UnsupportedEncodingException;import java.util.Map;import javax.servlet.Filter;import javax.servlet.FilterChain;import javax.servlet.FilterConfig;import javax.servlet.ServletException;import javax.servlet.ServletRequest;import javax.servlet.ServletResponse;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletRequestWrapper;import javax.servlet.http.HttpServletResponse;/** * 统一编码 * @author Administrator * */public class EncodingFilter implements Filter &#123;    @Override    public void init(FilterConfig filterConfig) throws ServletException &#123;        // TODO Auto-generated method stub    &#125;    @Override    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException &#123;        //1.强转        HttpServletRequest request=(HttpServletRequest) req;        HttpServletResponse response=(HttpServletResponse) resp;        response.setContentType(&quot;text/html;charset=utf-8&quot;);        //2.放行        chain.doFilter(new MyRequest(request), response);    &#125;    @Override    public void destroy() &#123;        // TODO Auto-generated method stub    &#125;&#125;class MyRequest extends HttpServletRequestWrapper&#123;    private HttpServletRequest request;    private boolean flag=true;            public MyRequest(HttpServletRequest request) &#123;        super(request);        this.request=request;    &#125;        @Override    public String getParameter(String name) &#123;          if(name==null || name.trim().length()==0)&#123;            return null;        &#125;        String[] values = getParameterValues(name);        if(values==null || values.length==0)&#123;            return null;        &#125;                return values[0];    &#125;        @Override    /**     * hobby=[eat,drink]     */    public String[] getParameterValues(String name) &#123;        if(name==null || name.trim().length()==0)&#123;            return null;        &#125;        Map&lt;String, String[]&gt; map = getParameterMap();        if(map==null || map.size()==0)&#123;            return null;        &#125;                return map.get(name);    &#125;        @Override    /**     * map&#123; username=[tom],password=[123],hobby=[eat,drink]&#125;     */    public Map&lt;String,String[]&gt; getParameterMap() &#123;                  /**         * 首先判断请求方式         * 若为post  request.setchar...(utf-8)         * 若为get 将map中的值遍历编码就可以了         */        String method = request.getMethod();        if(&quot;post&quot;.equalsIgnoreCase(method))&#123;            try &#123;                request.setCharacterEncoding(&quot;utf-8&quot;);                return request.getParameterMap();            &#125; catch (UnsupportedEncodingException e) &#123;                // TODO Auto-generated catch block                e.printStackTrace();            &#125;        &#125;else if(&quot;get&quot;.equalsIgnoreCase(method))&#123;            Map&lt;String,String[]&gt; map = request.getParameterMap();            if(flag)&#123;                for (String key:map.keySet()) &#123;                    String[] arr = map.get(key);                    //继续遍历数组                    for(int i=0;i&lt;arr.length;i++)&#123;                        //编码                        try &#123;                            arr[i]=new String(arr[i].getBytes(&quot;iso8859-1&quot;),&quot;utf-8&quot;);                        &#125; catch (UnsupportedEncodingException e) &#123;                            e.printStackTrace();                        &#125;                    &#125;                &#125;                flag=false;            &#125;            //需要遍历map 修改value的每一个数据的编码                        return map;        &#125;                return super.getParameterMap();    &#125;    &#125;</code></pre><p><strong>配置web.xml文件:</strong></p><pre><code>&lt;!-- 配置项目编码 --&gt;  &lt;filter&gt;    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;    &lt;filter-class&gt;com.oracle.filter.EncodingFilter&lt;/filter-class&gt;  &lt;/filter&gt;  &lt;filter-mapping&gt;    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;  &lt;/filter-mapping&gt;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;使用filter解决项目编码问题&quot;&gt;&lt;a href=&quot;#使用filter解决项目编码问题&quot; class=&quot;headerlink&quot; title=&quot;使用filter解决项目编码问题&quot;&gt;&lt;/a&gt;使用filter解决项目编码问题&lt;/h1&gt;&lt;p&gt;在开发JavaWeb项目时，</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="filter" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/"/>
+    
+    <category term="解决项目编码问题" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/"/>
+    
+    
+    <category term="filter" scheme="http://example.com/tags/filter/"/>
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="解决项目编码问题" scheme="http://example.com/tags/%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/"/>
+    
+  </entry>
   
   <entry>
     <title>JavaWeb项目开发 | filter</title>
@@ -551,36 +585,6 @@
     
     
     <category term="虚假名人照片生成" scheme="http://example.com/tags/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Computer Vision | 基于ResNet的CIFAER10图像分类</title>
-    <link href="http://example.com/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/"/>
-    <id>http://example.com/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/</id>
-    <published>2021-11-17T03:26:33.000Z</published>
-    <updated>2021-11-20T09:51:10.207Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="基于ResNet的CIFAER-10图像分类"><a href="#基于ResNet的CIFAER-10图像分类" class="headerlink" title="基于ResNet的CIFAER-10图像分类"></a>基于ResNet的CIFAER-10图像分类</h1><h2 id="CIFAR-10数据集"><a href="#CIFAR-10数据集" class="headerlink" title="CIFAR-10数据集"></a>CIFAR-10数据集</h2><p><strong>数据集规模</strong><br>60000张32×32的彩色图片，共有十个类别，每个类别6000张图片。共50000张训练集图片和10000测试集图片。<br><strong>数据集样本类别</strong><br>飞机、汽车、鸟、猫、鹿、狗、青蛙、马、船、卡车（汽车和卡车无重叠）—&gt; 10分类任务<br><strong>数据集网址</strong><br><a href="http://www.cs.toronto.edu/~kriz/cifar.html">http://www.cs.toronto.edu/~kriz/cifar.html</a><br><strong>网络</strong><br>ResNet18</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;基于ResNet的CIFAER-10图像分类&quot;&gt;&lt;a href=&quot;#基于ResNet的CIFAER-10图像分类&quot; class=&quot;headerlink&quot; title=&quot;基于ResNet的CIFAER-10图像分类&quot;&gt;&lt;/a&gt;基于ResNet的CIFAER-10图像</summary>
-      
-    
-    
-    
-    <category term="项目经历" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/"/>
-    
-    <category term="Deep Learning" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/"/>
-    
-    <category term="Computer Vision" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/"/>
-    
-    <category term="基于ResNet的CIFAER-10图像分类" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER-10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/"/>
-    
-    
-    <category term="基于ResNet的CIFAER-10图像分类" scheme="http://example.com/tags/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER-10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/"/>
     
   </entry>
   
