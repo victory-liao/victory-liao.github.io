@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-11T13:26:22.167Z</updated>
+  <updated>2022-01-12T04:25:17.426Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaWeb项目开发 | 使用jsp查询所有商品案例实现</title>
+    <link href="http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/</id>
+    <published>2022-01-12T04:10:58.000Z</published>
+    <updated>2022-01-12T04:25:17.426Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用jsp查询所有商品案例实现"><a href="#使用jsp查询所有商品案例实现" class="headerlink" title="使用jsp查询所有商品案例实现"></a>使用jsp查询所有商品案例实现</h1><ol><li>创建表product<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/1.PNG"></li><li>项目目录(按下图导入jar包、c3p0-config.xml)<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/2.PNG"></li><li>创建jsp页面<span id="more"></span></li></ol><pre><code>&lt;%@page import=&quot;com.oracle.bean.Product&quot;%&gt;&lt;%@page import=&quot;java.util.ArrayList&quot;%&gt;&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;a href=&quot;/jsptest/product&quot;&gt;点击查看商品&lt;/a&gt;        &lt;hr&gt;        &lt;%        ArrayList&lt;Product&gt; arr = (ArrayList&lt;Product&gt;)request.getAttribute(&quot;list&quot;);    %&gt;        &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;        &lt;tr&gt;            &lt;th&gt;商品的id&lt;/th&gt;            &lt;th&gt;商品的名称&lt;/th&gt;            &lt;th&gt;商品的价格&lt;/th&gt;            &lt;th&gt;商品的描述&lt;/th&gt;        &lt;/tr&gt;        &lt;%        if(arr!=null)&#123;            for(Product p: arr)&#123;            %&gt;            &lt;tr&gt;                &lt;td&gt;&lt;%=p.getId() %&gt;&lt;/td&gt;                &lt;td&gt;&lt;%=p.getPname() %&gt;&lt;/td&gt;                &lt;td&gt;&lt;%=p.getPrice() %&gt;&lt;/td&gt;                &lt;td&gt;&lt;%=p.getPdesc() %&gt;&lt;/td&gt;            &lt;/tr&gt;            &lt;%             &#125;        &#125;        %&gt;    &lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><ol start="4"><li>创建product bean Product.java</li></ol><pre><code>package com.oracle.bean;public class Product &#123;    private int id;    private String pname;    private double price;    private String pdesc;    public Product(int id, String pname, double price, String pdesc) &#123;        super();        this.id = id;        this.pname = pname;        this.price = price;        this.pdesc = pdesc;    &#125;    public Product() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    public int getId() &#123;        return id;    &#125;    public void setId(int id) &#123;        this.id = id;    &#125;    public String getPname() &#123;        return pname;    &#125;    public void setPname(String pname) &#123;        this.pname = pname;    &#125;    public double getPrice() &#123;        return price;    &#125;    public void setPrice(double price) &#123;        this.price = price;    &#125;    public String getPdesc() &#123;        return pdesc;    &#125;    public void setPdesc(String pdesc) &#123;        this.pdesc = pdesc;    &#125;&#125;</code></pre><ol start="5"><li>创建ProductServlet</li></ol><pre><code>package com.oracle;import java.util.List;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import org.apache.commons.dbutils.QueryRunner;import org.apache.commons.dbutils.handlers.BeanListHandler;import com.oracle.bean.Product;import com.oracle.utils.DataSourceUtils;public class ProductServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        try &#123;            //查询数据库当中的所有数据            QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());                        String sql = &quot;select * from product&quot;;                        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class));                        //把list放入域对象中            request.setAttribute(&quot;list&quot;, list);                        //请求转发到aa.jsp中            request.getRequestDispatcher(&quot;/aa.jsp&quot;).forward(request, response);                    &#125; catch (Exception e) &#123;            // TODO Auto-generated catch block            e.printStackTrace();        &#125;    &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><ol start="6"><li>效果<br>访问aa.jsp页面：<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/3.PNG"><br>点击超链接查询商品：<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/4.PNG"></li></ol><p>注：项目编码问题的解决参考本博客的<a href="https://victory-liao.github.io/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">使用filter解决项目编码问题一文</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;使用jsp查询所有商品案例实现&quot;&gt;&lt;a href=&quot;#使用jsp查询所有商品案例实现&quot; class=&quot;headerlink&quot; title=&quot;使用jsp查询所有商品案例实现&quot;&gt;&lt;/a&gt;使用jsp查询所有商品案例实现&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;创建表product&lt;br&gt;&lt;img src=&quot;/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/1.PNG&quot;&gt;&lt;/li&gt;
+&lt;li&gt;项目目录(按下图导入jar包、c3p0-config.xml)&lt;br&gt;&lt;img src=&quot;/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/2.PNG&quot;&gt;&lt;/li&gt;
+&lt;li&gt;创建jsp页面&lt;/li&gt;&lt;/ol&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="jsp" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jsp/"/>
+    
+    <category term="使用jsp查询所有商品案例实现" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jsp/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="jsp" scheme="http://example.com/tags/jsp/"/>
+    
+  </entry>
   
   <entry>
     <title>JavaWeb项目开发 | jsp</title>
@@ -562,38 +594,6 @@
     
     
     <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RNN | LSTM输入输出格式</title>
-    <link href="http://example.com/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/"/>
-    <id>http://example.com/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/</id>
-    <published>2021-11-21T12:07:15.000Z</published>
-    <updated>2021-11-21T12:10:08.192Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="LSTM模型结构的可视化"><a href="#LSTM模型结构的可视化" class="headerlink" title="LSTM模型结构的可视化"></a>LSTM模型结构的可视化</h1><p><a href="https://zhuanlan.zhihu.com/p/139617364?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">非常到位的LSTM解读！</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;LSTM模型结构的可视化&quot;&gt;&lt;a href=&quot;#LSTM模型结构的可视化&quot; class=&quot;headerlink&quot; title=&quot;LSTM模型结构的可视化&quot;&gt;&lt;/a&gt;LSTM模型结构的可视化&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhih</summary>
-      
-    
-    
-    
-    <category term="深度学习" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="深度学习基础" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="RNN" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/"/>
-    
-    <category term="LSTM" scheme="http://example.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/LSTM/"/>
-    
-    
-    <category term="LSTM" scheme="http://example.com/tags/LSTM/"/>
-    
-    <category term="RNN" scheme="http://example.com/tags/RNN/"/>
     
   </entry>
   
