@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-12T06:42:19.432Z</updated>
+  <updated>2022-01-13T04:51:09.015Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaWeb项目开发 | 分页</title>
+    <link href="http://example.com/2022/01/12/%E5%88%86%E9%A1%B5/"/>
+    <id>http://example.com/2022/01/12/%E5%88%86%E9%A1%B5/</id>
+    <published>2022-01-13T04:03:11.000Z</published>
+    <updated>2022-01-13T04:51:09.015Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><h2 id="项目目录"><a href="#项目目录" class="headerlink" title="项目目录"></a>项目目录</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG"></p><span id="more"></span><h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/2.PNG"></p><h2 id="分页后台实现"><a href="#分页后台实现" class="headerlink" title="分页后台实现"></a>分页后台实现</h2><ol><li>paging.jsp(发出分页查询请求)</li></ol><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;a href=&quot;/paging/page?pageNumber=1&quot;&gt;分页查询&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><ol start="2"><li>PageServlet.java(处理请求)</li></ol><pre><code>package com.oracle.servlet;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import com.oracle.bean.PageBean;import com.oracle.service.PageService;public class PageServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        //获取前台传递的当前页        String pn = request.getParameter(&quot;pageNumber&quot;);        int pageNumber = Integer.parseInt(pn);        int pageSize = 2;                PageService ps = new PageService();        PageBean pb = ps.getPageBean(pageNumber, pageSize);                //把pb放入request域对象中        request.setAttribute(&quot;pb&quot;, pb);        //请求转发到前台页面        request.getRequestDispatcher(&quot;/paging1.jsp&quot;).forward(request, response);    &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><ol start="3"><li>PageService.java(编写业务逻辑)</li></ol><pre><code>package com.oracle.service;import java.sql.SQLException;import java.util.List;import com.oracle.bean.PageBean;import com.oracle.bean.Product;import com.oracle.dao.PageDao;public class PageService &#123;    public PageBean getPageBean(int pageNumber, int pageSize) &#123;        PageBean pb = null;        try &#123;            // TODO Auto-generated method stub            PageDao pd = new PageDao();                        //组装PageBean            pb = new PageBean(pageSize, pageNumber);                        //查询当前页显示的数据            List&lt;Product&gt; list = pd.getProList(pb);                        //查询总条数            int count = pd.getCount();                        //把数据放如pagebean中            pb.setList(list);            pb.setTotalSize(count);        &#125; catch (Exception e) &#123;            // TODO Auto-generated catch block            e.printStackTrace();        &#125;                return pb;    &#125;&#125;</code></pre><ol start="5"><li>PageDao.java(操作数据库)</li></ol><pre><code>package com.oracle.dao;import java.sql.SQLException;import java.util.List;import org.apache.commons.dbutils.QueryRunner;import org.apache.commons.dbutils.handlers.BeanListHandler;import org.apache.commons.dbutils.handlers.ScalarHandler;import com.oracle.bean.PageBean;import com.oracle.bean.Product;import com.oracle.utils.DataSourceUtils;public class PageDao &#123;    public List&lt;Product&gt; getProList(PageBean pb) throws SQLException &#123;        // TODO Auto-generated method stub        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());                String sql = &quot;select * from product limit ?,?&quot;;        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class), pb.getIndex(), pb.getPageSize());        return list;    &#125;    public int getCount() throws SQLException &#123;        // TODO Auto-generated method stub        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());                String sql = &quot;select coutn(*) from product&quot;;                int count = ((Long)qr.query(sql, new ScalarHandler())).intValue();                return count;    &#125;&#125;</code></pre><h2 id="分页前台实现"><a href="#分页前台实现" class="headerlink" title="分页前台实现"></a>分页前台实现</h2><ol><li>paging1.jsp(展示分页查询结果)</li></ol><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;        &lt;tr&gt;            &lt;th&gt;商品id&lt;/th&gt;            &lt;th&gt;商品名称&lt;/th&gt;            &lt;th&gt;商品价格&lt;/th&gt;            &lt;th&gt;商品描述&lt;/th&gt;        &lt;/tr&gt;                &lt;c:forEach items=&quot;$&#123;pb.list&#125;&quot; var=&quot;pro&quot;&gt;            &lt;tr&gt;                &lt;td&gt;$&#123;pro.id&#125;&lt;/td&gt;                &lt;td&gt;$&#123;pro.pname&#125;&lt;/td&gt;                &lt;td&gt;$&#123;pro.price&#125;&lt;/td&gt;                &lt;td&gt;$&#123;pro.pdesc&#125;&lt;/td&gt;            &lt;/tr&gt;        &lt;/c:forEach&gt;    &lt;/table&gt;        &lt;center&gt;        &lt;c:forEach begin=&quot;1&quot; end=&quot;$&#123;pb.totalCount&#125;&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;            &lt;a href=&quot;/paging/page?pageNumber=$&#123;n&#125;&quot;&gt;$&#123;n&#125;&lt;/a&gt;        &lt;/c:forEach&gt;    &lt;/center&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><ol start="2"><li>效果<br><img src="/2022/01/12/%E5%88%86%E9%A1%B5/3.PNG"></li></ol><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/4.PNG"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;分页&quot;&gt;&lt;a href=&quot;#分页&quot; class=&quot;headerlink&quot; title=&quot;分页&quot;&gt;&lt;/a&gt;分页&lt;/h1&gt;&lt;h2 id=&quot;项目目录&quot;&gt;&lt;a href=&quot;#项目目录&quot; class=&quot;headerlink&quot; title=&quot;项目目录&quot;&gt;&lt;/a&gt;项目目录&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="分页" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%86%E9%A1%B5/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="分页" scheme="http://example.com/tags/%E5%88%86%E9%A1%B5/"/>
+    
+  </entry>
   
   <entry>
     <title>JavaWeb项目开发 | jstl标签</title>
@@ -592,19 +619,6 @@
     
     
     <category term="CTeX" scheme="http://example.com/tags/CTeX/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>EmotionalTendencyPredictionUsingLSTM</title>
-    <link href="http://example.com/2021/11/29/EmotionalTendencyPredictionUsingLSTM/"/>
-    <id>http://example.com/2021/11/29/EmotionalTendencyPredictionUsingLSTM/</id>
-    <published>2021-11-29T12:48:49.000Z</published>
-    <updated>2021-11-29T12:48:49.761Z</updated>
-    
-    
-    
-    
     
   </entry>
   
