@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-13T11:00:10.091Z</updated>
+  <updated>2022-01-14T03:38:01.165Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>基于JavaWeb的网上购物商城 | 登录成功后网页头部显示用户名</title>
+    <link href="http://example.com/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/"/>
+    <id>http://example.com/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/</id>
+    <published>2022-01-14T03:25:06.000Z</published>
+    <updated>2022-01-14T03:38:01.165Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="登录成功后网页头部显示用户名"><a href="#登录成功后网页头部显示用户名" class="headerlink" title="登录成功后网页头部显示用户名"></a>登录成功后网页头部显示用户名</h1><p>要实现登录成功后在网页头部显示用户名，只需在登录成功后将当前用户存入session,然后在登录页面使用jstl语法判断用户状态，<br>登录成功则显示用户名。</p><ol><li>在UserServlet.java中添加将当前用户加入session中的代码<br>public void login(HttpServletRequest request, HttpServletResponse response) {<pre><code> ...... if(user!=null) &#123;     HttpSession session = request.getSession();     session.setAttribute(&quot;user&quot;, user);//将当前用户(User)加入session          request.getRequestDispatcher(&quot;/index.jsp&quot;).forward(request, response); &#125; ......</code></pre> }</li><li>修改header.jsp代码<br>使用jstl代码判断当前用户是否为空，若为空，显示登录注册链接，若不为空显示用户名等信息。</li></ol><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;&lt;!DOCTYPE html&gt;&lt;!-- 登录 注册 购物车... --&gt;&lt;div class=&quot;container-fluid&quot;&gt;    &lt;div class=&quot;col-md-4&quot;&gt;        &lt;img src=&quot;img/logo2.png&quot; /&gt;    &lt;/div&gt;    &lt;div class=&quot;col-md-5&quot;&gt;        &lt;img src=&quot;img/header.png&quot; /&gt;    &lt;/div&gt;    &lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;        &lt;ol class=&quot;list-inline&quot;&gt;            &lt;c:if test=&quot;$&#123;empty user&#125;&quot;&gt;                &lt;li&gt;&lt;a href=&quot;login.jsp&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;                &lt;li&gt;&lt;a href=&quot;register.jsp&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;            &lt;/c:if&gt;            &lt;c:if test=&quot;$&#123;not empty user&#125;&quot;&gt;                &lt;li&gt;$&#123;user.username&#125;&lt;/li&gt;                &lt;li&gt;&lt;a href=&quot;cart.jsp&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;                &lt;li&gt;&lt;a href=&quot;order_list.jsp&quot;&gt;我的订单&lt;/a&gt;&lt;/li&gt;            &lt;/c:if&gt;        &lt;/ol&gt;    &lt;/div&gt;&lt;/div&gt;&lt;!-- 导航条 --&gt;&lt;div class=&quot;container-fluid&quot;&gt;    &lt;nav class=&quot;navbar navbar-inverse&quot;&gt;        &lt;div class=&quot;container-fluid&quot;&gt;            &lt;!-- Brand and toggle get grouped for better mobile display --&gt;            &lt;div class=&quot;navbar-header&quot;&gt;                &lt;button type=&quot;button&quot; class=&quot;navbar-toggle collapsed&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#bs-example-navbar-collapse-1&quot; aria-expanded=&quot;false&quot;&gt;                    &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;                &lt;/button&gt;                &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;首页&lt;/a&gt;            &lt;/div&gt;            &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;bs-example-navbar-collapse-1&quot;&gt;                &lt;ul class=&quot;nav navbar-nav&quot;&gt;                    &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;product_list.htm&quot;&gt;手机数码&lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;                &lt;/ul&gt;                &lt;form class=&quot;navbar-form navbar-right&quot; role=&quot;search&quot;&gt;                    &lt;div class=&quot;form-group&quot;&gt;                        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search&quot;&gt;                    &lt;/div&gt;                    &lt;button type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;Submit&lt;/button&gt;                &lt;/form&gt;            &lt;/div&gt;        &lt;/div&gt;    &lt;/nav&gt;&lt;/div&gt;</code></pre><ol start="3"><li>效果<br><img src="/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/1.PNG"></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;登录成功后网页头部显示用户名&quot;&gt;&lt;a href=&quot;#登录成功后网页头部显示用户名&quot; class=&quot;headerlink&quot; title=&quot;登录成功后网页头部显示用户名&quot;&gt;&lt;/a&gt;登录成功后网页头部显示用户名&lt;/h1&gt;&lt;p&gt;要实现登录成功后在网页头部显示用户名，只需在</summary>
+      
+    
+    
+    
+    <category term="项目经历" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/"/>
+    
+    <category term="JavaWeb" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/"/>
+    
+    <category term="基于JavaWeb的网上购物商城" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+    <category term="登录成功后网页头部显示用户名" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="JavaWeb" scheme="http://example.com/tags/JavaWeb/"/>
+    
+    <category term="基于JavaWeb的网上购物商城" scheme="http://example.com/tags/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+  </entry>
   
   <entry>
     <title>基于JavaWeb的网上购物商城 | 注册和登录</title>
@@ -605,32 +639,6 @@
     <category term="脑电分类" scheme="http://example.com/tags/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/"/>
     
     <category term="EEG" scheme="http://example.com/tags/EEG/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>期刊 | 脑电期刊</title>
-    <link href="http://example.com/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/"/>
-    <id>http://example.com/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</id>
-    <published>2022-01-05T03:17:28.000Z</published>
-    <updated>2022-01-05T03:21:52.030Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;脑电期刊&quot;&gt;&lt;a href=&quot;#脑电期刊&quot; class=&quot;headerlink&quot; title=&quot;脑电期刊&quot;&gt;&lt;/a&gt;脑电期刊&lt;/h1&gt;&lt;p&gt;名称：Biomedical Siganl Processing and Control&lt;br&gt;网址：&lt;a href=&quot;htt</summary>
-      
-    
-    
-    
-    <category term="Research and Paper" scheme="http://example.com/categories/Research-and-Paper/"/>
-    
-    <category term="脑电期刊" scheme="http://example.com/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/"/>
-    
-    <category term="Biomedical Signal Processing and Control" scheme="http://example.com/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/Biomedical-Signal-Processing-and-Control/"/>
-    
     
   </entry>
   

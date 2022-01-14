@@ -190,6 +190,121 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/" class="post-title-link" itemprop="url">pdfplumber | 一键提取PDF中的表格到Excel</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-28 18:28:29" itemprop="dateCreated datePublished" datetime="2021-10-28T18:28:29-08:00">2021-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-29 00:32:01" itemprop="dateModified" datetime="2021-10-29T00:32:01-08:00">2021-10-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pdfplumber/" itemprop="url" rel="index"><span itemprop="name">pdfplumber</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
+<pre><code>import os
+import pdfplumber
+from openpyxl import Workbook
+
+path = &#39;PDF&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+key_words = &quot;主要会计数据&quot;
+
+for file in files:
+    with pdfplumber.open(file) as p:
+        wb = Workbook()  # 新建excel工作簿
+        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
+
+        # 获取关键词所在页及下一页的页码
+        pages_wanted = []
+        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
+            if key_words in page.extract_text():
+                pages_wanted.append(index)
+                pages_wanted.append(index + 1)
+                break
+
+        # 提取指定页码里的表格
+        for i in pages_wanted:
+            page = p.pages[i]
+            tables = page.extract_tables()  # 读取表格
+            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
+                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
+                for table in tables:  # 遍历所有列表
+                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
+                        ws.append(row)  # 写入excel表
+        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
+</code></pre>
+<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1069,82 +1184,6 @@ if __name__ == &quot;__main__&quot;:
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">CNN | 卷积神经网络如何处理一维时间序列数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-26 19:28:20 / Modified: 19:31:42" itemprop="dateCreated datePublished" datetime="2021-10-26T19:28:20-08:00">2021-10-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/" itemprop="url" rel="index"><span itemprop="name">CNN</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1216,14 +1255,14 @@ if __name__ == &quot;__main__&quot;:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">311</span>
+          <span class="site-state-item-count">312</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">146</span>
+        <span class="site-state-item-count">147</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
