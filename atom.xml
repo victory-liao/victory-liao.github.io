@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-16T04:35:26.867Z</updated>
+  <updated>2022-01-16T05:20:55.225Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>基于JavaWeb的网上购物商城 | 删除购物车中的商品</title>
+    <link href="http://example.com/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/"/>
+    <id>http://example.com/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/</id>
+    <published>2022-01-16T05:13:54.000Z</published>
+    <updated>2022-01-16T05:20:55.225Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="删除购物车中的商品"><a href="#删除购物车中的商品" class="headerlink" title="删除购物车中的商品"></a>删除购物车中的商品</h1><p><strong>实现功能：</strong><br>用户点击购物车中购物项后面的删除将这个购物项删除，总计金额减去当前购物项小计。<br><img src="/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/1.PNG"></p><span id="more"></span><p><strong>cart.jsp</strong><br>为删除链接增加onclick属性，并使用js实现delCart方法。</p><pre><code>&lt;td&gt;    &lt;a href=&quot;javascript:;&quot; class=&quot;delete&quot; onclick=&quot;delCart(&#39;$&#123;en.value.pro.pid&#125;&#39;, &#39;$&#123;en.value.subTotal&#125;&#39;)&quot;&gt;删除&lt;/a&gt;&lt;/td&gt;</code></pre><p><strong>ProductServlet.java</strong><br>在ProductServlet.java的doGet方法中添加delCart的判断，并完成delCart方法。</p><pre><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;    String method = request.getParameter(&quot;method&quot;);    if(&quot;getProById&quot;.equals(method)) &#123;        getProById(request, response);    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;        findListByCate(request, response);    &#125;else if(&quot;cart&quot;.equals(method)) &#123;        cart(request, response);    &#125;else if(&quot;delCart&quot;.equals(method)) &#123;        delCart(request, response);    &#125;&#125;public void delCart(HttpServletRequest request, HttpServletResponse response) &#123;    // TODO Auto-generated method stub    try &#123;        String pid = request.getParameter(&quot;pid&quot;);        String money = request.getParameter(&quot;money&quot;);        //获取购物车        HttpSession session = request.getSession();        Cart cart = (Cart) session.getAttribute(&quot;cart&quot;);        HashMap&lt;String, CartItem&gt; map = cart.getMap();        CartItem c = map.remove(pid);        double subTotal = c.getSubTotal();        //购物车金额-小计        cart.setSubMoney(cart.getSubMoney()-subTotal);        //返回购物车页面        request.getRequestDispatcher(&quot;/cart.jsp&quot;).forward(request, response);    &#125; catch (Exception e) &#123;        // TODO Auto-generated catch block        e.printStackTrace();    &#125; &#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;删除购物车中的商品&quot;&gt;&lt;a href=&quot;#删除购物车中的商品&quot; class=&quot;headerlink&quot; title=&quot;删除购物车中的商品&quot;&gt;&lt;/a&gt;删除购物车中的商品&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;实现功能：&lt;/strong&gt;&lt;br&gt;用户点击购物车中购物项后面的删除将这个购物项删除，总计金额减去当前购物项小计。&lt;br&gt;&lt;img src=&quot;/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/1.PNG&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="项目经历" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/"/>
+    
+    <category term="JavaWeb" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/"/>
+    
+    <category term="基于JavaWeb的网上购物商城" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+    <category term="删除购物车中的商品" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="JavaWeb" scheme="http://example.com/tags/JavaWeb/"/>
+    
+    <category term="基于JavaWeb的网上购物商城" scheme="http://example.com/tags/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+    <category term="删除购物车中的商品" scheme="http://example.com/tags/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/"/>
+    
+  </entry>
   
   <entry>
     <title>基于JavaWeb的网上购物商城 | 购物车</title>
@@ -622,36 +655,6 @@
     <category term="请求转发" scheme="http://example.com/tags/%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91/"/>
     
     <category term="request" scheme="http://example.com/tags/request/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | servlet</title>
-    <link href="http://example.com/2022/01/10/servlet/"/>
-    <id>http://example.com/2022/01/10/servlet/</id>
-    <published>2022-01-10T09:00:20.000Z</published>
-    <updated>2022-01-11T08:06:49.365Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><h2 id="创建servlet"><a href="#创建servlet" class="headerlink" title="创建servlet"></a>创建servlet</h2><ol><li>在src下面新建一个包com.oracle(公司域名反写)</li><li>在com.oracle下新建一个servlet(New–&gt;Other–&gt;Web–&gt;Servlet)<br>输入servlet的名称：<br><img src="/2022/01/10/servlet/1.PNG"><br>修改URL mappings:<br><img src="/2022/01/10/servlet/2.PNG"><br>去掉Constructors form superclass的勾选：<br><img src="/2022/01/10/servlet/3.PNG"><br>创建好的servlet:<br><img src="/2022/01/10/servlet/4.PNG"><h2 id="测试Demo1Servlet"><a href="#测试Demo1Servlet" class="headerlink" title="测试Demo1Servlet"></a>测试Demo1Servlet</h2></li><li>创建demo1.html<br><img src="/2022/01/10/servlet/5.PNG"></li><li>在Demo1Servlet.java中编写处理来自demo1.html的请求的Java代码<br><img src="/2022/01/10/servlet/6.PNG"></li><li>在浏览器地址栏输入：localhost:8080/shop/demo1.html<br><img src="/2022/01/10/servlet/7.PNG"></li><li>点击上图中的超链接向服务器发出请求<br>servelet处理来自浏览器的请求，执行在Demo1Servlet.java中编写的Java代码<br><img src="/2022/01/10/servlet/8.PNG"></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;servlet&quot;&gt;&lt;a href=&quot;#servlet&quot; class=&quot;headerlink&quot; title=&quot;servlet&quot;&gt;&lt;/a&gt;servlet&lt;/h1&gt;&lt;h2 id=&quot;创建servlet&quot;&gt;&lt;a href=&quot;#创建servlet&quot; class=&quot;header</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="创建servlet接收并处理请求" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAservlet%E6%8E%A5%E6%94%B6%E5%B9%B6%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="servlet" scheme="http://example.com/tags/servlet/"/>
     
   </entry>
   
