@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-15T12:50:33.097Z</updated>
+  <updated>2022-01-16T04:35:26.867Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>基于JavaWeb的网上购物商城 | 购物车</title>
+    <link href="http://example.com/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/"/>
+    <id>http://example.com/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/</id>
+    <published>2022-01-16T04:18:23.000Z</published>
+    <updated>2022-01-16T04:35:26.867Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="购物车"><a href="#购物车" class="headerlink" title="购物车"></a>购物车</h1><p><strong>实现功能：</strong><br>用户在登录状态下可以将商品加入购物车（如下图所示）。<br><img src="/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/1.PNG"></p><span id="more"></span><p><strong>product_info.jsp</strong><br>（1）给购物车按钮增加onclick属性。</p><pre><code>&lt;div style=&quot;margin: 20px 0 10px 0;; text-align: center;&quot;&gt;    &lt;a href=&quot;#&quot;&gt; &lt;input        style=&quot;background: url(&#39;./images/product.gif&#39;) no-repeat scroll 0 -600px rgba(0, 0, 0, 0); height: 36px; width: 127px;&quot;        value=&quot;加入购物车&quot; type=&quot;button&quot; onclick=&quot;cart()&quot;&gt;    &lt;/a&gt; &amp;nbsp;收藏商品&lt;/div&gt;</code></pre><p>（2）使用js编写cart()</p><pre><code>&lt;script type=&quot;text/javascript&quot;&gt;    function cart()&#123;        location.href=&quot;$&#123;pageContext.request.contextPath&#125;/product?method=cart&amp;pid=$&#123;p.pid&#125;&amp;proNumber=&quot;+$(&quot;#quantity&quot;).val();    &#125;&lt;/script&gt;</code></pre><p><strong>CartItem.java</strong><br>一个购物项（由一个商品、数量、小计构成）<br><img src="/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/2.PNG"></p><pre><code>package com.oracle.bean;public class CartItem &#123;    private Product pro = new Product();    private double subTotal;    private int count;    public CartItem() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    public CartItem(Product pro, double subTotal, int count) &#123;        super();        this.pro = pro;        this.subTotal = subTotal;        this.count = count;    &#125;    public Product getPro() &#123;        return pro;    &#125;    public void setPro(Product pro) &#123;        this.pro = pro;    &#125;    public double getSubTotal() &#123;        return subTotal;    &#125;    public void setSubTotal(double subTotal) &#123;        this.subTotal = subTotal;    &#125;    public int getCount() &#123;        return count;    &#125;    public void setCount(int count) &#123;        this.count = count;    &#125;    &#125;</code></pre><p><strong>Cart.java</strong><br>购物车（由一个存储许多购物项的Map集合、总计金额构成）<br><img src="/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/3.PNG"></p><pre><code>package com.oracle.bean;import java.util.HashMap;import java.util.List;public class Cart &#123;    private HashMap&lt;String, CartItem&gt; map = new HashMap&lt;&gt;();    private double subMoney;    public Cart() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    public Cart(HashMap&lt;String, CartItem&gt; map, double subMoney) &#123;        super();        this.map = map;        this.subMoney = subMoney;    &#125;    public HashMap&lt;String, CartItem&gt; getMap() &#123;        return map;    &#125;    public void setMap(HashMap&lt;String, CartItem&gt; map) &#123;        this.map = map;    &#125;    public double getSubMoney() &#123;        return subMoney;    &#125;    public void setSubMoney(double subMoney) &#123;        this.subMoney = subMoney;    &#125;    &#125;</code></pre><p><strong>ProductServlet.java</strong><br>在ProductServlet的doGet方法中添加购物车的判断并完成cart方法。</p><pre><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;    String method = request.getParameter(&quot;method&quot;);    if(&quot;getProById&quot;.equals(method)) &#123;        getProById(request, response);    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;        findListByCate(request, response);    &#125;else if(&quot;cart&quot;.equals(method)) &#123;        cart(request, response);    &#125;&#125;public void cart(HttpServletRequest request, HttpServletResponse response) &#123;    // TODO Auto-generated method stub    //接收前台参数    try &#123;        String pid = request.getParameter(&quot;pid&quot;);        String pn = request.getParameter(&quot;proNumber&quot;);        int proNumber = Integer.parseInt(pn);        //查询商品信息        ProductService ps = new ProductService();        Product pro = ps.getProById(pid);                //从session中获取购物车        HttpSession session = request.getSession();        Cart cart = (Cart)session.getAttribute(&quot;cart&quot;);        //判断用户是否登录        User user = (User)session.getAttribute(&quot;user&quot;);        if(user==null) &#123;            //跳转到首页            request.getRequestDispatcher(&quot;/login.jsp&quot;).forward(request, response);            return;        &#125;                //判断购物车是否为空        if(cart==null) &#123;            //创建一个新的购物车            cart = new Cart();        &#125;        //否则有数据    有数据的话添加商品        HashMap&lt;String, CartItem&gt; map = cart.getMap();        if(map.containsKey(pid)) &#123;            //购物车中已经存在当前要购买的商品            //获取购物车中商品的数量            CartItem ci = map.get(pid);            //获取购物车中商品的数量            int count = ci.getCount();            //购物车商品数量+需要购买的商品的数量=总数            int newCount = count+proNumber;            //商品小计            double subTotal = newCount * pro.getShop_price();                        ci.setCount(newCount);            ci.setSubTotal(subTotal);            map.put(pid, ci);        &#125;else &#123;            //购物车中不存在购买的商品            CartItem ca = new CartItem();            ca.setPro(pro);            ca.setCount(proNumber);            ca.setSubTotal(proNumber*pro.getShop_price());            map.put(pid, ca);        &#125;        //定义变量存储总计        double totalMoney=0.0;        Set&lt;String&gt; keySet = map.keySet();        for(String key:keySet) &#123;            CartItem cc = map.get(key);            totalMoney+=cc.getSubTotal();        &#125;        cart.setSubMoney(totalMoney);        cart.setMap(map);                //把购物车放入session中        session.setAttribute(&quot;cart&quot;, cart);                //请求转发到购物车页面解析        request.getRequestDispatcher(&quot;/cart.jsp&quot;).forward(request, response);            &#125; catch (Exception e) &#123;        // TODO Auto-generated catch block        e.printStackTrace();    &#125;&#125;public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;    String method = request.getParameter(&quot;method&quot;);    if(&quot;getProById&quot;.equals(method)) &#123;        getProById(request, response);    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;        findListByCate(request, response);    &#125;else if(&quot;cart&quot;.equals(method)) &#123;        cart(request, response);    &#125;&#125;public void cart(HttpServletRequest request, HttpServletResponse response) &#123;    // TODO Auto-generated method stub    //接收前台参数    try &#123;        String pid = request.getParameter(&quot;pid&quot;);        String pn = request.getParameter(&quot;proNumber&quot;);        int proNumber = Integer.parseInt(pn);        //查询商品信息        ProductService ps = new ProductService();        Product pro = ps.getProById(pid);                //从session中获取购物车        HttpSession session = request.getSession();        Cart cart = (Cart)session.getAttribute(&quot;cart&quot;);        //判断用户是否登录        User user = (User)session.getAttribute(&quot;user&quot;);        if(user==null) &#123;            //跳转到首页            request.getRequestDispatcher(&quot;/login.jsp&quot;).forward(request, response);            return;        &#125;                //判断购物车是否为空        if(cart==null) &#123;            //创建一个新的购物车            cart = new Cart();        &#125;        //否则有数据    有数据的话添加商品        HashMap&lt;String, CartItem&gt; map = cart.getMap();        if(map.containsKey(pid)) &#123;            //购物车中已经存在当前要购买的商品            //获取购物车中商品的数量            CartItem ci = map.get(pid);            //获取购物车中商品的数量            int count = ci.getCount();            //购物车商品数量+需要购买的商品的数量=总数            int newCount = count+proNumber;            //商品小计            double subTotal = newCount * pro.getShop_price();                        ci.setCount(newCount);            ci.setSubTotal(subTotal);            map.put(pid, ci);        &#125;else &#123;            //购物车中不存在购买的商品            CartItem ca = new CartItem();            ca.setPro(pro);            ca.setCount(proNumber);            ca.setSubTotal(proNumber*pro.getShop_price());            map.put(pid, ca);        &#125;        //定义变量存储总计        double totalMoney=0.0;        Set&lt;String&gt; keySet = map.keySet();        for(String key:keySet) &#123;            CartItem cc = map.get(key);            totalMoney+=cc.getSubTotal();        &#125;        cart.setSubMoney(totalMoney);        cart.setMap(map);                //把购物车放入session中        session.setAttribute(&quot;cart&quot;, cart);                //请求转发到购物车页面解析        request.getRequestDispatcher(&quot;/cart.jsp&quot;).forward(request, response);            &#125; catch (Exception e) &#123;        // TODO Auto-generated catch block        e.printStackTrace();    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;购物车&quot;&gt;&lt;a href=&quot;#购物车&quot; class=&quot;headerlink&quot; title=&quot;购物车&quot;&gt;&lt;/a&gt;购物车&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;实现功能：&lt;/strong&gt;&lt;br&gt;用户在登录状态下可以将商品加入购物车（如下图所示）。&lt;br&gt;&lt;img src=&quot;/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/1.PNG&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="项目经历" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/"/>
+    
+    <category term="JavaWeb" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/"/>
+    
+    <category term="基于JavaWeb的网上购物商城" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+    <category term="购物车" scheme="http://example.com/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E8%B4%AD%E7%89%A9%E8%BD%A6/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="JavaWeb" scheme="http://example.com/tags/JavaWeb/"/>
+    
+    <category term="基于JavaWeb的网上购物商城" scheme="http://example.com/tags/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/"/>
+    
+    <category term="购物车" scheme="http://example.com/tags/%E8%B4%AD%E7%89%A9%E8%BD%A6/"/>
+    
+  </entry>
   
   <entry>
     <title>基于JavaWeb的网上购物商城 | 分页</title>
@@ -619,36 +652,6 @@
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="servlet" scheme="http://example.com/tags/servlet/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | 创建web项目并添加到服务器中</title>
-    <link href="http://example.com/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/"/>
-    <id>http://example.com/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/</id>
-    <published>2022-01-10T08:33:13.000Z</published>
-    <updated>2022-01-11T08:06:41.765Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="创建web项目并添加到服务器中"><a href="#创建web项目并添加到服务器中" class="headerlink" title="创建web项目并添加到服务器中"></a>创建web项目并添加到服务器中</h1><h2 id="1-创建web项目"><a href="#1-创建web项目" class="headerlink" title="1.创建web项目"></a>1.创建web项目</h2><p>New –&gt; Web –&gt; dynamic web project,然后按照下图操作。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/1.PNG"><br>注意：Target runtime需选择与服务器对应的版本，dynamic web module version选择2.5.</p><h2 id="2-将创建好的web项目加入到服务器中"><a href="#2-将创建好的web项目加入到服务器中" class="headerlink" title="2.将创建好的web项目加入到服务器中"></a>2.将创建好的web项目加入到服务器中</h2><p>在服务器上右键–&gt;add and remove,然后将对应的项目加入到服务器。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/2.PNG"></p><h2 id="3-访问服务器上的web信息"><a href="#3-访问服务器上的web信息" class="headerlink" title="3.访问服务器上的web信息"></a>3.访问服务器上的web信息</h2><p>1.在WebContent下面创建一个简单的页面（1.html）<br>2.在浏览器地址栏输入：localhot/8080/shop/1.html<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/3.PNG"><br>效果：<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/4.PNG"></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;创建web项目并添加到服务器中&quot;&gt;&lt;a href=&quot;#创建web项目并添加到服务器中&quot; class=&quot;headerlink&quot; title=&quot;创建web项目并添加到服务器中&quot;&gt;&lt;/a&gt;创建web项目并添加到服务器中&lt;/h1&gt;&lt;h2 id=&quot;1-创建web项目&quot;&gt;&lt;a</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="创建web项目并添加到服务器中" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="创建web项目" scheme="http://example.com/tags/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE/"/>
     
   </entry>
   
