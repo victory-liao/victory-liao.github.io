@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-26T11:59:54.232Z</updated>
+  <updated>2022-01-26T12:09:44.946Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/"/>
     <id>http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/</id>
     <published>2022-01-26T11:46:22.000Z</published>
-    <updated>2022-01-26T11:59:54.232Z</updated>
+    <updated>2022-01-26T12:09:44.946Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p><pre><code>CREATE TABLE user1(id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,NAME VARCHAR(20),balance DOUBLE);</code></pre><p><strong>创建测试类Test1.java</strong></p><pre><code>package com.oracle.test;import java.sql.SQLException;import org.apache.commons.dbutils.QueryRunner;import com.oracle.utils.DataSourceUtils;public class Test1 &#123;    public static void main(String[] args)&#123;        try &#123;            //开启事务            DataSourceUtils.startTransaction();            //创建QueryRunner对象            QueryRunner qr = new QueryRunner();            //编写sql语句            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;            //执行sql            qr.update(DataSourceUtils.getConnection(), sql1);                        //失败            int c=100/0;                        qr.update(DataSourceUtils.getConnection(), sql2);            //事务提交            DataSourceUtils.commitAndRelease();            //关闭事务            DataSourceUtils.closeConnection();        &#125; catch (Exception e) &#123;            //失败则回滚            try &#123;                DataSourceUtils.rollback();            &#125; catch (Exception e1) &#123;                // TODO Auto-generated catch block                e1.printStackTrace();            &#125;        &#125;    &#125;&#125;</code></pre>]]></content>
+    <content type="html"><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p><pre><code>CREATE TABLE user(id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,NAME VARCHAR(20),balance DOUBLE);</code></pre><p><strong>创建测试类Test1.java</strong></p><pre><code>package com.oracle.test;import java.sql.SQLException;import org.apache.commons.dbutils.QueryRunner;import com.oracle.utils.DataSourceUtils;public class Test1 &#123;    public static void main(String[] args)&#123;        try &#123;            //开启事务            DataSourceUtils.startTransaction();            //创建QueryRunner对象            QueryRunner qr = new QueryRunner();            //编写sql语句            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;            //执行sql            qr.update(DataSourceUtils.getConnection(), sql1);                        //失败            int c=100/0;                        qr.update(DataSourceUtils.getConnection(), sql2);            //事务提交            DataSourceUtils.commitAndRelease();            //关闭事务            DataSourceUtils.closeConnection();        &#125; catch (Exception e) &#123;            //失败则回滚            try &#123;                DataSourceUtils.rollback();            &#125; catch (Exception e1) &#123;                // TODO Auto-generated catch block                e1.printStackTrace();            &#125;        &#125;    &#125;&#125;</code></pre>]]></content>
     
     
       
@@ -79,9 +79,9 @@
     <link href="http://example.com/2022/01/25/jdbc/"/>
     <id>http://example.com/2022/01/25/jdbc/</id>
     <published>2022-01-26T04:17:47.000Z</published>
-    <updated>2022-01-26T12:05:51.606Z</updated>
+    <updated>2022-01-26T12:08:56.140Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.png"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;c3p0-config&gt;    &lt;default-config&gt;        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;    &lt;/default-config&gt; &lt;/c3p0-config&gt; </code></pre><p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;c3p0-config&gt;    &lt;default-config&gt;        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;    &lt;/default-config&gt; &lt;/c3p0-config&gt; </code></pre><p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>]]></content>
     
     
       
