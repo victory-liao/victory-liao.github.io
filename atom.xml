@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-26T11:20:06.146Z</updated>
+  <updated>2022-01-26T11:59:54.232Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaWeb项目开发 | 事务</title>
+    <link href="http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/"/>
+    <id>http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/</id>
+    <published>2022-01-26T11:46:22.000Z</published>
+    <updated>2022-01-26T11:59:54.232Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p><pre><code>CREATE TABLE user1(id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,NAME VARCHAR(20),balance DOUBLE);</code></pre><p><strong>创建测试类Test1.java</strong></p><pre><code>package com.oracle.test;import java.sql.SQLException;import org.apache.commons.dbutils.QueryRunner;import com.oracle.utils.DataSourceUtils;public class Test1 &#123;    public static void main(String[] args)&#123;        try &#123;            //开启事务            DataSourceUtils.startTransaction();            //创建QueryRunner对象            QueryRunner qr = new QueryRunner();            //编写sql语句            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;            //执行sql            qr.update(DataSourceUtils.getConnection(), sql1);                        //失败            int c=100/0;                        qr.update(DataSourceUtils.getConnection(), sql2);            //事务提交            DataSourceUtils.commitAndRelease();            //关闭事务            DataSourceUtils.closeConnection();        &#125; catch (Exception e) &#123;            //失败则回滚            try &#123;                DataSourceUtils.rollback();            &#125; catch (Exception e1) &#123;                // TODO Auto-generated catch block                e1.printStackTrace();            &#125;        &#125;    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;事务&quot;&gt;&lt;a href=&quot;#事务&quot; class=&quot;headerlink&quot; title=&quot;事务&quot;&gt;&lt;/a&gt;事务&lt;/h1&gt;&lt;p&gt;当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。&lt;br&gt;例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="事务" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E4%BA%8B%E5%8A%A1/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="事务" scheme="http://example.com/tags/%E4%BA%8B%E5%8A%A1/"/>
+    
+    <category term="数据库" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
@@ -613,37 +645,6 @@
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="分页" scheme="http://example.com/tags/%E5%88%86%E9%A1%B5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | jstl标签</title>
-    <link href="http://example.com/2022/01/11/jstl%E6%A0%87%E7%AD%BE/"/>
-    <id>http://example.com/2022/01/11/jstl%E6%A0%87%E7%AD%BE/</id>
-    <published>2022-01-12T06:33:02.000Z</published>
-    <updated>2022-01-12T06:42:19.432Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="jstl标签"><a href="#jstl标签" class="headerlink" title="jstl标签"></a>jstl标签</h1><ol><li>jstl标签(替换jsp页面中的if、forjava代码)<br><img src="/2022/01/11/jstl%E6%A0%87%E7%AD%BE/1.PNG"></li><li>jstl标签测试</li></ol><pre><code>&lt;%@page import=&quot;java.util.HashMap&quot;%&gt;&lt;%@page import=&quot;java.util.ArrayList&quot;%&gt;&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;%        request.setAttribute(&quot;a&quot;, 1);        request.setAttribute(&quot;b&quot;, 4);                //在request域中设置复杂数据(ArrayList)        ArrayList&lt;String&gt; arr = new ArrayList&lt;String&gt;();        arr.add(&quot;zhangsan&quot;);        arr.add(&quot;lisi&quot;);        arr.add(&quot;wangwu&quot;);        request.setAttribute(&quot;list&quot;, arr);                //在request域中设置复杂数据(HashMap)        HashMap&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();        map.put(&quot;a&quot;, &quot;A&quot;);        map.put(&quot;b&quot;, &quot;B&quot;);        map.put(&quot;c&quot;, &quot;C&quot;);        request.setAttribute(&quot;map&quot;, map);    %&gt;    &lt;c:if test=&quot;$&#123;a&gt;b&#125;&quot;&gt;        &lt;font color=&quot;red&quot;&gt;a大于b&lt;/font&gt;&lt;br&gt;    &lt;/c:if&gt;        &lt;c:if test=&quot;$&#123;a&lt;b&#125;&quot;&gt;        &lt;font color=&quot;green&quot;&gt;a大于b&lt;/font&gt;&lt;br&gt;    &lt;/c:if&gt;        &lt;c:forEach begin=&quot;1&quot; end=&quot;10&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;        $&#123;n&#125;    &lt;/c:forEach&gt;&lt;br&gt;        &lt;c:forEach items=&quot;$&#123;list&#125;&quot; var=&quot;s&quot;&gt;        $&#123;s&#125;    &lt;/c:forEach&gt;&lt;br&gt;        &lt;c:forEach items=&quot;$&#123;map&#125;&quot; var=&quot;en&quot;&gt;        $&#123;en.key&#125;        $&#123;en.value&#125;&lt;br&gt;    &lt;/c:forEach&gt;&lt;/body&gt;&lt;/html&gt;s</code></pre><ol start="3"><li>效果<br><img src="/2022/01/11/jstl%E6%A0%87%E7%AD%BE/2.PNG"></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;jstl标签&quot;&gt;&lt;a href=&quot;#jstl标签&quot; class=&quot;headerlink&quot; title=&quot;jstl标签&quot;&gt;&lt;/a&gt;jstl标签&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;jstl标签(替换jsp页面中的if、forjava代码)&lt;br&gt;&lt;img src=&quot;/2022</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="jstl标签" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jstl%E6%A0%87%E7%AD%BE/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="jstl标签" scheme="http://example.com/tags/jstl%E6%A0%87%E7%AD%BE/"/>
     
   </entry>
   
