@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-21T03:59:45.144Z</updated>
+  <updated>2022-01-26T11:20:06.146Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
+    <link href="http://example.com/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/"/>
+    <id>http://example.com/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</id>
+    <published>2022-01-26T11:10:13.000Z</published>
+    <updated>2022-01-26T11:20:06.146Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href>JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p><pre><code>create table dept(int id primary key auto_increment not null,varchar(20) name)</code></pre><p><strong>Dept.java（JavaBean）</strong></p><pre><code>package com.oracle.bean;public class Dept &#123;    private int id;    private String name;    public Dept() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    public Dept(int id, String name) &#123;        super();        this.id = id;        this.name = name;    &#125;    public int getId() &#123;        return id;    &#125;    public void setId(int id) &#123;        this.id = id;    &#125;    public String getName() &#123;        return name;    &#125;    public void setName(String name) &#123;        this.name = name;    &#125;        &#125;</code></pre><p><strong>新建一个Test类实现数据库增删改查操作</strong></p><pre><code>package com.oracle.test;import java.sql.SQLException;import java.util.List;import org.apache.commons.dbutils.QueryRunner;import org.apache.commons.dbutils.handlers.BeanHandler;import org.apache.commons.dbutils.handlers.BeanListHandler;import org.apache.commons.dbutils.handlers.ScalarHandler;import com.oracle.bean.Dept;import com.oracle.utils.DataSourceUtils;public class Test &#123;        public static void main(String[] args) throws SQLException &#123;        //创建QueryRunner对象        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());                //增加数据        //String sql = &quot;insert into dept(name) values(?)&quot;;        //qr.update(sql, &quot;需求部&quot;);                //修改数据        //String sql = &quot;update dept set name=? where id=?&quot;;        //qr.update(sql, &quot;需求组&quot;, 4);                //删除数据        //String sql = &quot;delete from dept where id=?&quot;;        //qr.update(sql, 4);                //查询数据        //（1）查询结果为一行        //String sql = &quot;select * from dept where id=?&quot;;        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);        //System.out.println(d.getId());        //System.out.println(d.getName());                //（2）查询结果为多行//        String sql = &quot;select * from dept&quot;;//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));//        for(Dept d:list) &#123;//            System.out.println(d.getId());//            System.out.println(d.getName());//        &#125;                //（2）查询结果为聚合函数        String sql = &quot;select count(*) from dept&quot;;                int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();                System.out.println(i);    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;QueryRunner和数据库增删改查操&quot;&gt;&lt;a href=&quot;#QueryRunner和数据库增删改查操&quot; class=&quot;headerlink&quot; title=&quot;QueryRunner和数据库增删改查操&quot;&gt;&lt;/a&gt;QueryRunner和数据库增删改查操&lt;/h1&gt;&lt;</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="QueryRunner和数据库增删改查操作" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JavaWeb项目开发 | jdbc</title>
+    <link href="http://example.com/2022/01/25/jdbc/"/>
+    <id>http://example.com/2022/01/25/jdbc/</id>
+    <published>2022-01-26T04:17:47.000Z</published>
+    <updated>2022-01-26T11:20:06.149Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.png"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;c3p0-config&gt;    &lt;default-config&gt;        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;    &lt;/default-config&gt; &lt;/c3p0-config&gt; </code></pre><p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;jdbc&quot;&gt;&lt;a href=&quot;#jdbc&quot; class=&quot;headerlink&quot; title=&quot;jdbc&quot;&gt;&lt;/a&gt;jdbc&lt;/h1&gt;&lt;p&gt;在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="jdbc封装类和数据库连接池" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jdbc%E5%B0%81%E8%A3%85%E7%B1%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="jdbc" scheme="http://example.com/tags/jdbc/"/>
+    
+  </entry>
   
   <entry>
     <title>MySQL | SQL语句实例大全</title>
@@ -588,69 +644,6 @@
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="jstl标签" scheme="http://example.com/tags/jstl%E6%A0%87%E7%AD%BE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | el表达式</title>
-    <link href="http://example.com/2022/01/11/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    <id>http://example.com/2022/01/11/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/</id>
-    <published>2022-01-12T06:05:06.000Z</published>
-    <updated>2022-01-12T06:12:58.142Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="el表达式"><a href="#el表达式" class="headerlink" title="el表达式"></a>el表达式</h1><ol><li>el表达式<br><img src="/2022/01/11/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/1.PNG"></li><li>测试el表达式</li></ol><pre><code>&lt;%@page import=&quot;com.oracle.bean.Product&quot;%&gt;&lt;%@page import=&quot;java.util.HashMap&quot;%&gt;&lt;%@page import=&quot;java.util.ArrayList&quot;%&gt;&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;%        //在request域中设置简单数据        request.setAttribute(&quot;a&quot;, 1);        request.setAttribute(&quot;b&quot;, 1);                //在request域中设置复杂数据(ArrayList)        ArrayList&lt;String&gt; arr = new ArrayList&lt;String&gt;();        arr.add(&quot;zhangsan&quot;);        arr.add(&quot;lisi&quot;);        arr.add(&quot;wangwu&quot;);        request.setAttribute(&quot;list&quot;, arr);                //在request域中设置复杂数据(HashMap)        HashMap&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();        map.put(&quot;a&quot;, &quot;A&quot;);        map.put(&quot;b&quot;, &quot;B&quot;);        map.put(&quot;c&quot;, &quot;C&quot;);        request.setAttribute(&quot;map&quot;, map);                //在request域中设置复杂数据(JavaBean)        Product p = new Product();        p.setId(1);        p.setPname(&quot;黄瓜&quot;);        p.setPrice(15.2);        p.setPdesc(&quot;黄瓜好吃，香&quot;);        request.setAttribute(&quot;p&quot;, p);    %&gt;        &lt;%=request.getAttribute(&quot;a&quot;) %&gt;        $&#123;a+b&#125;&lt;br&gt;        $&#123;list[0]&#125;&lt;br&gt;        $&#123;map.a&#125;&lt;br&gt;        $&#123;p.pname&#125;&lt;br&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><ol start="3"><li>效果<br><img src="/2022/01/11/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/2.PNG"></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;el表达式&quot;&gt;&lt;a href=&quot;#el表达式&quot; class=&quot;headerlink&quot; title=&quot;el表达式&quot;&gt;&lt;/a&gt;el表达式&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;el表达式&lt;br&gt;&lt;img src=&quot;/2022/01/11/el%E8%A1%A8%E8%BE%BE%</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="el表达式" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="el表达式" scheme="http://example.com/tags/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | 使用jsp查询所有商品案例实现</title>
-    <link href="http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/"/>
-    <id>http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/</id>
-    <published>2022-01-12T04:10:58.000Z</published>
-    <updated>2022-01-12T04:25:17.426Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="使用jsp查询所有商品案例实现"><a href="#使用jsp查询所有商品案例实现" class="headerlink" title="使用jsp查询所有商品案例实现"></a>使用jsp查询所有商品案例实现</h1><ol><li>创建表product<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/1.PNG"></li><li>项目目录(按下图导入jar包、c3p0-config.xml)<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/2.PNG"></li><li>创建jsp页面<span id="more"></span></li></ol><pre><code>&lt;%@page import=&quot;com.oracle.bean.Product&quot;%&gt;&lt;%@page import=&quot;java.util.ArrayList&quot;%&gt;&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;a href=&quot;/jsptest/product&quot;&gt;点击查看商品&lt;/a&gt;        &lt;hr&gt;        &lt;%        ArrayList&lt;Product&gt; arr = (ArrayList&lt;Product&gt;)request.getAttribute(&quot;list&quot;);    %&gt;        &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;        &lt;tr&gt;            &lt;th&gt;商品的id&lt;/th&gt;            &lt;th&gt;商品的名称&lt;/th&gt;            &lt;th&gt;商品的价格&lt;/th&gt;            &lt;th&gt;商品的描述&lt;/th&gt;        &lt;/tr&gt;        &lt;%        if(arr!=null)&#123;            for(Product p: arr)&#123;            %&gt;            &lt;tr&gt;                &lt;td&gt;&lt;%=p.getId() %&gt;&lt;/td&gt;                &lt;td&gt;&lt;%=p.getPname() %&gt;&lt;/td&gt;                &lt;td&gt;&lt;%=p.getPrice() %&gt;&lt;/td&gt;                &lt;td&gt;&lt;%=p.getPdesc() %&gt;&lt;/td&gt;            &lt;/tr&gt;            &lt;%             &#125;        &#125;        %&gt;    &lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><ol start="4"><li>创建product bean Product.java</li></ol><pre><code>package com.oracle.bean;public class Product &#123;    private int id;    private String pname;    private double price;    private String pdesc;    public Product(int id, String pname, double price, String pdesc) &#123;        super();        this.id = id;        this.pname = pname;        this.price = price;        this.pdesc = pdesc;    &#125;    public Product() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    public int getId() &#123;        return id;    &#125;    public void setId(int id) &#123;        this.id = id;    &#125;    public String getPname() &#123;        return pname;    &#125;    public void setPname(String pname) &#123;        this.pname = pname;    &#125;    public double getPrice() &#123;        return price;    &#125;    public void setPrice(double price) &#123;        this.price = price;    &#125;    public String getPdesc() &#123;        return pdesc;    &#125;    public void setPdesc(String pdesc) &#123;        this.pdesc = pdesc;    &#125;&#125;</code></pre><ol start="5"><li>创建ProductServlet</li></ol><pre><code>package com.oracle;import java.util.List;import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import org.apache.commons.dbutils.QueryRunner;import org.apache.commons.dbutils.handlers.BeanListHandler;import com.oracle.bean.Product;import com.oracle.utils.DataSourceUtils;public class ProductServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        try &#123;            //查询数据库当中的所有数据            QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());                        String sql = &quot;select * from product&quot;;                        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class));                        //把list放入域对象中            request.setAttribute(&quot;list&quot;, list);                        //请求转发到aa.jsp中            request.getRequestDispatcher(&quot;/aa.jsp&quot;).forward(request, response);                    &#125; catch (Exception e) &#123;            // TODO Auto-generated catch block            e.printStackTrace();        &#125;    &#125;    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        doGet(request, response);    &#125;&#125;</code></pre><ol start="6"><li>效果<br>访问aa.jsp页面：<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/3.PNG"><br>点击超链接查询商品：<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/4.PNG"></li></ol><p>注：项目编码问题的解决参考本博客的<a href="https://victory-liao.github.io/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">使用filter解决项目编码问题一文</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;使用jsp查询所有商品案例实现&quot;&gt;&lt;a href=&quot;#使用jsp查询所有商品案例实现&quot; class=&quot;headerlink&quot; title=&quot;使用jsp查询所有商品案例实现&quot;&gt;&lt;/a&gt;使用jsp查询所有商品案例实现&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;创建表product&lt;br&gt;&lt;img src=&quot;/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/1.PNG&quot;&gt;&lt;/li&gt;
-&lt;li&gt;项目目录(按下图导入jar包、c3p0-config.xml)&lt;br&gt;&lt;img src=&quot;/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/2.PNG&quot;&gt;&lt;/li&gt;
-&lt;li&gt;创建jsp页面&lt;/li&gt;&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="jsp" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jsp/"/>
-    
-    <category term="使用jsp查询所有商品案例实现" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jsp/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="jsp" scheme="http://example.com/tags/jsp/"/>
     
   </entry>
   

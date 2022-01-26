@@ -1738,20 +1738,6 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | I/O密集型和计算密集型</title>
-    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
-<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTP | HTTP请求方法</title>
     <url>/2020/11/09/HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="HTTP请求方法"><a href="#HTTP请求方法" class="headerlink" title="HTTP请求方法"></a>HTTP请求方法</h1><h2 id="常见的几种请求方式"><a href="#常见的几种请求方式" class="headerlink" title="常见的几种请求方式"></a>常见的几种请求方式</h2><table>
@@ -1792,6 +1778,20 @@ with urllib.request.urlopen(req) as response:
       </categories>
       <tags>
         <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | I/O密集型和计算密集型</title>
+    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
+<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -2663,6 +2663,109 @@ to_word(all_links)
         <tag>requests</tag>
         <tag>BeautifulSoup</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
+    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href>JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
+<pre><code>create table dept(
+int id primary key auto_increment not null,
+varchar(20) name
+)
+</code></pre>
+<p><strong>Dept.java（JavaBean）</strong></p>
+<pre><code>package com.oracle.bean;
+
+public class Dept &#123;
+    private int id;
+    private String name;
+    public Dept() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    public Dept(int id, String name) &#123;
+        super();
+        this.id = id;
+        this.name = name;
+    &#125;
+    public int getId() &#123;
+        return id;
+    &#125;
+    public void setId(int id) &#123;
+        this.id = id;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    
+    
+&#125;
+</code></pre>
+<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.Dept;
+import com.oracle.utils.DataSourceUtils;
+
+public class Test &#123;
+    
+    public static void main(String[] args) throws SQLException &#123;
+        //创建QueryRunner对象
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        //增加数据
+        //String sql = &quot;insert into dept(name) values(?)&quot;;
+        //qr.update(sql, &quot;需求部&quot;);
+        
+        //修改数据
+        //String sql = &quot;update dept set name=? where id=?&quot;;
+        //qr.update(sql, &quot;需求组&quot;, 4);
+        
+        //删除数据
+        //String sql = &quot;delete from dept where id=?&quot;;
+        //qr.update(sql, 4);
+        
+        //查询数据
+        //（1）查询结果为一行
+        //String sql = &quot;select * from dept where id=?&quot;;
+        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
+        //System.out.println(d.getId());
+        //System.out.println(d.getName());
+        
+        //（2）查询结果为多行
+//        String sql = &quot;select * from dept&quot;;
+//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
+//        for(Dept d:list) &#123;
+//            System.out.println(d.getId());
+//            System.out.println(d.getName());
+//        &#125;
+        
+        //（2）查询结果为聚合函数
+        String sql = &quot;select count(*) from dept&quot;;
+        
+        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
+        
+        System.out.println(i);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>QueryRunner和数据库增删改查操作</category>
+      </categories>
   </entry>
   <entry>
     <title>MySQL | SQL语句实例大全</title>
@@ -3867,6 +3970,32 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | jdbc</title>
+    <url>/2022/01/25/jdbc/</url>
+    <content><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.png"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;c3p0-config&gt;
+    &lt;default-config&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
+    &lt;/default-config&gt; 
+&lt;/c3p0-config&gt; 
+</code></pre>
+<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>jdbc封装类和数据库连接池</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>jdbc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | jsp</title>
     <url>/2022/01/11/jsp/</url>
     <content><![CDATA[<h1 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h1><ol>
@@ -4415,20 +4544,6 @@ print(coffee2)
       </tags>
   </entry>
   <entry>
-    <title>python | python中的iter()与next()</title>
-    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
-    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
-<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
-<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | python中的filter函数和map函数</title>
     <url>/2021/08/02/python%E4%B8%AD%E7%9A%84filter%E5%87%BD%E6%95%B0%E5%92%8Cmap%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="python中的filter函数和map函数"><a href="#python中的filter函数和map函数" class="headerlink" title="python中的filter函数和map函数"></a>python中的filter函数和map函数</h1><h2 id="filter"><a href="#filter" class="headerlink" title="filter()"></a>filter()</h2><p>filter()用于对容器中的元素进行过滤处理</p>
@@ -4467,6 +4582,20 @@ mapped = map(lambda x : (x * 2), data1)
 data2 = list(mapped)
 print(data2)
 </code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | python中的iter()与next()</title>
+    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
+    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
+<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
+<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -7027,19 +7156,6 @@ app.MainLoop()
       </tags>
   </entry>
   <entry>
-    <title>深度学习基础 | 一文看懂各种神经网络优化算法</title>
-    <url>/2021/11/05/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="一文看懂各种神经网络优化算法"><a href="#一文看懂各种神经网络优化算法" class="headerlink" title="一文看懂各种神经网络优化算法"></a>一文看懂各种神经网络优化算法</h1><p><a href="https://mp.weixin.qq.com/s/gRrZImMydyCDBNCTIgVYXw">一文看懂各种神经网络优化算法</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>优化算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习基础 | 一文深层解决模型过拟合</title>
     <url>/2021/11/05/%E4%B8%80%E6%96%87%E6%B7%B1%E5%B1%82%E8%A7%A3%E5%86%B3%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88/</url>
     <content><![CDATA[<h1 id="一文深层解决模型过拟合"><a href="#一文深层解决模型过拟合" class="headerlink" title="一文深层解决模型过拟合"></a>一文深层解决模型过拟合</h1><p><a href="https://mp.weixin.qq.com/s/RBSewyWPdUnywKplVDzeLA">参考资料</a></p>
@@ -7051,6 +7167,19 @@ app.MainLoop()
       <tags>
         <tag>深度学习</tag>
         <tag>过拟合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习基础 | 一文看懂各种神经网络优化算法</title>
+    <url>/2021/11/05/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="一文看懂各种神经网络优化算法"><a href="#一文看懂各种神经网络优化算法" class="headerlink" title="一文看懂各种神经网络优化算法"></a>一文看懂各种神经网络优化算法</h1><p><a href="https://mp.weixin.qq.com/s/gRrZImMydyCDBNCTIgVYXw">一文看懂各种神经网络优化算法</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>优化算法</tag>
       </tags>
   </entry>
   <entry>
@@ -8535,6 +8664,15 @@ wb.save(&quot;资料单（每日）-更改后.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>免费看视频</title>
+    <url>/2021/06/19/%E5%85%8D%E8%B4%B9%E7%9C%8B%E8%A7%86%E9%A2%91/</url>
+    <content><![CDATA[<h1 id="免费看视频"><a href="#免费看视频" class="headerlink" title="免费看视频"></a>免费看视频</h1><p><b>在视频链接前加wn.run/</b></p>
+]]></content>
+      <tags>
+        <tag>免费看视频</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 偏函数</title>
     <url>/2021/11/07/%E5%81%8F%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h1><p><strong>作用：</strong> 通过设定参数的默认值，降低函数调用的难度<br>函数在执行时，要带上所有必要的参数进行调用。但是，有时参数可以在函数被调用之前提前获知。这种情况下，一个函数有一个或多个参数预先就能用上，以便函数能用更少的参数进行调用。<br>偏函数是将所要承载的函数作为partial()函数的第一个参数，原函数的各个参数依次作为partial()函数后续的参数，除非使用关键字参数。</p>
@@ -8578,15 +8716,6 @@ add_100(10)
       <tags>
         <tag>python</tag>
         <tag>偏函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费看视频</title>
-    <url>/2021/06/19/%E5%85%8D%E8%B4%B9%E7%9C%8B%E8%A7%86%E9%A2%91/</url>
-    <content><![CDATA[<h1 id="免费看视频"><a href="#免费看视频" class="headerlink" title="免费看视频"></a>免费看视频</h1><p><b>在视频链接前加wn.run/</b></p>
-]]></content>
-      <tags>
-        <tag>免费看视频</tag>
       </tags>
   </entry>
   <entry>
@@ -10524,21 +10653,6 @@ doc.save(&quot;6S稽查问题.docx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 吴恩达课后作业</title>
-    <url>/2021/06/23/%E5%90%B4%E6%81%A9%E8%BE%BE%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A/</url>
-    <content><![CDATA[<h1 id="吴恩达课后作业"><a href="#吴恩达课后作业" class="headerlink" title="吴恩达课后作业"></a>吴恩达课后作业</h1><p>这是在b站学习吴恩达深度学习课程时发现的课后作业实现，非常详细！！！点赞！！！</p>
-<p><a href="https://blog.csdn.net/u013733326/article/details/79827273">链接：吴恩达深度学习课后作业</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>学习资料</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>吴恩达</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python-docx | 向word中的表格写入数据</title>
     <url>/2021/10/24/%E5%90%91word%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="向word中的表格写入数据"><a href="#向word中的表格写入数据" class="headerlink" title="向word中的表格写入数据"></a>向word中的表格写入数据</h1><p>以下代码实现一键往word文档的表格中填写数据。</p>
@@ -10641,6 +10755,21 @@ doc.save(&quot;收货记录3.docx&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>openpyxl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 吴恩达课后作业</title>
+    <url>/2021/06/23/%E5%90%B4%E6%81%A9%E8%BE%BE%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A/</url>
+    <content><![CDATA[<h1 id="吴恩达课后作业"><a href="#吴恩达课后作业" class="headerlink" title="吴恩达课后作业"></a>吴恩达课后作业</h1><p>这是在b站学习吴恩达深度学习课程时发现的课后作业实现，非常详细！！！点赞！！！</p>
+<p><a href="https://blog.csdn.net/u013733326/article/details/79827273">链接：吴恩达深度学习课后作业</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>学习资料</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>吴恩达</tag>
       </tags>
   </entry>
   <entry>
@@ -17830,6 +17959,43 @@ public class Category &#123;
       </tags>
   </entry>
   <entry>
+    <title>urllib.request | 解码json数据</title>
+    <url>/2021/08/05/%E8%A7%A3%E7%A0%81json%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="使用json提供的loads-str-函数进行JSON数据的解码"><a href="#使用json提供的loads-str-函数进行JSON数据的解码" class="headerlink" title="使用json提供的loads(str)函数进行JSON数据的解码"></a>使用json提供的loads(str)函数进行JSON数据的解码</h1><p><strong>函数说明：</strong><br>    str - JSON字符串<br>    返回值 - python数据<br><strong>示例代码：</strong></p>
+<pre><code># coding=utf-8
+
+import urllib.request
+import json
+
+# 使用json模块的loads(str)函数进行JSON数据的解码
+url = &#39;http://localhost:8080/NoteWebService/note.do?action=query&amp;ID=10&#39;
+
+req = urllib.request.Request(url)
+
+with urllib.request.urlopen(req) as response:
+    data = response.read()
+    json_data = data.decode()
+    print(&quot;JSON字符串：&quot;, json_data)
+
+    py_dict = json.loads(json_data)  # 解码JSON字符串，返回字典
+    print(&#39;备忘录ID：&#39;, py_dict[&#39;ID&#39;])
+    print(&#39;备忘录日期：&#39;, py_dict[&#39;CDate&#39;])
+    print(&#39;备忘录内容：&#39;, py_dict[&#39;Content&#39;])
+    print(&#39;用户ID：&#39;, py_dict[&#39;UserID&#39;])
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>urllib</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>urllib</tag>
+        <tag>json</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 装饰器</title>
     <url>/2021/11/07/%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
     <content><![CDATA[<h1 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h1><p>顾名思义，从字面意思就可以理解，它是用来”装饰”Python的工具，使得代码更具有Python简洁的风格。换句话说，它是一种函数的函数，因为装饰器传入的参数就是一个函数，然后通过实现各种功能来对这个函数的功能进行增强。<br><strong>注：装饰器输入一个函数，输出一个函数</strong><br><strong>装饰器最大的优势</strong>是用于<strong>解决重复性</strong>的操作，其主要使用的场景有如下几个：<br>1.计算函数运行时间<br>2.给函数打日志<br>3.类型检查<br>当然，如果遇到其他重复操作的场景也可以类比使用装饰器。</p>
@@ -17912,43 +18078,6 @@ student_info(&#39;Molly&#39;,18, &#39;语文书&#39;,&#39;数学书&#39;,height=
       <tags>
         <tag>python</tag>
         <tag>装饰器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>urllib.request | 解码json数据</title>
-    <url>/2021/08/05/%E8%A7%A3%E7%A0%81json%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="使用json提供的loads-str-函数进行JSON数据的解码"><a href="#使用json提供的loads-str-函数进行JSON数据的解码" class="headerlink" title="使用json提供的loads(str)函数进行JSON数据的解码"></a>使用json提供的loads(str)函数进行JSON数据的解码</h1><p><strong>函数说明：</strong><br>    str - JSON字符串<br>    返回值 - python数据<br><strong>示例代码：</strong></p>
-<pre><code># coding=utf-8
-
-import urllib.request
-import json
-
-# 使用json模块的loads(str)函数进行JSON数据的解码
-url = &#39;http://localhost:8080/NoteWebService/note.do?action=query&amp;ID=10&#39;
-
-req = urllib.request.Request(url)
-
-with urllib.request.urlopen(req) as response:
-    data = response.read()
-    json_data = data.decode()
-    print(&quot;JSON字符串：&quot;, json_data)
-
-    py_dict = json.loads(json_data)  # 解码JSON字符串，返回字典
-    print(&#39;备忘录ID：&#39;, py_dict[&#39;ID&#39;])
-    print(&#39;备忘录日期：&#39;, py_dict[&#39;CDate&#39;])
-    print(&#39;备忘录内容：&#39;, py_dict[&#39;Content&#39;])
-    print(&#39;用户ID：&#39;, py_dict[&#39;UserID&#39;])
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>urllib</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>urllib</tag>
-        <tag>json</tag>
       </tags>
   </entry>
   <entry>
