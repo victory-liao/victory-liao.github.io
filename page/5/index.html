@@ -190,6 +190,962 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">JavaWeb项目开发 | request域对象</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-10 04:56:14" itemprop="dateCreated datePublished" datetime="2022-01-10T04:56:14-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:07:09" itemprop="dateModified" datetime="2022-01-11T00:07:09-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/" itemprop="url" rel="index"><span itemprop="name">request域对象</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="request域对象"><a href="#request域对象" class="headerlink" title="request域对象"></a>request域对象</h1><p><strong>场景</strong>：有时候我们发送一个请求然后由一个对应的servlet处理请求，接着我们需要将当前的request对象的一些信息传递到另一个servlet或者jsp页面。<br><strong>方法</strong>：</p>
+<ol>
+<li>请求转发<br>假设当前处理请求的是Demo2Servlet(/demo2)，需要传递信息到Demo3Servlet(/demo3)中。</li>
+</ol>
+<pre><code>request.getRequestDispatcher(&quot;/demo3&quot;).forward(request, response);
+</code></pre>
+<p>然后我们就可以在Demo3Servlet中获取request中的信息。</p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Demo3Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        String username = request.getParameter(&quot;username&quot;);
+        System.out.println(username);
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+
+&#125;
+</code></pre>
+<ol start="2">
+<li>使用request域对象（使用request的setAttribute()方法设置其他信息并传递到Demo3Servlet中）</li>
+</ol>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Demo2Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        request.setAttribute(&quot;flag&quot;, 1);
+        request.getRequestDispatcher(&quot;/demo3&quot;).forward(request, response);
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>在Demo3Servlet中获取请求中的信息或者在Demo2Servlet中设置的新信息）</li>
+</ol>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Demo3Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        String username = request.getParameter(&quot;username&quot;);
+        System.out.println(username);
+        
+        //request.removeAttribute(&quot;flag&quot;);//如果在获取设置的属性前将其删除，后面将获取不到该属性
+        Integer a = (Integer)request.getAttribute(&quot;flag&quot;);
+        System.out.println(a);
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">JavaWeb项目开发 | request获取各种形式的数据、请求转发</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-10 03:50:27" itemprop="dateCreated datePublished" datetime="2022-01-10T03:50:27-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:06:59" itemprop="dateModified" datetime="2022-01-11T00:06:59-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E3%80%81%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">request获取各种形式的数据、请求转发</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="request获取各种形式的数据"><a href="#request获取各种形式的数据" class="headerlink" title="request获取各种形式的数据"></a>request获取各种形式的数据</h1><ol>
+<li>新建form.html<br><img src="/2022/01/10/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE/1.PNG"></li>
+<li>新建Demo2Servlet处理来自form表单的请求并通过request对象的集中常用方法获取各种形式的数据</li>
+</ol>
+<pre><code>package com.oracle;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class Demo2Servlet
+ */
+public class Demo2Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        //response.getWriter().append(&quot;Served at: &quot;).append(request.getContextPath());
+//        //获取前台传递的参数
+//        String username = request.getParameter(&quot;username&quot;);
+//        String password = request.getParameter(&quot;pwd&quot;);
+//        
+//        //获取单值
+//        System.out.println(username);
+//        System.out.println(password);
+//        
+//        //获取多值
+//        String[] vals = request.getParameterValues(&quot;hobby&quot;);
+//        for(String val:vals) &#123;
+//            System.out.println(val);
+//        &#125;
+        
+        //获取表单中的所有数据
+        Map&lt;String, String[]&gt; map = request.getParameterMap();
+        for(String s:map.keySet()) &#123;
+            String[] strs = map.get(s);
+            
+            for(String st:strs) &#123;
+                System.out.println(st);
+            &#125;
+        &#125;
+        
+        
+    &#125;
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+
+&#125;
+</code></pre>
+<ol start="3">
+<li>请求转发<br>假设我们刚刚处理的表单就是一个网站的注册页面，提交登录成功后，我们需要跳转到登录页面（从一个页面跳转到另一个页面）</li>
+</ol>
+<p><strong>解决办法：</strong><br>我们只需要在doGet方法的最后增加下面一行代码（假设1.html为登录页面）：</p>
+<pre><code>//请求转发到1.html页面
+request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/servlet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/servlet/" class="post-title-link" itemprop="url">JavaWeb项目开发 | servlet</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-10 01:00:20" itemprop="dateCreated datePublished" datetime="2022-01-10T01:00:20-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:06:49" itemprop="dateModified" datetime="2022-01-11T00:06:49-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAservlet%E6%8E%A5%E6%94%B6%E5%B9%B6%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82/" itemprop="url" rel="index"><span itemprop="name">创建servlet接收并处理请求</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><h2 id="创建servlet"><a href="#创建servlet" class="headerlink" title="创建servlet"></a>创建servlet</h2><ol>
+<li>在src下面新建一个包com.oracle(公司域名反写)</li>
+<li>在com.oracle下新建一个servlet(New–&gt;Other–&gt;Web–&gt;Servlet)<br>输入servlet的名称：<br><img src="/2022/01/10/servlet/1.PNG"><br>修改URL mappings:<br><img src="/2022/01/10/servlet/2.PNG"><br>去掉Constructors form superclass的勾选：<br><img src="/2022/01/10/servlet/3.PNG"><br>创建好的servlet:<br><img src="/2022/01/10/servlet/4.PNG"><h2 id="测试Demo1Servlet"><a href="#测试Demo1Servlet" class="headerlink" title="测试Demo1Servlet"></a>测试Demo1Servlet</h2></li>
+<li>创建demo1.html<br><img src="/2022/01/10/servlet/5.PNG"></li>
+<li>在Demo1Servlet.java中编写处理来自demo1.html的请求的Java代码<br><img src="/2022/01/10/servlet/6.PNG"></li>
+<li>在浏览器地址栏输入：localhost:8080/shop/demo1.html<br><img src="/2022/01/10/servlet/7.PNG"></li>
+<li>点击上图中的超链接向服务器发出请求<br>servelet处理来自浏览器的请求，执行在Demo1Servlet.java中编写的Java代码<br><img src="/2022/01/10/servlet/8.PNG"></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 创建web项目并添加到服务器中</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-10 00:33:13" itemprop="dateCreated datePublished" datetime="2022-01-10T00:33:13-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:06:41" itemprop="dateModified" datetime="2022-01-11T00:06:41-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/" itemprop="url" rel="index"><span itemprop="name">创建web项目并添加到服务器中</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="创建web项目并添加到服务器中"><a href="#创建web项目并添加到服务器中" class="headerlink" title="创建web项目并添加到服务器中"></a>创建web项目并添加到服务器中</h1><h2 id="1-创建web项目"><a href="#1-创建web项目" class="headerlink" title="1.创建web项目"></a>1.创建web项目</h2><p>New –&gt; Web –&gt; dynamic web project,然后按照下图操作。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/1.PNG"><br>注意：Target runtime需选择与服务器对应的版本，dynamic web module version选择2.5.</p>
+<h2 id="2-将创建好的web项目加入到服务器中"><a href="#2-将创建好的web项目加入到服务器中" class="headerlink" title="2.将创建好的web项目加入到服务器中"></a>2.将创建好的web项目加入到服务器中</h2><p>在服务器上右键–&gt;add and remove,然后将对应的项目加入到服务器。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/2.PNG"></p>
+<h2 id="3-访问服务器上的web信息"><a href="#3-访问服务器上的web信息" class="headerlink" title="3.访问服务器上的web信息"></a>3.访问服务器上的web信息</h2><p>1.在WebContent下面创建一个简单的页面（1.html）<br>2.在浏览器地址栏输入：localhot/8080/shop/1.html<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/3.PNG"><br>效果：<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/4.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/09/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/09/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%A0%88/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 项目技术栈</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-09 23:54:45" itemprop="dateCreated datePublished" datetime="2022-01-09T23:54:45-08:00">2022-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:07:15" itemprop="dateModified" datetime="2022-01-11T00:07:15-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">项目技术栈</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="项目技术栈"><a href="#项目技术栈" class="headerlink" title="项目技术栈"></a>项目技术栈</h1><p>表格列出了开发网上购物商城所用到的技术。</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>html</td>
+<td>写静态页面</td>
+</tr>
+<tr>
+<td>css</td>
+<td>渲染页面</td>
+</tr>
+<tr>
+<td>js/jquery</td>
+<td>可以为html增加动画效果</td>
+</tr>
+<tr>
+<td>bootstrap</td>
+<td>前端框架</td>
+</tr>
+<tr>
+<td>Servlet</td>
+<td>接受请求,处理请求,生成动态的web资源</td>
+</tr>
+<tr>
+<td>Request</td>
+<td>请求</td>
+</tr>
+<tr>
+<td>session</td>
+<td>服务器端会话技术</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>过滤请求和响应</td>
+</tr>
+<tr>
+<td>jsp</td>
+<td>动态展示数据</td>
+</tr>
+<tr>
+<td>el和jstl</td>
+<td>el:jsp中的输出表达式 jstl:减少页面JAVA代码量 让结构更加清晰</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/" class="post-title-link" itemprop="url">JavaWeb项目开发 | web服务器tomcat和eclipse的集成</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-09 23:01:34" itemprop="dateCreated datePublished" datetime="2022-01-09T23:01:34-08:00">2022-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:06:30" itemprop="dateModified" datetime="2022-01-11T00:06:30-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">web服务器和eclipse的集成</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a target="_blank" rel="noopener" href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
+<h2 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h2><p>将下载的后缀为.zip的压缩文件解压即可（本项目使用tomcat 7）<br>将文件解压到不包含中文文件名的路径下（例：D://tomcat//）</p>
+<h2 id="将tomcat服务器集成到eclipse中"><a href="#将tomcat服务器集成到eclipse中" class="headerlink" title="将tomcat服务器集成到eclipse中"></a>将tomcat服务器集成到eclipse中</h2><p>1.在eclipse菜单栏中点击window–&gt;preferences,然后按照下图所示顺序点击。<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/1.PNG"><br>2.按照下图所示步骤添加服务器，选择版本7<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/2.PNG"><br>3.选择下载并解压的tomcat服务器并选择jre<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/3.PNG"><br>4.在菜单栏选择windown–&gt;show view–&gt;Other..–&gt;Server–&gt;Servers来显示配置的tomcat服务器<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/4.PNG"><br>注：可以通过点击上图中的启动按钮和关闭按钮来关闭/停止服务器<br>5.双击上图中的服务器并按照下图将Deploy path修改为webapps<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/5.PNG"><br>6.通过浏览器访问该服务器<br>在浏览器地址栏输入localhost:8080来访问（先通过启动按钮启动服务器）<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/6.PNG"><br>如果端口8080被占用，可以在tomcat目录下/conf/server.xml中修改端口号。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/" class="post-title-link" itemprop="url">Java | Java判断对象是否相等</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-07 22:37:05 / Modified: 23:48:34" itemprop="dateCreated datePublished" datetime="2022-01-07T22:37:05-08:00">2022-01-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/" itemprop="url" rel="index"><span itemprop="name">判断两个对象是否相等</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/04/MultimodalEmotionRecognition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/04/MultimodalEmotionRecognition/" class="post-title-link" itemprop="url">参考文献 | Multimodal Emotion Recognition Method based on Facial expressions and EEG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-04 21:26:08" itemprop="dateCreated datePublished" datetime="2022-01-04T21:26:08-08:00">2022-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-05 05:25:58" itemprop="dateModified" datetime="2022-01-05T05:25:58-08:00">2022-01-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/" itemprop="url" rel="index"><span itemprop="name">EEG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">脑电分类</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/" itemprop="url" rel="index"><span itemprop="name">参考文献</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG"><a href="#Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG" class="headerlink" title="Multimodal Emotion Recognition Method based on Facial expressions and EEG"></a>Multimodal Emotion Recognition Method based on Facial expressions and EEG</h1><h2 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h2><p>To solve the <strong>multimodal emtoion recognition</strong> problem, the emotion recognition results<br>were calculated using the <strong>Monte Carlo method</strong> to combine the recognition results of<br><strong>facical expressions</strong> and <strong>EEG</strong> in the multimodal emotion recognition.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/04/MultimodalEmotionRecognition/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/" class="post-title-link" itemprop="url">期刊 | 脑电期刊</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-04 19:17:28 / Modified: 19:21:52" itemprop="dateCreated datePublished" datetime="2022-01-04T19:17:28-08:00">2022-01-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/" itemprop="url" rel="index"><span itemprop="name">脑电期刊</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/Biomedical-Signal-Processing-and-Control/" itemprop="url" rel="index"><span itemprop="name">Biomedical Signal Processing and Control</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a target="_blank" rel="noopener" href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/16/%E6%9C%80%E6%96%B0SCI%E6%9C%9F%E5%88%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E6%8A%95%E7%A8%BF%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -243,713 +1199,6 @@
 
       
           <h1 id="最新SCI期刊查询及投稿分析系统"><a href="#最新SCI期刊查询及投稿分析系统" class="headerlink" title="最新SCI期刊查询及投稿分析系统"></a>最新SCI期刊查询及投稿分析系统</h1><p><a target="_blank" rel="noopener" href="https://www.letpub.com.cn/">最新SCI期刊查询及投稿分析系统</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/16/%E5%86%99%E8%AE%BA%E6%96%87%E7%A5%9E%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/16/%E5%86%99%E8%AE%BA%E6%96%87%E7%A5%9E%E5%99%A8/" class="post-title-link" itemprop="url">写论文神器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-12-16 22:35:39 / Modified: 22:42:50" itemprop="dateCreated datePublished" datetime="2021-12-16T22:35:39-08:00">2021-12-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/CTeX%E5%86%99%E8%AE%BA%E6%96%87%E7%A5%9E%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">CTeX写论文神器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="写论文神器-CTeX"><a href="#写论文神器-CTeX" class="headerlink" title="写论文神器-CTeX"></a>写论文神器-CTeX</h1><p><a target="_blank" rel="noopener" href="http://www.ctex.org/CTeX">CTeX下载地址</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhiqianghe.blog.csdn.net/article/details/102978653?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link">CTeX安装教程</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/29/EmotionalTendencyPredictionUsingLSTM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/29/EmotionalTendencyPredictionUsingLSTM/" class="post-title-link" itemprop="url">EmotionalTendencyPredictionUsingLSTM</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-11-29 04:48:49" itemprop="dateCreated datePublished" datetime="2021-11-29T04:48:49-08:00">2021-11-29</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/22/PILImageCrop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/22/PILImageCrop/" class="post-title-link" itemprop="url">PIL | PIL.Image.crop()</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-11-22 01:27:54 / Modified: 01:31:23" itemprop="dateCreated datePublished" datetime="2021-11-22T01:27:54-08:00">2021-11-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/PIL/" itemprop="url" rel="index"><span itemprop="name">PIL</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="PIL-Image-crop"><a href="#PIL-Image-crop" class="headerlink" title="PIL.Image.crop()"></a>PIL.Image.crop()</h1><p>程序使用PIL.Image.crop()将一张图片切割成9张小图片。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/22/PILImageCrop/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/21/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0pytorch%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/21/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0pytorch%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/" class="post-title-link" itemprop="url">深度学习 | 深度学习pytorch训练代码模板</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-11-21 04:13:30 / Modified: 04:15:17" itemprop="dateCreated datePublished" datetime="2021-11-21T04:13:30-08:00">2021-11-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="深度学习pytorch训练代码模板"><a href="#深度学习pytorch训练代码模板" class="headerlink" title="深度学习pytorch训练代码模板"></a>深度学习pytorch训练代码模板</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/396666255?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">查看模板！</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/" class="post-title-link" itemprop="url">RNN | LSTM输入输出格式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-11-21 04:07:15 / Modified: 04:10:08" itemprop="dateCreated datePublished" datetime="2021-11-21T04:07:15-08:00">2021-11-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/" itemprop="url" rel="index"><span itemprop="name">RNN</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/LSTM/" itemprop="url" rel="index"><span itemprop="name">LSTM</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LSTM模型结构的可视化"><a href="#LSTM模型结构的可视化" class="headerlink" title="LSTM模型结构的可视化"></a>LSTM模型结构的可视化</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139617364?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">非常到位的LSTM解读！</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/20/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/" class="post-title-link" itemprop="url">Computer Vision | 虚假名人照片生成</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-11-20 02:02:52 / Modified: 04:14:26" itemprop="dateCreated datePublished" datetime="2021-11-20T02:02:52-08:00">2021-11-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">虚假名人照片生成</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="虚假名人照片生成"><a href="#虚假名人照片生成" class="headerlink" title="虚假名人照片生成"></a>虚假名人照片生成</h1><h2 id="1-虚假照片生成有什么用？"><a href="#1-虚假照片生成有什么用？" class="headerlink" title="1. 虚假照片生成有什么用？"></a>1. 虚假照片生成有什么用？</h2><p>生成一些“并不存在的人”的照片<br>给定一系列真人照片，通过GAN技术生成一些类似的照片。但这些照片上的人并不真实存在。<br>这些照片可以用作一些影视作品中的“遗像”，这样，既保证了影视作品的真实性，又不需要使用真人照片。</p>
-<h2 id="2-数据集情况"><a href="#2-数据集情况" class="headerlink" title="2.数据集情况"></a>2.数据集情况</h2><p>CelebA（名人照片数据集）<br>网址：<a target="_blank" rel="noopener" href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html</a><br><strong>·</strong> 人脸照片，拥有超过200K张名人照片<br><strong>·</strong> 照片中人的姿态不一，背景杂乱</p>
-<h2 id="模型介绍"><a href="#模型介绍" class="headerlink" title="模型介绍"></a>模型介绍</h2><p>DCGAN generator</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">Computer Vision | 基于ResNet的CIFAER10图像分类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-11-16 19:26:33" itemprop="dateCreated datePublished" datetime="2021-11-16T19:26:33-08:00">2021-11-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-20 01:51:10" itemprop="dateModified" datetime="2021-11-20T01:51:10-08:00">2021-11-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER-10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基于ResNet的CIFAER-10图像分类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="基于ResNet的CIFAER-10图像分类"><a href="#基于ResNet的CIFAER-10图像分类" class="headerlink" title="基于ResNet的CIFAER-10图像分类"></a>基于ResNet的CIFAER-10图像分类</h1><h2 id="CIFAR-10数据集"><a href="#CIFAR-10数据集" class="headerlink" title="CIFAR-10数据集"></a>CIFAR-10数据集</h2><p><strong>数据集规模</strong><br>60000张32×32的彩色图片，共有十个类别，每个类别6000张图片。共50000张训练集图片和10000测试集图片。<br><strong>数据集样本类别</strong><br>飞机、汽车、鸟、猫、鹿、狗、青蛙、马、船、卡车（汽车和卡车无重叠）—&gt; 10分类任务<br><strong>数据集网址</strong><br><a target="_blank" rel="noopener" href="http://www.cs.toronto.edu/~kriz/cifar.html">http://www.cs.toronto.edu/~kriz/cifar.html</a><br><strong>网络</strong><br>ResNet18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/16/DogsVSCats/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/16/DogsVSCats/" class="post-title-link" itemprop="url">Computer Vision | DogsVSCats</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-11-16 18:34:35" itemprop="dateCreated datePublished" datetime="2021-11-16T18:34:35-08:00">2021-11-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-20 01:57:33" itemprop="dateModified" datetime="2021-11-20T01:57:33-08:00">2021-11-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/Dogs-VS-Cats/" itemprop="url" rel="index"><span itemprop="name">Dogs VS Cats</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Dogs-VS-Cats"><a href="#Dogs-VS-Cats" class="headerlink" title="Dogs VS Cats"></a>Dogs VS Cats</h1><h2 id="猫狗大战任务"><a href="#猫狗大战任务" class="headerlink" title="猫狗大战任务"></a>猫狗大战任务</h2><p>猫狗大战是来源于Kaggle的一个比赛项目，任务为给定一个有猫狗照片数据集，设计一种算法对测试集中的猫狗图片进行分类。<br><strong>比赛项目网址：</strong><br><a target="_blank" rel="noopener" href="https://www.kaggle.com/">https://www.kaggle.com/</a><br><strong>网络</strong></p>
-<pre><code>layer1: Conv2d(3, 16, 3, padding=1)
-layer2: relu():
-layer3: max_pool2d(2)
-layer4: Conv2d(16, 16, 3, padding=1)
-layer5: relu()
-layer6: max_pool2d(2)
-layer7: Linear(50*50*16, 128)
-layer8: relu()
-layer9: Linear(128, 64)
-layer10: relu()
-layer11: Linear(64, 2)
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/15/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/15/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" class="post-title-link" itemprop="url">脑电伪迹降噪方法整理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-11-15 05:31:27 / Modified: 05:33:18" itemprop="dateCreated datePublished" datetime="2021-11-15T05:31:27-08:00">2021-11-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/" itemprop="url" rel="index"><span itemprop="name">EEG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/" itemprop="url" rel="index"><span itemprop="name">伪迹移除</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">脑电伪迹降噪方法整理</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="脑电伪迹降噪方法整理"><a href="#脑电伪迹降噪方法整理" class="headerlink" title="脑电伪迹降噪方法整理"></a>脑电伪迹降噪方法整理</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/gRIP-fuYsZv2p92qptOmew">脑电伪迹降噪方法整理</a></p>
 
       
     </div>
@@ -1036,14 +1285,14 @@ layer11: Linear(64, 2)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">331</span>
+          <span class="site-state-item-count">340</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">172</span>
+        <span class="site-state-item-count">181</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
