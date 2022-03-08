@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="事务管理1.项目目录book包—&gt;使用注解管理事务book_xml—&gt;使用xml方式管理事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring | 事务管理">
+<meta property="og:url" content="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/index.html">
+<meta property="og:site_name" content="Victory&#39;s Blog">
+<meta property="og:description" content="事务管理1.项目目录book包—&gt;使用注解管理事务book_xml—&gt;使用xml方式管理事务">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/1.PNG">
+<meta property="og:image" content="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/2.PNG">
+<meta property="og:image" content="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/3.PNG">
+<meta property="og:image" content="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/4.PNG">
+<meta property="article:published_time" content="2022-03-07T12:25:30.000Z">
+<meta property="article:modified_time" content="2022-03-08T09:56:39.978Z">
+<meta property="article:author" content="victory-liao">
+<meta property="article:tag" content="spring">
+<meta property="article:tag" content="事务管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/1.PNG">
+
+<link rel="canonical" href="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>spring | 事务管理 | Victory's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Victory's Blog" type="application/atom+xml">
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+    <div class="headband"></div>
+	<a target="_blank" rel="noopener" href="https://github.com/victory-liao/" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Victory's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">非淡泊无以明志，非宁静无以致远</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+    
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/%E4%BA%8B%E5%8A%A1-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spring | 事务管理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-07 04:25:30" itemprop="dateCreated datePublished" datetime="2022-03-07T04:25:30-08:00">2022-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-08 01:56:39" itemprop="dateModified" datetime="2022-03-08T01:56:39-08:00">2022-03-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">事务管理</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h1><p>1.项目目录<br><img src="/2022/03/07/%E4%BA%8B%E5%8A%A1-1/1.PNG"><br>book包—&gt;使用注解管理事务<br>book_xml—&gt;使用xml方式管理事务</p>
+<span id="more"></span>
+
+<p>数据库表(book,stock,money)<br><img src="/2022/03/07/%E4%BA%8B%E5%8A%A1-1/2.PNG"><br><img src="/2022/03/07/%E4%BA%8B%E5%8A%A1-1/3.PNG"><br><img src="/2022/03/07/%E4%BA%8B%E5%8A%A1-1/4.PNG"><br>2.使用注解管理事务<br>2.1 BookController.java</p>
+<pre><code>package com.atguigu.book.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.atguigu.book.service.BookService;
+import com.atguigu.book.service.Cashier;
+
+@Controller
+public class BookController &#123;
+    @Autowired
+    private BookService service;
+    
+    @Autowired
+    private Cashier cashier;
+    
+    public void buyBook()&#123;
+        service.buyBook(&quot;1&quot;, &quot;1001&quot;);
+    &#125;
+    
+    public void checkOut()&#123;
+        List&lt;String&gt; bids = new ArrayList&lt;&gt;();
+        bids.add(&quot;1&quot;);
+        bids.add(&quot;2&quot;);
+        cashier.checkOut(&quot;1001&quot;, bids);
+    &#125;
+&#125;
+</code></pre>
+<p>2.2 BookDao.java</p>
+<pre><code>package com.atguigu.book.dao;
+
+public interface BookDao &#123;
+    Integer selectPrice(String bid);
+    
+    void updateSt(String bid);
+    
+    void updateBalance(String uid, Integer price);
+&#125;
+</code></pre>
+<p>2.3 BookDaoImpl.java</p>
+<pre><code>package com.atguigu.book.dao.impl;
+
+import javax.management.RuntimeErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.atguigu.book.dao.BookDao;
+import com.atguigu.book.exception.MyException;
+
+@Repository
+public class BookDaoImpl implements BookDao&#123;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Override
+    public Integer selectPrice(String bid) &#123;
+        String sql = &quot;select price from book where bid = ?&quot;;
+        Integer price = jdbcTemplate.queryForObject(sql, new Object[]&#123;bid&#125;, Integer.class);
+        return price;
+    &#125;
+
+    @Override
+    public void updateSt(String bid) &#123;
+        //获取该书记的库存
+        String sql = &quot;select st from stock where sid = ?&quot;;
+        Integer st = jdbcTemplate.queryForObject(sql, new Object[]&#123;bid&#125;, Integer.class);
+        if(st &lt;= 0)&#123;
+            throw new RuntimeException();
+        &#125;else&#123;
+            jdbcTemplate.update(&quot;update stock set st = st - 1 where sid = ?&quot;, bid);
+        &#125;
+    &#125;
+
+    @Override
+    public void updateBalance(String uid, Integer price) &#123;
+        Integer balance = jdbcTemplate.queryForObject(&quot;select balance from money where uid = ?&quot;, new Object[]&#123;uid&#125;, Integer.class);
+        if(balance &lt; price)&#123;
+            throw new MyException(&quot;余额不足&quot;);
+        &#125;else&#123;
+            jdbcTemplate.update(&quot;update money set balance = balance - ? where uid = ?&quot;, price, uid);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>2.4 BookService.java</p>
+<pre><code>package com.atguigu.book.service;
+
+public interface BookService &#123;
+    void buyBook(String bid, String uid);
+&#125;
+</code></pre>
+<p>2.5 BookServiceImpl.java</p>
+<pre><code>package com.atguigu.book.service.impl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.atguigu.book.dao.BookDao;
+import com.atguigu.book.exception.MyException;
+import com.atguigu.book.service.BookService;
+
+@Service
+//@Transactional
+public class BookServiceImpl implements BookService&#123;
+    @Autowired
+    private BookDao dao;
+    
+    /**
+     * @Transactional:对方法中所有的操作作为一个事务进行管理
+     * 在方法上使用，只对方法有效果
+     * 在类上使用，对类中所有的方法都有效果
+     * @Transactional中可以设置的属性：
+     * propagation:A方法和B方法都有事务，当A在调用B时，会将A中的事务传播给B方法，
+     * B方法对于事务的处理方式就是事务的传播行为
+     * Propagation.REQUIRED:必须使用调用者的事务（默认值）
+     * Propagation.REQUIRES_NEW:将调用者的事务挂起，不使用调用者的事务，使用新的事务进行处理
+     * isolation:事务的隔离级别，在并发的情况下，操作数据的一种规定
+     *         读未提交(1)：脏读（读到没有意义的数据）---&gt;对于字段来说
+     *         读已提交(2)：不可重复读（重复读到的数据不一致）---&gt;对于字段来说
+     *         可重复读(4)：幻读（重复读到整张表的数据不一致，第一次读一部分，第二次读多了一些数据）---&gt;对于记录来说
+     *         串行化(8)：性能低，消耗大
+     * timeout:在事务强制回滚前最多可以执行（等待）的时间
+     * 
+     * readOnly:指定当前事务中的一系列的操作是否为只读
+     * 若设置为只读，不管事务中有没有写的操作，MySQL都会在请求访问数据的时候，不加锁，提高性能
+     * 如果有写操作的情况，建议一定不能设置只读
+     * 
+     * rollbackFor|rollbackForClassName|noRollbackFor|noRollbakForClassName
+     */
+    @Transactional(propagation=Propagation.REQUIRES_NEW, timeout=3, noRollbackFor=&#123;NullPointerException.class, MyException.class&#125;)
+    public void buyBook(String bid, String uid)&#123;
+//        try &#123;
+//            Thread.sleep(5000);
+//        &#125; catch (InterruptedException e) &#123;
+//            e.printStackTrace();
+//        &#125;
+        Integer price = dao.selectPrice(bid);
+
+        dao.updateSt(bid);
+        
+        dao.updateBalance(uid, price);
+    &#125;    
+&#125;
+</code></pre>
+<p>2.6 Cashier.java</p>
+<pre><code>package com.atguigu.book.service;
+
+import java.util.List;
+
+public interface Cashier &#123;
+    void checkOut(String uid, List&lt;String&gt; bids);
+&#125;
+</code></pre>
+<p>2.7 CashierServiceImpl.java</p>
+<pre><code>package com.atguigu.book.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.atguigu.book.service.BookService;
+import com.atguigu.book.service.Cashier;
+
+@Service
+@Transactional
+public class CashierServiceImpl implements Cashier&#123;
+    @Autowired
+    private BookService service;
+    
+    @Override
+    public void checkOut(String uid, List&lt;String&gt; bids) &#123;
+        // TODO Auto-generated method stub
+        for (String bid : bids) &#123;
+            service.buyBook(bid, uid);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>2.8 MyException.java</p>
+<pre><code>package com.atguigu.book.exception;
+
+public class MyException extends RuntimeException&#123;
+
+    public MyException() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+
+    public MyException(String arg0, Throwable arg1, boolean arg2, boolean arg3) &#123;
+        super(arg0, arg1, arg2, arg3);
+        // TODO Auto-generated constructor stub
+    &#125;
+
+    public MyException(String arg0, Throwable arg1) &#123;
+        super(arg0, arg1);
+        // TODO Auto-generated constructor stub
+    &#125;
+
+    public MyException(String arg0) &#123;
+        super(arg0);
+        // TODO Auto-generated constructor stub
+    &#125;
+
+    public MyException(Throwable arg0) &#123;
+        super(arg0);
+        // TODO Auto-generated constructor stub
+    &#125;
+
+&#125;
+</code></pre>
+<p>2.9 Test.java</p>
+<pre><code>package com.atguigu.book;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.atguigu.book.controller.BookController;
+
+public class Test &#123;
+    public static void main(String[] args)&#123;
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;book.xml&quot;);
+        
+        BookController controller = ac.getBean(&quot;bookController&quot;, BookController.class);
+        controller.buyBook();
+        
+        //controller.checkOut();
+    &#125;
+&#125;
+</code></pre>
+<p>2.10 db.properties</p>
+<pre><code>jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/ssm
+jdbc.username=root
+jdbc.password=root   
+</code></pre>
+<p>2.11 book.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd&quot;&gt;
+
+    &lt;context:component-scan base-package=&quot;com.atguigu.book&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
+    
+    &lt;!-- 创建数据源 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 通过数据源配置JdbcTemplate --&gt;
+    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 配置事务管理器 --&gt;
+    &lt;bean id=&quot;dataSourceTransactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 开启注解驱动，即对事务相关的注解进行扫描，解析含义并执行功能 --&gt;
+    &lt;tx:annotation-driven transaction-manager=&quot;dataSourceTransactionManager&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>3.使用xml方式管理事务<br>3.1 BookServiceImpl.java</p>
+<pre><code>package com.atguigu.book_xml.service.impl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.atguigu.book_xml.dao.BookDao;
+import com.atguigu.book_xml.exception.MyException;
+import com.atguigu.book_xml.service.BookService;
+
+@Service
+public class BookServiceImpl implements BookService&#123;
+    @Autowired
+    private BookDao dao;
+    
+    public void buyBook(String bid, String uid)&#123;
+//        try &#123;
+//            Thread.sleep(5000);
+//        &#125; catch (InterruptedException e) &#123;
+//            e.printStackTrace();
+//        &#125;
+        Integer price = dao.selectPrice(bid);
+
+        dao.updateSt(bid);
+        
+        dao.updateBalance(uid, price);
+    &#125;    
+&#125;
+</code></pre>
+<p>3.2 book_xml.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd&quot;&gt;
+
+    &lt;context:component-scan base-package=&quot;com.atguigu.book_xml&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
+    
+    &lt;!-- 创建数据源 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 通过数据源配置JdbcTemplate --&gt;
+    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 配置事务管理器(相当于一个切面),不管时用注解方式或xml方式配置事务，一定要有DataSourceTransactionManager事务管理器的支持 --&gt;
+    &lt;bean id=&quot;dataSourceTransactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 配置事务通知 --&gt;
+    &lt;tx:advice id=&quot;tx&quot; transaction-manager=&quot;dataSourceTransactionManager&quot;&gt;
+        &lt;tx:attributes&gt;
+            &lt;!-- 在设置好的切入点表达式下再次进行事务设置 --&gt;
+            &lt;tx:method name=&quot;buyBook&quot;/&gt;
+            &lt;tx:method name=&quot;checkOut&quot;/&gt;
+            
+            &lt;!-- 只有select开头的方法才会被事务处理 --&gt;
+            &lt;tx:method name=&quot;select*&quot; read-only=&quot;true&quot;/&gt;
+            &lt;tx:method name=&quot;insert*&quot;/&gt;
+            &lt;tx:method name=&quot;update*&quot;/&gt;
+            &lt;tx:method name=&quot;delete*&quot;/&gt;
+            
+            &lt;tx:method name=&quot;*&quot;/&gt;
+        &lt;/tx:attributes&gt;
+    &lt;/tx:advice&gt;
+    
+    &lt;!-- 配置切入点表达式 --&gt;
+    &lt;aop:config&gt;
+        &lt;aop:pointcut expression=&quot;execution(* com.atguigu.book_xml.service.impl.*.*(..))&quot; id=&quot;pointCut&quot;/&gt;
+        &lt;aop:advisor advice-ref=&quot;tx&quot; pointcut-ref=&quot;pointCut&quot;/&gt;
+    &lt;/aop:config&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>3.3 Test.java</p>
+<pre><code>package com.atguigu.book_xml;
+
+import org.springframework.context.ApplicationContext;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.atguigu.book_xml.controller.BookController;
+
+public class Test &#123;
+    public static void main(String[] args)&#123;
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;book_xml.xml&quot;);
+        
+        BookController controller = ac.getBean(&quot;bookController&quot;, BookController.class);
+        controller.buyBook();
+        
+        //controller.checkOut();
+    &#125;
+&#125;
+</code></pre>
+<p>3.4 其他代码与注解方式管理事务相同</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/spring/" rel="tag"># spring</a>
+              <a href="/tags/%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/" rel="tag"># 事务管理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/07/JdbcTemplate/" rel="prev" title="spring | JdbcTemplate增删改查">
+      <i class="fa fa-chevron-left"></i> spring | JdbcTemplate增删改查
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">事务管理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="victory-liao"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">victory-liao</p>
+  <div class="site-description" itemprop="description">保持理智 相信未来</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">344</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">182</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">220</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/victory-liao" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;victory-liao" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="E-Mail → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="WeChat → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="QQ → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">victory-liao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+</html>
