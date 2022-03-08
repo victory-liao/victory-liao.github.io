@@ -395,6 +395,228 @@ print(c)  # 5
       </tags>
   </entry>
   <entry>
+    <title>spring | AOP(切面、通知、切入点、切面优先级)</title>
+    <url>/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/</url>
+    <content><![CDATA[<h1 id="AOP-切面、通知、切入点、切面优先级"><a href="#AOP-切面、通知、切入点、切面优先级" class="headerlink" title="AOP(切面、通知、切入点、切面优先级)"></a>AOP(切面、通知、切入点、切面优先级)</h1><p><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG"></p>
+<span id="more"></span>
+<p>2.MathI.java(接口)</p>
+<pre><code>package com.atguigu.spring.aop;
+
+public interface MathI &#123;
+    int add(int i, int j);
+    int sub(int i, int j);
+    int mul(int i, int j);
+    int div(int i, int j);
+&#125;
+</code></pre>
+<p>3.MathImpl.java（实现类）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class MathImpl implements MathI&#123;
+
+    @Override
+    public int add(int i, int j) &#123;
+        int result = i + j;
+        return result;
+    &#125;
+    
+    @Override
+    public int sub(int i, int j) &#123;
+        int result = i - j;
+        return result;
+    &#125;
+
+    @Override
+    public int mul(int i, int j) &#123;
+        int result = i * j;
+        return result; 
+    &#125;
+
+    @Override
+    public int div(int i, int j) &#123;
+        int result = i / j;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>4.MyLoggerAspect.java（切面–&gt;日志）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import java.util.Arrays;
+import org.aopalliance.intercept.Joinpoint;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Component
+@Aspect//标注当前类为切面
+@Order(1)
+public class MyLoggerAspect &#123;
+    //AspectJ支持的5种类型的通知注解
+    
+    //重用切入点定义
+    @Pointcut(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    public void test()&#123;
+        
+    &#125;
+    /**
+     * @Before：将方法指定为前置通知
+     * 必须设置value,其值为切入点表达式
+     * 前置通知：作用于方法执行之前
+     */
+    //前置通知 
+//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.add(int, int))&quot;)
+//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
+//    @Before(value = &quot;execution(* com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
+//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(int,int))&quot;)
+//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    @Before(value = &quot;test()&quot;)
+    public void beforeMethod(JoinPoint joinPoint)&#123;
+        Object[] args = joinPoint.getArgs();//获取方法的参数
+        String methodName = joinPoint.getSignature().getName();//获取方法名
+        
+        System.out.println(&quot;method:&quot; + methodName + &quot;,arguments:&quot; + Arrays.toString(args));
+    &#125;
+    
+    /**
+     * @After:将方法标注为后置通知
+     * 后置通知：作用于方法的finally语句块，即不管有没有异常都会执行
+     */
+    //后置通知
+    //@After(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    @After(value = &quot;test()&quot;)
+    public void afterMethod()&#123;
+        System.out.println(&quot;后置通知&quot;);
+    &#125;
+    
+    /**
+     * @AfterReturning：将方法标注为返回通知
+     * 返回通知：作用于方法执行之后
+     * 要通过returning设置接收方法返回值的变量名
+     * 要向在方法中使用，必须在方法的形参中设置和变量名相同的参数名的参数
+     */
+    @AfterReturning(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;,returning=&quot;result&quot;)
+    public void afterReturing(JoinPoint joinPoint, Object result)&#123;
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println(&quot;method:&quot; + methodName + &quot;,result:&quot; + result);
+    &#125;
+    
+    /**
+     * @AfterThrowing：将方法标注为异常通知（例外通知）
+     * 异常通知：作用于方法抛出异常时
+     * 可通过throwing设置接受方法返回的异常信息
+     * 在参数列表中可通过具体的异常类型，来对指定的异常信息进行操作
+     */
+    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
+    public void afterThrowing(Exception ex)&#123;
+        System.out.println(&quot;有异常了,messages&quot;+ex);
+    &#125;
+    //处理特定异常
+//    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
+//    public void afterThrowing(NullPointerException ex)&#123;
+//        System.out.println(&quot;有异常了,messages&quot;+ex);
+//    &#125;
+    
+    /**
+     * @Around：
+     */
+    @Around(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    public Object aroundMethod(ProceedingJoinPoint joinPoint)&#123;    
+        Object result = null;
+        try &#123;
+            //前置通知
+            System.out.println(&quot;前置通知&quot;);
+            result = joinPoint.proceed();//执行方法
+            //返回通知
+            System.out.println(&quot;返回通知&quot;);
+            return result;
+        &#125; catch (Throwable e) &#123;
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            //异常通知
+            System.out.println(&quot;异常通知&quot;);
+        &#125;finally&#123;
+            //后置通知
+            System.out.println(&quot;后置通知&quot;);
+        &#125;
+        return -1;
+    &#125;
+&#125;
+</code></pre>
+<p>5.TestHandler.java</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TestHandler &#123;
+    public void test()&#123;
+        System.out.println(&quot;测试切入点表达式&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>6.TestAspect.java（切面–&gt;另一个切面，用来测试切面优先级）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Component
+@Aspect
+@Order(0)//定义切面作用的优先级，值越小优先级越高，默认值为int的最大值 
+public class TestAspect &#123;
+    @Before(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    public void before()&#123;
+        System.out.println(&quot;TestAspect====&gt;前置通知&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>7.Test.java（测试类）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop.xml&quot;);
+        
+        MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);
+        
+        int i = math.div(1, 1);
+        System.out.println(i);
+        
+//        TestHandler bean = ac.getBean(&quot;testHandler&quot;, TestHandler.class);
+//        bean.test();
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>AOP(切面、通知、切入点、切面优先级)</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+        <tag>AOP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 68个python内置函数详解</title>
     <url>/2021/10/16/68%E4%B8%AApython%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="68个python内置函数详解"><a href="#68个python内置函数详解" class="headerlink" title="68个python内置函数详解"></a>68个python内置函数详解</h1><p>内置函数就是Python给你提供的，拿来直接用的函数，比如print.，input等。<br>截止到python版本3.6.2 ，python一共提供了68个内置函数，具体如下👇</p>
@@ -707,248 +929,6 @@ def f():
       </tags>
   </entry>
   <entry>
-    <title>spring | AOP(切面、通知、切入点、切面优先级)</title>
-    <url>/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/</url>
-    <content><![CDATA[<h1 id="AOP-切面、通知、切入点、切面优先级"><a href="#AOP-切面、通知、切入点、切面优先级" class="headerlink" title="AOP(切面、通知、切入点、切面优先级)"></a>AOP(切面、通知、切入点、切面优先级)</h1><p><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG"></p>
-<span id="more"></span>
-<p>2.MathI.java(接口)</p>
-<pre><code>package com.atguigu.spring.aop;
-
-public interface MathI &#123;
-    int add(int i, int j);
-    int sub(int i, int j);
-    int mul(int i, int j);
-    int div(int i, int j);
-&#125;
-</code></pre>
-<p>3.MathImpl.java（实现类）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.springframework.stereotype.Component;
-
-@Component
-public class MathImpl implements MathI&#123;
-
-    @Override
-    public int add(int i, int j) &#123;
-        int result = i + j;
-        return result;
-    &#125;
-    
-    @Override
-    public int sub(int i, int j) &#123;
-        int result = i - j;
-        return result;
-    &#125;
-
-    @Override
-    public int mul(int i, int j) &#123;
-        int result = i * j;
-        return result; 
-    &#125;
-
-    @Override
-    public int div(int i, int j) &#123;
-        int result = i / j;
-        return result;
-    &#125;
-&#125;
-</code></pre>
-<p>4.MyLoggerAspect.java（切面–&gt;日志）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import java.util.Arrays;
-import org.aopalliance.intercept.Joinpoint;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Component
-@Aspect//标注当前类为切面
-@Order(1)
-public class MyLoggerAspect &#123;
-    //AspectJ支持的5种类型的通知注解
-    
-    //重用切入点定义
-    @Pointcut(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    public void test()&#123;
-        
-    &#125;
-    /**
-     * @Before：将方法指定为前置通知
-     * 必须设置value,其值为切入点表达式
-     * 前置通知：作用于方法执行之前
-     */
-    //前置通知 
-//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.add(int, int))&quot;)
-//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
-//    @Before(value = &quot;execution(* com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
-//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(int,int))&quot;)
-//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    @Before(value = &quot;test()&quot;)
-    public void beforeMethod(JoinPoint joinPoint)&#123;
-        Object[] args = joinPoint.getArgs();//获取方法的参数
-        String methodName = joinPoint.getSignature().getName();//获取方法名
-        
-        System.out.println(&quot;method:&quot; + methodName + &quot;,arguments:&quot; + Arrays.toString(args));
-    &#125;
-    
-    /**
-     * @After:将方法标注为后置通知
-     * 后置通知：作用于方法的finally语句块，即不管有没有异常都会执行
-     */
-    //后置通知
-    //@After(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    @After(value = &quot;test()&quot;)
-    public void afterMethod()&#123;
-        System.out.println(&quot;后置通知&quot;);
-    &#125;
-    
-    /**
-     * @AfterReturning：将方法标注为返回通知
-     * 返回通知：作用于方法执行之后
-     * 要通过returning设置接收方法返回值的变量名
-     * 要向在方法中使用，必须在方法的形参中设置和变量名相同的参数名的参数
-     */
-    @AfterReturning(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;,returning=&quot;result&quot;)
-    public void afterReturing(JoinPoint joinPoint, Object result)&#123;
-        String methodName = joinPoint.getSignature().getName();
-        System.out.println(&quot;method:&quot; + methodName + &quot;,result:&quot; + result);
-    &#125;
-    
-    /**
-     * @AfterThrowing：将方法标注为异常通知（例外通知）
-     * 异常通知：作用于方法抛出异常时
-     * 可通过throwing设置接受方法返回的异常信息
-     * 在参数列表中可通过具体的异常类型，来对指定的异常信息进行操作
-     */
-    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
-    public void afterThrowing(Exception ex)&#123;
-        System.out.println(&quot;有异常了,messages&quot;+ex);
-    &#125;
-    //处理特定异常
-//    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
-//    public void afterThrowing(NullPointerException ex)&#123;
-//        System.out.println(&quot;有异常了,messages&quot;+ex);
-//    &#125;
-    
-    /**
-     * @Around：
-     */
-    @Around(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    public Object aroundMethod(ProceedingJoinPoint joinPoint)&#123;    
-        Object result = null;
-        try &#123;
-            //前置通知
-            System.out.println(&quot;前置通知&quot;);
-            result = joinPoint.proceed();//执行方法
-            //返回通知
-            System.out.println(&quot;返回通知&quot;);
-            return result;
-        &#125; catch (Throwable e) &#123;
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            //异常通知
-            System.out.println(&quot;异常通知&quot;);
-        &#125;finally&#123;
-            //后置通知
-            System.out.println(&quot;后置通知&quot;);
-        &#125;
-        return -1;
-    &#125;
-&#125;
-</code></pre>
-<p>5.TestHandler.java</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.springframework.stereotype.Component;
-
-@Component
-public class TestHandler &#123;
-    public void test()&#123;
-        System.out.println(&quot;测试切入点表达式&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>6.TestAspect.java（切面–&gt;另一个切面，用来测试切面优先级）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Component
-@Aspect
-@Order(0)//定义切面作用的优先级，值越小优先级越高，默认值为int的最大值 
-public class TestAspect &#123;
-    @Before(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    public void before()&#123;
-        System.out.println(&quot;TestAspect====&gt;前置通知&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>7.Test.java（测试类）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args) &#123;
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop.xml&quot;);
-        
-        MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);
-        
-        int i = math.div(1, 1);
-        System.out.println(i);
-        
-//        TestHandler bean = ac.getBean(&quot;testHandler&quot;, TestHandler.class);
-//        bean.test();
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>AOP(切面、通知、切入点、切面优先级)</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
-        <tag>AOP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | AdaBoost</title>
-    <url>/2021/04/17/AdaBoost/</url>
-    <content><![CDATA[<h1 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h1><h2 id="集成方法"><a href="#集成方法" class="headerlink" title="集成方法"></a>集成方法</h2><p>集成方法(ensemble method)/元算法(meta-algorithm):将不同的分类器组合起来的组合结果</p>
-<p><b>集成方法的多种形式</b>：<br>1.不同算法的集成<br>2.同一种算法在不同设置下的集成<br>3.数据集不同部分分配给不同分类器之后的集成</p>
-<p>基分类器一般采用的是弱可学习（weakly learnable）分类器，通过集成方法，组合成一个强可学习（strongly learnable）分类器</p>
-<p><b>弱可学习：</b><br>是指学习的正确率仅略优于随机猜测的多项式学习算法</p>
-<p><b>强可学习：</b><br>指正确率较高的多项式学习算法。</p>
-<p>集成学习的泛化能力一般比单一的基分类器要好，这是因为大部分基分类器都分类错误的概率远低于单一基分类器的。</p>
-<p><b>集成方法主要包括Bagging和Boosting两种方法</b>，Bagging和Boosting都是将已有的分类或回归算法通过一定方式组合起来，形成一个性能更加强大的分类器，更准确的说这是一种分类算法的组装方法，即<b>将弱分类器组装成强分类器</b>的方法。</p>
-<h3 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h3><h3 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h3><h3 id="Bagging、boosting二者之间的区别"><a href="#Bagging、boosting二者之间的区别" class="headerlink" title="Bagging、boosting二者之间的区别"></a>Bagging、boosting二者之间的区别</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h2 id="AdaBoost-1"><a href="#AdaBoost-1" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><h2 id="分类器性能评价"><a href="#分类器性能评价" class="headerlink" title="分类器性能评价"></a>分类器性能评价</h2><h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2>]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>AdaBoost</category>
-      </categories>
-      <tags>
-        <tag>AdaBoost</tag>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>算法基础 | 算法基础</title>
     <url>/2020/10/09/Algorithms-1/</url>
     <content><![CDATA[<h1 id="算法基础"><a href="#算法基础" class="headerlink" title="算法基础"></a>算法基础</h1><h2 id="算法定义"><a href="#算法定义" class="headerlink" title="算法定义"></a>算法定义</h2><p><strong>解决一个具体问题的<strong style="color:red">方法</strong>称为一个算法</strong></p>
@@ -1070,6 +1050,26 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习 | AdaBoost</title>
+    <url>/2021/04/17/AdaBoost/</url>
+    <content><![CDATA[<h1 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h1><h2 id="集成方法"><a href="#集成方法" class="headerlink" title="集成方法"></a>集成方法</h2><p>集成方法(ensemble method)/元算法(meta-algorithm):将不同的分类器组合起来的组合结果</p>
+<p><b>集成方法的多种形式</b>：<br>1.不同算法的集成<br>2.同一种算法在不同设置下的集成<br>3.数据集不同部分分配给不同分类器之后的集成</p>
+<p>基分类器一般采用的是弱可学习（weakly learnable）分类器，通过集成方法，组合成一个强可学习（strongly learnable）分类器</p>
+<p><b>弱可学习：</b><br>是指学习的正确率仅略优于随机猜测的多项式学习算法</p>
+<p><b>强可学习：</b><br>指正确率较高的多项式学习算法。</p>
+<p>集成学习的泛化能力一般比单一的基分类器要好，这是因为大部分基分类器都分类错误的概率远低于单一基分类器的。</p>
+<p><b>集成方法主要包括Bagging和Boosting两种方法</b>，Bagging和Boosting都是将已有的分类或回归算法通过一定方式组合起来，形成一个性能更加强大的分类器，更准确的说这是一种分类算法的组装方法，即<b>将弱分类器组装成强分类器</b>的方法。</p>
+<h3 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h3><h3 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h3><h3 id="Bagging、boosting二者之间的区别"><a href="#Bagging、boosting二者之间的区别" class="headerlink" title="Bagging、boosting二者之间的区别"></a>Bagging、boosting二者之间的区别</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h2 id="AdaBoost-1"><a href="#AdaBoost-1" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><h2 id="分类器性能评价"><a href="#分类器性能评价" class="headerlink" title="分类器性能评价"></a>分类器性能评价</h2><h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2>]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>AdaBoost</category>
+      </categories>
+      <tags>
+        <tag>AdaBoost</tag>
+        <tag>机器学习</tag>
       </tags>
   </entry>
   <entry>
@@ -1240,23 +1240,6 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
-    <title>CNN | BatchNormalization</title>
-    <url>/2021/11/15/BatchNormalization/</url>
-    <content><![CDATA[<h1 id="BatchNormalization"><a href="#BatchNormalization" class="headerlink" title="BatchNormalization"></a>BatchNormalization</h1><p>由于深度神经网络涉及到很多层的叠加，而每一层的参数更新会导致上层的输入数据分布发生变化，<br>通过层层叠加，高层的输入分布变化会非常剧烈，这就使得高层需要不断去重新适应底层的参数更新。<br>为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。<br>也就是随是着网络加深，参数分布不断往激活函数两端移动(梯度变小)，导致反向传播出现梯度消失，收敛困难。<br>原理：可在每层的激活函数前，加入BN，将参数重新拉回0-1正态分布，加速收敛。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-        <category>Batch Normalization</category>
-      </categories>
-      <tags>
-        <tag>Batch Normalization</tag>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C# | C#中的访问修饰符</title>
     <url>/2021/07/03/C-%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6/</url>
     <content><![CDATA[<h1 id="C-中的访问修饰符"><a href="#C-中的访问修饰符" class="headerlink" title="C#中的访问修饰符"></a>C#中的访问修饰符</h1><p><b>public:</b>任何公有成员可以被外部的类访问<br><b>Code:</b></p>
@@ -1390,6 +1373,23 @@ namespace ConsoleApp1
       </categories>
       <tags>
         <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CNN | BatchNormalization</title>
+    <url>/2021/11/15/BatchNormalization/</url>
+    <content><![CDATA[<h1 id="BatchNormalization"><a href="#BatchNormalization" class="headerlink" title="BatchNormalization"></a>BatchNormalization</h1><p>由于深度神经网络涉及到很多层的叠加，而每一层的参数更新会导致上层的输入数据分布发生变化，<br>通过层层叠加，高层的输入分布变化会非常剧烈，这就使得高层需要不断去重新适应底层的参数更新。<br>为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。<br>也就是随是着网络加深，参数分布不断往激活函数两端移动(梯度变小)，导致反向传播出现梯度消失，收敛困难。<br>原理：可在每层的激活函数前，加入BN，将参数重新拉回0-1正态分布，加速收敛。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+        <category>Batch Normalization</category>
+      </categories>
+      <tags>
+        <tag>Batch Normalization</tag>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
       </tags>
   </entry>
   <entry>
@@ -2822,19 +2822,6 @@ print(TestPrivacy.__name) # Output: AttributeError: type object &#39;TestPrivacy
       </tags>
   </entry>
   <entry>
-    <title>Anaconda | ProxyError</title>
-    <url>/2021/07/08/ProxyError/</url>
-    <content><![CDATA[<p>在使用Anaconda创建虚拟环境时出错： ProxyError: Conda cannot proceed due to an error in your proxy configuration</p>
-<p><a href="https://blog.csdn.net/littlehaes/article/details/103518285">解决办法！！！</a></p>
-]]></content>
-      <categories>
-        <category>Anaconda</category>
-      </categories>
-      <tags>
-        <tag>Anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python-docx | Python检查word文件中的特殊标记词是否与文件名中的一致</title>
     <url>/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/</url>
     <content><![CDATA[<h1 id="Python检查word文件中的特殊标记词是否与文件名中的一致"><a href="#Python检查word文件中的特殊标记词是否与文件名中的一致" class="headerlink" title="Python检查word文件中的特殊标记词是否与文件名中的一致"></a>Python检查word文件中的特殊标记词是否与文件名中的一致</h1><p>公司的部分文件分为“内部”和“外部”。正常情况下，这个标识在文件名及文件首页左上角都有标注。然鹅，有时候操作一下，忘记改了，或者忘记标注了。就需要回头去一个一个地整理，非常麻烦。这种重复的，繁杂的操作，尽快冲Python来，人类还是应该多做做其它更有意思的事。</p>
@@ -3056,6 +3043,109 @@ wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
+    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
+<pre><code>create table dept(
+int id primary key auto_increment not null,
+varchar(20) name
+)
+</code></pre>
+<p><strong>Dept.java（JavaBean）</strong></p>
+<pre><code>package com.oracle.bean;
+
+public class Dept &#123;
+    private int id;
+    private String name;
+    public Dept() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    public Dept(int id, String name) &#123;
+        super();
+        this.id = id;
+        this.name = name;
+    &#125;
+    public int getId() &#123;
+        return id;
+    &#125;
+    public void setId(int id) &#123;
+        this.id = id;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    
+    
+&#125;
+</code></pre>
+<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.Dept;
+import com.oracle.utils.DataSourceUtils;
+
+public class Test &#123;
+    
+    public static void main(String[] args) throws SQLException &#123;
+        //创建QueryRunner对象
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        //增加数据
+        //String sql = &quot;insert into dept(name) values(?)&quot;;
+        //qr.update(sql, &quot;需求部&quot;);
+        
+        //修改数据
+        //String sql = &quot;update dept set name=? where id=?&quot;;
+        //qr.update(sql, &quot;需求组&quot;, 4);
+        
+        //删除数据
+        //String sql = &quot;delete from dept where id=?&quot;;
+        //qr.update(sql, 4);
+        
+        //查询数据
+        //（1）查询结果为一行
+        //String sql = &quot;select * from dept where id=?&quot;;
+        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
+        //System.out.println(d.getId());
+        //System.out.println(d.getName());
+        
+        //（2）查询结果为多行
+//        String sql = &quot;select * from dept&quot;;
+//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
+//        for(Dept d:list) &#123;
+//            System.out.println(d.getId());
+//            System.out.println(d.getName());
+//        &#125;
+        
+        //（2）查询结果为聚合函数
+        String sql = &quot;select count(*) from dept&quot;;
+        
+        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
+        
+        System.out.println(i);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>QueryRunner和数据库增删改查操作</category>
+      </categories>
+  </entry>
+  <entry>
     <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
     <url>/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p>
@@ -3174,107 +3264,136 @@ to_word(all_links)
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
-    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
-<pre><code>create table dept(
-int id primary key auto_increment not null,
-varchar(20) name
-)
+    <title>Anaconda | ProxyError</title>
+    <url>/2021/07/08/ProxyError/</url>
+    <content><![CDATA[<p>在使用Anaconda创建虚拟环境时出错： ProxyError: Conda cannot proceed due to an error in your proxy configuration</p>
+<p><a href="https://blog.csdn.net/littlehaes/article/details/103518285">解决办法！！！</a></p>
+]]></content>
+      <categories>
+        <category>Anaconda</category>
+      </categories>
+      <tags>
+        <tag>Anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringMVC | SpringMVC之HelloWorld</title>
+    <url>/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/</url>
+    <content><![CDATA[<h1 id="SpringMVC之HelloWorld"><a href="#SpringMVC之HelloWorld" class="headerlink" title="SpringMVC之HelloWorld"></a>SpringMVC之HelloWorld</h1><h2 id="springMVC的搭建过程："><a href="#springMVC的搭建过程：" class="headerlink" title="springMVC的搭建过程："></a>springMVC的搭建过程：</h2><p>1.导入jar</p>
+<p>2.在web.xml配置springMVC的核心（前端）控制器DispatcherServlet<br>作用：加载springMVC的配置文件，在下方的配置方式下，DispatcherServlet<br>自动加载配置文件，此时的配置文件有默认的位置和名称<br>    默认位置：WEB-INF下，默认名称：<servlet-name>-servlet.xml,<br>    例如以下配置方式的文件名：springMVC-servlet.xml<br>    当加载了配置文件，springMVC就会根据扫描组件找到控制层</servlet-name></p>
+<pre><code>&lt;servlet&gt;
+&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+&lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
 </code></pre>
-<p><strong>Dept.java（JavaBean）</strong></p>
-<pre><code>package com.oracle.bean;
+<p>3.创建一个POJO,在此类上加上@Controller注解，springMVC就会将此类作为控制层加载，让其处理请求响应<br>4.在控制层中，需要在方法上设置@RequestMapping(value=”hello”),<br>springMVC就是通过此注解将请求路径与控制层中的方法进行匹配，此时请求路径为localhost:8080/projectName/xxx<br>5.处理请求的方法会返回一个字符串，即视图名称，最终会通过配置文件中配置的视图解析器实现页面跳转<br>方式：prefix + 视图名称 + suffix，此为最终跳转的页面路径</p>
+<span id="more"></span>
+<h2 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h2><p>1.项目目录<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/1.PNG"><br>2.web.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
+  &lt;display-name&gt;SpringMVC01&lt;/display-name&gt;
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+  
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  
+&lt;/web-app&gt;
+</code></pre>
+<p>3.springMVC-servlet.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 扫描组件，将加上@Controller注解的类作为springMVC的控制层 --&gt;
+    &lt;context:component-scan base-package=&quot;com.atguigu.test&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;!-- 
+        配置视图解析器
+        作用：将prefix + 视图名称 + suffix 确定最终要跳转的页面
+        /WEB-INF/view/success.jsp
+     --&gt;
+    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
 
-public class Dept &#123;
-    private int id;
-    private String name;
-    public Dept() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    public Dept(int id, String name) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-    &#125;
-    public int getId() &#123;
-        return id;
-    &#125;
-    public void setId(int id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
+&lt;/beans&gt;
+</code></pre>
+<p>4.index.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;hello&quot;&gt;测试springMVC&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.success.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;success&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>6.TestController.java</p>
+<pre><code>package com.atguigu.test;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class TestController &#123;
+    /**
+     * 假设：localhost:8080/SpringMVC01/hello
+     */
     
-    
+    @RequestMapping(&quot;hello&quot;)
+    public String hello()&#123;
+        System.out.println(&quot;SUCCESS&quot;);
+        return &quot;success&quot;;//视图名称
+    &#125;
 &#125;
 </code></pre>
-<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
-<pre><code>package com.oracle.test;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import com.oracle.bean.Dept;
-import com.oracle.utils.DataSourceUtils;
-
-public class Test &#123;
-    
-    public static void main(String[] args) throws SQLException &#123;
-        //创建QueryRunner对象
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        //增加数据
-        //String sql = &quot;insert into dept(name) values(?)&quot;;
-        //qr.update(sql, &quot;需求部&quot;);
-        
-        //修改数据
-        //String sql = &quot;update dept set name=? where id=?&quot;;
-        //qr.update(sql, &quot;需求组&quot;, 4);
-        
-        //删除数据
-        //String sql = &quot;delete from dept where id=?&quot;;
-        //qr.update(sql, 4);
-        
-        //查询数据
-        //（1）查询结果为一行
-        //String sql = &quot;select * from dept where id=?&quot;;
-        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
-        //System.out.println(d.getId());
-        //System.out.println(d.getName());
-        
-        //（2）查询结果为多行
-//        String sql = &quot;select * from dept&quot;;
-//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
-//        for(Dept d:list) &#123;
-//            System.out.println(d.getId());
-//            System.out.println(d.getName());
-//        &#125;
-        
-        //（2）查询结果为聚合函数
-        String sql = &quot;select count(*) from dept&quot;;
-        
-        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
-        
-        System.out.println(i);
-    &#125;
-&#125;
-</code></pre>
+<p>7.运行结果<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/2.PNG"></p>
+<p><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/3.PNG"></p>
 ]]></content>
       <categories>
         <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>QueryRunner和数据库增删改查操作</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>SpringMVC之HelloWorld</category>
       </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+      </tags>
   </entry>
   <entry>
     <title>MySQL | SQL语句实例大全</title>
@@ -3648,125 +3767,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>SpringMVC | SpringMVC之HelloWorld</title>
-    <url>/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/</url>
-    <content><![CDATA[<h1 id="SpringMVC之HelloWorld"><a href="#SpringMVC之HelloWorld" class="headerlink" title="SpringMVC之HelloWorld"></a>SpringMVC之HelloWorld</h1><h2 id="springMVC的搭建过程："><a href="#springMVC的搭建过程：" class="headerlink" title="springMVC的搭建过程："></a>springMVC的搭建过程：</h2><p>1.导入jar</p>
-<p>2.在web.xml配置springMVC的核心（前端）控制器DispatcherServlet<br>作用：加载springMVC的配置文件，在下方的配置方式下，DispatcherServlet<br>自动加载配置文件，此时的配置文件有默认的位置和名称<br>    默认位置：WEB-INF下，默认名称：<servlet-name>-servlet.xml,<br>    例如以下配置方式的文件名：springMVC-servlet.xml<br>    当加载了配置文件，springMVC就会根据扫描组件找到控制层</servlet-name></p>
-<pre><code>&lt;servlet&gt;
-&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-&lt;/servlet&gt;
-&lt;servlet-mapping&gt;
-&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-&lt;url-pattern&gt;/&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-</code></pre>
-<p>3.创建一个POJO,在此类上加上@Controller注解，springMVC就会将此类作为控制层加载，让其处理请求响应<br>4.在控制层中，需要在方法上设置@RequestMapping(value=”hello”),<br>springMVC就是通过此注解将请求路径与控制层中的方法进行匹配，此时请求路径为localhost:8080/projectName/xxx<br>5.处理请求的方法会返回一个字符串，即视图名称，最终会通过配置文件中配置的视图解析器实现页面跳转<br>方式：prefix + 视图名称 + suffix，此为最终跳转的页面路径</p>
-<span id="more"></span>
-<h2 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h2><p>1.项目目录<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/1.PNG"><br>2.web.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
-  &lt;display-name&gt;SpringMVC01&lt;/display-name&gt;
-  &lt;welcome-file-list&gt;
-    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
-  &lt;/welcome-file-list&gt;
-  
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  
-&lt;/web-app&gt;
-</code></pre>
-<p>3.springMVC-servlet.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
-    
-    &lt;!-- 扫描组件，将加上@Controller注解的类作为springMVC的控制层 --&gt;
-    &lt;context:component-scan base-package=&quot;com.atguigu.test&quot;&gt;&lt;/context:component-scan&gt;
-    
-    &lt;!-- 
-        配置视图解析器
-        作用：将prefix + 视图名称 + suffix 确定最终要跳转的页面
-        /WEB-INF/view/success.jsp
-     --&gt;
-    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
-        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-
-&lt;/beans&gt;
-</code></pre>
-<p>4.index.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;hello&quot;&gt;测试springMVC&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.success.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;success&lt;/h1&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>6.TestController.java</p>
-<pre><code>package com.atguigu.test;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-@Controller
-public class TestController &#123;
-    /**
-     * 假设：localhost:8080/SpringMVC01/hello
-     */
-    
-    @RequestMapping(&quot;hello&quot;)
-    public String hello()&#123;
-        System.out.println(&quot;SUCCESS&quot;);
-        return &quot;success&quot;;//视图名称
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/2.PNG"></p>
-<p><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/3.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>SpringMVC之HelloWorld</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>UML | UML中的事物分类</title>
     <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
@@ -4133,83 +4133,6 @@ for link in all_links:
       </tags>
   </entry>
   <entry>
-    <title>spring | bean的作用域</title>
-    <url>/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
-    <content><![CDATA[<h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
-<p>2.Student.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-public class Student &#123;
-    private Integer sid;
-    private String sname;
-    public Student() &#123;
-        System.out.println(&quot;Student 无参构造方法&quot;);
-    &#125;
-    public Integer getSid() &#123;
-        return sid;
-    &#125;
-    public void setSid(Integer sid) &#123;
-        this.sid = sid;
-    &#125;
-    public String getSname() &#123;
-        return sname;
-    &#125;
-    public void setSname(String sname) &#123;
-        this.sname = sname;
-    &#125;
-//    @Override
-//    public String toString() &#123;
-//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
-//    &#125;
-&#125;
-</code></pre>
-<p>3.scope.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
-        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<p>4.Test.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args)&#123;
-        /**
-         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
-         * 而多例即原型(prototype)的bean，会在使用时创建
-         */
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
-        
-//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
-//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
-//        
-//        System.out.println(student1);
-//        System.out.println(student2);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>bean的作用域</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | bean的生命周期</title>
     <url>/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
     <content><![CDATA[<h1 id="bean的生命周期、bean的后置处理器"><a href="#bean的生命周期、bean的后置处理器" class="headerlink" title="bean的生命周期、bean的后置处理器"></a>bean的生命周期、bean的后置处理器</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/1.PNG"></p>
@@ -4349,6 +4272,83 @@ Five:销毁
       </tags>
   </entry>
   <entry>
+    <title>spring | bean的作用域</title>
+    <url>/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
+    <content><![CDATA[<h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
+<p>2.Student.java</p>
+<pre><code>package com.atguigu.ioc.scope;
+
+public class Student &#123;
+    private Integer sid;
+    private String sname;
+    public Student() &#123;
+        System.out.println(&quot;Student 无参构造方法&quot;);
+    &#125;
+    public Integer getSid() &#123;
+        return sid;
+    &#125;
+    public void setSid(Integer sid) &#123;
+        this.sid = sid;
+    &#125;
+    public String getSname() &#123;
+        return sname;
+    &#125;
+    public void setSname(String sname) &#123;
+        this.sname = sname;
+    &#125;
+//    @Override
+//    public String toString() &#123;
+//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
+//    &#125;
+&#125;
+</code></pre>
+<p>3.scope.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    
+    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
+        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p>4.Test.java</p>
+<pre><code>package com.atguigu.ioc.scope;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+    public static void main(String[] args)&#123;
+        /**
+         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
+         * 而多例即原型(prototype)的bean，会在使用时创建
+         */
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
+        
+//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
+//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
+//        
+//        System.out.println(student1);
+//        System.out.println(student2);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>bean的作用域</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>伪迹移除 | comparison of methods of artifacts removal</title>
     <url>/2021/02/09/comparison-of-methods-of-artifacts-removal/</url>
     <content><![CDATA[<h1 id="Comparison-of-Methods-of-Artifacts-Removal"><a href="#Comparison-of-Methods-of-Artifacts-Removal" class="headerlink" title="Comparison of Methods of Artifacts Removal"></a>Comparison of Methods of Artifacts Removal</h1><div style>
@@ -4470,6 +4470,21 @@ Five:销毁
       </tags>
   </entry>
   <entry>
+    <title>Django | django开发流程</title>
+    <url>/2021/04/15/django%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="django开发流程"><a href="#django开发流程" class="headerlink" title="django开发流程"></a>django开发流程</h1><p>1.安装虚拟环境<br>conda create -n python27 python==2.7<br>2..安装django<br>pip install django==1.8.2<br>3.创建项目<br>django-adming startproject project_name<br>4.创建应用<br>python manage.py startapp app_name<br>5.将app应用加入到installed_apps中<br>6.app_name/models.py中定义模型类<br>6.数据库配置(settings.py-DATABASES)<br>7.生成迁移文件<br>python manage.py makemigrations<br>8.执行迁移<br>python manage.py migrate<br>9.开启服务器<br>python manage.py runserver ip:port<br>10.创建管理员用户<br>python manage.py createsuperuser，按提示输入用户名、邮箱、密码<br>11.向admin注册app_name的模型<br>app_name/admin.py<br>admin.site.register(BookInfo)</p>
+<p>注：<br>python shell—python manage.py shell</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | django自定义错误页面</title>
     <url>/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/</url>
     <content><![CDATA[<h1 id="django自定义错误页面"><a href="#django自定义错误页面" class="headerlink" title="django自定义错误页面"></a>django自定义错误页面</h1><p>在进行django项目开发时，如果用户请求一个不存在的页面，将会显示以下界面：<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/1.png"><br>我们可以自定义一个错误页面来展示提示信息。</p>
@@ -4493,21 +4508,6 @@ ALLOWED_HOSTS = [&#39;*&#39;]
 &lt;/html&gt;
 </code></pre>
 <p>3.运行服务器，访问一个不存在的页面，将显示自定义的错误页面<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/2.png"></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | django开发流程</title>
-    <url>/2021/04/15/django%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="django开发流程"><a href="#django开发流程" class="headerlink" title="django开发流程"></a>django开发流程</h1><p>1.安装虚拟环境<br>conda create -n python27 python==2.7<br>2..安装django<br>pip install django==1.8.2<br>3.创建项目<br>django-adming startproject project_name<br>4.创建应用<br>python manage.py startapp app_name<br>5.将app应用加入到installed_apps中<br>6.app_name/models.py中定义模型类<br>6.数据库配置(settings.py-DATABASES)<br>7.生成迁移文件<br>python manage.py makemigrations<br>8.执行迁移<br>python manage.py migrate<br>9.开启服务器<br>python manage.py runserver ip:port<br>10.创建管理员用户<br>python manage.py createsuperuser，按提示输入用户名、邮箱、密码<br>11.向admin注册app_name的模型<br>app_name/admin.py<br>admin.site.register(BookInfo)</p>
-<p>注：<br>python shell—python manage.py shell</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -4814,6 +4814,32 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | jdbc</title>
+    <url>/2022/01/25/jdbc/</url>
+    <content><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;c3p0-config&gt;
+    &lt;default-config&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
+    &lt;/default-config&gt; 
+&lt;/c3p0-config&gt; 
+</code></pre>
+<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>jdbc封装类和数据库连接池</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>jdbc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | jsp</title>
     <url>/2022/01/11/jsp/</url>
     <content><![CDATA[<h1 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h1><ol>
@@ -4951,32 +4977,6 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | jdbc</title>
-    <url>/2022/01/25/jdbc/</url>
-    <content><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;c3p0-config&gt;
-    &lt;default-config&gt;
-        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
-        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
-        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
-        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
-    &lt;/default-config&gt; 
-&lt;/c3p0-config&gt; 
-</code></pre>
-<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>jdbc封装类和数据库连接池</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>jdbc</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | jstl标签</title>
     <url>/2022/01/11/jstl%E6%A0%87%E7%AD%BE/</url>
     <content><![CDATA[<h1 id="jstl标签"><a href="#jstl标签" class="headerlink" title="jstl标签"></a>jstl标签</h1><ol>
@@ -5066,56 +5066,6 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
-    <title>matplotlib | 绘制双柱状图</title>
-    <url>/2021/10/24/matplotlib%E7%BB%98%E5%88%B6%E5%8F%8C%E6%9F%B1%E7%8A%B6%E5%9B%BE/</url>
-    <content><![CDATA[<h1 id="使用matplotlib绘制双柱状图"><a href="#使用matplotlib绘制双柱状图" class="headerlink" title="使用matplotlib绘制双柱状图"></a>使用matplotlib绘制双柱状图</h1><p>实现代码：</p>
-<pre><code>import matplotlib.pyplot as plt
-
-
-# 定义函数来显示柱状上的数值
-def autolabel(rects):
-    for rect in rects:
-        height = rect.get_height()
-        plt.text(rect.get_x() + rect.get_width() / 2. - 0.2, 1.03 * height, &#39;%s&#39; % float(height))
-
-
-if __name__ == &#39;__main__&#39;:
-    l1 = [75, 57, 59, 60, 60]
-    l2 = [68.39, 58, 54, 58, 55]
-
-    # l1 = [68.50, 53.13, 53.04, 52.64, 56.32]
-    # l2 = [66.31, 53.57, 50.54, 55.54, 47.72]
-    name = [&#39;CNN-LSTM&#39;, &#39;CNN3Conv&#39;, &#39;CNN5Conv&#39;, &#39;LeNet&#39;, &#39;EEGNet&#39;]
-    total_width, n = 0.8, 2
-    width = total_width / n
-    x = [0, 1, 2, 3, 4]
-    plt.rc(&#39;font&#39;, family=&#39;SimHei&#39;, size=12)  # 设置中文显示，否则出现乱码！
-    a = plt.bar(x, l1, width=width, label=&#39;Valence&#39;, fc=&#39;y&#39;)
-    for i in range(len(x)):
-        x[i] = x[i] + width
-    b = plt.bar(x, l2, width=width, label=&#39;Arousal&#39;, tick_label=name, fc=&#39;r&#39;)
-    autolabel(a)
-    autolabel(b)
-    plt.xlabel(&#39;Models&#39;)
-    plt.ylabel(&#39;Accuracy&#39;)
-    plt.title(&#39;Valence Accuracy and Arousal Accuracy&#39;)
-    plt.legend()
-    plt.show()
-    plt.savefig(&#39;accuracy.png&#39;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>matplotlib</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>matplotlib</tag>
-        <tag>双柱状图</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pandas | pandas提取指定数据并保存在原Excel工作簿中</title>
     <url>/2021/10/29/pandas%E6%8F%90%E5%8F%96%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%8E%9FExcel%E5%B7%A5%E4%BD%9C%E7%B0%BF%E4%B8%AD/</url>
     <content><![CDATA[<h1 id="pandas提取指定数据并保存在原Excel工作簿中"><a href="#pandas提取指定数据并保存在原Excel工作簿中" class="headerlink" title="pandas提取指定数据并保存在原Excel工作簿中"></a>pandas提取指定数据并保存在原Excel工作簿中</h1><p>实现代码：</p>
@@ -5164,6 +5114,56 @@ wb.save(&quot;物料表.xlsx&quot;)
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pandas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>matplotlib | 绘制双柱状图</title>
+    <url>/2021/10/24/matplotlib%E7%BB%98%E5%88%B6%E5%8F%8C%E6%9F%B1%E7%8A%B6%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="使用matplotlib绘制双柱状图"><a href="#使用matplotlib绘制双柱状图" class="headerlink" title="使用matplotlib绘制双柱状图"></a>使用matplotlib绘制双柱状图</h1><p>实现代码：</p>
+<pre><code>import matplotlib.pyplot as plt
+
+
+# 定义函数来显示柱状上的数值
+def autolabel(rects):
+    for rect in rects:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2. - 0.2, 1.03 * height, &#39;%s&#39; % float(height))
+
+
+if __name__ == &#39;__main__&#39;:
+    l1 = [75, 57, 59, 60, 60]
+    l2 = [68.39, 58, 54, 58, 55]
+
+    # l1 = [68.50, 53.13, 53.04, 52.64, 56.32]
+    # l2 = [66.31, 53.57, 50.54, 55.54, 47.72]
+    name = [&#39;CNN-LSTM&#39;, &#39;CNN3Conv&#39;, &#39;CNN5Conv&#39;, &#39;LeNet&#39;, &#39;EEGNet&#39;]
+    total_width, n = 0.8, 2
+    width = total_width / n
+    x = [0, 1, 2, 3, 4]
+    plt.rc(&#39;font&#39;, family=&#39;SimHei&#39;, size=12)  # 设置中文显示，否则出现乱码！
+    a = plt.bar(x, l1, width=width, label=&#39;Valence&#39;, fc=&#39;y&#39;)
+    for i in range(len(x)):
+        x[i] = x[i] + width
+    b = plt.bar(x, l2, width=width, label=&#39;Arousal&#39;, tick_label=name, fc=&#39;r&#39;)
+    autolabel(a)
+    autolabel(b)
+    plt.xlabel(&#39;Models&#39;)
+    plt.ylabel(&#39;Accuracy&#39;)
+    plt.title(&#39;Valence Accuracy and Arousal Accuracy&#39;)
+    plt.legend()
+    plt.show()
+    plt.savefig(&#39;accuracy.png&#39;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>matplotlib</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>matplotlib</tag>
+        <tag>双柱状图</tag>
       </tags>
   </entry>
   <entry>
@@ -6505,20 +6505,6 @@ doc.save(&#39;替换后_设置格式.docx&#39;)
       </tags>
   </entry>
   <entry>
-    <title>文档 | python文档</title>
-    <url>/2021/10/27/python%E6%96%87%E6%A1%A3/</url>
-    <content><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>文档</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>python文档</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>requests | python爬虫爬取会计师网站的指定文章</title>
     <url>/2021/10/29/python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%87%E7%AB%A0/</url>
     <content><![CDATA[<h1 id="python爬虫爬取会计师网站的指定文章"><a href="#python爬虫爬取会计师网站的指定文章" class="headerlink" title="python爬虫爬取会计师网站的指定文章"></a>python爬虫爬取会计师网站的指定文章</h1><p>还没学习爬虫，没看懂！有缘再见！后会有期！</p>
@@ -6642,6 +6628,20 @@ input()
       </tags>
   </entry>
   <entry>
+    <title>文档 | python文档</title>
+    <url>/2021/10/27/python%E6%96%87%E6%A1%A3/</url>
+    <content><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>python文档</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pyinstaller | python程序打包</title>
     <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
     <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
@@ -6716,6 +6716,34 @@ for file in files:
       </tags>
   </entry>
   <entry>
+    <title>python资源大全</title>
+    <url>/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | re.match与re.search的区别</title>
+    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
+re.match(r&quot;dogs&quot;,s)#匹配失败
+re.search(r&quot;dogs&quot;,s)#匹配成功
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>baidu-aip | python调用人工智能识别表格</title>
     <url>/2021/10/27/python%E8%B0%83%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC/</url>
     <content><![CDATA[<h1 id="python调用人工智能识别表格"><a href="#python调用人工智能识别表格" class="headerlink" title="python调用人工智能识别表格"></a>python调用人工智能识别表格</h1><p>使用百度的OCR API识别表格中的文字。<br><a href="https://blog.csdn.net/weixin_39932611/article/details/112354147">参考资料1</a><br><a href="https://blog.csdn.net/weixin_44298740/article/details/117560495">参考资料2</a></p>
@@ -6776,34 +6804,6 @@ for picture in pictures:
         <tag>requests</tag>
         <tag>time</tag>
         <tag>baidu-aip</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python资源大全</title>
-    <url>/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | re.match与re.search的区别</title>
-    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
-re.match(r&quot;dogs&quot;,s)#匹配失败
-re.search(r&quot;dogs&quot;,s)#匹配成功
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -8329,8 +8329,8 @@ plt.savefig(&#39;order_byDept.png&#39;)
         <category>pandas</category>
       </categories>
       <tags>
-        <tag>matplotlib</tag>
         <tag>pandas</tag>
+        <tag>matplotlib</tag>
         <tag>numpy</tag>
         <tag>datetime</tag>
       </tags>
@@ -9482,6 +9482,40 @@ wb.save(&quot;物料表_1.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
+    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
+<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
+<li>1.先要解析出baidu.com对应的ip地址</li>
+<ol>
+<li>1.先要知道默认网关的MAC地址</li>
+<ol>
+<li>1.使用ARP获取默认网关的MAC地址</li>
+</ol>
+<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
+<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
+<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
+<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
+<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
+</ol>
+<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
+<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
+<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
+<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
+<li>6.浏览器关闭TCP连接，即4次挥手</li>
+</ol>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
     <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
@@ -9554,40 +9588,6 @@ print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len
         <tag>python</tag>
         <tag>os</tag>
         <tag>openpyxl</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
-    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
-<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
-<li>1.先要解析出baidu.com对应的ip地址</li>
-<ol>
-<li>1.先要知道默认网关的MAC地址</li>
-<ol>
-<li>1.使用ARP获取默认网关的MAC地址</li>
-</ol>
-<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
-<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
-<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
-<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
-<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
-</ol>
-<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
-<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
-<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
-<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
-<li>6.浏览器关闭TCP连接，即4次挥手</li>
-</ol>
-
-
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -15988,78 +15988,6 @@ doc.save(&#39;data\制造业必修课.docx&#39;)
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 无重复字符的最长子串</title>
-    <url>/2021/08/27/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</url>
-    <content><![CDATA[<h1 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3.无重复字符的最长子串"></a>3.无重复字符的最长子串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>找出字符串中所有不包含重复字符的字串,返回长度最长的一个子串</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def lengthOfLongestSubstring(self, s: str) -&gt; int:
-        &quot;&quot;&quot;找出字符串中所有不包含重复字符的字串,返回长度最长的一个子串&quot;&quot;&quot;
-        s_list = list(s)  # 将字符串转化为列表
-        max_length = 0  # 最大字串长度
-
-        # 找出以字符串中的每个字母开头的不包含重复字符的字串
-        for i in range(0, len(s_list)):
-            sub_str_list = []
-            sub_str_list.append(s_list[i])
-            for j in range(i + 1, len(s_list)):
-                if s_list[j] not in sub_str_list:
-                    sub_str_list.append(s_list[j])
-                else:  # 遇到字串中已有的字符,则结束当前子串的寻找
-                    break
-            # print(&quot;sub_str_list:&quot;, sub_str_list)
-
-            if len(sub_str_list) &gt; max_length:
-                max_length = len(sub_str_list)
-                # print(&quot;max_length:&quot;, max_length)
-                sub_str = &quot;&quot;
-                for e in sub_str_list:
-                    sub_str += e
-                # print(&quot;sub_str:&quot;, sub_str)
-                # print(&quot;long_sub_str:&quot;, sub_str)
-
-        print(&quot;无重复字符的最长字串是&#123;&#125;,长度为&#123;&#125;&quot;.format(sub_str, max_length))
-
-        return max_length
-
-    def lengthOfLongestSubstring1(self, s: str) -&gt; int:
-        # 哈希集合，记录每个字符是否出现过
-        occ = set()
-        n = len(s)
-        # 右指针，初始值为-1，相当于我们在字符串的左边界的左侧，还没有开始移动
-        rk, ans = -1, 0
-        for i in range(n):
-            if i != 0:
-                # 左指针向右移动一格，移动一个字符
-                occ.remove(s[i - 1])
-            while rk + 1 &lt; n and s[rk + 1] not in occ:
-                # 不断地移动右指针
-                occ.add(s[rk + 1])
-                rk += 1
-            # 第i到rk个字符是一个极长的无重复字符字串
-            ans = max(ans, rk - i + 1)
-        return ans
-
-
-if __name__ == &quot;__main__&quot;:
-    s = &quot;pwwkew&quot;
-    slt = Solution()
-    len_long_sub_str = slt.lengthOfLongestSubstring1(s)
-    print(len_long_sub_str)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 旋转链表</title>
     <url>/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="61-旋转链表"><a href="#61-旋转链表" class="headerlink" title="61.旋转链表"></a>61.旋转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。</p>
@@ -16185,6 +16113,78 @@ if __name__ == &quot;__main__&quot;:
         <category>算法刷题</category>
         <category>leetcode</category>
         <category>链表</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 无重复字符的最长子串</title>
+    <url>/2021/08/27/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</url>
+    <content><![CDATA[<h1 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3.无重复字符的最长子串"></a>3.无重复字符的最长子串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>找出字符串中所有不包含重复字符的字串,返回长度最长的一个子串</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def lengthOfLongestSubstring(self, s: str) -&gt; int:
+        &quot;&quot;&quot;找出字符串中所有不包含重复字符的字串,返回长度最长的一个子串&quot;&quot;&quot;
+        s_list = list(s)  # 将字符串转化为列表
+        max_length = 0  # 最大字串长度
+
+        # 找出以字符串中的每个字母开头的不包含重复字符的字串
+        for i in range(0, len(s_list)):
+            sub_str_list = []
+            sub_str_list.append(s_list[i])
+            for j in range(i + 1, len(s_list)):
+                if s_list[j] not in sub_str_list:
+                    sub_str_list.append(s_list[j])
+                else:  # 遇到字串中已有的字符,则结束当前子串的寻找
+                    break
+            # print(&quot;sub_str_list:&quot;, sub_str_list)
+
+            if len(sub_str_list) &gt; max_length:
+                max_length = len(sub_str_list)
+                # print(&quot;max_length:&quot;, max_length)
+                sub_str = &quot;&quot;
+                for e in sub_str_list:
+                    sub_str += e
+                # print(&quot;sub_str:&quot;, sub_str)
+                # print(&quot;long_sub_str:&quot;, sub_str)
+
+        print(&quot;无重复字符的最长字串是&#123;&#125;,长度为&#123;&#125;&quot;.format(sub_str, max_length))
+
+        return max_length
+
+    def lengthOfLongestSubstring1(self, s: str) -&gt; int:
+        # 哈希集合，记录每个字符是否出现过
+        occ = set()
+        n = len(s)
+        # 右指针，初始值为-1，相当于我们在字符串的左边界的左侧，还没有开始移动
+        rk, ans = -1, 0
+        for i in range(n):
+            if i != 0:
+                # 左指针向右移动一格，移动一个字符
+                occ.remove(s[i - 1])
+            while rk + 1 &lt; n and s[rk + 1] not in occ:
+                # 不断地移动右指针
+                occ.add(s[rk + 1])
+                rk += 1
+            # 第i到rk个字符是一个极长的无重复字符字串
+            ans = max(ans, rk - i + 1)
+        return ans
+
+
+if __name__ == &quot;__main__&quot;:
+    s = &quot;pwwkew&quot;
+    slt = Solution()
+    len_long_sub_str = slt.lengthOfLongestSubstring1(s)
+    print(len_long_sub_str)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
       </categories>
       <tags>
         <tag>leetcode</tag>
@@ -20110,17 +20110,6 @@ plt.show()
       </tags>
   </entry>
   <entry>
-    <title>绝对路径和相对路径</title>
-    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
-    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
-<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
-]]></content>
-      <tags>
-        <tag>绝对路径</tag>
-        <tag>相对路径</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | 网络、模型、算法的区别</title>
     <url>/2021/11/09/%E7%BD%91%E7%BB%9Cand%E6%A8%A1%E5%9E%8Band%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h1 id="网络、模型、算法的区别"><a href="#网络、模型、算法的区别" class="headerlink" title="网络、模型、算法的区别"></a>网络、模型、算法的区别</h1><p>网络: 一种简单的网络结构，不包含任何权重参数。</p>
@@ -20132,6 +20121,17 @@ plt.show()
       </categories>
       <tags>
         <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>绝对路径和相对路径</title>
+    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
+    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
+<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
+]]></content>
+      <tags>
+        <tag>绝对路径</tag>
+        <tag>相对路径</tag>
       </tags>
   </entry>
   <entry>
