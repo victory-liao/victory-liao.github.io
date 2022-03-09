@@ -51,6 +51,37 @@
   </entry>
   
   <entry>
+    <title>SpringMVC | RequestMapping注解的几个属性和作用位置</title>
+    <link href="http://example.com/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/"/>
+    <id>http://example.com/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/</id>
+    <published>2022-03-09T03:55:46.000Z</published>
+    <updated>2022-03-09T08:57:13.775Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="RequestMapping注解的几个属性和作用位置"><a href="#RequestMapping注解的几个属性和作用位置" class="headerlink" title="RequestMapping注解的几个属性和作用位置"></a>RequestMapping注解的几个属性和作用位置</h1><p>1.项目目录<br><img src="/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/1.PNG"></p><span id="more"></span><p>2.web.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;  &lt;display-name&gt;SpringMVC02&lt;/display-name&gt;  &lt;welcome-file-list&gt;    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;  &lt;/welcome-file-list&gt;    &lt;!-- The front controller of this Spring Web application, responsible for handling all application requests --&gt;    &lt;servlet&gt;        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;    &lt;/servlet&gt;    &lt;!-- Map all requests to the DispatcherServlet for handling --&gt;    &lt;servlet-mapping&gt;        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;        &lt;url-pattern&gt;/&lt;/url-pattern&gt;    &lt;/servlet-mapping&gt;&lt;/web-app&gt;</code></pre><p>3.springMVC-servlet.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;        &lt;!-- 扫描组件 --&gt;    &lt;context:component-scan base-package=&quot;com.atguigu.controller&quot;&gt;&lt;/context:component-scan&gt;        &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;    &lt;/bean&gt;&lt;/beans&gt;</code></pre><p>4.index.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;a href=&quot;test&quot;&gt;测试springMVC&lt;/a&gt;        &lt;br&gt;        &lt;form action=&quot;test&quot; method=&quot;post&quot;&gt;        &lt;input type=&quot;submit&quot; value=&quot;测试POST&quot;&gt;    &lt;/form&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>5.success.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h1&gt;成功&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>6.TestController.java</p><pre><code>package com.atguigu.controller;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RequestMethod;@Controller//@RequestMapping(&quot;/mvc&quot;)public class TestController &#123;    /**     * @RequestMapping:设置请求映射，把请求和控制层中的方法设置映射关系     * 当请求路径和@RequestMapping的value属性一致时，则该注解所标注的方法即为处理请求的方法     *      * @RequestMapping可以加在类上，也可以加在方法上     * 若类和方法上都加有，应该一层一层的访问，西安访问类，再访问类中的方法     *      * method:用来设置请求方式，只有客户端发送请求的方式和method的值一致，才能处理请求     * 请求方式：GET查询    POST添加    PUT修改    DELETE删除     * params:用来设置客户端传到服务器的数据，支持表达式     * username !username username=admin username!=admin     * headers:用来设置请求头信息，所发送的请求的请求头信息一定要个headers属性中所设置的一致     *///    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.POST)//    public String testPOST()&#123;//        System.out.println(&quot;SUCCESS:POST&quot;);//        return &quot;success&quot;;//    &#125;    //    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.GET)//    public String testGET()&#123;//        System.out.println(&quot;SUCCESS:GET&quot;);//        return &quot;success&quot;;//    &#125;    //    @RequestMapping(value=&quot;/test&quot;, params=&#123;&quot;username&quot;, &quot;!age&quot;, &quot;sex!=1&quot;&#125;)//    public String testParams()&#123;//        System.out.println(&quot;SUCCESS&quot;);//        return &quot;success&quot;;//    &#125;        @RequestMapping(value=&quot;/test&quot;,             headers=&#123;&quot;Accept-Encoding=gzip, deflate&quot;&#125;)    public String testHeaders()&#123;        System.out.println(&quot;SUCCESS&quot;);        return &quot;success&quot;;    &#125;        /**    * springMVC支持Ant方式的请求路径    * 在Ant中，有3个匹配符    * *:任意字符    * ?:任意一个字符    * **:任意多层目录    */    //访问路径举例：localhost:8080/SpringMVC02/abc/ant11/a/b/testAnt    @RequestMapping(value=&quot;/*/ant??/**/testAnt&quot;)    public String testAnt()&#123;        System.out.println(&quot;SUCCESS:testAnt&quot;);        return &quot;success&quot;;    &#125;        /**     * 以前：localhost:8080/SpringMVC02/testREST?id=1001&amp;username=admin     * 现在：localhost:8080/SpringMVC02/testREST/1001/admin     */    @RequestMapping(&quot;/testREST/&#123;id&#125;/&#123;username&#125;&quot;)//占位符方式的路径    public String testREST(@PathVariable(&quot;id&quot;)Integer id, @PathVariable(&quot;username&quot;)String username)&#123;        System.out.println(&quot;id:&quot;+id+&quot;,username=&quot;+username);        return &quot;success&quot;;    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;RequestMapping注解的几个属性和作用位置&quot;&gt;&lt;a href=&quot;#RequestMapping注解的几个属性和作用位置&quot; class=&quot;headerlink&quot; title=&quot;RequestMapping注解的几个属性和作用位置&quot;&gt;&lt;/a&gt;RequestMapping注解的几个属性和作用位置&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/1.PNG&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
+    
+    <category term="RequestMapping注解的几个属性和作用位置" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/"/>
+    
+    
+    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
+    
+    <category term="RequestMapping Ant风格路径" scheme="http://example.com/tags/RequestMapping-Ant%E9%A3%8E%E6%A0%BC%E8%B7%AF%E5%BE%84/"/>
+    
+    <category term="PathVariable注解" scheme="http://example.com/tags/PathVariable%E6%B3%A8%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>SpringMVC | SpringMVC之HelloWorld</title>
     <link href="http://example.com/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/"/>
     <id>http://example.com/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/</id>
@@ -619,32 +650,6 @@
     <category term="事务" scheme="http://example.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
     <category term="数据库" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
-    <link href="http://example.com/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/"/>
-    <id>http://example.com/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</id>
-    <published>2022-01-26T11:10:13.000Z</published>
-    <updated>2022-01-26T12:02:34.184Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p><pre><code>create table dept(int id primary key auto_increment not null,varchar(20) name)</code></pre><p><strong>Dept.java（JavaBean）</strong></p><pre><code>package com.oracle.bean;public class Dept &#123;    private int id;    private String name;    public Dept() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    public Dept(int id, String name) &#123;        super();        this.id = id;        this.name = name;    &#125;    public int getId() &#123;        return id;    &#125;    public void setId(int id) &#123;        this.id = id;    &#125;    public String getName() &#123;        return name;    &#125;    public void setName(String name) &#123;        this.name = name;    &#125;        &#125;</code></pre><p><strong>新建一个Test类实现数据库增删改查操作</strong></p><pre><code>package com.oracle.test;import java.sql.SQLException;import java.util.List;import org.apache.commons.dbutils.QueryRunner;import org.apache.commons.dbutils.handlers.BeanHandler;import org.apache.commons.dbutils.handlers.BeanListHandler;import org.apache.commons.dbutils.handlers.ScalarHandler;import com.oracle.bean.Dept;import com.oracle.utils.DataSourceUtils;public class Test &#123;        public static void main(String[] args) throws SQLException &#123;        //创建QueryRunner对象        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());                //增加数据        //String sql = &quot;insert into dept(name) values(?)&quot;;        //qr.update(sql, &quot;需求部&quot;);                //修改数据        //String sql = &quot;update dept set name=? where id=?&quot;;        //qr.update(sql, &quot;需求组&quot;, 4);                //删除数据        //String sql = &quot;delete from dept where id=?&quot;;        //qr.update(sql, 4);                //查询数据        //（1）查询结果为一行        //String sql = &quot;select * from dept where id=?&quot;;        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);        //System.out.println(d.getId());        //System.out.println(d.getName());                //（2）查询结果为多行//        String sql = &quot;select * from dept&quot;;//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));//        for(Dept d:list) &#123;//            System.out.println(d.getId());//            System.out.println(d.getName());//        &#125;                //（2）查询结果为聚合函数        String sql = &quot;select count(*) from dept&quot;;                int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();                System.out.println(i);    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;QueryRunner和数据库增删改查操&quot;&gt;&lt;a href=&quot;#QueryRunner和数据库增删改查操&quot; class=&quot;headerlink&quot; title=&quot;QueryRunner和数据库增删改查操&quot;&gt;&lt;/a&gt;QueryRunner和数据库增删改查操&lt;/h1&gt;&lt;</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="QueryRunner和数据库增删改查操作" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/"/>
-    
     
   </entry>
   
