@@ -4270,6 +4270,83 @@ for link in all_links:
       </tags>
   </entry>
   <entry>
+    <title>spring | bean的作用域</title>
+    <url>/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
+    <content><![CDATA[<h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
+<p>2.Student.java</p>
+<pre><code>package com.atguigu.ioc.scope;
+
+public class Student &#123;
+    private Integer sid;
+    private String sname;
+    public Student() &#123;
+        System.out.println(&quot;Student 无参构造方法&quot;);
+    &#125;
+    public Integer getSid() &#123;
+        return sid;
+    &#125;
+    public void setSid(Integer sid) &#123;
+        this.sid = sid;
+    &#125;
+    public String getSname() &#123;
+        return sname;
+    &#125;
+    public void setSname(String sname) &#123;
+        this.sname = sname;
+    &#125;
+//    @Override
+//    public String toString() &#123;
+//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
+//    &#125;
+&#125;
+</code></pre>
+<p>3.scope.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    
+    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
+        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p>4.Test.java</p>
+<pre><code>package com.atguigu.ioc.scope;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+    public static void main(String[] args)&#123;
+        /**
+         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
+         * 而多例即原型(prototype)的bean，会在使用时创建
+         */
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
+        
+//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
+//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
+//        
+//        System.out.println(student1);
+//        System.out.println(student2);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>bean的作用域</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring | bean的生命周期</title>
     <url>/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
     <content><![CDATA[<h1 id="bean的生命周期、bean的后置处理器"><a href="#bean的生命周期、bean的后置处理器" class="headerlink" title="bean的生命周期、bean的后置处理器"></a>bean的生命周期、bean的后置处理器</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/1.PNG"></p>
@@ -4481,83 +4558,6 @@ Five:销毁
         <tag>ICA</tag>
         <tag>PCA</tag>
         <tag>小波变换</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>spring | bean的作用域</title>
-    <url>/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
-    <content><![CDATA[<h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
-<p>2.Student.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-public class Student &#123;
-    private Integer sid;
-    private String sname;
-    public Student() &#123;
-        System.out.println(&quot;Student 无参构造方法&quot;);
-    &#125;
-    public Integer getSid() &#123;
-        return sid;
-    &#125;
-    public void setSid(Integer sid) &#123;
-        this.sid = sid;
-    &#125;
-    public String getSname() &#123;
-        return sname;
-    &#125;
-    public void setSname(String sname) &#123;
-        this.sname = sname;
-    &#125;
-//    @Override
-//    public String toString() &#123;
-//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
-//    &#125;
-&#125;
-</code></pre>
-<p>3.scope.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
-        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<p>4.Test.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args)&#123;
-        /**
-         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
-         * 而多例即原型(prototype)的bean，会在使用时创建
-         */
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
-        
-//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
-//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
-//        
-//        System.out.println(student1);
-//        System.out.println(student2);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>bean的作用域</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -11877,6 +11877,21 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>CNN | 卷积神经网络如何处理一维时间序列数据</title>
+    <url>/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CNN | 卷积神经网络之卷积计算作用与思想</title>
     <url>/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/</url>
     <content><![CDATA[<h1 id="卷积神经网络之卷积计算作用与思想"><a href="#卷积神经网络之卷积计算作用与思想" class="headerlink" title="卷积神经网络之卷积计算作用与思想"></a>卷积神经网络之卷积计算作用与思想</h1><p><a href="https://www.cnblogs.com/shine-lee/p/9932226.html">卷积神经网络之卷积计算、作用与思想</a></p>
@@ -11891,21 +11906,6 @@ if __name__ == &#39;__main__&#39;:
         <tag>深度学习</tag>
         <tag>CNN</tag>
         <tag>卷积</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CNN | 卷积神经网络如何处理一维时间序列数据</title>
-    <url>/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
       </tags>
   </entry>
   <entry>
@@ -13635,6 +13635,58 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 字符串中的单词数</title>
+    <url>/2021/09/01/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="434-字符串中的单词数"><a href="#434-字符串中的单词数" class="headerlink" title="434.字符串中的单词数"></a>434.字符串中的单词数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>统计字符串中的单词个数，这里的单词指的是连续的不是空格的字符。<br>请注意，你可以假定字符串里不包括任何不可打印的字符。</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/number-of-segments-in-a-string/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.使用语言内置函数split()<br>2.原地法<br>计算单词的数量，就等同于计数单词开始的下标个数。因此，只需要定义好下标的条件，就可以遍历整个字符串，检测每个下标。定义如下：若该下标前为空格（或者为初始下标），且自身不为空格，则其为单词开始的下标。该条件可以以常数时间检测。最后，返回满足条件的下标个数。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def countSegments(self, s: str) -&gt; int:
+        list_s = s.split(&#39; &#39;)
+        for i in range(list_s.count(&#39;&#39;)):
+            list_s.remove(&#39;&#39;)
+        if not list_s:
+            return 0
+        return len(list_s)
+
+    def countSegments1(self, s):
+        return len(s.split())
+
+    def countSegments2(self, s):
+        segment_count = 0
+
+        for i in range(len(s)):
+            if (i == 0 or s[i-1] == &#39; &#39;) and s[i] != &#39; &#39;:
+                segment_count +=1
+
+        return segment_count
+
+
+if __name__ == &#39;__main__&#39;:
+    slt = Solution()
+    # s = &quot;      &quot;
+    s = &quot;The one-hour drama series Westworld is a dark odyssey about the dawn of artificial consciousness and the evolution of sin. Set at the intersection of the near future and the reimagined past, it explores a world in which every human appetite, no matter how noble or depraved, can be indulged.&quot;
+    res = slt.countSegments2(s)
+    print(res)
+
+    # 分割文本
+    # s = &quot;The sky is very blue.&quot;
+    # words = s.split(&quot; &quot;)
+    # print(words)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 字符串相乘</title>
     <url>/2021/09/05/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98/</url>
     <content><![CDATA[<h1 id="43-字符串相乘"><a href="#43-字符串相乘" class="headerlink" title="43.字符串相乘"></a>43.字符串相乘</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。</p>
@@ -13747,58 +13799,6 @@ if __name__ == &quot;__main__&quot;:
     result = slt.multiply4(&quot;12&quot;, &quot;34&quot;)
     print(result)
     print(type(result))
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 字符串中的单词数</title>
-    <url>/2021/09/01/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="434-字符串中的单词数"><a href="#434-字符串中的单词数" class="headerlink" title="434.字符串中的单词数"></a>434.字符串中的单词数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>统计字符串中的单词个数，这里的单词指的是连续的不是空格的字符。<br>请注意，你可以假定字符串里不包括任何不可打印的字符。</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/number-of-segments-in-a-string/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.使用语言内置函数split()<br>2.原地法<br>计算单词的数量，就等同于计数单词开始的下标个数。因此，只需要定义好下标的条件，就可以遍历整个字符串，检测每个下标。定义如下：若该下标前为空格（或者为初始下标），且自身不为空格，则其为单词开始的下标。该条件可以以常数时间检测。最后，返回满足条件的下标个数。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def countSegments(self, s: str) -&gt; int:
-        list_s = s.split(&#39; &#39;)
-        for i in range(list_s.count(&#39;&#39;)):
-            list_s.remove(&#39;&#39;)
-        if not list_s:
-            return 0
-        return len(list_s)
-
-    def countSegments1(self, s):
-        return len(s.split())
-
-    def countSegments2(self, s):
-        segment_count = 0
-
-        for i in range(len(s)):
-            if (i == 0 or s[i-1] == &#39; &#39;) and s[i] != &#39; &#39;:
-                segment_count +=1
-
-        return segment_count
-
-
-if __name__ == &#39;__main__&#39;:
-    slt = Solution()
-    # s = &quot;      &quot;
-    s = &quot;The one-hour drama series Westworld is a dark odyssey about the dawn of artificial consciousness and the evolution of sin. Set at the intersection of the near future and the reimagined past, it explores a world in which every human appetite, no matter how noble or depraved, can be indulged.&quot;
-    res = slt.countSegments2(s)
-    print(res)
-
-    # 分割文本
-    # s = &quot;The sky is very blue.&quot;
-    # words = s.split(&quot; &quot;)
-    # print(words)
 </code></pre>
 ]]></content>
       <categories>
@@ -18988,19 +18988,6 @@ for i in range(100):
       </tags>
   </entry>
   <entry>
-    <title>Chicken Soup for the Soul | 生活没有想象的那么糟</title>
-    <url>/2021/10/14/%E7%94%9F%E6%B4%BB%E6%B2%A1%E6%9C%89%E6%83%B3%E8%B1%A1%E7%9A%84%E9%82%A3%E4%B9%88%E7%B3%9F/</url>
-    <content><![CDATA[<h1 id="生活没有想象的那么糟"><a href="#生活没有想象的那么糟" class="headerlink" title="生活没有想象的那么糟"></a>生活没有想象的那么糟</h1><p>生活可能不像你想象的那么好，但是也不会像你想象的那么糟，人的脆弱和坚强，都超乎了自己的想象，有时候，可能脆弱的一句话就泪流满面，有时候你发现你自己咬着牙，已经走过很长的路。</p>
-<p>2021/10/14</p>
-]]></content>
-      <categories>
-        <category>Chicken Soup for the Soul</category>
-      </categories>
-      <tags>
-        <tag>Chicken Soup for the Soul</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>生成器 | 生成器输出质数</title>
     <url>/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/</url>
     <content><![CDATA[<h1 id="生成器输出小于max-num的质数"><a href="#生成器输出小于max-num的质数" class="headerlink" title="生成器输出小于max_num的质数"></a>生成器输出小于max_num的质数</h1><p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。<br>而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前<br>面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。</p>
@@ -19036,6 +19023,19 @@ for n in g:
       </categories>
       <tags>
         <tag>生成器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chicken Soup for the Soul | 生活没有想象的那么糟</title>
+    <url>/2021/10/14/%E7%94%9F%E6%B4%BB%E6%B2%A1%E6%9C%89%E6%83%B3%E8%B1%A1%E7%9A%84%E9%82%A3%E4%B9%88%E7%B3%9F/</url>
+    <content><![CDATA[<h1 id="生活没有想象的那么糟"><a href="#生活没有想象的那么糟" class="headerlink" title="生活没有想象的那么糟"></a>生活没有想象的那么糟</h1><p>生活可能不像你想象的那么好，但是也不会像你想象的那么糟，人的脆弱和坚强，都超乎了自己的想象，有时候，可能脆弱的一句话就泪流满面，有时候你发现你自己咬着牙，已经走过很长的路。</p>
+<p>2021/10/14</p>
+]]></content>
+      <categories>
+        <category>Chicken Soup for the Soul</category>
+      </categories>
+      <tags>
+        <tag>Chicken Soup for the Soul</tag>
       </tags>
   </entry>
   <entry>
