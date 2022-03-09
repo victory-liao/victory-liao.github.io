@@ -3277,6 +3277,143 @@ public class Test &#123;
       </categories>
   </entry>
   <entry>
+    <title>SpringMVC | RequestMapping注解的几个属性和作用位置</title>
+    <url>/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="RequestMapping注解的几个属性和作用位置"><a href="#RequestMapping注解的几个属性和作用位置" class="headerlink" title="RequestMapping注解的几个属性和作用位置"></a>RequestMapping注解的几个属性和作用位置</h1><p>1.项目目录<br><img src="/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/1.PNG"></p>
+<span id="more"></span>
+<p>2.web.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
+  &lt;display-name&gt;SpringMVC02&lt;/display-name&gt;
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+  
+  &lt;!-- The front controller of this Spring Web application, responsible for handling all application requests --&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;!-- Map all requests to the DispatcherServlet for handling --&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</code></pre>
+<p>3.springMVC-servlet.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 扫描组件 --&gt;
+    &lt;context:component-scan base-package=&quot;com.atguigu.controller&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>4.index.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;test&quot;&gt;测试springMVC&lt;/a&gt;
+    
+    &lt;br&gt;
+    
+    &lt;form action=&quot;test&quot; method=&quot;post&quot;&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;测试POST&quot;&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.success.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;成功&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>6.TestController.java</p>
+<pre><code>package com.atguigu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+@RequestMapping(&quot;/mvc&quot;)
+public class TestController &#123;
+    /**
+     * @RequestMapping:设置请求映射，把请求和控制层中的方法设置映射关系
+     * 当请求路径和@RequestMapping的value属性一致时，则该注解所标注的方法即为处理请求的方法
+     * 
+     * @RequestMapping可以加在类上，也可以加在方法上
+     * 若类和方法上都加有，应该一层一层的访问，西安访问类，再访问类中的方法
+     * 
+     * method:用来设置请求方式，只有客户端发送请求的方式和method的值一致，才能处理请求
+     * 请求方式：GET查询    POST添加    PUT修改    DELETE删除
+     * params:用来设置客户端传到服务器的数据，支持表达式
+     * username !username username=admin username!=admin
+     * headers:用来设置请求头信息，所发送的请求的请求头信息一定要个headers属性中所设置的一致
+     */
+//    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.POST)
+//    public String testPOST()&#123;
+//        System.out.println(&quot;SUCCESS:POST&quot;);
+//        return &quot;success&quot;;
+//    &#125;
+    
+//    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.GET)
+//    public String testGET()&#123;
+//        System.out.println(&quot;SUCCESS:GET&quot;);
+//        return &quot;success&quot;;
+//    &#125;
+    
+//    @RequestMapping(value=&quot;/test&quot;, params=&#123;&quot;username&quot;, &quot;!age&quot;, &quot;sex!=1&quot;&#125;)
+//    public String testParams()&#123;
+//        System.out.println(&quot;SUCCESS&quot;);
+//        return &quot;success&quot;;
+//    &#125;
+    
+    @RequestMapping(value=&quot;/test&quot;, 
+            headers=&#123;&quot;Accept-Encoding=gzip, deflate&quot;&#125;)
+    public String testHeaders()&#123;
+        System.out.println(&quot;SUCCESS&quot;);
+        return &quot;success&quot;;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>RequestMapping注解的几个属性和作用位置</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL | SQL语句实例大全</title>
     <url>/2022/01/20/SQL%E8%AF%AD%E5%8F%A5%E5%AE%9E%E4%BE%8B%E5%A4%A7%E5%85%A8/</url>
     <content><![CDATA[<h1 id="SQL语句实例大全"><a href="#SQL语句实例大全" class="headerlink" title="SQL语句实例大全"></a>SQL语句实例大全</h1><p><strong>SQL语句分类</strong></p>
@@ -4133,83 +4270,6 @@ for link in all_links:
       </tags>
   </entry>
   <entry>
-    <title>spring | bean的作用域</title>
-    <url>/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
-    <content><![CDATA[<h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
-<p>2.Student.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-public class Student &#123;
-    private Integer sid;
-    private String sname;
-    public Student() &#123;
-        System.out.println(&quot;Student 无参构造方法&quot;);
-    &#125;
-    public Integer getSid() &#123;
-        return sid;
-    &#125;
-    public void setSid(Integer sid) &#123;
-        this.sid = sid;
-    &#125;
-    public String getSname() &#123;
-        return sname;
-    &#125;
-    public void setSname(String sname) &#123;
-        this.sname = sname;
-    &#125;
-//    @Override
-//    public String toString() &#123;
-//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
-//    &#125;
-&#125;
-</code></pre>
-<p>3.scope.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
-        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<p>4.Test.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args)&#123;
-        /**
-         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
-         * 而多例即原型(prototype)的bean，会在使用时创建
-         */
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
-        
-//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
-//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
-//        
-//        System.out.println(student1);
-//        System.out.println(student2);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>bean的作用域</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | bean的生命周期</title>
     <url>/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
     <content><![CDATA[<h1 id="bean的生命周期、bean的后置处理器"><a href="#bean的生命周期、bean的后置处理器" class="headerlink" title="bean的生命周期、bean的后置处理器"></a>bean的生命周期、bean的后置处理器</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/1.PNG"></p>
@@ -4421,6 +4481,83 @@ Five:销毁
         <tag>ICA</tag>
         <tag>PCA</tag>
         <tag>小波变换</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>spring | bean的作用域</title>
+    <url>/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
+    <content><![CDATA[<h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
+<p>2.Student.java</p>
+<pre><code>package com.atguigu.ioc.scope;
+
+public class Student &#123;
+    private Integer sid;
+    private String sname;
+    public Student() &#123;
+        System.out.println(&quot;Student 无参构造方法&quot;);
+    &#125;
+    public Integer getSid() &#123;
+        return sid;
+    &#125;
+    public void setSid(Integer sid) &#123;
+        this.sid = sid;
+    &#125;
+    public String getSname() &#123;
+        return sname;
+    &#125;
+    public void setSname(String sname) &#123;
+        this.sname = sname;
+    &#125;
+//    @Override
+//    public String toString() &#123;
+//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
+//    &#125;
+&#125;
+</code></pre>
+<p>3.scope.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    
+    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
+        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p>4.Test.java</p>
+<pre><code>package com.atguigu.ioc.scope;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+    public static void main(String[] args)&#123;
+        /**
+         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
+         * 而多例即原型(prototype)的bean，会在使用时创建
+         */
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
+        
+//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
+//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
+//        
+//        System.out.println(student1);
+//        System.out.println(student2);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>bean的作用域</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -9482,40 +9619,6 @@ wb.save(&quot;物料表_1.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
-    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
-<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
-<li>1.先要解析出baidu.com对应的ip地址</li>
-<ol>
-<li>1.先要知道默认网关的MAC地址</li>
-<ol>
-<li>1.使用ARP获取默认网关的MAC地址</li>
-</ol>
-<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
-<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
-<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
-<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
-<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
-</ol>
-<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
-<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
-<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
-<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
-<li>6.浏览器关闭TCP连接，即4次挥手</li>
-</ol>
-
-
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
     <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
@@ -9588,6 +9691,40 @@ print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len
         <tag>python</tag>
         <tag>os</tag>
         <tag>openpyxl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
+    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
+<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
+<li>1.先要解析出baidu.com对应的ip地址</li>
+<ol>
+<li>1.先要知道默认网关的MAC地址</li>
+<ol>
+<li>1.使用ARP获取默认网关的MAC地址</li>
+</ol>
+<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
+<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
+<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
+<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
+<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
+</ol>
+<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
+<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
+<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
+<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
+<li>6.浏览器关闭TCP连接，即4次挥手</li>
+</ol>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -11430,49 +11567,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>python | 动态查找列表中的第二个number</title>
-    <url>/2021/11/05/%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AAnumber/</url>
-    <content><![CDATA[<h1 id="动态查找列表中的第二个number"><a href="#动态查找列表中的第二个number" class="headerlink" title="动态查找列表中的第二个number"></a>动态查找列表中的第二个number</h1><p>方法：先找到第一个2所在位置fist_index，切片new_list=names[index+1:]得到新的列表，<br>再从新列表中找第一个2的位置second_index.最终第二个2的位置为first_index+second_index+1</p>
-<span id="more"></span>
-<p><strong>代码：</strong></p>
-<pre><code>names = [&#39;apple&#39;, &#39;rice&#39;, &#39;jack&#39;, &#39;rose&#39;, 2, &#39;girl&#39;, &#39;boy&#39;, 2, &#39;heather&#39;, 2]
-first_index = names.index(2)
-new_list = names[first_index + 1:]
-second_index = new_list.index(2)
-second_loction = first_index + second_index + 1  # 第二个2的位置
-print(&#39;第二个2 的位置为：&#39;, second_loction)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | 匹配第n个分组的内容</title>
-    <url>/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/</url>
-    <content><![CDATA[<h1 id="1…-9"><a href="#1…-9" class="headerlink" title="\1…\9"></a>\1…\9</h1><p>\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用<br>例：在以下代码段中\2表示匹配第2个分组（一个括号代表一个分组）的内容，即\2匹配”world”字符串</p>
-<pre><code>import re
-string = &quot;helloworld world&quot;
-pattern = r&#39;^(\w+)(world) \2$&#39;
-print(re.search(pattern, string))
-</code></pre>
-<p><a href="https://www.jianshu.com/p/8a4ce87ef4b2">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>re</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>re</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | 动态代理之数学计算器</title>
     <url>/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
     <content><![CDATA[<h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p>
@@ -11602,6 +11696,49 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 动态查找列表中的第二个number</title>
+    <url>/2021/11/05/%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AAnumber/</url>
+    <content><![CDATA[<h1 id="动态查找列表中的第二个number"><a href="#动态查找列表中的第二个number" class="headerlink" title="动态查找列表中的第二个number"></a>动态查找列表中的第二个number</h1><p>方法：先找到第一个2所在位置fist_index，切片new_list=names[index+1:]得到新的列表，<br>再从新列表中找第一个2的位置second_index.最终第二个2的位置为first_index+second_index+1</p>
+<span id="more"></span>
+<p><strong>代码：</strong></p>
+<pre><code>names = [&#39;apple&#39;, &#39;rice&#39;, &#39;jack&#39;, &#39;rose&#39;, 2, &#39;girl&#39;, &#39;boy&#39;, 2, &#39;heather&#39;, 2]
+first_index = names.index(2)
+new_list = names[first_index + 1:]
+second_index = new_list.index(2)
+second_loction = first_index + second_index + 1  # 第二个2的位置
+print(&#39;第二个2 的位置为：&#39;, second_loction)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 匹配第n个分组的内容</title>
+    <url>/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/</url>
+    <content><![CDATA[<h1 id="1…-9"><a href="#1…-9" class="headerlink" title="\1…\9"></a>\1…\9</h1><p>\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用<br>例：在以下代码段中\2表示匹配第2个分组（一个括号代表一个分组）的内容，即\2匹配”world”字符串</p>
+<pre><code>import re
+string = &quot;helloworld world&quot;
+pattern = r&#39;^(\w+)(world) \2$&#39;
+print(re.search(pattern, string))
+</code></pre>
+<p><a href="https://www.jianshu.com/p/8a4ce87ef4b2">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>re</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>re</tag>
       </tags>
   </entry>
   <entry>
@@ -13498,58 +13635,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 字符串中的单词数</title>
-    <url>/2021/09/01/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="434-字符串中的单词数"><a href="#434-字符串中的单词数" class="headerlink" title="434.字符串中的单词数"></a>434.字符串中的单词数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>统计字符串中的单词个数，这里的单词指的是连续的不是空格的字符。<br>请注意，你可以假定字符串里不包括任何不可打印的字符。</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/number-of-segments-in-a-string/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.使用语言内置函数split()<br>2.原地法<br>计算单词的数量，就等同于计数单词开始的下标个数。因此，只需要定义好下标的条件，就可以遍历整个字符串，检测每个下标。定义如下：若该下标前为空格（或者为初始下标），且自身不为空格，则其为单词开始的下标。该条件可以以常数时间检测。最后，返回满足条件的下标个数。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def countSegments(self, s: str) -&gt; int:
-        list_s = s.split(&#39; &#39;)
-        for i in range(list_s.count(&#39;&#39;)):
-            list_s.remove(&#39;&#39;)
-        if not list_s:
-            return 0
-        return len(list_s)
-
-    def countSegments1(self, s):
-        return len(s.split())
-
-    def countSegments2(self, s):
-        segment_count = 0
-
-        for i in range(len(s)):
-            if (i == 0 or s[i-1] == &#39; &#39;) and s[i] != &#39; &#39;:
-                segment_count +=1
-
-        return segment_count
-
-
-if __name__ == &#39;__main__&#39;:
-    slt = Solution()
-    # s = &quot;      &quot;
-    s = &quot;The one-hour drama series Westworld is a dark odyssey about the dawn of artificial consciousness and the evolution of sin. Set at the intersection of the near future and the reimagined past, it explores a world in which every human appetite, no matter how noble or depraved, can be indulged.&quot;
-    res = slt.countSegments2(s)
-    print(res)
-
-    # 分割文本
-    # s = &quot;The sky is very blue.&quot;
-    # words = s.split(&quot; &quot;)
-    # print(words)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 字符串相乘</title>
     <url>/2021/09/05/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98/</url>
     <content><![CDATA[<h1 id="43-字符串相乘"><a href="#43-字符串相乘" class="headerlink" title="43.字符串相乘"></a>43.字符串相乘</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。</p>
@@ -13662,6 +13747,58 @@ if __name__ == &quot;__main__&quot;:
     result = slt.multiply4(&quot;12&quot;, &quot;34&quot;)
     print(result)
     print(type(result))
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 字符串中的单词数</title>
+    <url>/2021/09/01/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="434-字符串中的单词数"><a href="#434-字符串中的单词数" class="headerlink" title="434.字符串中的单词数"></a>434.字符串中的单词数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>统计字符串中的单词个数，这里的单词指的是连续的不是空格的字符。<br>请注意，你可以假定字符串里不包括任何不可打印的字符。</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/number-of-segments-in-a-string/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.使用语言内置函数split()<br>2.原地法<br>计算单词的数量，就等同于计数单词开始的下标个数。因此，只需要定义好下标的条件，就可以遍历整个字符串，检测每个下标。定义如下：若该下标前为空格（或者为初始下标），且自身不为空格，则其为单词开始的下标。该条件可以以常数时间检测。最后，返回满足条件的下标个数。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def countSegments(self, s: str) -&gt; int:
+        list_s = s.split(&#39; &#39;)
+        for i in range(list_s.count(&#39;&#39;)):
+            list_s.remove(&#39;&#39;)
+        if not list_s:
+            return 0
+        return len(list_s)
+
+    def countSegments1(self, s):
+        return len(s.split())
+
+    def countSegments2(self, s):
+        segment_count = 0
+
+        for i in range(len(s)):
+            if (i == 0 or s[i-1] == &#39; &#39;) and s[i] != &#39; &#39;:
+                segment_count +=1
+
+        return segment_count
+
+
+if __name__ == &#39;__main__&#39;:
+    slt = Solution()
+    # s = &quot;      &quot;
+    s = &quot;The one-hour drama series Westworld is a dark odyssey about the dawn of artificial consciousness and the evolution of sin. Set at the intersection of the near future and the reimagined past, it explores a world in which every human appetite, no matter how noble or depraved, can be indulged.&quot;
+    res = slt.countSegments2(s)
+    print(res)
+
+    # 分割文本
+    # s = &quot;The sky is very blue.&quot;
+    # words = s.split(&quot; &quot;)
+    # print(words)
 </code></pre>
 ]]></content>
       <categories>
@@ -18851,6 +18988,19 @@ for i in range(100):
       </tags>
   </entry>
   <entry>
+    <title>Chicken Soup for the Soul | 生活没有想象的那么糟</title>
+    <url>/2021/10/14/%E7%94%9F%E6%B4%BB%E6%B2%A1%E6%9C%89%E6%83%B3%E8%B1%A1%E7%9A%84%E9%82%A3%E4%B9%88%E7%B3%9F/</url>
+    <content><![CDATA[<h1 id="生活没有想象的那么糟"><a href="#生活没有想象的那么糟" class="headerlink" title="生活没有想象的那么糟"></a>生活没有想象的那么糟</h1><p>生活可能不像你想象的那么好，但是也不会像你想象的那么糟，人的脆弱和坚强，都超乎了自己的想象，有时候，可能脆弱的一句话就泪流满面，有时候你发现你自己咬着牙，已经走过很长的路。</p>
+<p>2021/10/14</p>
+]]></content>
+      <categories>
+        <category>Chicken Soup for the Soul</category>
+      </categories>
+      <tags>
+        <tag>Chicken Soup for the Soul</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>生成器 | 生成器输出质数</title>
     <url>/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/</url>
     <content><![CDATA[<h1 id="生成器输出小于max-num的质数"><a href="#生成器输出小于max-num的质数" class="headerlink" title="生成器输出小于max_num的质数"></a>生成器输出小于max_num的质数</h1><p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。<br>而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前<br>面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。</p>
@@ -18886,19 +19036,6 @@ for n in g:
       </categories>
       <tags>
         <tag>生成器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Chicken Soup for the Soul | 生活没有想象的那么糟</title>
-    <url>/2021/10/14/%E7%94%9F%E6%B4%BB%E6%B2%A1%E6%9C%89%E6%83%B3%E8%B1%A1%E7%9A%84%E9%82%A3%E4%B9%88%E7%B3%9F/</url>
-    <content><![CDATA[<h1 id="生活没有想象的那么糟"><a href="#生活没有想象的那么糟" class="headerlink" title="生活没有想象的那么糟"></a>生活没有想象的那么糟</h1><p>生活可能不像你想象的那么好，但是也不会像你想象的那么糟，人的脆弱和坚强，都超乎了自己的想象，有时候，可能脆弱的一句话就泪流满面，有时候你发现你自己咬着牙，已经走过很长的路。</p>
-<p>2021/10/14</p>
-]]></content>
-      <categories>
-        <category>Chicken Soup for the Soul</category>
-      </categories>
-      <tags>
-        <tag>Chicken Soup for the Soul</tag>
       </tags>
   </entry>
   <entry>
@@ -21419,21 +21556,6 @@ public void cart(HttpServletRequest request, HttpServletResponse response) &#123
       </tags>
   </entry>
   <entry>
-    <title>软件架构 | 软件设计策略</title>
-    <url>/2021/03/11/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5/</url>
-    <content><![CDATA[<h1 id="软件设计策略"><a href="#软件设计策略" class="headerlink" title="软件设计策略"></a>软件设计策略</h1><p>1.面向对象设计</p>
-<p>2.面向功能设计(结构化)</p>
-<p>3.面向主题设计</p>
-<p>4.面向数据结构设计(数据库)</p>
-]]></content>
-      <categories>
-        <category>SA</category>
-      </categories>
-      <tags>
-        <tag>软件架构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 赎金信</title>
     <url>/2021/09/01/%E8%B5%8E%E9%87%91%E4%BF%A1/</url>
     <content><![CDATA[<h1 id="383-赎金信"><a href="#383-赎金信" class="headerlink" title="383.赎金信"></a>383.赎金信</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。<br>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
@@ -21474,6 +21596,21 @@ if __name__ == &#39;__main__&#39;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件架构 | 软件设计策略</title>
+    <url>/2021/03/11/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<h1 id="软件设计策略"><a href="#软件设计策略" class="headerlink" title="软件设计策略"></a>软件设计策略</h1><p>1.面向对象设计</p>
+<p>2.面向功能设计(结构化)</p>
+<p>3.面向主题设计</p>
+<p>4.面向数据结构设计(数据库)</p>
+]]></content>
+      <categories>
+        <category>SA</category>
+      </categories>
+      <tags>
+        <tag>软件架构</tag>
       </tags>
   </entry>
   <entry>
