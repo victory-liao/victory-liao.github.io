@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-10T03:27:54.085Z</updated>
+  <updated>2022-03-10T08:38:46.940Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,13 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>SpringMVC | ModelAndView处理响应数据</title>
-    <link href="http://example.com/2022/03/09/ModelAndView%E5%A4%84%E7%90%86%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE/"/>
-    <id>http://example.com/2022/03/09/ModelAndView%E5%A4%84%E7%90%86%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE/</id>
+    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
+    <link href="http://example.com/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
+    <id>http://example.com/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</id>
     <published>2022-03-10T03:23:17.000Z</published>
-    <updated>2022-03-10T03:27:54.085Z</updated>
+    <updated>2022-03-10T08:38:46.940Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p><pre><code>@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)public ModelAndView param()&#123;    ModelAndView mav = new ModelAndView();    //javaWEB： request.setAttribute(xxx)     mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值    mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转    return mav;&#125;</code></pre><p>并在param.jsp页面获取request作用域中的值</p><pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;    $&#123;username&#125;</code></pre>]]></content>
+    <content type="html"><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p><pre><code>/** * SpringMVC处理请求过程中，往作用域中放值有以下三种方式 * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中 *///往作用域中放值方式1//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)//    public ModelAndView param()&#123;//        ModelAndView mav = new ModelAndView();//        //javaWEB： request.setAttribute(xxx) //        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转//        return mav;//    &#125;        //往作用域中放值方式2//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)//    public String param(Map&lt;String, Object&gt; map)&#123;//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值//        return &quot;success&quot;;//返回视图名称//    &#125;//往作用域中放值方式3@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)public String param(Model model)&#123;    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值    return &quot;success&quot;;//返回视图名称&#125;</code></pre><p>并在param.jsp页面获取request作用域中的值</p><pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;    $&#123;username&#125;</code></pre>]]></content>
     
     
       
@@ -39,7 +39,7 @@
     
     <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
     
-    <category term="处理响应数据 ModelAndView" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E5%A4%84%E7%90%86%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE-ModelAndView/"/>
+    <category term="处理请求过程中往作用域中放值的三种方式" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
     
     
     <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
