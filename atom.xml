@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-10T08:38:46.940Z</updated>
+  <updated>2022-03-10T12:36:49.505Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,58 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java | 获取Class对象的四种方式</title>
+    <link href="http://example.com/2022/03/10/%E8%8E%B7%E5%8F%96Class%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
+    <id>http://example.com/2022/03/10/%E8%8E%B7%E5%8F%96Class%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/</id>
+    <published>2022-03-10T12:33:03.000Z</published>
+    <updated>2022-03-10T12:36:49.505Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="获取Class对象的四种方式"><a href="#获取Class对象的四种方式" class="headerlink" title="获取Class对象的四种方式"></a>获取Class对象的四种方式</h1><p>反射可以动态获取类的信息，这需要依靠 Class 对象。Class 类对象将一个类的方法、变量等信息告诉运行的程序。Java 提供了四种方式获取 Class 对象:</p><ol><li>知道具体类的情况下可以使用：</li></ol><pre><code>Class alunbarClass = TargetObject.class;</code></pre><p>但是我们一般是不知道具体类的，基本都是通过遍历包下面的类来获取 Class 对象，通过此方式获取 Class 对象不会进行初始化</p><ol start="2"><li>通过 Class.forName()传入类的全路径获取：</li></ol><pre><code>Class alunbarClass1 = Class.forName(&quot;cn.javaguide.TargetObject&quot;);</code></pre><ol start="3"><li>通过对象实例instance.getClass()获取：</li></ol><pre><code>TargetObject o = new TargetObject();Class alunbarClass2 = o.getClass();</code></pre><ol start="4"><li>通过类加载器xxxClassLoader.loadClass()传入类路径获取:</li></ol><pre><code>Class clazz = ClassLoader.loadClass(&quot;cn.javaguide.TargetObject&quot;);</code></pre><p>通过类加载器获取 Class 对象不会进行初始化，意味着不进行包括初始化等一系列步骤，静态代码块和静态对象不会得到执行</p><span id="more"></span><p><strong>示例</strong></p><pre><code>class Student&#123;    private Integer sid;    private String sname;    public Integer getSid() &#123;        return sid;    &#125;    public void setSid(Integer sid) &#123;        this.sid = sid;    &#125;    public String getSname() &#123;        return sname;    &#125;    public void setSname(String sname) &#123;        this.sname = sname;    &#125;    @Override    public String toString() &#123;        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;    &#125;    &#125;public class Test &#123;    public static void main(String[] args)&#123;                //获取 Class 对象的四种方式        System.out.println(&quot;方式一:&quot; + Student.class);                try &#123;            System.out.println(&quot;方式二:&quot; + Class.forName(&quot;Student&quot;));        &#125; catch (ClassNotFoundException e) &#123;            e.printStackTrace();        &#125;                Student s1 = new Student();        System.out.println(&quot;方式三:&quot; + s1.getClass());                try &#123;            System.out.println(&quot;方式四:&quot;+ClassLoader.getSystemClassLoader().loadClass(&quot;Student&quot;));                    &#125; catch (ClassNotFoundException e) &#123;            e.printStackTrace();        &#125;                try &#123;            //使用反射操作Student类的方法以及参数            Student s2 = s1.getClass().newInstance();            s2.setSname(&quot;zhangsan&quot;);            s2.setSid(1);            System.out.println(s2);        &#125; catch (InstantiationException e) &#123;            // TODO Auto-generated catch block            e.printStackTrace();        &#125; catch (IllegalAccessException e) &#123;            // TODO Auto-generated catch block            e.printStackTrace();        &#125;                    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;获取Class对象的四种方式&quot;&gt;&lt;a href=&quot;#获取Class对象的四种方式&quot; class=&quot;headerlink&quot; title=&quot;获取Class对象的四种方式&quot;&gt;&lt;/a&gt;获取Class对象的四种方式&lt;/h1&gt;&lt;p&gt;反射可以动态获取类的信息，这需要依靠 Class 对象。Class 类对象将一个类的方法、变量等信息告诉运行的程序。Java 提供了四种方式获取 Class 对象:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;知道具体类的情况下可以使用：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;Class alunbarClass = TargetObject.class;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是我们一般是不知道具体类的，基本都是通过遍历包下面的类来获取 Class 对象，通过此方式获取 Class 对象不会进行初始化&lt;/p&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;通过 Class.forName()传入类的全路径获取：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;Class alunbarClass1 = Class.forName(&amp;quot;cn.javaguide.TargetObject&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;通过对象实例instance.getClass()获取：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;TargetObject o = new TargetObject();
+Class alunbarClass2 = o.getClass();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;通过类加载器xxxClassLoader.loadClass()传入类路径获取:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;Class clazz = ClassLoader.loadClass(&amp;quot;cn.javaguide.TargetObject&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过类加载器获取 Class 对象不会进行初始化，意味着不进行包括初始化等一系列步骤，静态代码块和静态对象不会得到执行&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="获取Class对象的四种方式" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E8%8E%B7%E5%8F%96Class%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="Class对象" scheme="http://example.com/tags/Class%E5%AF%B9%E8%B1%A1/"/>
+    
+    <category term="反射" scheme="http://example.com/tags/%E5%8F%8D%E5%B0%84/"/>
+    
+  </entry>
   
   <entry>
     <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
@@ -615,48 +667,6 @@
     <category term="p命名空间" scheme="http://example.com/tags/p%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/"/>
     
     <category term="依赖注入的两种方式" scheme="http://example.com/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring | spring简单案例</title>
-    <link href="http://example.com/2022/01/27/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/"/>
-    <id>http://example.com/2022/01/27/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/</id>
-    <published>2022-01-27T11:24:34.000Z</published>
-    <updated>2022-01-27T13:28:14.443Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="spring简单案例"><a href="#spring简单案例" class="headerlink" title="spring简单案例"></a>spring简单案例</h1><h2 id="使用软件：STS"><a href="#使用软件：STS" class="headerlink" title="使用软件：STS"></a>使用软件：STS</h2><p><a href="https://www.cnblogs.com/larryzeal/p/5800980.html">下载地址</a></p><h2 id="搭建spring运行时环境"><a href="#搭建spring运行时环境" class="headerlink" title="搭建spring运行时环境"></a>搭建spring运行时环境</h2><p>1.加入JAR包<br>1)Spring自身JAR包：spring-framework-4.0.0.RELEASE\libs目录下<br>spring-beans-4.0.0.RELEASE.jar<br>spring-context-4.0.0.RELE2ASE.jar<br>spring-core-4.0.0.RELEASE.jar<br>spring-expression-4.0.0.RELEASE.jar<br>2)commons-logging-1.1.1.jar<br>注：将以上所有的jar包复制到项目中的lib目录下并全选所有jar包–&gt;右键–&gt;build path–&gt;config bulid path<br>2.在Spring Tool Suite工具中通过如下步骤创建Spring的配置文件<br>1)File-&gt;New-&gt;Spring Bean Configuration File<br>2)为文件取名字 例如：applicationContext.xml<br><img src="/2022/01/27/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/1.PNG"></p><h2 id="创建一个类：Person-java"><a href="#创建一个类：Person-java" class="headerlink" title="创建一个类：Person.java"></a>创建一个类：Person.java</h2><pre><code>package com.atguigu.spring.mod;public class Person &#123;    private Integer id;    private String name;    public Integer getId() &#123;        return id;    &#125;    public void setId(Integer id) &#123;        this.id = id;    &#125;    public String getName() &#123;        return name;    &#125;    public void setName(String name) &#123;        this.name = name;    &#125;    @Override    public String toString() &#123;        return &quot;Person [id=&quot; + id + &quot;, name=&quot; + name + &quot;]&quot;;    &#125;    &#125;</code></pre><h2 id="常规方法操作对象"><a href="#常规方法操作对象" class="headerlink" title="常规方法操作对象"></a>常规方法操作对象</h2><p>创建一个测试类Test.java</p><pre><code>package com.atguigu.spring.mod;public class Test &#123;    public static void main(String[] args)&#123;        Person person = new Person();        person.setId(1);        person.setName(&quot;zhangsan&quot;);        System.out.println(person);    &#125;&#125;</code></pre><h2 id="spring管理对象"><a href="#spring管理对象" class="headerlink" title="spring管理对象"></a>spring管理对象</h2><p>1.创建applicationContext.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;    &lt;!-- 命名空间 规定当前的文件里面能写什么--&gt;    &lt;!--        &lt;bean&gt;：定义spring管理的一个对象        id:该对象的唯一标识，注意不能重复,在类型获取bean的过程中可以不设置        class:该对象所属类的全限定名     --&gt;        &lt;!-- 通过反射创建对象 --&gt;    &lt;bean id=&quot;person&quot; class=&quot;com.atguigu.spring.mod.Person&quot;&gt;        &lt;!--            &lt;property&gt;:为对象的某个属性赋值            name:属性名            value:属性值         --&gt;        &lt;property name=&quot;id&quot; value=&quot;1111&quot;&gt;&lt;/property&gt;        &lt;property name=&quot;name&quot; value=&quot;小明&quot;&gt;&lt;/property&gt;    &lt;/bean&gt;    &lt;/beans&gt;</code></pre><p>2.创建一个测试类TestBySpring.java</p><pre><code>package com.atguigu.spring.mod;import org.springframework.context.ApplicationContext;import org.springframework.context.support.ClassPathXmlApplicationContext;public class TestBySpring &#123;    public static void main(String[] args) &#123;        //初始化容器        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);                //通过getBean()获取对象        Person person = (Person) ac.getBean(&quot;person&quot;);        System.out.println(person);    &#125;&#125;</code></pre><p><strong>注：IOC和DI</strong><br>反转控制（IOC）：对象的管理权（创建、赋值等）由程序员交给了spring容器<br>依赖注入（DI）:bean对象依赖于属性 向属性注入资源（赋值）<br>总结: IOC 就是一种反转控制的思想， 而DI是对IOC的一种具体实现。 </p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;spring简单案例&quot;&gt;&lt;a href=&quot;#spring简单案例&quot; class=&quot;headerlink&quot; title=&quot;spring简单案例&quot;&gt;&lt;/a&gt;spring简单案例&lt;/h1&gt;&lt;h2 id=&quot;使用软件：STS&quot;&gt;&lt;a href=&quot;#使用软件：STS&quot; cla</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="spring" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/"/>
-    
-    <category term="spring简单案例" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/"/>
-    
-    
-    <category term="spring" scheme="http://example.com/tags/spring/"/>
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/tags/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="IOC" scheme="http://example.com/tags/IOC/"/>
-    
-    <category term="DI" scheme="http://example.com/tags/DI/"/>
-    
-    <category term="控制反转" scheme="http://example.com/tags/%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/"/>
-    
-    <category term="依赖注入" scheme="http://example.com/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/"/>
     
   </entry>
   
