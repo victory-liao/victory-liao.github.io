@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-09T08:58:40.551Z</updated>
+  <updated>2022-03-09T14:24:32.526Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,43 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpringMVC | 处理请求数据</title>
+    <link href="http://example.com/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/"/>
+    <id>http://example.com/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/</id>
+    <published>2022-03-09T14:16:43.000Z</published>
+    <updated>2022-03-09T14:24:32.526Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="处理请求数据"><a href="#处理请求数据" class="headerlink" title="处理请求数据"></a>处理请求数据</h1><p>1.项目目录<br><img src="/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/1.PNG"></p><span id="more"></span><p>2.web.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;  &lt;display-name&gt;SpringMVC02&lt;/display-name&gt;  &lt;welcome-file-list&gt;    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;  &lt;/welcome-file-list&gt;    &lt;!-- The front controller of this Spring Web application, responsible for handling all application requests --&gt;    &lt;servlet&gt;        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;    &lt;/servlet&gt;    &lt;!-- Map all requests to the DispatcherServlet for handling --&gt;    &lt;servlet-mapping&gt;        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;        &lt;url-pattern&gt;/&lt;/url-pattern&gt;    &lt;/servlet-mapping&gt;        &lt;filter&gt;        &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;        &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;    &lt;/filter&gt;    &lt;filter-mapping&gt;        &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;    &lt;/filter-mapping&gt;    &lt;/web-app&gt;</code></pre><p>3.springMVC-servlet.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;        &lt;!-- 扫描组件 --&gt;    &lt;context:component-scan base-package=&quot;com.atguigu.controller&quot;&gt;&lt;/context:component-scan&gt;        &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;    &lt;/bean&gt;&lt;/beans&gt;</code></pre><p>4.param.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;form action=&quot;param&quot; method=&quot;post&quot;&gt;        username:&lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;&lt;br&gt;         password:&lt;input type=&quot;text&quot; name=&quot;password&quot; /&gt;&lt;br&gt;        age:&lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;&lt;br&gt;                &lt;!-- 测试RequestParam取消这段代码的注释 --&gt;        &lt;!-- province:&lt;input type=&quot;text&quot; name=&quot;province&quot; /&gt;&lt;br&gt;        city:&lt;input type=&quot;text&quot; name=&quot;city&quot; /&gt;&lt;br&gt;        country:&lt;input type=&quot;text&quot; name=&quot;country&quot; /&gt; --&gt;                &lt;!-- 使用POJO获取客户端数据 --&gt;        province:&lt;input type=&quot;text&quot; name=&quot;address.province&quot; /&gt;&lt;br&gt;        city:&lt;input type=&quot;text&quot; name=&quot;address.city&quot; /&gt;&lt;br&gt;        country:&lt;input type=&quot;text&quot; name=&quot;address.country&quot; /&gt;        &lt;input type=&quot;submit&quot; value=&quot;添加&quot;/&gt;            &lt;/form&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>5.success.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h1&gt;成功&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>6.User.java</p><pre><code>package com.atguigu.bean;public class User &#123;    private Integer id;    private String username;    private String password;    private Address address;    public Integer getId() &#123;        return id;    &#125;    public void setId(Integer id) &#123;        this.id = id;    &#125;    public String getUsername() &#123;        return username;    &#125;    public void setUsername(String username) &#123;        this.username = username;    &#125;    public String getPassword() &#123;        return password;    &#125;    public void setPassword(String password) &#123;        this.password = password;    &#125;    public Address getAddress() &#123;        return address;    &#125;    public void setAddress(Address address) &#123;        this.address = address;    &#125;    @Override    public String toString() &#123;        return &quot;User [id=&quot; + id + &quot;, username=&quot; + username + &quot;, password=&quot; + password + &quot;, address=&quot; + address + &quot;]&quot;;    &#125;    &#125;</code></pre><p>7.Address.java</p><pre><code>package com.atguigu.bean;public class Address &#123;    private String province;    private String city;    private String country;    public String getProvince() &#123;        return province;    &#125;    public void setProvince(String province) &#123;        this.province = province;    &#125;    public String getCity() &#123;        return city;    &#125;    public void setCity(String city) &#123;        this.city = city;    &#125;    public String getCountry() &#123;        return country;    &#125;    public void setCountry(String country) &#123;        this.country = country;    &#125;    @Override    public String toString() &#123;        return &quot;Address [province=&quot; + province + &quot;, city=&quot; + city + &quot;, country=&quot; + country + &quot;]&quot;;    &#125;    &#125;</code></pre><p>8.ParamController.java</p><pre><code>package com.atguigu.controller;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.CookieValue;import org.springframework.web.bind.annotation.RequestHeader;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RequestMethod;import org.springframework.web.bind.annotation.RequestParam;import com.atguigu.bean.User;@Controllerpublic class ParamController &#123;    /**     * 在springMVC获取客户端传递的数据的方式     * 1、在处理请求的方法中，加入相对应的形参，保证形参参数名和传递的数据的参数名保持一致，就可以自动赋值     * @RequestParam：可以把请求参数传递给请求方法     * 当不满足赋值条件时，可以使用value属性，指定映射关系     * required：设置形参是否必须被赋值，默认为ture，必须赋值，若设置为false，则不必须赋值，     * 因此形参的值为null     * defaultValue:若形参所获得的值为null，则设置一个默认值，用在分页和模糊查询中     *///    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)//    public String testRequestParam(@RequestParam(value=&quot;name&quot;, required=false, defaultValue=&quot;admin&quot;)String username, String password, String age)&#123;//        System.out.println(&quot;username=&quot;+username+&quot;,password=&quot;+password+&quot;,age=&quot;+age);//        return &quot;success&quot;;//    &#125;        /**     * @RequestHeader:在处理请求的方法上，获取请求头信息，用户和@RequestParam一致     *///    @RequestMapping(value=&quot;/testRequestHeader&quot;)//    public String testRequestHeader(@RequestHeader(value=&quot;Accept-Language&quot;)String al)&#123;//        System.out.println(al);//        return &quot;success&quot;;//    &#125;        /**     * @CookieValue:在处理请求的方法上，获取cookie信息，用法和RequestParam一致     *///    @RequestMapping(&quot;/testCookieValue&quot;)//    public String testCookieValue(@CookieValue(&quot;JSESSIONID&quot;)String sessionId)&#123;//        System.out.println(&quot;testCookieValue:sessionId:&quot;+sessionId);//        return &quot;success&quot;;//    &#125;        /**     * 可以使用POJO获取客户端数据，要求实体类对象中的属性名一定要和页面中表单元素的name属性值一致，且支持级联关系     *///    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)//    public String testPojo(User user)&#123;//        System.out.println(user);//        return &quot;success&quot;;//    &#125;        /**     * 可以通过设置形参的方式，获取servletAPI     */    @RequestMapping(&quot;/param&quot;)    public String testServletAPI(HttpServletRequest request, HttpServletResponse response)&#123;        System.out.println(&quot;testServletAPI,&quot;+request+&quot;,&quot;+response);                String username = request.getParameter(&quot;username&quot;);        System.out.println(username);        return &quot;success&quot;;    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;处理请求数据&quot;&gt;&lt;a href=&quot;#处理请求数据&quot; class=&quot;headerlink&quot; title=&quot;处理请求数据&quot;&gt;&lt;/a&gt;处理请求数据&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/1.PNG&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
+    
+    <category term="处理请求数据" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/"/>
+    
+    
+    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
+    
+    <category term="RequestParam注解" scheme="http://example.com/tags/RequestParam%E6%B3%A8%E8%A7%A3/"/>
+    
+    <category term="RequestHeader注解" scheme="http://example.com/tags/RequestHeader%E6%B3%A8%E8%A7%A3/"/>
+    
+    <category term="CookieValue注解" scheme="http://example.com/tags/CookieValue%E6%B3%A8%E8%A7%A3/"/>
+    
+    <category term="使用POJO获取客户端数据" scheme="http://example.com/tags/%E4%BD%BF%E7%94%A8POJO%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%B0%E6%8D%AE/"/>
+    
+    <category term="获取servletAPI" scheme="http://example.com/tags/%E8%8E%B7%E5%8F%96servletAPI/"/>
+    
+  </entry>
   
   <entry>
     <title>SpringMVC | REST风格GetPostPutDelete请求</title>
@@ -618,38 +655,6 @@
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="框架" scheme="http://example.com/tags/%E6%A1%86%E6%9E%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaWeb项目开发 | 事务</title>
-    <link href="http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/"/>
-    <id>http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/</id>
-    <published>2022-01-26T11:46:22.000Z</published>
-    <updated>2022-01-26T12:09:44.946Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p><pre><code>CREATE TABLE user(id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,NAME VARCHAR(20),balance DOUBLE);</code></pre><p><strong>创建测试类Test1.java</strong></p><pre><code>package com.oracle.test;import java.sql.SQLException;import org.apache.commons.dbutils.QueryRunner;import com.oracle.utils.DataSourceUtils;public class Test1 &#123;    public static void main(String[] args)&#123;        try &#123;            //开启事务            DataSourceUtils.startTransaction();            //创建QueryRunner对象            QueryRunner qr = new QueryRunner();            //编写sql语句            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;            //执行sql            qr.update(DataSourceUtils.getConnection(), sql1);                        //失败            int c=100/0;                        qr.update(DataSourceUtils.getConnection(), sql2);            //事务提交            DataSourceUtils.commitAndRelease();            //关闭事务            DataSourceUtils.closeConnection();        &#125; catch (Exception e) &#123;            //失败则回滚            try &#123;                DataSourceUtils.rollback();            &#125; catch (Exception e1) &#123;                // TODO Auto-generated catch block                e1.printStackTrace();            &#125;        &#125;    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;事务&quot;&gt;&lt;a href=&quot;#事务&quot; class=&quot;headerlink&quot; title=&quot;事务&quot;&gt;&lt;/a&gt;事务&lt;/h1&gt;&lt;p&gt;当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。&lt;br&gt;例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="JavaWeb项目开发" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="事务" scheme="http://example.com/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E4%BA%8B%E5%8A%A1/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="事务" scheme="http://example.com/tags/%E4%BA%8B%E5%8A%A1/"/>
-    
-    <category term="数据库" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
