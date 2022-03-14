@@ -190,6 +190,413 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/06/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" class="post-title-link" itemprop="url">spring | 自动装配</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-06 00:00:49 / Modified: 00:16:07" itemprop="dateCreated datePublished" datetime="2022-03-06T00:00:49-08:00">2022-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%EF%BC%88%E8%87%AA%E5%8A%A8%E4%B8%BA%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC%EF%BC%89/" itemprop="url" rel="index"><span itemprop="name">自动装配（自动为属性赋值）</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="自动装配（自动为属性赋值）"><a href="#自动装配（自动为属性赋值）" class="headerlink" title="自动装配（自动为属性赋值）"></a>自动装配（自动为属性赋值）</h1><p>1.项目目录<br><img src="/2022/03/06/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/1.PNG"></p>
+<p>2.Emp.java</p>
+<pre><code>package com.atguigu.ioc.auto;
+
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    //private Car car;//类型可以写该类以及该类的父类
+    private CarExtends car;
+    //private Dept dept;//类型可以写该类以及该类的父类
+    private DeptI dept;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public CarExtends getCar() &#123;
+        return car;
+    &#125;
+    public void setCar(CarExtends car) &#123;
+        this.car = car;
+    &#125;
+    public DeptI getDept() &#123;
+        return dept;
+    &#125;
+    public void setDept(DeptI dept) &#123;
+        this.dept = dept;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, car=&quot; + car + &quot;, dept=&quot; + dept + &quot;]&quot;;
+    &#125;
+    
+&#125;
+</code></pre>
+<p>3.CarExtends.java(Car的父类)</p>
+<pre><code>package com.atguigu.ioc.auto;
+
+public class CarExtends &#123;
+
+&#125;
+</code></pre>
+<p>4.Car.java</p>
+<pre><code>package com.atguigu.ioc.auto;
+
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    //private Car car;//类型可以写该类以及该类的父类
+    private CarExtends car;
+    //private Dept dept;//类型可以写该类以及该类的父类
+    private DeptI dept;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public CarExtends getCar() &#123;
+        return car;
+    &#125;
+    public void setCar(CarExtends car) &#123;
+        this.car = car;
+    &#125;
+    public DeptI getDept() &#123;
+        return dept;
+    &#125;
+    public void setDept(DeptI dept) &#123;
+        this.dept = dept;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, car=&quot; + car + &quot;, dept=&quot; + dept + &quot;]&quot;;
+    &#125;
+    
+&#125;
+</code></pre>
+<p>5.DeptI.java（接口）</p>
+<pre><code>package com.atguigu.ioc.auto;
+
+public interface DeptI &#123;
+
+&#125;
+</code></pre>
+<p>6.Dept.java（DeptI接口的实现类）</p>
+<pre><code>package com.atguigu.ioc.auto;
+
+public class Dept implements DeptI&#123;
+    private Integer did;
+    private String dname;
+    public Integer getDid() &#123;
+        return did;
+    &#125;
+    public void setDid(Integer did) &#123;
+        this.did = did;
+    &#125;
+    public String getDname() &#123;
+        return dname;
+    &#125;
+    public void setDname(String dname) &#123;
+        this.dname = dname;
+    &#125;
+&#125;
+</code></pre>
+<p>7.auto.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    
+    &lt;!--
+        autowire:根据某种策略自动未非字面量属性赋值
+        autowire=&quot;byName|byType&quot;
+        byName:通过属性名和spring容器中bean的id进行比较，若一致则可直接赋值
+        byType:通过spring容器中bean的类型，为兼容性（子类对象为父类赋值，实现类为接口赋值）的属性赋值 
+                在使用byType的过程中，要求spring容器中只能有一个能为属性赋值的bean
+        
+        选用建议：当设置autowire属性，会最作用于该bean中所有的非字面量属性，因此谁都不用
+     --&gt;
+    
+    &lt;bean id=&quot;emp&quot; class=&quot;com.atguigu.ioc.auto.Emp&quot; autowire=&quot;byName&quot;&gt;&lt;!-- byName/byType --&gt;
+        &lt;property name=&quot;eid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;ename&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
+        &lt;!-- &lt;property name=&quot;car&quot; ref=&quot;car&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;dept&quot; ref=&quot;dept&quot;&gt;&lt;/property&gt; --&gt;
+    &lt;/bean&gt;
+    
+    &lt;bean id=&quot;car&quot; class=&quot;com.atguigu.ioc.auto.Car&quot;&gt;
+        &lt;property name=&quot;cid&quot; value=&quot;666666&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;cname&quot; value=&quot;霸道&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;bean id=&quot;dept&quot; class=&quot;com.atguigu.ioc.auto.Dept&quot;&gt;
+        &lt;property name=&quot;did&quot; value=&quot;1111&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;dname&quot; value=&quot;开发部&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>8.Test.java</p>
+<pre><code>package com.atguigu.ioc.auto;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+
+    public static void main(String[] args) &#123;
+        // TODO Auto-generated method stub
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;auto.xml&quot;);
+        
+        Emp bean = ac.getBean(&quot;emp&quot;, Emp.class);
+        
+        System.out.println(bean);
+    &#125;
+&#125;
+</code></pre>
+<p>9.运行结果</p>
+<pre><code>Emp [eid=1001, ename=张三, car=com.atguigu.ioc.auto.Car@31ef45e3, dept=com.atguigu.ioc.auto.Dept@598067a5]
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">spring | 引用外部属性文件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-05 23:58:42" itemprop="dateCreated datePublished" datetime="2022-03-05T23:58:42-08:00">2022-03-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-06 00:15:14" itemprop="dateModified" datetime="2022-03-06T00:15:14-08:00">2022-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">引用外部属性文件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="引用外部属性文件"><a href="#引用外部属性文件" class="headerlink" title="引用外部属性文件"></a>引用外部属性文件</h1><p>1.项目目录<br><img src="/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/1.PNG"></p>
+<p>2.导入druid-1.1.9.jar、mysql-connector-java-5.1.7-bin.jar</p>
+<p>3.db.properties</p>
+<pre><code># k = v
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/test
+jdbc.username=root
+jdbc.password=123456
+</code></pre>
+<p>4.datasource.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 直接配置 --&gt;
+    &lt;!-- &lt;bean id=&quot;datasource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/test&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;123456&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt; --&gt;
+    
+    &lt;!-- 加载资源文件（引用外部资源文件） --&gt;
+    &lt;!-- &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;datasource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt; --&gt;
+    
+    &lt;!-- 使用context标签加载资源文件（引用外部属性文件） --&gt;
+    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
+    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;datasource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt; 
+&lt;/beans&gt;
+</code></pre>
+<p>5.Test.java</p>
+<pre><code>package com.atguigu.ioc.datasource;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.alibaba.druid.pool.DruidDataSource;
+
+public class Test &#123;
+
+    public static void main(String[] args) throws Exception &#123;
+        // TODO Auto-generated method stub
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;datasource.xml&quot;);
+        
+        DruidDataSource bean = ac.getBean(&quot;datasource&quot;, DruidDataSource.class);
+        
+        System.out.println(bean);
+        
+        //System.out.println(bean.getConnection());
+    &#125;
+
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1714,267 +2121,6 @@ public class Test1 &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">JavaWeb项目开发 | QueryRunner和数据库增删改查操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-26 03:10:13 / Modified: 04:02:34" itemprop="dateCreated datePublished" datetime="2022-01-26T03:10:13-08:00">2022-01-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">QueryRunner和数据库增删改查操作</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a target="_blank" rel="noopener" href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
-<pre><code>create table dept(
-int id primary key auto_increment not null,
-varchar(20) name
-)
-</code></pre>
-<p><strong>Dept.java（JavaBean）</strong></p>
-<pre><code>package com.oracle.bean;
-
-public class Dept &#123;
-    private int id;
-    private String name;
-    public Dept() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    public Dept(int id, String name) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-    &#125;
-    public int getId() &#123;
-        return id;
-    &#125;
-    public void setId(int id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    
-    
-&#125;
-</code></pre>
-<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
-<pre><code>package com.oracle.test;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import com.oracle.bean.Dept;
-import com.oracle.utils.DataSourceUtils;
-
-public class Test &#123;
-    
-    public static void main(String[] args) throws SQLException &#123;
-        //创建QueryRunner对象
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        //增加数据
-        //String sql = &quot;insert into dept(name) values(?)&quot;;
-        //qr.update(sql, &quot;需求部&quot;);
-        
-        //修改数据
-        //String sql = &quot;update dept set name=? where id=?&quot;;
-        //qr.update(sql, &quot;需求组&quot;, 4);
-        
-        //删除数据
-        //String sql = &quot;delete from dept where id=?&quot;;
-        //qr.update(sql, 4);
-        
-        //查询数据
-        //（1）查询结果为一行
-        //String sql = &quot;select * from dept where id=?&quot;;
-        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
-        //System.out.println(d.getId());
-        //System.out.println(d.getName());
-        
-        //（2）查询结果为多行
-//        String sql = &quot;select * from dept&quot;;
-//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
-//        for(Dept d:list) &#123;
-//            System.out.println(d.getId());
-//            System.out.println(d.getName());
-//        &#125;
-        
-        //（2）查询结果为聚合函数
-        String sql = &quot;select count(*) from dept&quot;;
-        
-        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
-        
-        System.out.println(i);
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/25/jdbc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/25/jdbc/" class="post-title-link" itemprop="url">JavaWeb项目开发 | jdbc</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-01-25 20:17:47" itemprop="dateCreated datePublished" datetime="2022-01-25T20:17:47-08:00">2022-01-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-26 04:08:56" itemprop="dateModified" datetime="2022-01-26T04:08:56-08:00">2022-01-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jdbc%E5%B0%81%E8%A3%85%E7%B1%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">jdbc封装类和数据库连接池</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;c3p0-config&gt;
-    &lt;default-config&gt;
-        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
-        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
-        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
-        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
-    &lt;/default-config&gt; 
-&lt;/c3p0-config&gt; 
-</code></pre>
-<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2046,14 +2192,14 @@ public class Test &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">351</span>
+          <span class="site-state-item-count">353</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">193</span>
+        <span class="site-state-item-count">195</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
