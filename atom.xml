@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-18T02:22:02.995Z</updated>
+  <updated>2022-03-18T12:29:52.497Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,77 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpringMVC | spring和springMVC的整合</title>
+    <link href="http://example.com/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/"/>
+    <id>http://example.com/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/</id>
+    <published>2022-03-18T12:22:49.000Z</published>
+    <updated>2022-03-18T12:29:52.497Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="spring和springMVC的整合"><a href="#spring和springMVC的整合" class="headerlink" title="spring和springMVC的整合"></a>spring和springMVC的整合</h1><p>1.项目目录<br><img src="/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/1.PNG"></p><span id="more"></span><p>2.web.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;  &lt;display-name&gt;SpringMVC04&lt;/display-name&gt;  &lt;welcome-file-list&gt;    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;  &lt;/welcome-file-list&gt;    &lt;filter&gt;    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;    &lt;init-param&gt;      &lt;param-name&gt;encoding&lt;/param-name&gt;      &lt;param-value&gt;UTF-8&lt;/param-value&gt;    &lt;/init-param&gt;  &lt;/filter&gt;  &lt;filter-mapping&gt;    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;  &lt;/filter-mapping&gt;    &lt;servlet&gt;    &lt;servlet-name&gt;springDispatcherServlet&lt;/servlet-name&gt;    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;    &lt;init-param&gt;      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;      &lt;param-value&gt;classpath:springMVC.xml&lt;/param-value&gt;    &lt;/init-param&gt;    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;  &lt;/servlet&gt;  &lt;servlet-mapping&gt;    &lt;servlet-name&gt;springDispatcherServlet&lt;/servlet-name&gt;    &lt;url-pattern&gt;/&lt;/url-pattern&gt;  &lt;/servlet-mapping&gt;    &lt;!-- 使用自定义监听器模拟spring、springMVC整合 --&gt;  &lt;!-- &lt;listener&gt;    &lt;listener-class&gt;com.atguigu.listener.SpringListener&lt;/listener-class&gt;  &lt;/listener&gt; --&gt;    &lt;!-- 使用spring提供的监听器模整合spring、springMVC --&gt;  &lt;!-- needed for ContextLoaderListener --&gt;    &lt;context-param&gt;        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;        &lt;param-value&gt;classpath:spring.xml&lt;/param-value&gt;    &lt;/context-param&gt;    &lt;!-- Bootstraps the root web application context before servlet initialization --&gt;    &lt;listener&gt;        &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;    &lt;/listener&gt;&lt;/web-app&gt;</code></pre><p>3.spring.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;    &lt;!-- &lt;bean id=&quot;user&quot; class=&quot;com.atguigu.bean.User&quot;&gt;&lt;/bean&gt; --&gt;        &lt;context:component-scan base-package=&quot;com.atguigu&quot;&gt;        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;    &lt;/context:component-scan&gt;        &lt;bean id=&quot;teacher&quot; class=&quot;com.atguigu.bean.Teacher&quot;&gt;&lt;/bean&gt;&lt;/beans&gt;</code></pre><p>4.springMVC.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;    xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;    xsi:schemaLocation=&quot;http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;        &lt;context:component-scan base-package=&quot;com.atguigu.controller&quot;&gt;&lt;/context:component-scan&gt;        &lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;    &lt;/bean&gt;        &lt;mvc:default-servlet-handler/&gt;    &lt;mvc:annotation-driven /&gt;        &lt;!--         处理文件，将客户端上传的File文件处理为MultipartFile        注意：文件解析器bean中的id必须设置为multipartResolver     --&gt;    &lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;        &lt;!-- 设置文件解析的编码，注意一定要和页面的pageEncoding保持一致 --&gt;        &lt;property name=&quot;defaultEncoding&quot; value=&quot;UTF-8&quot;&gt;&lt;/property&gt;        &lt;!-- 设置最大上传文件大小 --&gt;        &lt;property name=&quot;maxUploadSize&quot; value=&quot;88888888&quot;&gt;&lt;/property&gt;    &lt;/bean&gt;        &lt;!-- 异常处理 --&gt;    &lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;        &lt;property name=&quot;exceptionMappings&quot;&gt;            &lt;props&gt;                &lt;prop key=&quot;java.lang.NullPointerException&quot;&gt;error&lt;/prop&gt;            &lt;/props&gt;        &lt;/property&gt;    &lt;/bean&gt;        &lt;!-- &lt;mvc:interceptors&gt;        默认拦截所有请求        第一种方式        &lt;bean class=&quot;com.atguigu.interceptor.FirstInterceptor&quot;&gt;&lt;/bean&gt;        &lt;bean class=&quot;com.atguigu.interceptor.SecondInterceptor&quot;&gt;&lt;/bean&gt;                    第二种方式            此方式要求拦截器上必须加注解@Component                &lt;ref bean=&quot;firstInterceptor&quot; /&gt;                设置自定义拦截方式        &lt;mvc:interceptor&gt;            &lt;bean&gt;&lt;/bean&gt;            &lt;mvc:mapping path=&quot;&quot;/&gt;            &lt;mvc:exclude-mapping path=&quot;&quot;/&gt;        &lt;/mvc:interceptor&gt;    &lt;/mvc:interceptors&gt; --&gt;&lt;/beans&gt;</code></pre><p>5.index.jsp</p><pre><code>&lt;a href=&quot;testListener&quot;&gt;测试监听器&lt;/a&gt;</code></pre><p>6.User.java</p><pre><code>package com.atguigu.bean;import org.springframework.stereotype.Component;@Componentpublic class User &#123;    private Integer id;    private String username;    public Integer getId() &#123;        return id;    &#125;    public void setId(Integer id) &#123;        this.id = id;    &#125;    public String getUsername() &#123;        return username;    &#125;    public void setUsername(String username) &#123;        this.username = username;    &#125;    public User() &#123;        System.out.println(&quot;User==&gt;构造方法&quot;);    &#125;&#125;</code></pre><p>7.Teacher.java</p><pre><code>package com.atguigu.bean;public class Teacher &#123;    private Integer id;        private String name;    public Integer getId() &#123;        return id;    &#125;    public void setId(Integer id) &#123;        this.id = id;    &#125;    public String getName() &#123;        return name;    &#125;    public void setName(String name) &#123;        this.name = name;    &#125;    public Teacher() &#123;        System.out.println(&quot;Teacher==&gt;构造方法&quot;);    &#125;    @Override    public String toString() &#123;        return &quot;Teacher [id=&quot; + id + &quot;, name=&quot; + name + &quot;]&quot;;    &#125;&#125;</code></pre><p>8.SpringListener.java（自定义监听器）</p><pre><code>package com.atguigu.listener;import javax.servlet.ServletContext;import javax.servlet.ServletContextEvent;import javax.servlet.ServletContextListener;import org.springframework.context.ApplicationContext;import org.springframework.context.support.ClassPathXmlApplicationContext;/** * Application Lifecycle Listener implementation class SpringListener * */public class SpringListener implements ServletContextListener &#123;    /**     * Default constructor.      */    public SpringListener() &#123;        // TODO Auto-generated constructor stub    &#125;    /**     * @see ServletContextListener#contextDestroyed(ServletContextEvent)     */    public void contextDestroyed(ServletContextEvent arg0)  &#123;          // TODO Auto-generated method stub    &#125;    /**     * @see ServletContextListener#contextInitialized(ServletContextEvent)     */    public void contextInitialized(ServletContextEvent sce)  &#123;         ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;spring.xml&quot;);        ServletContext servletContext = sce.getServletContext();        servletContext.setAttribute(&quot;ac&quot;, ac);    &#125;&#125;</code></pre><p>9.TestController.java</p><pre><code>package com.atguigu.controller;import javax.servlet.ServletContext;import javax.servlet.http.HttpSession;import org.springframework.context.ApplicationContext;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.RequestMapping;import com.atguigu.bean.Teacher;@Controllerpublic class TestController &#123;    @RequestMapping(&quot;/testListener&quot;)    public void testListener(HttpSession session)&#123;        //获取spring所管理的teacher对象        ServletContext servletContext = session.getServletContext();        ApplicationContext ac = (ApplicationContext)servletContext.getAttribute(&quot;ac&quot;);        Teacher teacher = ac.getBean(&quot;teacher&quot;, Teacher.class);        System.out.println(teacher);    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;spring和springMVC的整合&quot;&gt;&lt;a href=&quot;#spring和springMVC的整合&quot; class=&quot;headerlink&quot; title=&quot;spring和springMVC的整合&quot;&gt;&lt;/a&gt;spring和springMVC的整合&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/1.PNG&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
+    
+    <category term="spring和springMVC的整合" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/"/>
+    
+    
+    <category term="spring" scheme="http://example.com/tags/spring/"/>
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringMVC | 异常处理</title>
+    <link href="http://example.com/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"/>
+    <id>http://example.com/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</id>
+    <published>2022-03-18T03:48:21.000Z</published>
+    <updated>2022-03-18T03:53:34.916Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>1.在SpringMVC配置文件（springMVC.xml）中做以下配置：</p><pre><code>&lt;!-- 异常处理 --&gt;&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;    &lt;property name=&quot;exceptionMappings&quot;&gt;        &lt;props&gt;            &lt;prop key=&quot;java.lang.NullPointerException&quot;&gt;error&lt;/prop&gt;        &lt;/props&gt;    &lt;/property&gt;&lt;/bean&gt;</code></pre><span id="more"></span><p>2.index.jsp</p><pre><code>&lt;a href=&quot;testException&quot;&gt;测试异常&lt;/a&gt;</code></pre><p>3.TestExceptionController.java</p><pre><code>package com.atguigu.controller;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RequestMethod;@Controllerpublic class TestExceptionController &#123;    @RequestMapping(value=&quot;/testException&quot;, method=RequestMethod.GET)    public String testException()&#123;        String s = null;        System.err.println(s.substring(0, 5));        return &quot;success&quot;;    &#125;&#125;</code></pre><p>4.error.jsp</p><pre><code>&lt;a href=&quot;&quot;&gt;操作异常，请稍后重试&lt;/a&gt;$&#123;exception&#125;</code></pre><p>5.运行结果<br><img src="/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/1.PNG"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;异常处理&quot;&gt;&lt;a href=&quot;#异常处理&quot; class=&quot;headerlink&quot; title=&quot;异常处理&quot;&gt;&lt;/a&gt;异常处理&lt;/h1&gt;&lt;p&gt;1.在SpringMVC配置文件（springMVC.xml）中做以下配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- 异常处理 --&amp;gt;
+&amp;lt;bean class=&amp;quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&amp;quot;&amp;gt;
+    &amp;lt;property name=&amp;quot;exceptionMappings&amp;quot;&amp;gt;
+        &amp;lt;props&amp;gt;
+            &amp;lt;prop key=&amp;quot;java.lang.NullPointerException&amp;quot;&amp;gt;error&amp;lt;/prop&amp;gt;
+        &amp;lt;/props&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/bean&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
+    
+    <category term="异常处理" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
+    
+    <category term="异常处理" scheme="http://example.com/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"/>
+    
+  </entry>
   
   <entry>
     <title>SpringMVC | 拦截器</title>
@@ -638,67 +709,6 @@ Class alunbarClass2 = o.getClass();
     <category term="spring" scheme="http://example.com/tags/spring/"/>
     
     <category term="JdbcTemplate" scheme="http://example.com/tags/JdbcTemplate/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring | 以XML方式配置切面</title>
-    <link href="http://example.com/2022/03/06/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/"/>
-    <id>http://example.com/2022/03/06/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/</id>
-    <published>2022-03-06T12:15:43.000Z</published>
-    <updated>2022-03-06T12:20:37.304Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="以XML方式配置切面"><a href="#以XML方式配置切面" class="headerlink" title="以XML方式配置切面"></a>以XML方式配置切面</h1><p>1.项目目录<br><img src="/2022/03/06/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/1.PNG"></p><p>2.MathI.java(接口)</p><pre><code>package com.atguigu.spring.aopxml;public interface MathI &#123;    int add(int i, int j);    int sub(int i, int j);    int mul(int i, int j);    int div(int i, int j);&#125;</code></pre><p>3.MathImpl.java(实现类)</p><pre><code>package com.atguigu.spring.aopxml;import org.springframework.stereotype.Component;@Componentpublic class MathImpl implements MathI&#123;    @Override    public int add(int i, int j) &#123;        int result = i + j;        return result;    &#125;        @Override    public int sub(int i, int j) &#123;        int result = i - j;        return result;    &#125;    @Override    public int mul(int i, int j) &#123;        int result = i * j;        return result;     &#125;    @Override    public int div(int i, int j) &#123;        int result = i / j;        return result;    &#125;&#125;</code></pre><p>4.MyLogger.java(切面)</p><pre><code>package com.atguigu.spring.aopxml;import org.springframework.stereotype.Component;@Componentpublic class MyLogger &#123;    public void before()&#123;        System.out.println(&quot;前置通知&quot;);    &#125;&#125;</code></pre><p>5.aop-xml.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd&quot;&gt;    &lt;context:component-scan base-package=&quot;com.atguigu.spring.aopxml&quot;&gt;&lt;/context:component-scan&gt;        &lt;!-- 以XML方式配置切面  --&gt;    &lt;aop:config&gt;        &lt;!-- 切面 --&gt;        &lt;aop:aspect ref=&quot;myLogger&quot;&gt;            &lt;!-- 前置通知 通知通过切入点表达式作用于连接点--&gt;            &lt;!-- &lt;aop:before method=&quot;before&quot; pointcut=&quot;execution(* com.atguigu.spring.aopxml.*.*(..))&quot;/&gt; --&gt;                        &lt;aop:pointcut expression=&quot;execution(* com.atguigu.spring.aopxml.*.*(..))&quot; id=&quot;cut&quot;/&gt;            &lt;aop:before method=&quot;before&quot; pointcut-ref=&quot;cut&quot;/&gt;        &lt;/aop:aspect&gt;    &lt;/aop:config&gt;&lt;/beans&gt;</code></pre><p>6.Test.java(测试类)</p><pre><code>package com.atguigu.spring.aopxml;import org.springframework.context.ApplicationContext;import org.springframework.context.support.ClassPathXmlApplicationContext;public class Test &#123;    public static void main(String[] args) &#123;        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop-xml.xml&quot;);        MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);        int add = math.add(2, 2);        System.out.println(add);    &#125;&#125;</code></pre><p>7.运行结果</p><pre><code>前置通知4</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;以XML方式配置切面&quot;&gt;&lt;a href=&quot;#以XML方式配置切面&quot; class=&quot;headerlink&quot; title=&quot;以XML方式配置切面&quot;&gt;&lt;/a&gt;以XML方式配置切面&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/06/%E4%BB</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="spring" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/"/>
-    
-    <category term="以XML方式配置切面" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/"/>
-    
-    
-    <category term="spring" scheme="http://example.com/tags/spring/"/>
-    
-    <category term="AOP" scheme="http://example.com/tags/AOP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring | AOP(切面、通知、切入点、切面优先级)</title>
-    <link href="http://example.com/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/"/>
-    <id>http://example.com/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/</id>
-    <published>2022-03-06T11:49:13.000Z</published>
-    <updated>2022-03-06T11:58:36.832Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="AOP-切面、通知、切入点、切面优先级"><a href="#AOP-切面、通知、切入点、切面优先级" class="headerlink" title="AOP(切面、通知、切入点、切面优先级)"></a>AOP(切面、通知、切入点、切面优先级)</h1><p><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG"></p><span id="more"></span><p>2.MathI.java(接口)</p><pre><code>package com.atguigu.spring.aop;public interface MathI &#123;    int add(int i, int j);    int sub(int i, int j);    int mul(int i, int j);    int div(int i, int j);&#125;</code></pre><p>3.MathImpl.java（实现类）</p><pre><code>package com.atguigu.spring.aop;import org.springframework.stereotype.Component;@Componentpublic class MathImpl implements MathI&#123;    @Override    public int add(int i, int j) &#123;        int result = i + j;        return result;    &#125;        @Override    public int sub(int i, int j) &#123;        int result = i - j;        return result;    &#125;    @Override    public int mul(int i, int j) &#123;        int result = i * j;        return result;     &#125;    @Override    public int div(int i, int j) &#123;        int result = i / j;        return result;    &#125;&#125;</code></pre><p>4.MyLoggerAspect.java（切面–&gt;日志）</p><pre><code>package com.atguigu.spring.aop;import java.util.Arrays;import org.aopalliance.intercept.Joinpoint;import org.aspectj.lang.JoinPoint;import org.aspectj.lang.ProceedingJoinPoint;import org.aspectj.lang.annotation.After;import org.aspectj.lang.annotation.AfterReturning;import org.aspectj.lang.annotation.AfterThrowing;import org.aspectj.lang.annotation.Around;import org.aspectj.lang.annotation.Aspect;import org.aspectj.lang.annotation.Before;import org.aspectj.lang.annotation.Pointcut;import org.springframework.core.annotation.Order;import org.springframework.stereotype.Component;@Component@Aspect//标注当前类为切面@Order(1)public class MyLoggerAspect &#123;    //AspectJ支持的5种类型的通知注解        //重用切入点定义    @Pointcut(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)    public void test()&#123;            &#125;    /**     * @Before：将方法指定为前置通知     * 必须设置value,其值为切入点表达式     * 前置通知：作用于方法执行之前     */    //前置通知 //    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.add(int, int))&quot;)//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)//    @Before(value = &quot;execution(* com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(int,int))&quot;)//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)    @Before(value = &quot;test()&quot;)    public void beforeMethod(JoinPoint joinPoint)&#123;        Object[] args = joinPoint.getArgs();//获取方法的参数        String methodName = joinPoint.getSignature().getName();//获取方法名                System.out.println(&quot;method:&quot; + methodName + &quot;,arguments:&quot; + Arrays.toString(args));    &#125;        /**     * @After:将方法标注为后置通知     * 后置通知：作用于方法的finally语句块，即不管有没有异常都会执行     */    //后置通知    //@After(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)    @After(value = &quot;test()&quot;)    public void afterMethod()&#123;        System.out.println(&quot;后置通知&quot;);    &#125;        /**     * @AfterReturning：将方法标注为返回通知     * 返回通知：作用于方法执行之后     * 要通过returning设置接收方法返回值的变量名     * 要向在方法中使用，必须在方法的形参中设置和变量名相同的参数名的参数     */    @AfterReturning(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;,returning=&quot;result&quot;)    public void afterReturing(JoinPoint joinPoint, Object result)&#123;        String methodName = joinPoint.getSignature().getName();        System.out.println(&quot;method:&quot; + methodName + &quot;,result:&quot; + result);    &#125;        /**     * @AfterThrowing：将方法标注为异常通知（例外通知）     * 异常通知：作用于方法抛出异常时     * 可通过throwing设置接受方法返回的异常信息     * 在参数列表中可通过具体的异常类型，来对指定的异常信息进行操作     */    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)    public void afterThrowing(Exception ex)&#123;        System.out.println(&quot;有异常了,messages&quot;+ex);    &#125;    //处理特定异常//    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)//    public void afterThrowing(NullPointerException ex)&#123;//        System.out.println(&quot;有异常了,messages&quot;+ex);//    &#125;        /**     * @Around：     */    @Around(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)    public Object aroundMethod(ProceedingJoinPoint joinPoint)&#123;            Object result = null;        try &#123;            //前置通知            System.out.println(&quot;前置通知&quot;);            result = joinPoint.proceed();//执行方法            //返回通知            System.out.println(&quot;返回通知&quot;);            return result;        &#125; catch (Throwable e) &#123;            // TODO Auto-generated catch block            e.printStackTrace();            //异常通知            System.out.println(&quot;异常通知&quot;);        &#125;finally&#123;            //后置通知            System.out.println(&quot;后置通知&quot;);        &#125;        return -1;    &#125;&#125;</code></pre><p>5.TestHandler.java</p><pre><code>package com.atguigu.spring.aop;import org.springframework.stereotype.Component;@Componentpublic class TestHandler &#123;    public void test()&#123;        System.out.println(&quot;测试切入点表达式&quot;);    &#125;&#125;</code></pre><p>6.TestAspect.java（切面–&gt;另一个切面，用来测试切面优先级）</p><pre><code>package com.atguigu.spring.aop;import org.aspectj.lang.annotation.Aspect;import org.aspectj.lang.annotation.Before;import org.springframework.core.annotation.Order;import org.springframework.stereotype.Component;@Component@Aspect@Order(0)//定义切面作用的优先级，值越小优先级越高，默认值为int的最大值 public class TestAspect &#123;    @Before(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)    public void before()&#123;        System.out.println(&quot;TestAspect====&gt;前置通知&quot;);    &#125;&#125;</code></pre><p>7.Test.java（测试类）</p><pre><code>package com.atguigu.spring.aop;import org.springframework.context.ApplicationContext;import org.springframework.context.support.ClassPathXmlApplicationContext;public class Test &#123;    public static void main(String[] args) &#123;        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop.xml&quot;);                MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);                int i = math.div(1, 1);        System.out.println(i);        //        TestHandler bean = ac.getBean(&quot;testHandler&quot;, TestHandler.class);//        bean.test();    &#125;&#125;</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;AOP-切面、通知、切入点、切面优先级&quot;&gt;&lt;a href=&quot;#AOP-切面、通知、切入点、切面优先级&quot; class=&quot;headerlink&quot; title=&quot;AOP(切面、通知、切入点、切面优先级)&quot;&gt;&lt;/a&gt;AOP(切面、通知、切入点、切面优先级)&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;示例：&lt;/strong&gt;&lt;br&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG&quot;&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="spring" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/"/>
-    
-    <category term="AOP(切面、通知、切入点、切面优先级)" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/AOP-%E5%88%87%E9%9D%A2%E3%80%81%E9%80%9A%E7%9F%A5%E3%80%81%E5%88%87%E5%85%A5%E7%82%B9%E3%80%81%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/"/>
-    
-    
-    <category term="spring" scheme="http://example.com/tags/spring/"/>
-    
-    <category term="AOP" scheme="http://example.com/tags/AOP/"/>
     
   </entry>
   

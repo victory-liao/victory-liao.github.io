@@ -190,6 +190,255 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/" class="post-title-link" itemprop="url">基于JavaWeb的网上购物商城 | 登录成功后网页头部显示用户名</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-13 19:25:06 / Modified: 19:38:01" itemprop="dateCreated datePublished" datetime="2022-01-13T19:25:06-08:00">2022-01-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/" itemprop="url" rel="index"><span itemprop="name">基于JavaWeb的网上购物商城</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/" itemprop="url" rel="index"><span itemprop="name">登录成功后网页头部显示用户名</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="登录成功后网页头部显示用户名"><a href="#登录成功后网页头部显示用户名" class="headerlink" title="登录成功后网页头部显示用户名"></a>登录成功后网页头部显示用户名</h1><p>要实现登录成功后在网页头部显示用户名，只需在登录成功后将当前用户存入session,然后在登录页面使用jstl语法判断用户状态，<br>登录成功则显示用户名。</p>
+<ol>
+<li>在UserServlet.java中添加将当前用户加入session中的代码<br>public void login(HttpServletRequest request, HttpServletResponse response) {<pre><code> ......
+ if(user!=null) &#123;
+     HttpSession session = request.getSession();
+     session.setAttribute(&quot;user&quot;, user);//将当前用户(User)加入session
+     
+     request.getRequestDispatcher(&quot;/index.jsp&quot;).forward(request, response);
+ &#125;
+ ......
+</code></pre>
+ }</li>
+<li>修改header.jsp代码<br>使用jstl代码判断当前用户是否为空，若为空，显示登录注册链接，若不为空显示用户名等信息。</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;!-- 登录 注册 购物车... --&gt;
+&lt;div class=&quot;container-fluid&quot;&gt;
+    &lt;div class=&quot;col-md-4&quot;&gt;
+        &lt;img src=&quot;img/logo2.png&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-md-5&quot;&gt;
+        &lt;img src=&quot;img/header.png&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;
+        &lt;ol class=&quot;list-inline&quot;&gt;
+            &lt;c:if test=&quot;$&#123;empty user&#125;&quot;&gt;
+                &lt;li&gt;&lt;a href=&quot;login.jsp&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;register.jsp&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;
+            &lt;/c:if&gt;
+            &lt;c:if test=&quot;$&#123;not empty user&#125;&quot;&gt;
+                &lt;li&gt;$&#123;user.username&#125;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;cart.jsp&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;order_list.jsp&quot;&gt;我的订单&lt;/a&gt;&lt;/li&gt;
+            &lt;/c:if&gt;
+        &lt;/ol&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 导航条 --&gt;
+&lt;div class=&quot;container-fluid&quot;&gt;
+    &lt;nav class=&quot;navbar navbar-inverse&quot;&gt;
+        &lt;div class=&quot;container-fluid&quot;&gt;
+            &lt;!-- Brand and toggle get grouped for better mobile display --&gt;
+            &lt;div class=&quot;navbar-header&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;navbar-toggle collapsed&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#bs-example-navbar-collapse-1&quot; aria-expanded=&quot;false&quot;&gt;
+                    &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
+                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;首页&lt;/a&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;bs-example-navbar-collapse-1&quot;&gt;
+                &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+                    &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;product_list.htm&quot;&gt;手机数码&lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;form class=&quot;navbar-form navbar-right&quot; role=&quot;search&quot;&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;button type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;Submit&lt;/button&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+&lt;/div&gt;
+</code></pre>
+<ol start="3">
+<li>效果<br><img src="/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/1.PNG"></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/13/%E6%B3%A8%E5%86%8C%E5%92%8C%E7%99%BB%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/13/%E6%B3%A8%E5%86%8C%E5%92%8C%E7%99%BB%E5%BD%95/" class="post-title-link" itemprop="url">基于JavaWeb的网上购物商城 | 注册和登录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-13 02:31:02" itemprop="dateCreated datePublished" datetime="2022-01-13T02:31:02-08:00">2022-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-14 18:31:06" itemprop="dateModified" datetime="2022-01-14T18:31:06-08:00">2022-01-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/" itemprop="url" rel="index"><span itemprop="name">基于JavaWeb的网上购物商城</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E6%B3%A8%E5%86%8C%E5%92%8C%E7%99%BB%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">注册和登录</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h1><p>以下代码实现网上购物商城的用户注册和登录功能。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/13/%E6%B3%A8%E5%86%8C%E5%92%8C%E7%99%BB%E5%BD%95/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/12/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1229,283 +1478,6 @@ public class Demo1Servlet extends HttpServlet &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/session/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/11/session/" class="post-title-link" itemprop="url">JavaWeb项目开发 | session</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-11 01:53:44 / Modified: 02:09:45" itemprop="dateCreated datePublished" datetime="2022-01-11T01:53:44-08:00">2022-01-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/session/" itemprop="url" rel="index"><span itemprop="name">session</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><h2 id="session-1"><a href="#session-1" class="headerlink" title="session"></a>session</h2><ol>
-<li>什么是session?<br>服务器端会话技术</li>
-<li>api</li>
-</ol>
-<p><strong>(1)session的获取</strong></p>
-<pre><code>HttpSession session=request.getSession()
-</code></pre>
-<p><strong>(2)session属性操作</strong></p>
-<pre><code>session.setAttribute(&quot;attr_name&quot;, attr_value);//设置属性
-session.getAttribute(attr_name);//获取属性
-</code></pre>
-<ol start="3">
-<li>作用范围<br>一次会话中<h2 id="session-测试（其他的servlet可以共享一次请求中的数据）"><a href="#session-测试（其他的servlet可以共享一次请求中的数据）" class="headerlink" title="session 测试（其他的servlet可以共享一次请求中的数据）"></a>session 测试（其他的servlet可以共享一次请求中的数据）</h2></li>
-<li>项目目录<br><img src="/2022/01/11/session/1.PNG"></li>
-<li>代码</li>
-</ol>
-<p><strong>a.html</strong></p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;/sessiontest/demo1&quot;&gt;访问demo1&lt;/a&gt;
-    &lt;a href=&quot;/sessiontest/demo2&quot;&gt;访问demo2&lt;/a&gt;
-    &lt;a href=&quot;/sessiontest/demo3&quot;&gt;访问demo3&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><strong>Demo1Servlet</strong></p>
-<pre><code>package com.oracle;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-public class Demo1Servlet extends HttpServlet &#123;
-    private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        //request.setAttribute(&quot;username&quot;, &quot;zhangsan&quot;);
-        
-        //请求转发
-        //request.getRequestDispatcher(&quot;/demo2&quot;).forward(request, response);
-        
-        //创建session
-        HttpSession session = request.getSession();
-        System.out.println(&quot;Demo1Servlet增加username属性，值为lisi&quot;);
-        session.setAttribute(&quot;username&quot;, &quot;lisi&quot;);
-    &#125;
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        doGet(request, response);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>Demo2Servlet</strong></p>
-<pre><code>package com.oracle;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-public class Demo2Servlet extends HttpServlet &#123;
-    private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        //String username = (String)request.getAttribute(&quot;username&quot;);
-        //System.out.println(username);//null 一次会话当中的第二次请求不能得到第一次请求的数据
-        
-        HttpSession session = request.getSession();
-        String username = (String)session.getAttribute(&quot;username&quot;);
-        System.out.println(&quot;Demo2Servlet:&quot; + username);
-        
-    &#125;
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        doGet(request, response);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>Demo3Servlet</strong></p>
-<pre><code>package com.oracle;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-public class Demo3Servlet extends HttpServlet &#123;
-    private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        HttpSession session = request.getSession();
-        String username = (String)session.getAttribute(&quot;username&quot;);
-        System.out.println(&quot;Demo2Servlet:&quot; + username);
-    &#125;
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        doGet(request, response);
-    &#125;
-&#125;
-</code></pre>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2022/01/11/session/2.PNG"></p>
-<p><img src="/2022/01/11/session/3.PNG"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 注册功能实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-11 00:05:06 / Modified: 00:32:35" itemprop="dateCreated datePublished" datetime="2022-01-11T00:05:06-08:00">2022-01-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">注册功能实现</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="注册功能实现"><a href="#注册功能实现" class="headerlink" title="注册功能实现"></a>注册功能实现</h1><ol>
-<li>实现原理<br>当用户输入完注册信息，点击提交，浏览器向服务器发出请求，然后由服务器中的servlet来处理请求，将前台用户输入的信息保存到数据库当中。<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/1.PNG"></li>
-<li>安装MySQL并创建需要的数据库和表(假设创建的数据库为test3，创建表user)，表结构如下图所示。<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/2.PNG"></li>
-<li>在eclipse中导入数据库配置文件<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/3.PNG"></li>
-<li>导入注册所需的jar包<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/4.PNG"></li>
-<li>导入DataSourceUtils.java<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/6.PNG"></li></ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1577,20 +1549,20 @@ public class Demo3Servlet extends HttpServlet &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">356</span>
+          <span class="site-state-item-count">358</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">198</span>
+        <span class="site-state-item-count">200</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">239</span>
+        <span class="site-state-item-count">240</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
