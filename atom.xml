@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-16T10:07:30.475Z</updated>
+  <updated>2022-03-18T02:22:02.995Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,58 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpringMVC | 拦截器</title>
+    <link href="http://example.com/2022/03/17/%E6%8B%A6%E6%88%AA%E5%99%A8/"/>
+    <id>http://example.com/2022/03/17/%E6%8B%A6%E6%88%AA%E5%99%A8/</id>
+    <published>2022-03-18T02:15:04.000Z</published>
+    <updated>2022-03-18T02:22:02.995Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="拦截器-HandlerInterceptor"><a href="#拦截器-HandlerInterceptor" class="headerlink" title="拦截器 HandlerInterceptor"></a>拦截器 HandlerInterceptor</h1><p>1.在SpringMVC配置文件（springMVC.xml）中进行以下配置：</p><pre><code>&lt;mvc:interceptors&gt;    &lt;!-- 默认拦截所有请求 --&gt;    &lt;!-- 第一种方式 --&gt;    &lt;bean class=&quot;com.atguigu.interceptor.FirstInterceptor&quot;&gt;&lt;/bean&gt;    &lt;bean class=&quot;com.atguigu.interceptor.SecondInterceptor&quot;&gt;&lt;/bean&gt;    &lt;!--         第二种方式        此方式要求拦截器上必须加注解@Component     --&gt;    &lt;!-- &lt;ref bean=&quot;firstInterceptor&quot; /&gt; --&gt;        &lt;!-- 设置自定义拦截方式 --&gt;    &lt;!-- &lt;mvc:interceptor&gt;        &lt;bean&gt;&lt;/bean&gt;        &lt;mvc:mapping path=&quot;&quot;/&gt;        &lt;mvc:exclude-mapping path=&quot;&quot;/&gt;    &lt;/mvc:interceptor&gt; --&gt;&lt;/mvc:interceptors&gt;</code></pre><span id="more"></span><p>2.test.jsp</p><pre><code>&lt;a href=&quot;testInterceptor&quot;&gt;测试拦截器&lt;/a&gt;</code></pre><p>3.TestInterceptorController.java(测试类)</p><pre><code>package com.atguigu.test;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.RequestMapping;@Controllerpublic class TestInterceptorController &#123;    /**     * 当有多个拦截器时，     * preHandle:按照拦截器数组正向顺序执行     * postHandle:按照拦截器数组反向顺序执行     * afterCompletion:按照拦截器数组反向顺序执行     *      * 当多个拦截器的preHandle有不同的值时     * 第一个返回false，第二个返回false：只有第一个的preHandle会执行     *      * 第一个返回true，第二个返回false：两个（全部）拦截器的preHandle都会执行，     * 但是（全部）postHandle都不会执行，     * 而afterCompletion只有第一个（返回false的拦截器之前的所有afterCompletion）会执行     *      * 第一个返回false，第二个返回true：只有第一个的preHandle会执行     */    @RequestMapping(&quot;/testInterceptor&quot;)    public String testInterceptor()&#123;        //System.out.println(1/0);        return &quot;success&quot;;    &#125;&#125;</code></pre><p>4.FirstInterceptor.java</p><pre><code>package com.atguigu.interceptor;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import org.springframework.stereotype.Component;import org.springframework.web.servlet.HandlerInterceptor;import org.springframework.web.servlet.ModelAndView;@Componentpublic class FirstInterceptor implements HandlerInterceptor&#123;    @Override    public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)            throws Exception &#123;        System.out.println(&quot;First:afterCompletion&quot;);    &#125;    @Override    public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)            throws Exception &#123;        System.out.println(&quot;First:posthandle&quot;);    &#125;    @Override    public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception &#123;        System.out.println(&quot;First:preHandle&quot;);        return true;//true:放行 false:拦截    &#125;&#125;</code></pre><p>5.SecondInterceptor.java</p><pre><code>package com.atguigu.interceptor;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import org.springframework.stereotype.Component;import org.springframework.web.servlet.HandlerInterceptor;import org.springframework.web.servlet.ModelAndView;@Componentpublic class SecondInterceptor implements HandlerInterceptor&#123;    @Override    public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)            throws Exception &#123;        System.out.println(&quot;Second:afterCompletion&quot;);    &#125;    @Override    public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)            throws Exception &#123;        System.out.println(&quot;Second:posthandle&quot;);    &#125;    @Override    public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception &#123;        System.out.println(&quot;Second:preHandle&quot;);        return false;//true:放行 false:拦截    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;拦截器-HandlerInterceptor&quot;&gt;&lt;a href=&quot;#拦截器-HandlerInterceptor&quot; class=&quot;headerlink&quot; title=&quot;拦截器 HandlerInterceptor&quot;&gt;&lt;/a&gt;拦截器 HandlerInterceptor&lt;/h1&gt;&lt;p&gt;1.在SpringMVC配置文件（springMVC.xml）中进行以下配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;mvc:interceptors&amp;gt;
+    &amp;lt;!-- 默认拦截所有请求 --&amp;gt;
+    &amp;lt;!-- 第一种方式 --&amp;gt;
+    &amp;lt;bean class=&amp;quot;com.atguigu.interceptor.FirstInterceptor&amp;quot;&amp;gt;&amp;lt;/bean&amp;gt;
+    &amp;lt;bean class=&amp;quot;com.atguigu.interceptor.SecondInterceptor&amp;quot;&amp;gt;&amp;lt;/bean&amp;gt;
+    &amp;lt;!-- 
+        第二种方式
+        此方式要求拦截器上必须加注解@Component
+     --&amp;gt;
+    &amp;lt;!-- &amp;lt;ref bean=&amp;quot;firstInterceptor&amp;quot; /&amp;gt; --&amp;gt;
+    
+    &amp;lt;!-- 设置自定义拦截方式 --&amp;gt;
+    &amp;lt;!-- &amp;lt;mvc:interceptor&amp;gt;
+        &amp;lt;bean&amp;gt;&amp;lt;/bean&amp;gt;
+        &amp;lt;mvc:mapping path=&amp;quot;&amp;quot;/&amp;gt;
+        &amp;lt;mvc:exclude-mapping path=&amp;quot;&amp;quot;/&amp;gt;
+    &amp;lt;/mvc:interceptor&amp;gt; --&amp;gt;
+&amp;lt;/mvc:interceptors&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
+    
+    <category term="拦截器 HandlerInterceptor" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E6%8B%A6%E6%88%AA%E5%99%A8-HandlerInterceptor/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
+    
+    <category term="拦截器" scheme="http://example.com/tags/%E6%8B%A6%E6%88%AA%E5%99%A8/"/>
+    
+    <category term="HandlerInterceptor" scheme="http://example.com/tags/HandlerInterceptor/"/>
+    
+  </entry>
   
   <entry>
     <title>SpringMVC | 上传和下载文件</title>
@@ -647,36 +699,6 @@ Class alunbarClass2 = o.getClass();
     <category term="spring" scheme="http://example.com/tags/spring/"/>
     
     <category term="AOP" scheme="http://example.com/tags/AOP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring | 动态代理之数学计算器</title>
-    <link href="http://example.com/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/"/>
-    <id>http://example.com/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/</id>
-    <published>2022-03-06T08:08:16.000Z</published>
-    <updated>2022-03-06T08:15:51.711Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p><p>1.要求<br>1）计算器能够执行加减乘除运算<br>2）日志：在程序执行期间追踪正在发生的活动<br>3）验证：希望计算器只能处理正数的运算</p><p>2.常规实现</p><pre><code>**MathI.java**package com.atguigu.proxy;public interface MathI &#123;    int add(int i, int j);    int sub(int i, int j);    int mul(int i, int j);    int div(int i, int j);&#125;</code></pre><p><strong>MathImpl.java</strong></p><pre><code>package com.atguigu.proxy;public class MathImpl implements MathI&#123;    @Override    public int add(int i, int j) &#123;        System.out.println(&quot;method:add,arguments:&quot; + i + &quot;,&quot; + j);        System.out.println(&quot;method:add,results:&quot; + (i + j));        return i + j;    &#125;        @Override    public int sub(int i, int j) &#123;        System.out.println(&quot;method:sub,arguments:&quot; + i + &quot;,&quot; + j);        System.out.println(&quot;method:sub,results:&quot; + (i - j));        return i - j;    &#125;    @Override    public int mul(int i, int j) &#123;        System.out.println(&quot;method:mul,arguments:&quot; + i + &quot;,&quot; + j);        System.out.println(&quot;method:mul,results:&quot; + (i * j));        return i * j;    &#125;    @Override    public int div(int i, int j) &#123;        System.out.println(&quot;method:div,arguments:&quot; + i + &quot;,&quot; + j);        System.out.println(&quot;method:div,results:&quot; + (i / j));        return i / j;    &#125;&#125;</code></pre><p><strong>常规实现方法存在的问题</strong><br>①代码混乱：越来越多的非业务需求(日志和验证等)加入后，原有的业务方法急剧膨胀。每个方法在处理核心逻辑的同时还必须兼顾其他多个关注点。<br>②代码分散: 以日志需求为例，只是为了满足这个单一需求，就不得不在多个模块（方法）里多次重复相同的日志代码。如果日志需求发生变化，必须修改所有模块。</p><p>3.动态代理<br><strong>MathI.java（与2中的代码相同）</strong></p><p><strong>MathImpl.java(2中的代码中去掉日志信息)</strong></p><p><strong>MyLogger.java(日志类)</strong></p><p><strong>ProxyUtil.java(代理类)</strong></p><pre><code>package com.atguigu.proxy;import java.lang.reflect.InvocationHandler;import java.lang.reflect.Method;import java.lang.reflect.Proxy;import java.util.Arrays;public class ProxyUtil&#123;    //代理模式：1、静态代理（代理对象真实存在，是自己写好的） 2、动态代理（动态生成代理对象，不需要自己写）    private MathImpl mathImpl;//目标对象 目标对象类必须实现接口        public ProxyUtil(MathImpl mathImpl) &#123;        super();        this.mathImpl = mathImpl;    &#125;    public Object getProxy()&#123;        //获取当前类的类加载器用来加载代理对象所属类        ClassLoader loader = this.getClass().getClassLoader();//动态生成代理对象就需要动态代理类，代理类的执行需要类加载器        //获取目标对象实现的所有接口的Class，代理类会和目标对象实现相同的接口，最终通过代理对象实现功能        Class[] interfaces = mathImpl.getClass().getInterfaces();                return Proxy.newProxyInstance(loader, interfaces, new InvocationHandler()&#123;            @Override            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;                //代理对象实现功能的方式                try&#123;                    MyLogger.before(method.getName(), Arrays.toString(args));                    Object result = method.invoke(mathImpl, args);//动态代理对象实现功能（调用目标对象的方法）                    MyLogger.after(method.getName(), result);                    return result;                &#125;catch (Exception e)&#123;                    MyLogger.throwing();                    e.printStackTrace();                &#125;finally&#123;                    System.out.println(&quot;哪都有我&quot;);                &#125;                return null;                            &#125;        &#125;);    &#125;&#125;</code></pre><p><strong>Test.java(测试类)</strong></p><pre><code>package com.atguigu.proxy;public class Test &#123;    public static void main(String[] args) &#123;//        MathI math = new MathImpl();//        int result = math.add(1, 1);//        System.out.println(result);        ProxyUtil proxy = new ProxyUtil(new MathImpl());                MathI math = (MathI)proxy.getProxy();                int i = math.add(1, 1);        System.out.println(i);                int j = math.div(4, 0);        System.out.println(j);    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;动态代理-数学计算器&quot;&gt;&lt;a href=&quot;#动态代理-数学计算器&quot; class=&quot;headerlink&quot; title=&quot;动态代理-数学计算器&quot;&gt;&lt;/a&gt;动态代理-数学计算器&lt;/h1&gt;&lt;p&gt;项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/06/%E5%8A%A</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="spring" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/"/>
-    
-    <category term="动态代理之数学计算器" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/"/>
-    
-    
-    <category term="spring" scheme="http://example.com/tags/spring/"/>
     
   </entry>
   
