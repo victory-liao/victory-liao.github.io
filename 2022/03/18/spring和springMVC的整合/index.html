@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="spring和springMVC的整合1.项目目录">
+  <meta name="description" content="spring和springMVC的整合1、不整合：需要将spring所管理的内容都交给springMVC管理，这样会造成业务逻辑混乱2、整合：spring的配置文件什么时候加载？怎么加载？解决办法：监听器，可以在ServletContext加载时，通过监听器加载spring的配置文件，创建spring容器spring提供的监听器：ContextLoaderListener3、bean被创建两次的问">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC | spring和springMVC的整合">
 <meta property="og:url" content="http://example.com/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/index.html">
 <meta property="og:site_name" content="Victory&#39;s Blog">
-<meta property="og:description" content="spring和springMVC的整合1.项目目录">
+<meta property="og:description" content="spring和springMVC的整合1、不整合：需要将spring所管理的内容都交给springMVC管理，这样会造成业务逻辑混乱2、整合：spring的配置文件什么时候加载？怎么加载？解决办法：监听器，可以在ServletContext加载时，通过监听器加载spring的配置文件，创建spring容器spring提供的监听器：ContextLoaderListener3、bean被创建两次的问">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/1.PNG">
 <meta property="article:published_time" content="2022-03-18T12:22:49.000Z">
-<meta property="article:modified_time" content="2022-03-18T12:29:52.497Z">
+<meta property="article:modified_time" content="2022-03-18T13:22:54.522Z">
 <meta property="article:author" content="victory-liao">
 <meta property="article:tag" content="spring">
 <meta property="article:tag" content="Java">
@@ -222,7 +222,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-03-18 04:22:49 / Modified: 04:29:52" itemprop="dateCreated datePublished" datetime="2022-03-18T04:22:49-08:00">2022-03-18</time>
+              <time title="Created: 2022-03-18 04:22:49 / Modified: 05:22:54" itemprop="dateCreated datePublished" datetime="2022-03-18T04:22:49-08:00">2022-03-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,9 +257,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="spring和springMVC的整合"><a href="#spring和springMVC的整合" class="headerlink" title="spring和springMVC的整合"></a>spring和springMVC的整合</h1><p>1.项目目录<br><img src="/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/1.PNG"></p>
+        <h1 id="spring和springMVC的整合"><a href="#spring和springMVC的整合" class="headerlink" title="spring和springMVC的整合"></a>spring和springMVC的整合</h1><p>1、不整合：需要将spring所管理的内容都交给springMVC管理，这样会造成业务逻辑混乱<br>2、整合：spring的配置文件什么时候加载？怎么加载？<br>解决办法：监听器，可以在ServletContext加载时，通过监听器加载spring的配置文件，创建spring容器<br>spring提供的监听器：ContextLoaderListener<br>3、bean被创建两次的问题：在springMVC中只扫描控制层，在spring中，通过包含或排除对所扫描的包进行指定<br>4、spring和springMVC的关系<br>spring是父容器<br>springMVC是子容器<br>规定：子容器能够调用父容器的bean，而父容器不能够调用访问子容器中的bean</p>
 <span id="more"></span>
-<p>2.web.xml</p>
+<p>1.项目目录<br><img src="/2022/03/18/spring%E5%92%8CspringMVC%E7%9A%84%E6%95%B4%E5%90%88/1.PNG"><br>2.web.xml</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
   &lt;display-name&gt;SpringMVC04&lt;/display-name&gt;
@@ -539,7 +539,10 @@ public class TestController &#123;
     <a href="/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" rel="prev" title="SpringMVC | 异常处理">
       <i class="fa fa-chevron-left"></i> SpringMVC | 异常处理
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/21/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" rel="next" title="设计模式 | 代理模式">
+      设计模式 | 代理模式 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -614,20 +617,20 @@ public class TestController &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">358</span>
+          <span class="site-state-item-count">361</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">200</span>
+        <span class="site-state-item-count">204</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">240</span>
+        <span class="site-state-item-count">243</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
