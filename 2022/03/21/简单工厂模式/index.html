@@ -29,7 +29,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/1.jpg">
 <meta property="article:published_time" content="2022-03-21T09:57:40.000Z">
-<meta property="article:modified_time" content="2022-03-21T10:23:24.688Z">
+<meta property="article:modified_time" content="2022-03-22T01:51:35.496Z">
 <meta property="article:author" content="victory-liao">
 <meta property="article:tag" content="设计模式">
 <meta property="article:tag" content="简单工厂模式">
@@ -221,7 +221,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-03-21 01:57:40 / Modified: 02:23:24" itemprop="dateCreated datePublished" datetime="2022-03-21T01:57:40-08:00">2022-03-21</time>
+              <time title="Created: 2022-03-21 01:57:40 / Modified: 17:51:35" itemprop="dateCreated datePublished" datetime="2022-03-21T01:57:40-08:00">2022-03-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -337,6 +337,25 @@ public class SimpleFactoryTest &#123;
     &#125;
 &#125;
 </code></pre>
+<p>在使用简单工厂模式的情况下，如果我们要增加新的功能，比如说现在要增加一个求余操作，<br>我们需要增加一个用于求余运算的类，然后在OperationFactory中增加对于求余运算的逻辑判断，这样的做法违背了<br>开放封闭原则，即在开放拓展的同时也开放了修改。</p>
+<pre><code>class Mod extends Operation&#123;
+    public double getResult()&#123;
+        double result = 0;
+        result = getNumberA() % getNumberB();
+        return result;
+    &#125;
+&#125;
+
+class OperationFactory&#123;
+    public static Operation createOperate(String operate)&#123;
+        ......
+        else if(operate.equals(&quot;%&quot;))&#123;
+            oper = new Div();
+        &#125;
+        ......
+    &#125;
+&#125;
+</code></pre>
 
     </div>
 
@@ -437,20 +456,20 @@ public class SimpleFactoryTest &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">361</span>
+          <span class="site-state-item-count">363</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">204</span>
+        <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">243</span>
+        <span class="site-state-item-count">245</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
