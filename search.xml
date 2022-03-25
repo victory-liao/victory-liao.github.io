@@ -25378,4 +25378,105 @@ public class ProductDao &#123;
         <tag>基于JavaWeb的网上购物商城</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Java | java引用</title>
+    <url>/2022/03/24/java%E5%BC%95%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="强软弱虚四大引用"><a href="#强软弱虚四大引用" class="headerlink" title="强软弱虚四大引用"></a>强软弱虚四大引用</h1><pre><code>import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class StudentClass&#123;
+    @Override
+    protected void finalize() throws Throwable&#123;
+        System.out.println(&quot;student对象被回收了&quot;);
+    &#125;
+&#125;
+
+public class ReferencesTest &#123;
+    public static void main(String[] args) &#123;
+        
+        /**
+         * 强引用
+         * 只要某个对象有强引用与之关联，这个对象永远不会被回收，即使内存不足，JVM宁愿抛出OOM，也不会去回收。
+         */
+        //StudentClass student = new StudentClass();
+        //student = null;//断开强引用与对象之间的关联
+        //System.gc();
+        
+        
+        /**
+         * 软引用
+         * 内存不足时，JVM会回收软引用关联的对象
+         * 
+         * 比较适合用作缓存，当内存足够，可以正常的拿到缓存，当内存不够，就会先干掉缓存，不至于马上抛出OOM。
+         */
+//        SoftReference&lt;byte[]&gt; softReference = new SoftReference&lt;byte[]&gt;(new byte[1024*1024*10]);
+//        System.out.println(softReference.get());
+//        System.gc();
+//        System.out.println(softReference.get());
+//        byte[] bytes = new byte[1024 * 1024 * 10];
+//        System.out.println(softReference.get());
+        
+        /**
+         * 弱引用
+         * 不管内存是否足够，只要发生GC，都会被回收
+         */
+//        WeakReference&lt;byte[]&gt; weakReference = new WeakReference&lt;byte[]&gt;(new byte[1]);
+//        System.out.println(weakReference.get());
+//        System.gc();
+//        System.out.println(weakReference.get());
+        
+//        [B@15db9742
+//         null
+        
+        /**
+         * 虚引用
+         * 特点一：无法通过虚引用来获取对一个对象的真实引用
+         * 特点二：虚引用必须与ReferenceQueue一起使用，当GC准备回收一个对象，如果发现它还有虚引用，就会在回收之前，把这个虚引用加入到与之关联的ReferenceQueue中。
+         * 
+         * 
+         * Unlike soft and weak references, phantom references are not
+ automatically cleared by the garbage collector as they are enqueued.  An
+object that is reachable via phantom references will remain so until all
+such references are cleared or themselves become unreachable.
+         */
+        ReferenceQueue&lt;Object&gt; referenceQueue = new ReferenceQueue&lt;&gt;();
+        List&lt;byte[]&gt; bytes = new ArrayList&lt;&gt;();
+        PhantomReference&lt;StudentClass&gt; reference = new PhantomReference&lt;StudentClass&gt;(new StudentClass(),referenceQueue);
+        
+        new Thread(() -&gt; &#123;
+            for (int i = 0; i &lt; 100;i++ ) &#123;
+                bytes.add(new byte[1024 * 1024]);
+            &#125;
+        &#125;).start();
+ 
+        new Thread(() -&gt; &#123;
+            while (true) &#123;
+                Reference poll = referenceQueue.poll();
+                if (poll != null) &#123;
+                    System.out.println(&quot;虚引用被回收了：&quot; + poll);
+                &#125;
+            &#125;
+        &#125;).start();
+        Scanner scanner = new Scanner(System.in);
+        scanner.hasNext();
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>强软弱虚四大引用</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>引用</tag>
+      </tags>
+  </entry>
 </search>

@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-25T02:43:56.690Z</updated>
+  <updated>2022-03-25T04:33:44.345Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java | java引用</title>
+    <link href="http://example.com/2022/03/24/java%E5%BC%95%E7%94%A8/"/>
+    <id>http://example.com/2022/03/24/java%E5%BC%95%E7%94%A8/</id>
+    <published>2022-03-25T04:32:36.000Z</published>
+    <updated>2022-03-25T04:33:44.345Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="强软弱虚四大引用"><a href="#强软弱虚四大引用" class="headerlink" title="强软弱虚四大引用"></a>强软弱虚四大引用</h1><pre><code>import java.lang.ref.PhantomReference;import java.lang.ref.Reference;import java.lang.ref.ReferenceQueue;import java.lang.ref.SoftReference;import java.lang.ref.WeakReference;import java.util.ArrayList;import java.util.List;import java.util.Scanner;class StudentClass&#123;    @Override    protected void finalize() throws Throwable&#123;        System.out.println(&quot;student对象被回收了&quot;);    &#125;&#125;public class ReferencesTest &#123;    public static void main(String[] args) &#123;                /**         * 强引用         * 只要某个对象有强引用与之关联，这个对象永远不会被回收，即使内存不足，JVM宁愿抛出OOM，也不会去回收。         */        //StudentClass student = new StudentClass();        //student = null;//断开强引用与对象之间的关联        //System.gc();                        /**         * 软引用         * 内存不足时，JVM会回收软引用关联的对象         *          * 比较适合用作缓存，当内存足够，可以正常的拿到缓存，当内存不够，就会先干掉缓存，不至于马上抛出OOM。         *///        SoftReference&lt;byte[]&gt; softReference = new SoftReference&lt;byte[]&gt;(new byte[1024*1024*10]);//        System.out.println(softReference.get());//        System.gc();//        System.out.println(softReference.get());//        byte[] bytes = new byte[1024 * 1024 * 10];//        System.out.println(softReference.get());                /**         * 弱引用         * 不管内存是否足够，只要发生GC，都会被回收         *///        WeakReference&lt;byte[]&gt; weakReference = new WeakReference&lt;byte[]&gt;(new byte[1]);//        System.out.println(weakReference.get());//        System.gc();//        System.out.println(weakReference.get());        //        [B@15db9742//         null                /**         * 虚引用         * 特点一：无法通过虚引用来获取对一个对象的真实引用         * 特点二：虚引用必须与ReferenceQueue一起使用，当GC准备回收一个对象，如果发现它还有虚引用，就会在回收之前，把这个虚引用加入到与之关联的ReferenceQueue中。         *          *          * Unlike soft and weak references, phantom references are not automatically cleared by the garbage collector as they are enqueued.  Anobject that is reachable via phantom references will remain so until allsuch references are cleared or themselves become unreachable.         */        ReferenceQueue&lt;Object&gt; referenceQueue = new ReferenceQueue&lt;&gt;();        List&lt;byte[]&gt; bytes = new ArrayList&lt;&gt;();        PhantomReference&lt;StudentClass&gt; reference = new PhantomReference&lt;StudentClass&gt;(new StudentClass(),referenceQueue);                new Thread(() -&gt; &#123;            for (int i = 0; i &lt; 100;i++ ) &#123;                bytes.add(new byte[1024 * 1024]);            &#125;        &#125;).start();         new Thread(() -&gt; &#123;            while (true) &#123;                Reference poll = referenceQueue.poll();                if (poll != null) &#123;                    System.out.println(&quot;虚引用被回收了：&quot; + poll);                &#125;            &#125;        &#125;).start();        Scanner scanner = new Scanner(System.in);        scanner.hasNext();    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;强软弱虚四大引用&quot;&gt;&lt;a href=&quot;#强软弱虚四大引用&quot; class=&quot;headerlink&quot; title=&quot;强软弱虚四大引用&quot;&gt;&lt;/a&gt;强软弱虚四大引用&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;import java.lang.ref.PhantomReference;</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="强软弱虚四大引用" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E5%BC%BA%E8%BD%AF%E5%BC%B1%E8%99%9A%E5%9B%9B%E5%A4%A7%E5%BC%95%E7%94%A8/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="引用" scheme="http://example.com/tags/%E5%BC%95%E7%94%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>绘图 | ConfusionMatrix</title>
@@ -642,38 +672,6 @@ Class alunbarClass2 = o.getClass();
     <category term="Class对象" scheme="http://example.com/tags/Class%E5%AF%B9%E8%B1%A1/"/>
     
     <category term="反射" scheme="http://example.com/tags/%E5%8F%8D%E5%B0%84/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
-    <link href="http://example.com/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    <id>http://example.com/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</id>
-    <published>2022-03-10T03:23:17.000Z</published>
-    <updated>2022-03-10T08:38:46.940Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p><pre><code>/** * SpringMVC处理请求过程中，往作用域中放值有以下三种方式 * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中 *///往作用域中放值方式1//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)//    public ModelAndView param()&#123;//        ModelAndView mav = new ModelAndView();//        //javaWEB： request.setAttribute(xxx) //        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转//        return mav;//    &#125;        //往作用域中放值方式2//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)//    public String param(Map&lt;String, Object&gt; map)&#123;//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值//        return &quot;success&quot;;//返回视图名称//    &#125;//往作用域中放值方式3@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)public String param(Model model)&#123;    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值    return &quot;success&quot;;//返回视图名称&#125;</code></pre><p>并在param.jsp页面获取request作用域中的值</p><pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;    $&#123;username&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;处理响应数据-ModelAndView&quot;&gt;&lt;a href=&quot;#处理响应数据-ModelAndView&quot; class=&quot;headerlink&quot; title=&quot;处理响应数据 ModelAndView&quot;&gt;&lt;/a&gt;处理响应数据 ModelAndView&lt;/h1&gt;&lt;p&gt;在&lt;</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
-    
-    <category term="处理请求过程中往作用域中放值的三种方式" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    
-    
-    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
-    
-    <category term="ModelAndView" scheme="http://example.com/tags/ModelAndView/"/>
     
   </entry>
   
