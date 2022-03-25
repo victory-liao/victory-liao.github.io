@@ -190,6 +190,203 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/" class="post-title-link" itemprop="url">spring | 动态代理之数学计算器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-06 00:08:16 / Modified: 00:15:51" itemprop="dateCreated datePublished" datetime="2022-03-06T00:08:16-08:00">2022-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">动态代理之数学计算器</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p>
+<p>1.要求<br>1）计算器能够执行加减乘除运算<br>2）日志：在程序执行期间追踪正在发生的活动<br>3）验证：希望计算器只能处理正数的运算</p>
+<p>2.常规实现</p>
+<pre><code>**MathI.java**
+package com.atguigu.proxy;
+
+public interface MathI &#123;
+    int add(int i, int j);
+    int sub(int i, int j);
+    int mul(int i, int j);
+    int div(int i, int j);
+&#125;
+</code></pre>
+<p><strong>MathImpl.java</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+public class MathImpl implements MathI&#123;
+
+    @Override
+    public int add(int i, int j) &#123;
+        System.out.println(&quot;method:add,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:add,results:&quot; + (i + j));
+        return i + j;
+    &#125;
+    
+    @Override
+    public int sub(int i, int j) &#123;
+        System.out.println(&quot;method:sub,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:sub,results:&quot; + (i - j));
+        return i - j;
+    &#125;
+
+    @Override
+    public int mul(int i, int j) &#123;
+        System.out.println(&quot;method:mul,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:mul,results:&quot; + (i * j));
+        return i * j;
+    &#125;
+
+    @Override
+    public int div(int i, int j) &#123;
+        System.out.println(&quot;method:div,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:div,results:&quot; + (i / j));
+        return i / j;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>常规实现方法存在的问题</strong><br>①代码混乱：越来越多的非业务需求(日志和验证等)加入后，原有的业务方法急剧膨胀。每个方法在处理核心逻辑的同时还必须兼顾其他多个关注点。<br>②代码分散: 以日志需求为例，只是为了满足这个单一需求，就不得不在多个模块（方法）里多次重复相同的日志代码。如果日志需求发生变化，必须修改所有模块。</p>
+<p>3.动态代理<br><strong>MathI.java（与2中的代码相同）</strong></p>
+<p><strong>MathImpl.java(2中的代码中去掉日志信息)</strong></p>
+<p><strong>MyLogger.java(日志类)</strong></p>
+<p><strong>ProxyUtil.java(代理类)</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+
+public class ProxyUtil&#123;
+    //代理模式：1、静态代理（代理对象真实存在，是自己写好的） 2、动态代理（动态生成代理对象，不需要自己写）
+    private MathImpl mathImpl;//目标对象 目标对象类必须实现接口
+    
+    public ProxyUtil(MathImpl mathImpl) &#123;
+        super();
+        this.mathImpl = mathImpl;
+    &#125;
+
+    public Object getProxy()&#123;
+        //获取当前类的类加载器用来加载代理对象所属类
+        ClassLoader loader = this.getClass().getClassLoader();//动态生成代理对象就需要动态代理类，代理类的执行需要类加载器
+        //获取目标对象实现的所有接口的Class，代理类会和目标对象实现相同的接口，最终通过代理对象实现功能
+        Class[] interfaces = mathImpl.getClass().getInterfaces();
+        
+        return Proxy.newProxyInstance(loader, interfaces, new InvocationHandler()&#123;
+
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+                //代理对象实现功能的方式
+                try&#123;
+                    MyLogger.before(method.getName(), Arrays.toString(args));
+                    Object result = method.invoke(mathImpl, args);//动态代理对象实现功能（调用目标对象的方法）
+                    MyLogger.after(method.getName(), result);
+                    return result;
+                &#125;catch (Exception e)&#123;
+                    MyLogger.throwing();
+                    e.printStackTrace();
+                &#125;finally&#123;
+                    System.out.println(&quot;哪都有我&quot;);
+                &#125;
+                return null;
+                
+            &#125;
+        &#125;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Test.java(测试类)</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+public class Test &#123;
+
+    public static void main(String[] args) &#123;
+//        MathI math = new MathImpl();
+//        int result = math.add(1, 1);
+//        System.out.println(result);
+        ProxyUtil proxy = new ProxyUtil(new MathImpl());
+        
+        MathI math = (MathI)proxy.getProxy();
+        
+        int i = math.add(1, 1);
+        System.out.println(i);
+        
+        int j = math.div(4, 0);
+        System.out.println(j);
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2235,170 +2432,6 @@ public class Test &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/27/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/27/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="url">spring | spring简单案例</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-27 03:24:34 / Modified: 05:28:14" itemprop="dateCreated datePublished" datetime="2022-01-27T03:24:34-08:00">2022-01-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/" itemprop="url" rel="index"><span itemprop="name">spring简单案例</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="spring简单案例"><a href="#spring简单案例" class="headerlink" title="spring简单案例"></a>spring简单案例</h1><h2 id="使用软件：STS"><a href="#使用软件：STS" class="headerlink" title="使用软件：STS"></a>使用软件：STS</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/larryzeal/p/5800980.html">下载地址</a></p>
-<h2 id="搭建spring运行时环境"><a href="#搭建spring运行时环境" class="headerlink" title="搭建spring运行时环境"></a>搭建spring运行时环境</h2><p>1.加入JAR包<br>1)Spring自身JAR包：spring-framework-4.0.0.RELEASE\libs目录下<br>spring-beans-4.0.0.RELEASE.jar<br>spring-context-4.0.0.RELE2ASE.jar<br>spring-core-4.0.0.RELEASE.jar<br>spring-expression-4.0.0.RELEASE.jar<br>2)commons-logging-1.1.1.jar<br>注：将以上所有的jar包复制到项目中的lib目录下并全选所有jar包–&gt;右键–&gt;build path–&gt;config bulid path<br>2.在Spring Tool Suite工具中通过如下步骤创建Spring的配置文件<br>1)File-&gt;New-&gt;Spring Bean Configuration File<br>2)为文件取名字 例如：applicationContext.xml<br><img src="/2022/01/27/spring%E7%AE%80%E5%8D%95%E6%A1%88%E4%BE%8B/1.PNG"></p>
-<h2 id="创建一个类：Person-java"><a href="#创建一个类：Person-java" class="headerlink" title="创建一个类：Person.java"></a>创建一个类：Person.java</h2><pre><code>package com.atguigu.spring.mod;
-
-public class Person &#123;
-    private Integer id;
-    private String name;
-    public Integer getId() &#123;
-        return id;
-    &#125;
-    public void setId(Integer id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Person [id=&quot; + id + &quot;, name=&quot; + name + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<h2 id="常规方法操作对象"><a href="#常规方法操作对象" class="headerlink" title="常规方法操作对象"></a>常规方法操作对象</h2><p>创建一个测试类Test.java</p>
-<pre><code>package com.atguigu.spring.mod;
-
-public class Test &#123;
-    public static void main(String[] args)&#123;
-        Person person = new Person();
-        person.setId(1);
-        person.setName(&quot;zhangsan&quot;);
-        System.out.println(person);
-    &#125;
-&#125;
-</code></pre>
-<h2 id="spring管理对象"><a href="#spring管理对象" class="headerlink" title="spring管理对象"></a>spring管理对象</h2><p>1.创建applicationContext.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;!-- 命名空间 规定当前的文件里面能写什么--&gt;
-
-    &lt;!--
-        &lt;bean&gt;：定义spring管理的一个对象
-        id:该对象的唯一标识，注意不能重复,在类型获取bean的过程中可以不设置
-        class:该对象所属类的全限定名 
-    --&gt;
-    
-    &lt;!-- 通过反射创建对象 --&gt;
-    &lt;bean id=&quot;person&quot; class=&quot;com.atguigu.spring.mod.Person&quot;&gt;
-        &lt;!--
-            &lt;property&gt;:为对象的某个属性赋值
-            name:属性名
-            value:属性值 
-        --&gt;
-        &lt;property name=&quot;id&quot; value=&quot;1111&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;name&quot; value=&quot;小明&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-&lt;/beans&gt;
-</code></pre>
-<p>2.创建一个测试类TestBySpring.java</p>
-<pre><code>package com.atguigu.spring.mod;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class TestBySpring &#123;
-
-    public static void main(String[] args) &#123;
-        //初始化容器
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-        
-        //通过getBean()获取对象
-        Person person = (Person) ac.getBean(&quot;person&quot;);
-        System.out.println(person);
-
-    &#125;
-&#125;
-</code></pre>
-<p><strong>注：IOC和DI</strong><br>反转控制（IOC）：对象的管理权（创建、赋值等）由程序员交给了spring容器<br>依赖注入（DI）:bean对象依赖于属性 向属性注入资源（赋值）<br>总结: IOC 就是一种反转控制的思想， 而DI是对IOC的一种具体实现。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2470,7 +2503,7 @@ public class TestBySpring &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">365</span>
+          <span class="site-state-item-count">366</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -2483,7 +2516,7 @@ public class TestBySpring &#123;
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">247</span>
+        <span class="site-state-item-count">249</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
