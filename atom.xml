@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-25T11:36:33.956Z</updated>
+  <updated>2022-03-27T10:06:05.601Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python | 迭代器</title>
+    <link href="http://example.com/2022/03/27/%E8%BF%AD%E4%BB%A3%E5%99%A8/"/>
+    <id>http://example.com/2022/03/27/%E8%BF%AD%E4%BB%A3%E5%99%A8/</id>
+    <published>2022-03-27T10:02:05.000Z</published>
+    <updated>2022-03-27T10:06:05.601Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><pre><code># 创建一个返回数字的迭代器，初始值为 1，逐步递增 1：class MyNumbers:    def __iter__(self):        self.a = 0        return self    def __next__(self):        self.a = self.a + 1        return self.a# 奇数迭代器class MyOddNumbers:    def __iter__(self):        self.num = 1        return self    def __next__(self):        self.num = self.num + 2        return self.num# 偶数迭代器class MyEvenNumbers:    def __iter__(self):        self.num = 0        return self    def __next__(self):        self.num = self.num + 2        return self.nummyclass = MyNumbers()myiter = iter(myclass)print(next(myiter))print(next(myiter))print(next(myiter))print(next(myiter))print(next(myiter))print(&quot;======================================&quot;)my_odd_numbers = MyOddNumbers()my_odd_numbers_iter = iter(my_odd_numbers)print(next(my_odd_numbers_iter))print(next(my_odd_numbers_iter))print(next(my_odd_numbers_iter))print(next(my_odd_numbers_iter))print(&quot;======================================&quot;)my_even_numbers = MyEvenNumbers()my_even_numbers_iter = iter(my_even_numbers)print(next(my_even_numbers_iter))print(next(my_even_numbers_iter))print(next(my_even_numbers_iter))print(next(my_even_numbers_iter))</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;迭代器&quot;&gt;&lt;a href=&quot;#迭代器&quot; class=&quot;headerlink&quot; title=&quot;迭代器&quot;&gt;&lt;/a&gt;迭代器&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;# 创建一个返回数字的迭代器，初始值为 1，逐步递增 1：
+class MyNumbers:
+    def __i</summary>
+      
+    
+    
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="迭代器" scheme="http://example.com/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8/"/>
+    
+    <category term="iterator" scheme="http://example.com/tags/iterator/"/>
+    
+  </entry>
   
   <entry>
     <title>python | property和property装饰器</title>
@@ -612,40 +640,6 @@
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="静态代理" scheme="http://example.com/tags/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | 动态代理</title>
-    <link href="http://example.com/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    <id>http://example.com/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</id>
-    <published>2022-03-10T14:20:12.000Z</published>
-    <updated>2022-03-11T02:57:15.735Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p><p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p><p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p><pre><code>package hireroom;public interface HireRoom &#123;    void hireRoom(String chaoxiang, String buju, int price);&#125;</code></pre><p><strong>HireRoomImpl.java(实现类)</strong></p><pre><code>package hireroom;public class HireRoomImpl implements HireRoom&#123;    @Override    public void hireRoom(String chaoxiang, String buju, int price) &#123;        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);    &#125;&#125;</code></pre><p><strong>Agency.java(中介/代理类)</strong></p><pre><code>package hireroom;import java.lang.reflect.InvocationHandler;import java.lang.reflect.Method;public class Agency implements InvocationHandler&#123;    private Object target;        public Agency(Object target)&#123;        this.target = target;    &#125;        @Override    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;        System.out.println(&quot;before&quot;);        Object result = method.invoke(target, args);        System.out.println(&quot;after&quot;);        return result;    &#125;&#125;</code></pre><p><strong>AgencyFactory.java(中介/代理工厂)</strong></p><pre><code>package hireroom;import java.lang.reflect.Proxy;public class AgencyFactory &#123;    public static Object getProxy(Object target)&#123;        return Proxy.newProxyInstance(target.getClass().getClassLoader(),                 target.getClass().getInterfaces(),                 new Agency(target));    &#125;&#125;</code></pre><p><strong>Main.java(测试)</strong></p><pre><code>package hireroom;public class Main &#123;    public static void main(String[] args) &#123;        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);    &#125;&#125;</code></pre><p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p><pre><code>package hireroom;public interface HireCar &#123;    void hireCar(String brand, int price);&#125;</code></pre><p><strong>HireCarImpl.java(实现类)</strong></p><pre><code>package hireroom;public class HireCarImpl implements HireCar&#123;    @Override    public void hireCar(String brand, int price) &#123;        System.out.println(&quot;租车：&quot;+brand+price);    &#125;&#125;</code></pre><p><strong>Main.java</strong></p><pre><code>package hireroom;public class Main &#123;    public static void main(String[] args) &#123;        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);                HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());        hireCar.hireCar(&quot;宝马&quot;, 150000);    &#125;&#125;</code></pre><p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;动态代理案例-JDK-动态代理机制&quot;&gt;&lt;a href=&quot;#动态代理案例-JDK-动态代理机制&quot; class=&quot;headerlink&quot; title=&quot;动态代理案例(JDK 动态代理机制)&quot;&gt;&lt;/a&gt;动态代理案例(JDK 动态代理机制)&lt;/h1&gt;&lt;p&gt;假设我们需要通过</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="动态代理" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="动态代理" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    
-    <category term="JDK动态代理机制" scheme="http://example.com/tags/JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%9C%BA%E5%88%B6/"/>
-    
-    <category term="CGLIB动态代理机制" scheme="http://example.com/tags/CGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%9C%BA%E5%88%B6/"/>
     
   </entry>
   
