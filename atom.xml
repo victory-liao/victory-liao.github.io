@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-27T10:06:05.601Z</updated>
+  <updated>2022-04-01T13:29:53.987Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MyBatis | MyBatis搭建过程</title>
+    <link href="http://example.com/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/"/>
+    <id>http://example.com/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</id>
+    <published>2022-04-01T13:16:26.000Z</published>
+    <updated>2022-04-01T13:29:53.987Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="MyBatis搭建过程"><a href="#MyBatis搭建过程" class="headerlink" title="MyBatis搭建过程"></a>MyBatis搭建过程</h1><p>1.导入MyBatis框架的jar包、Mysql驱动包、log4j的jar包</p><pre><code>myBatis-3.4.1.jarmysql-connector-java-5.1.37-bin.jarlog4j.jar</code></pre><p>2.创建MyBatis的核心（全局）配置文件mybatis-config.xml并配置（如何连接数据库）<br>3.创建映射文件XxxMapper.xml并配置（如何操作数据库）<br>4.创建mapper接口，实现两个绑定:<br>4.1接口全限定名要和映射文件的namespace保持一致<br>4.2接口中方法名和SQL语句的id保持一致<br>5.获取MyBatis操作数据库的会话对象SqlSession，通过getMapper()获取接口的动态代理实现类</p><pre><code>InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);SqlSession sqlSession = sqlSessionFactory.openSession();UserMapper mapper = sqlSession.getMapper(UserMapper.class);</code></pre><p>6、测试</p><span id="more"></span><h2 id="搭建过程案例"><a href="#搭建过程案例" class="headerlink" title="搭建过程案例"></a>搭建过程案例</h2><p>1.项目目录<br><img src="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/1.PNG"></p><p><strong>user表</strong><br><img src="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/2.PNG"></p><p><strong>log4j.xml</strong></p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE log4j:configuration SYSTEM &quot;log4j.dtd&quot;&gt; &lt;log4j:configuration xmlns:log4j=&quot;http://jakarta.apache.org/log4j/&quot;&gt;  &lt;appender name=&quot;STDOUT&quot; class=&quot;org.apache.log4j.ConsoleAppender&quot;&gt;   &lt;param name=&quot;Encoding&quot; value=&quot;UTF-8&quot; /&gt;   &lt;layout class=&quot;org.apache.log4j.PatternLayout&quot;&gt;    &lt;param name=&quot;ConversionPattern&quot; value=&quot;%-5p %d&#123;MM-dd HH:mm:ss,SSS&#125; %m  (%F:%L) \n&quot; /&gt;   &lt;/layout&gt; &lt;/appender&gt; &lt;logger name=&quot;java.sql&quot;&gt;   &lt;level value=&quot;debug&quot; /&gt; &lt;/logger&gt; &lt;logger name=&quot;org.apache.ibatis&quot;&gt;   &lt;level value=&quot;info&quot; /&gt; &lt;/logger&gt; &lt;root&gt;   &lt;level value=&quot;debug&quot; /&gt;   &lt;appender-ref ref=&quot;STDOUT&quot; /&gt; &lt;/root&gt;&lt;/log4j:configuration&gt;</code></pre><p>2.导入上图中所示的jar包<br>3.jdbc.properties</p><pre><code>jdbc.driver=com.mysql.jdbc.Driverjdbc.url=jdbc:mysql://localhost:3306/ssmjdbc.username=rootjdbc.password=root</code></pre><p>4.mybatis-config.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE configuration PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;&lt;configuration&gt;    &lt;!-- &lt;properties&gt;        &lt;property name=&quot;jdbc.driver&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;    &lt;/properties&gt; --&gt;        &lt;!--         &lt;properties&gt;:设置或引入资源文件        resource:在类路径下访问资源文件        url:在网络路径或磁盘路径下访问资源文件     --&gt;    &lt;properties resource=&quot;jdbc.properties&quot;&gt;&lt;/properties&gt;        &lt;settings&gt;        &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;    &lt;/settings&gt;        &lt;typeAliases&gt;        &lt;!--             为类型设置类型别名            type:Java类型，若只设置type，默认的别名就是类型，且不区分大小写         --&gt;         &lt;!-- &lt;typeAlias type=&quot;com.atguigu.bean.User&quot; alias=&quot;User&quot;/&gt; --&gt;                  &lt;package name=&quot;com.atguigu.bean&quot;/&gt;    &lt;/typeAliases&gt;    &lt;!--        &lt;environments&gt;:设置连接数据库的环境        default:设置默认使用的数据库环境     --&gt;    &lt;environments default=&quot;development&quot;&gt;        &lt;!--             &lt;environment&gt;:设置某个具体的数据库环境            id:数据库环境的唯一标识         --&gt;        &lt;environment id=&quot;development&quot;&gt;            &lt;!--                type=&quot;JDBC|MANAGED&quot;              --&gt;            &lt;transactionManager type=&quot;JDBC&quot; /&gt;            &lt;!--                type=&quot;POOLED|UNPOOLED|JNDI&quot;              --&gt;            &lt;dataSource type=&quot;POOLED&quot;&gt;                &lt;property name=&quot;driver&quot; value=&quot;$&#123;jdbc.driver&#125;&quot; /&gt;                &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot; /&gt;                &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot; /&gt;                &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot; /&gt;            &lt;/dataSource&gt;        &lt;/environment&gt;    &lt;/environments&gt;        &lt;!-- 引入映射文件 --&gt;    &lt;mappers&gt;        &lt;mapper resource=&quot;UserMapper.xml&quot; /&gt;    &lt;/mappers&gt;&lt;/configuration&gt;</code></pre><p>5.User.java</p><pre><code>package com.atguigu.bean;public class User &#123;    private Integer uid;    private String userName;    private String password;    private Integer age;    private String sex;    public Integer getUid() &#123;        return uid;    &#125;    public void setUid(Integer uid) &#123;        this.uid = uid;    &#125;    public String getUserName() &#123;        return userName;    &#125;    public void setUserName(String userName) &#123;        this.userName = userName;    &#125;    public String getPassword() &#123;        return password;    &#125;    public void setPassword(String password) &#123;        this.password = password;    &#125;    public Integer getAge() &#123;        return age;    &#125;    public void setAge(Integer age) &#123;        this.age = age;    &#125;    public String getSex() &#123;        return sex;    &#125;    public void setSex(String sex) &#123;        this.sex = sex;    &#125;    @Override    public String toString() &#123;        return &quot;User [uid=&quot; + uid + &quot;, userName=&quot; + userName + &quot;, password=&quot; + password + &quot;, age=&quot; + age + &quot;, sex=&quot;                + sex + &quot;]&quot;;    &#125;    &#125;</code></pre><p>6.UserMapper.xml(举例：操作数据库中的user表)</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.mapper.UserMapper&quot;&gt;    &lt;!--         &lt;select&gt;:定义查询语句         id:设置SQL语句的唯一标识        resultType:结果类型，即实体类的全限定名    --&gt;    &lt;select id=&quot;getUserByUid&quot; resultType=&quot;User&quot;&gt;        &lt;!--         当数据库表中的字段与类中的属性名不一样时，可以在查询时指定别名        select uid,user_name userName,password,age,sex from user where uid = #&#123;id&#125;         --&gt;                &lt;!--         当数据库表中的字段与类中的属性名不一样时，如果不指定别名，需要在核心配置文件mybatis-config.xml中做以下配置：         &lt;settings&gt;            &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;         &lt;/settings&gt;                  注：此配置通常不使用，即在开发时将数据库的字段名与类的属性名保持一致         --&gt;        select uid,user_name,password,age,sex from user where uid = #&#123;id&#125;    &lt;/select&gt;&lt;/mapper&gt;</code></pre><p>7.UserMapper.java(mapper接口)</p><pre><code>package com.atguigu.mapper;import com.atguigu.bean.User;public interface UserMapper &#123;    User getUserByUid(String uid);&#125;</code></pre><p>8.TestMybatis.java(测试类)</p><pre><code>package com.atguigu.mapper;import java.io.IOException;import java.io.InputStream;import org.apache.ibatis.io.Resources;import org.apache.ibatis.session.SqlSession;import org.apache.ibatis.session.SqlSessionFactory;import org.apache.ibatis.session.SqlSessionFactoryBuilder;import org.junit.Test;import com.atguigu.bean.User;public class TestMybatis &#123;    @Test    public void test() throws IOException&#123;        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);        SqlSession sqlSession = sqlSessionFactory.openSession();        //getMapper():会通过动态代理动态生成UserMapper的代理实现类        UserMapper mapper = sqlSession.getMapper(UserMapper.class);        //System.out.println(mapper.getClass().getName());        User user = mapper.getUserByUid(&quot;1&quot;);        System.out.println(user);      &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;MyBatis搭建过程&quot;&gt;&lt;a href=&quot;#MyBatis搭建过程&quot; class=&quot;headerlink&quot; title=&quot;MyBatis搭建过程&quot;&gt;&lt;/a&gt;MyBatis搭建过程&lt;/h1&gt;&lt;p&gt;1.导入MyBatis框架的jar包、Mysql驱动包、log4j的jar包&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;myBatis-3.4.1.jar
+mysql-connector-java-5.1.37-bin.jar
+log4j.jar
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;2.创建MyBatis的核心（全局）配置文件mybatis-config.xml并配置（如何连接数据库）&lt;br&gt;3.创建映射文件XxxMapper.xml并配置（如何操作数据库）&lt;br&gt;4.创建mapper接口，实现两个绑定:&lt;br&gt;4.1接口全限定名要和映射文件的namespace保持一致&lt;br&gt;4.2接口中方法名和SQL语句的id保持一致&lt;br&gt;5.获取MyBatis操作数据库的会话对象SqlSession，通过getMapper()获取接口的动态代理实现类&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;InputStream is = Resources.getResourceAsStream(&amp;quot;mybatis-config.xml&amp;quot;);
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+SqlSession sqlSession = sqlSessionFactory.openSession();
+UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;6、测试&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="MyBatis" scheme="http://example.com/tags/MyBatis/"/>
+    
+  </entry>
   
   <entry>
     <title>python | 迭代器</title>
@@ -610,36 +648,6 @@ class MyNumbers:
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | 静态代理</title>
-    <link href="http://example.com/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    <id>http://example.com/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/</id>
-    <published>2022-03-11T02:08:35.000Z</published>
-    <updated>2022-03-11T02:14:43.272Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="静态代理案例"><a href="#静态代理案例" class="headerlink" title="静态代理案例"></a>静态代理案例</h1><p>通过静态代理来帮助发短信(短信发送类和代理类实现相同的接口)<br><strong>SmsService.java(接口)</strong></p><pre><code>package proxy;public interface SmsService &#123;    String send(String message);&#125;</code></pre><p><strong>SmsServiceImpl.java(实现类)</strong></p><pre><code>package proxy;public class SmsServiceImpl implements SmsService&#123;    @Override    public String send(String message) &#123;        System.out.println(&quot;send message:&quot; + message);        return message;    &#125;&#125;</code></pre><p><strong>SmsProxy.java(代理类)</strong></p><pre><code>package proxy;public class SmsProxy implements SmsService&#123;    private final SmsService smsService;        public SmsProxy(SmsService smsService)&#123;        this.smsService = smsService;    &#125;        @Override    public String send(String message) &#123;        System.out.println(&quot;before method send()&quot;);        smsService.send(message);        System.out.println(&quot;after method send()&quot;);        return null;    &#125;&#125;</code></pre><p><strong>Main.java(测试类)</strong></p><pre><code>package proxy;public class Main &#123;    public static void main(String[] args)&#123;        SmsService smsService = new SmsServiceImpl();        SmsProxy smsProxy = new SmsProxy(smsService);        smsProxy.send(&quot;java&quot;);    &#125;&#125;</code></pre><p><strong>运行结果</strong><br><img src="/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;静态代理案例&quot;&gt;&lt;a href=&quot;#静态代理案例&quot; class=&quot;headerlink&quot; title=&quot;静态代理案例&quot;&gt;&lt;/a&gt;静态代理案例&lt;/h1&gt;&lt;p&gt;通过静态代理来帮助发短信(短信发送类和代理类实现相同的接口)&lt;br&gt;&lt;strong&gt;SmsService.j</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="静态代理" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="静态代理" scheme="http://example.com/tags/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
