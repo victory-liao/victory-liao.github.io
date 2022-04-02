@@ -190,6 +190,547 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">MyBatis | 获取参数值的两种方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-02 05:00:31 / Modified: 05:06:08" itemprop="dateCreated datePublished" datetime="2022-04-02T05:00:31-08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">MyBatis获取参数值的两种方式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
+<h2 id="Statement与PreparedStatement"><a href="#Statement与PreparedStatement" class="headerlink" title="Statement与PreparedStatement"></a>Statement与PreparedStatement</h2><pre><code>package com.atguigu.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
+import com.atguigu.bean.Emp;
+
+public class TestJDBC &#123;
+    public static void main(String[] args) throws Exception &#123;
+        Class.forName(&quot;&quot;);
+        Connection conn = DriverManager.getConnection(&quot;&quot;,&quot;&quot;,&quot;&quot;);
+        //可以使用通配符赋值
+        PreparedStatement ps = conn.prepareStatement(&quot;insert into emp values(null, ?, ?,?&quot;);
+        ps.setString(1, &quot;root&quot;);
+        ps.setString(2, &quot;23&quot;);
+        ps.setString(3, &quot;男&quot;);
+        ps.executeUpdate();
+        
+        Statement statement = conn.createStatement();
+        Emp emp = new Emp(null, &quot;a&quot;, 1, &quot;b&quot;);
+        //不可以使用通配符赋值
+        statement.executeUpdate(&quot;insert into emp values(null, &#39;&quot;+emp.getEname()+&quot;&#39;, &quot;+emp.getAge()+&quot;, &#39;&quot;+emp.getSex()+&quot;&#39;)&quot;);
+    &#125;
+&#125;
+</code></pre>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">MyBatis | 三种查询方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-02 04:55:34 / Modified: 04:59:18" itemprop="dateCreated datePublished" datetime="2022-04-02T04:55:34-08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">MyBatis三种查询方式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.MapKey;
+
+import com.atguigu.bean.Emp;
+
+public interface EmpSelectMapper &#123;
+    //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid);
+    
+    //获取所有的员工数量
+    Integer getCount();
+    
+    //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid);
+    
+    //以map集合获取所有员工信息
+    
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap();
+&#125;
+</code></pre>
+<p>3.EmpSelectMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;
+    
+    
+    &lt;!-- //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- //获取所有的员工数量
+    Integer getCount(); --&gt;
+    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;
+        select count(eid) from emp
+    &lt;/select&gt;
+    
+    &lt;!-- //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- //以map集合获取所有员工信息
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;
+    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;
+    select eid,ename,age,sex from emp
+    &lt;/select&gt;
+    
+&lt;/mapper&gt;
+</code></pre>
+<p>4.TestSelect.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpSelectMapper;
+
+public class TestSelect &#123;
+    @Test
+    public void testSelect() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);
+        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean
+//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);
+//        System.out.println(emp);
+        
+        //获取员工总记录数
+//        Integer i = mapper.getCount();
+//        System.out.println(i);
+        
+        //以map获取单个emp
+//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);
+//        System.out.println(map);
+        
+        //以map获取所有emp
+        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();
+        System.out.println(map);
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="保持理智 相信未来">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" class="post-title-link" itemprop="url">MyBatis | 增删改查</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-02 04:43:59 / Modified: 04:53:47" itemprop="dateCreated datePublished" datetime="2022-04-02T04:43:59-08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/CRUD/" itemprop="url" rel="index"><span itemprop="name">CRUD</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MyBatis-CRUD"><a href="#MyBatis-CRUD" class="headerlink" title="MyBatis CRUD"></a>MyBatis CRUD</h1><p>按照<a target="_blank" rel="noopener" href="https://victory-liao.github.io/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">MyBatis搭建过程</a>进行项目搭建，<br>并在mybatis-config.xml中将按如下方式引入映射文件：</p>
+<pre><code>&lt;!-- 引入映射文件 --&gt;
+&lt;mappers&gt;
+    &lt;!-- &lt;mapper resource=&quot;EmpMapper.xml&quot; /&gt;
+    &lt;mapper resource=&quot;DeptMapper.xml&quot;&gt;&lt;/mapper&gt; --&gt;
+    
+    &lt;!-- 此种写法要求mapper接口和mapper映射文件在同一个包下 --&gt;
+    &lt;package name=&quot;com.atguigu.mapper&quot;/&gt;
+    
+&lt;/mappers&gt;
+</code></pre>
+<h2 id="CRUD-案例"><a href="#CRUD-案例" class="headerlink" title="CRUD 案例"></a>CRUD 案例</h2><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/1.PNG"><br>2.Emp.java</p>
+<pre><code>package com.atguigu.bean;
+
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    private Integer age;
+    private String sex;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;]&quot;;
+    &#125;
+    public Emp(Integer eid, String ename, Integer age, String sex) &#123;
+        super();
+        this.eid = eid;
+        this.ename = ename;
+        this.age = age;
+        this.sex = sex;
+    &#125;
+    public Emp() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    
+    
+    
+&#125;
+</code></pre>
+<p>3.EmpMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.List;
+
+import com.atguigu.bean.Emp;
+
+public interface EmpMapper &#123;
+    //根据eid查询员工信息
+    Emp getEmpByEid(String eid);
+    
+    //获取所有的员工信息
+    List&lt;Emp&gt; getAllEmp();
+    
+    //添加员工信息
+    void addEmp(Emp emp);
+    
+    //修改员工信息
+    void updateEmp(Emp emp);
+    
+    //删除员工信息
+    Integer deleteEmp(String id);
+&#125;
+</code></pre>
+<p>4.EmpMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpMapper&quot;&gt;
+    &lt;!-- Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;
+    &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp
+    &lt;/select&gt;
+    
+    &lt;!-- void addEmp(Emp emp); --&gt;
+    &lt;insert id=&quot;addEmp&quot;&gt;
+        insert into emp values(null, #&#123;ename&#125;, #&#123;age&#125;, #&#123;sex&#125;)
+    &lt;/insert&gt;
+    
+    &lt;!-- void updateEmp(Emp emp); --&gt;
+    &lt;update id=&quot;updateEmp&quot; parameterType=&quot;Emp&quot;&gt;
+        update emp set ename=#&#123;ename&#125;,age=#&#123;age&#125;,sex=#&#123;sex&#125; where eid=#&#123;eid&#125;
+    &lt;/update&gt;
+    
+    &lt;!-- void deleteEmp(String id);  --&gt;
+    &lt;delete id=&quot;deleteEmp&quot;&gt;
+        delete from emp where eid=#&#123;eid&#125;
+    &lt;/delete&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>5.TestCRUD.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpMapper;
+
+public class TestCRUD &#123;
+    @Test
+    public void testCRUD() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+//        SqlSession sqlSession = sqlSessionFactory.openSession();//需要手动处理事务
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);//自动处理事务
+        EmpMapper empMapper = sqlSession.getMapper(EmpMapper.class);
+        //测试：根据eid获取员工信息
+//        Emp emp = empMapper.getEmpByEid(&quot;3&quot;);
+//        System.out.println(emp);
+        
+        //测试：获取所有的员工信息
+//        List&lt;Emp&gt; list = empMapper.getAllEmp();
+//        System.out.println(list);
+        
+        //测试：添加员工信息
+//        empMapper.addEmp(new Emp(null,&quot;admin&quot;,23,&quot;女&quot;));
+//        sqlSession.commit();//提交事务
+        
+        //测试：修改员工信息
+        empMapper.updateEmp(new Emp(2, &quot;张二&quot;, 33, &quot;女&quot;));
+        
+        //测试：删除员工信息
+//        Integer rowNum = empMapper.deleteEmp(&quot;5&quot;);
+//        System.out.println(rowNum);//返回值类型为Integer:返回受影响的行数 Boolean:·
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -213,10 +754,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-04-01 05:16:26 / Modified: 05:29:53" itemprop="dateCreated datePublished" datetime="2022-04-01T05:16:26-08:00">2022-04-01</time>
+              <time title="Created: 2022-04-01 05:16:26" itemprop="dateCreated datePublished" datetime="2022-04-01T05:16:26-08:00">2022-04-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-02 04:45:02" itemprop="dateModified" datetime="2022-04-02T04:45:02-08:00">2022-04-02</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -232,6 +779,10 @@
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">MyBatis搭建过程</span></a>
                 </span>
             </span>
 
@@ -877,341 +1428,10 @@ such references are cleared or themselves become unreachable.
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 工厂方法模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-21 02:11:59 / Modified: 17:48:06" itemprop="dateCreated datePublished" datetime="2022-03-21T02:11:59-08:00">2022-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">工厂方法模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h1><p><strong>why 工厂方法模式？</strong><br>简单工厂模式违背了开放封闭原则（开放了拓展，也开放了修改），如果需要增加功能就需要在工厂类中修改逻辑判断，于是工厂方法模式应运而生。</p>
-<p>工厂方法模式：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法是一个类的实例化延迟到子类。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 简单工厂模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-21 01:57:40 / Modified: 17:51:35" itemprop="dateCreated datePublished" datetime="2022-03-21T01:57:40-08:00">2022-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">简单工厂模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h1><p>工厂：用一个单独的类来完成创造实例的过程。<br><strong>案例</strong><br>类图：<br><img src="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/1.jpg"></p>
-<pre><code>class Operation&#123;
-    private double numberA = 0;
-    private double numberB = 0;
-    public double getNumberA() &#123;
-        return numberA;
-    &#125;
-    public void setNumberA(double numberA) &#123;
-        this.numberA = numberA;
-    &#125;
-    public double getNumberB() &#123;
-        return numberB;
-    &#125;
-    public void setNumberB(double numberB) &#123;
-        this.numberB = numberB;
-    &#125;
-    public double getResult() throws Exception&#123;
-        double result = 0;
-        return result;
-    &#125;
-&#125;
-
-class Add extends Operation&#123;
-    public double getResult()
-    &#123;
-        double result = 0;
-        result = getNumberA() + getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class Sub extends Operation&#123;
-    public double getResult()
-    &#123;
-        double result = 0;
-        result = getNumberA() - getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class Mul extends Operation&#123;
-    public double getResult()
-    &#123;
-        double result = 0;
-        result = getNumberA() * getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class Div extends Operation&#123;
-    public double getResult() throws Exception
-    &#123;
-        double result = 0;
-        if (getNumberB() == 0)&#123;
-            throw new Exception(&quot;除数不能为0&quot;);
-        &#125;
-        result = getNumberA() / getNumberB();
-        return result;
-    &#125;
-&#125;
-
-//工厂：用一个单独的类来做这个创造实例的过程
-class OperationFactory&#123;
-    public static Operation createOperate(String operate)&#123;
-        Operation oper = null;
-        
-        if(operate.equals(&quot;+&quot;))&#123;
-            oper = new Add();
-        &#125;else if(operate.equals(&quot;-&quot;))&#123;
-            oper = new Sub();
-        &#125;else if(operate.equals(&quot;*&quot;))&#123;
-            oper = new Mul();
-        &#125;else if(operate.equals(&quot;/&quot;))&#123;
-            oper = new Div();
-        &#125;
-        return oper;
-    &#125;
-&#125;
-
-public class SimpleFactoryTest &#123;
-    public static void main(String[] args) throws Exception &#123;
-        Operation oper = OperationFactory.createOperate(&quot;+&quot;);
-        oper.setNumberA(1);
-        oper.setNumberB(2);
-        double result = oper.getResult();
-        System.out.println(result);
-    &#125;
-&#125;
-</code></pre>
-<p>在使用简单工厂模式的情况下，如果我们要增加新的功能，比如说现在要增加一个求余操作，<br>我们需要增加一个用于求余运算的类，然后在OperationFactory中增加对于求余运算的逻辑判断，这样的做法违背了<br>开放封闭原则，即在开放拓展的同时也开放了修改。</p>
-<pre><code>class Mod extends Operation&#123;
-    public double getResult()&#123;
-        double result = 0;
-        result = getNumberA() % getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class OperationFactory&#123;
-    public static Operation createOperate(String operate)&#123;
-        ......
-        else if(operate.equals(&quot;%&quot;))&#123;
-            oper = new Div();
-        &#125;
-        ......
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="保持理智 相信未来">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/21/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 代理模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-21 01:55:37 / Modified: 01:57:24" itemprop="dateCreated datePublished" datetime="2022-03-21T01:55:37-08:00">2022-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">代理模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1><p><a target="_blank" rel="noopener" href="https://victory-liao.github.io/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">动态代理</a><br><a target="_blank" rel="noopener" href="https://victory-liao.github.io/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/">静态代理</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1279,20 +1499,20 @@ class OperationFactory&#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">368</span>
+          <span class="site-state-item-count">371</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">210</span>
+        <span class="site-state-item-count">214</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">252</span>
+        <span class="site-state-item-count">253</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
