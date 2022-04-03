@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-04-02 05:00:31 / Modified: 05:26:35" itemprop="dateCreated datePublished" datetime="2022-04-02T05:00:31-08:00">2022-04-02</time>
+              <time title="Created: 2022-04-02 05:00:31 / Modified: 20:10:52" itemprop="dateCreated datePublished" datetime="2022-04-02T05:00:31-08:00">2022-04-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -251,6 +251,7 @@
 
       
           <h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
+<h2 id="不同的参数类型，-和-的不同取值方式："><a href="#不同的参数类型，-和-的不同取值方式：" class="headerlink" title="不同的参数类型，${}和#{}的不同取值方式："></a>不同的参数类型，${}和#{}的不同取值方式：</h2><p>1、当传输参数为单个String或基本数据类型和其包装类型<br>#{}：可以以任意的名字获取参数值<br>${}：只能以${value}或${_parameter}获取<br>2、当传输参数为JavaBean时<br>#{}和${}都可以通过属性名直接获取属性值，但是要注意${}的单引号问题<br>3、当传输多个参数时，mybatis会默认将这些参数放在map集合中<br>两种方式：<br>（1）键为0，1，2，3…N-1,以参数为值<br>（2）键为param1,param2,param3…paramN，以参数为值<br>#{}:#{0}、#{1}；#{param1}、#{param2}<br>${}:#{param1}、{param2}，但是要注意${}的单引号问题<br>4、当传输Map参数时<br>#{}和${}都可以通过键的名字直接获取值，但是要注意${}的单引号问题<br>5、命名参数<br>可以通过@Param(“key”)为map集合指定键的名字<br>Emp getEmpByEidAndEnameByParam(@Param(“eid”)String eid, @Param(“ename”)String ename);<br>6、当传输参数为List或Array,mybatis会将List或Array放在map中<br>List以list为键，Array以array为键</p>
 <h2 id="Statement与PreparedStatement"><a href="#Statement与PreparedStatement" class="headerlink" title="Statement与PreparedStatement"></a>Statement与PreparedStatement</h2><pre><code>package com.atguigu.test;
 
 import java.sql.Connection;
