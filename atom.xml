@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-06T01:04:22.628Z</updated>
+  <updated>2022-04-06T02:32:32.798Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MyBatis | 分步查询、分步查询延迟加载</title>
+    <link href="http://example.com/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/"/>
+    <id>http://example.com/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</id>
+    <published>2022-04-06T01:53:04.000Z</published>
+    <updated>2022-04-06T02:32:32.798Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p><pre><code>&lt;settings&gt;    &lt;!-- 开启延迟加载 --&gt;    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;    &lt;!-- 是否查询所有数据 --&gt;    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;&lt;/settings&gt;</code></pre><p>2.DeptMapper.java</p><pre><code>public interface DeptMapper &#123;    Dept getDeptByDid(String did);&#125;</code></pre><p>3.DeptMapper.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;        select did,dname from dept where did=#&#123;did&#125;    &lt;/select&gt;&lt;/mapper&gt;</code></pre><p>4.EmpDeptMapper.java</p><pre><code>public interface EmpDeptMapper &#123;    List&lt;Emp&gt; getAllEmp();        Emp getEmpStep(String eid);//分步查询&#125;</code></pre><p>5.EmpDeptMapper.xml<br>添加查询语句</p><pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;    &lt;!--        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id        column:分步查询的条件，注意：此条件必须是从数据库查询过的      --&gt;    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;&lt;/resultMap&gt;&lt;!-- Emp getEmpStep(String eid); --&gt;&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;&lt;/select&gt;</code></pre><p>6.TestEmpDept.java</p><pre><code>public class TestEmpDept &#123;    public static void main(String[] args) throws IOException &#123;        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);        SqlSession sqlSession = sqlSessionFactory.openSession(true);        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);                Emp emp = mapper.getEmpStep(&quot;3&quot;);        System.out.println(emp.getEname());        System.out.println(emp.getDept());    &#125;&#125;</code></pre><p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p><pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 王五DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) Dept [did=3, dname=研发部]</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;分步查询、分步查询延迟加载&quot;&gt;&lt;a href=&quot;#分步查询、分步查询延迟加载&quot; class=&quot;headerlink&quot; title=&quot;分步查询、分步查询延迟加载&quot;&gt;&lt;/a&gt;分步查询、分步查询延迟加载&lt;/h1&gt;&lt;p&gt;项目目录&lt;br&gt;&lt;img src=&quot;/2022/04</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
+    
+    <category term="分步查询、分步查询延迟加载" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/"/>
+    
+    
+    <category term="MyBatis" scheme="http://example.com/tags/MyBatis/"/>
+    
+    <category term="分步查询" scheme="http://example.com/tags/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2/"/>
+    
+    <category term="分步查询延迟加载" scheme="http://example.com/tags/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/"/>
+    
+  </entry>
   
   <entry>
     <title>python | 统计字符串中各个字符出现的次数并返回出现次数最多的字符</title>
@@ -645,37 +679,6 @@ class MyNumbers:
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringMVC | 处理json</title>
-    <link href="http://example.com/2022/03/15/%E5%A4%84%E7%90%86json/"/>
-    <id>http://example.com/2022/03/15/%E5%A4%84%E7%90%86json/</id>
-    <published>2022-03-16T07:23:48.000Z</published>
-    <updated>2022-03-16T07:36:59.395Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="处理json"><a href="#处理json" class="headerlink" title="处理json"></a>处理json</h1><p>1.项目目录<br><img src="/2022/03/15/%E5%A4%84%E7%90%86json/1.PNG"><br><strong>注意：</strong><br>1.按照上图创建项目、导入图中所示的jar包并按照<a href="https://victory-liao.github.io/2022/03/13/REST-CRUD/">REST-CRUD</a>中的<br>web.xml、springMVC配置配置文件；<br>2.src下的dao、bean包中的代码参照REST CRUD；</p><span id="more"></span><p>3.index.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot; /&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.servletContext.contextPath&#125;/js/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot;&gt;    $(function()&#123;        $(&quot;#btn&quot;).click(function()&#123;            $.ajax(&#123;                url:&quot;testJson&quot;,                type:&quot;POST&quot;,                dataType:&quot;json&quot;,//dataType=&quot;text&quot; 原样显示                success:function(msg)&#123;                    //alert(msg);                    /*                    [&#123;&quot;id&quot;:1001,&quot;lastName&quot;:&quot;E-AA&quot;,&quot;email&quot;:&quot;aa@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:101,&quot;departmentName&quot;:&quot;D-AA&quot;&#125;&#125;,                     &#123;&quot;id&quot;:1002,&quot;lastName&quot;:&quot;E-BB&quot;,&quot;email&quot;:&quot;bb@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:102,&quot;departmentName&quot;:&quot;D-BB&quot;&#125;&#125;,                     &#123;&quot;id&quot;:1003,&quot;lastName&quot;:&quot;E-CC&quot;,&quot;email&quot;:&quot;cc@163.com&quot;,&quot;gender&quot;:0,&quot;department&quot;:&#123;&quot;id&quot;:103,&quot;departmentName&quot;:&quot;D-CC&quot;&#125;&#125;,                     &#123;&quot;id&quot;:1004,&quot;lastName&quot;:&quot;E-DD&quot;,&quot;email&quot;:&quot;dd@163.com&quot;,&quot;gender&quot;:0,&quot;department&quot;:&#123;&quot;id&quot;:104,&quot;departmentName&quot;:&quot;D-DD&quot;&#125;&#125;,                     &#123;&quot;id&quot;:1005,&quot;lastName&quot;:&quot;E-EE&quot;,&quot;email&quot;:&quot;ee@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:105,&quot;departmentName&quot;:&quot;D-EE&quot;&#125;&#125;]                    */                    /* for(var i in msg) &#123;                        var emp = msg[i]                        alert(&quot;id=&quot;+emp.id+&quot;,lastName=&quot;+emp.lastName+&quot;,departmentName=&quot;+emp.department.departmentName);                    &#125; */                                        //第一种实现方式                    /* var tb = &quot;&lt;table&gt;&quot;                    tb += &quot;&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;th&gt;email&lt;/th&gt;&lt;th&gt;gender&lt;/th&gt;&lt;th&gt;departmentName&lt;/th&gt;&lt;/tr&gt;&quot;                    for(var i in msg) &#123;                        var emp = msg[i]                        tb += &quot;&lt;tr&gt;&lt;td&gt;&quot;+emp.id+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.lastName+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.email+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.gender+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.department.departmentName+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;                    &#125;                     tb += &quot;&lt;/table&gt;&quot;                    $(&quot;body&quot;).append(tb); */                                        //第二种实现方式                    $(&quot;body&quot;).append(&quot;&lt;table&gt;&lt;/table&gt;&quot;);                    $(&quot;table&quot;).append(&quot;&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;th&gt;email&lt;/th&gt;&lt;th&gt;gender&lt;/th&gt;&lt;th&gt;departmentName&lt;/th&gt;&lt;/tr&gt;&quot;)                    for(var i in msg)&#123;                        var emp = msg[i]                        $(&quot;table&quot;).append(&quot;&lt;tr&gt;&lt;td&gt;&quot;+emp.id+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.lastName+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.email+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.gender+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.department.departmentName+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;);                    &#125;                &#125;            &#125;);        &#125;)    &#125;);&lt;/script&gt;&lt;/head&gt;&lt;body&gt;    &lt;input id=&quot;btn&quot; type=&quot;button&quot; value=&quot;测试ajax&quot; /&gt;        &lt;a href=&quot;testJson&quot;&gt;测试json&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>2.TestJsonController.java</p><pre><code>package com.atguigu.test;import java.util.Collection;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.ResponseBody;import com.atguigu.bean.Employee;import com.atguigu.dao.EmployeeDao;@Controllerpublic class TestJsonController &#123;        @Autowired    private EmployeeDao dao;        /**     * springMVC处理json的四个条件     * 1、导入jackson的jar包     * 2、在springMVC的配置文件中开启MVC驱动，&lt;mvc:annotation-driven /&gt;     * 3、在处理ajax请求的方法上加上注解@ResponseBody     * 4、将要转为为json且响应到客户端的数据，直接作为该方法的返回值返回     * @ResponseBody     */    @RequestMapping(&quot;testJson&quot;)    @ResponseBody    public Collection&lt;Employee&gt; testJson()&#123;        Collection&lt;Employee&gt; emps = dao.getAll();        return emps;    &#125;&#125;</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;处理json&quot;&gt;&lt;a href=&quot;#处理json&quot; class=&quot;headerlink&quot; title=&quot;处理json&quot;&gt;&lt;/a&gt;处理json&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/03/15/%E5%A4%84%E7%90%86json/1.PNG&quot;&gt;&lt;br&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;br&gt;1.按照上图创建项目、导入图中所示的jar包并按照&lt;a href=&quot;https://victory-liao.github.io/2022/03/13/REST-CRUD/&quot;&gt;REST-CRUD&lt;/a&gt;中的&lt;br&gt;web.xml、springMVC配置配置文件；&lt;br&gt;2.src下的dao、bean包中的代码参照REST CRUD；&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="SpringMVC" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/"/>
-    
-    <category term="处理json" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E5%A4%84%E7%90%86json/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="SpringMVC" scheme="http://example.com/tags/SpringMVC/"/>
-    
-    <category term="json" scheme="http://example.com/tags/json/"/>
     
   </entry>
   
