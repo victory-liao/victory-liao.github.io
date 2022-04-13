@@ -1775,6 +1775,19 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
+    <title>GPU | GPU利用率低？</title>
+    <url>/2021/10/09/GPU%E5%88%A9%E7%94%A8%E7%8E%87%E4%BD%8E%EF%BC%9F/</url>
+    <content><![CDATA[<h1 id="GPU利用率低？"><a href="#GPU利用率低？" class="headerlink" title="GPU利用率低？"></a>GPU利用率低？</h1><p><a href="https://blog.csdn.net/qq_32998593/article/details/92849585">GPU利用率低？</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>GPU</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HTTP | HTTP请求方法</title>
     <url>/2020/11/09/HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="HTTP请求方法"><a href="#HTTP请求方法" class="headerlink" title="HTTP请求方法"></a>HTTP请求方法</h1><h2 id="常见的几种请求方式"><a href="#常见的几种请求方式" class="headerlink" title="常见的几种请求方式"></a>常见的几种请求方式</h2><table>
@@ -1815,19 +1828,6 @@ with urllib.request.urlopen(req) as response:
       </categories>
       <tags>
         <tag>HTTP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GPU | GPU利用率低？</title>
-    <url>/2021/10/09/GPU%E5%88%A9%E7%94%A8%E7%8E%87%E4%BD%8E%EF%BC%9F/</url>
-    <content><![CDATA[<h1 id="GPU利用率低？"><a href="#GPU利用率低？" class="headerlink" title="GPU利用率低？"></a>GPU利用率低？</h1><p><a href="https://blog.csdn.net/qq_32998593/article/details/92849585">GPU利用率低？</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>GPU</category>
-      </categories>
-      <tags>
-        <tag>GPU</tag>
       </tags>
   </entry>
   <entry>
@@ -2396,124 +2396,6 @@ reduce(jiecheng, [i for i in range(1, n+1)])
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | 三种查询方式</title>
-    <url>/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.Map;
-
-import org.apache.ibatis.annotations.MapKey;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpSelectMapper &#123;
-    //根据eid查询一个员工信息
-    Emp getEmpByEid(String eid);
-    
-    //获取所有的员工数量
-    Integer getCount();
-    
-    //以map集合获取一个员工信息
-    Map&lt;String, Object&gt; getEmpMapByEid(String eid);
-    
-    //以map集合获取所有员工信息
-    
-    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
-    Map&lt;String, Object&gt; getAllEmpMap();
-&#125;
-</code></pre>
-<p>3.EmpSelectMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;
-    
-    
-    &lt;!-- //根据eid查询一个员工信息
-    Emp getEmpByEid(String eid); --&gt;
-    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
-    &lt;/select&gt;
-    
-    &lt;!-- //获取所有的员工数量
-    Integer getCount(); --&gt;
-    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;
-        select count(eid) from emp
-    &lt;/select&gt;
-    
-    &lt;!-- //以map集合获取一个员工信息
-    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;
-    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;
-        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
-    &lt;/select&gt;
-    
-    &lt;!-- //以map集合获取所有员工信息
-    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
-    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;
-    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;
-    select eid,ename,age,sex from emp
-    &lt;/select&gt;
-    
-&lt;/mapper&gt;
-</code></pre>
-<p>4.TestSelect.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpSelectMapper;
-
-public class TestSelect &#123;
-    @Test
-    public void testSelect() throws IOException&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);
-        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean
-//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);
-//        System.out.println(emp);
-        
-        //获取员工总记录数
-//        Integer i = mapper.getCount();
-//        System.out.println(i);
-        
-        //以map获取单个emp
-//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);
-//        System.out.println(map);
-        
-        //以map获取所有emp
-        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();
-        System.out.println(map);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>MyBatis三种查询方式</category>
-      </categories>
-      <tags>
-        <tag>Mybatis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MyBatis | 增删改查</title>
     <url>/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/</url>
     <content><![CDATA[<h1 id="MyBatis-CRUD"><a href="#MyBatis-CRUD" class="headerlink" title="MyBatis CRUD"></a>MyBatis CRUD</h1><p>按照<a href="https://victory-liao.github.io/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">MyBatis搭建过程</a>进行项目搭建，<br>并在mybatis-config.xml中将按如下方式引入映射文件：</p>
@@ -2694,151 +2576,77 @@ public class TestCRUD &#123;
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | 获取参数值的两种方式</title>
-    <url>/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
-<h2 id="不同的参数类型，-和-的不同取值方式："><a href="#不同的参数类型，-和-的不同取值方式：" class="headerlink" title="不同的参数类型，${}和#{}的不同取值方式："></a>不同的参数类型，${}和#{}的不同取值方式：</h2><p>1、当传输参数为单个String或基本数据类型和其包装类型<br>#{}：可以以任意的名字获取参数值<br>${}：只能以${value}或${_parameter}获取<br>2、当传输参数为JavaBean时<br>#{}和${}都可以通过属性名直接获取属性值，但是要注意${}的单引号问题<br>3、当传输多个参数时，mybatis会默认将这些参数放在map集合中<br>两种方式：<br>（1）键为0，1，2，3…N-1,以参数为值<br>（2）键为param1,param2,param3…paramN，以参数为值<br>#{}:#{0}、#{1}；#{param1}、#{param2}<br>${}:#{param1}、{param2}，但是要注意${}的单引号问题<br>4、当传输Map参数时<br>#{}和${}都可以通过键的名字直接获取值，但是要注意${}的单引号问题<br>5、命名参数<br>可以通过@Param(“key”)为map集合指定键的名字<br>Emp getEmpByEidAndEnameByParam(@Param(“eid”)String eid, @Param(“ename”)String ename);<br>6、当传输参数为List或Array,mybatis会将List或Array放在map中<br>List以list为键，Array以array为键</p>
-<h2 id="Statement与PreparedStatement"><a href="#Statement与PreparedStatement" class="headerlink" title="Statement与PreparedStatement"></a>Statement与PreparedStatement</h2><pre><code>package com.atguigu.test;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-
-import com.atguigu.bean.Emp;
-
-public class TestJDBC &#123;
-    public static void main(String[] args) throws Exception &#123;
-        Class.forName(&quot;&quot;);
-        Connection conn = DriverManager.getConnection(&quot;&quot;,&quot;&quot;,&quot;&quot;);
-        //可以使用通配符赋值
-        PreparedStatement ps = conn.prepareStatement(&quot;insert into emp values(null, ?, ?,?&quot;);
-        ps.setString(1, &quot;root&quot;);
-        ps.setString(2, &quot;23&quot;);
-        ps.setString(3, &quot;男&quot;);
-        ps.executeUpdate();
-        
-        Statement statement = conn.createStatement();
-        Emp emp = new Emp(null, &quot;a&quot;, 1, &quot;b&quot;);
-        //不可以使用通配符赋值
-        statement.executeUpdate(&quot;insert into emp values(null, &#39;&quot;+emp.getEname()+&quot;&#39;, &quot;+emp.getAge()+&quot;, &#39;&quot;+emp.getSex()+&quot;&#39;)&quot;);
-    &#125;
-&#125;
-</code></pre>
-<span id="more"></span>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/1.PNG"><br>2.ParamMapper.java</p>
+    <title>MyBatis | 三种查询方式</title>
+    <url>/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p>
 <pre><code>package com.atguigu.mapper;
 
-import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.MapKey;
 
 import com.atguigu.bean.Emp;
 
-public interface ParamMapper &#123;
-    //添加员工信息
-    void insertEmp(Emp emp);
-    
-    //获取名字中包含以name开头且后面多一个任意字符的员工信息
-    List&lt;Emp&gt; getAllEmp(String name);
-        
-    //删除名字中包含name的员工信息
-    void deleteEmp(String name);
-    
-    //根据eid获取员工信息
+public interface EmpSelectMapper &#123;
+    //根据eid查询一个员工信息
     Emp getEmpByEid(String eid);
     
-    //根据eid和ename获取员工信息
-    Emp getEmpByEidAndEname(String eid, String ename);
+    //获取所有的员工数量
+    Integer getCount();
     
-    //根据map查询员工信息
-    Emp getEmpByMap(Map&lt;String, Object&gt; map);
+    //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid);
     
-    //根据eid和ename获取员工信息
-    Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename);
+    //以map集合获取所有员工信息
+    
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap();
 &#125;
 </code></pre>
-<p>3.ParamMapper.xml</p>
+<p>3.EmpSelectMapper.xml</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
 &lt;!DOCTYPE mapper
  PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
  &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
  
-&lt;mapper namespace=&quot;com.atguigu.mapper.ParamMapper&quot;&gt;
-    &lt;!--
-        useGeneratedKeys:可以使用自动生成的主键 
-        keyProperty:将自动生成的主键赋值给传递过来的参数的哪一个属性
-     --&gt;
-    &lt;insert id=&quot;insertEmp&quot; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;eid&quot;&gt;
-        &lt;!-- insert into emp values(null, #&#123;ename&#125;, #&#123;age&#125;, #&#123;sex&#125;) --&gt;
-        
-        insert into emp values(null, &#39;$&#123;ename&#125;&#39;, $&#123;age&#125;, &#39;$&#123;sex&#125;&#39;)
-    &lt;/insert&gt;
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;
     
-    &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- 模糊查询 --&gt;
-        select eid,ename,age,sex from emp where ename like &#39;$&#123;value&#125;_&#39;
-    &lt;/select&gt;
     
-    &lt;delete id=&quot;deleteEmp&quot;&gt;
-        &lt;!-- 批量删除 --&gt;
-        delete from emp where ename like &#39;%$&#123;value&#125;%&#39;
-    &lt;/delete&gt;
-    
-    &lt;!-- Emp getEmpByEid(String eid); --&gt;
+    &lt;!-- //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid); --&gt;
     &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eid&#125; --&gt;
-        
-        &lt;!-- 参数与接口中的参数不一致也可以 --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eids&#125; --&gt;
-        
-
-        &lt;!-- 
-            报错：
-            org.apache.ibatis.reflection.ReflectionException: 
-            There is no getter for property named &#39;eid&#39; in 
-            &#39;class java.lang.String&#39; 
-        --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;eid&#125; --&gt;
-        
-        &lt;!-- 成功 --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;value&#125; --&gt;
-        
-        select eid,ename,age,sex from emp where eid = $&#123;_parameter&#125;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
     &lt;/select&gt;
     
-    &lt;!-- Emp getEmpByEidAndEname(String eid, String ename); --&gt;
-    &lt;select id=&quot;getEmpByEidAndEname&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;0&#125; and ename=#&#123;1&#125; --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;param1&#125; and ename=#&#123;param2&#125; --&gt;
-        
-        select eid,ename,age,sex from emp where eid=$&#123;param1&#125; and ename=&#39;$&#123;param2&#125;&#39;
-        &lt;!-- select eid,ename,age,sex from emp where eid=$&#123;0&#125; and ename=$&#123;1&#125; --&gt;&lt;!-- 不可行 --&gt;
+    &lt;!-- //获取所有的员工数量
+    Integer getCount(); --&gt;
+    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;
+        select count(eid) from emp
     &lt;/select&gt;
     
-    &lt;!-- Emp getEmpByMap(Map&lt;String, Object&gt; map); --&gt;
-    &lt;select id=&quot;getEmpByMap&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp where eid=$&#123;eid&#125; and ename=&#39;$&#123;ename&#125;&#39;
+    &lt;!-- //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
     &lt;/select&gt;
     
-    &lt;!-- Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename); --&gt;
-    &lt;select id=&quot;getEmpByEidAndEnameByParam&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp where eid=#&#123;eid&#125; and ename=#&#123;ename&#125;
+    &lt;!-- //以map集合获取所有员工信息
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;
+    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;
+    select eid,ename,age,sex from emp
     &lt;/select&gt;
-
     
 &lt;/mapper&gt;
 </code></pre>
-<p>4.TestParam.java</p>
+<p>4.TestSelect.java</p>
 <pre><code>package com.atguigu.test;
 
 import java.io.IOException;
-
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -2847,72 +2655,42 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
 import com.atguigu.bean.Emp;
-import com.atguigu.mapper.ParamMapper;
+import com.atguigu.mapper.EmpSelectMapper;
 
-
-public class TestParam &#123;
+public class TestSelect &#123;
     @Test
-    public void testCRUD() throws IOException&#123;
+    public void testSelect() throws IOException&#123;
         InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-//        SqlSession sqlSession = sqlSessionFactory.openSession();//需要手动处理事务
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);//自动处理事务
-        ParamMapper mapper = sqlSession.getMapper(ParamMapper.class);
-        
-        //获取名字中包含admin的所有员工信息(模糊查询)
-//        List&lt;Emp&gt; allEmp = mapper.getAllEmp(&quot;admin&quot;);
-//        System.out.println(allEmp);
-        
-        //删除名字中包含admin的所有员工信息(批量删除)
-//        mapper.deleteEmp(&quot;admin&quot;);
-        
-        
-//        Emp emp = new Emp(null, &quot;admin&quot;, 23, &quot;男&quot;);
-//        mapper.insertEmp(emp);
-//        System.out.println(emp.getEid());
-        
-//        Emp emp = mapper.getEmpByEid(&quot;1&quot;);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);
+        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean
+//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);
 //        System.out.println(emp);
         
-//        Emp emp = mapper.getEmpByEidAndEname(&quot;1&quot;, &quot;张三&quot;);
-//        System.out.println(emp);
+        //获取员工总记录数
+//        Integer i = mapper.getCount();
+//        System.out.println(i);
         
-//        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
-//        map.put(&quot;eid&quot;, &quot;1&quot;);
-//        map.put(&quot;ename&quot;, &quot;张三&quot;);
-//        Emp emp = mapper.getEmpByMap(map);
-//        System.out.println(emp);
+        //以map获取单个emp
+//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);
+//        System.out.println(map);
         
-        Emp emp = mapper.getEmpByEidAndEnameByParam(&quot;1&quot;, &quot;张三&quot;);
-        System.out.println(emp);
+        //以map获取所有emp
+        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();
+        System.out.println(map);
     &#125;
-&#125; 
+&#125;
 </code></pre>
 ]]></content>
       <categories>
         <category>Java</category>
         <category>框架</category>
         <category>MyBatis</category>
-        <category>MyBatis获取参数值的两种方式</category>
+        <category>MyBatis三种查询方式</category>
       </categories>
       <tags>
         <tag>Mybatis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL | 内连接和外连接的区别</title>
-    <url>/2022/01/19/MySQL%E5%86%85%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="内连接和外连接的区别"><a href="#内连接和外连接的区别" class="headerlink" title="内连接和外连接的区别"></a>内连接和外连接的区别</h1><p><strong>区别：</strong><br>内连接（inner join）：取出两张表中匹配到的数据，匹配不到的不保留<br>外连接（outer join）：取出连接表中匹配到的数据，匹配不到的也会保留，其值为NULL</p>
-<p><a href="https://blog.csdn.net/johnhan9/article/details/88686288">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-        <category>内连接和外连接的区别</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>内连接</tag>
-        <tag>外连接</tag>
       </tags>
   </entry>
   <entry>
@@ -3151,6 +2929,228 @@ public class TestMybatis &#123;
       <tags>
         <tag>Java</tag>
         <tag>MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis | 获取参数值的两种方式</title>
+    <url>/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
+<h2 id="不同的参数类型，-和-的不同取值方式："><a href="#不同的参数类型，-和-的不同取值方式：" class="headerlink" title="不同的参数类型，${}和#{}的不同取值方式："></a>不同的参数类型，${}和#{}的不同取值方式：</h2><p>1、当传输参数为单个String或基本数据类型和其包装类型<br>#{}：可以以任意的名字获取参数值<br>${}：只能以${value}或${_parameter}获取<br>2、当传输参数为JavaBean时<br>#{}和${}都可以通过属性名直接获取属性值，但是要注意${}的单引号问题<br>3、当传输多个参数时，mybatis会默认将这些参数放在map集合中<br>两种方式：<br>（1）键为0，1，2，3…N-1,以参数为值<br>（2）键为param1,param2,param3…paramN，以参数为值<br>#{}:#{0}、#{1}；#{param1}、#{param2}<br>${}:#{param1}、{param2}，但是要注意${}的单引号问题<br>4、当传输Map参数时<br>#{}和${}都可以通过键的名字直接获取值，但是要注意${}的单引号问题<br>5、命名参数<br>可以通过@Param(“key”)为map集合指定键的名字<br>Emp getEmpByEidAndEnameByParam(@Param(“eid”)String eid, @Param(“ename”)String ename);<br>6、当传输参数为List或Array,mybatis会将List或Array放在map中<br>List以list为键，Array以array为键</p>
+<h2 id="Statement与PreparedStatement"><a href="#Statement与PreparedStatement" class="headerlink" title="Statement与PreparedStatement"></a>Statement与PreparedStatement</h2><pre><code>package com.atguigu.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
+import com.atguigu.bean.Emp;
+
+public class TestJDBC &#123;
+    public static void main(String[] args) throws Exception &#123;
+        Class.forName(&quot;&quot;);
+        Connection conn = DriverManager.getConnection(&quot;&quot;,&quot;&quot;,&quot;&quot;);
+        //可以使用通配符赋值
+        PreparedStatement ps = conn.prepareStatement(&quot;insert into emp values(null, ?, ?,?&quot;);
+        ps.setString(1, &quot;root&quot;);
+        ps.setString(2, &quot;23&quot;);
+        ps.setString(3, &quot;男&quot;);
+        ps.executeUpdate();
+        
+        Statement statement = conn.createStatement();
+        Emp emp = new Emp(null, &quot;a&quot;, 1, &quot;b&quot;);
+        //不可以使用通配符赋值
+        statement.executeUpdate(&quot;insert into emp values(null, &#39;&quot;+emp.getEname()+&quot;&#39;, &quot;+emp.getAge()+&quot;, &#39;&quot;+emp.getSex()+&quot;&#39;)&quot;);
+    &#125;
+&#125;
+</code></pre>
+<span id="more"></span>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/1.PNG"><br>2.ParamMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.atguigu.bean.Emp;
+
+public interface ParamMapper &#123;
+    //添加员工信息
+    void insertEmp(Emp emp);
+    
+    //获取名字中包含以name开头且后面多一个任意字符的员工信息
+    List&lt;Emp&gt; getAllEmp(String name);
+        
+    //删除名字中包含name的员工信息
+    void deleteEmp(String name);
+    
+    //根据eid获取员工信息
+    Emp getEmpByEid(String eid);
+    
+    //根据eid和ename获取员工信息
+    Emp getEmpByEidAndEname(String eid, String ename);
+    
+    //根据map查询员工信息
+    Emp getEmpByMap(Map&lt;String, Object&gt; map);
+    
+    //根据eid和ename获取员工信息
+    Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename);
+&#125;
+</code></pre>
+<p>3.ParamMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.ParamMapper&quot;&gt;
+    &lt;!--
+        useGeneratedKeys:可以使用自动生成的主键 
+        keyProperty:将自动生成的主键赋值给传递过来的参数的哪一个属性
+     --&gt;
+    &lt;insert id=&quot;insertEmp&quot; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;eid&quot;&gt;
+        &lt;!-- insert into emp values(null, #&#123;ename&#125;, #&#123;age&#125;, #&#123;sex&#125;) --&gt;
+        
+        insert into emp values(null, &#39;$&#123;ename&#125;&#39;, $&#123;age&#125;, &#39;$&#123;sex&#125;&#39;)
+    &lt;/insert&gt;
+    
+    &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
+        &lt;!-- 模糊查询 --&gt;
+        select eid,ename,age,sex from emp where ename like &#39;$&#123;value&#125;_&#39;
+    &lt;/select&gt;
+    
+    &lt;delete id=&quot;deleteEmp&quot;&gt;
+        &lt;!-- 批量删除 --&gt;
+        delete from emp where ename like &#39;%$&#123;value&#125;%&#39;
+    &lt;/delete&gt;
+    
+    &lt;!-- Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eid&#125; --&gt;
+        
+        &lt;!-- 参数与接口中的参数不一致也可以 --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eids&#125; --&gt;
+        
+
+        &lt;!-- 
+            报错：
+            org.apache.ibatis.reflection.ReflectionException: 
+            There is no getter for property named &#39;eid&#39; in 
+            &#39;class java.lang.String&#39; 
+        --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;eid&#125; --&gt;
+        
+        &lt;!-- 成功 --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;value&#125; --&gt;
+        
+        select eid,ename,age,sex from emp where eid = $&#123;_parameter&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- Emp getEmpByEidAndEname(String eid, String ename); --&gt;
+    &lt;select id=&quot;getEmpByEidAndEname&quot; resultType=&quot;Emp&quot;&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;0&#125; and ename=#&#123;1&#125; --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;param1&#125; and ename=#&#123;param2&#125; --&gt;
+        
+        select eid,ename,age,sex from emp where eid=$&#123;param1&#125; and ename=&#39;$&#123;param2&#125;&#39;
+        &lt;!-- select eid,ename,age,sex from emp where eid=$&#123;0&#125; and ename=$&#123;1&#125; --&gt;&lt;!-- 不可行 --&gt;
+    &lt;/select&gt;
+    
+    &lt;!-- Emp getEmpByMap(Map&lt;String, Object&gt; map); --&gt;
+    &lt;select id=&quot;getEmpByMap&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=$&#123;eid&#125; and ename=&#39;$&#123;ename&#125;&#39;
+    &lt;/select&gt;
+    
+    &lt;!-- Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename); --&gt;
+    &lt;select id=&quot;getEmpByEidAndEnameByParam&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125; and ename=#&#123;ename&#125;
+    &lt;/select&gt;
+
+    
+&lt;/mapper&gt;
+</code></pre>
+<p>4.TestParam.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.ParamMapper;
+
+
+public class TestParam &#123;
+    @Test
+    public void testCRUD() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+//        SqlSession sqlSession = sqlSessionFactory.openSession();//需要手动处理事务
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);//自动处理事务
+        ParamMapper mapper = sqlSession.getMapper(ParamMapper.class);
+        
+        //获取名字中包含admin的所有员工信息(模糊查询)
+//        List&lt;Emp&gt; allEmp = mapper.getAllEmp(&quot;admin&quot;);
+//        System.out.println(allEmp);
+        
+        //删除名字中包含admin的所有员工信息(批量删除)
+//        mapper.deleteEmp(&quot;admin&quot;);
+        
+        
+//        Emp emp = new Emp(null, &quot;admin&quot;, 23, &quot;男&quot;);
+//        mapper.insertEmp(emp);
+//        System.out.println(emp.getEid());
+        
+//        Emp emp = mapper.getEmpByEid(&quot;1&quot;);
+//        System.out.println(emp);
+        
+//        Emp emp = mapper.getEmpByEidAndEname(&quot;1&quot;, &quot;张三&quot;);
+//        System.out.println(emp);
+        
+//        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
+//        map.put(&quot;eid&quot;, &quot;1&quot;);
+//        map.put(&quot;ename&quot;, &quot;张三&quot;);
+//        Emp emp = mapper.getEmpByMap(map);
+//        System.out.println(emp);
+        
+        Emp emp = mapper.getEmpByEidAndEnameByParam(&quot;1&quot;, &quot;张三&quot;);
+        System.out.println(emp);
+    &#125;
+&#125; 
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>MyBatis获取参数值的两种方式</category>
+      </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL | 内连接和外连接的区别</title>
+    <url>/2022/01/19/MySQL%E5%86%85%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="内连接和外连接的区别"><a href="#内连接和外连接的区别" class="headerlink" title="内连接和外连接的区别"></a>内连接和外连接的区别</h1><p><strong>区别：</strong><br>内连接（inner join）：取出两张表中匹配到的数据，匹配不到的不保留<br>外连接（outer join）：取出连接表中匹配到的数据，匹配不到的也会保留，其值为NULL</p>
+<p><a href="https://blog.csdn.net/johnhan9/article/details/88686288">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+        <category>内连接和外连接的区别</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>内连接</tag>
+        <tag>外连接</tag>
       </tags>
   </entry>
   <entry>
@@ -6413,6 +6413,29 @@ wb.save(&quot;物料表.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>itertools | product</title>
+    <url>/2021/09/04/product/</url>
+    <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
+<pre><code>print(list(itertools.product(‘a&#39;, repeat=4)))   # 等价于 print(list(itertools.product(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;a&#39;)))
+
+a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.product(a, a)))
+</code></pre>
+<p><strong>用法2：</strong></p>
+<pre><code>print(list(itertools.product(a, b)))  # 等价于 print(list((x, y) for x in a for y in b))
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>itertools</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>itertools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | property和property装饰器</title>
     <url>/2022/03/25/property%E5%92%8Cproperty%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
     <content><![CDATA[<h1 id="property和property装饰器"><a href="#property和property装饰器" class="headerlink" title="property和property装饰器"></a>property和property装饰器</h1><pre><code>class Student:
@@ -6451,29 +6474,6 @@ print(s.name)
         <tag>python</tag>
         <tag>property</tag>
         <tag>property装饰器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>itertools | product</title>
-    <url>/2021/09/04/product/</url>
-    <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
-<pre><code>print(list(itertools.product(‘a&#39;, repeat=4)))   # 等价于 print(list(itertools.product(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;a&#39;)))
-
-a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
-print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.product(a, a)))
-</code></pre>
-<p><strong>用法2：</strong></p>
-<pre><code>print(list(itertools.product(a, b)))  # 等价于 print(list((x, y) for x in a for y in b))
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>itertools</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>itertools</tag>
       </tags>
   </entry>
   <entry>
@@ -6686,6 +6686,20 @@ mapped = map(lambda x : (x * 2), data1)
 data2 = list(mapped)
 print(data2)
 </code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | python中的iter()与next()</title>
+    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
+    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
+<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
+<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -6928,20 +6942,6 @@ for number in range(1, 21):  # 不同的试卷数量，此处为20套
       </tags>
   </entry>
   <entry>
-    <title>python | python中的iter()与next()</title>
-    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
-    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
-<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
-<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>random | python出数学练习题</title>
     <url>/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/</url>
     <content><![CDATA[<h1 id="python出数学练习题"><a href="#python出数学练习题" class="headerlink" title="python出数学练习题"></a>python出数学练习题</h1><p>实现代码：</p>
@@ -7034,6 +7034,73 @@ To_word(data, &quot;加法题&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>random</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 分块拆分txt文件中的数据</title>
+    <url>/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
+<pre><code># -*- coding:utf-8 -*-
+# 读取txt文件中的数据
+file = open(&quot;数据.txt&quot;)
+lines = file.readlines()
+# print(lines[:5])
+
+data = &#123;&#125;  # 储存分割的数据
+line_list = []  # 中转列表
+last_id = &quot;start&quot;  # 数据分块标识
+for line in lines:
+    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
+    ID = row_data[0]  # 获得ID
+    if last_id == &quot;start&quot;:  # 用于处理数据第一行
+        line_list.append(line)  # 将第一行数据放入中转列表
+    else:  # 不是第一行数据，则按如下执行
+        if ID != last_id:  # 如果出现新的数据块
+            if last_id in data:  # 新的数据块的ID已存在字典data中
+                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
+            else:  # 新的数据快的ID不在字典data中
+                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
+            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
+        else:  # 没出现新的数据块
+            line_list.append(line)  # 将数据继续加入中转列表
+    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
+
+# 将最后一个文字块的数据放入字典
+if last_id in data:
+    data[last_id].append(line_list)
+else:
+    data[last_id] = [line_list]
+
+# print(data[&#39;89031&#39;])
+
+# for i in data.keys():
+#     for block in data[i]:
+#         print(block)
+#         print(&quot;- -&quot;*50)
+
+
+# 写入数据函数
+def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
+    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
+    for i in range(len(data_list)):
+        file.write(data_list[i])
+    file.close()  # 保存数据并关闭
+
+
+# 批量写入数据
+for ID in data.keys():
+    for i in range(len(data[ID])):
+        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
+        
+</code></pre>
+<p><a href="数据.txt">数据.txt</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -7207,73 +7274,6 @@ if __name__ == &#39;__main__&#39;:
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>PyQt5</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | 分块拆分txt文件中的数据</title>
-    <url>/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
-<pre><code># -*- coding:utf-8 -*-
-# 读取txt文件中的数据
-file = open(&quot;数据.txt&quot;)
-lines = file.readlines()
-# print(lines[:5])
-
-data = &#123;&#125;  # 储存分割的数据
-line_list = []  # 中转列表
-last_id = &quot;start&quot;  # 数据分块标识
-for line in lines:
-    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
-    ID = row_data[0]  # 获得ID
-    if last_id == &quot;start&quot;:  # 用于处理数据第一行
-        line_list.append(line)  # 将第一行数据放入中转列表
-    else:  # 不是第一行数据，则按如下执行
-        if ID != last_id:  # 如果出现新的数据块
-            if last_id in data:  # 新的数据块的ID已存在字典data中
-                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
-            else:  # 新的数据快的ID不在字典data中
-                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
-            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
-        else:  # 没出现新的数据块
-            line_list.append(line)  # 将数据继续加入中转列表
-    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
-
-# 将最后一个文字块的数据放入字典
-if last_id in data:
-    data[last_id].append(line_list)
-else:
-    data[last_id] = [line_list]
-
-# print(data[&#39;89031&#39;])
-
-# for i in data.keys():
-#     for block in data[i]:
-#         print(block)
-#         print(&quot;- -&quot;*50)
-
-
-# 写入数据函数
-def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
-    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
-    for i in range(len(data_list)):
-        file.write(data_list[i])
-    file.close()  # 保存数据并关闭
-
-
-# 批量写入数据
-for ID in data.keys():
-    for i in range(len(data[ID])):
-        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
-        
-</code></pre>
-<p><a href="数据.txt">数据.txt</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -8039,13 +8039,9 @@ for picture in pictures:
       </tags>
   </entry>
   <entry>
-    <title>python | re.match与re.search的区别</title>
-    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
-re.match(r&quot;dogs&quot;,s)#匹配失败
-re.search(r&quot;dogs&quot;,s)#匹配成功
-</code></pre>
+    <title>python资源大全</title>
+    <url>/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -8055,9 +8051,13 @@ re.search(r&quot;dogs&quot;,s)#匹配成功
       </tags>
   </entry>
   <entry>
-    <title>python资源大全</title>
-    <url>/2021/07/03/python%E8%B5%84%E6%BA%90%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p>awesome-python 是 vinta 发起维护的 Python 资源列表，内容包括：Web 框架、网络爬虫、网络内容提取、模板引擎、数据库、数据可视化、图片处理、文本处理、自然语言处理、机器学习、日志、代码分析等。<br><a href="http://jobbole.github.io/awesome-python-cn/">python资源大全中文版</a></p>
+    <title>python | re.match与re.search的区别</title>
+    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
+re.match(r&quot;dogs&quot;,s)#匹配失败
+re.search(r&quot;dogs&quot;,s)#匹配成功
+</code></pre>
 ]]></content>
       <categories>
         <category>python</category>
@@ -8368,28 +8368,6 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | servlet</title>
-    <url>/2022/01/10/servlet/</url>
-    <content><![CDATA[<h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><h2 id="创建servlet"><a href="#创建servlet" class="headerlink" title="创建servlet"></a>创建servlet</h2><ol>
-<li>在src下面新建一个包com.oracle(公司域名反写)</li>
-<li>在com.oracle下新建一个servlet(New–&gt;Other–&gt;Web–&gt;Servlet)<br>输入servlet的名称：<br><img src="/2022/01/10/servlet/1.PNG"><br>修改URL mappings:<br><img src="/2022/01/10/servlet/2.PNG"><br>去掉Constructors form superclass的勾选：<br><img src="/2022/01/10/servlet/3.PNG"><br>创建好的servlet:<br><img src="/2022/01/10/servlet/4.PNG"><h2 id="测试Demo1Servlet"><a href="#测试Demo1Servlet" class="headerlink" title="测试Demo1Servlet"></a>测试Demo1Servlet</h2></li>
-<li>创建demo1.html<br><img src="/2022/01/10/servlet/5.PNG"></li>
-<li>在Demo1Servlet.java中编写处理来自demo1.html的请求的Java代码<br><img src="/2022/01/10/servlet/6.PNG"></li>
-<li>在浏览器地址栏输入：localhost:8080/shop/demo1.html<br><img src="/2022/01/10/servlet/7.PNG"></li>
-<li>点击上图中的超链接向服务器发出请求<br>servelet处理来自浏览器的请求，执行在Demo1Servlet.java中编写的Java代码<br><img src="/2022/01/10/servlet/8.PNG"></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>创建servlet接收并处理请求</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>servlet</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Movies | sacrifice</title>
     <url>/2020/10/29/sacrifice/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -8409,6 +8387,28 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
       </categories>
       <tags>
         <tag>金刚川</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb项目开发 | servlet</title>
+    <url>/2022/01/10/servlet/</url>
+    <content><![CDATA[<h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><h2 id="创建servlet"><a href="#创建servlet" class="headerlink" title="创建servlet"></a>创建servlet</h2><ol>
+<li>在src下面新建一个包com.oracle(公司域名反写)</li>
+<li>在com.oracle下新建一个servlet(New–&gt;Other–&gt;Web–&gt;Servlet)<br>输入servlet的名称：<br><img src="/2022/01/10/servlet/1.PNG"><br>修改URL mappings:<br><img src="/2022/01/10/servlet/2.PNG"><br>去掉Constructors form superclass的勾选：<br><img src="/2022/01/10/servlet/3.PNG"><br>创建好的servlet:<br><img src="/2022/01/10/servlet/4.PNG"><h2 id="测试Demo1Servlet"><a href="#测试Demo1Servlet" class="headerlink" title="测试Demo1Servlet"></a>测试Demo1Servlet</h2></li>
+<li>创建demo1.html<br><img src="/2022/01/10/servlet/5.PNG"></li>
+<li>在Demo1Servlet.java中编写处理来自demo1.html的请求的Java代码<br><img src="/2022/01/10/servlet/6.PNG"></li>
+<li>在浏览器地址栏输入：localhost:8080/shop/demo1.html<br><img src="/2022/01/10/servlet/7.PNG"></li>
+<li>点击上图中的超链接向服务器发出请求<br>servelet处理来自浏览器的请求，执行在Demo1Servlet.java中编写的Java代码<br><img src="/2022/01/10/servlet/8.PNG"></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>创建servlet接收并处理请求</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>servlet</tag>
       </tags>
   </entry>
   <entry>
@@ -8540,6 +8540,37 @@ public class Demo3Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>numpy | shuffle数据</title>
+    <url>/2021/11/15/shuffle%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="shuffle数据"><a href="#shuffle数据" class="headerlink" title="shuffle数据"></a>shuffle数据</h1><p>在使用大量的数据来训练深度学习模型时，我们有可能需要对训练数据和数据标签进行shuffle(打乱)操作。</p>
+<span id="more"></span>
+<p><strong>show you the example code:</strong></p>
+<pre><code>data = np.array([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]])
+y = np.array([1, 2, 3, 4, 5])
+
+print(&#39;-------原数据：----------&#39;)
+print(&#39;数据：&#39;, data)
+print(&#39;标签：&#39;, y)
+print(&#39;-------打乱数据：----------&#39;)
+np.random.seed(116)
+np.random.shuffle(data)
+np.random.seed(116)
+np.random.shuffle(y)
+print(&#39;数据：&#39;, data)
+print(&#39;标签：&#39;, y )
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>numpy</category>
+      </categories>
+      <tags>
+        <tag>numpy</tag>
+        <tag>shuffle</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | session实现用户登录</title>
     <url>/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/</url>
     <content><![CDATA[<h1 id="session实现用户登录"><a href="#session实现用户登录" class="headerlink" title="session实现用户登录"></a>session实现用户登录</h1><p>下面将使用session实现用户登录，如下图所示效果：<br><img src="/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/login.gif"></p>
@@ -8646,37 +8677,6 @@ login.html
       </categories>
       <tags>
         <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy | shuffle数据</title>
-    <url>/2021/11/15/shuffle%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="shuffle数据"><a href="#shuffle数据" class="headerlink" title="shuffle数据"></a>shuffle数据</h1><p>在使用大量的数据来训练深度学习模型时，我们有可能需要对训练数据和数据标签进行shuffle(打乱)操作。</p>
-<span id="more"></span>
-<p><strong>show you the example code:</strong></p>
-<pre><code>data = np.array([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]])
-y = np.array([1, 2, 3, 4, 5])
-
-print(&#39;-------原数据：----------&#39;)
-print(&#39;数据：&#39;, data)
-print(&#39;标签：&#39;, y)
-print(&#39;-------打乱数据：----------&#39;)
-np.random.seed(116)
-np.random.shuffle(data)
-np.random.seed(116)
-np.random.shuffle(y)
-print(&#39;数据：&#39;, data)
-print(&#39;标签：&#39;, y )
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>numpy</category>
-      </categories>
-      <tags>
-        <tag>numpy</tag>
-        <tag>shuffle</tag>
       </tags>
   </entry>
   <entry>
@@ -9137,21 +9137,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | tcp三次握手四次挥手</title>
-    <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
-    <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>三次握手</tag>
-        <tag>四次挥手</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络编程 | tcp与udp的稳定性</title>
     <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
     <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
@@ -9232,6 +9217,21 @@ tcpClientSocket.close()
         <tag>网络编程</tag>
         <tag>tcp客户端</tag>
         <tag>tcp服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | tcp三次握手四次挥手</title>
+    <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
+    <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>三次握手</tag>
+        <tag>四次挥手</tag>
       </tags>
   </entry>
   <entry>
@@ -9430,6 +9430,140 @@ if __name__ == &#39;__main__&#39;:
         <category>电脑使用小技巧</category>
         <category>关闭弹框广告</category>
       </categories>
+  </entry>
+  <entry>
+    <title>MyBatis | 一对多自定义映射、分步查询和延迟加载</title>
+    <url>/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<h1 id="一对多自定义映射、分步查询和延迟加载"><a href="#一对多自定义映射、分步查询和延迟加载" class="headerlink" title="一对多自定义映射、分步查询和延迟加载"></a>一对多自定义映射、分步查询和延迟加载</h1><p>1.项目目录<br><img src="/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>2.Dept.java<br>在”一”方添加List&lt;多&gt;</p>
+<pre><code>package com.atguigu.bean;
+
+import java.util.List;
+
+public class Dept &#123;
+    private Integer did;
+    private String dname;
+    private List&lt;Emp&gt; emps;
+    
+    public List&lt;Emp&gt; getEmps() &#123;
+        return emps;
+    &#125;
+    public void setEmps(List&lt;Emp&gt; emps) &#123;
+        this.emps = emps;
+    &#125;
+    public Integer getDid() &#123;
+        return did;
+    &#125;
+    public void setDid(Integer did) &#123;
+        this.did = did;
+    &#125;
+    public String getDname() &#123;
+        return dname;
+    &#125;
+    public void setDname(String dname) &#123;
+        this.dname = dname;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;, emps=&quot; + emps + &quot;]&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>3.EmpDeptMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.List;
+
+import com.atguigu.bean.Dept;
+import com.atguigu.bean.Emp;
+
+public interface EmpDeptMapper &#123;
+    List&lt;Emp&gt; getAllEmp();
+    
+    Emp getEmpStep(String eid);
+    
+    Dept getDeptEmpsByDid(String did);
+    
+    Dept getOnlyDeptByDid(String did);//测试一对多
+    
+    List&lt;Emp&gt; getEmpListByDid(String did);//测试一对多
+&#125;
+</code></pre>
+<p>4.EmpDeptMapper.xml<br>在映射文件中做以下配置：</p>
+<pre><code>&lt;resultMap type=&quot;Dept&quot; id=&quot;deptMapStep&quot;&gt;
+    &lt;id column=&quot;did&quot; property=&quot;did&quot; /&gt;
+    &lt;result column=&quot;dname&quot; property=&quot;dname&quot; /&gt;
+    &lt;!-- &lt;collection property=&quot;emps&quot; select=&quot;com.atguigu.mapper.EmpDeptMapper.getEmpListByDid&quot; column=&quot;did&quot;&gt;&lt;/collection&gt; --&gt;
+    &lt;!-- 
+        fetchType:
+            lazy 延迟加载
+            eager 不进行延迟加载
+     --&gt;
+    &lt;collection property=&quot;emps&quot; select=&quot;com.atguigu.mapper.EmpDeptMapper.getEmpListByDid&quot; column=&quot;&#123;did=did&#125;&quot; fetchType=&quot;lazy&quot;&gt;&lt;/collection&gt;
+&lt;/resultMap&gt;
+
+&lt;!-- Dept getOnlyDeptByDid(String did); --&gt;
+&lt;select id=&quot;getOnlyDeptByDid&quot; resultMap=&quot;deptMapStep&quot;&gt;
+    select did,dname from dept where did=#&#123;did&#125;
+&lt;/select&gt;
+
+&lt;!-- List&lt;Emp&gt; getEmpListByDid(String did); --&gt;
+&lt;select id=&quot;getEmpListByDid&quot; resultType=&quot;Emp&quot;&gt;
+    select eid,ename,age,sex from emp where did = #&#123;did&#125;
+&lt;/select&gt;
+</code></pre>
+<p>5.TestEmpDept.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.atguigu.bean.Dept;
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpDeptMapper;
+
+public class TestEmpDept &#123;
+    public static void main(String[] args) throws IOException &#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
+        
+//        List&lt;Emp&gt; empList = mapper.getAllEmp();
+//        System.out.println(empList);
+        
+//        Emp emp = mapper.getEmpStep(&quot;3&quot;);
+//        System.out.println(emp.getEname());
+//        System.out.println(emp.getDept());
+        
+//        Dept dept = mapper.getDeptEmpsByDid(&quot;2&quot;);
+//        System.out.println(dept);
+        
+        Dept dept = mapper.getOnlyDeptByDid(&quot;3&quot;);
+        //System.out.println(dept);
+        System.out.println(dept.getDname());
+        System.out.println(dept.getEmps());
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>一对多自定义映射、分步查询和延迟加载</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>自定义映射</tag>
+        <tag>分步查询</tag>
+        <tag>延迟加载</tag>
+      </tags>
   </entry>
   <entry>
     <title>wxPython | wxPython控件</title>
@@ -9640,140 +9774,6 @@ app.MainLoop()
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | 一对多自定义映射、分步查询和延迟加载</title>
-    <url>/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
-    <content><![CDATA[<h1 id="一对多自定义映射、分步查询和延迟加载"><a href="#一对多自定义映射、分步查询和延迟加载" class="headerlink" title="一对多自定义映射、分步查询和延迟加载"></a>一对多自定义映射、分步查询和延迟加载</h1><p>1.项目目录<br><img src="/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>2.Dept.java<br>在”一”方添加List&lt;多&gt;</p>
-<pre><code>package com.atguigu.bean;
-
-import java.util.List;
-
-public class Dept &#123;
-    private Integer did;
-    private String dname;
-    private List&lt;Emp&gt; emps;
-    
-    public List&lt;Emp&gt; getEmps() &#123;
-        return emps;
-    &#125;
-    public void setEmps(List&lt;Emp&gt; emps) &#123;
-        this.emps = emps;
-    &#125;
-    public Integer getDid() &#123;
-        return did;
-    &#125;
-    public void setDid(Integer did) &#123;
-        this.did = did;
-    &#125;
-    public String getDname() &#123;
-        return dname;
-    &#125;
-    public void setDname(String dname) &#123;
-        this.dname = dname;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;, emps=&quot; + emps + &quot;]&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>3.EmpDeptMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import com.atguigu.bean.Dept;
-import com.atguigu.bean.Emp;
-
-public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-    
-    Emp getEmpStep(String eid);
-    
-    Dept getDeptEmpsByDid(String did);
-    
-    Dept getOnlyDeptByDid(String did);//测试一对多
-    
-    List&lt;Emp&gt; getEmpListByDid(String did);//测试一对多
-&#125;
-</code></pre>
-<p>4.EmpDeptMapper.xml<br>在映射文件中做以下配置：</p>
-<pre><code>&lt;resultMap type=&quot;Dept&quot; id=&quot;deptMapStep&quot;&gt;
-    &lt;id column=&quot;did&quot; property=&quot;did&quot; /&gt;
-    &lt;result column=&quot;dname&quot; property=&quot;dname&quot; /&gt;
-    &lt;!-- &lt;collection property=&quot;emps&quot; select=&quot;com.atguigu.mapper.EmpDeptMapper.getEmpListByDid&quot; column=&quot;did&quot;&gt;&lt;/collection&gt; --&gt;
-    &lt;!-- 
-        fetchType:
-            lazy 延迟加载
-            eager 不进行延迟加载
-     --&gt;
-    &lt;collection property=&quot;emps&quot; select=&quot;com.atguigu.mapper.EmpDeptMapper.getEmpListByDid&quot; column=&quot;&#123;did=did&#125;&quot; fetchType=&quot;lazy&quot;&gt;&lt;/collection&gt;
-&lt;/resultMap&gt;
-
-&lt;!-- Dept getOnlyDeptByDid(String did); --&gt;
-&lt;select id=&quot;getOnlyDeptByDid&quot; resultMap=&quot;deptMapStep&quot;&gt;
-    select did,dname from dept where did=#&#123;did&#125;
-&lt;/select&gt;
-
-&lt;!-- List&lt;Emp&gt; getEmpListByDid(String did); --&gt;
-&lt;select id=&quot;getEmpListByDid&quot; resultType=&quot;Emp&quot;&gt;
-    select eid,ename,age,sex from emp where did = #&#123;did&#125;
-&lt;/select&gt;
-</code></pre>
-<p>5.TestEmpDept.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import com.atguigu.bean.Dept;
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpDeptMapper;
-
-public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-//        List&lt;Emp&gt; empList = mapper.getAllEmp();
-//        System.out.println(empList);
-        
-//        Emp emp = mapper.getEmpStep(&quot;3&quot;);
-//        System.out.println(emp.getEname());
-//        System.out.println(emp.getDept());
-        
-//        Dept dept = mapper.getDeptEmpsByDid(&quot;2&quot;);
-//        System.out.println(dept);
-        
-        Dept dept = mapper.getOnlyDeptByDid(&quot;3&quot;);
-        //System.out.println(dept);
-        System.out.println(dept.getDname());
-        System.out.println(dept.getEmps());
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>一对多自定义映射、分步查询和延迟加载</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>自定义映射</tag>
-        <tag>分步查询</tag>
-        <tag>延迟加载</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习基础 | 一文深层解决模型过拟合</title>
     <url>/2021/11/05/%E4%B8%80%E6%96%87%E6%B7%B1%E5%B1%82%E8%A7%A3%E5%86%B3%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88/</url>
     <content><![CDATA[<h1 id="一文深层解决模型过拟合"><a href="#一文深层解决模型过拟合" class="headerlink" title="一文深层解决模型过拟合"></a>一文深层解决模型过拟合</h1><p><a href="https://mp.weixin.qq.com/s/RBSewyWPdUnywKplVDzeLA">参考资料</a></p>
@@ -9864,144 +9864,6 @@ for file in files:
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pdfplumber</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pandas | 一键更新Excel中的图表</title>
-    <url>/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p>
-<span id="more"></span>
-<p><strong>代码实现：</strong></p>
-<pre><code>import pandas as pd
-
-file = &#39;生产订单.xlsx&#39;
-df = pd.read_excel(file)
-df.fillna(0, inplace=True)
-df[&quot;数量&quot;] = df[&quot;数量&quot;].astype(&#39;int&#39;)
-
-# 增加周数字段
-df[&quot;周数&quot;] = df[&quot;日期&quot;].dt.week
-df[&quot;年份&quot;] = df[&quot;日期&quot;].dt.year
-# print(df.head())
-
-# 获取当前周数
-import datetime
-
-year, current_week, day = datetime.datetime.now().isocalendar()
-# print(current_week)
-
-# 只获取最近12周的数据
-df_required = df[(df[&quot;周数&quot;] &gt;= (current_week - 36)) &amp; (df[&quot;周数&quot;] &lt;= (current_week - 24))]
-# print(df_required[&#39;年份&#39;])
-
-result = df_required.groupby([&quot;周数&quot;, &quot;年份&quot;])[&#39;数量&#39;].sum().reset_index()  # reset后才是DF，不然是Series
-# print(result)
-#
-# # print(result[result[&quot;年份&quot;]==2019][&quot;数量&quot;])
-#
-# 如果有中文，需要配置中文字体，不然会显示成方框
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import numpy as np
-
-plt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签
-# 数据和标签
-qty_2019 = result[result[&quot;年份&quot;] == 2019][&quot;数量&quot;]
-qty_2020 = result[result[&quot;年份&quot;] == 2020][&quot;数量&quot;]
-print(qty_2020)
-x_label = result[result[&quot;年份&quot;] == 2019][&quot;周数&quot;]
-
-# 设置字体大小
-mpl.rcParams[&#39;font.size&#39;] = 12
-# 设置图片大小
-plt.figure(figsize=(12, 6))
-# 设置柱形图宽度
-bar_width = 0.45
-
-index = np.arange(13)
-qty_2019_list = [qty for qty in qty_2019]
-qty_2020_list = [qty for qty in qty_2020]
-print(f&quot;index: &#123;len(index)&#125;&quot;)
-print(len(qty_2019_list))
-
-print(len(qty_2020_list))
-# 绘制2019年数据
-qty1 = plt.bar(index, qty_2019, bar_width, color=&#39;#336633&#39;, label=&quot;2019&quot;)
-# 绘制2020年数据
-qty2 = plt.bar(index + bar_width, qty_2020, bar_width, color=&#39;#6666CC&#39;, label=&quot;2020&quot;)
-
-# X,Y轴标题
-plt.xticks(index + bar_width, x_label)
-plt.xlabel(&quot;周数&quot;, fontsize=14)
-plt.ylabel(&quot;产品数量/台&quot;, fontsize=14)
-# 图表标题
-plt.title(u&#39;每周生产订单对比&#39;, fontsize=20)
-# 图例显示
-plt.legend()
-
-
-# 添加数据标签
-def add_labels(qtys):
-    for qty in qtys:
-        height = qty.get_height()
-        plt.text(qty.get_x() + qty.get_width() / 2, height, height, ha=&#39;center&#39;, va=&#39;bottom&#39;)
-        # 柱形图边缘用白色填充
-        qty.set_edgecolor(&#39;white&#39;)
-
-
-add_labels(qty1)
-add_labels(qty2)
-
-plt.savefig(&#39;prod_order.png&#39;)
-
-# 按部门计算订单数量
-order_2019 = df_required[df_required[&quot;年份&quot;] == 2019]
-# print(order_2019)
-dept_2019 = order_2019[&quot;部门&quot;].value_counts()
-# print(dept_2019)
-order_2020 = df_required[df_required[&quot;年份&quot;] == 2020]
-# print(order_2020)
-dept_2020 = order_2020[&quot;部门&quot;].value_counts()
-# print(dept_2020)
-
-# 绘制饼图
-import matplotlib as mpl
-import numpy as np
-
-plt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签
-mpl.rcParams[&#39;font.size&#39;] = 12
-fig = plt.figure(figsize=(12, 6))
-axl = fig.add_subplot(1, 2, 1)
-
-
-def my_label(pct, allvals):
-    absolute = int(pct / 100. * np.sum(allvals))
-    return &quot;&#123;:.1f&#125;%\n(&#123;:d&#125;)&quot;.format(pct, absolute)
-
-
-explode = (0.1, 0, 0, 0, 0)
-plt.pie(dept_2019, autopct=lambda x: my_label(x, dept_2019), explode=explode, labels=dept_2019.index, shadow=True,
-        startangle=150)
-plt.title(&quot;各部门订单比例\n(最近12周)_2019&quot;, fontsize=20)
-# plt.label(&quot;2019&quot;,fontsize = 14)
-ax2 = fig.add_subplot(1, 2, 2)
-plt.pie(dept_2020, autopct=lambda x: my_label(x, dept_2020), explode=explode, labels=dept_2020.index, shadow=True,
-        startangle=150)
-plt.title(&quot;各部门订单比例\n(最近12周)_2020&quot;, fontsize=20)
-
-plt.savefig(&#39;order_byDept.png&#39;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pandas</category>
-      </categories>
-      <tags>
-        <tag>matplotlib</tag>
-        <tag>pandas</tag>
-        <tag>numpy</tag>
-        <tag>datetime</tag>
       </tags>
   </entry>
   <entry>
@@ -10149,6 +10011,144 @@ public class TestUploadAndDownController&#123;
       <tags>
         <tag>Java</tag>
         <tag>SpringMVC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pandas | 一键更新Excel中的图表</title>
+    <url>/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p>
+<span id="more"></span>
+<p><strong>代码实现：</strong></p>
+<pre><code>import pandas as pd
+
+file = &#39;生产订单.xlsx&#39;
+df = pd.read_excel(file)
+df.fillna(0, inplace=True)
+df[&quot;数量&quot;] = df[&quot;数量&quot;].astype(&#39;int&#39;)
+
+# 增加周数字段
+df[&quot;周数&quot;] = df[&quot;日期&quot;].dt.week
+df[&quot;年份&quot;] = df[&quot;日期&quot;].dt.year
+# print(df.head())
+
+# 获取当前周数
+import datetime
+
+year, current_week, day = datetime.datetime.now().isocalendar()
+# print(current_week)
+
+# 只获取最近12周的数据
+df_required = df[(df[&quot;周数&quot;] &gt;= (current_week - 36)) &amp; (df[&quot;周数&quot;] &lt;= (current_week - 24))]
+# print(df_required[&#39;年份&#39;])
+
+result = df_required.groupby([&quot;周数&quot;, &quot;年份&quot;])[&#39;数量&#39;].sum().reset_index()  # reset后才是DF，不然是Series
+# print(result)
+#
+# # print(result[result[&quot;年份&quot;]==2019][&quot;数量&quot;])
+#
+# 如果有中文，需要配置中文字体，不然会显示成方框
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签
+# 数据和标签
+qty_2019 = result[result[&quot;年份&quot;] == 2019][&quot;数量&quot;]
+qty_2020 = result[result[&quot;年份&quot;] == 2020][&quot;数量&quot;]
+print(qty_2020)
+x_label = result[result[&quot;年份&quot;] == 2019][&quot;周数&quot;]
+
+# 设置字体大小
+mpl.rcParams[&#39;font.size&#39;] = 12
+# 设置图片大小
+plt.figure(figsize=(12, 6))
+# 设置柱形图宽度
+bar_width = 0.45
+
+index = np.arange(13)
+qty_2019_list = [qty for qty in qty_2019]
+qty_2020_list = [qty for qty in qty_2020]
+print(f&quot;index: &#123;len(index)&#125;&quot;)
+print(len(qty_2019_list))
+
+print(len(qty_2020_list))
+# 绘制2019年数据
+qty1 = plt.bar(index, qty_2019, bar_width, color=&#39;#336633&#39;, label=&quot;2019&quot;)
+# 绘制2020年数据
+qty2 = plt.bar(index + bar_width, qty_2020, bar_width, color=&#39;#6666CC&#39;, label=&quot;2020&quot;)
+
+# X,Y轴标题
+plt.xticks(index + bar_width, x_label)
+plt.xlabel(&quot;周数&quot;, fontsize=14)
+plt.ylabel(&quot;产品数量/台&quot;, fontsize=14)
+# 图表标题
+plt.title(u&#39;每周生产订单对比&#39;, fontsize=20)
+# 图例显示
+plt.legend()
+
+
+# 添加数据标签
+def add_labels(qtys):
+    for qty in qtys:
+        height = qty.get_height()
+        plt.text(qty.get_x() + qty.get_width() / 2, height, height, ha=&#39;center&#39;, va=&#39;bottom&#39;)
+        # 柱形图边缘用白色填充
+        qty.set_edgecolor(&#39;white&#39;)
+
+
+add_labels(qty1)
+add_labels(qty2)
+
+plt.savefig(&#39;prod_order.png&#39;)
+
+# 按部门计算订单数量
+order_2019 = df_required[df_required[&quot;年份&quot;] == 2019]
+# print(order_2019)
+dept_2019 = order_2019[&quot;部门&quot;].value_counts()
+# print(dept_2019)
+order_2020 = df_required[df_required[&quot;年份&quot;] == 2020]
+# print(order_2020)
+dept_2020 = order_2020[&quot;部门&quot;].value_counts()
+# print(dept_2020)
+
+# 绘制饼图
+import matplotlib as mpl
+import numpy as np
+
+plt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 用来正常显示中文标签
+mpl.rcParams[&#39;font.size&#39;] = 12
+fig = plt.figure(figsize=(12, 6))
+axl = fig.add_subplot(1, 2, 1)
+
+
+def my_label(pct, allvals):
+    absolute = int(pct / 100. * np.sum(allvals))
+    return &quot;&#123;:.1f&#125;%\n(&#123;:d&#125;)&quot;.format(pct, absolute)
+
+
+explode = (0.1, 0, 0, 0, 0)
+plt.pie(dept_2019, autopct=lambda x: my_label(x, dept_2019), explode=explode, labels=dept_2019.index, shadow=True,
+        startangle=150)
+plt.title(&quot;各部门订单比例\n(最近12周)_2019&quot;, fontsize=20)
+# plt.label(&quot;2019&quot;,fontsize = 14)
+ax2 = fig.add_subplot(1, 2, 2)
+plt.pie(dept_2020, autopct=lambda x: my_label(x, dept_2020), explode=explode, labels=dept_2020.index, shadow=True,
+        startangle=150)
+plt.title(&quot;各部门订单比例\n(最近12周)_2020&quot;, fontsize=20)
+
+plt.savefig(&#39;order_byDept.png&#39;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pandas</category>
+      </categories>
+      <tags>
+        <tag>matplotlib</tag>
+        <tag>pandas</tag>
+        <tag>numpy</tag>
+        <tag>datetime</tag>
       </tags>
   </entry>
   <entry>
@@ -11298,40 +11298,6 @@ wb.save(&quot;物料表_1.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
-    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
-<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
-<li>1.先要解析出baidu.com对应的ip地址</li>
-<ol>
-<li>1.先要知道默认网关的MAC地址</li>
-<ol>
-<li>1.使用ARP获取默认网关的MAC地址</li>
-</ol>
-<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
-<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
-<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
-<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
-<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
-</ol>
-<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
-<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
-<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
-<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
-<li>6.浏览器关闭TCP连接，即4次挥手</li>
-</ol>
-
-
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
     <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
@@ -11404,6 +11370,40 @@ print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len
         <tag>python</tag>
         <tag>os</tag>
         <tag>openpyxl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 从浏览器访问百度的整个访问过程</title>
+    <url>/2020/10/26/%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="从浏览器访问百度的整个访问过程"><a href="#从浏览器访问百度的整个访问过程" class="headerlink" title="从浏览器访问百度的整个访问过程"></a>从浏览器访问百度的整个访问过程</h1><h2 id="实际场景"><a href="#实际场景" class="headerlink" title="实际场景"></a>实际场景</h2><p>在浏览器的地址输入栏，输入<a href="http://www.baidu.com访问百度./">www.baidu.com访问百度。</a></p>
+<h2 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h2><ol>
+<li>1.先要解析出baidu.com对应的ip地址</li>
+<ol>
+<li>1.先要知道默认网关的MAC地址</li>
+<ol>
+<li>1.使用ARP获取默认网关的MAC地址</li>
+</ol>
+<li>2.组织数据发送给默认网关（IP还是DNS服务器的IP，但MAC地址是默认网关的MAC地址）</li>
+<li>3.默认网关拥有转发数据的能力，把数据转发给路由器</li>
+<li>4.路由器根据自己的路由协议来选择一个合适的较快的路径转发数据给目的网关</li>
+<li>5.目的网关（DNS服务器所在的网关），把数据转发给DNS服务器</li>
+<li>6.DNS服务器查询解析出baidu.com对应的IP地址，并把它原路返回给请求这个域名的客户端</li>
+</ol>
+<li>2.得到了baidu.com对应的IP地址后会发送TCP的3次握手，进行连接</li>
+<li>3.使用HTTP协议发送请求数据给WEB服务器</li>
+<li>4.WEB服务器收到请求数据之后，通过查询自己的服务器得到响应的结果，原路返回个浏览器</li>
+<li>5.浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页</li>
+<li>6.浏览器关闭TCP连接，即4次挥手</li>
+</ol>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -12017,36 +12017,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>openpyxl | 修改excel表中的单元格内容</title>
-    <url>/2021/10/16/%E4%BF%AE%E6%94%B9excel%E8%A1%A8%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC%E5%86%85%E5%AE%B9/</url>
-    <content><![CDATA[<h1 id="修改excel表中的单元格内容"><a href="#修改excel表中的单元格内容" class="headerlink" title="修改excel表中的单元格内容"></a>修改excel表中的单元格内容</h1><p>以下代码实现了修改 领料单（每日）.xlsx 中的所有表中某单元格的内容。</p>
-<span id="more"></span>
-
-<pre><code>from openpyxl import load_workbook
-
-wb = load_workbook(&quot;领料单（每日）.xlsx&quot;)
-print(wb.sheetnames)
-
-for sheet_name in wb.sheetnames:  # 遍历每个工作表，更改A4单元格的数据
-    print(sheet_name)
-    ws = wb[sheet_name]
-    ws[&#39;A4&#39;].value = &quot;零件测试领料单&quot; #直接将A4单元格的值改为需要的
-
-wb.save(&quot;资料单（每日）-更改后.xlsx&quot;)
-</code></pre>
-<p><a href="https://blog.csdn.net/weixin_41546513/article/details/109555832">openpyxl参考资料</a><br><a href="https://openpyxl.readthedocs.io/en/stable/index.html">openpyxl官方文档</a><br><a href="领料单（每日）.xlsx">下载领料单（每日）.xlsx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>openpyxl</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | 使用注解配置bean</title>
     <url>/2022/03/06/%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AEbean/</url>
     <content><![CDATA[<h1 id="使用注解配置bean"><a href="#使用注解配置bean" class="headerlink" title="使用注解配置bean"></a>使用注解配置bean</h1><p>1.项目目录<br><img src="/2022/03/06/%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AEbean/1.PNG"></p>
@@ -12173,6 +12143,36 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>openpyxl | 修改excel表中的单元格内容</title>
+    <url>/2021/10/16/%E4%BF%AE%E6%94%B9excel%E8%A1%A8%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC%E5%86%85%E5%AE%B9/</url>
+    <content><![CDATA[<h1 id="修改excel表中的单元格内容"><a href="#修改excel表中的单元格内容" class="headerlink" title="修改excel表中的单元格内容"></a>修改excel表中的单元格内容</h1><p>以下代码实现了修改 领料单（每日）.xlsx 中的所有表中某单元格的内容。</p>
+<span id="more"></span>
+
+<pre><code>from openpyxl import load_workbook
+
+wb = load_workbook(&quot;领料单（每日）.xlsx&quot;)
+print(wb.sheetnames)
+
+for sheet_name in wb.sheetnames:  # 遍历每个工作表，更改A4单元格的数据
+    print(sheet_name)
+    ws = wb[sheet_name]
+    ws[&#39;A4&#39;].value = &quot;零件测试领料单&quot; #直接将A4单元格的值改为需要的
+
+wb.save(&quot;资料单（每日）-更改后.xlsx&quot;)
+</code></pre>
+<p><a href="https://blog.csdn.net/weixin_41546513/article/details/109555832">openpyxl参考资料</a><br><a href="https://openpyxl.readthedocs.io/en/stable/index.html">openpyxl官方文档</a><br><a href="领料单（每日）.xlsx">下载领料单（每日）.xlsx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>openpyxl</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
       </tags>
   </entry>
   <entry>
@@ -13695,6 +13695,276 @@ public class TestDynamicSQL &#123;
       </tags>
   </entry>
   <entry>
+    <title>Java | 动态代理</title>
+    <url>/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p>
+<p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
+<p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p>
+<pre><code>package hireroom;
+
+public interface HireRoom &#123;
+    void hireRoom(String chaoxiang, String buju, int price);
+&#125;
+</code></pre>
+<p><strong>HireRoomImpl.java(实现类)</strong></p>
+<pre><code>package hireroom;
+
+public class HireRoomImpl implements HireRoom&#123;
+
+    @Override
+    public void hireRoom(String chaoxiang, String buju, int price) &#123;
+        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>Agency.java(中介/代理类)</strong></p>
+<pre><code>package hireroom;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
+public class Agency implements InvocationHandler&#123;
+    private Object target;
+    
+    public Agency(Object target)&#123;
+        this.target = target;
+    &#125;
+    
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+        System.out.println(&quot;before&quot;);
+        Object result = method.invoke(target, args);
+        System.out.println(&quot;after&quot;);
+        return result;
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>AgencyFactory.java(中介/代理工厂)</strong></p>
+<pre><code>package hireroom;
+
+import java.lang.reflect.Proxy;
+
+public class AgencyFactory &#123;
+    public static Object getProxy(Object target)&#123;
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(), 
+                target.getClass().getInterfaces(), 
+                new Agency(target));
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Main.java(测试)</strong></p>
+<pre><code>package hireroom;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
+        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p>
+<pre><code>package hireroom;
+
+public interface HireCar &#123;
+    void hireCar(String brand, int price);
+&#125;
+</code></pre>
+<p><strong>HireCarImpl.java(实现类)</strong></p>
+<pre><code>package hireroom;
+
+public class HireCarImpl implements HireCar&#123;
+
+    @Override
+    public void hireCar(String brand, int price) &#123;
+        System.out.println(&quot;租车：&quot;+brand+price);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>Main.java</strong></p>
+<pre><code>package hireroom;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
+        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
+        
+        HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());
+        hireCar.hireCar(&quot;宝马&quot;, 150000);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>动态代理</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>动态代理</tag>
+        <tag>JDK动态代理机制</tag>
+        <tag>CGLIB动态代理机制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>spring | 动态代理之数学计算器</title>
+    <url>/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p>
+<p>1.要求<br>1）计算器能够执行加减乘除运算<br>2）日志：在程序执行期间追踪正在发生的活动<br>3）验证：希望计算器只能处理正数的运算</p>
+<p>2.常规实现</p>
+<pre><code>**MathI.java**
+package com.atguigu.proxy;
+
+public interface MathI &#123;
+    int add(int i, int j);
+    int sub(int i, int j);
+    int mul(int i, int j);
+    int div(int i, int j);
+&#125;
+</code></pre>
+<p><strong>MathImpl.java</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+public class MathImpl implements MathI&#123;
+
+    @Override
+    public int add(int i, int j) &#123;
+        System.out.println(&quot;method:add,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:add,results:&quot; + (i + j));
+        return i + j;
+    &#125;
+    
+    @Override
+    public int sub(int i, int j) &#123;
+        System.out.println(&quot;method:sub,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:sub,results:&quot; + (i - j));
+        return i - j;
+    &#125;
+
+    @Override
+    public int mul(int i, int j) &#123;
+        System.out.println(&quot;method:mul,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:mul,results:&quot; + (i * j));
+        return i * j;
+    &#125;
+
+    @Override
+    public int div(int i, int j) &#123;
+        System.out.println(&quot;method:div,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:div,results:&quot; + (i / j));
+        return i / j;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>常规实现方法存在的问题</strong><br>①代码混乱：越来越多的非业务需求(日志和验证等)加入后，原有的业务方法急剧膨胀。每个方法在处理核心逻辑的同时还必须兼顾其他多个关注点。<br>②代码分散: 以日志需求为例，只是为了满足这个单一需求，就不得不在多个模块（方法）里多次重复相同的日志代码。如果日志需求发生变化，必须修改所有模块。</p>
+<p>3.动态代理<br><strong>MathI.java（与2中的代码相同）</strong></p>
+<p><strong>MathImpl.java(2中的代码中去掉日志信息)</strong></p>
+<p><strong>MyLogger.java(日志类)</strong></p>
+<p><strong>ProxyUtil.java(代理类)</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+
+public class ProxyUtil&#123;
+    //代理模式：1、静态代理（代理对象真实存在，是自己写好的） 2、动态代理（动态生成代理对象，不需要自己写）
+    private MathImpl mathImpl;//目标对象 目标对象类必须实现接口
+    
+    public ProxyUtil(MathImpl mathImpl) &#123;
+        super();
+        this.mathImpl = mathImpl;
+    &#125;
+
+    public Object getProxy()&#123;
+        //获取当前类的类加载器用来加载代理对象所属类
+        ClassLoader loader = this.getClass().getClassLoader();//动态生成代理对象就需要动态代理类，代理类的执行需要类加载器
+        //获取目标对象实现的所有接口的Class，代理类会和目标对象实现相同的接口，最终通过代理对象实现功能
+        Class[] interfaces = mathImpl.getClass().getInterfaces();
+        
+        return Proxy.newProxyInstance(loader, interfaces, new InvocationHandler()&#123;
+
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+                //代理对象实现功能的方式
+                try&#123;
+                    MyLogger.before(method.getName(), Arrays.toString(args));
+                    Object result = method.invoke(mathImpl, args);//动态代理对象实现功能（调用目标对象的方法）
+                    MyLogger.after(method.getName(), result);
+                    return result;
+                &#125;catch (Exception e)&#123;
+                    MyLogger.throwing();
+                    e.printStackTrace();
+                &#125;finally&#123;
+                    System.out.println(&quot;哪都有我&quot;);
+                &#125;
+                return null;
+                
+            &#125;
+        &#125;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Test.java(测试类)</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+public class Test &#123;
+
+    public static void main(String[] args) &#123;
+//        MathI math = new MathImpl();
+//        int result = math.add(1, 1);
+//        System.out.println(result);
+        ProxyUtil proxy = new ProxyUtil(new MathImpl());
+        
+        MathI math = (MathI)proxy.getProxy();
+        
+        int i = math.add(1, 1);
+        System.out.println(i);
+        
+        int j = math.div(4, 0);
+        System.out.println(j);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>动态代理之数学计算器</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 动态查找列表中的第二个number</title>
+    <url>/2021/11/05/%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AAnumber/</url>
+    <content><![CDATA[<h1 id="动态查找列表中的第二个number"><a href="#动态查找列表中的第二个number" class="headerlink" title="动态查找列表中的第二个number"></a>动态查找列表中的第二个number</h1><p>方法：先找到第一个2所在位置fist_index，切片new_list=names[index+1:]得到新的列表，<br>再从新列表中找第一个2的位置second_index.最终第二个2的位置为first_index+second_index+1</p>
+<span id="more"></span>
+<p><strong>代码：</strong></p>
+<pre><code>names = [&#39;apple&#39;, &#39;rice&#39;, &#39;jack&#39;, &#39;rose&#39;, 2, &#39;girl&#39;, &#39;boy&#39;, 2, &#39;heather&#39;, 2]
+first_index = names.index(2)
+new_list = names[first_index + 1:]
+second_index = new_list.index(2)
+second_loction = first_index + second_index + 1  # 第二个2的位置
+print(&#39;第二个2 的位置为：&#39;, second_loction)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 匹配第n个分组的内容</title>
     <url>/2021/08/28/%E5%8C%B9%E9%85%8D%E7%AC%ACn%E4%B8%AA%E5%88%86%E7%BB%84%E7%9A%84%E5%86%85%E5%AE%B9/</url>
     <content><![CDATA[<h1 id="1…-9"><a href="#1…-9" class="headerlink" title="\1…\9"></a>\1…\9</h1><p>\1…\9用来匹配与第n(1~9)个分组的内容，必须与()配合使用<br>例：在以下代码段中\2表示匹配第2个分组（一个括号代表一个分组）的内容，即\2匹配”world”字符串</p>
@@ -13895,43 +14165,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>CNN | 卷积神经网络如何处理一维时间序列数据</title>
-    <url>/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | 动态查找列表中的第二个number</title>
-    <url>/2021/11/05/%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AAnumber/</url>
-    <content><![CDATA[<h1 id="动态查找列表中的第二个number"><a href="#动态查找列表中的第二个number" class="headerlink" title="动态查找列表中的第二个number"></a>动态查找列表中的第二个number</h1><p>方法：先找到第一个2所在位置fist_index，切片new_list=names[index+1:]得到新的列表，<br>再从新列表中找第一个2的位置second_index.最终第二个2的位置为first_index+second_index+1</p>
-<span id="more"></span>
-<p><strong>代码：</strong></p>
-<pre><code>names = [&#39;apple&#39;, &#39;rice&#39;, &#39;jack&#39;, &#39;rose&#39;, 2, &#39;girl&#39;, &#39;boy&#39;, 2, &#39;heather&#39;, 2]
-first_index = names.index(2)
-new_list = names[first_index + 1:]
-second_index = new_list.index(2)
-second_loction = first_index + second_index + 1  # 第二个2的位置
-print(&#39;第二个2 的位置为：&#39;, second_loction)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CNN | 卷积神经网络之卷积计算作用与思想</title>
     <url>/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/</url>
     <content><![CDATA[<h1 id="卷积神经网络之卷积计算作用与思想"><a href="#卷积神经网络之卷积计算作用与思想" class="headerlink" title="卷积神经网络之卷积计算作用与思想"></a>卷积神经网络之卷积计算作用与思想</h1><p><a href="https://www.cnblogs.com/shine-lee/p/9932226.html">卷积神经网络之卷积计算、作用与思想</a></p>
@@ -13946,6 +14179,21 @@ print(&#39;第二个2 的位置为：&#39;, second_loction)
         <tag>深度学习</tag>
         <tag>CNN</tag>
         <tag>卷积</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CNN | 卷积神经网络如何处理一维时间序列数据</title>
+    <url>/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
       </tags>
   </entry>
   <entry>
@@ -14314,138 +14562,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>spring | 动态代理之数学计算器</title>
-    <url>/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p>
-<p>1.要求<br>1）计算器能够执行加减乘除运算<br>2）日志：在程序执行期间追踪正在发生的活动<br>3）验证：希望计算器只能处理正数的运算</p>
-<p>2.常规实现</p>
-<pre><code>**MathI.java**
-package com.atguigu.proxy;
-
-public interface MathI &#123;
-    int add(int i, int j);
-    int sub(int i, int j);
-    int mul(int i, int j);
-    int div(int i, int j);
-&#125;
-</code></pre>
-<p><strong>MathImpl.java</strong></p>
-<pre><code>package com.atguigu.proxy;
-
-public class MathImpl implements MathI&#123;
-
-    @Override
-    public int add(int i, int j) &#123;
-        System.out.println(&quot;method:add,arguments:&quot; + i + &quot;,&quot; + j);
-        System.out.println(&quot;method:add,results:&quot; + (i + j));
-        return i + j;
-    &#125;
-    
-    @Override
-    public int sub(int i, int j) &#123;
-        System.out.println(&quot;method:sub,arguments:&quot; + i + &quot;,&quot; + j);
-        System.out.println(&quot;method:sub,results:&quot; + (i - j));
-        return i - j;
-    &#125;
-
-    @Override
-    public int mul(int i, int j) &#123;
-        System.out.println(&quot;method:mul,arguments:&quot; + i + &quot;,&quot; + j);
-        System.out.println(&quot;method:mul,results:&quot; + (i * j));
-        return i * j;
-    &#125;
-
-    @Override
-    public int div(int i, int j) &#123;
-        System.out.println(&quot;method:div,arguments:&quot; + i + &quot;,&quot; + j);
-        System.out.println(&quot;method:div,results:&quot; + (i / j));
-        return i / j;
-    &#125;
-&#125;
-</code></pre>
-<p><strong>常规实现方法存在的问题</strong><br>①代码混乱：越来越多的非业务需求(日志和验证等)加入后，原有的业务方法急剧膨胀。每个方法在处理核心逻辑的同时还必须兼顾其他多个关注点。<br>②代码分散: 以日志需求为例，只是为了满足这个单一需求，就不得不在多个模块（方法）里多次重复相同的日志代码。如果日志需求发生变化，必须修改所有模块。</p>
-<p>3.动态代理<br><strong>MathI.java（与2中的代码相同）</strong></p>
-<p><strong>MathImpl.java(2中的代码中去掉日志信息)</strong></p>
-<p><strong>MyLogger.java(日志类)</strong></p>
-<p><strong>ProxyUtil.java(代理类)</strong></p>
-<pre><code>package com.atguigu.proxy;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-
-public class ProxyUtil&#123;
-    //代理模式：1、静态代理（代理对象真实存在，是自己写好的） 2、动态代理（动态生成代理对象，不需要自己写）
-    private MathImpl mathImpl;//目标对象 目标对象类必须实现接口
-    
-    public ProxyUtil(MathImpl mathImpl) &#123;
-        super();
-        this.mathImpl = mathImpl;
-    &#125;
-
-    public Object getProxy()&#123;
-        //获取当前类的类加载器用来加载代理对象所属类
-        ClassLoader loader = this.getClass().getClassLoader();//动态生成代理对象就需要动态代理类，代理类的执行需要类加载器
-        //获取目标对象实现的所有接口的Class，代理类会和目标对象实现相同的接口，最终通过代理对象实现功能
-        Class[] interfaces = mathImpl.getClass().getInterfaces();
-        
-        return Proxy.newProxyInstance(loader, interfaces, new InvocationHandler()&#123;
-
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-                //代理对象实现功能的方式
-                try&#123;
-                    MyLogger.before(method.getName(), Arrays.toString(args));
-                    Object result = method.invoke(mathImpl, args);//动态代理对象实现功能（调用目标对象的方法）
-                    MyLogger.after(method.getName(), result);
-                    return result;
-                &#125;catch (Exception e)&#123;
-                    MyLogger.throwing();
-                    e.printStackTrace();
-                &#125;finally&#123;
-                    System.out.println(&quot;哪都有我&quot;);
-                &#125;
-                return null;
-                
-            &#125;
-        &#125;);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>Test.java(测试类)</strong></p>
-<pre><code>package com.atguigu.proxy;
-
-public class Test &#123;
-
-    public static void main(String[] args) &#123;
-//        MathI math = new MathImpl();
-//        int result = math.add(1, 1);
-//        System.out.println(result);
-        ProxyUtil proxy = new ProxyUtil(new MathImpl());
-        
-        MathI math = (MathI)proxy.getProxy();
-        
-        int i = math.add(1, 1);
-        System.out.println(i);
-        
-        int j = math.div(4, 0);
-        System.out.println(j);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>动态代理之数学计算器</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>openpyxl | 合并excel表格中上下行内容相同的单元格</title>
     <url>/2021/10/21/%E5%90%88%E5%B9%B6excel%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
     <content><![CDATA[<h1 id="合并excel表格中上下行内容相同的单元格"><a href="#合并excel表格中上下行内容相同的单元格" class="headerlink" title="合并excel表格中上下行内容相同的单元格"></a>合并excel表格中上下行内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
@@ -14771,122 +14887,6 @@ doc.save(&quot;6S稽查问题.docx&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>openpyxl</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java | 动态代理</title>
-    <url>/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p>
-<p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
-<p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p>
-<pre><code>package hireroom;
-
-public interface HireRoom &#123;
-    void hireRoom(String chaoxiang, String buju, int price);
-&#125;
-</code></pre>
-<p><strong>HireRoomImpl.java(实现类)</strong></p>
-<pre><code>package hireroom;
-
-public class HireRoomImpl implements HireRoom&#123;
-
-    @Override
-    public void hireRoom(String chaoxiang, String buju, int price) &#123;
-        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>Agency.java(中介/代理类)</strong></p>
-<pre><code>package hireroom;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
-public class Agency implements InvocationHandler&#123;
-    private Object target;
-    
-    public Agency(Object target)&#123;
-        this.target = target;
-    &#125;
-    
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-        System.out.println(&quot;before&quot;);
-        Object result = method.invoke(target, args);
-        System.out.println(&quot;after&quot;);
-        return result;
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>AgencyFactory.java(中介/代理工厂)</strong></p>
-<pre><code>package hireroom;
-
-import java.lang.reflect.Proxy;
-
-public class AgencyFactory &#123;
-    public static Object getProxy(Object target)&#123;
-        return Proxy.newProxyInstance(target.getClass().getClassLoader(), 
-                target.getClass().getInterfaces(), 
-                new Agency(target));
-    &#125;
-&#125;
-</code></pre>
-<p><strong>Main.java(测试)</strong></p>
-<pre><code>package hireroom;
-
-public class Main &#123;
-    public static void main(String[] args) &#123;
-        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
-        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p>
-<pre><code>package hireroom;
-
-public interface HireCar &#123;
-    void hireCar(String brand, int price);
-&#125;
-</code></pre>
-<p><strong>HireCarImpl.java(实现类)</strong></p>
-<pre><code>package hireroom;
-
-public class HireCarImpl implements HireCar&#123;
-
-    @Override
-    public void hireCar(String brand, int price) &#123;
-        System.out.println(&quot;租车：&quot;+brand+price);
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>Main.java</strong></p>
-<pre><code>package hireroom;
-
-public class Main &#123;
-    public static void main(String[] args) &#123;
-        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
-        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
-        
-        HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());
-        hireCar.hireCar(&quot;宝马&quot;, 150000);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>动态代理</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>动态代理</tag>
-        <tag>JDK动态代理机制</tag>
-        <tag>CGLIB动态代理机制</tag>
       </tags>
   </entry>
   <entry>
@@ -16307,74 +16307,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 学生出勤记录1</title>
-    <url>/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</url>
-    <content><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p>
-<span id="more"></span>
-<p>示例 1：<br>输入：s = “PPALLP”<br>输出：true<br>解释：学生缺勤次数少于 2 次，且不存在 3 天或以上的连续迟到记录。</p>
-<p><a href>题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.一次遍历<br>可奖励的出勤记录要求缺勤次数少于 2 和连续迟到次数少于 3。判断出勤记录是否可奖励，只需要遍历出勤记录，判断这两个条件是否同时满足即可。<br>遍历过程中，记录缺勤次数和连续迟到次数，根据遍历到的字符更新缺勤次数和连续迟到次数：<br>    如果遇到 ‘A’，即缺勤，则将缺勤次数加 1，否则缺勤次数不变；<br>    如果遇到 ‘L’，即迟到，则将连续迟到次数加 1，否则将连续迟到次数清零。<br>如果在更新缺勤次数和连续迟到次数之后，出现缺勤次数大于或等于 2 或者连续迟到次数大于或等于 3，则该出勤记录不满足可奖励的要求，返回 false。如果遍历结束时未出现出勤记录不满足可奖励的要求的情况，则返回 true。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def checkRecord(self, s: str) -&gt; bool:
-        # 统计字符串中出现‘A’的的次数
-        count_A = s.count(&#39;A&#39;)
-        # 字符串中是否有连续3个以上的‘L&#39;
-        for i in range(len(s)):
-            if i + 2 &lt; len(s) and s[i] == &#39;L&#39; and s[i+1] == &#39;L&#39; and s[i+2] == &#39;L&#39;:
-                    return False
-
-        return True if count_A &lt; 2 else False
-
-    def checkRecord1(self, s: str) -&gt; bool:
-        absents = lates = 0
-        for char in s:
-            if char == &quot;A&quot;:
-                absents += 1
-                lates = 0
-            elif char == &quot;L&quot;:
-                lates += 1
-            else:
-                lates = 0
-
-            if lates &gt;= 3 or absents &gt; 1:
-                return False
-
-        return True
-        # absents = lates = 0
-        # for i, c in enumerate(s):
-        #     if c == &quot;A&quot;:
-        #         absents += 1
-        #         if absents &gt;= 2:
-        #             return False
-        #
-        #     if c == &quot;L&quot;:
-        #         lates += 1
-        #         if lates &gt;= 3:
-        #             return False
-        #     else:
-        #         lates = 0
-        #
-        # return True
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    # res = slt.checkRecord2(&quot;PPALLL&quot;)
-    res = slt.checkRecord2(&quot;PPALLP&quot;)
-    print(res)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 字符串相乘</title>
     <url>/2021/09/05/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98/</url>
     <content><![CDATA[<h1 id="43-字符串相乘"><a href="#43-字符串相乘" class="headerlink" title="43.字符串相乘"></a>43.字符串相乘</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。</p>
@@ -16487,6 +16419,74 @@ if __name__ == &quot;__main__&quot;:
     result = slt.multiply4(&quot;12&quot;, &quot;34&quot;)
     print(result)
     print(type(result))
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 学生出勤记录1</title>
+    <url>/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</url>
+    <content><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p>
+<span id="more"></span>
+<p>示例 1：<br>输入：s = “PPALLP”<br>输出：true<br>解释：学生缺勤次数少于 2 次，且不存在 3 天或以上的连续迟到记录。</p>
+<p><a href>题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.一次遍历<br>可奖励的出勤记录要求缺勤次数少于 2 和连续迟到次数少于 3。判断出勤记录是否可奖励，只需要遍历出勤记录，判断这两个条件是否同时满足即可。<br>遍历过程中，记录缺勤次数和连续迟到次数，根据遍历到的字符更新缺勤次数和连续迟到次数：<br>    如果遇到 ‘A’，即缺勤，则将缺勤次数加 1，否则缺勤次数不变；<br>    如果遇到 ‘L’，即迟到，则将连续迟到次数加 1，否则将连续迟到次数清零。<br>如果在更新缺勤次数和连续迟到次数之后，出现缺勤次数大于或等于 2 或者连续迟到次数大于或等于 3，则该出勤记录不满足可奖励的要求，返回 false。如果遍历结束时未出现出勤记录不满足可奖励的要求的情况，则返回 true。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def checkRecord(self, s: str) -&gt; bool:
+        # 统计字符串中出现‘A’的的次数
+        count_A = s.count(&#39;A&#39;)
+        # 字符串中是否有连续3个以上的‘L&#39;
+        for i in range(len(s)):
+            if i + 2 &lt; len(s) and s[i] == &#39;L&#39; and s[i+1] == &#39;L&#39; and s[i+2] == &#39;L&#39;:
+                    return False
+
+        return True if count_A &lt; 2 else False
+
+    def checkRecord1(self, s: str) -&gt; bool:
+        absents = lates = 0
+        for char in s:
+            if char == &quot;A&quot;:
+                absents += 1
+                lates = 0
+            elif char == &quot;L&quot;:
+                lates += 1
+            else:
+                lates = 0
+
+            if lates &gt;= 3 or absents &gt; 1:
+                return False
+
+        return True
+        # absents = lates = 0
+        # for i, c in enumerate(s):
+        #     if c == &quot;A&quot;:
+        #         absents += 1
+        #         if absents &gt;= 2:
+        #             return False
+        #
+        #     if c == &quot;L&quot;:
+        #         lates += 1
+        #         if lates &gt;= 3:
+        #             return False
+        #     else:
+        #         lates = 0
+        #
+        # return True
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    # res = slt.checkRecord2(&quot;PPALLL&quot;)
+    res = slt.checkRecord2(&quot;PPALLP&quot;)
+    print(res)
 </code></pre>
 ]]></content>
       <categories>
@@ -16719,6 +16719,24 @@ t2.start()
       </categories>
       <tags>
         <tag>sviewgui</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | 小波变换</title>
+    <url>/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/</url>
+    <content><![CDATA[<h1 id="小波变换-Wavelet-Transform-WT"><a href="#小波变换-Wavelet-Transform-WT" class="headerlink" title="小波变换(Wavelet Transform,WT)"></a>小波变换(Wavelet Transform,WT)</h1><p>小波变化是一个时间尺度的表示方法，它把信号分解成时间和尺度的基函数(母小波基函数的扩展/变体)</p>
+<h2 id="一些基于小波理论的技术"><a href="#一些基于小波理论的技术" class="headerlink" title="一些基于小波理论的技术"></a>一些基于小波理论的技术</h2><p>1.wavelet packets<br>2.wavelet approximation and decomposition<br>3.discrete and continuous wavelet transform<br>…<br>其中，最常用的技术是离散小波变换(Discrete Wavelet Transform);<br>离散小波变换是由离散输入的连续小波变换得到的；<br>离散小波变换将信号输入到低通滤波器中，得到低频分量，进入高通滤波器得到高频分量。</p>
+<h2 id="离散小波变换进行2级分解的示例结构"><a href="#离散小波变换进行2级分解的示例结构" class="headerlink" title="离散小波变换进行2级分解的示例结构"></a>离散小波变换进行2级分解的示例结构</h2><p><img src="/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/1.png"><br>where g[n] is a low pass filter and h[n] is a high pass filter</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+        <tag>EEG</tag>
+        <tag>小波变换</tag>
       </tags>
   </entry>
   <entry>
@@ -17071,24 +17089,6 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | 小波变换</title>
-    <url>/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/</url>
-    <content><![CDATA[<h1 id="小波变换-Wavelet-Transform-WT"><a href="#小波变换-Wavelet-Transform-WT" class="headerlink" title="小波变换(Wavelet Transform,WT)"></a>小波变换(Wavelet Transform,WT)</h1><p>小波变化是一个时间尺度的表示方法，它把信号分解成时间和尺度的基函数(母小波基函数的扩展/变体)</p>
-<h2 id="一些基于小波理论的技术"><a href="#一些基于小波理论的技术" class="headerlink" title="一些基于小波理论的技术"></a>一些基于小波理论的技术</h2><p>1.wavelet packets<br>2.wavelet approximation and decomposition<br>3.discrete and continuous wavelet transform<br>…<br>其中，最常用的技术是离散小波变换(Discrete Wavelet Transform);<br>离散小波变换是由离散输入的连续小波变换得到的；<br>离散小波变换将信号输入到低通滤波器中，得到低频分量，进入高通滤波器得到高频分量。</p>
-<h2 id="离散小波变换进行2级分解的示例结构"><a href="#离散小波变换进行2级分解的示例结构" class="headerlink" title="离散小波变换进行2级分解的示例结构"></a>离散小波变换进行2级分解的示例结构</h2><p><img src="/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/1.png"><br>where g[n] is a low pass filter and h[n] is a high pass filter</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>EEG</tag>
-        <tag>小波变换</tag>
       </tags>
   </entry>
   <entry>
@@ -18215,6 +18215,19 @@ print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 把隐藏层数量当做参数</title>
+    <url>/2021/06/24/%E6%8A%8A%E9%9A%90%E8%97%8F%E5%B1%82%E6%95%B0%E9%87%8F%E5%BD%93%E5%81%9A%E5%8F%82%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="把隐藏层数量当做参数"><a href="#把隐藏层数量当做参数" class="headerlink" title="把隐藏层数量当做参数"></a>把隐藏层数量当做参数</h1><p>在搭建深度网络时，不一定非要使用很多隐藏层，在刚开始解决一个新问题时，通常可以从<br>logistic回归开始，再试试一到两个隐层，把隐藏层数量当做参数、超参数一样去调试，这样<br>去找比较合适的深度。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>算法基础 | 折半查找</title>
     <url>/2021/05/24/%E6%8A%98%E5%8D%8A%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<h1 id="递归折半查找算法"><a href="#递归折半查找算法" class="headerlink" title="递归折半查找算法"></a>递归折半查找算法</h1><pre><code>def recursive_binary_search(arr, low, high, key):
@@ -18237,19 +18250,6 @@ print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)
       <tags>
         <tag>算法</tag>
         <tag>折半查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 把隐藏层数量当做参数</title>
-    <url>/2021/06/24/%E6%8A%8A%E9%9A%90%E8%97%8F%E5%B1%82%E6%95%B0%E9%87%8F%E5%BD%93%E5%81%9A%E5%8F%82%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="把隐藏层数量当做参数"><a href="#把隐藏层数量当做参数" class="headerlink" title="把隐藏层数量当做参数"></a>把隐藏层数量当做参数</h1><p>在搭建深度网络时，不一定非要使用很多隐藏层，在刚开始解决一个新问题时，通常可以从<br>logistic回归开始，再试试一到两个隐层，把隐藏层数量当做参数、超参数一样去调试，这样<br>去找比较合适的深度。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -19214,6 +19214,19 @@ doc.save(&#39;data\制造业必修课.docx&#39;)
       </tags>
   </entry>
   <entry>
+    <title>数据中的缺失值的处理</title>
+    <url>/2021/03/19/%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="数据中的缺失值的处理"><a href="#数据中的缺失值的处理" class="headerlink" title="数据中的缺失值的处理"></a>数据中的缺失值的处理</h1><p>1.使用可用特征的均值来填补缺失值；<br>2.使用特殊值来填补缺失值，如-1；<br>3.忽略有缺失值的样本；<br>4.使用相似样本的均值添补缺失值；<br>5.使用另外的机器学习算法预测缺失值。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>数据缺失值处理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 旋转链表</title>
     <url>/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="61-旋转链表"><a href="#61-旋转链表" class="headerlink" title="61.旋转链表"></a>61.旋转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。</p>
@@ -19345,19 +19358,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>数据中的缺失值的处理</title>
-    <url>/2021/03/19/%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="数据中的缺失值的处理"><a href="#数据中的缺失值的处理" class="headerlink" title="数据中的缺失值的处理"></a>数据中的缺失值的处理</h1><p>1.使用可用特征的均值来填补缺失值；<br>2.使用特殊值来填补缺失值，如-1；<br>3.忽略有缺失值的样本；<br>4.使用相似样本的均值添补缺失值；<br>5.使用另外的机器学习算法预测缺失值。</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>数据缺失值处理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 无重复字符的最长子串</title>
     <url>/2021/08/27/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</url>
     <content><![CDATA[<h1 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3.无重复字符的最长子串"></a>3.无重复字符的最长子串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。</p>
@@ -19427,6 +19427,23 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | 时频表示</title>
+    <url>/2021/02/23/%E6%97%B6%E9%A2%91%E8%A1%A8%E7%A4%BA/</url>
+    <content><![CDATA[<h1 id="时频表示-Time-Frequency-Representation"><a href="#时频表示-Time-Frequency-Representation" class="headerlink" title="时频表示(Time Frequency Representation)"></a>时频表示(Time Frequency Representation)</h1><p>时频表示基于短时傅里叶变换(Short-Time Fourier Transfrom,STFT)。</p>
+<h2 id="同时使用时间、频率域分析的原因："><a href="#同时使用时间、频率域分析的原因：" class="headerlink" title="同时使用时间、频率域分析的原因："></a>同时使用时间、频率域分析的原因：</h2><p>脑电信号的非稳定特性</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>在所有的频率范围有统一的时频分辨率，然而我们感兴趣的脑电的频率通常小于30Hz,很多伪迹的频率小于10Hz，这就需要在低频范围有STFT(短时傅里叶变换)不能提供的高频分辨率。</p>
+<h2 id="问题的解决"><a href="#问题的解决" class="headerlink" title="问题的解决"></a>问题的解决</h2><p>采用基于小波的方法-小波变换（适合为脑电信号的每一个频带提供相应的分辨率）</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -19522,23 +19539,6 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | 时频表示</title>
-    <url>/2021/02/23/%E6%97%B6%E9%A2%91%E8%A1%A8%E7%A4%BA/</url>
-    <content><![CDATA[<h1 id="时频表示-Time-Frequency-Representation"><a href="#时频表示-Time-Frequency-Representation" class="headerlink" title="时频表示(Time Frequency Representation)"></a>时频表示(Time Frequency Representation)</h1><p>时频表示基于短时傅里叶变换(Short-Time Fourier Transfrom,STFT)。</p>
-<h2 id="同时使用时间、频率域分析的原因："><a href="#同时使用时间、频率域分析的原因：" class="headerlink" title="同时使用时间、频率域分析的原因："></a>同时使用时间、频率域分析的原因：</h2><p>脑电信号的非稳定特性</p>
-<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>在所有的频率范围有统一的时频分辨率，然而我们感兴趣的脑电的频率通常小于30Hz,很多伪迹的频率小于10Hz，这就需要在低频范围有STFT(短时傅里叶变换)不能提供的高频分辨率。</p>
-<h2 id="问题的解决"><a href="#问题的解决" class="headerlink" title="问题的解决"></a>问题的解决</h2><p>采用基于小波的方法-小波变换（适合为脑电信号的每一个频带提供相应的分辨率）</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -23361,17 +23361,6 @@ controlthread.start()
       </tags>
   </entry>
   <entry>
-    <title>绝对路径和相对路径</title>
-    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
-    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
-<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
-]]></content>
-      <tags>
-        <tag>绝对路径</tag>
-        <tag>相对路径</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>matplotlib | 绘制几个模型某性能指标在某个范围内的大小比较图</title>
     <url>/2021/10/12/%E7%BB%98%E5%88%B6%E5%87%A0%E4%B8%AA%E6%A8%A1%E5%9E%8B%E6%9F%90%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E5%9C%A8%E6%9F%90%E4%B8%AA%E8%8C%83%E5%9B%B4%E5%86%85%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83%E5%9B%BE/</url>
     <content><![CDATA[<h1 id="绘制几个模型某性能指标在某个范围内的大小比较图"><a href="#绘制几个模型某性能指标在某个范围内的大小比较图" class="headerlink" title="绘制几个模型某性能指标在某个范围内的大小比较图"></a>绘制几个模型某性能指标在某个范围内的大小比较图</h1><p>我们在做深度学习实验时，很多时候会需要对几个模型的性能进行对比并进行可视化，从而清楚地展示模型性能的大小关系。</p>
@@ -23406,6 +23395,17 @@ plt.show()
       </categories>
       <tags>
         <tag>matplotlib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>绝对路径和相对路径</title>
+    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
+    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
+<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
+]]></content>
+      <tags>
+        <tag>绝对路径</tag>
+        <tag>相对路径</tag>
       </tags>
   </entry>
   <entry>
@@ -23464,20 +23464,6 @@ print(max(word_frequency, key=word_frequency.get))
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 网络、模型、算法的区别</title>
-    <url>/2021/11/09/%E7%BD%91%E7%BB%9Cand%E6%A8%A1%E5%9E%8Band%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="网络、模型、算法的区别"><a href="#网络、模型、算法的区别" class="headerlink" title="网络、模型、算法的区别"></a>网络、模型、算法的区别</h1><p>网络: 一种简单的网络结构，不包含任何权重参数。</p>
-<p>模型： 设计一个网络后，在某些数据集上进行训练，得到一个包含权重参数的数据，称为模型。</p>
-<p>算法： 在模型的基础上通过一些代码具体实现某些相关目的，这些代码以及模型文件等等资源被称为某算法。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络编程 | 网络中常见的协议以及术语</title>
     <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
     <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
@@ -23497,6 +23483,20 @@ print(max(word_frequency, key=word_frequency.get))
       <tags>
         <tag>网络编程</tag>
         <tag>协议</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 网络、模型、算法的区别</title>
+    <url>/2021/11/09/%E7%BD%91%E7%BB%9Cand%E6%A8%A1%E5%9E%8Band%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="网络、模型、算法的区别"><a href="#网络、模型、算法的区别" class="headerlink" title="网络、模型、算法的区别"></a>网络、模型、算法的区别</h1><p>网络: 一种简单的网络结构，不包含任何权重参数。</p>
+<p>模型： 设计一个网络后，在某些数据集上进行训练，得到一个包含权重参数的数据，称为模型。</p>
+<p>算法： 在模型的基础上通过一些代码具体实现某些相关目的，这些代码以及模型文件等等资源被称为某算法。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -24914,21 +24914,6 @@ public void cart(HttpServletRequest request, HttpServletResponse response) &#123
       </tags>
   </entry>
   <entry>
-    <title>软件架构 | 软件设计策略</title>
-    <url>/2021/03/11/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5/</url>
-    <content><![CDATA[<h1 id="软件设计策略"><a href="#软件设计策略" class="headerlink" title="软件设计策略"></a>软件设计策略</h1><p>1.面向对象设计</p>
-<p>2.面向功能设计(结构化)</p>
-<p>3.面向主题设计</p>
-<p>4.面向数据结构设计(数据库)</p>
-]]></content>
-      <categories>
-        <category>SA</category>
-      </categories>
-      <tags>
-        <tag>软件架构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 赎金信</title>
     <url>/2021/09/01/%E8%B5%8E%E9%87%91%E4%BF%A1/</url>
     <content><![CDATA[<h1 id="383-赎金信"><a href="#383-赎金信" class="headerlink" title="383.赎金信"></a>383.赎金信</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。<br>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
@@ -24969,6 +24954,21 @@ if __name__ == &#39;__main__&#39;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件架构 | 软件设计策略</title>
+    <url>/2021/03/11/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<h1 id="软件设计策略"><a href="#软件设计策略" class="headerlink" title="软件设计策略"></a>软件设计策略</h1><p>1.面向对象设计</p>
+<p>2.面向功能设计(结构化)</p>
+<p>3.面向主题设计</p>
+<p>4.面向数据结构设计(数据库)</p>
+]]></content>
+      <categories>
+        <category>SA</category>
+      </categories>
+      <tags>
+        <tag>软件架构</tag>
       </tags>
   </entry>
   <entry>
