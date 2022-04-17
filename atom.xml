@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-17T02:11:11.920Z</updated>
+  <updated>2022-04-17T08:21:21.721Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MyBatis | 分页插件PageHelper及PageHelper模拟分页</title>
+    <link href="http://example.com/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/"/>
+    <id>http://example.com/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/</id>
+    <published>2022-04-17T08:14:54.000Z</published>
+    <updated>2022-04-17T08:21:21.721Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p><h2 id="模拟分页"><a href="#模拟分页" class="headerlink" title="模拟分页"></a>模拟分页</h2><p><strong>PageUtil.java</strong></p><pre><code>package com.atguigu.test;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import com.atguigu.bean.Emp;import com.github.pagehelper.PageInfo;/** * 首页 上一页 1 2 3 4 5 下一页 末页 */public class PageUtil &#123;    public static String getPageInfo(PageInfo&lt;Emp&gt; pageInfo, HttpServletRequest request)&#123;        //String path = request.getContextPath() + &quot;/&quot;;        String path = &quot;/SSM/&quot;;                StringBuilder builder = new StringBuilder();                //拼接首页        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/1&#39;&gt;首页&lt;/a&gt;&quot;);        builder.append(&quot;&amp;nbsp;&quot;);                //拼接上一页        if(pageInfo.isHasPreviousPage())&#123;            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPrePage()+&quot;&#39;&gt;上一页 &lt;/a&gt;&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;else&#123;            builder.append(&quot;上一页&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;                //拼接页码        int[] nums = pageInfo.getNavigatepageNums();        for(int i : nums)&#123;            if(i == pageInfo.getPageNum())&#123;                builder.append(&quot;&lt;a style=&#39;color:red;&#39; href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);                builder.append(&quot;&amp;nbsp;&quot;);            &#125;else&#123;                builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);                builder.append(&quot;&amp;nbsp;&quot;);            &#125;        &#125;                //拼接下一页        if(pageInfo.isHasNextPage())&#123;            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getNextPage()+&quot;&#39;&gt;下一页&lt;/a&gt;&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;else&#123;            builder.append(&quot;下一页&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;                //拼接尾页        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPages()+&quot;&#39;&gt;尾页&lt;/a&gt;&quot;);        builder.append(&quot;&amp;nbsp;&quot;);                return builder.toString();    &#125;&#125;</code></pre><p><strong>TestPage.java</strong></p><pre><code>package com.atguigu.test;import java.io.InputStream;import java.util.Arrays;import java.util.List;import org.apache.ibatis.io.Resources;import org.apache.ibatis.session.SqlSession;import org.apache.ibatis.session.SqlSessionFactory;import org.apache.ibatis.session.SqlSessionFactoryBuilder;import org.junit.Test;import com.atguigu.bean.Emp;import com.atguigu.mapper.EmpMapper;import com.github.pagehelper.PageHelper;import com.github.pagehelper.PageInfo;public class TestPage &#123;    @Test    public void testPage() throws Exception&#123;        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();        SqlSession sqlSession = sqlSessionFactory.openSession(true);        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);        PageHelper.startPage(2, 2);        List&lt;Emp&gt; list = mapper.getAllEmp();                PageInfo&lt;Emp&gt; pageInfo = new PageInfo&lt;&gt;(list, 5);//        System.out.println(pageInfo);//        System.out.println(Arrays.toString(pageInfo.getNavigatepageNums()));                System.out.println(PageUtil.getPageInfo(pageInfo, null));                        for (Emp emp : list) &#123;            System.out.println(emp);        &#125;    &#125;        public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);        return sqlSessionFactory;    &#125;&#125;</code></pre><p><strong>返回结果</strong><br>字符串：</p><pre><code>&lt;a href=&#39;/SSM/emps/1&#39;&gt;首页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;上一页 &lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;1&lt;/a&gt;&amp;nbsp;&lt;a style=&#39;color:red;&#39; href=&#39;/SSM/emps/2&#39;&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/4&#39;&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/5&#39;&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;下一页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/6&#39;&gt;尾页&lt;/a&gt;&amp;nbsp;</code></pre><p>浏览器显示：<br><img src="/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/1.PNG"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;分页插件PageHelper及PageHelper模拟分页&quot;&gt;&lt;a href=&quot;#分页插件PageHelper及PageHelper模拟分页&quot; class=&quot;headerlink&quot; title=&quot;分页插件PageHelper及PageHelper模拟分页&quot;&gt;&lt;/a</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
+    
+    <category term="分页插件PageHelper及PageHelper模拟分页" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/"/>
+    
+    
+    <category term="MyBatis" scheme="http://example.com/tags/MyBatis/"/>
+    
+    <category term="分页插件PageHelper" scheme="http://example.com/tags/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper/"/>
+    
+    <category term="PageHelper模拟分页" scheme="http://example.com/tags/PageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/"/>
+    
+  </entry>
   
   <entry>
     <title>MyBatis | 逆向工程</title>
@@ -612,38 +646,6 @@ class MyNumbers:
     <category term="设计模式" scheme="http://example.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
     <category term="简单工厂模式" scheme="http://example.com/tags/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>设计模式 | 代理模式</title>
-    <link href="http://example.com/2022/03/21/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"/>
-    <id>http://example.com/2022/03/21/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</id>
-    <published>2022-03-21T09:55:37.000Z</published>
-    <updated>2022-03-21T09:57:24.681Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1><p><a href="https://victory-liao.github.io/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">动态代理</a><br><a href="https://victory-liao.github.io/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/">静态代理</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;代理模式&quot;&gt;&lt;a href=&quot;#代理模式&quot; class=&quot;headerlink&quot; title=&quot;代理模式&quot;&gt;&lt;/a&gt;代理模式&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://victory-liao.github.io/2022/03/10/%E5%8A%A8%E</summary>
-      
-    
-    
-    
-    <category term="设计模式" scheme="http://example.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-    <category term="代理模式" scheme="http://example.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"/>
-    
-    
-    <category term="设计模式" scheme="http://example.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-    <category term="代理模式" scheme="http://example.com/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"/>
-    
-    <category term="动态代理" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    
-    <category term="静态代理" scheme="http://example.com/tags/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
