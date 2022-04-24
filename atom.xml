@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-24T02:56:03.079Z</updated>
+  <updated>2022-04-24T04:10:42.781Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java | ThreadLocal</title>
+    <link href="http://example.com/2022/04/23/ThreadLocal/"/>
+    <id>http://example.com/2022/04/23/ThreadLocal/</id>
+    <published>2022-04-24T04:07:49.000Z</published>
+    <updated>2022-04-24T04:10:42.781Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p><p><strong>代码：</strong></p><pre><code>import java.text.SimpleDateFormat;import java.util.Random;public class ThreadLocalTest implements Runnable&#123;    //private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = ThreadLocal.withInitial(()-&gt;new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;));    private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = new ThreadLocal&lt;SimpleDateFormat&gt;()&#123;        @Override        protected SimpleDateFormat initialValue()&#123;            return new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;);        &#125;    &#125;;        @Override    public void run() &#123;        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; default formatter=&quot;+formatter.get().toPattern());        try &#123;            Thread.sleep(new Random().nextInt(1000));        &#125; catch (InterruptedException e) &#123;            e.printStackTrace();        &#125;        formatter.set(new SimpleDateFormat());        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; current formatter=&quot;+formatter.get().toPattern());            &#125;        public static void main(String[] args) throws InterruptedException&#123;        ThreadLocalTest obj = new ThreadLocalTest();        for(int i=0;i&lt;10;i++)&#123;            Thread t = new Thread(obj, &quot;&quot;+i);            Thread.sleep(new Random().nextInt(1000));            t.start();        &#125;    &#125;    &#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;ThreadLocal示例&quot;&gt;&lt;a href=&quot;#ThreadLocal示例&quot; class=&quot;headerlink&quot; title=&quot;ThreadLocal示例&quot;&gt;&lt;/a&gt;ThreadLocal示例&lt;/h1&gt;&lt;p&gt;ThreadLocal:&lt;br&gt;通常情况下，我们创建</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="ThreadLocal" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/ThreadLocal/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="ThreadLocal" scheme="http://example.com/tags/ThreadLocal/"/>
+    
+  </entry>
   
   <entry>
     <title>单例模式 | 双重检验锁方式实现单例模式</title>
@@ -646,34 +676,6 @@ UserMapper mapper = sqlSession.getMapper(UserMapper.class);
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="MyBatis" scheme="http://example.com/tags/MyBatis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python | 迭代器</title>
-    <link href="http://example.com/2022/03/27/%E8%BF%AD%E4%BB%A3%E5%99%A8/"/>
-    <id>http://example.com/2022/03/27/%E8%BF%AD%E4%BB%A3%E5%99%A8/</id>
-    <published>2022-03-27T10:02:05.000Z</published>
-    <updated>2022-03-27T10:06:05.601Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><pre><code># 创建一个返回数字的迭代器，初始值为 1，逐步递增 1：class MyNumbers:    def __iter__(self):        self.a = 0        return self    def __next__(self):        self.a = self.a + 1        return self.a# 奇数迭代器class MyOddNumbers:    def __iter__(self):        self.num = 1        return self    def __next__(self):        self.num = self.num + 2        return self.num# 偶数迭代器class MyEvenNumbers:    def __iter__(self):        self.num = 0        return self    def __next__(self):        self.num = self.num + 2        return self.nummyclass = MyNumbers()myiter = iter(myclass)print(next(myiter))print(next(myiter))print(next(myiter))print(next(myiter))print(next(myiter))print(&quot;======================================&quot;)my_odd_numbers = MyOddNumbers()my_odd_numbers_iter = iter(my_odd_numbers)print(next(my_odd_numbers_iter))print(next(my_odd_numbers_iter))print(next(my_odd_numbers_iter))print(next(my_odd_numbers_iter))print(&quot;======================================&quot;)my_even_numbers = MyEvenNumbers()my_even_numbers_iter = iter(my_even_numbers)print(next(my_even_numbers_iter))print(next(my_even_numbers_iter))print(next(my_even_numbers_iter))print(next(my_even_numbers_iter))</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;迭代器&quot;&gt;&lt;a href=&quot;#迭代器&quot; class=&quot;headerlink&quot; title=&quot;迭代器&quot;&gt;&lt;/a&gt;迭代器&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;# 创建一个返回数字的迭代器，初始值为 1，逐步递增 1：
-class MyNumbers:
-    def __i</summary>
-      
-    
-    
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="迭代器" scheme="http://example.com/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8/"/>
-    
-    <category term="iterator" scheme="http://example.com/tags/iterator/"/>
     
   </entry>
   
