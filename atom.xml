@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-24T02:45:28.393Z</updated>
+  <updated>2022-04-24T02:56:03.079Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,19 +21,20 @@
     <link href="http://example.com/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
     <id>http://example.com/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</id>
     <published>2022-04-24T02:43:26.000Z</published>
-    <updated>2022-04-24T02:45:28.393Z</updated>
+    <updated>2022-04-24T02:56:03.079Z</updated>
     
-    <content type="html"><![CDATA[<p><a href>参考资料</a></p><pre><code>public class Singleton &#123;    private volatile static Singleton uniqueInstance;    private Singleton() &#123;    &#125;    public  static Singleton getUniqueInstance() &#123;       //先判断对象是否已经实例过，没有实例化过才进入加锁代码        if (uniqueInstance == null) &#123;//第一重判断            //类对象加锁            synchronized (Singleton.class) &#123;                if (uniqueInstance == null) &#123;//第二重判断                    uniqueInstance = new Singleton();                &#125;            &#125;        &#125;        return uniqueInstance;    &#125;&#125;</code></pre>]]></content>
+    <content type="html"><![CDATA[<p><a href>参考资料</a></p><pre><code>package SingletonTest;class Singleton&#123;    private volatile static Singleton instance;        private Singleton()&#123;            &#125;        public static Singleton getInstance()&#123;        if(instance == null)&#123;            synchronized (Singleton.class) &#123;                if(instance == null)&#123;                    instance = new Singleton();                &#125;                //instance = new Singleton();            &#125;        &#125;        return instance;    &#125;&#125;public class MyThread extends Thread&#123;    @Override    public void run()&#123;        System.out.println(Singleton.getInstance().hashCode());    &#125;        public static void main(String[] args)&#123;        MyThread[] myThread = new MyThread[10];        for(int i=0;i&lt;myThread.length;i++)&#123;            myThread[i] = new MyThread();        &#125;                for(int i=0;i&lt;myThread.length;i++)&#123;            myThread[i].start();        &#125;    &#125;&#125;</code></pre><p><strong>双重锁的运行结果：</strong></p><pre><code>1156205522115620552211562055221156205522115620552211562055221156205522115620552211562055221156205522</code></pre><p><strong>去掉第二重锁的运行结果（产生了多例）：</strong></p><pre><code>1700548907148620290814862029081700548907148620290814862029081700548907148620290814862029081700548907</code></pre>]]></content>
     
     
       
       
     <summary type="html">&lt;p&gt;&lt;a href&gt;参考资料&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public class Singleton &amp;#123;
+&lt;pre&gt;&lt;code&gt;package SingletonTest;
 
-    private volatile static Singleton uniqueInstance;
-
-    private Singlet</summary>
+class Singleton&amp;#123;
+    private volatile static Singleton instance;
+    
+    pr</summary>
       
     
     

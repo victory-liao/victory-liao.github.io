@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参考资料 public class Singleton &amp;#123;      private volatile static Singleton uniqueInstance;      private Singleton() &amp;#123;     &amp;#125;      public  static Singleton getUniqueInstance() &amp;#123;        &#x2F;&#x2F;先">
+  <meta name="description" content="参考资料 package SingletonTest;  class Singleton&amp;#123;     private volatile static Singleton instance;          private Singleton()&amp;#123;              &amp;#125;          public static Singleton getInstance()">
 <meta property="og:type" content="article">
 <meta property="og:title" content="单例模式 | 双重检验锁方式实现单例模式">
 <meta property="og:url" content="http://example.com/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="Victory&#39;s Blog">
-<meta property="og:description" content="参考资料 public class Singleton &amp;#123;      private volatile static Singleton uniqueInstance;      private Singleton() &amp;#123;     &amp;#125;      public  static Singleton getUniqueInstance() &amp;#123;        &#x2F;&#x2F;先">
+<meta property="og:description" content="参考资料 package SingletonTest;  class Singleton&amp;#123;     private volatile static Singleton instance;          private Singleton()&amp;#123;              &amp;#125;          public static Singleton getInstance()">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-24T02:43:26.000Z">
-<meta property="article:modified_time" content="2022-04-24T02:45:28.393Z">
+<meta property="article:modified_time" content="2022-04-24T02:56:03.079Z">
 <meta property="article:author" content="victory-liao">
 <meta property="article:tag" content="设计模式">
 <meta property="article:tag" content="单例模式">
@@ -220,7 +220,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-04-23 18:43:26 / Modified: 18:45:28" itemprop="dateCreated datePublished" datetime="2022-04-23T18:43:26-08:00">2022-04-23</time>
+              <time title="Created: 2022-04-23 18:43:26 / Modified: 18:56:03" itemprop="dateCreated datePublished" datetime="2022-04-23T18:43:26-08:00">2022-04-23</time>
             </span>
 
           
@@ -235,26 +235,69 @@
 
       
         <p><a href>参考资料</a></p>
-<pre><code>public class Singleton &#123;
+<pre><code>package SingletonTest;
 
-    private volatile static Singleton uniqueInstance;
-
-    private Singleton() &#123;
+class Singleton&#123;
+    private volatile static Singleton instance;
+    
+    private Singleton()&#123;
+        
     &#125;
-
-    public  static Singleton getUniqueInstance() &#123;
-       //先判断对象是否已经实例过，没有实例化过才进入加锁代码
-        if (uniqueInstance == null) &#123;//第一重判断
-            //类对象加锁
+    
+    public static Singleton getInstance()&#123;
+        if(instance == null)&#123;
             synchronized (Singleton.class) &#123;
-                if (uniqueInstance == null) &#123;//第二重判断
-                    uniqueInstance = new Singleton();
+                if(instance == null)&#123;
+                    instance = new Singleton();
                 &#125;
+                //instance = new Singleton();
             &#125;
         &#125;
-        return uniqueInstance;
+        return instance;
     &#125;
 &#125;
+
+public class MyThread extends Thread&#123;
+    @Override
+    public void run()&#123;
+        System.out.println(Singleton.getInstance().hashCode());
+    &#125;
+    
+    public static void main(String[] args)&#123;
+        MyThread[] myThread = new MyThread[10];
+        for(int i=0;i&lt;myThread.length;i++)&#123;
+            myThread[i] = new MyThread();
+        &#125;
+        
+        for(int i=0;i&lt;myThread.length;i++)&#123;
+            myThread[i].start();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>双重锁的运行结果：</strong></p>
+<pre><code>1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+</code></pre>
+<p><strong>去掉第二重锁的运行结果（产生了多例）：</strong></p>
+<pre><code>1700548907
+1486202908
+1486202908
+1700548907
+1486202908
+1486202908
+1700548907
+1486202908
+1486202908
+1700548907
 </code></pre>
 
     </div>

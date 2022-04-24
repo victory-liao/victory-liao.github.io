@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-04-23 18:43:26 / Modified: 18:45:28" itemprop="dateCreated datePublished" datetime="2022-04-23T18:43:26-08:00">2022-04-23</time>
+              <time title="Created: 2022-04-23 18:43:26 / Modified: 18:56:03" itemprop="dateCreated datePublished" datetime="2022-04-23T18:43:26-08:00">2022-04-23</time>
             </span>
 
           
@@ -230,26 +230,69 @@
 
       
           <p><a href>参考资料</a></p>
-<pre><code>public class Singleton &#123;
+<pre><code>package SingletonTest;
 
-    private volatile static Singleton uniqueInstance;
-
-    private Singleton() &#123;
+class Singleton&#123;
+    private volatile static Singleton instance;
+    
+    private Singleton()&#123;
+        
     &#125;
-
-    public  static Singleton getUniqueInstance() &#123;
-       //先判断对象是否已经实例过，没有实例化过才进入加锁代码
-        if (uniqueInstance == null) &#123;//第一重判断
-            //类对象加锁
+    
+    public static Singleton getInstance()&#123;
+        if(instance == null)&#123;
             synchronized (Singleton.class) &#123;
-                if (uniqueInstance == null) &#123;//第二重判断
-                    uniqueInstance = new Singleton();
+                if(instance == null)&#123;
+                    instance = new Singleton();
                 &#125;
+                //instance = new Singleton();
             &#125;
         &#125;
-        return uniqueInstance;
+        return instance;
     &#125;
 &#125;
+
+public class MyThread extends Thread&#123;
+    @Override
+    public void run()&#123;
+        System.out.println(Singleton.getInstance().hashCode());
+    &#125;
+    
+    public static void main(String[] args)&#123;
+        MyThread[] myThread = new MyThread[10];
+        for(int i=0;i&lt;myThread.length;i++)&#123;
+            myThread[i] = new MyThread();
+        &#125;
+        
+        for(int i=0;i&lt;myThread.length;i++)&#123;
+            myThread[i].start();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>双重锁的运行结果：</strong></p>
+<pre><code>1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+</code></pre>
+<p><strong>去掉第二重锁的运行结果（产生了多例）：</strong></p>
+<pre><code>1700548907
+1486202908
+1486202908
+1700548907
+1486202908
+1486202908
+1700548907
+1486202908
+1486202908
+1700548907
 </code></pre>
 
       
