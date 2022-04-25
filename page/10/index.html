@@ -190,6 +190,347 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/filter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/11/filter/" class="post-title-link" itemprop="url">JavaWeb项目开发 | filter</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-11 02:20:47 / Modified: 03:09:04" itemprop="dateCreated datePublished" datetime="2022-01-11T02:20:47-08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/" itemprop="url" rel="index"><span itemprop="name">filter</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h1><h2 id="filter-1"><a href="#filter-1" class="headerlink" title="filter"></a>filter</h2><ol>
+<li>filter是什么？<br>servlet2.3后增加的新功能,运行在服务器端的程序，先于与之相关的servlet或者jsp页面之前运行</li>
+<li>作用<br>过滤请求和相应</li>
+<li>应用场景<br>(1)自动登录<br>(2)统一编码<br>(3)过滤特殊符号或敏感词<h2 id="filter程序编写"><a href="#filter程序编写" class="headerlink" title="filter程序编写"></a>filter程序编写</h2></li>
+<li>编写一个类</li>
+<li>1 实现一个Filter接口</li>
+<li>2 重写接口所有的方法</li>
+<li>编写配置文件</li>
+<li>1 注册filter</li>
+<li>2 绑定路径</li>
+<li>2.1 完全匹配 例如：/demo1</li>
+<li>2.2 目录匹配 例如: /* 过滤所有请求<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2></li>
+<li>项目目录<br><img src="/2022/01/11/filter/1.PNG"></li>
+<li>代码</li>
+</ol>
+<p><strong>Demo1Filter</strong></p>
+<pre><code>package com.oracle.filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+public class Demo1Filter implements Filter&#123;
+
+    @Override
+    public void destroy() &#123;
+        // TODO Auto-generated method stub
+        
+    &#125;
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException &#123;
+        // TODO Auto-generated method stub
+        System.out.println(&quot;Demo1Filter过滤到请求.../demo1&quot;);
+        
+        //放行
+        chain.doFilter(request, response);
+    &#125;
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException &#123;
+        // TODO Auto-generated method stub
+        
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>web.xml</strong><br><img src="/2022/01/11/filter/2.PNG"><br><strong>Demo1Servlet</strong></p>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo1Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        System.out.println(&quot;Demo1Servlet接收到请求.../demo1&quot;);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2022/01/11/filter/3.PNG"></p>
+<p><img src="/2022/01/11/filter/4.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/11/session/" class="post-title-link" itemprop="url">JavaWeb项目开发 | session</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-11 01:53:44 / Modified: 02:09:45" itemprop="dateCreated datePublished" datetime="2022-01-11T01:53:44-08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/session/" itemprop="url" rel="index"><span itemprop="name">session</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><h2 id="session-1"><a href="#session-1" class="headerlink" title="session"></a>session</h2><ol>
+<li>什么是session?<br>服务器端会话技术</li>
+<li>api</li>
+</ol>
+<p><strong>(1)session的获取</strong></p>
+<pre><code>HttpSession session=request.getSession()
+</code></pre>
+<p><strong>(2)session属性操作</strong></p>
+<pre><code>session.setAttribute(&quot;attr_name&quot;, attr_value);//设置属性
+session.getAttribute(attr_name);//获取属性
+</code></pre>
+<ol start="3">
+<li>作用范围<br>一次会话中<h2 id="session-测试（其他的servlet可以共享一次请求中的数据）"><a href="#session-测试（其他的servlet可以共享一次请求中的数据）" class="headerlink" title="session 测试（其他的servlet可以共享一次请求中的数据）"></a>session 测试（其他的servlet可以共享一次请求中的数据）</h2></li>
+<li>项目目录<br><img src="/2022/01/11/session/1.PNG"></li>
+<li>代码</li>
+</ol>
+<p><strong>a.html</strong></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;/sessiontest/demo1&quot;&gt;访问demo1&lt;/a&gt;
+    &lt;a href=&quot;/sessiontest/demo2&quot;&gt;访问demo2&lt;/a&gt;
+    &lt;a href=&quot;/sessiontest/demo3&quot;&gt;访问demo3&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>Demo1Servlet</strong></p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo1Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        //request.setAttribute(&quot;username&quot;, &quot;zhangsan&quot;);
+        
+        //请求转发
+        //request.getRequestDispatcher(&quot;/demo2&quot;).forward(request, response);
+        
+        //创建session
+        HttpSession session = request.getSession();
+        System.out.println(&quot;Demo1Servlet增加username属性，值为lisi&quot;);
+        session.setAttribute(&quot;username&quot;, &quot;lisi&quot;);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Demo2Servlet</strong></p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo2Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        //String username = (String)request.getAttribute(&quot;username&quot;);
+        //System.out.println(username);//null 一次会话当中的第二次请求不能得到第一次请求的数据
+        
+        HttpSession session = request.getSession();
+        String username = (String)session.getAttribute(&quot;username&quot;);
+        System.out.println(&quot;Demo2Servlet:&quot; + username);
+        
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Demo3Servlet</strong></p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo3Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        HttpSession session = request.getSession();
+        String username = (String)session.getAttribute(&quot;username&quot;);
+        System.out.println(&quot;Demo2Servlet:&quot; + username);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2022/01/11/session/2.PNG"></p>
+<p><img src="/2022/01/11/session/3.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1061,175 +1402,6 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/04/MultimodalEmotionRecognition/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/04/MultimodalEmotionRecognition/" class="post-title-link" itemprop="url">参考文献 | Multimodal Emotion Recognition Method based on Facial expressions and EEG</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-01-04 21:26:08" itemprop="dateCreated datePublished" datetime="2022-01-04T21:26:08-08:00">2022-01-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-05 05:25:58" itemprop="dateModified" datetime="2022-01-05T05:25:58-08:00">2022-01-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/" itemprop="url" rel="index"><span itemprop="name">EEG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">脑电分类</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/" itemprop="url" rel="index"><span itemprop="name">参考文献</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG"><a href="#Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG" class="headerlink" title="Multimodal Emotion Recognition Method based on Facial expressions and EEG"></a>Multimodal Emotion Recognition Method based on Facial expressions and EEG</h1><h2 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h2><p>To solve the <strong>multimodal emtoion recognition</strong> problem, the emotion recognition results<br>were calculated using the <strong>Monte Carlo method</strong> to combine the recognition results of<br><strong>facical expressions</strong> and <strong>EEG</strong> in the multimodal emotion recognition.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/04/MultimodalEmotionRecognition/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/" class="post-title-link" itemprop="url">期刊 | 脑电期刊</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-04 19:17:28 / Modified: 19:21:52" itemprop="dateCreated datePublished" datetime="2022-01-04T19:17:28-08:00">2022-01-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/" itemprop="url" rel="index"><span itemprop="name">脑电期刊</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/Biomedical-Signal-Processing-and-Control/" itemprop="url" rel="index"><span itemprop="name">Biomedical Signal Processing and Control</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a target="_blank" rel="noopener" href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1301,20 +1473,20 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">387</span>
+          <span class="site-state-item-count">389</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">230</span>
+        <span class="site-state-item-count">232</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">269</span>
+        <span class="site-state-item-count">271</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
