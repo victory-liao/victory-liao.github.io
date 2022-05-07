@@ -190,6 +190,274 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 使用filter解决项目编码问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-11 03:31:44 / Modified: 03:57:04" itemprop="dateCreated datePublished" datetime="2022-01-11T03:31:44-08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/" itemprop="url" rel="index"><span itemprop="name">filter</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">filter解决项目编码问题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用filter解决项目编码问题"><a href="#使用filter解决项目编码问题" class="headerlink" title="使用filter解决项目编码问题"></a>使用filter解决项目编码问题</h1><p>在开发JavaWeb项目时，前端的编码使用的时utf-8编码方式，服务器端使用的是ISO-8859-1编码方式，故在开发中会出现乱码。</p>
+<h2 id="解决方案（使用filter）"><a href="#解决方案（使用filter）" class="headerlink" title="解决方案（使用filter）"></a>解决方案（使用filter）</h2><p>实现EncodingFilter来解决项目乱码问题</p>
+<p><strong>乱码情形举例：</strong></p>
+<ol>
+<li>写一个b.html文件</li>
+</ol>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;/filtertest/demox?username=张三&quot;&gt;向服务器发送请求&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
+<li>再写一个servlet处理请求</li>
+</ol>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DemoxServlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        String username = request.getParameter(&quot;username&quot;);
+        System.out.println(username);
+        
+        response.getWriter().println(&quot;王五&quot;);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>servlet写到浏览器的内容和servlet从浏览器接收到的请求数据会出现乱码<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/1.PNG"><br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/2.PNG"></li>
+</ol>
+<p><strong>EncodingFilter:</strong></p>
+<pre><code>package com.oracle.filter;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+/**
+ * 统一编码
+ * @author Administrator
+ *
+ */
+public class EncodingFilter implements Filter &#123;
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException &#123;
+        // TODO Auto-generated method stub
+
+    &#125;
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException &#123;
+        //1.强转
+        HttpServletRequest request=(HttpServletRequest) req;
+        HttpServletResponse response=(HttpServletResponse) resp;
+        response.setContentType(&quot;text/html;charset=utf-8&quot;);
+        //2.放行
+        chain.doFilter(new MyRequest(request), response);
+    &#125;
+
+    @Override
+    public void destroy() &#123;
+        // TODO Auto-generated method stub
+
+    &#125;
+
+&#125;
+class MyRequest extends HttpServletRequestWrapper&#123;
+    private HttpServletRequest request;
+    private boolean flag=true;
+    
+    
+    public MyRequest(HttpServletRequest request) &#123;
+        super(request);
+        this.request=request;
+    &#125;
+    
+    @Override
+    public String getParameter(String name) &#123;  
+        if(name==null || name.trim().length()==0)&#123;
+            return null;
+        &#125;
+        String[] values = getParameterValues(name);
+        if(values==null || values.length==0)&#123;
+            return null;
+        &#125;
+        
+        return values[0];
+    &#125;
+    
+    @Override
+    /**
+     * hobby=[eat,drink]
+     */
+    public String[] getParameterValues(String name) &#123;
+        if(name==null || name.trim().length()==0)&#123;
+            return null;
+        &#125;
+        Map&lt;String, String[]&gt; map = getParameterMap();
+        if(map==null || map.size()==0)&#123;
+            return null;
+        &#125;
+        
+        return map.get(name);
+    &#125;
+    
+    @Override
+    /**
+     * map&#123; username=[tom],password=[123],hobby=[eat,drink]&#125;
+     */
+    public Map&lt;String,String[]&gt; getParameterMap() &#123;  
+        
+        /**
+         * 首先判断请求方式
+         * 若为post  request.setchar...(utf-8)
+         * 若为get 将map中的值遍历编码就可以了
+         */
+        String method = request.getMethod();
+        if(&quot;post&quot;.equalsIgnoreCase(method))&#123;
+            try &#123;
+                request.setCharacterEncoding(&quot;utf-8&quot;);
+                return request.getParameterMap();
+            &#125; catch (UnsupportedEncodingException e) &#123;
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            &#125;
+        &#125;else if(&quot;get&quot;.equalsIgnoreCase(method))&#123;
+            Map&lt;String,String[]&gt; map = request.getParameterMap();
+            if(flag)&#123;
+                for (String key:map.keySet()) &#123;
+                    String[] arr = map.get(key);
+                    //继续遍历数组
+                    for(int i=0;i&lt;arr.length;i++)&#123;
+                        //编码
+                        try &#123;
+                            arr[i]=new String(arr[i].getBytes(&quot;iso8859-1&quot;),&quot;utf-8&quot;);
+                        &#125; catch (UnsupportedEncodingException e) &#123;
+                            e.printStackTrace();
+                        &#125;
+                    &#125;
+                &#125;
+                flag=false;
+            &#125;
+            //需要遍历map 修改value的每一个数据的编码
+            
+            return map;
+        &#125;
+        
+        return super.getParameterMap();
+    &#125;
+    
+&#125;
+</code></pre>
+<p><strong>配置web.xml文件:</strong></p>
+<pre><code>&lt;!-- 配置项目编码 --&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;com.oracle.filter.EncodingFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/filter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1319,89 +1587,6 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/" class="post-title-link" itemprop="url">Java | Java判断对象是否相等</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-07 22:37:05 / Modified: 23:48:34" itemprop="dateCreated datePublished" datetime="2022-01-07T22:37:05-08:00">2022-01-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/" itemprop="url" rel="index"><span itemprop="name">判断两个对象是否相等</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1473,20 +1658,20 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">389</span>
+          <span class="site-state-item-count">390</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">232</span>
+        <span class="site-state-item-count">234</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">271</span>
+        <span class="site-state-item-count">274</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

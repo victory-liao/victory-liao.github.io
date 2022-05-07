@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-25T01:08:26.053Z</updated>
+  <updated>2022-05-07T02:28:05.158Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis | Jedis实现手机号验证码</title>
+    <link href="http://example.com/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/"/>
+    <id>http://example.com/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/</id>
+    <published>2022-05-07T02:19:55.000Z</published>
+    <updated>2022-05-07T02:28:05.158Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Jedis实现手机号验证码"><a href="#Jedis实现手机号验证码" class="headerlink" title="Jedis实现手机号验证码"></a>Jedis实现手机号验证码</h1><p><img src="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG"><br><strong>要求</strong><br>1.输入手机号，点击发送后随机生成6位数字码，2分钟有效<br>2.输入验证码，点击验证，返回成功或失败<br>3.每个手机号每天只能输入3次</p><span id="more"></span><p>1.index.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=ISO-8859-1&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;script  src=&quot;/Verify_code/static/jquery/jquery-3.1.0.js&quot; &gt;&lt;/script&gt;&lt;link href=&quot;/Verify_code/static/bs/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;script  src=&quot;/Verify_code/static/bs/js/bootstrap.min.js&quot;   &gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;   &lt;div class=&quot;container&quot;&gt;        &lt;div class=&quot;row&quot;&gt;            &lt;div id=&quot;alertdiv&quot; class=&quot;col-md-12&quot;&gt;                  &lt;form class=&quot;navbar-form navbar-left&quot; role=&quot;search&quot; id=&quot;codeform&quot;&gt;                  &lt;div class=&quot;form-group&quot;&gt;                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;填写手机号&quot; name=&quot;phone_no&quot;&gt;                    &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot; id=&quot;sendCode&quot;&gt;发送验证码&lt;/button&gt;&lt;br&gt;                    &lt;font id=&quot;countdown&quot; color=&quot;red&quot; &gt;&lt;/font&gt;                    &lt;br&gt;                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;填写验证码&quot; name=&quot;verify_code&quot;&gt;                    &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot; id=&quot;verifyCode&quot;&gt;确定&lt;/button&gt;                    &lt;font id=&quot;result&quot; color=&quot;green&quot; &gt;&lt;/font&gt;&lt;font id=&quot;error&quot; color=&quot;red&quot; &gt;&lt;/font&gt;                    &lt;/div&gt;                    &lt;/form&gt;    &lt;/div&gt;   &lt;/div&gt;  &lt;/div&gt;&lt;/body&gt;&lt;script type=&quot;text/javascript&quot;&gt; var t=120;//设定倒计时的时间 var interval;function refer()&#123;      $(&quot;#countdown&quot;).text(&quot;请于&quot;+t+&quot;秒内填写验证码 &quot;); // 显示倒计时     t--; // 计数器递减     if(t&lt;=0)&#123;        clearInterval(interval);        $(&quot;#countdown&quot;).text(&quot;验证码已失效，请重新发送！ &quot;);    &#125;&#125; $(function()&#123;    $(&quot;#sendCode&quot;).click( function () &#123;                      $.post(&quot;/Verify_code/CodeSenderServlet&quot;,$(&quot;#codeform&quot;).serialize(),function(data)&#123;             if(data==&quot;true&quot;)&#123;                 t=120;                 clearInterval(interval);                 interval= setInterval(&quot;refer()&quot;,1000);//启动1秒定时               &#125;else if (data==&quot;limit&quot;)&#123;                clearInterval(interval);                $(&quot;#countdown&quot;).text(&quot;单日发送超过次数！ &quot;)             &#125;          &#125;);       &#125;);        $(&quot;#verifyCode&quot;).click( function () &#123;                   $.post(&quot;/Verify_code/CodeVerifyServlet&quot;,$(&quot;#codeform&quot;).serialize(),function(data)&#123;             if(data==&quot;true&quot;)&#123;                 $(&quot;#result&quot;).attr(&quot;color&quot;,&quot;green&quot;);                 $(&quot;#result&quot;).text(&quot;验证成功&quot;);                 clearInterval(interval);                 $(&quot;#countdown&quot;).text(&quot;&quot;);             &#125;else&#123;                 $(&quot;#result&quot;).attr(&quot;color&quot;,&quot;red&quot;);                 $(&quot;#result&quot;).text(&quot;验证失败&quot;);             &#125;          &#125;);       &#125;);        &#125;);&lt;/script&gt;&lt;/html&gt;</code></pre><p>2.CodeSenderServlet.java(发送验证码)</p><pre><code>@WebServlet(&quot;/CodeSenderServlet&quot;)public class CodeSenderServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;           /**     * @see HttpServlet#HttpServlet()     */    public CodeSenderServlet() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    /**     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)     */    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;                //获取手机号        String phone_no = request.getParameter(&quot;phone_no&quot;);        //获取验证码        String code = getCode(6);        //拼接key        String codeKey = &quot;Verify_code:&quot; + phone_no + &quot;:code&quot;;//Verify_code:12345:code        String countKey = &quot;Verify_code:&quot; + phone_no + &quot;:count&quot;;                Jedis jedis = new Jedis(&quot;192.168.44.132&quot;, 6379);        //判断发送验证码的次数        String count = jedis.get(countKey);        if(count == null) &#123;            //代表第一次            jedis.setex(countKey, 24*60*60, &quot;1&quot;);        &#125;else if(Integer.parseInt(count) &lt;= 2) &#123;            jedis.incr(countKey);        &#125;else if(Integer.parseInt(count) &gt; 2) &#123;            response.getWriter().print(&quot;limit&quot;);            jedis.close();            return ;        &#125;                //向redis中进行存储，以手机号为键，以验证码为值        jedis.setex(codeKey, 120, code);        jedis.close();        response.getWriter().print(true);            &#125;            private String getCode(int length) &#123;        String code = &quot;&quot;;        Random random = new Random();        for(int i = 0; i &lt; length; i++) &#123;            int rand = random.nextInt(10);            code += rand;        &#125;        return code;    &#125;&#125;</code></pre><p>3.验证</p><pre><code>@WebServlet(&quot;/CodeVerifyServlet&quot;)public class CodeVerifyServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;           /**     * @see HttpServlet#HttpServlet()     */    public CodeVerifyServlet() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    /**     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)     */    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;            //获取验证码和手机号        String phone_no = request.getParameter(&quot;phone_no&quot;);        String verify_code = request.getParameter(&quot;verify_code&quot;);        //拼接key        String codeKey = &quot;Verify_code:&quot; + phone_no + &quot;:code&quot;;        //从redis中获取手机号所对应的验证码        Jedis jedis = new Jedis(&quot;192.168.44.132&quot;, 6379);        String code = jedis.get(codeKey);        if(code.equals(verify_code)) &#123;            response.getWriter().print(true);        &#125;        jedis.close();            &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Jedis实现手机号验证码&quot;&gt;&lt;a href=&quot;#Jedis实现手机号验证码&quot; class=&quot;headerlink&quot; title=&quot;Jedis实现手机号验证码&quot;&gt;&lt;/a&gt;Jedis实现手机号验证码&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG&quot;&gt;&lt;br&gt;&lt;strong&gt;要求&lt;/strong&gt;&lt;br&gt;1.输入手机号，点击发送后随机生成6位数字码，2分钟有效&lt;br&gt;2.输入验证码，点击验证，返回成功或失败&lt;br&gt;3.每个手机号每天只能输入3次&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
+    
+    <category term="Jedis实现手机号验证码" scheme="http://example.com/categories/Redis/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/"/>
+    
+    
+    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
+    
+    <category term="Jedis" scheme="http://example.com/tags/Jedis/"/>
+    
+    <category term="手机号验证码" scheme="http://example.com/tags/%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/"/>
+    
+  </entry>
   
   <entry>
     <title>Java | 创建线程的三种方式</title>
@@ -632,36 +659,6 @@ public class TestJDBC &amp;#123;
     <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
     
     <category term="MyBatis获取参数值的两种方式" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    
-    
-    <category term="Mybatis" scheme="http://example.com/tags/Mybatis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MyBatis | 三种查询方式</title>
-    <link href="http://example.com/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/"/>
-    <id>http://example.com/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/</id>
-    <published>2022-04-02T12:55:34.000Z</published>
-    <updated>2022-04-02T12:59:18.223Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p><pre><code>package com.atguigu.mapper;import java.util.Map;import org.apache.ibatis.annotations.MapKey;import com.atguigu.bean.Emp;public interface EmpSelectMapper &#123;    //根据eid查询一个员工信息    Emp getEmpByEid(String eid);        //获取所有的员工数量    Integer getCount();        //以map集合获取一个员工信息    Map&lt;String, Object&gt; getEmpMapByEid(String eid);        //以map集合获取所有员工信息        @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键    Map&lt;String, Object&gt; getAllEmpMap();&#125;</code></pre><p>3.EmpSelectMapper.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;            &lt;!-- //根据eid查询一个员工信息    Emp getEmpByEid(String eid); --&gt;    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;    &lt;/select&gt;        &lt;!-- //获取所有的员工数量    Integer getCount(); --&gt;    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;        select count(eid) from emp    &lt;/select&gt;        &lt;!-- //以map集合获取一个员工信息    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;    &lt;/select&gt;        &lt;!-- //以map集合获取所有员工信息    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;    select eid,ename,age,sex from emp    &lt;/select&gt;    &lt;/mapper&gt;</code></pre><p>4.TestSelect.java</p><pre><code>package com.atguigu.test;import java.io.IOException;import java.io.InputStream;import java.util.Map;import javax.annotation.Resource;import org.apache.ibatis.io.Resources;import org.apache.ibatis.session.SqlSession;import org.apache.ibatis.session.SqlSessionFactory;import org.apache.ibatis.session.SqlSessionFactoryBuilder;import org.junit.Test;import com.atguigu.bean.Emp;import com.atguigu.mapper.EmpSelectMapper;public class TestSelect &#123;    @Test    public void testSelect() throws IOException&#123;        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);        SqlSession sqlSession = sqlSessionFactory.openSession(true);        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);//        System.out.println(emp);                //获取员工总记录数//        Integer i = mapper.getCount();//        System.out.println(i);                //以map获取单个emp//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);//        System.out.println(map);                //以map获取所有emp        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();        System.out.println(map);    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;MyBatis三种查询方式&quot;&gt;&lt;a href=&quot;#MyBatis三种查询方式&quot; class=&quot;headerlink&quot; title=&quot;MyBatis三种查询方式&quot;&gt;&lt;/a&gt;MyBatis三种查询方式&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
-    
-    <category term="MyBatis三种查询方式" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/"/>
     
     
     <category term="Mybatis" scheme="http://example.com/tags/Mybatis/"/>
