@@ -190,6 +190,210 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/07/%E7%A7%92%E6%9D%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/07/%E7%A7%92%E6%9D%80/" class="post-title-link" itemprop="url">Redis | 秒杀</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-05-07 04:14:29 / Modified: 05:04:17" itemprop="dateCreated datePublished" datetime="2022-05-07T04:14:29-08:00">2022-05-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E7%A7%92%E6%9D%80/" itemprop="url" rel="index"><span itemprop="name">秒杀</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="秒杀"><a href="#秒杀" class="headerlink" title="秒杀"></a>秒杀</h1><p>1.index.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;iPhoneXsMAX !!!  1元秒杀！！！
+&lt;/h1&gt;
+
+
+&lt;form id=&quot;msform&quot; action=&quot;$&#123;pageContext.request.contextPath&#125;/doseckill&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
+    &lt;input type=&quot;hidden&quot; id=&quot;prodid&quot; name=&quot;prodid&quot; value=&quot;0101&quot;&gt;
+    &lt;input type=&quot;button&quot;  id=&quot;miaosha_btn&quot; name=&quot;seckill_btn&quot; value=&quot;秒杀点我&quot;/&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;script  type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.request.contextPath&#125;/script/jquery/jquery-3.1.0.js&quot;&gt;&lt;/script&gt;
+&lt;script  type=&quot;text/javascript&quot;&gt;
+$(function()&#123;
+    $(&quot;#miaosha_btn&quot;).click(function()&#123;     
+        var url=$(&quot;#msform&quot;).attr(&quot;action&quot;);
+         $.post(url,$(&quot;#msform&quot;).serialize(),function(data)&#123;
+            if(data==&quot;false&quot;)&#123;
+                alert(&quot;抢光了&quot; );
+                $(&quot;#miaosha_btn&quot;).attr(&quot;disabled&quot;,true);
+            &#125;
+        &#125; );    
+    &#125;)
+&#125;)
+&lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.SeckillServlet.java</p>
+<pre><code>public class SeckillServlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public SecKillServlet() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+ 
+        String userid = new Random().nextInt(50000) +&quot;&quot; ; 
+
+        String prodid =request.getParameter(&quot;prodid&quot;);
+        
+        boolean if_success=SecKill_redis.doSecKill(userid,prodid);
+ 
+        response.getWriter().print(if_success);
+    &#125;
+
+&#125;
+</code></pre>
+<p>3.Seckill_redis.java</p>
+<pre><code>public class SecKill_redis &#123;
+    
+    private static final  org.slf4j.Logger logger =LoggerFactory.getLogger(SecKill_redis.class) ;
+
+    public static void main(String[] args) &#123;
+ 
+ 
+        Jedis jedis =new Jedis(&quot;192.168.223.132&quot;,6379);
+        
+        System.out.println(jedis.ping());
+     
+        jedis.close();
+    &#125;
+    
+    public static boolean doSecKill(String uid,String prodid) throws IOException &#123;
+        
+        //拼接key
+        String kcKey = &quot;Seckill:&quot; + prodid + &quot;:kc&quot;;
+        String userKey = &quot;Seckill:&quot; + prodid + &quot;:user&quot;;
+        
+        Jedis jedis = new Jedis(&quot;192.168.223.132&quot;, 6379);
+        //监视库存
+        jedis.watch(kcKey);
+        //获取库存
+        String kc = jedis.get(kcKey);
+        
+        //秒杀还没开始，表示为库存为null
+        if(kc == null) &#123;
+            System.out.println(&quot;秒杀还没开始&quot;);
+            jedis.close();
+            return false;
+        &#125;
+        
+        //已经秒杀成功，表示为存储uid的set中已经有该用户uid
+        if(jedis.sismember(userKey, uid)) &#123;
+            System.out.println(&quot;已经秒杀成功，不能重复秒杀&quot;);
+            jedis.close();
+            return false;
+        &#125;
+        
+        //判断库存，若大于0，则减库存，加人，若小于等于0，秒杀结束
+        if(Integer.parseInt(kc) &lt;= 0) &#123;
+            System.out.println(&quot;秒杀已结束&quot;);
+            jedis.close();
+            return false;
+        &#125;
+        
+        //库存大于0，减库存，加人
+        Transaction transaction = jedis.multi();
+        
+        transaction.decr(kcKey);
+        transaction.sadd(userKey, uid);
+        
+        List&lt;Object&gt; exec = transaction.exec();
+        
+        if(exec == null || exec.size() == 0) &#123;
+            System.out.println(&quot;秒杀失败&quot;);
+            jedis.close();
+            return false;
+        &#125;
+        
+        System.out.println(&quot;秒杀成功&quot;);
+        jedis.close();
+        return true;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/07/%E4%BA%8B%E5%8A%A1-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1448,82 +1652,6 @@ public class EmpServiceImpl implements EmpService&#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/%E5%8F%8D%E5%B0%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/18/%E5%8F%8D%E5%B0%84/" class="post-title-link" itemprop="url">Java | 反射</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-18 16:07:36 / Modified: 16:13:00" itemprop="dateCreated datePublished" datetime="2022-04-18T16:07:36-08:00">2022-04-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%8F%8D%E5%B0%84/" itemprop="url" rel="index"><span itemprop="name">反射</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1595,20 +1723,20 @@ public class EmpServiceImpl implements EmpService&#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">391</span>
+          <span class="site-state-item-count">392</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">235</span>
+        <span class="site-state-item-count">236</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">274</span>
+        <span class="site-state-item-count">275</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

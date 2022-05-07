@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-07T12:11:56.112Z</updated>
+  <updated>2022-05-07T13:04:17.613Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis | 秒杀</title>
+    <link href="http://example.com/2022/05/07/%E7%A7%92%E6%9D%80/"/>
+    <id>http://example.com/2022/05/07/%E7%A7%92%E6%9D%80/</id>
+    <published>2022-05-07T12:14:29.000Z</published>
+    <updated>2022-05-07T13:04:17.613Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="秒杀"><a href="#秒杀" class="headerlink" title="秒杀"></a>秒杀</h1><p>1.index.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;iPhoneXsMAX !!!  1元秒杀！！！&lt;/h1&gt;&lt;form id=&quot;msform&quot; action=&quot;$&#123;pageContext.request.contextPath&#125;/doseckill&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;    &lt;input type=&quot;hidden&quot; id=&quot;prodid&quot; name=&quot;prodid&quot; value=&quot;0101&quot;&gt;    &lt;input type=&quot;button&quot;  id=&quot;miaosha_btn&quot; name=&quot;seckill_btn&quot; value=&quot;秒杀点我&quot;/&gt;&lt;/form&gt;&lt;/body&gt;&lt;script  type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.request.contextPath&#125;/script/jquery/jquery-3.1.0.js&quot;&gt;&lt;/script&gt;&lt;script  type=&quot;text/javascript&quot;&gt;$(function()&#123;    $(&quot;#miaosha_btn&quot;).click(function()&#123;             var url=$(&quot;#msform&quot;).attr(&quot;action&quot;);         $.post(url,$(&quot;#msform&quot;).serialize(),function(data)&#123;            if(data==&quot;false&quot;)&#123;                alert(&quot;抢光了&quot; );                $(&quot;#miaosha_btn&quot;).attr(&quot;disabled&quot;,true);            &#125;        &#125; );        &#125;)&#125;)&lt;/script&gt;&lt;/html&gt;</code></pre><p>2.SeckillServlet.java</p><pre><code>public class SeckillServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;           /**     * @see HttpServlet#HttpServlet()     */    public SecKillServlet() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    /**     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)     */    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;        // TODO Auto-generated method stub         String userid = new Random().nextInt(50000) +&quot;&quot; ;         String prodid =request.getParameter(&quot;prodid&quot;);                boolean if_success=SecKill_redis.doSecKill(userid,prodid);         response.getWriter().print(if_success);    &#125;&#125;</code></pre><p>3.Seckill_redis.java</p><pre><code>public class SecKill_redis &#123;        private static final  org.slf4j.Logger logger =LoggerFactory.getLogger(SecKill_redis.class) ;    public static void main(String[] args) &#123;          Jedis jedis =new Jedis(&quot;192.168.223.132&quot;,6379);                System.out.println(jedis.ping());             jedis.close();    &#125;        public static boolean doSecKill(String uid,String prodid) throws IOException &#123;                //拼接key        String kcKey = &quot;Seckill:&quot; + prodid + &quot;:kc&quot;;        String userKey = &quot;Seckill:&quot; + prodid + &quot;:user&quot;;                Jedis jedis = new Jedis(&quot;192.168.223.132&quot;, 6379);        //监视库存        jedis.watch(kcKey);        //获取库存        String kc = jedis.get(kcKey);                //秒杀还没开始，表示为库存为null        if(kc == null) &#123;            System.out.println(&quot;秒杀还没开始&quot;);            jedis.close();            return false;        &#125;                //已经秒杀成功，表示为存储uid的set中已经有该用户uid        if(jedis.sismember(userKey, uid)) &#123;            System.out.println(&quot;已经秒杀成功，不能重复秒杀&quot;);            jedis.close();            return false;        &#125;                //判断库存，若大于0，则减库存，加人，若小于等于0，秒杀结束        if(Integer.parseInt(kc) &lt;= 0) &#123;            System.out.println(&quot;秒杀已结束&quot;);            jedis.close();            return false;        &#125;                //库存大于0，减库存，加人        Transaction transaction = jedis.multi();                transaction.decr(kcKey);        transaction.sadd(userKey, uid);                List&lt;Object&gt; exec = transaction.exec();                if(exec == null || exec.size() == 0) &#123;            System.out.println(&quot;秒杀失败&quot;);            jedis.close();            return false;        &#125;                System.out.println(&quot;秒杀成功&quot;);        jedis.close();        return true;    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;秒杀&quot;&gt;&lt;a href=&quot;#秒杀&quot; class=&quot;headerlink&quot; title=&quot;秒杀&quot;&gt;&lt;/a&gt;秒杀&lt;/h1&gt;&lt;p&gt;1.index.jsp&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;%@ page language=&amp;quot;java&amp;quot; conte</summary>
+      
+    
+    
+    
+    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
+    
+    <category term="秒杀" scheme="http://example.com/categories/Redis/%E7%A7%92%E6%9D%80/"/>
+    
+    
+    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
+    
+    <category term="秒杀" scheme="http://example.com/tags/%E7%A7%92%E6%9D%80/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis | 事务</title>
@@ -601,38 +630,6 @@ class Singleton&amp;#123;
     <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="找出字符串中出现次数最多的字符" scheme="http://example.com/tags/%E6%89%BE%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MyBatis | 多对一查询自定义映射</title>
-    <link href="http://example.com/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/"/>
-    <id>http://example.com/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/</id>
-    <published>2022-04-03T09:38:59.000Z</published>
-    <updated>2022-04-03T09:44:07.024Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="多对一查询自定义映射"><a href="#多对一查询自定义映射" class="headerlink" title="多对一查询自定义映射"></a>多对一查询自定义映射</h1><p>1.项目目录<br><img src="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/1.PNG"><br>2.Emp.java</p><pre><code>package com.atguigu.bean;public class Emp &#123;    private Integer eid;    private String ename;    private Integer age;    private String sex;    private Dept dept;            public Dept getDept() &#123;        return dept;    &#125;    public void setDept(Dept dept) &#123;        this.dept = dept;    &#125;    public Integer getEid() &#123;        return eid;    &#125;    public void setEid(Integer eid) &#123;        this.eid = eid;    &#125;    public String getEname() &#123;        return ename;    &#125;    public void setEname(String ename) &#123;        this.ename = ename;    &#125;    public Integer getAge() &#123;        return age;    &#125;    public void setAge(Integer age) &#123;        this.age = age;    &#125;    public String getSex() &#123;        return sex;    &#125;    public void setSex(String sex) &#123;        this.sex = sex;    &#125;        @Override    public String toString() &#123;        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, dept=&quot; + dept + &quot;]&quot;;    &#125;    public Emp(Integer eid, String ename, Integer age, String sex) &#123;        super();        this.eid = eid;        this.ename = ename;        this.age = age;        this.sex = sex;    &#125;    public Emp() &#123;        super();        // TODO Auto-generated constructor stub    &#125;&#125;</code></pre><p>3.Dept.java</p><pre><code>package com.atguigu.bean;public class Dept &#123;    private Integer did;    private String dname;    public Integer getDid() &#123;        return did;    &#125;    public void setDid(Integer did) &#123;        this.did = did;    &#125;    public String getDname() &#123;        return dname;    &#125;    public void setDname(String dname) &#123;        this.dname = dname;    &#125;    @Override    public String toString() &#123;        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;]&quot;;    &#125;    &#125;</code></pre><p>4.EmpDeptMapper.java</p><pre><code>package com.atguigu.mapper;import java.util.List;import com.atguigu.bean.Emp;public interface EmpDeptMapper &#123;    List&lt;Emp&gt; getAllEmp();&#125;</code></pre><p>5.EmpDeptMapper.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.mapper.EmpDeptMapper&quot;&gt;        &lt;!-- &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did                    查询结果：            [Emp [eid=1, ename=张三, age=12, sex=男, dept=null],             不能够查询出员工所对应的部门，需要进行自定义映射            &lt;/select&gt; --&gt;        &lt;!-- 自定义映射-第一种方式 --&gt;    &lt;!-- &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;        &lt;result column=&quot;did&quot; property=&quot;dept.did&quot;/&gt;        &lt;result column=&quot;dname&quot; property=&quot;dept.dname&quot;/&gt;    &lt;/resultMap&gt; --&gt;    &lt;!--        &lt;resultMap&gt;:自定义映射，处理复杂的表关系        &lt;id/&gt;:设置主键的映射关系，column设置字段名，property设置属性名        &lt;result/&gt;:设置非主键的映射关系， column设置字段名，property设置属性名     --&gt;          &lt;!-- 自定义映射-第二种方式 --&gt;     &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;        &lt;association property=&quot;dept&quot; javaType=&quot;Dept&quot;&gt;            &lt;id column=&quot;did&quot; property=&quot;did&quot;/&gt;            &lt;result column=&quot;dname&quot; property=&quot;dname&quot;/&gt;        &lt;/association&gt;     &lt;/resultMap&gt;        &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;    &lt;select id=&quot;getAllEmp&quot; resultMap=&quot;empMap&quot;&gt;        &lt;!-- select * from emp e, dept d where e.did = d.did --&gt;        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did    &lt;/select&gt;&lt;/mapper&gt;</code></pre><p>6.TestEmpDept.java</p><pre><code>package com.atguigu.test;import java.io.IOException;import java.io.InputStream;import java.util.List;import org.apache.ibatis.io.Resources;import org.apache.ibatis.session.SqlSession;import org.apache.ibatis.session.SqlSessionFactory;import org.apache.ibatis.session.SqlSessionFactoryBuilder;import com.atguigu.bean.Emp;import com.atguigu.mapper.EmpDeptMapper;public class TestEmpDept &#123;    public static void main(String[] args) throws IOException &#123;        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);        SqlSession sqlSession = sqlSessionFactory.openSession(true);        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);                List&lt;Emp&gt; empList = mapper.getAllEmp();        System.out.println(empList);    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;多对一查询自定义映射&quot;&gt;&lt;a href=&quot;#多对一查询自定义映射&quot; class=&quot;headerlink&quot; title=&quot;多对一查询自定义映射&quot;&gt;&lt;/a&gt;多对一查询自定义映射&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/04/03/%E5%A4</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
-    
-    <category term="多对一查询自定义映射" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/"/>
-    
-    
-    <category term="MyBatis" scheme="http://example.com/tags/MyBatis/"/>
-    
-    <category term="自定义映射" scheme="http://example.com/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/"/>
     
   </entry>
   
