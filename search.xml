@@ -4536,175 +4536,6 @@ SELECT * FROM dept RIGHT OUTER JOIN emp ON emp.`dept_id`=dept.`id` AND emp.`gend
       </tags>
   </entry>
   <entry>
-    <title>SSM | 修改</title>
-    <url>/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;展示员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table&gt;
-        &lt;tr&gt;
-            &lt;th&gt;EID&lt;/th&gt;
-            &lt;th&gt;ENAME&lt;/th&gt;
-            &lt;th&gt;AGE&lt;/th&gt;
-            &lt;th&gt;SEX&lt;/th&gt;
-            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
-            &lt;th&gt;OPTIONS&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
-                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-        &lt;tr&gt;
-            &lt;td colspan=&quot;10&quot;&gt;
-                $&#123;page&#125;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>2.update.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;修改员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
-        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
-        &lt;form:hidden path=&quot;eid&quot;/&gt;
-        &lt;table&gt;
-            &lt;tr&gt;
-                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;ENAME&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;ename&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;AGE&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;age&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;sex&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;DEPARTMENT&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td colspan=&quot;2&quot;&gt;
-                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/form:form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3.EmpController.java</p>
-<pre><code>@Controller
-public class EmpController &#123;
-
-    @Autowired
-    private EmpService service;
-    
-    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
-    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
-        //要修改的员工信息
-        Emp emp = service.getEmpByEid(eid);
-        
-        //所有的部门信息
-        List&lt;Dept&gt; deptList = service.getAllDept();
-        
-        //获取存储性别的map集合
-        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
-        sex.put(&quot;0&quot;, &quot;女&quot;);
-        sex.put(&quot;1&quot;, &quot;男&quot;);
-        
-        map.put(&quot;emp&quot;, emp);
-        map.put(&quot;deptList&quot;, deptList);
-        map.put(&quot;sex&quot;, sex);
-        
-        return &quot;update&quot;;
-    &#125;
-    
-    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
-    public String updateEmp(Emp emp)&#123;
-        service.updateEmp(emp);
-        return &quot;redirect:/emps/1&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>4.EmpService.java</p>
-<pre><code>public interface EmpService &#123;
-    ......
-    
-    List&lt;Dept&gt; getAllDept();
-&#125;
-</code></pre>
-<p>5.EmpServiceImpl.java</p>
-<pre><code>@Service
-public class EmpServiceImpl implements EmpService&#123;
-    @Autowired
-    private EmpMapper empMapper;
-    
-    @Autowired
-    private DeptMapper deptMapper;
-    
-    ......
-    
-    @Override
-    public List&lt;Dept&gt; getAllDept() &#123;
-        // TODO Auto-generated method stub
-        return deptMapper.getAllDept();
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>修改</category>
-      </categories>
-      <tags>
-        <tag>SSM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SSM | 列表及分页</title>
     <url>/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="列表及分页"><a href="#列表及分页" class="headerlink" title="列表及分页"></a>列表及分页</h1><p>1.index.jsp(请求)</p>
@@ -5043,6 +4874,175 @@ public interface DeptMapper &#123;
       <tags>
         <tag>SSM</tag>
         <tag>分页</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSM | 修改</title>
+    <url>/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;展示员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;th&gt;EID&lt;/th&gt;
+            &lt;th&gt;ENAME&lt;/th&gt;
+            &lt;th&gt;AGE&lt;/th&gt;
+            &lt;th&gt;SEX&lt;/th&gt;
+            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
+            &lt;th&gt;OPTIONS&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
+                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+        &lt;tr&gt;
+            &lt;td colspan=&quot;10&quot;&gt;
+                $&#123;page&#125;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.update.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;修改员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
+        &lt;form:hidden path=&quot;eid&quot;/&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;ENAME&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;ename&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;AGE&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;age&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;sex&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;DEPARTMENT&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td colspan=&quot;2&quot;&gt;
+                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.EmpController.java</p>
+<pre><code>@Controller
+public class EmpController &#123;
+
+    @Autowired
+    private EmpService service;
+    
+    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
+    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
+        //要修改的员工信息
+        Emp emp = service.getEmpByEid(eid);
+        
+        //所有的部门信息
+        List&lt;Dept&gt; deptList = service.getAllDept();
+        
+        //获取存储性别的map集合
+        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
+        sex.put(&quot;0&quot;, &quot;女&quot;);
+        sex.put(&quot;1&quot;, &quot;男&quot;);
+        
+        map.put(&quot;emp&quot;, emp);
+        map.put(&quot;deptList&quot;, deptList);
+        map.put(&quot;sex&quot;, sex);
+        
+        return &quot;update&quot;;
+    &#125;
+    
+    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
+    public String updateEmp(Emp emp)&#123;
+        service.updateEmp(emp);
+        return &quot;redirect:/emps/1&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.EmpService.java</p>
+<pre><code>public interface EmpService &#123;
+    ......
+    
+    List&lt;Dept&gt; getAllDept();
+&#125;
+</code></pre>
+<p>5.EmpServiceImpl.java</p>
+<pre><code>@Service
+public class EmpServiceImpl implements EmpService&#123;
+    @Autowired
+    private EmpMapper empMapper;
+    
+    @Autowired
+    private DeptMapper deptMapper;
+    
+    ......
+    
+    @Override
+    public List&lt;Dept&gt; getAllDept() &#123;
+        // TODO Auto-generated method stub
+        return deptMapper.getAllDept();
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>修改</category>
+      </categories>
+      <tags>
+        <tag>SSM</tag>
       </tags>
   </entry>
   <entry>
@@ -12725,211 +12725,6 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | 使用filter解决项目编码问题</title>
-    <url>/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="使用filter解决项目编码问题"><a href="#使用filter解决项目编码问题" class="headerlink" title="使用filter解决项目编码问题"></a>使用filter解决项目编码问题</h1><p>在开发JavaWeb项目时，前端的编码使用的时utf-8编码方式，服务器端使用的是ISO-8859-1编码方式，故在开发中会出现乱码。</p>
-<h2 id="解决方案（使用filter）"><a href="#解决方案（使用filter）" class="headerlink" title="解决方案（使用filter）"></a>解决方案（使用filter）</h2><p>实现EncodingFilter来解决项目乱码问题</p>
-<p><strong>乱码情形举例：</strong></p>
-<ol>
-<li>写一个b.html文件</li>
-</ol>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;/filtertest/demox?username=张三&quot;&gt;向服务器发送请求&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<ol start="2">
-<li>再写一个servlet处理请求</li>
-</ol>
-<pre><code>package com.oracle.servlet;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-public class DemoxServlet extends HttpServlet &#123;
-    private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        String username = request.getParameter(&quot;username&quot;);
-        System.out.println(username);
-        
-        response.getWriter().println(&quot;王五&quot;);
-    &#125;
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        doGet(request, response);
-    &#125;
-&#125;
-</code></pre>
-<ol start="3">
-<li>servlet写到浏览器的内容和servlet从浏览器接收到的请求数据会出现乱码<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/1.PNG"><br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/2.PNG"></li>
-</ol>
-<p><strong>EncodingFilter:</strong></p>
-<pre><code>package com.oracle.filter;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-/**
- * 统一编码
- * @author Administrator
- *
- */
-public class EncodingFilter implements Filter &#123;
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException &#123;
-        // TODO Auto-generated method stub
-
-    &#125;
-
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException &#123;
-        //1.强转
-        HttpServletRequest request=(HttpServletRequest) req;
-        HttpServletResponse response=(HttpServletResponse) resp;
-        response.setContentType(&quot;text/html;charset=utf-8&quot;);
-        //2.放行
-        chain.doFilter(new MyRequest(request), response);
-    &#125;
-
-    @Override
-    public void destroy() &#123;
-        // TODO Auto-generated method stub
-
-    &#125;
-
-&#125;
-class MyRequest extends HttpServletRequestWrapper&#123;
-    private HttpServletRequest request;
-    private boolean flag=true;
-    
-    
-    public MyRequest(HttpServletRequest request) &#123;
-        super(request);
-        this.request=request;
-    &#125;
-    
-    @Override
-    public String getParameter(String name) &#123;  
-        if(name==null || name.trim().length()==0)&#123;
-            return null;
-        &#125;
-        String[] values = getParameterValues(name);
-        if(values==null || values.length==0)&#123;
-            return null;
-        &#125;
-        
-        return values[0];
-    &#125;
-    
-    @Override
-    /**
-     * hobby=[eat,drink]
-     */
-    public String[] getParameterValues(String name) &#123;
-        if(name==null || name.trim().length()==0)&#123;
-            return null;
-        &#125;
-        Map&lt;String, String[]&gt; map = getParameterMap();
-        if(map==null || map.size()==0)&#123;
-            return null;
-        &#125;
-        
-        return map.get(name);
-    &#125;
-    
-    @Override
-    /**
-     * map&#123; username=[tom],password=[123],hobby=[eat,drink]&#125;
-     */
-    public Map&lt;String,String[]&gt; getParameterMap() &#123;  
-        
-        /**
-         * 首先判断请求方式
-         * 若为post  request.setchar...(utf-8)
-         * 若为get 将map中的值遍历编码就可以了
-         */
-        String method = request.getMethod();
-        if(&quot;post&quot;.equalsIgnoreCase(method))&#123;
-            try &#123;
-                request.setCharacterEncoding(&quot;utf-8&quot;);
-                return request.getParameterMap();
-            &#125; catch (UnsupportedEncodingException e) &#123;
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            &#125;
-        &#125;else if(&quot;get&quot;.equalsIgnoreCase(method))&#123;
-            Map&lt;String,String[]&gt; map = request.getParameterMap();
-            if(flag)&#123;
-                for (String key:map.keySet()) &#123;
-                    String[] arr = map.get(key);
-                    //继续遍历数组
-                    for(int i=0;i&lt;arr.length;i++)&#123;
-                        //编码
-                        try &#123;
-                            arr[i]=new String(arr[i].getBytes(&quot;iso8859-1&quot;),&quot;utf-8&quot;);
-                        &#125; catch (UnsupportedEncodingException e) &#123;
-                            e.printStackTrace();
-                        &#125;
-                    &#125;
-                &#125;
-                flag=false;
-            &#125;
-            //需要遍历map 修改value的每一个数据的编码
-            
-            return map;
-        &#125;
-        
-        return super.getParameterMap();
-    &#125;
-    
-&#125;
-</code></pre>
-<p><strong>配置web.xml文件:</strong></p>
-<pre><code>&lt;!-- 配置项目编码 --&gt;
-  &lt;filter&gt;
-    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;com.oracle.filter.EncodingFilter&lt;/filter-class&gt;
-  &lt;/filter&gt;
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>filter</category>
-        <category>filter解决项目编码问题</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>filter</tag>
-        <tag>解决项目编码问题</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | 使用jsp查询所有商品案例实现</title>
     <url>/2022/01/11/%E4%BD%BF%E7%94%A8jsp%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%95%86%E5%93%81%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="使用jsp查询所有商品案例实现"><a href="#使用jsp查询所有商品案例实现" class="headerlink" title="使用jsp查询所有商品案例实现"></a>使用jsp查询所有商品案例实现</h1><ol>
@@ -13343,6 +13138,211 @@ wb.save(&quot;资料单（每日）-更改后.xlsx&quot;)
       <tags>
         <tag>python</tag>
         <tag>openpyxl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb项目开发 | 使用filter解决项目编码问题</title>
+    <url>/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="使用filter解决项目编码问题"><a href="#使用filter解决项目编码问题" class="headerlink" title="使用filter解决项目编码问题"></a>使用filter解决项目编码问题</h1><p>在开发JavaWeb项目时，前端的编码使用的时utf-8编码方式，服务器端使用的是ISO-8859-1编码方式，故在开发中会出现乱码。</p>
+<h2 id="解决方案（使用filter）"><a href="#解决方案（使用filter）" class="headerlink" title="解决方案（使用filter）"></a>解决方案（使用filter）</h2><p>实现EncodingFilter来解决项目乱码问题</p>
+<p><strong>乱码情形举例：</strong></p>
+<ol>
+<li>写一个b.html文件</li>
+</ol>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;/filtertest/demox?username=张三&quot;&gt;向服务器发送请求&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
+<li>再写一个servlet处理请求</li>
+</ol>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DemoxServlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        String username = request.getParameter(&quot;username&quot;);
+        System.out.println(username);
+        
+        response.getWriter().println(&quot;王五&quot;);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>servlet写到浏览器的内容和servlet从浏览器接收到的请求数据会出现乱码<br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/1.PNG"><br><img src="/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/2.PNG"></li>
+</ol>
+<p><strong>EncodingFilter:</strong></p>
+<pre><code>package com.oracle.filter;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+/**
+ * 统一编码
+ * @author Administrator
+ *
+ */
+public class EncodingFilter implements Filter &#123;
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException &#123;
+        // TODO Auto-generated method stub
+
+    &#125;
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException &#123;
+        //1.强转
+        HttpServletRequest request=(HttpServletRequest) req;
+        HttpServletResponse response=(HttpServletResponse) resp;
+        response.setContentType(&quot;text/html;charset=utf-8&quot;);
+        //2.放行
+        chain.doFilter(new MyRequest(request), response);
+    &#125;
+
+    @Override
+    public void destroy() &#123;
+        // TODO Auto-generated method stub
+
+    &#125;
+
+&#125;
+class MyRequest extends HttpServletRequestWrapper&#123;
+    private HttpServletRequest request;
+    private boolean flag=true;
+    
+    
+    public MyRequest(HttpServletRequest request) &#123;
+        super(request);
+        this.request=request;
+    &#125;
+    
+    @Override
+    public String getParameter(String name) &#123;  
+        if(name==null || name.trim().length()==0)&#123;
+            return null;
+        &#125;
+        String[] values = getParameterValues(name);
+        if(values==null || values.length==0)&#123;
+            return null;
+        &#125;
+        
+        return values[0];
+    &#125;
+    
+    @Override
+    /**
+     * hobby=[eat,drink]
+     */
+    public String[] getParameterValues(String name) &#123;
+        if(name==null || name.trim().length()==0)&#123;
+            return null;
+        &#125;
+        Map&lt;String, String[]&gt; map = getParameterMap();
+        if(map==null || map.size()==0)&#123;
+            return null;
+        &#125;
+        
+        return map.get(name);
+    &#125;
+    
+    @Override
+    /**
+     * map&#123; username=[tom],password=[123],hobby=[eat,drink]&#125;
+     */
+    public Map&lt;String,String[]&gt; getParameterMap() &#123;  
+        
+        /**
+         * 首先判断请求方式
+         * 若为post  request.setchar...(utf-8)
+         * 若为get 将map中的值遍历编码就可以了
+         */
+        String method = request.getMethod();
+        if(&quot;post&quot;.equalsIgnoreCase(method))&#123;
+            try &#123;
+                request.setCharacterEncoding(&quot;utf-8&quot;);
+                return request.getParameterMap();
+            &#125; catch (UnsupportedEncodingException e) &#123;
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            &#125;
+        &#125;else if(&quot;get&quot;.equalsIgnoreCase(method))&#123;
+            Map&lt;String,String[]&gt; map = request.getParameterMap();
+            if(flag)&#123;
+                for (String key:map.keySet()) &#123;
+                    String[] arr = map.get(key);
+                    //继续遍历数组
+                    for(int i=0;i&lt;arr.length;i++)&#123;
+                        //编码
+                        try &#123;
+                            arr[i]=new String(arr[i].getBytes(&quot;iso8859-1&quot;),&quot;utf-8&quot;);
+                        &#125; catch (UnsupportedEncodingException e) &#123;
+                            e.printStackTrace();
+                        &#125;
+                    &#125;
+                &#125;
+                flag=false;
+            &#125;
+            //需要遍历map 修改value的每一个数据的编码
+            
+            return map;
+        &#125;
+        
+        return super.getParameterMap();
+    &#125;
+    
+&#125;
+</code></pre>
+<p><strong>配置web.xml文件:</strong></p>
+<pre><code>&lt;!-- 配置项目编码 --&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;com.oracle.filter.EncodingFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;EncodingFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>filter</category>
+        <category>filter解决项目编码问题</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>filter</tag>
+        <tag>解决项目编码问题</tag>
       </tags>
   </entry>
   <entry>
@@ -15710,6 +15710,70 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>Java | 反射</title>
+    <url>/2022/04/18/%E5%8F%8D%E5%B0%84/</url>
+    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>反射</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>反射</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 反转字符串</title>
+    <url>/2021/08/29/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<h1 id="344-反转字符串"><a href="#344-反转字符串" class="headerlink" title="344.反转字符串"></a>344.反转字符串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。<br>不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。<br>你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。</p>
+<span id="more"></span>
+<p>示例 1：<br>输入：[“h”,”e”,”l”,”l”,”o”]<br>输出：[“o”,”l”,”l”,”e”,”h”]</p>
+<p><a href="https://leetcode-cn.com/problems/reverse-string">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.字符串切片 —&gt; reversString()<br>2.使用list.reverse()方法 —&gt; reversString1()<br>3.使用reversed()函数 —&gt; reversString2()<br>4.使用栈 —&gt; reversString3()<br>将s列表看作一个栈，低端作为栈底，高端作为栈顶，依次将栈顶元素出栈即可。<br>5.for —&gt; reversString4()<br>将列表中的第i个元素与倒数第i个元素交换（0&lt; i &lt; len(s)//2）<br>6.递归 —&gt; reversString5()</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
+    def reverseString(self, s):
+        &quot;&quot;&quot;
+        :type s: List[str]
+        :rtype: None Do not return anything, modify s in-place instead.
+        &quot;&quot;&quot;
+        return s[::-1]
+
+    def reverseString1(self, s):
+        s.reverse()
+
+    def reverseString2(self, s):
+        s[:] = list(reversed(s))
+
+    def reverseString3(self, s):
+        result = list()
+
+        while len(s) &gt; 0:
+            result.append(s.pop())
+
+        s[:] = result
+
+    def reverseString4(self, s):
+        for i in range(len(s)//2):
+            s[i], s[len(s) - i - 1] = s[len(s) - i - 1], s[i]
+
+    # def reverseString5(self, s):
+    #     if len(s) &lt; 1:
+    #         return s
+    #     return self.reverseString4(s[1:]) + s[0]
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>单例模式 | 双重检验锁方式实现单例模式</title>
     <url>/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><a href>参考资料</a></p>
@@ -15782,70 +15846,6 @@ public class MyThread extends Thread&#123;
         <tag>设计模式</tag>
         <tag>单例模式</tag>
         <tag>双重检验锁方式实现单例模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java | 反射</title>
-    <url>/2022/04/18/%E5%8F%8D%E5%B0%84/</url>
-    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>反射</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>反射</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 反转字符串</title>
-    <url>/2021/08/29/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
-    <content><![CDATA[<h1 id="344-反转字符串"><a href="#344-反转字符串" class="headerlink" title="344.反转字符串"></a>344.反转字符串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。<br>不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。<br>你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。</p>
-<span id="more"></span>
-<p>示例 1：<br>输入：[“h”,”e”,”l”,”l”,”o”]<br>输出：[“o”,”l”,”l”,”e”,”h”]</p>
-<p><a href="https://leetcode-cn.com/problems/reverse-string">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.字符串切片 —&gt; reversString()<br>2.使用list.reverse()方法 —&gt; reversString1()<br>3.使用reversed()函数 —&gt; reversString2()<br>4.使用栈 —&gt; reversString3()<br>将s列表看作一个栈，低端作为栈底，高端作为栈顶，依次将栈顶元素出栈即可。<br>5.for —&gt; reversString4()<br>将列表中的第i个元素与倒数第i个元素交换（0&lt; i &lt; len(s)//2）<br>6.递归 —&gt; reversString5()</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def reverseString(self, s):
-        &quot;&quot;&quot;
-        :type s: List[str]
-        :rtype: None Do not return anything, modify s in-place instead.
-        &quot;&quot;&quot;
-        return s[::-1]
-
-    def reverseString1(self, s):
-        s.reverse()
-
-    def reverseString2(self, s):
-        s[:] = list(reversed(s))
-
-    def reverseString3(self, s):
-        result = list()
-
-        while len(s) &gt; 0:
-            result.append(s.pop())
-
-        s[:] = result
-
-    def reverseString4(self, s):
-        for i in range(len(s)//2):
-            s[i], s[len(s) - i - 1] = s[len(s) - i - 1], s[i]
-
-    # def reverseString5(self, s):
-    #     if len(s) &lt; 1:
-    #         return s
-    #     return self.reverseString4(s[1:]) + s[0]
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -22400,148 +22400,6 @@ excel_app.Quit()
       </tags>
   </entry>
   <entry>
-    <title>spring | 注入方式</title>
-    <url>/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="依赖注入的两种方式"><a href="#依赖注入的两种方式" class="headerlink" title="依赖注入的两种方式"></a>依赖注入的两种方式</h1><ol>
-<li>通过bean的setXxx()方法赋值</li>
-<li>通过bean的构造器赋值<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2></li>
-<li>项目目录<br><img src="/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/1.PNG"></li>
-</ol>
-<p>2.创建Student.java</p>
-<pre><code>package com.atguigu.spring.di;
-
-public class Student &#123;
-    private Integer id;
-    private String name;
-    private Integer age;
-    private String sex;
-    private Double score;
-    public Double getScore() &#123;
-        return score;
-    &#125;
-    public void setScore(Double score) &#123;
-        this.score = score;
-    &#125;
-    public Integer getId() &#123;
-        return id;
-    &#125;
-    public void setId(Integer id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    @Override
-    public String toString() &#123;
-        return &quot;Student [id=&quot; + id + &quot;, name=&quot; + name + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, score=&quot; + score + &quot;]&quot;;
-    &#125;
-    public Student() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    public Student(Integer id, String name, Integer age, String sex) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-    &#125;
-    
-    public Student(Integer id, String name, Double score, String sex)&#123;
-        this.id = id;
-        this.name = name;
-        this.score = score;
-        this.sex = sex;
-    &#125;
-&#125;
-</code></pre>
-<p>3.创建beans-di.xml配置文件</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;s1&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过set方法注入 --&gt;
-        &lt;property name=&quot;id&quot; value=&quot;10010&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;age&quot; value=&quot;23&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-        
-    &lt;bean id=&quot;s2&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过构造方法注入 --&gt;
-        &lt;constructor-arg value=&quot;10086&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;李四&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;24&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
-    &lt;/bean&gt;
-    
-    &lt;bean id=&quot;s3&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过构造方法注入 --&gt;
-        &lt;constructor-arg value=&quot;10022&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;王五&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;90&quot; index=&quot;2&quot; type=&quot;java.lang.Double&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- Namespaces勾选p（beans标签会增加内容xmlns:p=&quot;http://www.springframework.org/schema/p&quot;） --&gt;
-    &lt;bean id=&quot;s4&quot; class=&quot;com.atguigu.spring.di.Student&quot; p:id=&quot;10033&quot; p:name=&quot;赵六&quot; p:age=&quot;26&quot; p:sex=&quot;男&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>4.编写测试类</p>
-<pre><code>package com.atguigu.spring.di;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-
-    public static void main(String[] args) &#123;
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;beans-di.xml&quot;);
-        
-        Student s1 = ac.getBean(&quot;s1&quot;, Student.class);
-        Student s2 = ac.getBean(&quot;s2&quot;, Student.class);
-        Student s3 = ac.getBean(&quot;s3&quot;, Student.class);
-        Student s4 = ac.getBean(&quot;s4&quot;, Student.class);
-        System.out.println(s1);
-        System.out.println(s2);
-        System.out.println(s3);
-        System.out.println(s4);
-    &#125;
-
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>依赖注入</category>
-        <category>依赖注入的两种方式</category>
-      </categories>
-      <tags>
-        <tag>p命名空间</tag>
-        <tag>依赖注入的两种方式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | 注册功能实现</title>
     <url>/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="注册功能实现"><a href="#注册功能实现" class="headerlink" title="注册功能实现"></a>注册功能实现</h1><ol>
@@ -22894,6 +22752,148 @@ public class User &#123;
       <tags>
         <tag>Java</tag>
         <tag>注册</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>spring | 注入方式</title>
+    <url>/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="依赖注入的两种方式"><a href="#依赖注入的两种方式" class="headerlink" title="依赖注入的两种方式"></a>依赖注入的两种方式</h1><ol>
+<li>通过bean的setXxx()方法赋值</li>
+<li>通过bean的构造器赋值<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2></li>
+<li>项目目录<br><img src="/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/1.PNG"></li>
+</ol>
+<p>2.创建Student.java</p>
+<pre><code>package com.atguigu.spring.di;
+
+public class Student &#123;
+    private Integer id;
+    private String name;
+    private Integer age;
+    private String sex;
+    private Double score;
+    public Double getScore() &#123;
+        return score;
+    &#125;
+    public void setScore(Double score) &#123;
+        this.score = score;
+    &#125;
+    public Integer getId() &#123;
+        return id;
+    &#125;
+    public void setId(Integer id) &#123;
+        this.id = id;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    
+    @Override
+    public String toString() &#123;
+        return &quot;Student [id=&quot; + id + &quot;, name=&quot; + name + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, score=&quot; + score + &quot;]&quot;;
+    &#125;
+    public Student() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    public Student(Integer id, String name, Integer age, String sex) &#123;
+        super();
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    &#125;
+    
+    public Student(Integer id, String name, Double score, String sex)&#123;
+        this.id = id;
+        this.name = name;
+        this.score = score;
+        this.sex = sex;
+    &#125;
+&#125;
+</code></pre>
+<p>3.创建beans-di.xml配置文件</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+
+    &lt;bean id=&quot;s1&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
+        &lt;!-- 通过set方法注入 --&gt;
+        &lt;property name=&quot;id&quot; value=&quot;10010&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;age&quot; value=&quot;23&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+        
+    &lt;bean id=&quot;s2&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
+        &lt;!-- 通过构造方法注入 --&gt;
+        &lt;constructor-arg value=&quot;10086&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;constructor-arg value=&quot;李四&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;constructor-arg value=&quot;24&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
+    &lt;/bean&gt;
+    
+    &lt;bean id=&quot;s3&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
+        &lt;!-- 通过构造方法注入 --&gt;
+        &lt;constructor-arg value=&quot;10022&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;constructor-arg value=&quot;王五&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;constructor-arg value=&quot;90&quot; index=&quot;2&quot; type=&quot;java.lang.Double&quot;&gt;&lt;/constructor-arg&gt;
+        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Namespaces勾选p（beans标签会增加内容xmlns:p=&quot;http://www.springframework.org/schema/p&quot;） --&gt;
+    &lt;bean id=&quot;s4&quot; class=&quot;com.atguigu.spring.di.Student&quot; p:id=&quot;10033&quot; p:name=&quot;赵六&quot; p:age=&quot;26&quot; p:sex=&quot;男&quot;&gt;&lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>4.编写测试类</p>
+<pre><code>package com.atguigu.spring.di;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+
+    public static void main(String[] args) &#123;
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;beans-di.xml&quot;);
+        
+        Student s1 = ac.getBean(&quot;s1&quot;, Student.class);
+        Student s2 = ac.getBean(&quot;s2&quot;, Student.class);
+        Student s3 = ac.getBean(&quot;s3&quot;, Student.class);
+        Student s4 = ac.getBean(&quot;s4&quot;, Student.class);
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
+        System.out.println(s4);
+    &#125;
+
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>依赖注入</category>
+        <category>依赖注入的两种方式</category>
+      </categories>
+      <tags>
+        <tag>p命名空间</tag>
+        <tag>依赖注入的两种方式</tag>
       </tags>
   </entry>
   <entry>
@@ -26119,74 +26119,6 @@ doc.save(&quot;收货记录-整理.docx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>win32com | 识别加密word文件</title>
-    <url>/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="识别加密word文件"><a href="#识别加密word文件" class="headerlink" title="识别加密word文件"></a>识别加密word文件</h1><p>Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。<br>因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。<br>如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。</p>
-<span id="more"></span>
-<p>实现代码：</p>
-<pre><code>from win32com import client as wc  # 导入模块
-
-file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;
-word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
-doc = word.Documents.Open(file)  # 打开word文件
-doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
-doc.Close()  # 关闭原来word文件
-word.Quit()
-
-# 增加异常处理语句
-import shutil  # 用于操作文件和文件夹
-from win32com import client as wc
-
-file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;
-try:
-    word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
-    doc = word.Documents.Open(file)  # 打开word文件
-    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
-    doc.Close()  # 关闭原来word文件
-    word.Quit()
-except:
-    # 将有密码的文件移动到专门的文件夹
-    shutil.move(file, r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\有密码文件&quot;)
-    print(f&quot;已移动加密文件 &#123;file&#125;&quot;)
-
-# #文件有“打开密码”的情况
-# import docx
-# doc = docx.Document(&#39;docx文件\\报告-有打开密码.docx&#39;)
-# PackageNotFoundError: Package not found at &#39;docx文件\报告-有打开密码.docx&#39;
-
-# 文件有“修改密码”的情况
-import docx
-
-doc = docx.Document(&#39;docx文件\\报告-有修改密码.docx&#39;)
-p = doc.paragraphs[0]
-pNew = p.insert_paragraph_before()
-run = pNew.add_run(&quot;测试&quot;)
-doc.save(&quot;docx文件\\报告-有修改密码.docx&quot;)
-
-import docx
-import shutil
-file = &quot;docx文件\\报告-有打开密码.docx&quot;
-try:
-    doc = docx.Document(file)
-    pass
-except:
-    shutil.move(file, &#39;有密码文件&#39;)
-    print(f&quot;已移动加密文件 &#123;file&#125; 到指定文件夹&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>win32com</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>win32com</tag>
-        <tag>python-docx</tag>
-        <tag>shutil</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>wordcloud | 词云</title>
     <url>/2021/10/28/%E8%AF%8D%E4%BA%91/</url>
     <content><![CDATA[<h1 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h1><p>根据文章中的关键词的词频生成词云图。</p>
@@ -26514,6 +26446,74 @@ public void cart(HttpServletRequest request, HttpServletResponse response) &#123
         <tag>JavaWeb</tag>
         <tag>基于JavaWeb的网上购物商城</tag>
         <tag>购物车</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32com | 识别加密word文件</title>
+    <url>/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="识别加密word文件"><a href="#识别加密word文件" class="headerlink" title="识别加密word文件"></a>识别加密word文件</h1><p>Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。<br>因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。<br>如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。</p>
+<span id="more"></span>
+<p>实现代码：</p>
+<pre><code>from win32com import client as wc  # 导入模块
+
+file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;
+word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
+doc = word.Documents.Open(file)  # 打开word文件
+doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
+doc.Close()  # 关闭原来word文件
+word.Quit()
+
+# 增加异常处理语句
+import shutil  # 用于操作文件和文件夹
+from win32com import client as wc
+
+file = r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\doc文件\\测试-有打开密码.doc&quot;
+try:
+    word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
+    doc = word.Documents.Open(file)  # 打开word文件
+    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
+    doc.Close()  # 关闭原来word文件
+    word.Quit()
+except:
+    # 将有密码的文件移动到专门的文件夹
+    shutil.move(file, r&quot;C:\Users\dywei\python\python_excel\实例65_Python区分出加密的word文件\有密码文件&quot;)
+    print(f&quot;已移动加密文件 &#123;file&#125;&quot;)
+
+# #文件有“打开密码”的情况
+# import docx
+# doc = docx.Document(&#39;docx文件\\报告-有打开密码.docx&#39;)
+# PackageNotFoundError: Package not found at &#39;docx文件\报告-有打开密码.docx&#39;
+
+# 文件有“修改密码”的情况
+import docx
+
+doc = docx.Document(&#39;docx文件\\报告-有修改密码.docx&#39;)
+p = doc.paragraphs[0]
+pNew = p.insert_paragraph_before()
+run = pNew.add_run(&quot;测试&quot;)
+doc.save(&quot;docx文件\\报告-有修改密码.docx&quot;)
+
+import docx
+import shutil
+file = &quot;docx文件\\报告-有打开密码.docx&quot;
+try:
+    doc = docx.Document(file)
+    pass
+except:
+    shutil.move(file, &#39;有密码文件&#39;)
+    print(f&quot;已移动加密文件 &#123;file&#125; 到指定文件夹&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>win32com</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>win32com</tag>
+        <tag>python-docx</tag>
+        <tag>shutil</tag>
       </tags>
   </entry>
   <entry>
