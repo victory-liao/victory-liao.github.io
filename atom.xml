@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-09T12:00:11.595Z</updated>
+  <updated>2022-05-12T06:53:19.933Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis | 持久化方式</title>
+    <link href="http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/"/>
+    <id>http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/</id>
+    <published>2022-05-09T13:45:48.000Z</published>
+    <updated>2022-05-12T06:53:19.933Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Redis持久化方式"><a href="#Redis持久化方式" class="headerlink" title="Redis持久化方式"></a>Redis持久化方式</h1><p>1.两个不同形式得持久化方式<br>RDB(Redis DataBase)<br>AOF(Append Of File)<br>2.RDB<br>2.1RDB<br>在指定的时间间隔内将内存中的数据集快照(Snapshot)写入磁盘,恢复时将快照文件直接读到内存中。<br>2.2备份<br>Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO操作的，这就确保了极高的性能；<br>2.3适用<br>大规模数据的恢复且对于数据恢复的完整性不是非常敏感<br>2.4优点<br>1）节省磁盘空间<br>2）恢复速度快<br>2.5缺点<br>1）虽然Redis在fork时使用了写时拷贝技术,但是如果数据庞大时还是比较消耗性能。<br>2）在备份周期在一定间隔时间做一次备份，所以如果Redis意外down掉的话，就会丢失最后一次快照后的所有修改。<br>3.AOF<br>3.1AOF<br>以日志的形式来记录每个写操作，将Redis执行过的所有写指令记录下来(读操作不记录)，只许追加文件但不可以改写文件，Redis启动之初会读取该文件重新构建数据，换言之，Redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。<br>3.2AOF同步频率设置：<br>1）始终同步<br>2）每秒同步<br>3）不主动进行同步<br>3.3Rewrite:<br>AOF采用文件追加方式，文件会越来越大为避免出现此种情况，新增了重写机制,当AOF文件的大小超过所设定的阈值时，Redis就会启动AOF文件的内容压缩，只保留可以恢复数据的最小指令集.可以使用命令bgrewriteaof。<br><em>如何实现重写？</em><br>AOF文件持续增长而过大时，会fork出一条新进程来将文件重写(也是先写临时文件最后再rename)，遍历新进程的内存中数据，每条记录有一条的Set语句。重写aof文件的操作，并没有读取旧的aof文件，而是<strong>将整个内存中的数据库内容用命令的方式重写了一个新的aof文件</strong>，这点和快照有点类似。<br><strong>何时重写</strong><br>系统载入时或者上次重写完毕时，Redis会记录此时AOF大小，设为base_size,如果Redis的AOF当前大小&gt;= base_size +base_size*100% (默认)或当前大小&gt;=64mb(默认)的情况下，Redis会对AOF进行重写。<br>3.4AOF的优点：<br>1）备份机制更稳健，丢失数据概率更低。<br>2）可读的日志文本，通过操作AOF文件，可以处理误操作。<br>3.5AOF的缺点：<br>1）比起RDB占用更多的磁盘空间。<br>2）恢复备份速度要慢。<br>3）每次读写都同步的话，有一定的性能压力。<br>4）存在个别Bug，造成不能恢复。<br><strong>注意：</strong><br>1）AOF和RDB同时开启，系统默认取AOF的数据<br>2）推荐AOF和RDB都使用<br>3）如果对数据不敏感，可以选单独用RDB<br>4）不建议单独用 AOF，因为可能会出现Bug<br>5）如果只是做纯内存缓存，可以都不用</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Redis持久化方式&quot;&gt;&lt;a href=&quot;#Redis持久化方式&quot; class=&quot;headerlink&quot; title=&quot;Redis持久化方式&quot;&gt;&lt;/a&gt;Redis持久化方式&lt;/h1&gt;&lt;p&gt;1.两个不同形式得持久化方式&lt;br&gt;RDB(Redis DataBase)&lt;</summary>
+      
+    
+    
+    
+    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
+    
+    <category term="持久化方式" scheme="http://example.com/categories/Redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/"/>
+    
+    
+    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
+    
+    <category term="持久化方式" scheme="http://example.com/tags/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis | 秒杀</title>
@@ -597,36 +625,6 @@ class Singleton&amp;#123;
     <category term="分步查询" scheme="http://example.com/tags/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2/"/>
     
     <category term="分步查询延迟加载" scheme="http://example.com/tags/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python | 统计字符串中各个字符出现的次数并返回出现次数最多的字符</title>
-    <link href="http://example.com/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/"/>
-    <id>http://example.com/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/</id>
-    <published>2022-04-06T00:50:00.000Z</published>
-    <updated>2022-04-06T01:04:22.628Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="找出字符串中出现次数最多的字符"><a href="#找出字符串中出现次数最多的字符" class="headerlink" title="找出字符串中出现次数最多的字符"></a>找出字符串中出现次数最多的字符</h1><pre><code>string = &quot;abcdaab&quot;word_frequency = dict()for ch in string:    if ch not in word_frequency.keys():        word_frequency[ch] = 1    else:        word_frequency[ch] += 1print(word_frequency)print(max(word_frequency, key=word_frequency.get))</code></pre><p><a href="https://blog.csdn.net/weixin_42444693/article/details/104203479?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&utm_relevant_index=1">参考资料</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;找出字符串中出现次数最多的字符&quot;&gt;&lt;a href=&quot;#找出字符串中出现次数最多的字符&quot; class=&quot;headerlink&quot; title=&quot;找出字符串中出现次数最多的字符&quot;&gt;&lt;/a&gt;找出字符串中出现次数最多的字符&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;string = &amp;</summary>
-      
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="找出字符串中出现次数最多的字符" scheme="http://example.com/categories/python/%E5%9F%BA%E7%A1%80/%E6%89%BE%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="找出字符串中出现次数最多的字符" scheme="http://example.com/tags/%E6%89%BE%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/"/>
     
   </entry>
   
