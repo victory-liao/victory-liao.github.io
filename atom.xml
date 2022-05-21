@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-16T06:28:15.976Z</updated>
+  <updated>2022-05-21T04:50:47.892Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis | 集群搭建</title>
+    <link href="http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/>
+    <id>http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</id>
+    <published>2022-05-21T04:19:56.000Z</published>
+    <updated>2022-05-21T04:50:47.892Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6379.pid&quot;port 6379dbfilename &quot;dump6379.rdb&quot;cluster-enabled yescluster-config-file nodes-6379.confcluster-node-timeout 15000</code></pre><p>(2)redis6380.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6380.pid&quot;port 6380dbfilename &quot;dump6380.rdb&quot;cluster-enabled yescluster-config-file nodes-6380.confcluster-node-timeout 15000</code></pre><p>(3)redis6381.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6381.pid&quot;port 6381dbfilename &quot;dump6381.rdb&quot;cluster-enabled yescluster-config-file nodes-6381.confcluster-node-timeout 15000</code></pre><p>(4)redis6389.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6389.pid&quot;port 6389dbfilename &quot;dump6389.rdb&quot;cluster-enabled yescluster-config-file nodes-6389.confcluster-node-timeout 15000</code></pre><p>(5)redis6390.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6390.pid&quot;port 6390dbfilename &quot;dump6390.rdb&quot;cluster-enabled yescluster-config-file nodes-6390.confcluster-node-timeout 15000</code></pre><p>(6)redis6391.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6391.pid&quot;port 6391dbfilename &quot;dump6391.rdb&quot;cluster-enabled yescluster-config-file nodes-6391.confcluster-node-timeout 15000</code></pre><p>5.启动所有redis实例，nodes-xxxx.conf文件都生成正常。<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/1.PNG"><br>6.将六个实例组合到一个集群当中</p><pre><code>redis-cli --cluster create 192.168.1.108:6379 192.168.1.108:6380 192.168.1.108:6381 192.168.1.108:6389 192.168.1.108:6390 192.168.1.108:6391 --cluster-replicas 1</code></pre><p>7.启动客户端并查看集群<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/2.PNG"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Redis集群搭建&quot;&gt;&lt;a href=&quot;#Redis集群搭建&quot; class=&quot;headerlink&quot; title=&quot;Redis集群搭建&quot;&gt;&lt;/a&gt;Redis集群搭建&lt;/h1&gt;&lt;p&gt;1.下载Redis并将redis放到linux目录/opt下&lt;br&gt;2.在opt下创</summary>
+      
+    
+    
+    
+    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
+    
+    <category term="集群搭建" scheme="http://example.com/categories/Redis/%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/>
+    
+    
+    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
+    
+    <category term="集群" scheme="http://example.com/tags/%E9%9B%86%E7%BE%A4/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis | 关闭服务报错</title>
@@ -580,36 +608,6 @@ class Singleton&amp;#123;
     
     
     <category term="逆向工程" scheme="http://example.com/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MyBatis | 缓存</title>
-    <link href="http://example.com/2022/04/14/mybatis%E7%BC%93%E5%AD%98/"/>
-    <id>http://example.com/2022/04/14/mybatis%E7%BC%93%E5%AD%98/</id>
-    <published>2022-04-14T11:39:49.000Z</published>
-    <updated>2022-04-14T11:51:36.732Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><p>mybatis中的一级缓存默认开启，是SqlSession级别的，即同一个SqlSession对于一个SQL语句执行之后就会存储在缓存中，<br>下次执行相同的sql，直接从缓存中取。<br><strong>一级缓存失效的几种情况：</strong><br>（1）不同的SqlSession对应不同的一级缓存<br>（2）同一个SqlSession但是查询条件不同<br>（3）同一个SqlSession两次查询期间执行了任何一次增删改操作，会自动将缓存清空<br>（4）同一个SqlSession两次查询期间手动清空了缓存</p><h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h2><p>mybatis的二级缓存默认不开启，需要设置：<br>1）全局配置文件中开启二级缓存<setting name="cacheEnabled" value="true"><br>2）需要使用二级缓存的映射文件处使用cache配置缓存<cache><br>3）POJO需要实现Serializable接口<br>注意：二级缓存在 SqlSession 关闭或提交之后才会生效<br>1)全局setting的cacheEnable：<br>配置二级缓存的开关，一级缓存一直是打开的。<br>2)select标签的useCache属性：<br>配置这个select是否使用二级缓存。一级缓存一直是使用的<br>3)sql标签的flushCache属性：<br>增删改默认flushCache=true。sql执行以后，会同时清空一级和二级缓存。<br>查询默认 flushCache=false。<br>4)sqlSession.clearCache()：只是用来清除一级缓存。</cache></setting></p><span id="more"></span><p>1.项目目录<br><img src="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/1.PNG"><br>2.EmpMapper.java</p><pre><code>public interface EmpMapper &#123;    .....        //添加员工信息，将0|1--&gt;女|男    void insertEmp(Emp emp);        //根据eid所组成的字符串进行批量删除    void deleteMoreEmp(String eids);     //test cache    //根据eid查询员工信息    Emp getEmpByEid(String eid);&#125;</code></pre><p>3.EmpMapper.xml</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.mapper.EmpMapper&quot;&gt;    &lt;!-- 第三方缓存 --&gt;    &lt;cache type=&quot;org.mybatis.caches.ehcache.EhcacheCache&quot;/&gt;         &lt;!-- Emp getEmpByEid(String eid); --&gt;     &lt;!--        useCache:配置这个select是否使用二级缓存       --&gt;     &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot; useCache=&quot;true&quot;&gt;        &lt;include refid=&quot;empColumns&quot;&gt;&lt;/include&gt; where eid=#&#123;eid&#125;     &lt;/select&gt;&lt;/mapper&gt;</code></pre><p>4.TestCache.java</p><pre><code>package com.atguigu.test;import java.io.InputStream;import org.apache.ibatis.io.Resources;import org.apache.ibatis.session.SqlSession;import org.apache.ibatis.session.SqlSessionFactory;import org.apache.ibatis.session.SqlSessionFactoryBuilder;import org.junit.Test;import com.atguigu.bean.Emp;import com.atguigu.mapper.EmpMapper;public class TestCache &#123;    @Test    public void testFirstCache() throws Exception&#123;        //测试一级缓存        //同一个SqlSession//        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();//        SqlSession sqlSession = sqlSessionFactory.openSession(true);//        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);//        Emp emp1 = mapper.getEmpByEid(&quot;8&quot;);//        System.out.println(emp1);//        System.out.println(&quot;===================&quot;);//        Emp emp2 = mapper.getEmpByEid(&quot;8&quot;);//        System.out.println(emp2);        //        DEBUG 04-14 16:23:56,710 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid=?   (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:23:56,726 ==&gt; Parameters: 8(String)  (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:23:56,738 &lt;==      Total: 1  (BaseJdbcLogger.java:145) //        Emp [eid=8, ename=小红, age=11, sex=0, dept=null]//        ===================//        Emp [eid=8, ename=小红, age=11, sex=0, dept=null]                        //不同SqlSession//        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();//        SqlSession sqlSession1 = sqlSessionFactory.openSession(true);//        EmpMapper mapper1 = sqlSession1.getMapper(EmpMapper.class);//        Emp emp1 = mapper1.getEmpByEid(&quot;8&quot;);//        System.out.println(emp1);//        //        System.out.println(&quot;===================&quot;);//        //        SqlSession sqlSession2 = sqlSessionFactory.openSession(true);//        EmpMapper mapper2 = sqlSession2.getMapper(EmpMapper.class);//        Emp emp2 = mapper2.getEmpByEid(&quot;8&quot;);//        System.out.println(emp2);        //        DEBUG 04-14 16:26:44,934 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid=?   (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:26:44,950 ==&gt; Parameters: 8(String)  (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:26:44,961 &lt;==      Total: 1  (BaseJdbcLogger.java:145) //        Emp [eid=8, ename=小红, age=11, sex=0, dept=null]//        ===================//        DEBUG 04-14 16:26:44,966 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid=?   (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:26:44,966 ==&gt; Parameters: 8(String)  (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:26:44,967 &lt;==      Total: 1  (BaseJdbcLogger.java:145) //        Emp [eid=8, ename=小红, age=11, sex=0, dept=null]                //同一个SqlSession两次查询期间执行了任何一次增删改操作        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();        SqlSession sqlSession1 = sqlSessionFactory.openSession(true);        EmpMapper mapper1 = sqlSession1.getMapper(EmpMapper.class);        Emp emp1 = mapper1.getEmpByEid(&quot;8&quot;);        System.out.println(emp1);                sqlSession1.clearCache();        System.out.println(&quot;===================&quot;);//        Emp emp = new Emp();//        emp.setEid(null);//        emp.setAge(25);//        emp.setEname(&quot;lisi&quot;);//        mapper1.insertEmp(emp);                EmpMapper mapper2 = sqlSession1.getMapper(EmpMapper.class);        Emp emp2 = mapper2.getEmpByEid(&quot;8&quot;);        System.out.println(emp2);//        DEBUG 04-14 16:39:56,334 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid=?   (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:39:56,350 ==&gt; Parameters: 8(String)  (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:39:56,361 &lt;==      Total: 1  (BaseJdbcLogger.java:145) //        Emp [eid=8, ename=小红, age=11, sex=0, dept=null]//        ===================//        DEBUG 04-14 16:39:56,362 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid=?   (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:39:56,363 ==&gt; Parameters: 8(String)  (BaseJdbcLogger.java:145) //        DEBUG 04-14 16:39:56,364 &lt;==      Total: 1  (BaseJdbcLogger.java:145) //        Emp [eid=8, ename=小红, age=11, sex=0, dept=null]    &#125;        @Test    public void testSecondCache() throws Exception&#123;                SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();        SqlSession sqlSession = sqlSessionFactory.openSession(true);        EmpMapper mapper1 = sqlSession.getMapper(EmpMapper.class);        Emp emp1 = mapper1.getEmpByEid(&quot;8&quot;);        System.out.println(emp1);        sqlSession.commit();//二级缓存在 SqlSession 关闭或提交之后才会生效        System.out.println(&quot;====================&quot;);        EmpMapper mapper2 = sqlSession.getMapper(EmpMapper.class);        Emp emp2 = mapper2.getEmpByEid(&quot;8&quot;);        System.out.println(emp2);    &#125;        public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);        return sqlSessionFactory;    &#125;&#125;</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;缓存&quot;&gt;&lt;a href=&quot;#缓存&quot; class=&quot;headerlink&quot; title=&quot;缓存&quot;&gt;&lt;/a&gt;缓存&lt;/h1&gt;&lt;h2 id=&quot;一级缓存&quot;&gt;&lt;a href=&quot;#一级缓存&quot; class=&quot;headerlink&quot; title=&quot;一级缓存&quot;&gt;&lt;/a&gt;一级缓存&lt;/h2&gt;&lt;p&gt;mybatis中的一级缓存默认开启，是SqlSession级别的，即同一个SqlSession对于一个SQL语句执行之后就会存储在缓存中，&lt;br&gt;下次执行相同的sql，直接从缓存中取。&lt;br&gt;&lt;strong&gt;一级缓存失效的几种情况：&lt;/strong&gt;&lt;br&gt;（1）不同的SqlSession对应不同的一级缓存&lt;br&gt;（2）同一个SqlSession但是查询条件不同&lt;br&gt;（3）同一个SqlSession两次查询期间执行了任何一次增删改操作，会自动将缓存清空&lt;br&gt;（4）同一个SqlSession两次查询期间手动清空了缓存&lt;/p&gt;
-&lt;h2 id=&quot;二级缓存&quot;&gt;&lt;a href=&quot;#二级缓存&quot; class=&quot;headerlink&quot; title=&quot;二级缓存&quot;&gt;&lt;/a&gt;二级缓存&lt;/h2&gt;&lt;p&gt;mybatis的二级缓存默认不开启，需要设置：&lt;br&gt;1）全局配置文件中开启二级缓存&lt;setting name=&quot;cacheEnabled&quot; value=&quot;true&quot;&gt;&lt;br&gt;2）需要使用二级缓存的映射文件处使用cache配置缓存&lt;cache&gt;&lt;br&gt;3）POJO需要实现Serializable接口&lt;br&gt;注意：二级缓存在 SqlSession 关闭或提交之后才会生效&lt;br&gt;1)全局setting的cacheEnable：&lt;br&gt;配置二级缓存的开关，一级缓存一直是打开的。&lt;br&gt;2)select标签的useCache属性：&lt;br&gt;配置这个select是否使用二级缓存。一级缓存一直是使用的&lt;br&gt;3)sql标签的flushCache属性：&lt;br&gt;增删改默认flushCache=true。sql执行以后，会同时清空一级和二级缓存。&lt;br&gt;查询默认 flushCache=false。&lt;br&gt;4)sqlSession.clearCache()：只是用来清除一级缓存。&lt;/cache&gt;&lt;/setting&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
-    
-    <category term="缓存" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E7%BC%93%E5%AD%98/"/>
-    
-    
-    <category term="MyBatis" scheme="http://example.com/tags/MyBatis/"/>
-    
-    <category term="缓存" scheme="http://example.com/tags/%E7%BC%93%E5%AD%98/"/>
     
   </entry>
   
