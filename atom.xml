@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-21T04:50:47.892Z</updated>
+  <updated>2022-05-22T04:19:41.080Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis | 缓存和数据库的一致性问题</title>
+    <link href="http://example.com/2022/05/21/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/2022/05/21/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/</id>
+    <published>2022-05-22T04:15:47.000Z</published>
+    <updated>2022-05-22T04:19:41.080Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="缓存和数据库的一致性问题"><a href="#缓存和数据库的一致性问题" class="headerlink" title="缓存和数据库的一致性问题"></a>缓存和数据库的一致性问题</h1><p>1、想要提高应用的性能，可以引入「缓存」来解决<br>2、引入缓存后，需要考虑缓存和数据库一致性问题，可选的方案有：「更新数据库 + 更新缓存」、「更新数据库 + 删除缓存」<br>3、更新数据库 + 更新缓存方案，在「并发」场景下无法保证缓存和数据一致性，且存在「缓存资源浪费」和「机器性能浪费」的情况发生<br>4、在更新数据库 + 删除缓存的方案中，「先删除缓存，再更新数据库」在「并发」场景下依旧有数据不一致问题，解决方案是「延迟双删」，但这个延迟时间很难评估，所以推荐用「先更新数据库，再删除缓存」的方案<br>5、在「先更新数据库，再删除缓存」方案下，为了保证两步都成功执行，需配合「消息队列」或「订阅变更日志」的方案来做，本质是通过「重试」的方式保证数据一致性<br>6、在「先更新数据库，再删除缓存」方案下，「读写分离 + 主从库延迟」也会导致缓存和数据库不一致，缓解此问题的方案是「延迟双删」，凭借经验发送「延迟消息」到队列中，延迟删除缓存，同时也要控制主从库延迟，尽可能降低不一致发生的概率<br><a href="https://mp.weixin.qq.com/s?__biz=MzIyOTYxNDI5OA==&mid=2247487312&idx=1&sn=fa19566f5729d6598155b5c676eee62d&chksm=e8beb8e5dfc931f3e35655da9da0b61c79f2843101c130cf38996446975014f958a6481aacf1&scene=178&cur_album_id=1699766580538032128#rd">参考资料</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;缓存和数据库的一致性问题&quot;&gt;&lt;a href=&quot;#缓存和数据库的一致性问题&quot; class=&quot;headerlink&quot; title=&quot;缓存和数据库的一致性问题&quot;&gt;&lt;/a&gt;缓存和数据库的一致性问题&lt;/h1&gt;&lt;p&gt;1、想要提高应用的性能，可以引入「缓存」来解决&lt;br&gt;2、引</summary>
+      
+    
+    
+    
+    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
+    
+    <category term="缓存和数据库的一致性问题" scheme="http://example.com/categories/Redis/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/"/>
+    
+    
+    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis | 集群搭建</title>
@@ -578,36 +604,6 @@ class Singleton&amp;#123;
     <category term="分页插件PageHelper" scheme="http://example.com/tags/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper/"/>
     
     <category term="PageHelper模拟分页" scheme="http://example.com/tags/PageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MyBatis | 逆向工程</title>
-    <link href="http://example.com/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"/>
-    <id>http://example.com/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/</id>
-    <published>2022-04-17T02:04:43.000Z</published>
-    <updated>2022-04-17T02:11:11.920Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="逆向工程"><a href="#逆向工程" class="headerlink" title="逆向工程"></a>逆向工程</h1><p>1.项目目录<br><img src="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/1.PNG"><br>2.导入逆向工程的jar包</p><pre><code>mybatis-generator-core-1.3.2.jar</code></pre><p>3.编写MBG的配置文件</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE generatorConfiguration  PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;  &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;&lt;generatorConfiguration&gt;  &lt;context id=&quot;DB2Tables&quot; targetRuntime=&quot;MyBatis3&quot;&gt;    &lt;!-- 设置连接数据库的信息 --&gt;    &lt;jdbcConnection driverClass=&quot;com.mysql.jdbc.Driver&quot;        connectionURL=&quot;jdbc:mysql://localhost:3306/ssm&quot;        userId=&quot;root&quot;        password=&quot;root&quot;&gt;    &lt;/jdbcConnection&gt;    &lt;javaTypeResolver &gt;      &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot; /&gt;    &lt;/javaTypeResolver&gt;    &lt;!-- javabean的生成策略 --&gt;    &lt;javaModelGenerator targetPackage=&quot;com.atguigu.bean&quot; targetProject=&quot;.\src&quot;&gt;      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;      &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot; /&gt;    &lt;/javaModelGenerator&gt;    &lt;!-- 映射文件的生成策略 --&gt;    &lt;sqlMapGenerator targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\conf&quot;&gt;      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;    &lt;/sqlMapGenerator&gt;    &lt;!-- mapper接口的生成策略 --&gt;    &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\src&quot;&gt;      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;    &lt;/javaClientGenerator&gt;    &lt;!-- 设置要将数据库中的哪张表逆向生成哪一个javabean --&gt;    &lt;table tableName=&quot;emp&quot; domainObjectName=&quot;Emp&quot;&gt;&lt;/table&gt;    &lt;table tableName=&quot;dept&quot; domainObjectName=&quot;Dept&quot;&gt;&lt;/table&gt;  &lt;/context&gt;&lt;/generatorConfiguration&gt;</code></pre><p>4.运行代码生成器生成代码</p><pre><code>@Testpublic void testMBG() throws Exception &#123;   List&lt;String&gt; warnings = new ArrayList&lt;String&gt;();   boolean overwrite = true;   File configFile = new File(&quot;mbg.xml&quot;);   ConfigurationParser cp = new ConfigurationParser(warnings);   Configuration config = cp.parseConfiguration(configFile);   DefaultShellCallback callback = new DefaultShellCallback(overwrite);   MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);   myBatisGenerator.generate(null);&#125;</code></pre><p>5.逆向工程的使用<br>基本查询与带条件查询测试</p><pre><code>@Test    public void testCRUD() throws Exception&#123;        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();        SqlSession sqlSession = sqlSessionFactory.openSession(true);        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);        //        Emp emp = mapper.selectByPrimaryKey(2);//        System.out.println(emp);                EmpExample example = new EmpExample();                Criteria c1 = example.createCriteria();        c1.andEnameLike(&quot;%a%&quot;);        c1.andSexEqualTo(&quot;1&quot;);                Criteria c2 = example.createCriteria();        c2.andDidEqualTo(2);                example.or(c2);                List&lt;Emp&gt; list = mapper.selectByExample(example);        for (Emp emp : list) &#123;            System.out.println(emp);        &#125;                //查询全部//        List&lt;Emp&gt; list1 = mapper.selectByExample(null);//        for (Emp emp : list1) &#123;//            System.out.println(emp);//        &#125;    &#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;逆向工程&quot;&gt;&lt;a href=&quot;#逆向工程&quot; class=&quot;headerlink&quot; title=&quot;逆向工程&quot;&gt;&lt;/a&gt;逆向工程&lt;/h1&gt;&lt;p&gt;1.项目目录&lt;br&gt;&lt;img src=&quot;/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="MyBatis" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/"/>
-    
-    <category term="逆向工程" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"/>
-    
-    
-    <category term="逆向工程" scheme="http://example.com/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
