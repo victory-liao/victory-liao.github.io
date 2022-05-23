@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-22T09:33:41.628Z</updated>
+  <updated>2022-05-23T02:59:57.500Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>并发 | 上下文切换和死锁</title>
+    <link href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/"/>
+    <id>http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</id>
+    <published>2022-05-23T02:37:08.000Z</published>
+    <updated>2022-05-23T02:59:57.500Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="上下文切换和死锁"><a href="#上下文切换和死锁" class="headerlink" title="上下文切换和死锁"></a>上下文切换和死锁</h1><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，再切换前会保存上一个任务的<br>状态，以便切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。频繁的上下文<br>切换会影响多线程的执行速度。</p><h2 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h2><p>（1）无锁并发编程。多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁（如采用分段锁，不同的线程处理不同段的数据）<br>（2）CAS算法。<br>（3）使用最小线程。避免创建不需要的线程（任务很少，创建了很多线程，造成大量线程阻塞等待）</p><h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的条件"><a href="#死锁产生的条件" class="headerlink" title="死锁产生的条件"></a>死锁产生的条件</h3><p>（1）互斥。一个资源同一时刻只能被一个线程拥有。<br>（2）请求和保持。线程在请求新的资源时，不释放已经拥有的资源。<br>（3）不剥夺条件。进程所获得的资源在未使用完之前，不被其他的线程强行剥夺。<br>（4）循环等待。竞争资源的各个线程形成一个线程等待环路。</p><h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><p>破坏产生死锁的条件：<br>（2）在进程开始执行时就申请他所需的全部资源<br>（3）一个进程不能获得所需要的全部资源时便处于等待状态，等待期间他占有的资源将被隐式的释放重新加入到系统的资源列表中<br>，可以被其他的进程使用，而等待的进程只有重新获得自己原有的资源以及新申请的资源才可以重新启动、执行。<br>（4）资源有序分配（银行家算法）</p><h3 id="死锁Demo"><a href="#死锁Demo" class="headerlink" title="死锁Demo"></a>死锁Demo</h3><pre><code>package concurrency;public class DeadLockDemo &#123;    private static String A = &quot;A&quot;;    private static String B = &quot;B&quot;;        public static void main(String[] args) &#123;        new DeadLockDemo().deadLock();    &#125;        private void deadLock()&#123;        Thread t1 = new Thread(new Runnable()&#123;            @Override            public void run()&#123;                synchronized(A)&#123;                    try &#123;                        Thread.currentThread().sleep(2000);                    &#125; catch (InterruptedException e) &#123;                        e.printStackTrace();                    &#125;                    synchronized(B)&#123;                        System.out.println(&quot;1&quot;);                    &#125;                &#125;            &#125;        &#125;);                Thread t2 = new Thread(new Runnable()&#123;            @Override            public void run() &#123;                synchronized(B)&#123;                    synchronized(A)&#123;                        System.out.println(&quot;2&quot;);                    &#125;                &#125;            &#125;        &#125;);                t1.start();        t2.start();    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;上下文切换和死锁&quot;&gt;&lt;a href=&quot;#上下文切换和死锁&quot; class=&quot;headerlink&quot; title=&quot;上下文切换和死锁&quot;&gt;&lt;/a&gt;上下文切换和死锁&lt;/h1&gt;&lt;h2 id=&quot;上下文切换&quot;&gt;&lt;a href=&quot;#上下文切换&quot; class=&quot;headerlink</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="上下文切换" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="死锁" scheme="http://example.com/tags/%E6%AD%BB%E9%94%81/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis | 面试题目</title>
@@ -563,39 +595,6 @@ class Singleton&amp;#123;
     
     
     <category term="SSM" scheme="http://example.com/tags/SSM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSM | 列表及分页</title>
-    <link href="http://example.com/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/"/>
-    <id>http://example.com/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/</id>
-    <published>2022-04-18T08:50:35.000Z</published>
-    <updated>2022-04-18T09:16:01.226Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="列表及分页"><a href="#列表及分页" class="headerlink" title="列表及分页"></a>列表及分页</h1><p>1.index.jsp(请求)</p><pre><code>......&lt;a href=&quot;emps/1&quot;&gt;展示员工信息&lt;/a&gt;......</code></pre><span id="more"></span><p>2.PageUtil.java</p><pre><code>package com.atguigu.ssm.util;import javax.servlet.http.HttpServlet;import javax.servlet.http.HttpServletRequest;import com.atguigu.ssm.bean.Emp;import com.github.pagehelper.PageInfo;/** * 首页 上一页 1 2 3 4 5 下一页 末页 */public class PageUtil &#123;    public static String getPageInfo(PageInfo&lt;?&gt; pageInfo, HttpServletRequest request)&#123;        String path = request.getContextPath() + &quot;/&quot;;                StringBuilder builder = new StringBuilder();                //拼接首页        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/1&#39;&gt;首页&lt;/a&gt;&quot;);        builder.append(&quot;&amp;nbsp;&quot;);                //拼接上一页        if(pageInfo.isHasPreviousPage())&#123;            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPrePage()+&quot;&#39;&gt;上一页 &lt;/a&gt;&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;else&#123;            builder.append(&quot;上一页&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;                //拼接页码        int[] nums = pageInfo.getNavigatepageNums();        for(int i : nums)&#123;            if(i == pageInfo.getPageNum())&#123;                builder.append(&quot;&lt;a style=&#39;color:red;&#39; href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);                builder.append(&quot;&amp;nbsp;&quot;);            &#125;else&#123;                builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);                builder.append(&quot;&amp;nbsp;&quot;);            &#125;        &#125;                //拼接下一页        if(pageInfo.isHasNextPage())&#123;            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getNextPage()+&quot;&#39;&gt;下一页&lt;/a&gt;&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;else&#123;            builder.append(&quot;下一页&quot;);            builder.append(&quot;&amp;nbsp;&quot;);        &#125;                //拼接尾页        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPages()+&quot;&#39;&gt;尾页&lt;/a&gt;&quot;);        builder.append(&quot;&amp;nbsp;&quot;);                return builder.toString();    &#125;&#125;</code></pre><p>3.EmpController.java</p><pre><code>package com.atguigu.ssm.controller;import java.util.List;import java.util.Map;import javax.servlet.http.HttpServletRequest;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Controller;import org.springframework.web.bind.annotation.PathVariable;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RequestMethod;import com.atguigu.ssm.bean.Emp;import com.atguigu.ssm.service.EmpService;import com.atguigu.ssm.util.PageUtil;import com.github.pagehelper.PageHelper;import com.github.pagehelper.PageInfo;@Controllerpublic class EmpController &#123;    @Autowired    private EmpService service;        @RequestMapping(value=&quot;/emps/&#123;pageNum&#125;&quot;, method=RequestMethod.GET)    public String getAllEmp(Map&lt;String, Object&gt; map, @PathVariable(&quot;pageNum&quot;)Integer pageNum, HttpServletRequest request)&#123;        PageHelper.startPage(pageNum, 1);        List&lt;Emp&gt; empList = service.getAllEmp();        PageInfo&lt;Emp&gt; pageInfo = new PageInfo&lt;&gt;(empList, 5);        String page = PageUtil.getPageInfo(pageInfo, request);        map.put(&quot;empList&quot;, empList);        map.put(&quot;page&quot;, page);        return &quot;list&quot;;    &#125;&#125;</code></pre><p>4.EmpService(Service接口)</p><pre><code>package com.atguigu.ssm.service;import java.util.List;import com.atguigu.ssm.bean.Emp;public interface EmpService &#123;    List&lt;Emp&gt; getAllEmp();        Emp getEmpByEid(String eid);        void updateEmp(Emp emp);&#125;</code></pre><p>5.EmpServiceImpl.java(Service实现类)</p><pre><code>package com.atguigu.ssm.service.impl;import java.util.List;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Service;import com.atguigu.ssm.bean.Emp;import com.atguigu.ssm.mapper.EmpMapper;import com.atguigu.ssm.service.EmpService;@Servicepublic class EmpServiceImpl implements EmpService&#123;    @Autowired    private EmpMapper mapper;    @Override    public List&lt;Emp&gt; getAllEmp() &#123;        // TODO Auto-generated method stub        return mapper.getAllEmp();    &#125;    @Override    public Emp getEmpByEid(String eid) &#123;        // TODO Auto-generated method stub        return mapper.getEmpByEid(eid);    &#125;    @Override    public void updateEmp(Emp emp) &#123;        // TODO Auto-generated method stub        mapper.updateEmp(emp);    &#125;&#125;</code></pre><p>6.Emp.java(Emp Bean)</p><pre><code>package com.atguigu.ssm.bean;public class Dept &#123;    private Integer did;    private String dname;    public Integer getDid() &#123;        return did;    &#125;    public void setDid(Integer did) &#123;        this.did = did;    &#125;    public String getDname() &#123;        return dname;    &#125;    public void setDname(String dname) &#123;        this.dname = dname;    &#125;&#125;</code></pre><p>7.Dept.java(Dept Bean)</p><pre><code>package com.atguigu.ssm.bean;public class Emp &#123;    private Integer eid;    private String ename;    private Integer age;    private String sex;    private Dept dept;    public Integer getEid() &#123;        return eid;    &#125;    public void setEid(Integer eid) &#123;        this.eid = eid;    &#125;    public String getEname() &#123;        return ename;    &#125;    public void setEname(String ename) &#123;        this.ename = ename;    &#125;    public Integer getAge() &#123;        return age;    &#125;    public void setAge(Integer age) &#123;        this.age = age;    &#125;    public String getSex() &#123;        return sex;    &#125;    public void setSex(String sex) &#123;        this.sex = sex;    &#125;    public Dept getDept() &#123;        return dept;    &#125;    public void setDept(Dept dept) &#123;        this.dept = dept;    &#125;&#125;</code></pre><p>8.EmpMapper.java(Emp Mapper接口)</p><pre><code>package com.atguigu.ssm.mapper;import java.util.List;import com.atguigu.ssm.bean.Emp;public interface EmpMapper &#123;    //获取所有的员工信息    List&lt;Emp&gt; getAllEmp();        //根据eid获取员工信息    Emp getEmpByEid(String eid);        //修改员工信息    void updateEmp(Emp emp);&#125;</code></pre><p>9.DeptMapper.java(Dept Mapper接口)</p><pre><code>package com.atguigu.ssm.mapper;import java.util.List;import com.atguigu.ssm.bean.Dept;public interface DeptMapper &#123;    //获取所有的部门信息    List&lt;Dept&gt; getAllDept();&#125;</code></pre><p>10.EmpMapper.xml(Emp映射文件)</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.ssm.mapper.EmpMapper&quot;&gt;    &lt;!--         //获取所有的员工信息        List&lt;Emp&gt; getAllEmp();     --&gt;    &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;        &lt;id column=&quot;eid&quot; property=&quot;eid&quot; /&gt;        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;        &lt;association property=&quot;dept&quot; javaType=&quot;Dept&quot;&gt;            &lt;id column=&quot;did&quot; property=&quot;did&quot;/&gt;            &lt;result column=&quot;dname&quot; property=&quot;dname&quot;/&gt;        &lt;/association&gt;    &lt;/resultMap&gt;    &lt;select id=&quot;getAllEmp&quot; resultMap=&quot;empMap&quot;&gt;        select         e.eid,e.ename,e.age,e.sex,d.did,d.dname        from emp e         left join         dept d        on         e.did = d.did    &lt;/select&gt;        &lt;!--         //根据eid获取员工信息        Emp getEmpByEid(String eid);     --&gt;    &lt;select id=&quot;getEmpByEid&quot; resultMap=&quot;empMap&quot;&gt;        select         e.eid,e.ename,e.age,e.sex,d.did,d.dname        from emp e         left join         dept d        on         e.did = d.did        where e.eid = #&#123;eid&#125;    &lt;/select&gt;        &lt;!--         //修改员工信息        void updateEmp(Emp emp);     --&gt;    &lt;update id=&quot;updateEmp&quot;&gt;        update emp set        ename = #&#123;ename&#125;,        age = #&#123;age&#125;,        sex = #&#123;sex&#125;,        did = #&#123;dept.did&#125;        where eid = #&#123;eid&#125;    &lt;/update&gt;&lt;/mapper&gt;</code></pre><p>11.DeptMapper.xml(Dept映射文件)</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt; &lt;mapper namespace=&quot;com.atguigu.ssm.mapper.DeptMapper&quot;&gt;    &lt;!--         //获取所有的部门信息        List&lt;Dept&gt; getAllDept();     --&gt;    &lt;select id=&quot;getAllDept&quot; resultType=&quot;Dept&quot;&gt;        select did,dname from dept    &lt;/select&gt;     &lt;/mapper&gt;</code></pre><p><strong>结果展示</strong><br><img src="/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/1.PNG"></p><p><img src="/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/2.PNG"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;列表及分页&quot;&gt;&lt;a href=&quot;#列表及分页&quot; class=&quot;headerlink&quot; title=&quot;列表及分页&quot;&gt;&lt;/a&gt;列表及分页&lt;/h1&gt;&lt;p&gt;1.index.jsp(请求)&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;......
-&amp;lt;a href=&amp;quot;emps/1&amp;quot;&amp;gt;展示员工信息&amp;lt;/a&amp;gt;
-......
-&lt;/code&gt;&lt;/pre&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="SSM" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SSM/"/>
-    
-    <category term="列表及分页" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SSM/%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/"/>
-    
-    
-    <category term="SSM" scheme="http://example.com/tags/SSM/"/>
-    
-    <category term="分页" scheme="http://example.com/tags/%E5%88%86%E9%A1%B5/"/>
     
   </entry>
   
