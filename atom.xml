@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-23T03:57:47.250Z</updated>
+  <updated>2022-05-24T01:02:03.770Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>并发 | volatile写读的内存语义和锁的释放获取的内存语义</title>
+    <link href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/"/>
+    <id>http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/</id>
+    <published>2022-05-23T14:02:50.000Z</published>
+    <updated>2022-05-24T01:02:03.770Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="volatile写读的内存语义和锁的释放获取的内存语义"><a href="#volatile写读的内存语义和锁的释放获取的内存语义" class="headerlink" title="volatile写读的内存语义和锁的释放获取的内存语义"></a>volatile写读的内存语义和锁的释放获取的内存语义</h1><h2 id="volatile写、读的内存语义"><a href="#volatile写、读的内存语义" class="headerlink" title="volatile写、读的内存语义"></a>volatile写、读的内存语义</h2><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量值刷新到主存。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/1.PNG"><br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/2.PNG"></p><h2 id="volatile内存语义的实现"><a href="#volatile内存语义的实现" class="headerlink" title="volatile内存语义的实现"></a>volatile内存语义的实现</h2><p>编译器生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。<br>JMM基于保守策略的JMM内存屏障插入策略如下：<br>（1）在每个volatile写操作的前面插入一个StoreStore屏障。<br>（2）在每个volatile写操作的后面插入一个StoreLoad屏障。<br>（3）在每个volatile读操作的后面插入一个LoadLoad屏障。<br>（4）在每个volatile读操作的后面插入一个LoadStore屏障。</p><h2 id="锁的释放、获取的内存语义"><a href="#锁的释放、获取的内存语义" class="headerlink" title="锁的释放、获取的内存语义"></a>锁的释放、获取的内存语义</h2><p>当线程释放锁时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存中。<br>当线程获取锁时，JMM会把该线程对应的本地内存置为无效。从而使得被监视器保护的临界区代码必须从主内存中读取共享变量。<br>注：锁释放与volatile写有相同的内存语义；锁获取与volatile读具有相同的内存语义。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;volatile写读的内存语义和锁的释放获取的内存语义&quot;&gt;&lt;a href=&quot;#volatile写读的内存语义和锁的释放获取的内存语义&quot; class=&quot;headerlink&quot; title=&quot;volatile写读的内存语义和锁的释放获取的内存语义&quot;&gt;&lt;/a&gt;volat</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="volatile写读的内存语义和锁的释放获取的内存语义" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="volatile" scheme="http://example.com/tags/volatile/"/>
+    
+    <category term="锁" scheme="http://example.com/tags/%E9%94%81/"/>
+    
+  </entry>
   
   <entry>
     <title>并发 | volatile、synchronized和原子操作</title>
@@ -572,36 +606,6 @@ class Singleton&amp;#123;
     
     
     <category term="SSM" scheme="http://example.com/tags/SSM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | 反射</title>
-    <link href="http://example.com/2022/04/18/%E5%8F%8D%E5%B0%84/"/>
-    <id>http://example.com/2022/04/18/%E5%8F%8D%E5%B0%84/</id>
-    <published>2022-04-19T00:07:36.000Z</published>
-    <updated>2022-04-19T00:13:00.590Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;反射&quot;&gt;&lt;a href=&quot;#反射&quot; class=&quot;headerlink&quot; title=&quot;反射&quot;&gt;&lt;/a&gt;反射&lt;/h1&gt;&lt;p&gt;1.反射&lt;br&gt;&lt;strong&gt;运行时分析类&lt;/strong&gt;并调用类中的属性和方法&lt;br&gt;2.反射的应用场景&lt;br&gt;（1）spring、s</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="反射" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E5%8F%8D%E5%B0%84/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="反射" scheme="http://example.com/tags/%E5%8F%8D%E5%B0%84/"/>
     
   </entry>
   
