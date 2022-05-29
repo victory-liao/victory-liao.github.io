@@ -190,6 +190,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Redis | 持久化方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-09 05:45:48" itemprop="dateCreated datePublished" datetime="2022-05-09T05:45:48-08:00">2022-05-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-11 23:03:25" itemprop="dateModified" datetime="2022-05-11T23:03:25-08:00">2022-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">持久化方式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Redis持久化方式"><a href="#Redis持久化方式" class="headerlink" title="Redis持久化方式"></a>Redis持久化方式</h1><ol>
+<li>两个不同形式得持久化方式<br>RDB(Redis DataBase)<br>AOF(Append Of File)</li>
+<li>RDB</li>
+<li>1 RDB<br>在指定的时间间隔内将内存中的数据集快照(Snapshot)写入磁盘,恢复时将快照文件直接读到内存中。</li>
+<li>2 备份<br>Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO操作的，这就确保了极高的性能；</li>
+<li>3 适用<br>大规模数据的恢复且对于数据恢复的完整性不是非常敏感</li>
+<li>4 优点<br>1）节省磁盘空间<br>2）恢复速度快</li>
+<li>5 缺点<br>1）虽然Redis在fork时使用了写时拷贝技术,但是如果数据庞大时还是比较消耗性能。<br>2）在备份周期在一定间隔时间做一次备份，所以如果Redis意外down掉的话，就会丢失最后一次快照后的所有修改。</li>
+<li>AOF</li>
+<li>1 AOF<br>以日志的形式来记录每个写操作，将Redis执行过的所有写指令记录下来(读操作不记录)，只许追加文件但不可以改写文件，Redis启动之初会读取该文件重新构建数据，换言之，Redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</li>
+<li>2 AOF同步频率设置：<br>1）始终同步<br>2）每秒同步<br>3）不主动进行同步</li>
+<li>3 Rewrite:<br>AOF采用文件追加方式，文件会越来越大为避免出现此种情况，新增了重写机制,当AOF文件的大小超过所设定的阈值时，Redis就会启动AOF文件的内容压缩，只保留可以恢复数据的最小指令集.可以使用命令bgrewriteaof。</li>
+</ol>
+<p><strong>如何实现重写？</strong><br>AOF文件持续增长而过大时，会fork出一条新进程来将文件重写(也是先写临时文件最后再rename)，遍历新进程的内存中数据，每条记录有一条的Set语句。重写aof文件的操作，并没有读取旧的aof文件，而是<strong>将整个内存中的数据库内容用命令的方式重写了一个新的aof文件</strong>，这点和快照有点类似。<br><strong>何时重写</strong><br>系统载入时或者上次重写完毕时，Redis会记录此时AOF大小，设为base_size,如果Redis的AOF当前大小&gt;= base_size +base_size*100% (默认)或当前大小&gt;=64mb(默认)的情况下，Redis会对AOF进行重写。<br>3.4 AOF的优点：<br>1）备份机制更稳健，丢失数据概率更低。<br>2）可读的日志文本，通过操作AOF文件，可以处理误操作。<br>3.5 AOF的缺点：<br>1）比起RDB占用更多的磁盘空间。<br>2）恢复备份速度要慢。<br>3）每次读写都同步的话，有一定的性能压力。<br>4）存在个别Bug，造成不能恢复。<br><strong>注意：</strong><br>1）AOF和RDB同时开启，系统默认取AOF的数据<br>2）推荐AOF和RDB都使用<br>3）如果对数据不敏感，可以选单独用RDB<br>4）不建议单独用 AOF，因为可能会出现Bug<br>5）如果只是做纯内存缓存，可以都不用</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/07/%E7%A7%92%E6%9D%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1300,240 +1391,6 @@ public class EmpController &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">SSM | 修改</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-18 17:07:54 / Modified: 17:13:39" itemprop="dateCreated datePublished" datetime="2022-04-18T17:07:54-08:00">2022-04-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/" itemprop="url" rel="index"><span itemprop="name">SSM</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/%E4%BF%AE%E6%94%B9/" itemprop="url" rel="index"><span itemprop="name">修改</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;展示员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table&gt;
-        &lt;tr&gt;
-            &lt;th&gt;EID&lt;/th&gt;
-            &lt;th&gt;ENAME&lt;/th&gt;
-            &lt;th&gt;AGE&lt;/th&gt;
-            &lt;th&gt;SEX&lt;/th&gt;
-            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
-            &lt;th&gt;OPTIONS&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
-                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-        &lt;tr&gt;
-            &lt;td colspan=&quot;10&quot;&gt;
-                $&#123;page&#125;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>2.update.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;修改员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
-        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
-        &lt;form:hidden path=&quot;eid&quot;/&gt;
-        &lt;table&gt;
-            &lt;tr&gt;
-                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;ENAME&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;ename&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;AGE&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;age&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;sex&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;DEPARTMENT&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td colspan=&quot;2&quot;&gt;
-                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/form:form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3.EmpController.java</p>
-<pre><code>@Controller
-public class EmpController &#123;
-
-    @Autowired
-    private EmpService service;
-    
-    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
-    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
-        //要修改的员工信息
-        Emp emp = service.getEmpByEid(eid);
-        
-        //所有的部门信息
-        List&lt;Dept&gt; deptList = service.getAllDept();
-        
-        //获取存储性别的map集合
-        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
-        sex.put(&quot;0&quot;, &quot;女&quot;);
-        sex.put(&quot;1&quot;, &quot;男&quot;);
-        
-        map.put(&quot;emp&quot;, emp);
-        map.put(&quot;deptList&quot;, deptList);
-        map.put(&quot;sex&quot;, sex);
-        
-        return &quot;update&quot;;
-    &#125;
-    
-    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
-    public String updateEmp(Emp emp)&#123;
-        service.updateEmp(emp);
-        return &quot;redirect:/emps/1&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>4.EmpService.java</p>
-<pre><code>public interface EmpService &#123;
-    ......
-    
-    List&lt;Dept&gt; getAllDept();
-&#125;
-</code></pre>
-<p>5.EmpServiceImpl.java</p>
-<pre><code>@Service
-public class EmpServiceImpl implements EmpService&#123;
-    @Autowired
-    private EmpMapper empMapper;
-    
-    @Autowired
-    private DeptMapper deptMapper;
-    
-    ......
-    
-    @Override
-    public List&lt;Dept&gt; getAllDept() &#123;
-        // TODO Auto-generated method stub
-        return deptMapper.getAllDept();
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1605,7 +1462,7 @@ public class EmpServiceImpl implements EmpService&#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">402</span>
+          <span class="site-state-item-count">403</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1618,7 +1475,7 @@ public class EmpServiceImpl implements EmpService&#123;
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">285</span>
+        <span class="site-state-item-count">286</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

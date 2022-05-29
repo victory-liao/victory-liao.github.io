@@ -190,6 +190,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">并发 | 等待/通知机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-05-28 23:37:56 / Modified: 23:41:50" itemprop="dateCreated datePublished" datetime="2022-05-28T23:37:56-08:00">2022-05-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p>
+<pre><code>package concurrency;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+public class WaitNotify &#123;
+    static boolean flag = true;
+    static Object lock = new Object();
+    
+    public static void main(String[] args) throws InterruptedException &#123;
+        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);
+        waitThread.start();
+        TimeUnit.SECONDS.sleep(1);
+        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);
+        notifyThread.start();
+    &#125;
+    
+    static class Wait implements Runnable&#123;
+        @Override
+        public void run()&#123;
+            //加锁，用于lock的Monitor
+            synchronized(lock)&#123;
+                //当条件不满足时，继续wait，同时释放了lock的锁
+                while(flag)&#123;
+                    try &#123;
+                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                        lock.wait();
+                    &#125; catch (InterruptedException e) &#123;
+                    &#125;
+                &#125;
+                //条件满足时，完成工作
+                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+            &#125;
+        &#125;
+    &#125;
+    
+    static class Notify implements Runnable&#123;
+        @Override
+        public void run() &#123;
+            synchronized(lock)&#123;
+                //获取lock的锁，然后进行通知，通知时不会释放lock的锁
+                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回
+                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                lock.notifyAll();
+                flag = false;
+                SleepUtils.second(5);
+            &#125;
+            
+            //再次加锁
+            synchronized(lock)&#123;
+                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                SleepUtils.second(5);
+            &#125;
+            
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1037,97 +1155,6 @@ cluster-node-timeout 15000
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Redis | 持久化方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-09 05:45:48" itemprop="dateCreated datePublished" datetime="2022-05-09T05:45:48-08:00">2022-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-11 23:03:25" itemprop="dateModified" datetime="2022-05-11T23:03:25-08:00">2022-05-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">持久化方式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis持久化方式"><a href="#Redis持久化方式" class="headerlink" title="Redis持久化方式"></a>Redis持久化方式</h1><ol>
-<li>两个不同形式得持久化方式<br>RDB(Redis DataBase)<br>AOF(Append Of File)</li>
-<li>RDB</li>
-<li>1 RDB<br>在指定的时间间隔内将内存中的数据集快照(Snapshot)写入磁盘,恢复时将快照文件直接读到内存中。</li>
-<li>2 备份<br>Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO操作的，这就确保了极高的性能；</li>
-<li>3 适用<br>大规模数据的恢复且对于数据恢复的完整性不是非常敏感</li>
-<li>4 优点<br>1）节省磁盘空间<br>2）恢复速度快</li>
-<li>5 缺点<br>1）虽然Redis在fork时使用了写时拷贝技术,但是如果数据庞大时还是比较消耗性能。<br>2）在备份周期在一定间隔时间做一次备份，所以如果Redis意外down掉的话，就会丢失最后一次快照后的所有修改。</li>
-<li>AOF</li>
-<li>1 AOF<br>以日志的形式来记录每个写操作，将Redis执行过的所有写指令记录下来(读操作不记录)，只许追加文件但不可以改写文件，Redis启动之初会读取该文件重新构建数据，换言之，Redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</li>
-<li>2 AOF同步频率设置：<br>1）始终同步<br>2）每秒同步<br>3）不主动进行同步</li>
-<li>3 Rewrite:<br>AOF采用文件追加方式，文件会越来越大为避免出现此种情况，新增了重写机制,当AOF文件的大小超过所设定的阈值时，Redis就会启动AOF文件的内容压缩，只保留可以恢复数据的最小指令集.可以使用命令bgrewriteaof。</li>
-</ol>
-<p><strong>如何实现重写？</strong><br>AOF文件持续增长而过大时，会fork出一条新进程来将文件重写(也是先写临时文件最后再rename)，遍历新进程的内存中数据，每条记录有一条的Set语句。重写aof文件的操作，并没有读取旧的aof文件，而是<strong>将整个内存中的数据库内容用命令的方式重写了一个新的aof文件</strong>，这点和快照有点类似。<br><strong>何时重写</strong><br>系统载入时或者上次重写完毕时，Redis会记录此时AOF大小，设为base_size,如果Redis的AOF当前大小&gt;= base_size +base_size*100% (默认)或当前大小&gt;=64mb(默认)的情况下，Redis会对AOF进行重写。<br>3.4 AOF的优点：<br>1）备份机制更稳健，丢失数据概率更低。<br>2）可读的日志文本，通过操作AOF文件，可以处理误操作。<br>3.5 AOF的缺点：<br>1）比起RDB占用更多的磁盘空间。<br>2）恢复备份速度要慢。<br>3）每次读写都同步的话，有一定的性能压力。<br>4）存在个别Bug，造成不能恢复。<br><strong>注意：</strong><br>1）AOF和RDB同时开启，系统默认取AOF的数据<br>2）推荐AOF和RDB都使用<br>3）如果对数据不敏感，可以选单独用RDB<br>4）不建议单独用 AOF，因为可能会出现Bug<br>5）如果只是做纯内存缓存，可以都不用</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1199,7 +1226,7 @@ cluster-node-timeout 15000
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">402</span>
+          <span class="site-state-item-count">403</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1212,7 +1239,7 @@ cluster-node-timeout 15000
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">285</span>
+        <span class="site-state-item-count">286</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
