@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-29T07:41:50.912Z</updated>
+  <updated>2022-05-29T08:55:28.419Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>并发 | 线程池</title>
+    <link href="http://example.com/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
+    <id>http://example.com/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</id>
+    <published>2022-05-29T08:44:53.000Z</published>
+    <updated>2022-05-29T08:55:28.419Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器<br>时，那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p><pre><code>package concurrency.threadPool;public interface ThreadPool&lt;Job extends Runnable&gt; &#123;    //执行一个Job，这个Job需要实现Runnable    void execute(Job job);        //关闭线程池    void shutdown();        //增加工作者线程    void addWorkers(int num);        //减少工作者线程    void remvoeWorkers(int num);        //得到正在等待执行的任务数量    int getJobSize();&#125;</code></pre><p><strong>DefaultThreadPool.java</strong></p><pre><code>package concurrency.threadPool;import java.util.ArrayList;import java.util.Collections;import java.util.LinkedList;import java.util.List;import java.util.concurrent.atomic.AtomicLong;public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool&lt;Job&gt; &#123;    //线程池最大数量    private static final int MAX_WORKER_NUMBERS = 10;        //线程池默认数量    private static final int DEFAULT_WORKER_NUMBERS = 5;        //线程池最小的数量    private static final int MIN_WORKER_NUMBERS = 1;        //这是一个工作列表，将会向里面插入工作    private final LinkedList&lt;Job&gt; jobs = new LinkedList&lt;Job&gt;();        //工作者列表    private final List&lt;Worker&gt; workers = Collections.synchronizedList(new ArrayList&lt;Worker&gt;());        //工作者线程的数量    private int workerNum = DEFAULT_WORKER_NUMBERS;        //线程编号的生成    private AtomicLong threadNum = new AtomicLong();        //工作者，负责消费任务    class Worker implements Runnable&#123;        //是否工作        private volatile boolean running = true;        @Override        public void run()&#123;            while(running)&#123;                Job job = null;                synchronized(jobs)&#123;                    //如果工作者列表是空的，那么就wait                    while(jobs.isEmpty())&#123;                        try&#123;                            jobs.wait();                        &#125;catch(InterruptedException ex)&#123;                            //感知到外部对WorkerThread的中断操作，返回                            Thread.currentThread().interrupt();                            return;                        &#125;                    &#125;                    //取出一个Job                    job = jobs.removeFirst();                &#125;                if(job != null)&#123;                    try&#123;                        job.run();                    &#125;catch(Exception ex)&#123;                        //忽略Job执行中的Exception                    &#125;                &#125;            &#125;        &#125;                public void shutdown()&#123;            running = false;        &#125;    &#125;        //初始化线程工作者    private void initializeWorkers(int num)&#123;        for(int i = 0; i &lt; num; i++)&#123;            Worker worker = new Worker();            workers.add(worker);            Thread thread = new Thread(worker, &quot;ThreadPool-Worker-&quot; + threadNum.incrementAndGet());            thread.start();        &#125;    &#125;        public DefaultThreadPool()&#123;        initializeWorkers(DEFAULT_WORKER_NUMBERS);    &#125;        public DefaultThreadPool(int num)&#123;        workerNum = num &gt; MAX_WORKER_NUMBERS ? MAX_WORKER_NUMBERS : num &lt; MIN_WORKER_NUMBERS ? MIN_WORKER_NUMBERS : num;        initializeWorkers(workerNum);    &#125;        @Override    public void execute(Job job) &#123;        if(job != null)&#123;            //添加一个工作，然后进行通知            synchronized(jobs)&#123;                jobs.addLast(job);                jobs.notify();            &#125;        &#125;    &#125;    @Override    public void shutdown() &#123;        for(Worker worker : workers)&#123;            worker.shutdown();        &#125;    &#125;    @Override    public void addWorkers(int num) &#123;        synchronized(jobs)&#123;            //限制新增的Worker数量不能超过最大值            if(num + this.workerNum &gt; MAX_WORKER_NUMBERS)&#123;                num = MAX_WORKER_NUMBERS - this.workerNum;            &#125;            initializeWorkers(num);            this.workerNum += num;        &#125;    &#125;    @Override    public void remvoeWorkers(int num) &#123;        synchronized(jobs)&#123;            if(num &gt;= this.workerNum)&#123;                throw new IllegalArgumentException(&quot;beyond workNum&quot;);            &#125;            //按照给定的数量停止Worker            int count = 0;            while(count &lt; num)&#123;                Worker worker = workers.get(count);                if(workers.remove(worker))&#123;                    worker.shutdown();                    count++;                &#125;            &#125;            this.workerNum -= count;        &#125;    &#125;    @Override    public int getJobSize() &#123;        return jobs.size();    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;线程池&quot;&gt;&lt;a href=&quot;#线程池&quot; class=&quot;headerlink&quot; title=&quot;线程池&quot;&gt;&lt;/a&gt;线程池&lt;/h1&gt;&lt;p&gt;1.线程池的作用&lt;br&gt;对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递</summary>
+      
+    
+    
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="线程池" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
+    
+  </entry>
   
   <entry>
     <title>并发 | 等待/通知机制</title>
@@ -566,41 +592,6 @@ class Singleton&amp;#123;
     <category term="HashMap" scheme="http://example.com/tags/HashMap/"/>
     
     <category term="遍历" scheme="http://example.com/tags/%E9%81%8D%E5%8E%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSM | 批量删除</title>
-    <link href="http://example.com/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/"/>
-    <id>http://example.com/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/</id>
-    <published>2022-04-19T02:27:24.000Z</published>
-    <updated>2022-04-19T02:32:27.663Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h1><p>1.list.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;title&gt;展示员工信息&lt;/title&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.servletContext.contextPath&#125;/js/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot;&gt;    $(function()&#123;        $(&quot;#selectAll&quot;).click(function()&#123;            $(&quot;[name=&#39;eid&#39;]&quot;).prop(&quot;checked&quot;, $(this).prop(&quot;checked&quot;));        &#125;);                $(&quot;#deleteMore&quot;).click(function()&#123;            $(&quot;form&quot;).attr(&quot;action&quot;, $(this).attr(&quot;href&quot;)).submit();            return false;//关闭默认跳转        &#125;);    &#125;);&lt;/script&gt;&lt;/head&gt;&lt;body&gt;    &lt;form method=&quot;post&quot;&gt;        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;        &lt;table&gt;            &lt;tr&gt;                &lt;th&gt;                    &lt;input type=&quot;checkbox&quot; id=&quot;selectAll&quot;&gt;                &lt;/th&gt;                &lt;th&gt;EID&lt;/th&gt;                &lt;th&gt;ENAME&lt;/th&gt;                &lt;th&gt;AGE&lt;/th&gt;                &lt;th&gt;SEX&lt;/th&gt;                &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;                &lt;th&gt;OPTIONS&lt;/th&gt;            &lt;/tr&gt;            &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;                &lt;tr&gt;                    &lt;td&gt;                        &lt;input type=&quot;checkbox&quot; name=&quot;eid&quot; value=&quot;$&#123;emp.eid&#125;&quot;/&gt;                    &lt;/td&gt;                    &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;                    &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;                    &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;                    &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;                    &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;                    &lt;td&gt;                        &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;                        &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;                    &lt;/td&gt;                &lt;/tr&gt;            &lt;/c:forEach&gt;            &lt;tr&gt;                &lt;td colspan=&quot;10&quot;&gt;                    &lt;a id=&quot;deleteMore&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emps&quot;&gt;批量删除&lt;/a&gt;&amp;nbsp;                    $&#123;page&#125;                &lt;/td&gt;            &lt;/tr&gt;        &lt;/table&gt;    &lt;/form&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>2.EmpMapper.java</p><pre><code>public interface EmpMapper &#123;    //获取所有的员工信息    List&lt;Emp&gt; getAllEmp();        ......        void deleteMore(String eids);&#125;</code></pre><p>3.EmpMapper.xml</p><pre><code>&lt;!-- void deleteMore(String eids); --&gt;&lt;delete id=&quot;deleteMore&quot;&gt;    delete from emp where eid in ($&#123;value&#125;)&lt;/delete&gt;</code></pre><p>4.EmpService.java</p><pre><code>public interface EmpService &#123;    ......        void deleteMore(String eids);&#125;</code></pre><p>5.EmpServiceImpl.java</p><pre><code>@Servicepublic class EmpServiceImpl implements EmpService&#123;    @Autowired    private EmpMapper empMapper;        ......    @Override    public void deleteMore(String eids) &#123;        // TODO Auto-generated method stub        empMapper.deleteMore(eids);    &#125;&#125;</code></pre><p>6.EmpController.java</p><pre><code>@Controllerpublic class EmpController &#123;    @Autowired    private EmpService service;        ......        @RequestMapping(value=&quot;/emps&quot;, method=RequestMethod.DELETE)    public String deleteMore(String eid)&#123;        //获取客户端name属性相同的多个元素的值，可以通过字符串直接获取，每个值以逗号分隔，也可以以数组直接获取        System.out.println(eid);        service.deleteMore(eid);        return &quot;redirect:/emps/1&quot;;    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;批量删除&quot;&gt;&lt;a href=&quot;#批量删除&quot; class=&quot;headerlink&quot; title=&quot;批量删除&quot;&gt;&lt;/a&gt;批量删除&lt;/h1&gt;&lt;p&gt;1.list.jsp&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;%@ page language=&amp;quot;java&amp;quot</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="SSM" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SSM/"/>
-    
-    <category term="批量删除" scheme="http://example.com/categories/Java/%E6%A1%86%E6%9E%B6/SSM/%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="SSM" scheme="http://example.com/tags/SSM/"/>
-    
-    <category term="批量删除" scheme="http://example.com/tags/%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/"/>
     
   </entry>
   
