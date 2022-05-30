@@ -11749,6 +11749,33 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>urllib.request | 下载图片</title>
+    <url>/2021/08/05/%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<h1 id="使用urllib-request库从互联网上下载图片"><a href="#使用urllib-request库从互联网上下载图片" class="headerlink" title="使用urllib.request库从互联网上下载图片"></a>使用urllib.request库从互联网上下载图片</h1><pre><code># coding=utf-8
+
+import urllib.request as request
+
+url = &#39;http://localhost:8080/NoteWebService/logo.png&#39;
+
+with request.urlopen(url) as response:
+    data = response.read()
+    f_name = &#39;download.png&#39;
+    with open(f_name, &#39;wb&#39;) as f:
+        f.write(data)
+        print(&#39;下载文件成功&#39;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>urllib</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>urllib</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 两数之和</title>
     <url>/2021/08/27/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
     <content><![CDATA[<h1 id="1-两数相加"><a href="#1-两数相加" class="headerlink" title="1.两数相加"></a>1.两数相加</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。<br>你可以按任意顺序返回答案。</p>
@@ -11939,33 +11966,6 @@ if __name__ == &#39;__main__&#39;:
         <tag>ICA</tag>
         <tag>EEG</tag>
         <tag>PCA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>urllib.request | 下载图片</title>
-    <url>/2021/08/05/%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<h1 id="使用urllib-request库从互联网上下载图片"><a href="#使用urllib-request库从互联网上下载图片" class="headerlink" title="使用urllib.request库从互联网上下载图片"></a>使用urllib.request库从互联网上下载图片</h1><pre><code># coding=utf-8
-
-import urllib.request as request
-
-url = &#39;http://localhost:8080/NoteWebService/logo.png&#39;
-
-with request.urlopen(url) as response:
-    data = response.read()
-    f_name = &#39;download.png&#39;
-    with open(f_name, &#39;wb&#39;) as f:
-        f.write(data)
-        print(&#39;下载文件成功&#39;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>urllib</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>urllib</tag>
       </tags>
   </entry>
   <entry>
@@ -12388,6 +12388,24 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>Redis | 事务</title>
+    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
+    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
+<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
+<span id="more"></span>
+<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
+<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>事务</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | 事务</title>
     <url>/2022/01/26/%E4%BA%8B%E5%8A%A1/</url>
     <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
@@ -12451,24 +12469,6 @@ public class Test1 &#123;
         <tag>Java</tag>
         <tag>事务</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis | 事务</title>
-    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
-    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
-<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
-<span id="more"></span>
-<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
-<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>事务</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
@@ -21171,6 +21171,137 @@ doc.save(&#39;data\制造业必修课.docx&#39;)
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 旋转链表</title>
+    <url>/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="61-旋转链表"><a href="#61-旋转链表" class="headerlink" title="61.旋转链表"></a>61.旋转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/rotate-list/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>方法一：</strong> 闭合为环<br>记给定链表的长度为 n，注意到当向右移动的次数 k≥n 时，我们仅需要向右移动 k mod n 次即可。因为每 n 次移动都会让链表变为原状。这样我们可以知道，新链表的最后一个节点为原链表的第 (n−1)−(k mod n) 个节点（从 0 开始计数）。<br>这样，我们可以先将给定的链表连接成环，然后将指定位置断开。<br>具体代码中，我们首先计算出链表的长度 n，并找到该链表的末尾节点，将其与头节点相连。这样就得到了闭合为环的链表。然后我们找到新链表的最后一个节点（即原链表的第 (n−1)−(k mod n) 个节点），将当前闭合为环的链表断开，即可得到我们所需要的结果。<br><strong>方法二：</strong> 将后k个节点移到前n-k个节点之前（n为链表长度）<br><strong>特别地，当链表长度不大于 1，或者 k 为 n 的倍数时，新链表将与原链表相同，我们无需进行任何处理。</strong></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
+class Solution(object):
+    def rotateRight(self, head, k):
+        &quot;&quot;&quot;
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        &quot;&quot;&quot;
+        # 如果链表为空直接返回head
+        # 如果右旋转的次数为0直接返回head
+        if head is None or head.next is None or k == 0 :
+            return head
+
+        # 统计head链表的长度
+        p1 = head
+        count = 0
+        while p1:
+            count += 1
+            p1 = p1.next
+
+        # 如果链表只有一个节点，直接返回head
+        # 如果右旋转次数除以链表长度的余数为0,直接返回head
+        if k % count == 0:
+            return head
+
+        i = 0
+        p2 = head
+        k = k % count  # 去掉整圈的旋转
+        while i &lt; count - k - 1:  # 找到后k个节点的前一个节点
+            p2 = p2.next
+            i += 1
+        second = p2.next  # second为后k个节点组成的链表
+        p2.next = None  # 将前count - k个节点的最后一个节点的next值置空
+
+        p3 = second
+        while p3.next is not None:  # 找到后k个节点组成的链表的最后一个节点
+            p3 = p3.next
+
+        p3.next = head  # 将后k个节点组成的链表与前count-k个节点组成的链表连接起来
+
+        return second
+
+    def rotateRight1(self, head, k):
+        &quot;&quot;&quot;
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        &quot;&quot;&quot;
+        if k == 0 or not head or not head.next:
+            return head
+
+        # 求链表长度
+        n = 1
+        cur = head
+        while cur.next:
+            cur = cur.next
+            n += 1
+
+        add = n - k % n
+        if add == n:
+            return head
+
+        # 链表闭合成环
+        cur.next = head
+        while add:
+            cur = cur.next
+            add -= 1
+
+        ret = cur.next
+        cur.next = None  # 将闭合为环的链表断开
+        return ret
+
+    def create_linked_list(self, list):
+        &quot;&quot;&quot;根据list中的所有元素构建单链表&quot;&quot;&quot;
+        l = ListNode()  # 单链表头节点
+        r = l  # 起始尾指针r指向头节点
+        for e in list:
+            node = ListNode(e)
+            r.next = node
+            r = r.next
+
+        return l.next
+
+    def print_linked_list(self, linked_list) -&gt; None:
+        &quot;&quot;&quot;
+        打印单链表中的所有元素
+
+        :param linked_list: 单链表
+        :return: 无
+        &quot;&quot;&quot;
+        print(&quot;----------------------------------------&quot;)
+        pointer = linked_list
+        while pointer is not None:
+            print(pointer.val)
+            pointer = pointer.next
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+
+    linked_list = slt.create_linked_list([1, 2])
+
+    slt.print_linked_list(linked_list)
+
+    rotated_linked_list = slt.rotateRight1(linked_list, 2)
+
+    slt.print_linked_list(rotated_linked_list)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>链表</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 无重复字符的最长子串</title>
     <url>/2021/08/27/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</url>
     <content><![CDATA[<h1 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3.无重复字符的最长子串"></a>3.无重复字符的最长子串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。</p>
@@ -21349,137 +21480,6 @@ if __name__ == &quot;__main__&quot;:
         <category>算法刷题</category>
         <category>leetcode</category>
         <category>栈</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 旋转链表</title>
-    <url>/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="61-旋转链表"><a href="#61-旋转链表" class="headerlink" title="61.旋转链表"></a>61.旋转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/rotate-list/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>方法一：</strong> 闭合为环<br>记给定链表的长度为 n，注意到当向右移动的次数 k≥n 时，我们仅需要向右移动 k mod n 次即可。因为每 n 次移动都会让链表变为原状。这样我们可以知道，新链表的最后一个节点为原链表的第 (n−1)−(k mod n) 个节点（从 0 开始计数）。<br>这样，我们可以先将给定的链表连接成环，然后将指定位置断开。<br>具体代码中，我们首先计算出链表的长度 n，并找到该链表的末尾节点，将其与头节点相连。这样就得到了闭合为环的链表。然后我们找到新链表的最后一个节点（即原链表的第 (n−1)−(k mod n) 个节点），将当前闭合为环的链表断开，即可得到我们所需要的结果。<br><strong>方法二：</strong> 将后k个节点移到前n-k个节点之前（n为链表长度）<br><strong>特别地，当链表长度不大于 1，或者 k 为 n 的倍数时，新链表将与原链表相同，我们无需进行任何处理。</strong></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
-class Solution(object):
-    def rotateRight(self, head, k):
-        &quot;&quot;&quot;
-        :type head: ListNode
-        :type k: int
-        :rtype: ListNode
-        &quot;&quot;&quot;
-        # 如果链表为空直接返回head
-        # 如果右旋转的次数为0直接返回head
-        if head is None or head.next is None or k == 0 :
-            return head
-
-        # 统计head链表的长度
-        p1 = head
-        count = 0
-        while p1:
-            count += 1
-            p1 = p1.next
-
-        # 如果链表只有一个节点，直接返回head
-        # 如果右旋转次数除以链表长度的余数为0,直接返回head
-        if k % count == 0:
-            return head
-
-        i = 0
-        p2 = head
-        k = k % count  # 去掉整圈的旋转
-        while i &lt; count - k - 1:  # 找到后k个节点的前一个节点
-            p2 = p2.next
-            i += 1
-        second = p2.next  # second为后k个节点组成的链表
-        p2.next = None  # 将前count - k个节点的最后一个节点的next值置空
-
-        p3 = second
-        while p3.next is not None:  # 找到后k个节点组成的链表的最后一个节点
-            p3 = p3.next
-
-        p3.next = head  # 将后k个节点组成的链表与前count-k个节点组成的链表连接起来
-
-        return second
-
-    def rotateRight1(self, head, k):
-        &quot;&quot;&quot;
-        :type head: ListNode
-        :type k: int
-        :rtype: ListNode
-        &quot;&quot;&quot;
-        if k == 0 or not head or not head.next:
-            return head
-
-        # 求链表长度
-        n = 1
-        cur = head
-        while cur.next:
-            cur = cur.next
-            n += 1
-
-        add = n - k % n
-        if add == n:
-            return head
-
-        # 链表闭合成环
-        cur.next = head
-        while add:
-            cur = cur.next
-            add -= 1
-
-        ret = cur.next
-        cur.next = None  # 将闭合为环的链表断开
-        return ret
-
-    def create_linked_list(self, list):
-        &quot;&quot;&quot;根据list中的所有元素构建单链表&quot;&quot;&quot;
-        l = ListNode()  # 单链表头节点
-        r = l  # 起始尾指针r指向头节点
-        for e in list:
-            node = ListNode(e)
-            r.next = node
-            r = r.next
-
-        return l.next
-
-    def print_linked_list(self, linked_list) -&gt; None:
-        &quot;&quot;&quot;
-        打印单链表中的所有元素
-
-        :param linked_list: 单链表
-        :return: 无
-        &quot;&quot;&quot;
-        print(&quot;----------------------------------------&quot;)
-        pointer = linked_list
-        while pointer is not None:
-            print(pointer.val)
-            pointer = pointer.next
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-
-    linked_list = slt.create_linked_list([1, 2])
-
-    slt.print_linked_list(linked_list)
-
-    rotated_linked_list = slt.rotateRight1(linked_list, 2)
-
-    slt.print_linked_list(rotated_linked_list)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>链表</category>
       </categories>
       <tags>
         <tag>leetcode</tag>
@@ -24583,6 +24583,64 @@ app.MainLoop()  # 进入主事件循环
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 盛最多水的容器</title>
+    <url>/2021/08/27/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="11-盛最多水的容器"><a href="#11-盛最多水的容器" class="headerlink" title="11.盛最多水的容器"></a>11.盛最多水的容器</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。<br>说明：你不能倾斜容器。</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/container-with-most-water/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>双指针法<br>height=[a1,a2,…,an]<br>起始两个指针l、r分别指向n个非负整数的两端，接着计算容器容积area = min(height[l], height[r]) * (r - l),然后移动l、r指针中指针指向元素较小的那个指针（向另一个指针所在的方向移动），再计算area,…,以此类推，然会最大的area</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
+    def maxArea(self, height):
+        &quot;&quot;&quot;
+        :type height: List[int]
+        :rtype: int
+        &quot;&quot;&quot;
+        # 容器的高为height中每一对值中较小的
+        # 容器的宽为每一对值的下标相减，后者下标减去前者下标
+        # Area = H x W
+
+        n = len(height)  # 输入数组的长度
+        max = 0  # 最大容器容量
+        for i in range(n):
+            for j in range(i+1, n):
+                h = min(height[i], height[j])
+                w = j - i
+                if h * w &gt; max:
+                    max = h * w
+
+        return max
+
+    def maxArea1(self, height):
+        l, r = 0, len(height) - 1
+        ans = 0
+
+        while l &lt; r:
+            area = min(height[l], height[r]) * (r - l)
+            ans = max(ans, area)
+            if height[l] &lt;= height[r]:
+                l += 1
+            else:  # height[l] &gt;= height[r]
+                r -= 1
+        return ans
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+    max_area = slt.maxArea(height)
+    print(max_area)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>数组</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>伪迹移除 | 盲源分离和独立成分分析</title>
     <url>/2021/02/21/%E7%9B%B2%E6%BA%90%E5%88%86%E7%A6%BB%E5%92%8C%E7%8B%AC%E7%AB%8B%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h1 id="盲源分离-BSS-和独立成分分析-ICA"><a href="#盲源分离-BSS-和独立成分分析-ICA" class="headerlink" title="盲源分离(BSS)和独立成分分析(ICA)"></a>盲源分离(BSS)和独立成分分析(ICA)</h1><h2 id="BSS"><a href="#BSS" class="headerlink" title="BSS"></a>BSS</h2><p>盲源分离是最流行的伪迹检测/移除方法之一，其目的是提取混合信号中独立的未知的源信号；同时尽可能在对源信号和混合通道没有或者有非常有限的了解下尽可能仅通过在每一个通道的输出观测到的混合信号来估计未知的混合通道。盲源分离包括ICA(独立成分分析)、CCA(典型成分分析)、MCA(形态成分分析)三种方法。</p>
@@ -24704,64 +24762,6 @@ if __name__ ==&quot;__main__&quot;:
         <category>算法刷题</category>
         <category>leetcode</category>
         <category>链表</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 盛最多水的容器</title>
-    <url>/2021/08/27/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="11-盛最多水的容器"><a href="#11-盛最多水的容器" class="headerlink" title="11.盛最多水的容器"></a>11.盛最多水的容器</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。<br>说明：你不能倾斜容器。</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/container-with-most-water/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>双指针法<br>height=[a1,a2,…,an]<br>起始两个指针l、r分别指向n个非负整数的两端，接着计算容器容积area = min(height[l], height[r]) * (r - l),然后移动l、r指针中指针指向元素较小的那个指针（向另一个指针所在的方向移动），再计算area,…,以此类推，然会最大的area</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def maxArea(self, height):
-        &quot;&quot;&quot;
-        :type height: List[int]
-        :rtype: int
-        &quot;&quot;&quot;
-        # 容器的高为height中每一对值中较小的
-        # 容器的宽为每一对值的下标相减，后者下标减去前者下标
-        # Area = H x W
-
-        n = len(height)  # 输入数组的长度
-        max = 0  # 最大容器容量
-        for i in range(n):
-            for j in range(i+1, n):
-                h = min(height[i], height[j])
-                w = j - i
-                if h * w &gt; max:
-                    max = h * w
-
-        return max
-
-    def maxArea1(self, height):
-        l, r = 0, len(height) - 1
-        ans = 0
-
-        while l &lt; r:
-            area = min(height[l], height[r]) * (r - l)
-            ans = max(ans, area)
-            if height[l] &lt;= height[r]:
-                l += 1
-            else:  # height[l] &gt;= height[r]
-                r -= 1
-        return ans
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
-    max_area = slt.maxArea(height)
-    print(max_area)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>数组</category>
       </categories>
       <tags>
         <tag>leetcode</tag>
@@ -25531,7 +25531,7 @@ controlthread.start()
   <entry>
     <title>并发 | 线程池</title>
     <url>/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</url>
-    <content><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器<br>时，那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p>
+    <content><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器时，<br>那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p>
 <pre><code>package concurrency.threadPool;
 
 public interface ThreadPool&lt;Job extends Runnable&gt; &#123;
