@@ -69,6 +69,36 @@
   </entry>
   
   <entry>
+    <title>并发 | 等待超时模式构造简单的数据库连接池</title>
+    <link href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
+    <id>http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/</id>
+    <published>2022-05-29T07:33:57.000Z</published>
+    <updated>2022-05-30T06:49:15.728Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p><pre><code>package concurrency.connetionPool;import java.lang.reflect.InvocationHandler;import java.lang.reflect.Method;import java.lang.reflect.Proxy;import java.sql.Connection;import java.util.LinkedList;import java.util.concurrent.TimeUnit;class ConnectionDriver&#123;    static class ConnectionHandler implements InvocationHandler&#123;        @Override        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;            if(method.getName().equals(&quot;commit&quot;))&#123;                TimeUnit.MILLISECONDS.sleep(100);            &#125;            return null;        &#125;    &#125;        //创建一个Connection的代理，在commit时休眠100毫秒    public static final Connection createConnection()&#123;        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());    &#125;&#125;public class ConnectionPool &#123;    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();        public ConnectionPool(int initialSize)&#123;        if(initialSize &gt; 0)&#123;            for(int i = 0; i &lt; initialSize; i++)&#123;                pool.addLast(ConnectionDriver.createConnection());            &#125;        &#125;    &#125;        public void releaseConnection(Connection connection)&#123;        if(connection != null)&#123;            synchronized(pool)&#123;                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接                pool.addLast(connection);                pool.notifyAll();            &#125;        &#125;    &#125;        //在mills内无法获取到连接，将会返回null    public Connection fetchConnection(long mills) throws InterruptedException&#123;        synchronized(pool)&#123;            //完全超时            if(mills &lt; 0)&#123;                while(pool.isEmpty())&#123;                    pool.wait();                &#125;                return pool.removeFirst();//Removes and returns the first element from this list.            &#125;else&#123;                long future = System.currentTimeMillis() + mills;                long remaining = mills;                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;                    pool.wait(remaining);                    remaining = future - System.currentTimeMillis();                &#125;                Connection result = null;                if(!pool.isEmpty())&#123;                    result = pool.removeFirst();                &#125;                return result;            &#125;        &#125;    &#125;&#125;</code></pre><p><strong>ConnectionPoolTest.java</strong></p><pre><code>package concurrency.connetionPool;import java.sql.Connection;import java.util.concurrent.CountDownLatch;import java.util.concurrent.atomic.AtomicInteger;public class ConnectionPoolTest &#123;    static ConnectionPool pool = new ConnectionPool(10);        //保证所有ConnectionRunner能够同时开始    static CountDownLatch start = new CountDownLatch(1);        //main线程将会等待所有ConnectionRunner结束后才能继续执行    static CountDownLatch end;        public static void main(String[] args) throws InterruptedException&#123;        //线程数量，可以修改线程数量进行观察        int threadCount = 50;        end = new CountDownLatch(threadCount);        int count = 20;        AtomicInteger got = new AtomicInteger();        AtomicInteger notGot = new AtomicInteger();        for(int i = 0; i &lt; threadCount; i++)&#123;            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);            thread.start();        &#125;        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。        System.out.println(&quot;total invoke: &quot; + (threadCount * count));        System.out.println(&quot;got connection: &quot; + got);        System.out.println(&quot;not got connection: &quot; + notGot);    &#125;    static class ConnectionRunner implements Runnable&#123;        int count;        AtomicInteger got;        AtomicInteger notGot;                public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;            this.count = count;            this.got = got;            this.notGot = notGot;        &#125;                public void run()&#123;            try&#123;                start.await();            &#125;catch(Exception ex)&#123;                            &#125;            while(count &gt; 0)&#123;                try&#123;                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null                    //分别统计连接获取的数量got和未获取到的数量notGot                    Connection connection = pool.fetchConnection(1000);                    if(connection != null)&#123;                        try&#123;                            connection.createStatement();                            connection.commit();                        &#125;finally&#123;                            pool.releaseConnection(connection);                            got.incrementAndGet();                        &#125;                    &#125;else&#123;                        notGot.incrementAndGet();                    &#125;                &#125;catch(Exception ex)&#123;                                    &#125;finally&#123;                    count--;                &#125;                            &#125;            end.countDown();        &#125;    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;等待超时模式构造简单的数据库连接池&quot;&gt;&lt;a href=&quot;#等待超时模式构造简单的数据库连接池&quot; class=&quot;headerlink&quot; title=&quot;等待超时模式构造简单的数据库连接池&quot;&gt;&lt;/a&gt;等待超时模式构造简单的数据库连接池&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;Co</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="等待超时模式构造简单的数据库连接池" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>并发 | volatile写读的内存语义和锁的释放获取的内存语义</title>
     <link href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/"/>
     <id>http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/</id>
@@ -562,36 +592,6 @@ class Singleton&amp;#123;
     <category term="单例模式" scheme="http://example.com/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
     
     <category term="双重检验锁方式实现单例模式" scheme="http://example.com/tags/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | HashMap的七种遍历方式</title>
-    <link href="http://example.com/2022/04/23/HashMap%E7%9A%84%E4%B8%83%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/"/>
-    <id>http://example.com/2022/04/23/HashMap%E7%9A%84%E4%B8%83%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/</id>
-    <published>2022-04-23T13:00:26.000Z</published>
-    <updated>2022-04-23T13:20:32.607Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="HashMap的七种遍历方式"><a href="#HashMap的七种遍历方式" class="headerlink" title="HashMap的七种遍历方式"></a>HashMap的七种遍历方式</h1><p><a href="https://mp.weixin.qq.com/s/zQBN3UvJDhRTKP6SzcZFKw">参考资料</a></p><pre><code>import java.util.HashMap;import java.util.Iterator;import java.util.Map;import java.util.Map.Entry;public class HashMapTraversalMethodsTest &#123;    public static void main(String[] args) &#123;                Map&lt;Integer, String&gt; map = new HashMap();        map.put(1, &quot;Java&quot;);        map.put(2, &quot;Python&quot;);        map.put(3, &quot;C&quot;);        map.put(4, &quot;C++&quot;);        map.put(5, &quot;JavaScript&quot;);                //迭代器EntrySet（推荐使用）//        Iterator&lt;Entry&lt;Integer, String&gt;&gt; iterator = map.entrySet().iterator();//        while(iterator.hasNext())&#123;//            Entry&lt;Integer, String&gt; entry = iterator.next();//            System.out.println(entry.getKey());//            System.out.println(entry.getValue());//        &#125;                //迭代器KeySet//        Iterator&lt;Integer&gt; iterator = map.keySet().iterator();//        while(iterator.hasNext())&#123;//            Integer key = iterator.next();//            System.out.println(key);//            System.out.println(map.get(key));//        &#125;                //ForEach EntrySet//        for(Entry&lt;Integer, String&gt; entry:map.entrySet())&#123;//            System.out.println(entry.getKey());//            System.out.println(entry.getValue());//        &#125;                //ForEach KeySet//        for(Integer key:map.keySet())&#123;//            System.out.println(key);//            System.out.println(map.get(key));//        &#125;                //Lambda//        map.forEach((key, value) -&gt; &#123;//            System.out.println(key);//            System.out.println(value);//        &#125;);                //Streams API单线程//        map.entrySet().stream().forEach((entry) -&gt; &#123;//            System.out.println(entry.getKey());//            System.out.println(entry.getValue());//        &#125;);                //Streams API多线程        map.entrySet().parallelStream().forEach((entry) -&gt;&#123;            System.out.println(entry.getKey());            System.out.println(entry.getValue());        &#125;);    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;HashMap的七种遍历方式&quot;&gt;&lt;a href=&quot;#HashMap的七种遍历方式&quot; class=&quot;headerlink&quot; title=&quot;HashMap的七种遍历方式&quot;&gt;&lt;/a&gt;HashMap的七种遍历方式&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://mp.we</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="HashMap的七种遍历方式" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/HashMap%E7%9A%84%E4%B8%83%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/"/>
-    
-    
-    <category term="HashMap" scheme="http://example.com/tags/HashMap/"/>
-    
-    <category term="遍历" scheme="http://example.com/tags/%E9%81%8D%E5%8E%86/"/>
     
   </entry>
   

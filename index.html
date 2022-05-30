@@ -528,6 +528,239 @@ public class WaitNotify &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 等待超时模式构造简单的数据库连接池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-28 23:33:57" itemprop="dateCreated datePublished" datetime="2022-05-28T23:33:57-08:00">2022-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-29 22:49:15" itemprop="dateModified" datetime="2022-05-29T22:49:15-08:00">2022-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">等待超时模式构造简单的数据库连接池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p>
+<pre><code>package concurrency.connetionPool;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
+
+class ConnectionDriver&#123;
+    static class ConnectionHandler implements InvocationHandler&#123;
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+            if(method.getName().equals(&quot;commit&quot;))&#123;
+                TimeUnit.MILLISECONDS.sleep(100);
+            &#125;
+            return null;
+        &#125;
+    &#125;
+    
+    //创建一个Connection的代理，在commit时休眠100毫秒
+    public static final Connection createConnection()&#123;
+        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());
+    &#125;
+&#125;
+
+public class ConnectionPool &#123;
+    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();
+    
+    public ConnectionPool(int initialSize)&#123;
+        if(initialSize &gt; 0)&#123;
+            for(int i = 0; i &lt; initialSize; i++)&#123;
+                pool.addLast(ConnectionDriver.createConnection());
+            &#125;
+        &#125;
+    &#125;
+    
+    public void releaseConnection(Connection connection)&#123;
+        if(connection != null)&#123;
+            synchronized(pool)&#123;
+                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接
+                pool.addLast(connection);
+                pool.notifyAll();
+            &#125;
+        &#125;
+    &#125;
+    
+    //在mills内无法获取到连接，将会返回null
+    public Connection fetchConnection(long mills) throws InterruptedException&#123;
+        synchronized(pool)&#123;
+            //完全超时
+            if(mills &lt; 0)&#123;
+                while(pool.isEmpty())&#123;
+                    pool.wait();
+                &#125;
+                return pool.removeFirst();//Removes and returns the first element from this list.
+            &#125;else&#123;
+                long future = System.currentTimeMillis() + mills;
+                long remaining = mills;
+                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;
+                    pool.wait(remaining);
+                    remaining = future - System.currentTimeMillis();
+                &#125;
+                Connection result = null;
+                if(!pool.isEmpty())&#123;
+                    result = pool.removeFirst();
+                &#125;
+                return result;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>ConnectionPoolTest.java</strong></p>
+<pre><code>package concurrency.connetionPool;
+
+import java.sql.Connection;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ConnectionPoolTest &#123;
+    static ConnectionPool pool = new ConnectionPool(10);
+    
+    //保证所有ConnectionRunner能够同时开始
+    static CountDownLatch start = new CountDownLatch(1);
+    
+    //main线程将会等待所有ConnectionRunner结束后才能继续执行
+    static CountDownLatch end;
+    
+    public static void main(String[] args) throws InterruptedException&#123;
+        //线程数量，可以修改线程数量进行观察
+        int threadCount = 50;
+        end = new CountDownLatch(threadCount);
+        int count = 20;
+        AtomicInteger got = new AtomicInteger();
+        AtomicInteger notGot = new AtomicInteger();
+        for(int i = 0; i &lt; threadCount; i++)&#123;
+            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);
+            thread.start();
+        &#125;
+        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
+        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
+        System.out.println(&quot;total invoke: &quot; + (threadCount * count));
+        System.out.println(&quot;got connection: &quot; + got);
+        System.out.println(&quot;not got connection: &quot; + notGot);
+    &#125;
+    static class ConnectionRunner implements Runnable&#123;
+        int count;
+        AtomicInteger got;
+        AtomicInteger notGot;
+        
+        public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;
+            this.count = count;
+            this.got = got;
+            this.notGot = notGot;
+        &#125;
+        
+        public void run()&#123;
+            try&#123;
+                start.await();
+            &#125;catch(Exception ex)&#123;
+                
+            &#125;
+            while(count &gt; 0)&#123;
+                try&#123;
+                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null
+                    //分别统计连接获取的数量got和未获取到的数量notGot
+                    Connection connection = pool.fetchConnection(1000);
+                    if(connection != null)&#123;
+                        try&#123;
+                            connection.createStatement();
+                            connection.commit();
+                        &#125;finally&#123;
+                            pool.releaseConnection(connection);
+                            got.incrementAndGet();
+                        &#125;
+                    &#125;else&#123;
+                        notGot.incrementAndGet();
+                    &#125;
+                &#125;catch(Exception ex)&#123;
+                    
+                &#125;finally&#123;
+                    count--;
+                &#125;
+                
+            &#125;
+            end.countDown();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1219,84 +1452,6 @@ cluster-node-timeout 15000
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/Redis%E9%9B%86%E7%BE%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/13/Redis%E9%9B%86%E7%BE%A4/" class="post-title-link" itemprop="url">Redis | 集群</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-05-13 02:06:31 / Modified: 02:17:50" itemprop="dateCreated datePublished" datetime="2022-05-13T02:06:31-08:00">2022-05-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E9%9B%86%E7%BE%A4/" itemprop="url" rel="index"><span itemprop="name">集群</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis集群"><a href="#Redis集群" class="headerlink" title="Redis集群"></a>Redis集群</h1><ol>
-<li>问题<br>1）服务器内存容量不够，redis如何进行扩容？<br>2）大量并发写操作， redis如何分摊？</li>
-<li>集群<br>Redis 集群实现了对Redis的水平扩容，即<strong>启动N个redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的1/N</strong>。<br>注：Redis 集群通过分区（partition）来提供一定程度的可用性（availability）： 即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。</li>
-<li>slots<br>一个 Redis 集群包含 16384 个插槽（hash slot）， 数据库中的每个键都属于这 16384 个插槽的其中一个， 集群使用公式 CRC16(key) % 16384 来计算键 key 属于哪个槽， 其中 CRC16(key) 语句用于计算键 key 的 CRC16 校验和 。<br>集群中的每个节点负责处理一部分插槽。举个例子， 如果一个集群可以有主节点，其中：节点A负责处理0号至5500号插槽，节点B负责处理5501号至11000号插槽，节点C负责处理11001号至16383号插槽。</li>
-<li>集群的优点<br>1）实现扩容<br>2）分摊压力<br>3）无中心配置相对简单</li>
-<li>集群的缺点<br>1）多键操作是不被支持的（这些键有可能存在不同的服务器上，可以通过{}来定义组的概念，从而使key中{}内相同内容的键值对放到一个slot中去。）<br>2）多键的Redis事务是不被支持的。lua脚本不被支持。<br>3）由于集群方案出现较晚，很多公司已经采用了其他的集群方案，而代理或者客户端分片的方案想要迁移至redis cluster，需要整体迁移而不是逐步过渡，复杂度较大。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1368,14 +1523,14 @@ cluster-node-timeout 15000
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">404</span>
+          <span class="site-state-item-count">405</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">246</span>
+        <span class="site-state-item-count">247</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

@@ -25350,6 +25350,172 @@ print(&#39;主线程继续执行...&#39;)
       </tags>
   </entry>
   <entry>
+    <title>并发 | 等待超时模式构造简单的数据库连接池</title>
+    <url>/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/</url>
+    <content><![CDATA[<h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p>
+<pre><code>package concurrency.connetionPool;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
+
+class ConnectionDriver&#123;
+    static class ConnectionHandler implements InvocationHandler&#123;
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+            if(method.getName().equals(&quot;commit&quot;))&#123;
+                TimeUnit.MILLISECONDS.sleep(100);
+            &#125;
+            return null;
+        &#125;
+    &#125;
+    
+    //创建一个Connection的代理，在commit时休眠100毫秒
+    public static final Connection createConnection()&#123;
+        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());
+    &#125;
+&#125;
+
+public class ConnectionPool &#123;
+    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();
+    
+    public ConnectionPool(int initialSize)&#123;
+        if(initialSize &gt; 0)&#123;
+            for(int i = 0; i &lt; initialSize; i++)&#123;
+                pool.addLast(ConnectionDriver.createConnection());
+            &#125;
+        &#125;
+    &#125;
+    
+    public void releaseConnection(Connection connection)&#123;
+        if(connection != null)&#123;
+            synchronized(pool)&#123;
+                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接
+                pool.addLast(connection);
+                pool.notifyAll();
+            &#125;
+        &#125;
+    &#125;
+    
+    //在mills内无法获取到连接，将会返回null
+    public Connection fetchConnection(long mills) throws InterruptedException&#123;
+        synchronized(pool)&#123;
+            //完全超时
+            if(mills &lt; 0)&#123;
+                while(pool.isEmpty())&#123;
+                    pool.wait();
+                &#125;
+                return pool.removeFirst();//Removes and returns the first element from this list.
+            &#125;else&#123;
+                long future = System.currentTimeMillis() + mills;
+                long remaining = mills;
+                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;
+                    pool.wait(remaining);
+                    remaining = future - System.currentTimeMillis();
+                &#125;
+                Connection result = null;
+                if(!pool.isEmpty())&#123;
+                    result = pool.removeFirst();
+                &#125;
+                return result;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>ConnectionPoolTest.java</strong></p>
+<pre><code>package concurrency.connetionPool;
+
+import java.sql.Connection;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ConnectionPoolTest &#123;
+    static ConnectionPool pool = new ConnectionPool(10);
+    
+    //保证所有ConnectionRunner能够同时开始
+    static CountDownLatch start = new CountDownLatch(1);
+    
+    //main线程将会等待所有ConnectionRunner结束后才能继续执行
+    static CountDownLatch end;
+    
+    public static void main(String[] args) throws InterruptedException&#123;
+        //线程数量，可以修改线程数量进行观察
+        int threadCount = 50;
+        end = new CountDownLatch(threadCount);
+        int count = 20;
+        AtomicInteger got = new AtomicInteger();
+        AtomicInteger notGot = new AtomicInteger();
+        for(int i = 0; i &lt; threadCount; i++)&#123;
+            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);
+            thread.start();
+        &#125;
+        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
+        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
+        System.out.println(&quot;total invoke: &quot; + (threadCount * count));
+        System.out.println(&quot;got connection: &quot; + got);
+        System.out.println(&quot;not got connection: &quot; + notGot);
+    &#125;
+    static class ConnectionRunner implements Runnable&#123;
+        int count;
+        AtomicInteger got;
+        AtomicInteger notGot;
+        
+        public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;
+            this.count = count;
+            this.got = got;
+            this.notGot = notGot;
+        &#125;
+        
+        public void run()&#123;
+            try&#123;
+                start.await();
+            &#125;catch(Exception ex)&#123;
+                
+            &#125;
+            while(count &gt; 0)&#123;
+                try&#123;
+                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null
+                    //分别统计连接获取的数量got和未获取到的数量notGot
+                    Connection connection = pool.fetchConnection(1000);
+                    if(connection != null)&#123;
+                        try&#123;
+                            connection.createStatement();
+                            connection.commit();
+                        &#125;finally&#123;
+                            pool.releaseConnection(connection);
+                            got.incrementAndGet();
+                        &#125;
+                    &#125;else&#123;
+                        notGot.incrementAndGet();
+                    &#125;
+                &#125;catch(Exception ex)&#123;
+                    
+                &#125;finally&#123;
+                    count--;
+                &#125;
+                
+            &#125;
+            end.countDown();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>并发</category>
+        <category>等待超时模式构造简单的数据库连接池</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设计模式 | 简单工厂模式</title>
     <url>/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h1><p>工厂：用一个单独的类来完成创造实例的过程。<br><strong>案例</strong><br>类图：<br><img src="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/1.jpg"></p>
