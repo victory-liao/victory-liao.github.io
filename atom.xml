@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-31T02:03:48.896Z</updated>
+  <updated>2022-05-31T03:16:52.610Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>并发 | 基于线程池技术的简单Web服务器</title>
+    <link href="http://example.com/2022/05/30/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E7%AE%80%E5%8D%95Web%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <id>http://example.com/2022/05/30/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E7%AE%80%E5%8D%95Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</id>
+    <published>2022-05-31T03:11:39.000Z</published>
+    <updated>2022-05-31T03:16:52.610Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="基于线程池技术的简单Web服务器"><a href="#基于线程池技术的简单Web服务器" class="headerlink" title="基于线程池技术的简单Web服务器"></a>基于线程池技术的简单Web服务器</h1><p>基于线程池技术的简单Web服务器，这个Web服务器用来处理HTTP请求(目前智能处理简单的文本和JPG图片内容)。这个服务器使用<br>main线程不断地接受可换段Socket的连接，将连接以及请求提交给线程池处理，这样使得Web服务器能够同时处理多个客户端请求。</p><span id="more"></span><p><strong>Web服务器示例代码</strong></p><pre><code>package concurrency.threadPool;import java.io.BufferedReader;import java.io.ByteArrayOutputStream;import java.io.Closeable;import java.io.File;import java.io.FileInputStream;import java.io.IOException;import java.io.InputStream;import java.io.InputStreamReader;import java.io.PrintWriter;import java.net.ServerSocket;import java.net.Socket;public class SimpleHttpServer &#123;    //处理HttpRequest的线程池    static ThreadPool&lt;HttpRequestHandler&gt; threadPool = new DefaultThreadPool&lt;HttpRequestHandler&gt;(1);        //SimpleHttpServer的根路径    static String basePath;        static ServerSocket serverSocket;        //服务器监听端口    static int port = 8080;        public static void setPort(int port)&#123;        if(port &gt; 0)&#123;            SimpleHttpServer.port = port;        &#125;    &#125;        public static void setBasePath(String basePath)&#123;        if(basePath != null &amp;&amp; new File(basePath).exists() &amp;&amp; new File(basePath).isDirectory())&#123;            SimpleHttpServer.basePath = basePath;        &#125;    &#125;        //启动SimpleHttpServer    public static void start() throws IOException&#123;        serverSocket = new ServerSocket(port);        Socket socket = null;        while((socket = serverSocket.accept()) != null)&#123;            //接收一个可换段Socket，生成一个HttpRequestHandler，放入线程池执行            threadPool.execute(new HttpRequestHandler(socket));        &#125;        serverSocket.close();    &#125;        static class HttpRequestHandler implements Runnable&#123;        private Socket socket;        public HttpRequestHandler(Socket socket)&#123;            this.socket = socket;        &#125;                @Override        public void run() &#123;            String line = null;            BufferedReader br = null;            BufferedReader reader = null;            PrintWriter out = null;            InputStream in = null;            try&#123;                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));                String header = reader.readLine();                //由相对路径计算出绝对路径                String filePath = basePath + header.split(&quot; &quot;)[1];                out = new PrintWriter(socket.getOutputStream());                //如果请求资源为jpg或者ico，则读取资源并输出                if(filePath.endsWith(&quot;jpg&quot;) || filePath.endsWith(&quot;ico&quot;))&#123;                    in = new FileInputStream(filePath);                    ByteArrayOutputStream baos = new ByteArrayOutputStream();                    int i = 0;                    while((i = in.read()) != -1)&#123;                        baos.write(i);                    &#125;                    byte[] array = baos.toByteArray();                    out.println(&quot;HTTP/1.1 200 OK&quot;);                    out.println(&quot;Server: Molly&quot;);                    out.println(&quot;Content-Type: image/jpeg&quot;);                    out.println(&quot;Content-Length: &quot;+array.length);                    out.println(&quot;&quot;);                    socket.getOutputStream().write(array, 0, array.length);                &#125;else&#123;                    br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));                    out = new PrintWriter(socket.getOutputStream());                    out.println(&quot;HTTP/1.1 200 OK&quot;);                    out.println(&quot;Server: Molly&quot;);                    out.println(&quot;Content-Type: text/html; charset=UTF-8&quot;);                    out.println(&quot;&quot;);                    while((line = br.readLine()) != null)&#123;                        out.println(line);                    &#125;                &#125;                out.flush();            &#125;catch(Exception ex)&#123;                out.println(&quot;HTTP/1.1 500&quot;);                out.println(&quot;&quot;);                out.flush();            &#125;finally&#123;                close(br, in, reader, out, socket);            &#125;        &#125;            &#125;        //关闭流或者Socket    private static void close(Closeable... closeables)&#123;        if(closeables != null)&#123;            for(Closeable closeable : closeables)&#123;                try &#123;                    closeable.close();                &#125; catch (IOException e) &#123;                    e.printStackTrace();                &#125;            &#125;        &#125;    &#125;&#125;</code></pre><p><strong>ThreadPool.java</strong></p><pre><code>package concurrency.threadPool;public interface ThreadPool&lt;Job extends Runnable&gt; &#123;    //执行一个Job，这个Job需要实现Runnable    void execute(Job job);        //关闭线程池    void shutdown();        //增加工作者线程    void addWorkers(int num);        //减少工作者线程    void remvoeWorkers(int num);        //得到正在等待执行的任务数量    int getJobSize();&#125;</code></pre><p><strong>DefaultThreadPool.java</strong></p><pre><code>package concurrency.threadPool;import java.util.ArrayList;import java.util.Collections;import java.util.LinkedList;import java.util.List;import java.util.concurrent.atomic.AtomicLong;public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool&lt;Job&gt; &#123;    //线程池最大数量    private static final int MAX_WORKER_NUMBERS = 10;        //线程池默认数量    private static final int DEFAULT_WORKER_NUMBERS = 5;        //线程池最小的数量    private static final int MIN_WORKER_NUMBERS = 1;        //这是一个工作列表，将会向里面插入工作    private final LinkedList&lt;Job&gt; jobs = new LinkedList&lt;Job&gt;();//生产者        //工作者列表    private final List&lt;Worker&gt; workers = Collections.synchronizedList(new ArrayList&lt;Worker&gt;());//消费者        //工作者线程的数量    private int workerNum = DEFAULT_WORKER_NUMBERS;        //线程编号的生成    private AtomicLong threadNum = new AtomicLong();        //工作者，负责消费任务    class Worker implements Runnable&#123;        //是否工作        private volatile boolean running = true;        @Override        public void run()&#123;            while(running)&#123;                Job job = null;                synchronized(jobs)&#123;                    //如果工作者列表是空的，那么就wait                    while(jobs.isEmpty())&#123;                        try&#123;                            jobs.wait();                        &#125;catch(InterruptedException ex)&#123;                            //感知到外部对WorkerThread的中断操作，返回                            Thread.currentThread().interrupt();                            return;                        &#125;                    &#125;                    //取出一个Job                    job = jobs.removeFirst();                &#125;                if(job != null)&#123;                    try&#123;                        job.run();                    &#125;catch(Exception ex)&#123;                        //忽略Job执行中的Exception                    &#125;                &#125;            &#125;        &#125;                public void shutdown()&#123;            running = false;        &#125;    &#125;        //初始化线程工作者    private void initializeWorkers(int num)&#123;        for(int i = 0; i &lt; num; i++)&#123;            Worker worker = new Worker();            workers.add(worker);            Thread thread = new Thread(worker, &quot;ThreadPool-Worker-&quot; + threadNum.incrementAndGet());            thread.start();        &#125;    &#125;        public DefaultThreadPool()&#123;        initializeWorkers(DEFAULT_WORKER_NUMBERS);    &#125;        public DefaultThreadPool(int num)&#123;        workerNum = num &gt; MAX_WORKER_NUMBERS ? MAX_WORKER_NUMBERS : num &lt; MIN_WORKER_NUMBERS ? MIN_WORKER_NUMBERS : num;        initializeWorkers(workerNum);    &#125;        @Override    public void execute(Job job) &#123;        if(job != null)&#123;            //添加一个工作，然后进行通知            synchronized(jobs)&#123;                jobs.addLast(job);                jobs.notify();            &#125;        &#125;    &#125;    @Override    public void shutdown() &#123;        for(Worker worker : workers)&#123;            worker.shutdown();        &#125;    &#125;    @Override    public void addWorkers(int num) &#123;        synchronized(jobs)&#123;            //限制新增的Worker数量不能超过最大值            if(num + this.workerNum &gt; MAX_WORKER_NUMBERS)&#123;                num = MAX_WORKER_NUMBERS - this.workerNum;            &#125;            initializeWorkers(num);            this.workerNum += num;        &#125;    &#125;    @Override    public void remvoeWorkers(int num) &#123;        synchronized(jobs)&#123;            if(num &gt;= this.workerNum)&#123;                throw new IllegalArgumentException(&quot;beyond workNum&quot;);            &#125;            //按照给定的数量停止Worker            int count = 0;            while(count &lt; num)&#123;                Worker worker = workers.get(count);                if(workers.remove(worker))&#123;                    worker.shutdown();                    count++;                &#125;            &#125;            this.workerNum -= count;        &#125;    &#125;    @Override    public int getJobSize() &#123;        return jobs.size();    &#125;&#125;</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;基于线程池技术的简单Web服务器&quot;&gt;&lt;a href=&quot;#基于线程池技术的简单Web服务器&quot; class=&quot;headerlink&quot; title=&quot;基于线程池技术的简单Web服务器&quot;&gt;&lt;/a&gt;基于线程池技术的简单Web服务器&lt;/h1&gt;&lt;p&gt;基于线程池技术的简单Web服务器，这个Web服务器用来处理HTTP请求(目前智能处理简单的文本和JPG图片内容)。这个服务器使用&lt;br&gt;main线程不断地接受可换段Socket的连接，将连接以及请求提交给线程池处理，这样使得Web服务器能够同时处理多个客户端请求。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="基于线程池技术的简单Web服务器" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E7%AE%80%E5%8D%95Web%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="基于线程池技术的简单Web服务器" scheme="http://example.com/tags/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E7%AE%80%E5%8D%95Web%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>并发 | CountDownLatch</title>
@@ -574,36 +603,6 @@ import </summary>
     <category term="Java" scheme="http://example.com/tags/Java/"/>
     
     <category term="线程池" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | ThreadLocal</title>
-    <link href="http://example.com/2022/04/23/ThreadLocal/"/>
-    <id>http://example.com/2022/04/23/ThreadLocal/</id>
-    <published>2022-04-24T04:07:49.000Z</published>
-    <updated>2022-04-24T04:10:42.781Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p><p><strong>代码：</strong></p><pre><code>import java.text.SimpleDateFormat;import java.util.Random;public class ThreadLocalTest implements Runnable&#123;    //private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = ThreadLocal.withInitial(()-&gt;new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;));    private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = new ThreadLocal&lt;SimpleDateFormat&gt;()&#123;        @Override        protected SimpleDateFormat initialValue()&#123;            return new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;);        &#125;    &#125;;        @Override    public void run() &#123;        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; default formatter=&quot;+formatter.get().toPattern());        try &#123;            Thread.sleep(new Random().nextInt(1000));        &#125; catch (InterruptedException e) &#123;            e.printStackTrace();        &#125;        formatter.set(new SimpleDateFormat());        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; current formatter=&quot;+formatter.get().toPattern());            &#125;        public static void main(String[] args) throws InterruptedException&#123;        ThreadLocalTest obj = new ThreadLocalTest();        for(int i=0;i&lt;10;i++)&#123;            Thread t = new Thread(obj, &quot;&quot;+i);            Thread.sleep(new Random().nextInt(1000));            t.start();        &#125;    &#125;    &#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;ThreadLocal示例&quot;&gt;&lt;a href=&quot;#ThreadLocal示例&quot; class=&quot;headerlink&quot; title=&quot;ThreadLocal示例&quot;&gt;&lt;/a&gt;ThreadLocal示例&lt;/h1&gt;&lt;p&gt;ThreadLocal:&lt;br&gt;通常情况下，我们创建</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="ThreadLocal" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/ThreadLocal/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="ThreadLocal" scheme="http://example.com/tags/ThreadLocal/"/>
     
   </entry>
   
