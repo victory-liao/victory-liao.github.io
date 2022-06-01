@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-05-31T03:16:52.610Z</updated>
+  <updated>2022-06-01T02:51:23.240Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>负载均衡</title>
+    <link href="http://example.com/2022/05/31/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+    <id>http://example.com/2022/05/31/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</id>
+    <published>2022-06-01T02:49:27.000Z</published>
+    <updated>2022-06-01T02:51:23.240Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p><a href="https://blog.csdn.net/wanghangzhen/article/details/118554304">负载均衡</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;负载均衡&quot;&gt;&lt;a href=&quot;#负载均衡&quot; class=&quot;headerlink&quot; title=&quot;负载均衡&quot;&gt;&lt;/a&gt;负载均衡&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/wanghangzhen/article/details/11</summary>
+      
+    
+    
+    
+    
+    <category term="负载均衡" scheme="http://example.com/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>并发 | 基于线程池技术的简单Web服务器</title>
@@ -572,37 +594,6 @@
     <category term="多线程" scheme="http://example.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     <category term="线程" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | 创建线程池的7种方式</title>
-    <link href="http://example.com/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/"/>
-    <id>http://example.com/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/</id>
-    <published>2022-04-24T09:57:42.000Z</published>
-    <updated>2022-04-24T09:58:52.626Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="创建线程池的7种方式"><a href="#创建线程池的7种方式" class="headerlink" title="创建线程池的7种方式"></a>创建线程池的7种方式</h1><pre><code>import java.util.Date;import java.util.concurrent.ArrayBlockingQueue;import java.util.concurrent.ExecutorService;import java.util.concurrent.Executors;import java.util.concurrent.Future;import java.util.concurrent.ScheduledExecutorService;import java.util.concurrent.ThreadPoolExecutor;import java.util.concurrent.TimeUnit;public class ThreadPoolCreationTest &#123;    public static void fixedThreadPool()&#123;//        ExecutorService threadPool = Executors.newFixedThreadPool(2);//        //        Runnable runnable = new Runnable()&#123;//            @Override//            public void run()&#123;//                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());//            &#125;//        &#125;;//        //        Future&lt;?&gt; submit = threadPool.submit(runnable);////        System.out.println(submit);////        System.out.println(submit.isDone());//        threadPool.execute(runnable);//        threadPool.execute(runnable);//        threadPool.execute(runnable);                ExecutorService threadPool = Executors.newFixedThreadPool(2);        for(int i = 0; i &lt; 4; i++)&#123;            threadPool.execute(() -&gt; &#123;                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());            &#125;);        &#125;    &#125;        public static void cachedThreadPool()&#123;        ExecutorService threadPool = Executors.newCachedThreadPool();        for(int i=0;i&lt;10;i++)&#123;            threadPool.execute(() -&gt; &#123;                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());            &#125;);        &#125;    &#125;        public static void singleThreadPool()&#123;        ExecutorService threadPool = Executors.newSingleThreadExecutor();        for(int i = 0; i &lt; 10; i++)&#123;            threadPool.execute(() -&gt; &#123;                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());            &#125;);        &#125;    &#125;        public static void scheduledThreadPool()&#123;        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(5);        System.out.println(&quot;添加任务，时间：&quot;+new Date());        threadPool.schedule(()-&gt;&#123;            System.out.println(&quot;任务被执行，时间：&quot;+new Date());            try &#123;                TimeUnit.SECONDS.sleep(1);            &#125; catch (InterruptedException e) &#123;                e.printStackTrace();            &#125;        &#125;, 1, TimeUnit.SECONDS);    &#125;        public static void singleThreadScheduledPool()&#123;        ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor();        System.out.println(&quot;添加任务，时间：&quot;+new Date());        threadPool.schedule(()-&gt;&#123;            System.out.println(&quot;任务被执行，时间：&quot;+new Date());            try &#123;                TimeUnit.SECONDS.sleep(1);            &#125; catch (InterruptedException e) &#123;                e.printStackTrace();            &#125;        &#125;, 2, TimeUnit.SECONDS);    &#125;        public static void workStealingPool()&#123;        ExecutorService threadPool = Executors.newWorkStealingPool();        for(int i = 0; i &lt; 10; i++)&#123;            final int index = i;            threadPool.execute(() -&gt;&#123;                System.out.println(index + &quot;被执行，线程名&quot;+Thread.currentThread().getName());            &#125;);        &#125;        while(!threadPool.isTerminated())&#123;                    &#125;    &#125;        //推荐使用    //阿里巴巴开发手册：线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。    public static void myThreadPoolExecutor()&#123;        final int CORE_POOL_SIZE = 5;          final int MAX_POOL_SIZE = 10;        final int QUEUE_CAPACITY = 100;        final Long KEEP_ALIVE_TIME = 1L;        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(                CORE_POOL_SIZE,                MAX_POOL_SIZE,                KEEP_ALIVE_TIME,                TimeUnit.SECONDS,                new ArrayBlockingQueue&lt;&gt;(QUEUE_CAPACITY),                new ThreadPoolExecutor.CallerRunsPolicy()                );        for(int i = 0; i &lt; 10; i++)&#123;            final int index = i;            threadPool.execute(() -&gt; &#123;                System.out.println(index+&quot;被执行，线程名：&quot;+Thread.currentThread().getName());                try &#123;                    Thread.sleep(1000);                &#125; catch (InterruptedException e) &#123;                    e.printStackTrace();                &#125;            &#125;);        &#125;            &#125;            public static void main(String[] args) &#123;        //fixedThreadPool();        //cachedThreadPool();        //singleThreadPool();        //scheduledThreadPool();        //singleThreadScheduledPool();        //workStealingPool();        myThreadPoolExecutor();    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;创建线程池的7种方式&quot;&gt;&lt;a href=&quot;#创建线程池的7种方式&quot; class=&quot;headerlink&quot; title=&quot;创建线程池的7种方式&quot;&gt;&lt;/a&gt;创建线程池的7种方式&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;import java.util.Date;
-import </summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="创建线程池的7种方式" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="线程池" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
     
   </entry>
   

@@ -2979,244 +2979,6 @@ public class TestCRUD &#123;
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | MyBatis搭建过程</title>
-    <url>/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="MyBatis搭建过程"><a href="#MyBatis搭建过程" class="headerlink" title="MyBatis搭建过程"></a>MyBatis搭建过程</h1><p>1.导入MyBatis框架的jar包、Mysql驱动包、log4j的jar包</p>
-<pre><code>myBatis-3.4.1.jar
-mysql-connector-java-5.1.37-bin.jar
-log4j.jar
-</code></pre>
-<p>2.创建MyBatis的核心（全局）配置文件mybatis-config.xml并配置（如何连接数据库）<br>3.创建映射文件XxxMapper.xml并配置（如何操作数据库）<br>4.创建mapper接口，实现两个绑定:<br>4.1接口全限定名要和映射文件的namespace保持一致<br>4.2接口中方法名和SQL语句的id保持一致<br>5.获取MyBatis操作数据库的会话对象SqlSession，通过getMapper()获取接口的动态代理实现类</p>
-<pre><code>InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-SqlSession sqlSession = sqlSessionFactory.openSession();
-UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-</code></pre>
-<p>6、测试</p>
-<span id="more"></span>
-<h2 id="搭建过程案例"><a href="#搭建过程案例" class="headerlink" title="搭建过程案例"></a>搭建过程案例</h2><p>1.项目目录<br><img src="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/1.PNG"></p>
-<p><strong>user表</strong><br><img src="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/2.PNG"></p>
-<p><strong>log4j.xml</strong></p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE log4j:configuration SYSTEM &quot;log4j.dtd&quot;&gt;
- 
-&lt;log4j:configuration xmlns:log4j=&quot;http://jakarta.apache.org/log4j/&quot;&gt;
- 
- &lt;appender name=&quot;STDOUT&quot; class=&quot;org.apache.log4j.ConsoleAppender&quot;&gt;
-   &lt;param name=&quot;Encoding&quot; value=&quot;UTF-8&quot; /&gt;
-   &lt;layout class=&quot;org.apache.log4j.PatternLayout&quot;&gt;
-    &lt;param name=&quot;ConversionPattern&quot; value=&quot;%-5p %d&#123;MM-dd HH:mm:ss,SSS&#125; %m  (%F:%L) \n&quot; /&gt;
-   &lt;/layout&gt;
- &lt;/appender&gt;
- &lt;logger name=&quot;java.sql&quot;&gt;
-   &lt;level value=&quot;debug&quot; /&gt;
- &lt;/logger&gt;
- &lt;logger name=&quot;org.apache.ibatis&quot;&gt;
-   &lt;level value=&quot;info&quot; /&gt;
- &lt;/logger&gt;
- &lt;root&gt;
-   &lt;level value=&quot;debug&quot; /&gt;
-   &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
- &lt;/root&gt;
-&lt;/log4j:configuration&gt;
-</code></pre>
-<p>2.导入上图中所示的jar包<br>3.jdbc.properties</p>
-<pre><code>jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/ssm
-jdbc.username=root
-jdbc.password=root
-</code></pre>
-<p>4.mybatis-config.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE configuration
- PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
-&lt;configuration&gt;
-    &lt;!-- &lt;properties&gt;
-        &lt;property name=&quot;jdbc.driver&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
-    &lt;/properties&gt; --&gt;
-    
-    &lt;!-- 
-        &lt;properties&gt;:设置或引入资源文件
-        resource:在类路径下访问资源文件
-        url:在网络路径或磁盘路径下访问资源文件
-     --&gt;
-    &lt;properties resource=&quot;jdbc.properties&quot;&gt;&lt;/properties&gt;
-    
-    &lt;settings&gt;
-        &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
-    &lt;/settings&gt;
-    
-    &lt;typeAliases&gt;
-        &lt;!-- 
-            为类型设置类型别名
-            type:Java类型，若只设置type，默认的别名就是类型，且不区分大小写
-         --&gt;
-         &lt;!-- &lt;typeAlias type=&quot;com.atguigu.bean.User&quot; alias=&quot;User&quot;/&gt; --&gt;
-         
-         &lt;package name=&quot;com.atguigu.bean&quot;/&gt;
-    &lt;/typeAliases&gt;
-
-    &lt;!--
-        &lt;environments&gt;:设置连接数据库的环境
-        default:设置默认使用的数据库环境
-     --&gt;
-    &lt;environments default=&quot;development&quot;&gt;
-        &lt;!-- 
-            &lt;environment&gt;:设置某个具体的数据库环境
-            id:数据库环境的唯一标识
-         --&gt;
-        &lt;environment id=&quot;development&quot;&gt;
-            &lt;!--
-                type=&quot;JDBC|MANAGED&quot; 
-             --&gt;
-            &lt;transactionManager type=&quot;JDBC&quot; /&gt;
-            &lt;!--
-                type=&quot;POOLED|UNPOOLED|JNDI&quot; 
-             --&gt;
-            &lt;dataSource type=&quot;POOLED&quot;&gt;
-                &lt;property name=&quot;driver&quot; value=&quot;$&#123;jdbc.driver&#125;&quot; /&gt;
-                &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot; /&gt;
-                &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot; /&gt;
-                &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot; /&gt;
-            &lt;/dataSource&gt;
-        &lt;/environment&gt;
-    &lt;/environments&gt;
-    
-    &lt;!-- 引入映射文件 --&gt;
-    &lt;mappers&gt;
-        &lt;mapper resource=&quot;UserMapper.xml&quot; /&gt;
-    &lt;/mappers&gt;
-&lt;/configuration&gt;
-</code></pre>
-<p>5.User.java</p>
-<pre><code>package com.atguigu.bean;
-
-public class User &#123;
-    private Integer uid;
-    private String userName;
-    private String password;
-    private Integer age;
-    private String sex;
-    public Integer getUid() &#123;
-        return uid;
-    &#125;
-    public void setUid(Integer uid) &#123;
-        this.uid = uid;
-    &#125;
-    public String getUserName() &#123;
-        return userName;
-    &#125;
-    public void setUserName(String userName) &#123;
-        this.userName = userName;
-    &#125;
-    public String getPassword() &#123;
-        return password;
-    &#125;
-    public void setPassword(String password) &#123;
-        this.password = password;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;User [uid=&quot; + uid + &quot;, userName=&quot; + userName + &quot;, password=&quot; + password + &quot;, age=&quot; + age + &quot;, sex=&quot;
-                + sex + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>6.UserMapper.xml(举例：操作数据库中的user表)</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.UserMapper&quot;&gt;
-    &lt;!-- 
-        &lt;select&gt;:定义查询语句 
-        id:设置SQL语句的唯一标识
-        resultType:结果类型，即实体类的全限定名
-    --&gt;
-    &lt;select id=&quot;getUserByUid&quot; resultType=&quot;User&quot;&gt;
-        &lt;!-- 
-        当数据库表中的字段与类中的属性名不一样时，可以在查询时指定别名
-        select uid,user_name userName,password,age,sex from user where uid = #&#123;id&#125; 
-        --&gt;
-        
-        &lt;!--
-         当数据库表中的字段与类中的属性名不一样时，如果不指定别名，需要在核心配置文件mybatis-config.xml中做以下配置：
-         &lt;settings&gt;
-            &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
-         &lt;/settings&gt;
-         
-         注：此配置通常不使用，即在开发时将数据库的字段名与类的属性名保持一致
-         --&gt;
-        select uid,user_name,password,age,sex from user where uid = #&#123;id&#125;
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>7.UserMapper.java(mapper接口)</p>
-<pre><code>package com.atguigu.mapper;
-
-import com.atguigu.bean.User;
-
-public interface UserMapper &#123;
-    User getUserByUid(String uid);
-&#125;
-</code></pre>
-<p>8.TestMybatis.java(测试类)</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.User;
-
-public class TestMybatis &#123;
-
-    @Test
-    public void test() throws IOException&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //getMapper():会通过动态代理动态生成UserMapper的代理实现类
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        //System.out.println(mapper.getClass().getName());
-        User user = mapper.getUserByUid(&quot;1&quot;);
-        System.out.println(user);  
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>MyBatis搭建过程</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>MyBatis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MyBatis | 获取参数值的两种方式</title>
     <url>/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
@@ -3473,6 +3235,244 @@ insert into table_name() values(),(),()
       </categories>
       <tags>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis | MyBatis搭建过程</title>
+    <url>/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="MyBatis搭建过程"><a href="#MyBatis搭建过程" class="headerlink" title="MyBatis搭建过程"></a>MyBatis搭建过程</h1><p>1.导入MyBatis框架的jar包、Mysql驱动包、log4j的jar包</p>
+<pre><code>myBatis-3.4.1.jar
+mysql-connector-java-5.1.37-bin.jar
+log4j.jar
+</code></pre>
+<p>2.创建MyBatis的核心（全局）配置文件mybatis-config.xml并配置（如何连接数据库）<br>3.创建映射文件XxxMapper.xml并配置（如何操作数据库）<br>4.创建mapper接口，实现两个绑定:<br>4.1接口全限定名要和映射文件的namespace保持一致<br>4.2接口中方法名和SQL语句的id保持一致<br>5.获取MyBatis操作数据库的会话对象SqlSession，通过getMapper()获取接口的动态代理实现类</p>
+<pre><code>InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+SqlSession sqlSession = sqlSessionFactory.openSession();
+UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+</code></pre>
+<p>6、测试</p>
+<span id="more"></span>
+<h2 id="搭建过程案例"><a href="#搭建过程案例" class="headerlink" title="搭建过程案例"></a>搭建过程案例</h2><p>1.项目目录<br><img src="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/1.PNG"></p>
+<p><strong>user表</strong><br><img src="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/2.PNG"></p>
+<p><strong>log4j.xml</strong></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE log4j:configuration SYSTEM &quot;log4j.dtd&quot;&gt;
+ 
+&lt;log4j:configuration xmlns:log4j=&quot;http://jakarta.apache.org/log4j/&quot;&gt;
+ 
+ &lt;appender name=&quot;STDOUT&quot; class=&quot;org.apache.log4j.ConsoleAppender&quot;&gt;
+   &lt;param name=&quot;Encoding&quot; value=&quot;UTF-8&quot; /&gt;
+   &lt;layout class=&quot;org.apache.log4j.PatternLayout&quot;&gt;
+    &lt;param name=&quot;ConversionPattern&quot; value=&quot;%-5p %d&#123;MM-dd HH:mm:ss,SSS&#125; %m  (%F:%L) \n&quot; /&gt;
+   &lt;/layout&gt;
+ &lt;/appender&gt;
+ &lt;logger name=&quot;java.sql&quot;&gt;
+   &lt;level value=&quot;debug&quot; /&gt;
+ &lt;/logger&gt;
+ &lt;logger name=&quot;org.apache.ibatis&quot;&gt;
+   &lt;level value=&quot;info&quot; /&gt;
+ &lt;/logger&gt;
+ &lt;root&gt;
+   &lt;level value=&quot;debug&quot; /&gt;
+   &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
+ &lt;/root&gt;
+&lt;/log4j:configuration&gt;
+</code></pre>
+<p>2.导入上图中所示的jar包<br>3.jdbc.properties</p>
+<pre><code>jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/ssm
+jdbc.username=root
+jdbc.password=root
+</code></pre>
+<p>4.mybatis-config.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE configuration
+ PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
+&lt;configuration&gt;
+    &lt;!-- &lt;properties&gt;
+        &lt;property name=&quot;jdbc.driver&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+    &lt;/properties&gt; --&gt;
+    
+    &lt;!-- 
+        &lt;properties&gt;:设置或引入资源文件
+        resource:在类路径下访问资源文件
+        url:在网络路径或磁盘路径下访问资源文件
+     --&gt;
+    &lt;properties resource=&quot;jdbc.properties&quot;&gt;&lt;/properties&gt;
+    
+    &lt;settings&gt;
+        &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
+    &lt;/settings&gt;
+    
+    &lt;typeAliases&gt;
+        &lt;!-- 
+            为类型设置类型别名
+            type:Java类型，若只设置type，默认的别名就是类型，且不区分大小写
+         --&gt;
+         &lt;!-- &lt;typeAlias type=&quot;com.atguigu.bean.User&quot; alias=&quot;User&quot;/&gt; --&gt;
+         
+         &lt;package name=&quot;com.atguigu.bean&quot;/&gt;
+    &lt;/typeAliases&gt;
+
+    &lt;!--
+        &lt;environments&gt;:设置连接数据库的环境
+        default:设置默认使用的数据库环境
+     --&gt;
+    &lt;environments default=&quot;development&quot;&gt;
+        &lt;!-- 
+            &lt;environment&gt;:设置某个具体的数据库环境
+            id:数据库环境的唯一标识
+         --&gt;
+        &lt;environment id=&quot;development&quot;&gt;
+            &lt;!--
+                type=&quot;JDBC|MANAGED&quot; 
+             --&gt;
+            &lt;transactionManager type=&quot;JDBC&quot; /&gt;
+            &lt;!--
+                type=&quot;POOLED|UNPOOLED|JNDI&quot; 
+             --&gt;
+            &lt;dataSource type=&quot;POOLED&quot;&gt;
+                &lt;property name=&quot;driver&quot; value=&quot;$&#123;jdbc.driver&#125;&quot; /&gt;
+                &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot; /&gt;
+                &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot; /&gt;
+                &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot; /&gt;
+            &lt;/dataSource&gt;
+        &lt;/environment&gt;
+    &lt;/environments&gt;
+    
+    &lt;!-- 引入映射文件 --&gt;
+    &lt;mappers&gt;
+        &lt;mapper resource=&quot;UserMapper.xml&quot; /&gt;
+    &lt;/mappers&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>5.User.java</p>
+<pre><code>package com.atguigu.bean;
+
+public class User &#123;
+    private Integer uid;
+    private String userName;
+    private String password;
+    private Integer age;
+    private String sex;
+    public Integer getUid() &#123;
+        return uid;
+    &#125;
+    public void setUid(Integer uid) &#123;
+        this.uid = uid;
+    &#125;
+    public String getUserName() &#123;
+        return userName;
+    &#125;
+    public void setUserName(String userName) &#123;
+        this.userName = userName;
+    &#125;
+    public String getPassword() &#123;
+        return password;
+    &#125;
+    public void setPassword(String password) &#123;
+        this.password = password;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;User [uid=&quot; + uid + &quot;, userName=&quot; + userName + &quot;, password=&quot; + password + &quot;, age=&quot; + age + &quot;, sex=&quot;
+                + sex + &quot;]&quot;;
+    &#125;
+    
+&#125;
+</code></pre>
+<p>6.UserMapper.xml(举例：操作数据库中的user表)</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.UserMapper&quot;&gt;
+    &lt;!-- 
+        &lt;select&gt;:定义查询语句 
+        id:设置SQL语句的唯一标识
+        resultType:结果类型，即实体类的全限定名
+    --&gt;
+    &lt;select id=&quot;getUserByUid&quot; resultType=&quot;User&quot;&gt;
+        &lt;!-- 
+        当数据库表中的字段与类中的属性名不一样时，可以在查询时指定别名
+        select uid,user_name userName,password,age,sex from user where uid = #&#123;id&#125; 
+        --&gt;
+        
+        &lt;!--
+         当数据库表中的字段与类中的属性名不一样时，如果不指定别名，需要在核心配置文件mybatis-config.xml中做以下配置：
+         &lt;settings&gt;
+            &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
+         &lt;/settings&gt;
+         
+         注：此配置通常不使用，即在开发时将数据库的字段名与类的属性名保持一致
+         --&gt;
+        select uid,user_name,password,age,sex from user where uid = #&#123;id&#125;
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>7.UserMapper.java(mapper接口)</p>
+<pre><code>package com.atguigu.mapper;
+
+import com.atguigu.bean.User;
+
+public interface UserMapper &#123;
+    User getUserByUid(String uid);
+&#125;
+</code></pre>
+<p>8.TestMybatis.java(测试类)</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.User;
+
+public class TestMybatis &#123;
+
+    @Test
+    public void test() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        //getMapper():会通过动态代理动态生成UserMapper的代理实现类
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        //System.out.println(mapper.getClass().getName());
+        User user = mapper.getUserByUid(&quot;1&quot;);
+        System.out.println(user);  
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>MyBatis搭建过程</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>MyBatis</tag>
       </tags>
   </entry>
   <entry>
@@ -4366,169 +4366,6 @@ cluster-node-timeout 15000
       </tags>
   </entry>
   <entry>
-    <title>SpringMVC | RequestMapping注解的几个属性和作用位置</title>
-    <url>/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="RequestMapping注解的几个属性和作用位置"><a href="#RequestMapping注解的几个属性和作用位置" class="headerlink" title="RequestMapping注解的几个属性和作用位置"></a>RequestMapping注解的几个属性和作用位置</h1><p>1.项目目录<br><img src="/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/1.PNG"></p>
-<span id="more"></span>
-<p>2.web.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
-  &lt;display-name&gt;SpringMVC02&lt;/display-name&gt;
-  &lt;welcome-file-list&gt;
-    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
-  &lt;/welcome-file-list&gt;
-  
-  &lt;!-- The front controller of this Spring Web application, responsible for handling all application requests --&gt;
-    &lt;servlet&gt;
-        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;/servlet&gt;
-
-    &lt;!-- Map all requests to the DispatcherServlet for handling --&gt;
-    &lt;servlet-mapping&gt;
-        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-    &lt;/servlet-mapping&gt;
-&lt;/web-app&gt;
-</code></pre>
-<p>3.springMVC-servlet.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
-    
-    &lt;!-- 扫描组件 --&gt;
-    &lt;context:component-scan base-package=&quot;com.atguigu.controller&quot;&gt;&lt;/context:component-scan&gt;
-    
-    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
-        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>4.index.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;test&quot;&gt;测试springMVC&lt;/a&gt;
-    
-    &lt;br&gt;
-    
-    &lt;form action=&quot;test&quot; method=&quot;post&quot;&gt;
-        &lt;input type=&quot;submit&quot; value=&quot;测试POST&quot;&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.success.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;成功&lt;/h1&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>6.TestController.java</p>
-<pre><code>package com.atguigu.controller;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-@Controller
-//@RequestMapping(&quot;/mvc&quot;)
-public class TestController &#123;
-    /**
-     * @RequestMapping:设置请求映射，把请求和控制层中的方法设置映射关系
-     * 当请求路径和@RequestMapping的value属性一致时，则该注解所标注的方法即为处理请求的方法
-     * 
-     * @RequestMapping可以加在类上，也可以加在方法上
-     * 若类和方法上都加有，应该一层一层的访问，西安访问类，再访问类中的方法
-     * 
-     * method:用来设置请求方式，只有客户端发送请求的方式和method的值一致，才能处理请求
-     * 请求方式：GET查询    POST添加    PUT修改    DELETE删除
-     * params:用来设置客户端传到服务器的数据，支持表达式
-     * username !username username=admin username!=admin
-     * headers:用来设置请求头信息，所发送的请求的请求头信息一定要个headers属性中所设置的一致
-     */
-//    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.POST)
-//    public String testPOST()&#123;
-//        System.out.println(&quot;SUCCESS:POST&quot;);
-//        return &quot;success&quot;;
-//    &#125;
-    
-//    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.GET)
-//    public String testGET()&#123;
-//        System.out.println(&quot;SUCCESS:GET&quot;);
-//        return &quot;success&quot;;
-//    &#125;
-    
-//    @RequestMapping(value=&quot;/test&quot;, params=&#123;&quot;username&quot;, &quot;!age&quot;, &quot;sex!=1&quot;&#125;)
-//    public String testParams()&#123;
-//        System.out.println(&quot;SUCCESS&quot;);
-//        return &quot;success&quot;;
-//    &#125;
-    
-    @RequestMapping(value=&quot;/test&quot;, 
-            headers=&#123;&quot;Accept-Encoding=gzip, deflate&quot;&#125;)
-    public String testHeaders()&#123;
-        System.out.println(&quot;SUCCESS&quot;);
-        return &quot;success&quot;;
-    &#125;
-    
-    /**
-    * springMVC支持Ant方式的请求路径
-    * 在Ant中，有3个匹配符
-    * *:任意字符
-    * ?:任意一个字符
-    * **:任意多层目录
-    */
-    //访问路径举例：localhost:8080/SpringMVC02/abc/ant11/a/b/testAnt
-    @RequestMapping(value=&quot;/*/ant??/**/testAnt&quot;)
-    public String testAnt()&#123;
-        System.out.println(&quot;SUCCESS:testAnt&quot;);
-        return &quot;success&quot;;
-    &#125;
-    
-    /**
-     * 以前：localhost:8080/SpringMVC02/testREST?id=1001&amp;username=admin
-     * 现在：localhost:8080/SpringMVC02/testREST/1001/admin
-     */
-    @RequestMapping(&quot;/testREST/&#123;id&#125;/&#123;username&#125;&quot;)//占位符方式的路径
-    public String testREST(@PathVariable(&quot;id&quot;)Integer id, @PathVariable(&quot;username&quot;)String username)&#123;
-        System.out.println(&quot;id:&quot;+id+&quot;,username=&quot;+username);
-        return &quot;success&quot;;
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>RequestMapping注解的几个属性和作用位置</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
-        <tag>RequestMapping Ant风格路径</tag>
-        <tag>PathVariable注解</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL | SQL语句实例大全</title>
     <url>/2022/01/20/SQL%E8%AF%AD%E5%8F%A5%E5%AE%9E%E4%BE%8B%E5%A4%A7%E5%85%A8/</url>
     <content><![CDATA[<h1 id="SQL语句实例大全"><a href="#SQL语句实例大全" class="headerlink" title="SQL语句实例大全"></a>SQL语句实例大全</h1><p><strong>SQL语句分类</strong></p>
@@ -4897,6 +4734,169 @@ public class EmpServiceImpl implements EmpService&#123;
       </categories>
       <tags>
         <tag>SSM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringMVC | RequestMapping注解的几个属性和作用位置</title>
+    <url>/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="RequestMapping注解的几个属性和作用位置"><a href="#RequestMapping注解的几个属性和作用位置" class="headerlink" title="RequestMapping注解的几个属性和作用位置"></a>RequestMapping注解的几个属性和作用位置</h1><p>1.项目目录<br><img src="/2022/03/08/RequestMapping%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BD%9C%E7%94%A8%E4%BD%8D%E7%BD%AE/1.PNG"></p>
+<span id="more"></span>
+<p>2.web.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
+  &lt;display-name&gt;SpringMVC02&lt;/display-name&gt;
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+  
+  &lt;!-- The front controller of this Spring Web application, responsible for handling all application requests --&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;!-- Map all requests to the DispatcherServlet for handling --&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</code></pre>
+<p>3.springMVC-servlet.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 扫描组件 --&gt;
+    &lt;context:component-scan base-package=&quot;com.atguigu.controller&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>4.index.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;test&quot;&gt;测试springMVC&lt;/a&gt;
+    
+    &lt;br&gt;
+    
+    &lt;form action=&quot;test&quot; method=&quot;post&quot;&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;测试POST&quot;&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.success.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;成功&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>6.TestController.java</p>
+<pre><code>package com.atguigu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+//@RequestMapping(&quot;/mvc&quot;)
+public class TestController &#123;
+    /**
+     * @RequestMapping:设置请求映射，把请求和控制层中的方法设置映射关系
+     * 当请求路径和@RequestMapping的value属性一致时，则该注解所标注的方法即为处理请求的方法
+     * 
+     * @RequestMapping可以加在类上，也可以加在方法上
+     * 若类和方法上都加有，应该一层一层的访问，西安访问类，再访问类中的方法
+     * 
+     * method:用来设置请求方式，只有客户端发送请求的方式和method的值一致，才能处理请求
+     * 请求方式：GET查询    POST添加    PUT修改    DELETE删除
+     * params:用来设置客户端传到服务器的数据，支持表达式
+     * username !username username=admin username!=admin
+     * headers:用来设置请求头信息，所发送的请求的请求头信息一定要个headers属性中所设置的一致
+     */
+//    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.POST)
+//    public String testPOST()&#123;
+//        System.out.println(&quot;SUCCESS:POST&quot;);
+//        return &quot;success&quot;;
+//    &#125;
+    
+//    @RequestMapping(value=&quot;/test&quot;, method=RequestMethod.GET)
+//    public String testGET()&#123;
+//        System.out.println(&quot;SUCCESS:GET&quot;);
+//        return &quot;success&quot;;
+//    &#125;
+    
+//    @RequestMapping(value=&quot;/test&quot;, params=&#123;&quot;username&quot;, &quot;!age&quot;, &quot;sex!=1&quot;&#125;)
+//    public String testParams()&#123;
+//        System.out.println(&quot;SUCCESS&quot;);
+//        return &quot;success&quot;;
+//    &#125;
+    
+    @RequestMapping(value=&quot;/test&quot;, 
+            headers=&#123;&quot;Accept-Encoding=gzip, deflate&quot;&#125;)
+    public String testHeaders()&#123;
+        System.out.println(&quot;SUCCESS&quot;);
+        return &quot;success&quot;;
+    &#125;
+    
+    /**
+    * springMVC支持Ant方式的请求路径
+    * 在Ant中，有3个匹配符
+    * *:任意字符
+    * ?:任意一个字符
+    * **:任意多层目录
+    */
+    //访问路径举例：localhost:8080/SpringMVC02/abc/ant11/a/b/testAnt
+    @RequestMapping(value=&quot;/*/ant??/**/testAnt&quot;)
+    public String testAnt()&#123;
+        System.out.println(&quot;SUCCESS:testAnt&quot;);
+        return &quot;success&quot;;
+    &#125;
+    
+    /**
+     * 以前：localhost:8080/SpringMVC02/testREST?id=1001&amp;username=admin
+     * 现在：localhost:8080/SpringMVC02/testREST/1001/admin
+     */
+    @RequestMapping(&quot;/testREST/&#123;id&#125;/&#123;username&#125;&quot;)//占位符方式的路径
+    public String testREST(@PathVariable(&quot;id&quot;)Integer id, @PathVariable(&quot;username&quot;)String username)&#123;
+        System.out.println(&quot;id:&quot;+id+&quot;,username=&quot;+username);
+        return &quot;success&quot;;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>RequestMapping注解的几个属性和作用位置</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+        <tag>RequestMapping Ant风格路径</tag>
+        <tag>PathVariable注解</tag>
       </tags>
   </entry>
   <entry>
@@ -5819,6 +5819,59 @@ public String param(Model model)&#123;
       </tags>
   </entry>
   <entry>
+    <title>Java | ThreadLocal</title>
+    <url>/2022/04/23/ThreadLocal/</url>
+    <content><![CDATA[<h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p>
+<p><strong>代码：</strong></p>
+<pre><code>import java.text.SimpleDateFormat;
+import java.util.Random;
+
+public class ThreadLocalTest implements Runnable&#123;
+
+    //private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = ThreadLocal.withInitial(()-&gt;new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;));
+    private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = new ThreadLocal&lt;SimpleDateFormat&gt;()&#123;
+        @Override
+        protected SimpleDateFormat initialValue()&#123;
+            return new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;);
+        &#125;
+    &#125;;
+    
+    @Override
+    public void run() &#123;
+        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; default formatter=&quot;+formatter.get().toPattern());
+        try &#123;
+            Thread.sleep(new Random().nextInt(1000));
+        &#125; catch (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+        formatter.set(new SimpleDateFormat());
+        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; current formatter=&quot;+formatter.get().toPattern());
+        
+    &#125;
+    
+    public static void main(String[] args) throws InterruptedException&#123;
+        ThreadLocalTest obj = new ThreadLocalTest();
+        for(int i=0;i&lt;10;i++)&#123;
+            Thread t = new Thread(obj, &quot;&quot;+i);
+            Thread.sleep(new Random().nextInt(1000));
+            t.start();
+        &#125;
+    &#125;
+    
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>ThreadLocal</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>ThreadLocal</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>tkinter | Tkinter制作python程序的图形化界面</title>
     <url>/2021/10/30/Tkinter%E5%88%B6%E4%BD%9Cpython%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2/</url>
     <content><![CDATA[<h1 id="Tkinter制作python程序的图形化界面"><a href="#Tkinter制作python程序的图形化界面" class="headerlink" title="Tkinter制作python程序的图形化界面"></a>Tkinter制作python程序的图形化界面</h1><p>代码：</p>
@@ -5985,59 +6038,6 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>python</tag>
         <tag>tkinter</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java | ThreadLocal</title>
-    <url>/2022/04/23/ThreadLocal/</url>
-    <content><![CDATA[<h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p>
-<p><strong>代码：</strong></p>
-<pre><code>import java.text.SimpleDateFormat;
-import java.util.Random;
-
-public class ThreadLocalTest implements Runnable&#123;
-
-    //private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = ThreadLocal.withInitial(()-&gt;new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;));
-    private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = new ThreadLocal&lt;SimpleDateFormat&gt;()&#123;
-        @Override
-        protected SimpleDateFormat initialValue()&#123;
-            return new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;);
-        &#125;
-    &#125;;
-    
-    @Override
-    public void run() &#123;
-        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; default formatter=&quot;+formatter.get().toPattern());
-        try &#123;
-            Thread.sleep(new Random().nextInt(1000));
-        &#125; catch (InterruptedException e) &#123;
-            e.printStackTrace();
-        &#125;
-        formatter.set(new SimpleDateFormat());
-        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; current formatter=&quot;+formatter.get().toPattern());
-        
-    &#125;
-    
-    public static void main(String[] args) throws InterruptedException&#123;
-        ThreadLocalTest obj = new ThreadLocalTest();
-        for(int i=0;i&lt;10;i++)&#123;
-            Thread t = new Thread(obj, &quot;&quot;+i);
-            Thread.sleep(new Random().nextInt(1000));
-            t.start();
-        &#125;
-    &#125;
-    
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>ThreadLocal</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>ThreadLocal</tag>
       </tags>
   </entry>
   <entry>
@@ -7215,169 +7215,6 @@ such references are cleared or themselves become unreachable.
       </tags>
   </entry>
   <entry>
-    <title>json</title>
-    <url>/2022/03/13/json/</url>
-    <content><![CDATA[<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>1.json有两种对象<br>（1）json对象：{key1:value1,key2:value2,…}<br>（2）json数组：[value1,value2,…]<br>2.解析方式<br>（1）Json对象解析方式：对象.key<br>（2）json数组解析方式：for循环遍历<br>3.java对象转换json<br>（1）Bean和map—&gt;json对象<br>（2）List—&gt;json数组</p>
-<p><strong>示例：</strong><br>数据：<br>    user：id=1,username=admin,age=23,sex=男</p>
-<p>Xml方式:</p>
-<pre><code>&lt;userinfo&gt;
-    &lt;user&gt;
-        &lt;id&gt;1&lt;/id&gt;
-        &lt;username&gt;admin&lt;/username&gt;
-        &lt;age&gt;23&lt;/age&gt;
-        &lt;sex&gt;男&lt;/sex&gt;
-    &lt;/user&gt;
-&lt;/userinfo&gt;
-</code></pre>
-<p>Json方式:</p>
-<pre><code>&#123;id:1,username:admin,age:23,sex:男&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>json</category>
-      </categories>
-      <tags>
-        <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaWeb项目开发 | jsp</title>
-    <url>/2022/01/11/jsp/</url>
-    <content><![CDATA[<h1 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h1><ol>
-<li>什么是jsp?<br>java server pages(java服务器页面)，本质上就是一个servlet,运行在服务器端.</li>
-<li>作用<br>可以在jsp嵌入java代码，动态展示数据</li>
-<li>jsp的特定内容</li>
-<li>1 jsp的脚本<br>&lt;%…%&gt;:写java程序片段<br>&lt;%=…%&gt;:输出表达式（输出表达式不能以分号结尾）</li>
-<li>2 jsp的指令<br>（1）包含在.jsp文件的头部，声明当前页面的一些属性和行为</li>
-</ol>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-        pageEncoding=&quot;UTF-8&quot;%&gt;
-</code></pre>
-<p>（2）taglib:导入标签库<br>s<br>    &lt;%@taglib prefix=”c” uri=”<a href="http://java.sun.com/jsp/jstl/core&quot;">http://java.sun.com/jsp/jstl/core&quot;</a> %&gt;<br>导入标签库后就可以使用jstl标签替换jsp中的if、for表达式。更多见<a href="https://victory-liao.github.io/2022/01/11/jstl%E6%A0%87%E7%AD%BE/">jstl标签</a><br>3.3 jsp中的域对象<br>request:当前请求<br>session:当前会话<br>3.4 jsp的动作标签<br>语法：&lt;jsp:动作标签 属性=”值”&gt;<br>例如： 将其他页面包含到当前页面 </p>
-<pre><code>&lt;jsp:include page=&quot;/..&quot;&gt;&lt;/jsp:inclue&gt;
-</code></pre>
-<span id="more"></span>
-<p>3.5 jsp测试</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!--定义两个变量--&gt;
-    &lt;%
-        int a = 1;
-        int b = 2;
-    %&gt;
-    &lt;!--输出a+b的值--&gt;
-    &lt;%=a+b %&gt;
-    &lt;!--写if表达式--&gt;
-    &lt;%
-        if(a&gt;b)&#123;
-        %&gt;
-        &lt;font color=&quot;red&quot;&gt;a is 大于 b&lt;/font&gt;
-        &lt;%
-        &#125;else&#123;
-            %&gt;
-            &lt;font color=&quot;red&quot;&gt;a 小于 b&lt;/font&gt;
-        &lt;%
-        &#125;
-    %&gt;
-    &lt;!--写for语句--&gt;
-    &lt;%
-        for(int i=1;i&lt;11;i++)&#123;
-            %&gt;
-            &lt;%=i %&gt;
-            &lt;% 
-        &#125;
-    %&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="/2022/01/11/jsp/1.PNG"><br>3.5 jsp中的域对象测试</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;%
-        request.setAttribute(&quot;username&quot;, &quot;zhangsan&quot;);
-    %&gt;
-    &lt;%=request.getAttribute(&quot;username&quot;) %&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="/2022/01/11/jsp/2.PNG"><br>3.6 jsp动作标签测试<br>以下代码可以是开发中引入前端页面的共同部分<br><strong>a.jsp</strong></p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-11111111111111111
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><strong>b.jsp</strong></p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;jsp:include page=&quot;/a.jsp&quot;&gt;&lt;/jsp:include&gt;
-    &lt;/br&gt;
-    22222222222222222
-    33333333333333333
-    &lt;/br&gt;
-    &lt;jsp:include page=&quot;/c.jsp&quot;&gt;&lt;/jsp:include&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><strong>c.jsp</strong></p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-33333333333333333
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>效果：</p>
-<pre><code>11111111111111111
-22222222222222222
-33333333333333333
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>jsp</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>jsp</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | jstl标签</title>
     <url>/2022/01/11/jstl%E6%A0%87%E7%AD%BE/</url>
     <content><![CDATA[<h1 id="jstl标签"><a href="#jstl标签" class="headerlink" title="jstl标签"></a>jstl标签</h1><ol>
@@ -7514,6 +7351,32 @@ if __name__ == &#39;__main__&#39;:
         <tag>python</tag>
         <tag>matplotlib</tag>
         <tag>双柱状图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>json</title>
+    <url>/2022/03/13/json/</url>
+    <content><![CDATA[<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>1.json有两种对象<br>（1）json对象：{key1:value1,key2:value2,…}<br>（2）json数组：[value1,value2,…]<br>2.解析方式<br>（1）Json对象解析方式：对象.key<br>（2）json数组解析方式：for循环遍历<br>3.java对象转换json<br>（1）Bean和map—&gt;json对象<br>（2）List—&gt;json数组</p>
+<p><strong>示例：</strong><br>数据：<br>    user：id=1,username=admin,age=23,sex=男</p>
+<p>Xml方式:</p>
+<pre><code>&lt;userinfo&gt;
+    &lt;user&gt;
+        &lt;id&gt;1&lt;/id&gt;
+        &lt;username&gt;admin&lt;/username&gt;
+        &lt;age&gt;23&lt;/age&gt;
+        &lt;sex&gt;男&lt;/sex&gt;
+    &lt;/user&gt;
+&lt;/userinfo&gt;
+</code></pre>
+<p>Json方式:</p>
+<pre><code>&#123;id:1,username:admin,age:23,sex:男&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>json</category>
+      </categories>
+      <tags>
+        <tag>json</tag>
       </tags>
   </entry>
   <entry>
@@ -7760,6 +7623,143 @@ wb.save(&quot;物料表.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | jsp</title>
+    <url>/2022/01/11/jsp/</url>
+    <content><![CDATA[<h1 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h1><ol>
+<li>什么是jsp?<br>java server pages(java服务器页面)，本质上就是一个servlet,运行在服务器端.</li>
+<li>作用<br>可以在jsp嵌入java代码，动态展示数据</li>
+<li>jsp的特定内容</li>
+<li>1 jsp的脚本<br>&lt;%…%&gt;:写java程序片段<br>&lt;%=…%&gt;:输出表达式（输出表达式不能以分号结尾）</li>
+<li>2 jsp的指令<br>（1）包含在.jsp文件的头部，声明当前页面的一些属性和行为</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+        pageEncoding=&quot;UTF-8&quot;%&gt;
+</code></pre>
+<p>（2）taglib:导入标签库<br>s<br>    &lt;%@taglib prefix=”c” uri=”<a href="http://java.sun.com/jsp/jstl/core&quot;">http://java.sun.com/jsp/jstl/core&quot;</a> %&gt;<br>导入标签库后就可以使用jstl标签替换jsp中的if、for表达式。更多见<a href="https://victory-liao.github.io/2022/01/11/jstl%E6%A0%87%E7%AD%BE/">jstl标签</a><br>3.3 jsp中的域对象<br>request:当前请求<br>session:当前会话<br>3.4 jsp的动作标签<br>语法：&lt;jsp:动作标签 属性=”值”&gt;<br>例如： 将其他页面包含到当前页面 </p>
+<pre><code>&lt;jsp:include page=&quot;/..&quot;&gt;&lt;/jsp:inclue&gt;
+</code></pre>
+<span id="more"></span>
+<p>3.5 jsp测试</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!--定义两个变量--&gt;
+    &lt;%
+        int a = 1;
+        int b = 2;
+    %&gt;
+    &lt;!--输出a+b的值--&gt;
+    &lt;%=a+b %&gt;
+    &lt;!--写if表达式--&gt;
+    &lt;%
+        if(a&gt;b)&#123;
+        %&gt;
+        &lt;font color=&quot;red&quot;&gt;a is 大于 b&lt;/font&gt;
+        &lt;%
+        &#125;else&#123;
+            %&gt;
+            &lt;font color=&quot;red&quot;&gt;a 小于 b&lt;/font&gt;
+        &lt;%
+        &#125;
+    %&gt;
+    &lt;!--写for语句--&gt;
+    &lt;%
+        for(int i=1;i&lt;11;i++)&#123;
+            %&gt;
+            &lt;%=i %&gt;
+            &lt;% 
+        &#125;
+    %&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><img src="/2022/01/11/jsp/1.PNG"><br>3.5 jsp中的域对象测试</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;%
+        request.setAttribute(&quot;username&quot;, &quot;zhangsan&quot;);
+    %&gt;
+    &lt;%=request.getAttribute(&quot;username&quot;) %&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><img src="/2022/01/11/jsp/2.PNG"><br>3.6 jsp动作标签测试<br>以下代码可以是开发中引入前端页面的共同部分<br><strong>a.jsp</strong></p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+11111111111111111
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>b.jsp</strong></p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;jsp:include page=&quot;/a.jsp&quot;&gt;&lt;/jsp:include&gt;
+    &lt;/br&gt;
+    22222222222222222
+    33333333333333333
+    &lt;/br&gt;
+    &lt;jsp:include page=&quot;/c.jsp&quot;&gt;&lt;/jsp:include&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>c.jsp</strong></p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+33333333333333333
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>效果：</p>
+<pre><code>11111111111111111
+22222222222222222
+33333333333333333
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>jsp</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>jsp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>itertools | product</title>
     <url>/2021/09/04/product/</url>
     <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
@@ -7889,18 +7889,6 @@ t = Test()
 t.num = 50
 print(t.num)
 </code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | python str 对象</title>
-    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -8727,6 +8715,18 @@ show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
         <tag>python</tag>
         <tag>垃圾回收机制</tag>
         <tag>gc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | python str 对象</title>
+    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -11985,6 +11985,427 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | 事务</title>
+    <url>/2022/01/26/%E4%BA%8B%E5%8A%A1/</url>
+    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
+<pre><code>CREATE TABLE user(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+NAME VARCHAR(20),
+balance DOUBLE
+);
+</code></pre>
+<p><strong>创建测试类Test1.java</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.QueryRunner;
+
+import com.oracle.utils.DataSourceUtils;
+
+public class Test1 &#123;
+
+    public static void main(String[] args)&#123;
+        try &#123;
+            //开启事务
+            DataSourceUtils.startTransaction();
+            //创建QueryRunner对象
+            QueryRunner qr = new QueryRunner();
+            //编写sql语句
+            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;
+            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;
+            //执行sql
+            qr.update(DataSourceUtils.getConnection(), sql1);
+            
+            //失败
+            int c=100/0;
+            
+            qr.update(DataSourceUtils.getConnection(), sql2);
+            //事务提交
+            DataSourceUtils.commitAndRelease();
+            //关闭事务
+            DataSourceUtils.closeConnection();
+        &#125; catch (Exception e) &#123;
+            //失败则回滚
+            try &#123;
+                DataSourceUtils.rollback();
+            &#125; catch (Exception e1) &#123;
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>事务</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>事务</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 二叉树的最小深度</title>
+    <url>/2022/01/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/</url>
+    <content><![CDATA[<h1 id="二叉树的最小深度"><a href="#二叉树的最小深度" class="headerlink" title="二叉树的最小深度"></a>二叉树的最小深度</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二叉树，找出其最小深度。<br>最小深度是从根节点到最近叶子节点的最短路径上的节点数量。<br>说明：叶子节点是指没有子节点的节点。</p>
+<p><a href="https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>方法一：深度优先搜索<br>首先可以想到使用深度优先搜索的方法，遍历整棵树，记录最小深度。<br>对于每一个非叶子节点，我们只需要分别计算其左右子树的最小叶子节点深度。这样就将一个大问题转化为了小问题，可以递归地解决该问题。<br>方法二：广度优先搜索<br>使用广度优先搜索的方法，遍历整棵树。<br>当我们找到一个叶子节点时，直接返回这个叶子节点的深度。广度优先搜索的性质保证了最先搜索到的叶子节点的深度一定最小。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for a binary tree node.
+import collections
+
+
+class TreeNode(object):
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+class Solution(object):
+    def minDepth(self, root):
+        &quot;&quot;&quot;
+        深度优先搜索
+        :type root: TreeNode
+        :rtype: int
+        &quot;&quot;&quot;
+        def get_depth(root):
+            if root is None:
+                return 0
+            left_depth = get_depth(root.right)
+            right_depth = get_depth(root.left)
+            return min(right_depth, left_depth) + 1
+
+        return get_depth(root)
+
+    def minDepth1(self, root):
+        &quot;&quot;&quot;深度优先搜索&quot;&quot;&quot;
+        if not root:
+            return 0
+
+        if not root.left and not root.right:
+            return 1
+
+        min_depth = 10 ** 9
+        if root.left:
+            min_depth = min(self.minDepth1(root.left), min_depth)
+        if root.right:
+            min_depth = min(self.minDepth1(root.right), min_depth)
+        return min_depth + 1
+
+    def minDepth2(self, root):
+        &quot;&quot;&quot;深度优先搜索&quot;&quot;&quot;
+        if not root:
+            return 0
+
+        que = collections.deque([(root, 1)])
+        while que:
+            node, depth = que.popleft()
+            if not node.left and not node.right:
+                return depth
+            if node.left:
+                que.append((node.left, depth + 1))
+            if node.right:
+                que.append((node.right, depth + 1))
+
+        return 0
+
+    def create_binary_tree(self, nodes_list):
+        node1 = TreeNode(nodes_list[1])
+        node3 = TreeNode(nodes_list[3])
+        node4 = TreeNode(nodes_list[4])
+        node2 = TreeNode(nodes_list[2], node3, node4)
+        root = TreeNode(nodes_list[0], node1, node2)
+        return root
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    root = slt.create_binary_tree([3, 9, 20, 15, 7])
+    print(slt.minDepth(root))
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>树</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 二进制求和</title>
+    <url>/2021/08/29/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B1%82%E5%92%8C/</url>
+    <content><![CDATA[<h1 id="67-二进制求和"><a href="#67-二进制求和" class="headerlink" title="67.二进制求和"></a>67.二进制求和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个二进制字符串，返回它们的和（用二进制表示）。<br>输入为 非空 字符串且只包含数字 1 和 0。</p>
+<span id="more"></span>
+<p>示例 1:<br>输入: a = “11”, b = “1”<br>输出: “100”</p>
+<p><a href="https://leetcode-cn.com/problems/add-binary/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.先将 a 和 b 转化成十进制数，求和后再转化为二进制数<br>2.列竖式<br>末尾对齐，逐位相加，逢二进一<br>具体的，我们可以取 n=max{∣a∣,∣b∣}，循环 n 次，从最低位开始遍历。我们使用一个变量 carry 表示上一个位置的进位，初始值为 0。记当前位置对其的两个位为 ai​ 和 bi​，则每一位的答案为 (carry+ai+bi) mod 2，下一位的进位为 ⌊(carry+ai+bi)/2⌋。重复上述步骤，直到数字 a 和 b 的每一位计算完毕。最后如果 carry 的最高位不为 0，则将最高位添加到计算结果的末尾。<br>注意，为了让各个位置对齐，你可以先反转这个代表二进制数字的字符串，然后低下标对应低位，高下标对应高位。当然你也可以直接把 a 和 b 中短的那一个补 0 直到和长的那个一样长，然后从高位向低位遍历，对应位置的答案按照顺序存入答案字符串内，最终将答案串反转。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def addBinary(self, a: str, b: str) -&gt; str:
+        &quot;&quot;&quot;
+        先将 aaa 和 bbb 转化成十进制数，求和后再转化为二进制数
+        :param a:
+        :param b:
+        :return:
+        &quot;&quot;&quot;
+        # a = int(a, 2)  # 将二进制数转为十进制
+        # b = int(b, 2)
+        # print(a)
+        # print(b)
+        # return bin(a+b)[2:]
+
+        return &#39;&#123;0:b&#125;&#39;.format(int(a, 2) + int(b, 2))
+
+    def addBinary1(self, a: str, b: str) -&gt; str:
+        ans = list()
+        n = max(len(a), len(b))
+        carry = 0
+
+        list_a = []
+        list_b = []
+        for e in a:
+            list_a.append(int(e))
+
+        for e in b:
+            list_b.append(int(e))
+
+        print(list_a)
+        print(list_b)
+
+        for i in range(n):
+            carry += list_a[len(a) - i - 1] if i &lt; len(a) else 0
+            carry += list_b[len(b) - i - 1] if i &lt; len(b) else 0
+            ans.append(str(int(carry % 2)))
+            carry /= 2
+
+        if carry &gt; 0:
+            ans.append(&#39;1&#39;)
+
+        return &#39;&#39;.join(ans[::-1])
+
+
+if __name__ == &#39;__main__&#39;:
+    s = Solution()
+    a = &quot;11&quot;
+    b = &quot;1&quot;
+    res = s.addBinary1(a, b)
+    print(res)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis | 事务</title>
+    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
+    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
+<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
+<span id="more"></span>
+<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
+<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>事务</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OS | 什么是操作系统</title>
+    <url>/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统?"></a>什么是操作系统?</h1><p>“操作系统（operating system，简称OS）是管理计算机硬件与软件资源的计算机程序,是硬件软件之间的一座桥梁。</p>
+<p><img src="/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.JPG"></p>
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>OS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>xlrd | 从Excel表中批量复制粘贴数据到新表</title>
+    <url>/2021/11/05/%E4%BB%8EExcel%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E6%95%B0%E6%8D%AE%E5%88%B0%E6%96%B0%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="从Excel表中批量复制粘贴数据到新表"><a href="#从Excel表中批量复制粘贴数据到新表" class="headerlink" title="从Excel表中批量复制粘贴数据到新表"></a>从Excel表中批量复制粘贴数据到新表</h1><p>程序实现从Excel表中批量复制粘贴部分数据到新表。</p>
+<span id="more"></span>
+<p>代码：</p>
+<pre><code># 读取xls文件中的数据
+import xlrd
+
+file = &quot;原表.xls&quot;
+wb = xlrd.open_workbook(file)  # 读取工作簿
+ws = wb.sheets()[0]  # 选第一个工作表
+data = []
+
+for row in range(7, ws.nrows):
+    name = ws.cell(row, 1).value.strip()  # 科室名称
+    total1 = ws.cell(row, 2).value  # 总计
+    total2 = ws.cell(row, 3).value  # 计
+    avg = ws.cell(row, 20).value  # 平均每日人次
+
+    info_list = [name, total1, total2, avg]
+
+    if info_list[0] != &quot;&quot;:  # 去除空数据
+        data.append(info_list)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+
+file = &quot;统计表模板.xlsx&quot;
+wb = load_workbook(file)
+ws = wb.active
+
+# 写入数据
+for i in data:
+    ws.append(i)
+
+# 设置字号，对齐，缩小字体填充，加边框
+# Font(bold=True)可加粗字体
+for row_number in range(3, ws.max_row + 1):
+    ws.row_dimensions[row_number].height = 25  # 设置行高
+    for col_number in range(1, 5):
+        c = ws.cell(row=row_number, column=col_number)
+        c.font = Font(size=11, bold=True)
+        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+        c.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
+
+wb.save(&quot;统计表.xlsx&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>xlrd</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>xlrd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</title>
+    <url>/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/</url>
+    <content><![CDATA[<h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
+<pre><code>import pandas as pd
+
+df = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)
+df.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03
+
+df[&#39;月份&#39;] = df[&#39;日期&#39;].dt.month
+df.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
+
+df5 = df[df[&#39;月份&#39;] == 5]
+df5.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 9649     A19X9280200     EA     36012XR0413200     LC009650     PC09650     66     2019-05-03     5
+# 9650     A19X9280200     EA     60022XR2298300     LC009651     PC09651     66     2019-05-03     5
+# 9651     A19X9280561     EA     72004XR2000001     LC009652     PC09652     604     2019-05-03     5
+# 9652     A19X9286759     EA     62010XR0161048     LC009653     PC09653     50     2019-05-03     5
+# 9653     A19X9286759     EA     62010XR0502208     LC009654     PC09654     100     2019-05-03     5
+
+df8 = df[df[&#39;月份&#39;] == 8]
+df8.head()
+
+
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 17213     A19X9317364     EA     62010XR0500126     LC017214     PC17214     230     2019-08-01     8
+# 17214     A19X9317364     EA     61010XR1120100     LC017215     PC17215     230     2019-08-01     8
+# 17215     A19X9317364     EA     62012XR0102262     LC017216     PC17216     230     2019-08-01     8
+# 17216     A19X9317364     EA     62010XR050150A     LC017217     PC17217     950     2019-08-01     8
+# 17217     A19X9317364     EA     61011XR1150500     LC017218     PC17218     230     2019-08-01     8
+
+
+# 去掉不需要的月份的数据
+def Remove_data(df, month=[]):
+    for i in month:
+        df = df[df[&#39;月份&#39;] != i]
+    return df
+
+
+df_rest = Remove_data(df, [5, 8])
+df_rest.head()
+#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
+# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
+# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
+# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
+# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
+# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
+
+with pd.ExcelWriter(&#39;物料表_1.xlsx&#39;, engine=&#39;openpyxl&#39;,
+                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:
+    df5.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;5月&#39;, index=False)
+    df8.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;8月&#39;, index=False)
+    df_rest.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;剩余月份&#39;, index=False)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+wb = load_workbook(&quot;物料表_1.xlsx&quot;)
+for sheetname in wb.sheetnames:
+    ws = wb[sheetname]
+
+    # 调整列宽
+    ws.column_dimensions[&#39;A&#39;].width = 12
+    ws.column_dimensions[&#39;C&#39;].width = 15.5
+    ws.column_dimensions[&#39;G&#39;].width = 10
+
+    # 设置字号，对齐，缩小字体填充，加边框
+    for row_number in range(2, ws.max_row + 1):
+        for col_number in range(1, ws.max_column + 1):
+            c = ws.cell(row=row_number, column=col_number)
+            c.font = Font(size=10)
+            c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+            c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+wb.save(&quot;物料表_1.xlsx&quot;)
+</code></pre>
+<p><a href="物料表.xlsx">物料表.xlsx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pandas</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>pandas</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring | 事务管理</title>
     <url>/2022/03/07/%E4%BA%8B%E5%8A%A1-1/</url>
     <content><![CDATA[<h1 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h1><p>1.项目目录<br><img src="/2022/03/07/%E4%BA%8B%E5%8A%A1-1/1.PNG"><br>book包—&gt;使用注解管理事务<br>book_xml—&gt;使用xml方式管理事务</p>
@@ -12401,427 +12822,6 @@ public class Test &#123;
       <tags>
         <tag>spring</tag>
         <tag>事务管理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis | 事务</title>
-    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
-    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
-<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
-<span id="more"></span>
-<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
-<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>事务</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-        <tag>事务</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaWeb项目开发 | 事务</title>
-    <url>/2022/01/26/%E4%BA%8B%E5%8A%A1/</url>
-    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
-<pre><code>CREATE TABLE user(
-id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-NAME VARCHAR(20),
-balance DOUBLE
-);
-</code></pre>
-<p><strong>创建测试类Test1.java</strong></p>
-<pre><code>package com.oracle.test;
-
-import java.sql.SQLException;
-
-import org.apache.commons.dbutils.QueryRunner;
-
-import com.oracle.utils.DataSourceUtils;
-
-public class Test1 &#123;
-
-    public static void main(String[] args)&#123;
-        try &#123;
-            //开启事务
-            DataSourceUtils.startTransaction();
-            //创建QueryRunner对象
-            QueryRunner qr = new QueryRunner();
-            //编写sql语句
-            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;
-            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;
-            //执行sql
-            qr.update(DataSourceUtils.getConnection(), sql1);
-            
-            //失败
-            int c=100/0;
-            
-            qr.update(DataSourceUtils.getConnection(), sql2);
-            //事务提交
-            DataSourceUtils.commitAndRelease();
-            //关闭事务
-            DataSourceUtils.closeConnection();
-        &#125; catch (Exception e) &#123;
-            //失败则回滚
-            try &#123;
-                DataSourceUtils.rollback();
-            &#125; catch (Exception e1) &#123;
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            &#125;
-        &#125;
-    &#125;
-
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>事务</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>事务</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 二叉树的最小深度</title>
-    <url>/2022/01/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/</url>
-    <content><![CDATA[<h1 id="二叉树的最小深度"><a href="#二叉树的最小深度" class="headerlink" title="二叉树的最小深度"></a>二叉树的最小深度</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二叉树，找出其最小深度。<br>最小深度是从根节点到最近叶子节点的最短路径上的节点数量。<br>说明：叶子节点是指没有子节点的节点。</p>
-<p><a href="https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>方法一：深度优先搜索<br>首先可以想到使用深度优先搜索的方法，遍历整棵树，记录最小深度。<br>对于每一个非叶子节点，我们只需要分别计算其左右子树的最小叶子节点深度。这样就将一个大问题转化为了小问题，可以递归地解决该问题。<br>方法二：广度优先搜索<br>使用广度优先搜索的方法，遍历整棵树。<br>当我们找到一个叶子节点时，直接返回这个叶子节点的深度。广度优先搜索的性质保证了最先搜索到的叶子节点的深度一定最小。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for a binary tree node.
-import collections
-
-
-class TreeNode(object):
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-
-class Solution(object):
-    def minDepth(self, root):
-        &quot;&quot;&quot;
-        深度优先搜索
-        :type root: TreeNode
-        :rtype: int
-        &quot;&quot;&quot;
-        def get_depth(root):
-            if root is None:
-                return 0
-            left_depth = get_depth(root.right)
-            right_depth = get_depth(root.left)
-            return min(right_depth, left_depth) + 1
-
-        return get_depth(root)
-
-    def minDepth1(self, root):
-        &quot;&quot;&quot;深度优先搜索&quot;&quot;&quot;
-        if not root:
-            return 0
-
-        if not root.left and not root.right:
-            return 1
-
-        min_depth = 10 ** 9
-        if root.left:
-            min_depth = min(self.minDepth1(root.left), min_depth)
-        if root.right:
-            min_depth = min(self.minDepth1(root.right), min_depth)
-        return min_depth + 1
-
-    def minDepth2(self, root):
-        &quot;&quot;&quot;深度优先搜索&quot;&quot;&quot;
-        if not root:
-            return 0
-
-        que = collections.deque([(root, 1)])
-        while que:
-            node, depth = que.popleft()
-            if not node.left and not node.right:
-                return depth
-            if node.left:
-                que.append((node.left, depth + 1))
-            if node.right:
-                que.append((node.right, depth + 1))
-
-        return 0
-
-    def create_binary_tree(self, nodes_list):
-        node1 = TreeNode(nodes_list[1])
-        node3 = TreeNode(nodes_list[3])
-        node4 = TreeNode(nodes_list[4])
-        node2 = TreeNode(nodes_list[2], node3, node4)
-        root = TreeNode(nodes_list[0], node1, node2)
-        return root
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    root = slt.create_binary_tree([3, 9, 20, 15, 7])
-    print(slt.minDepth(root))
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>树</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>二叉树</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 二进制求和</title>
-    <url>/2021/08/29/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B1%82%E5%92%8C/</url>
-    <content><![CDATA[<h1 id="67-二进制求和"><a href="#67-二进制求和" class="headerlink" title="67.二进制求和"></a>67.二进制求和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个二进制字符串，返回它们的和（用二进制表示）。<br>输入为 非空 字符串且只包含数字 1 和 0。</p>
-<span id="more"></span>
-<p>示例 1:<br>输入: a = “11”, b = “1”<br>输出: “100”</p>
-<p><a href="https://leetcode-cn.com/problems/add-binary/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.先将 a 和 b 转化成十进制数，求和后再转化为二进制数<br>2.列竖式<br>末尾对齐，逐位相加，逢二进一<br>具体的，我们可以取 n=max{∣a∣,∣b∣}，循环 n 次，从最低位开始遍历。我们使用一个变量 carry 表示上一个位置的进位，初始值为 0。记当前位置对其的两个位为 ai​ 和 bi​，则每一位的答案为 (carry+ai+bi) mod 2，下一位的进位为 ⌊(carry+ai+bi)/2⌋。重复上述步骤，直到数字 a 和 b 的每一位计算完毕。最后如果 carry 的最高位不为 0，则将最高位添加到计算结果的末尾。<br>注意，为了让各个位置对齐，你可以先反转这个代表二进制数字的字符串，然后低下标对应低位，高下标对应高位。当然你也可以直接把 a 和 b 中短的那一个补 0 直到和长的那个一样长，然后从高位向低位遍历，对应位置的答案按照顺序存入答案字符串内，最终将答案串反转。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def addBinary(self, a: str, b: str) -&gt; str:
-        &quot;&quot;&quot;
-        先将 aaa 和 bbb 转化成十进制数，求和后再转化为二进制数
-        :param a:
-        :param b:
-        :return:
-        &quot;&quot;&quot;
-        # a = int(a, 2)  # 将二进制数转为十进制
-        # b = int(b, 2)
-        # print(a)
-        # print(b)
-        # return bin(a+b)[2:]
-
-        return &#39;&#123;0:b&#125;&#39;.format(int(a, 2) + int(b, 2))
-
-    def addBinary1(self, a: str, b: str) -&gt; str:
-        ans = list()
-        n = max(len(a), len(b))
-        carry = 0
-
-        list_a = []
-        list_b = []
-        for e in a:
-            list_a.append(int(e))
-
-        for e in b:
-            list_b.append(int(e))
-
-        print(list_a)
-        print(list_b)
-
-        for i in range(n):
-            carry += list_a[len(a) - i - 1] if i &lt; len(a) else 0
-            carry += list_b[len(b) - i - 1] if i &lt; len(b) else 0
-            ans.append(str(int(carry % 2)))
-            carry /= 2
-
-        if carry &gt; 0:
-            ans.append(&#39;1&#39;)
-
-        return &#39;&#39;.join(ans[::-1])
-
-
-if __name__ == &#39;__main__&#39;:
-    s = Solution()
-    a = &quot;11&quot;
-    b = &quot;1&quot;
-    res = s.addBinary1(a, b)
-    print(res)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OS | 什么是操作系统</title>
-    <url>/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h1 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统?"></a>什么是操作系统?</h1><p>“操作系统（operating system，简称OS）是管理计算机硬件与软件资源的计算机程序,是硬件软件之间的一座桥梁。</p>
-<p><img src="/2021/10/14/%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.JPG"></p>
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>xlrd | 从Excel表中批量复制粘贴数据到新表</title>
-    <url>/2021/11/05/%E4%BB%8EExcel%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E6%95%B0%E6%8D%AE%E5%88%B0%E6%96%B0%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="从Excel表中批量复制粘贴数据到新表"><a href="#从Excel表中批量复制粘贴数据到新表" class="headerlink" title="从Excel表中批量复制粘贴数据到新表"></a>从Excel表中批量复制粘贴数据到新表</h1><p>程序实现从Excel表中批量复制粘贴部分数据到新表。</p>
-<span id="more"></span>
-<p>代码：</p>
-<pre><code># 读取xls文件中的数据
-import xlrd
-
-file = &quot;原表.xls&quot;
-wb = xlrd.open_workbook(file)  # 读取工作簿
-ws = wb.sheets()[0]  # 选第一个工作表
-data = []
-
-for row in range(7, ws.nrows):
-    name = ws.cell(row, 1).value.strip()  # 科室名称
-    total1 = ws.cell(row, 2).value  # 总计
-    total2 = ws.cell(row, 3).value  # 计
-    avg = ws.cell(row, 20).value  # 平均每日人次
-
-    info_list = [name, total1, total2, avg]
-
-    if info_list[0] != &quot;&quot;:  # 去除空数据
-        data.append(info_list)
-
-from openpyxl import load_workbook
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-
-file = &quot;统计表模板.xlsx&quot;
-wb = load_workbook(file)
-ws = wb.active
-
-# 写入数据
-for i in data:
-    ws.append(i)
-
-# 设置字号，对齐，缩小字体填充，加边框
-# Font(bold=True)可加粗字体
-for row_number in range(3, ws.max_row + 1):
-    ws.row_dimensions[row_number].height = 25  # 设置行高
-    for col_number in range(1, 5):
-        c = ws.cell(row=row_number, column=col_number)
-        c.font = Font(size=11, bold=True)
-        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-        c.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
-
-wb.save(&quot;统计表.xlsx&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>xlrd</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>xlrd</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</title>
-    <url>/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/</url>
-    <content><![CDATA[<h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
-<pre><code>import pandas as pd
-
-df = pd.read_excel(&quot;物料表.xlsx&quot;, header=2)
-df.head()
-#     请求单号     单位     物料编号     架位     批号     数量     日期
-# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03
-# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03
-# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03
-# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03
-# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03
-
-df[&#39;月份&#39;] = df[&#39;日期&#39;].dt.month
-df.head()
-#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
-# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
-# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
-# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
-# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
-# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
-
-df5 = df[df[&#39;月份&#39;] == 5]
-df5.head()
-#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
-# 9649     A19X9280200     EA     36012XR0413200     LC009650     PC09650     66     2019-05-03     5
-# 9650     A19X9280200     EA     60022XR2298300     LC009651     PC09651     66     2019-05-03     5
-# 9651     A19X9280561     EA     72004XR2000001     LC009652     PC09652     604     2019-05-03     5
-# 9652     A19X9286759     EA     62010XR0161048     LC009653     PC09653     50     2019-05-03     5
-# 9653     A19X9286759     EA     62010XR0502208     LC009654     PC09654     100     2019-05-03     5
-
-df8 = df[df[&#39;月份&#39;] == 8]
-df8.head()
-
-
-#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
-# 17213     A19X9317364     EA     62010XR0500126     LC017214     PC17214     230     2019-08-01     8
-# 17214     A19X9317364     EA     61010XR1120100     LC017215     PC17215     230     2019-08-01     8
-# 17215     A19X9317364     EA     62012XR0102262     LC017216     PC17216     230     2019-08-01     8
-# 17216     A19X9317364     EA     62010XR050150A     LC017217     PC17217     950     2019-08-01     8
-# 17217     A19X9317364     EA     61011XR1150500     LC017218     PC17218     230     2019-08-01     8
-
-
-# 去掉不需要的月份的数据
-def Remove_data(df, month=[]):
-    for i in month:
-        df = df[df[&#39;月份&#39;] != i]
-    return df
-
-
-df_rest = Remove_data(df, [5, 8])
-df_rest.head()
-#     请求单号     单位     物料编号     架位     批号     数量     日期     月份
-# 0     A19X9239156     EA     11010XR0073700     LC000001     PC00001     3     2019-01-03     1
-# 1     A19X9239156     EA     11020XR0025500     LC000002     PC00002     10     2019-01-03     1
-# 2     A19X9239156     EA     11030XR0013200     LC000003     PC00003     3     2019-01-03     1
-# 3     A19X9239156     EA     11140XR0000100     LC000004     PC00004     3     2019-01-03     1
-# 4     A19X9239156     EA     12121XR0172300     LC000005     PC00005     3     2019-01-03     1
-
-with pd.ExcelWriter(&#39;物料表_1.xlsx&#39;, engine=&#39;openpyxl&#39;,
-                    datetime_format=&#39;YYYY-MM-DD&#39;) as writer:
-    df5.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;5月&#39;, index=False)
-    df8.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;8月&#39;, index=False)
-    df_rest.drop(&#39;月份&#39;, axis=1).to_excel(writer, sheet_name=&#39;剩余月份&#39;, index=False)
-
-from openpyxl import load_workbook
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-wb = load_workbook(&quot;物料表_1.xlsx&quot;)
-for sheetname in wb.sheetnames:
-    ws = wb[sheetname]
-
-    # 调整列宽
-    ws.column_dimensions[&#39;A&#39;].width = 12
-    ws.column_dimensions[&#39;C&#39;].width = 15.5
-    ws.column_dimensions[&#39;G&#39;].width = 10
-
-    # 设置字号，对齐，缩小字体填充，加边框
-    for row_number in range(2, ws.max_row + 1):
-        for col_number in range(1, ws.max_column + 1):
-            c = ws.cell(row=row_number, column=col_number)
-            c.font = Font(size=10)
-            c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-            c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
-wb.save(&quot;物料表_1.xlsx&quot;)
-</code></pre>
-<p><a href="物料表.xlsx">物料表.xlsx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pandas</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>pandas</tag>
       </tags>
   </entry>
   <entry>
@@ -18422,99 +18422,6 @@ controlthread.start()
       </tags>
   </entry>
   <entry>
-    <title>系统编程 | 多进程拷贝文件</title>
-    <url>/2020/10/14/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="多进程拷贝文件"><a href="#多进程拷贝文件" class="headerlink" title="多进程拷贝文件"></a>多进程拷贝文件</h1><h2 id="实现流程分析"><a href="#实现流程分析" class="headerlink" title="实现流程分析"></a>实现流程分析</h2><ol>
-<li>获取要copy的文件夹的名字</li>
-<li>创建一个文件夹</li>
-<li>获取old文件夹中的所有的文件名字</li>
-<li>使用多进程方式copy原文件夹中的所有文件到新的文件夹中</li>
-</ol>
-
-<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><pre><code>from multiprocessing import Pool,Manager
-import os
-import time
-
-def copyFileTask(name,oldFolderName,newFolderName,queue):
-    &quot;complete the function of coping a file&quot;
-    fr = open(oldFolderName+&quot;/&quot;+name)
-    fw = open(newFolderName+&quot;/&quot;+name,&quot;w&quot;)
-    content = fr.read()
-    fw.write(content)
-    fr.close()
-    fw.close()
-    queue.put(name)
-
-def main():
-    #0.get the file name you want to copy
-    oldFolderName = input(&quot;Please input the file name:&quot;)
-    #1.create a file directory
-    newFolderName = oldFolderName+&quot;-copy&quot;
-    #pmrint(newFolderName)
-    os.mkdir(newFolderName)
-    #2.get all file name of old file directory
-    fileNames = os.listdir(oldFolderName)
-    #print(fileNames)
-    #3.copy all file of old file directory to a new file directory
-    pool = Pool(5)
-    queue = Manager().Queue()
-    for name in fileNames:
-        pool.apply_async(copyFileTask,args=(name,oldFolderName,newFolderName,queue))
-    num = 0
-    allNum = len(fileNames)
-    while num &lt; allNum:
-        queue.get()
-        num += 1
-        copyRate = num/allNum
-        print(&quot;\rcopy process:%.2f%% &quot;%(copyRate*100),end=&quot;&quot;)
-        time.sleep(1)
-    print(&#39;\ncompleted&#39;)
-    pool.close()
-    pool.join()
-if __name__ == &quot;__main__&quot;:
-    main()
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>系统编程</category>
-      </categories>
-      <tags>
-        <tag>多进程</tag>
-        <tag>系统编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 大胆新奇的卷积神经网络设计</title>
-    <url>/2021/11/05/%E5%A4%A7%E8%83%86%E6%96%B0%E5%A5%87%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1/</url>
-    <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s/6HbPBYQvLMU5okI-tIUBcg">大胆又新奇的卷积网络结构设计</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何计算深度学习代码实践中的trainsteps</title>
-    <url>/2021/08/02/%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84trainsteps/</url>
-    <content><![CDATA[<h1 id="如何计算深度学习代码实践中的trainsteps"><a href="#如何计算深度学习代码实践中的trainsteps" class="headerlink" title="如何计算深度学习代码实践中的trainsteps?"></a>如何计算深度学习代码实践中的trainsteps?</h1><p>深度学习中已经有epoch参数了，为什么还要再定义steps参数？</p>
-<p>epoch:全体训练数据过几遍</p>
-<p>steps:模型会计算几次loss,即模型参数会更新几次梯度</p>
-<p>当我们训练模型时，epoch变成了一个间接的关注对象，我们关系模型能更新多少次，这些才知道循环多少次，计算多少次loss。其实最主要的一点是训练步数与模型的参数会有相关关系，比如如果要采用自适应学习率，那每步都是有一个不同的学习率的。</p>
-<p>train steps通常按以下公式进行计算：<br>train steps = len(data) // batch_size</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>train steps</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 字符串中的单词数</title>
     <url>/2021/09/01/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D%E6%95%B0/</url>
     <content><![CDATA[<h1 id="434-字符串中的单词数"><a href="#434-字符串中的单词数" class="headerlink" title="434.字符串中的单词数"></a>434.字符串中的单词数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>统计字符串中的单词个数，这里的单词指的是连续的不是空格的字符。<br>请注意，你可以假定字符串里不包括任何不可打印的字符。</p>
@@ -18760,6 +18667,69 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>系统编程 | 多进程拷贝文件</title>
+    <url>/2020/10/14/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="多进程拷贝文件"><a href="#多进程拷贝文件" class="headerlink" title="多进程拷贝文件"></a>多进程拷贝文件</h1><h2 id="实现流程分析"><a href="#实现流程分析" class="headerlink" title="实现流程分析"></a>实现流程分析</h2><ol>
+<li>获取要copy的文件夹的名字</li>
+<li>创建一个文件夹</li>
+<li>获取old文件夹中的所有的文件名字</li>
+<li>使用多进程方式copy原文件夹中的所有文件到新的文件夹中</li>
+</ol>
+
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><pre><code>from multiprocessing import Pool,Manager
+import os
+import time
+
+def copyFileTask(name,oldFolderName,newFolderName,queue):
+    &quot;complete the function of coping a file&quot;
+    fr = open(oldFolderName+&quot;/&quot;+name)
+    fw = open(newFolderName+&quot;/&quot;+name,&quot;w&quot;)
+    content = fr.read()
+    fw.write(content)
+    fr.close()
+    fw.close()
+    queue.put(name)
+
+def main():
+    #0.get the file name you want to copy
+    oldFolderName = input(&quot;Please input the file name:&quot;)
+    #1.create a file directory
+    newFolderName = oldFolderName+&quot;-copy&quot;
+    #pmrint(newFolderName)
+    os.mkdir(newFolderName)
+    #2.get all file name of old file directory
+    fileNames = os.listdir(oldFolderName)
+    #print(fileNames)
+    #3.copy all file of old file directory to a new file directory
+    pool = Pool(5)
+    queue = Manager().Queue()
+    for name in fileNames:
+        pool.apply_async(copyFileTask,args=(name,oldFolderName,newFolderName,queue))
+    num = 0
+    allNum = len(fileNames)
+    while num &lt; allNum:
+        queue.get()
+        num += 1
+        copyRate = num/allNum
+        print(&quot;\rcopy process:%.2f%% &quot;%(copyRate*100),end=&quot;&quot;)
+        time.sleep(1)
+    print(&#39;\ncompleted&#39;)
+    pool.close()
+    pool.join()
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>系统编程</category>
+      </categories>
+      <tags>
+        <tag>多进程</tag>
+        <tag>系统编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | 安装mysql_python失败</title>
     <url>/2021/07/25/%E5%AE%89%E8%A3%85mysql-python%E5%A4%B1%E8%B4%A5/</url>
     <content><![CDATA[<h1 id="安装mysql-python失败"><a href="#安装mysql-python失败" class="headerlink" title="安装mysql_python失败"></a>安装mysql_python失败</h1><p><a href="https://blog.csdn.net/qq_37431752/article/details/87965695">解决办法！！！</a></p>
@@ -18965,6 +18935,36 @@ t2.start()
         <tag>python</tag>
         <tag>多线程</tag>
         <tag>threading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何计算深度学习代码实践中的trainsteps</title>
+    <url>/2021/08/02/%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84trainsteps/</url>
+    <content><![CDATA[<h1 id="如何计算深度学习代码实践中的trainsteps"><a href="#如何计算深度学习代码实践中的trainsteps" class="headerlink" title="如何计算深度学习代码实践中的trainsteps?"></a>如何计算深度学习代码实践中的trainsteps?</h1><p>深度学习中已经有epoch参数了，为什么还要再定义steps参数？</p>
+<p>epoch:全体训练数据过几遍</p>
+<p>steps:模型会计算几次loss,即模型参数会更新几次梯度</p>
+<p>当我们训练模型时，epoch变成了一个间接的关注对象，我们关系模型能更新多少次，这些才知道循环多少次，计算多少次loss。其实最主要的一点是训练步数与模型的参数会有相关关系，比如如果要采用自适应学习率，那每步都是有一个不同的学习率的。</p>
+<p>train steps通常按以下公式进行计算：<br>train steps = len(data) // batch_size</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>train steps</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 大胆新奇的卷积神经网络设计</title>
+    <url>/2021/11/05/%E5%A4%A7%E8%83%86%E6%96%B0%E5%A5%87%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s/6HbPBYQvLMU5okI-tIUBcg">大胆又新奇的卷积网络结构设计</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -26356,41 +26356,6 @@ print(max(word_frequency, key=word_frequency.get))
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 网络中常见的协议以及术语</title>
-    <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
-    <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
-<p>ARP(地址解析协议)—&gt;根据IP地址找MAC地址</p>
-<p>RARP(反向地址解析协议)—&gt;根据MAC地址找IP地址</p>
-<p>MAC(媒体访问控制地址)—&gt;网卡的编号</p>
-<p>IP:标记逻辑上的地址</p>
-<p>mac：标记实际转发数据时的设备地址</p>
-<p>DHCP(动态主机配置协议):发现当前局域网内没有IP的电脑，给这台电脑自动分配IP</p>
-<p>netmask:和ip地址一起来确定网络号</p>
-<p>默认网关：发送的ip不在同一个网段内，那么会把这个数据转发给默认网关<br><b>Note:</b><br>MAC地址在两个设备之间通信时在变化<br>IP地址在整个通信过程中都不会发生变化</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>协议</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Chicken Soup for the Soul | 罗曼罗兰英雄主义</title>
-    <url>/2021/10/12/%E7%BD%97%E6%9B%BC%E7%BD%97%E5%85%B0%E8%8B%B1%E9%9B%84%E4%B8%BB%E4%B9%89/</url>
-    <content><![CDATA[<h1 id="Chicken-Soup"><a href="#Chicken-Soup" class="headerlink" title="Chicken Soup"></a>Chicken Soup</h1><p>人生当中成功只是一时的，失败却是主旋律，但是如何面对失败，却把人分成了不同的样子，有的人会被失败击垮，有的人能够不断地爬起来继续向前，我想真正的成熟，并不是追求完美，而是直面自己的缺憾，这才是生活的本质。罗曼罗兰说过：这个世上只有一种真正的英雄注意，那就是认清生活的真相，并且依然热爱它。</p>
-<p>2021/10/13</p>
-]]></content>
-      <categories>
-        <category>Chicken Soup for the Soul</category>
-      </categories>
-      <tags>
-        <tag>Chicken Soup for the Soul</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 罗马数字转整数</title>
     <url>/2021/08/27/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/</url>
     <content><![CDATA[<h1 id="13-罗马数字转整数"><a href="#13-罗马数字转整数" class="headerlink" title="13.罗马数字转整数"></a>13.罗马数字转整数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。</p>
@@ -26487,6 +26452,28 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | 网络中常见的协议以及术语</title>
+    <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
+    <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
+<p>ARP(地址解析协议)—&gt;根据IP地址找MAC地址</p>
+<p>RARP(反向地址解析协议)—&gt;根据MAC地址找IP地址</p>
+<p>MAC(媒体访问控制地址)—&gt;网卡的编号</p>
+<p>IP:标记逻辑上的地址</p>
+<p>mac：标记实际转发数据时的设备地址</p>
+<p>DHCP(动态主机配置协议):发现当前局域网内没有IP的电脑，给这台电脑自动分配IP</p>
+<p>netmask:和ip地址一起来确定网络号</p>
+<p>默认网关：发送的ip不在同一个网段内，那么会把这个数据转发给默认网关<br><b>Note:</b><br>MAC地址在两个设备之间通信时在变化<br>IP地址在整个通信过程中都不会发生变化</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>协议</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>EEG | 脑电信号采用深度学习方法存在的问题</title>
     <url>/2020/11/10/%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E9%87%87%E7%94%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="脑电信号采用深度学习方法存在的问题"><a href="#脑电信号采用深度学习方法存在的问题" class="headerlink" title="脑电信号采用深度学习方法存在的问题"></a>脑电信号采用深度学习方法存在的问题</h1><p>深度学习是一种构造多层神经网络的机器学习方法，具有发现数据中隐藏的分布式特征表示的能力。</p>
@@ -26500,6 +26487,19 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>深度学习</tag>
         <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chicken Soup for the Soul | 罗曼罗兰英雄主义</title>
+    <url>/2021/10/12/%E7%BD%97%E6%9B%BC%E7%BD%97%E5%85%B0%E8%8B%B1%E9%9B%84%E4%B8%BB%E4%B9%89/</url>
+    <content><![CDATA[<h1 id="Chicken-Soup"><a href="#Chicken-Soup" class="headerlink" title="Chicken Soup"></a>Chicken Soup</h1><p>人生当中成功只是一时的，失败却是主旋律，但是如何面对失败，却把人分成了不同的样子，有的人会被失败击垮，有的人能够不断地爬起来继续向前，我想真正的成熟，并不是追求完美，而是直面自己的缺憾，这才是生活的本质。罗曼罗兰说过：这个世上只有一种真正的英雄注意，那就是认清生活的真相，并且依然热爱它。</p>
+<p>2021/10/13</p>
+]]></content>
+      <categories>
+        <category>Chicken Soup for the Soul</category>
+      </categories>
+      <tags>
+        <tag>Chicken Soup for the Soul</tag>
       </tags>
   </entry>
   <entry>
@@ -26527,6 +26527,21 @@ if __name__ == &quot;__main__&quot;:
         <category>脑电期刊</category>
         <category>Biomedical Signal Processing and Control</category>
       </categories>
+  </entry>
+  <entry>
+    <title>伪迹移除 | 自适应滤波器</title>
+    <url>/2021/02/23/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="Adaptive-Filter"><a href="#Adaptive-Filter" class="headerlink" title="Adaptive Filter"></a>Adaptive Filter</h1><p>Adaptive Filter is a system with a linear filter that has a transfer function controlled by variable parameters and a means to adjust those parameters according to an optimization algorithm.The filter weights can adapt based on the feedback from output of the system and it requires a reference input o compare the desired output with the observed output.</p>
+<h2 id="The-use-of-adaptive-filter-for-EOG-artifact-removal"><a href="#The-use-of-adaptive-filter-for-EOG-artifact-removal" class="headerlink" title="The use of adaptive filter for EOG artifact removal"></a>The use of adaptive filter for EOG artifact removal</h2><p><img src="/2021/02/23/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8/1.PNG"><br>where s[n] is observed signal,x[n] is original EEG,r[n] is artifact,x’[n] is artifact-free EEG.</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>自适应滤波器</tag>
+      </tags>
   </entry>
   <entry>
     <title>spring | 自动装配</title>
@@ -26712,21 +26727,6 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | 自适应滤波器</title>
-    <url>/2021/02/23/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="Adaptive-Filter"><a href="#Adaptive-Filter" class="headerlink" title="Adaptive Filter"></a>Adaptive Filter</h1><p>Adaptive Filter is a system with a linear filter that has a transfer function controlled by variable parameters and a means to adjust those parameters according to an optimization algorithm.The filter weights can adapt based on the feedback from output of the system and it requires a reference input o compare the desired output with the observed output.</p>
-<h2 id="The-use-of-adaptive-filter-for-EOG-artifact-removal"><a href="#The-use-of-adaptive-filter-for-EOG-artifact-removal" class="headerlink" title="The use of adaptive filter for EOG artifact removal"></a>The use of adaptive filter for EOG artifact removal</h2><p><img src="/2021/02/23/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8/1.PNG"><br>where s[n] is observed signal,x[n] is original EEG,r[n] is artifact,x’[n] is artifact-free EEG.</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>自适应滤波器</tag>
       </tags>
   </entry>
   <entry>
@@ -27517,6 +27517,15 @@ for file in files:
         <tag>python</tag>
         <tag>wordcloud</tag>
         <tag>词云</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>负载均衡</title>
+    <url>/2022/05/31/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
+    <content><![CDATA[<h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p><a href="https://blog.csdn.net/wanghangzhen/article/details/118554304">负载均衡</a></p>
+]]></content>
+      <tags>
+        <tag>负载均衡</tag>
       </tags>
   </entry>
   <entry>
