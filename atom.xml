@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-01T02:51:23.240Z</updated>
+  <updated>2022-06-06T13:34:29.637Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,70 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用ForkJoin框架计算整数相加的结果</title>
+    <link href="http://example.com/2022/06/06/%E4%BD%BF%E7%94%A8ForkJoin%E6%A1%86%E6%9E%B6%E8%AE%A1%E7%AE%97%E6%95%B4%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%9A%84%E7%BB%93%E6%9E%9C/"/>
+    <id>http://example.com/2022/06/06/%E4%BD%BF%E7%94%A8ForkJoin%E6%A1%86%E6%9E%B6%E8%AE%A1%E7%AE%97%E6%95%B4%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%9A%84%E7%BB%93%E6%9E%9C/</id>
+    <published>2022-06-06T13:29:43.000Z</published>
+    <updated>2022-06-06T13:34:29.637Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用ForkJoin框架计算整数相加的结果"><a href="#使用ForkJoin框架计算整数相加的结果" class="headerlink" title="使用ForkJoin框架计算整数相加的结果"></a>使用ForkJoin框架计算整数相加的结果</h1><p><strong>需求：</strong> 使用Fork/Join框架计算1+2+3+4的结果。<br><strong>分析：</strong> 使用Fork/Join框架首先要考虑到的是如何分割任务，如果希望每个子任务最多执行两个数的相加<br>，那么我们设置分割的阈值是2，由于是四个数字相加，所以Fork/Join框架会把这个任务fork成两个子<br>任务，子任务1负责计算1+2，子任务2负责3+4，然后再join两个子任务的结果。因为是有结果的任务，所<br>以必须继承RecursiveTask。<br><strong>实现代码：</strong></p><pre><code>package concurrency.forkjoin;import java.util.concurrent.ExecutionException;import java.util.concurrent.ForkJoinPool;import java.util.concurrent.Future;import java.util.concurrent.RecursiveTask;public class CountTask extends RecursiveTask&lt;Integer&gt;&#123;    private static final int THRESHOLD = 2;//阈值    private int start;    private int end;        public CountTask(int start, int end)&#123;        this.start = start;        this.end = end;    &#125;    @Override    protected Integer compute() &#123;        int sum = 0;                //如果任务足够小就计算任务        boolean canCompute = (end - start) &lt;= THRESHOLD;        if(canCompute)&#123;            for(int i = start; i &lt;= end; i++)&#123;                sum += i;            &#125;        &#125;else&#123;            //如果任务大虚与之，就分裂成两个子任务计算            int middle = (start + end) / 2;            CountTask leftTask = new CountTask(start, middle);            CountTask rightTask = new CountTask(middle + 1, end);            //执行子任务            leftTask.fork();            rightTask.fork();            //等待子任务执行完，并得到其结果            int leftResult = leftTask.join();            int rightResult = rightTask.join();            //合并子任务            sum = leftResult + rightResult;        &#125;        return sum;    &#125;        public static void main(String[] args)&#123;        ForkJoinPool forkJoinPool = new ForkJoinPool();        //生成一个计算任务，负责计算1+2+3+4        CountTask task = new CountTask(1, 4);        //执行一个任务        Future&lt;Integer&gt; result = forkJoinPool.submit(task);        try&#123;            System.out.println(result.get());        &#125;catch(InterruptedException e)&#123;            e.printStackTrace();        &#125;catch(ExecutionException e)&#123;            e.printStackTrace();        &#125;    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;使用ForkJoin框架计算整数相加的结果&quot;&gt;&lt;a href=&quot;#使用ForkJoin框架计算整数相加的结果&quot; class=&quot;headerlink&quot; title=&quot;使用ForkJoin框架计算整数相加的结果&quot;&gt;&lt;/a&gt;使用ForkJoin框架计算整数相加的结果&lt;/</summary>
+      
+    
+    
+    
+    <category term="并发" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="ForkJoin" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/ForkJoin/"/>
+    
+    <category term="使用ForkJoin框架计算整数相加的结果" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/ForkJoin/%E4%BD%BF%E7%94%A8ForkJoin%E6%A1%86%E6%9E%B6%E8%AE%A1%E7%AE%97%E6%95%B4%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%9A%84%E7%BB%93%E6%9E%9C/"/>
+    
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="ForkJoin" scheme="http://example.com/tags/ForkJoin/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>锁 | 读写锁+HashMap实现线程安全的HashMap</title>
+    <link href="http://example.com/2022/06/06/%E8%AF%BB%E5%86%99%E9%94%81-HashMap%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84HashMap/"/>
+    <id>http://example.com/2022/06/06/%E8%AF%BB%E5%86%99%E9%94%81-HashMap%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84HashMap/</id>
+    <published>2022-06-06T08:12:53.000Z</published>
+    <updated>2022-06-06T08:31:49.622Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="读写锁-HashMap实现线程安全的HashMap"><a href="#读写锁-HashMap实现线程安全的HashMap" class="headerlink" title="读写锁+HashMap实现线程安全的HashMap"></a>读写锁+HashMap实现线程安全的HashMap</h1><p>ReadWriteLockCache组合一个非线程安全的HashMap作为缓存的实现，同时使用读写锁的读锁和写锁来保证ReadWriteLockCaChe是线程安全的。<br><strong>代码：</strong></p><pre><code>package concurrency.AQS; import java.util.HashMap;import java.util.Map;import java.util.Map.Entry;import java.util.concurrent.locks.Lock;import java.util.concurrent.locks.ReentrantReadWriteLock;public class ReadWriteLockCache &#123;    public static void main(String[] args) &#123;        ReadWriteLockCache.put(&quot;user1&quot;, &quot;123&quot;);        ReadWriteLockCache.put(&quot;user2&quot;, &quot;456&quot;);        ReadWriteLockCache.put(&quot;user3&quot;, &quot;789&quot;);        for(Entry entry : ReadWriteLockCache.map.entrySet())&#123;            System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());        &#125;        System.out.println(&quot;==========================&quot;);        ReadWriteLockCache.put(&quot;user1&quot;, &quot;1233&quot;);        for(Entry entry : ReadWriteLockCache.map.entrySet())&#123;            System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());        &#125;        System.out.println(&quot;==========================&quot;);        System.out.println(&quot;user1&quot; + ReadWriteLockCache.get(&quot;user1&quot;));        System.out.println(&quot;==========================&quot;);        ReadWriteLockCache.clear();        for(Entry entry : ReadWriteLockCache.map.entrySet())&#123;            System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());        &#125;            &#125;        static Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();    static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();    static Lock r = rwl.readLock();    static Lock w = rwl.writeLock();        //获取一个key对应的value    public static final Object get(String key)&#123;        r.lock();        try&#123;            return map.get(key);        &#125;finally&#123;            r.unlock();        &#125;    &#125;        //设置key对应的value，并返回旧的value    public static final Object put(String key, Object value)&#123;        w.lock();        try&#123;            return map.put(key, value);        &#125;finally&#123;            w.unlock();        &#125;    &#125;        //清空所有内容    public static final void clear()&#123;        w.lock();        try&#123;            map.clear();        &#125;finally&#123;            w.unlock();        &#125;    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;读写锁-HashMap实现线程安全的HashMap&quot;&gt;&lt;a href=&quot;#读写锁-HashMap实现线程安全的HashMap&quot; class=&quot;headerlink&quot; title=&quot;读写锁+HashMap实现线程安全的HashMap&quot;&gt;&lt;/a&gt;读写锁+HashMap</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="锁" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E9%94%81/"/>
+    
+    <category term="读写锁+HashMap实现线程安全的HashMap" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E9%94%81/%E8%AF%BB%E5%86%99%E9%94%81-HashMap%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84HashMap/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="锁" scheme="http://example.com/tags/%E9%94%81/"/>
+    
+  </entry>
   
   <entry>
     <title>负载均衡</title>
@@ -537,63 +601,6 @@
     <category term="Redis" scheme="http://example.com/tags/Redis/"/>
     
     <category term="事务" scheme="http://example.com/tags/%E4%BA%8B%E5%8A%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis | Jedis实现手机号验证码</title>
-    <link href="http://example.com/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/"/>
-    <id>http://example.com/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/</id>
-    <published>2022-05-07T02:19:55.000Z</published>
-    <updated>2022-05-07T02:28:05.158Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Jedis实现手机号验证码"><a href="#Jedis实现手机号验证码" class="headerlink" title="Jedis实现手机号验证码"></a>Jedis实现手机号验证码</h1><p><img src="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG"><br><strong>要求</strong><br>1.输入手机号，点击发送后随机生成6位数字码，2分钟有效<br>2.输入验证码，点击验证，返回成功或失败<br>3.每个手机号每天只能输入3次</p><span id="more"></span><p>1.index.jsp</p><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;    pageEncoding=&quot;UTF-8&quot;%&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=ISO-8859-1&quot;&gt;&lt;title&gt;Insert title here&lt;/title&gt;&lt;script  src=&quot;/Verify_code/static/jquery/jquery-3.1.0.js&quot; &gt;&lt;/script&gt;&lt;link href=&quot;/Verify_code/static/bs/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;script  src=&quot;/Verify_code/static/bs/js/bootstrap.min.js&quot;   &gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;   &lt;div class=&quot;container&quot;&gt;        &lt;div class=&quot;row&quot;&gt;            &lt;div id=&quot;alertdiv&quot; class=&quot;col-md-12&quot;&gt;                  &lt;form class=&quot;navbar-form navbar-left&quot; role=&quot;search&quot; id=&quot;codeform&quot;&gt;                  &lt;div class=&quot;form-group&quot;&gt;                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;填写手机号&quot; name=&quot;phone_no&quot;&gt;                    &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot; id=&quot;sendCode&quot;&gt;发送验证码&lt;/button&gt;&lt;br&gt;                    &lt;font id=&quot;countdown&quot; color=&quot;red&quot; &gt;&lt;/font&gt;                    &lt;br&gt;                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;填写验证码&quot; name=&quot;verify_code&quot;&gt;                    &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot; id=&quot;verifyCode&quot;&gt;确定&lt;/button&gt;                    &lt;font id=&quot;result&quot; color=&quot;green&quot; &gt;&lt;/font&gt;&lt;font id=&quot;error&quot; color=&quot;red&quot; &gt;&lt;/font&gt;                    &lt;/div&gt;                    &lt;/form&gt;    &lt;/div&gt;   &lt;/div&gt;  &lt;/div&gt;&lt;/body&gt;&lt;script type=&quot;text/javascript&quot;&gt; var t=120;//设定倒计时的时间 var interval;function refer()&#123;      $(&quot;#countdown&quot;).text(&quot;请于&quot;+t+&quot;秒内填写验证码 &quot;); // 显示倒计时     t--; // 计数器递减     if(t&lt;=0)&#123;        clearInterval(interval);        $(&quot;#countdown&quot;).text(&quot;验证码已失效，请重新发送！ &quot;);    &#125;&#125; $(function()&#123;    $(&quot;#sendCode&quot;).click( function () &#123;                      $.post(&quot;/Verify_code/CodeSenderServlet&quot;,$(&quot;#codeform&quot;).serialize(),function(data)&#123;             if(data==&quot;true&quot;)&#123;                 t=120;                 clearInterval(interval);                 interval= setInterval(&quot;refer()&quot;,1000);//启动1秒定时               &#125;else if (data==&quot;limit&quot;)&#123;                clearInterval(interval);                $(&quot;#countdown&quot;).text(&quot;单日发送超过次数！ &quot;)             &#125;          &#125;);       &#125;);        $(&quot;#verifyCode&quot;).click( function () &#123;                   $.post(&quot;/Verify_code/CodeVerifyServlet&quot;,$(&quot;#codeform&quot;).serialize(),function(data)&#123;             if(data==&quot;true&quot;)&#123;                 $(&quot;#result&quot;).attr(&quot;color&quot;,&quot;green&quot;);                 $(&quot;#result&quot;).text(&quot;验证成功&quot;);                 clearInterval(interval);                 $(&quot;#countdown&quot;).text(&quot;&quot;);             &#125;else&#123;                 $(&quot;#result&quot;).attr(&quot;color&quot;,&quot;red&quot;);                 $(&quot;#result&quot;).text(&quot;验证失败&quot;);             &#125;          &#125;);       &#125;);        &#125;);&lt;/script&gt;&lt;/html&gt;</code></pre><p>2.CodeSenderServlet.java(发送验证码)</p><pre><code>@WebServlet(&quot;/CodeSenderServlet&quot;)public class CodeSenderServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;           /**     * @see HttpServlet#HttpServlet()     */    public CodeSenderServlet() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    /**     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)     */    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;                //获取手机号        String phone_no = request.getParameter(&quot;phone_no&quot;);        //获取验证码        String code = getCode(6);        //拼接key        String codeKey = &quot;Verify_code:&quot; + phone_no + &quot;:code&quot;;//Verify_code:12345:code        String countKey = &quot;Verify_code:&quot; + phone_no + &quot;:count&quot;;                Jedis jedis = new Jedis(&quot;192.168.44.132&quot;, 6379);        //判断发送验证码的次数        String count = jedis.get(countKey);        if(count == null) &#123;            //代表第一次            jedis.setex(countKey, 24*60*60, &quot;1&quot;);        &#125;else if(Integer.parseInt(count) &lt;= 2) &#123;            jedis.incr(countKey);        &#125;else if(Integer.parseInt(count) &gt; 2) &#123;            response.getWriter().print(&quot;limit&quot;);            jedis.close();            return ;        &#125;                //向redis中进行存储，以手机号为键，以验证码为值        jedis.setex(codeKey, 120, code);        jedis.close();        response.getWriter().print(true);            &#125;            private String getCode(int length) &#123;        String code = &quot;&quot;;        Random random = new Random();        for(int i = 0; i &lt; length; i++) &#123;            int rand = random.nextInt(10);            code += rand;        &#125;        return code;    &#125;&#125;</code></pre><p>3.验证</p><pre><code>@WebServlet(&quot;/CodeVerifyServlet&quot;)public class CodeVerifyServlet extends HttpServlet &#123;    private static final long serialVersionUID = 1L;           /**     * @see HttpServlet#HttpServlet()     */    public CodeVerifyServlet() &#123;        super();        // TODO Auto-generated constructor stub    &#125;    /**     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)     */    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;            //获取验证码和手机号        String phone_no = request.getParameter(&quot;phone_no&quot;);        String verify_code = request.getParameter(&quot;verify_code&quot;);        //拼接key        String codeKey = &quot;Verify_code:&quot; + phone_no + &quot;:code&quot;;        //从redis中获取手机号所对应的验证码        Jedis jedis = new Jedis(&quot;192.168.44.132&quot;, 6379);        String code = jedis.get(codeKey);        if(code.equals(verify_code)) &#123;            response.getWriter().print(true);        &#125;        jedis.close();            &#125;&#125;</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Jedis实现手机号验证码&quot;&gt;&lt;a href=&quot;#Jedis实现手机号验证码&quot; class=&quot;headerlink&quot; title=&quot;Jedis实现手机号验证码&quot;&gt;&lt;/a&gt;Jedis实现手机号验证码&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG&quot;&gt;&lt;br&gt;&lt;strong&gt;要求&lt;/strong&gt;&lt;br&gt;1.输入手机号，点击发送后随机生成6位数字码，2分钟有效&lt;br&gt;2.输入验证码，点击验证，返回成功或失败&lt;br&gt;3.每个手机号每天只能输入3次&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
-    
-    <category term="Jedis实现手机号验证码" scheme="http://example.com/categories/Redis/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/"/>
-    
-    
-    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
-    
-    <category term="Jedis" scheme="http://example.com/tags/Jedis/"/>
-    
-    <category term="手机号验证码" scheme="http://example.com/tags/%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java | 创建线程的三种方式</title>
-    <link href="http://example.com/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    <id>http://example.com/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</id>
-    <published>2022-04-25T01:05:43.000Z</published>
-    <updated>2022-04-25T01:08:26.053Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="创建线程的三种方式"><a href="#创建线程的三种方式" class="headerlink" title="创建线程的三种方式"></a>创建线程的三种方式</h1><p>创建线程有三种方式，分别是继承Thread类、实现Runnable接口、实现Callable接口。</p><p>1.通过继承Thread类来创建并启动线程的步骤如下：<br>1.1定义Thread类的子类，并重写该类的run()方法，该run()方法将作为线程执行体。<br>1.2创建Thread子类的实例，即创建了线程对象。<br>1.3调用线程对象的start()方法来启动该线程。<br>2.通过实现Runnable接口来创建并启动线程的步骤如下：<br>2.1定义Runnable接口的实现类，并实现该接口的run()方法，该run()方法将作为线程执行体。<br>2.2创建Runnable实现类的实例，并将其作为Thread的target来创建Thread对象，Thread对象为线程对象。<br>2.3调用线程对象的start()方法来启动该线程。<br>3.通过实现Callable接口来创建并启动线程的步骤如下：<br>3.1创建Callable接口的实现类，并实现call()方法，该call()方法将作为线程执行体，且该call()方法有返回值。然后再创建Callable实现类的实例。<br>3.2使用FutureTask类来包装Callable对象，该FutureTask对象封装了该Callable对象的call()方法的返回值。<br>3.3使用FutureTask对象作为Thread对象的target创建并启动新线程。<br>3.4调用FutureTask对象的get()方法来获得子线程执行结束后的返回值。</p><span id="more"></span><p><strong>代码</strong></p><pre><code>import java.util.concurrent.Callable;import java.util.concurrent.ExecutionException;import java.util.concurrent.FutureTask;class MyThread extends Thread&#123;    @Override    public void run()&#123;        System.out.println(Thread.currentThread().getName());    &#125;&#125;class MyThread1 implements Runnable&#123;    @Override    public void run() &#123;        System.out.println(Thread.currentThread().getName());    &#125;&#125;class MyThread2 implements Callable&#123;    @Override    public Object call() throws Exception &#123;        return &quot;success&quot;;    &#125;&#125;public class ThreadTest &#123;    public static void main(String[] args) throws ExecutionException &#123;        for(int i=0;i&lt;10;i++)&#123;            //继承Thread类            //new MyThread().start();                        //实现Runnable接口            //new Thread(new MyThread1()).start();                        //实现Callable接口            FutureTask&lt;String&gt; task = new FutureTask&lt;&gt;(new MyThread2());            new Thread(task).start();                    try &#123;                System.out.println(task.get());            &#125; catch (InterruptedException e) &#123;                e.printStackTrace();            &#125;        &#125;        &#125;&#125;</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;创建线程的三种方式&quot;&gt;&lt;a href=&quot;#创建线程的三种方式&quot; class=&quot;headerlink&quot; title=&quot;创建线程的三种方式&quot;&gt;&lt;/a&gt;创建线程的三种方式&lt;/h1&gt;&lt;p&gt;创建线程有三种方式，分别是继承Thread类、实现Runnable接口、实现Callable接口。&lt;/p&gt;
-&lt;p&gt;1.通过继承Thread类来创建并启动线程的步骤如下：&lt;br&gt;1.1定义Thread类的子类，并重写该类的run()方法，该run()方法将作为线程执行体。&lt;br&gt;1.2创建Thread子类的实例，即创建了线程对象。&lt;br&gt;1.3调用线程对象的start()方法来启动该线程。&lt;br&gt;2.通过实现Runnable接口来创建并启动线程的步骤如下：&lt;br&gt;2.1定义Runnable接口的实现类，并实现该接口的run()方法，该run()方法将作为线程执行体。&lt;br&gt;2.2创建Runnable实现类的实例，并将其作为Thread的target来创建Thread对象，Thread对象为线程对象。&lt;br&gt;2.3调用线程对象的start()方法来启动该线程。&lt;br&gt;3.通过实现Callable接口来创建并启动线程的步骤如下：&lt;br&gt;3.1创建Callable接口的实现类，并实现call()方法，该call()方法将作为线程执行体，且该call()方法有返回值。然后再创建Callable实现类的实例。&lt;br&gt;3.2使用FutureTask类来包装Callable对象，该FutureTask对象封装了该Callable对象的call()方法的返回值。&lt;br&gt;3.3使用FutureTask对象作为Thread对象的target创建并启动新线程。&lt;br&gt;3.4调用FutureTask对象的get()方法来获得子线程执行结束后的返回值。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="基础" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="创建线程的三种方式" scheme="http://example.com/categories/Java/%E5%9F%BA%E7%A1%80/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="多线程" scheme="http://example.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
-    
-    <category term="线程" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B/"/>
     
   </entry>
   
