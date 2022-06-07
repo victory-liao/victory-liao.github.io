@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-07T13:54:03.288Z</updated>
+  <updated>2022-06-07T14:28:19.950Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>并发 | Exchanger</title>
+    <link href="http://example.com/2022/06/07/Exchanger/"/>
+    <id>http://example.com/2022/06/07/Exchanger/</id>
+    <published>2022-06-07T14:14:03.000Z</published>
+    <updated>2022-06-07T14:28:19.950Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h1><p>Exchanger用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程<br>通过exchange方法交换数据，如果第一个线程先执行exchange方法，它会一直等待第二个线程也执行exchange方法，当<br>两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产出来的数据传递给对方。<br><strong>应用场景</strong><br>（1）遗传算法<br>遗传算法里需要选出两个人作为交配对象，这时候会交换两个人的数据，并使用交叉规则得出2个交配结果。<br>（2）校对工作<br>例如，我们需要将纸制银行流水通过人工的方式录入成电子银行流水，为了避免错误，采用AB岗两个人进行录入，录入到<br>Excel后，系统需要加载这两个Excel，并对两个Excel数据进行校对，看看是否录入一致。<br><strong>示例代码：</strong></p><pre><code>package concurrency.exchanger;import java.util.concurrent.Exchanger;import java.util.concurrent.ExecutorService;import java.util.concurrent.Executors;public class ExchangerTest &#123;    private static final Exchanger&lt;String&gt; exgr = new Exchanger&lt;String&gt;();        private static ExecutorService threadPool = Executors.newFixedThreadPool(2);        public static void main(String[] args) &#123;        threadPool.execute(new Runnable()&#123;            @Override            public void run() &#123;                try&#123;                    String A = &quot;银行流水A&quot;;//A录入银行流水数据                    exgr.exchange(A);                &#125;catch(InterruptedException e)&#123;                    e.printStackTrace();                &#125;            &#125;                    &#125;);                threadPool.execute(new Runnable()&#123;            @Override            public void run() &#123;                try&#123;                    String B = &quot;银行流水B&quot;;//B录入银行流水数据                    String A = exgr.exchange(B);                    System.out.println(&quot;A和B数据是否一致：&quot;+A.equals(B)+&quot;,A录入的是：&quot;+A+&quot;,B录入的是：&quot;+B);                &#125;catch(InterruptedException e)&#123;                    e.printStackTrace();                &#125;            &#125;                    &#125;);    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Exchanger&quot;&gt;&lt;a href=&quot;#Exchanger&quot; class=&quot;headerlink&quot; title=&quot;Exchanger&quot;&gt;&lt;/a&gt;Exchanger&lt;/h1&gt;&lt;p&gt;Exchanger用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程</summary>
+      
+    
+    
+    
+    <category term="并发" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="Exchanger" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/Exchanger/"/>
+    
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="Exchanger" scheme="http://example.com/tags/Exchanger/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>并发 | Semaphore</title>
+    <link href="http://example.com/2022/06/07/Semaphore/"/>
+    <id>http://example.com/2022/06/07/Semaphore/</id>
+    <published>2022-06-07T14:02:35.000Z</published>
+    <updated>2022-06-07T14:11:47.673Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>Semaphore（信号量）是用来控制同时访问特定资源的数量，它通过协调各个线程，以保证合理的使用公共资源。<br><strong>应用场景：</strong><br>Semaphore可以用于做<strong>流量控制</strong>，特别是公共资源优先的应用场景，比如<strong>数据库连接</strong>。<br><strong>示例代码：</strong></p><pre><code>package concurrency.semaphore;import java.util.concurrent.ExecutorService;import java.util.concurrent.Executors;import java.util.concurrent.Semaphore;public class SemaphoreTest &#123;    private static final int THREAD_COUNT = 30;        private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);        private static Semaphore s = new Semaphore(10);        public static void main(String[] args) &#123;        for(int i = 0; i &lt; THREAD_COUNT; i++)&#123;//虽然有30个线程在执行，但是只允许10个并发执行            threadPool.execute(new Runnable()&#123;                @Override                public void run()&#123;                    try&#123;                        s.acquire();                        System.out.println(&quot;save data&quot;);                        s.release();                    &#125;catch(InterruptedException e)&#123;                        e.printStackTrace();                    &#125;                &#125;            &#125;);        &#125;        threadPool.shutdown();    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Semaphore&quot;&gt;&lt;a href=&quot;#Semaphore&quot; class=&quot;headerlink&quot; title=&quot;Semaphore&quot;&gt;&lt;/a&gt;Semaphore&lt;/h1&gt;&lt;p&gt;Semaphore（信号量）是用来控制同时访问特定资源的数量，它通过协调各个线程，以</summary>
+      
+    
+    
+    
+    <category term="并发" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="Semaphore" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/Semaphore/"/>
+    
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="Semaphore" scheme="http://example.com/tags/Semaphore/"/>
+    
+  </entry>
   
   <entry>
     <title>并发 | Java中的12个原子操作类</title>
@@ -543,64 +599,6 @@
     <category term="Redis" scheme="http://example.com/tags/Redis/"/>
     
     <category term="集群" scheme="http://example.com/tags/%E9%9B%86%E7%BE%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis | 主从复制</title>
-    <link href="http://example.com/2022/05/13/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/"/>
-    <id>http://example.com/2022/05/13/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</id>
-    <published>2022-05-13T08:26:24.000Z</published>
-    <updated>2022-05-13T10:05:21.190Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Redis主从复制"><a href="#Redis主从复制" class="headerlink" title="Redis主从复制"></a>Redis主从复制</h1><ol><li>主从复制<br>主机数据更新后根据配置和策略，自动同步到备机的master/slaver机制，master以写为主，slave以读为主<br><img src="/2022/05/13/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/1.PNG"></li><li>复制原理<br>（1）每次从机联通后，都会给主机发送sync指令<br>（2）主机立刻进行存盘操作并发送RDB文给从机<br>（3）从机收到RDB文件后，进行全盘加载<br>（4）之后每次主机的写操作，都会立刻发送给从机，从机执行相同的命令<br><img src="/2022/05/13/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/2.PNG"></li><li>哨兵模式<br>能够后台监控主机是否故障，如果故障了根据投票数自动将从机转换为主机<br><img src="/2022/05/13/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/3.PNG"></li><li>故障恢复<br>（1）如果发生故障，从下线的主服务的所有从服务里挑选一个从服务，将其转成主服务<br>选择条件：<br>1）选择优先级靠前的（优先级可以在redis.conf中设置slave-priority）<br>2）选择偏移量最大的(偏移量最大指获得原主服务数据最多的服务)<br>3）选择runid最小的从服务（每个Redis实例启动后都会随机生成一个40为的runid）</li><li>优点<br>（1）读写分离<br>（2）容灾快速恢复</li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;Redis主从复制&quot;&gt;&lt;a href=&quot;#Redis主从复制&quot; class=&quot;headerlink&quot; title=&quot;Redis主从复制&quot;&gt;&lt;/a&gt;Redis主从复制&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;主从复制&lt;br&gt;主机数据更新后根据配置和策略，自动同步到备机的maste</summary>
-      
-    
-    
-    
-    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
-    
-    <category term="主从复制" scheme="http://example.com/categories/Redis/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/"/>
-    
-    
-    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
-    
-    <category term="主从复制" scheme="http://example.com/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis | 持久化方式</title>
-    <link href="http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/"/>
-    <id>http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/</id>
-    <published>2022-05-09T13:45:48.000Z</published>
-    <updated>2022-05-12T07:03:25.131Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Redis持久化方式"><a href="#Redis持久化方式" class="headerlink" title="Redis持久化方式"></a>Redis持久化方式</h1><ol><li>两个不同形式得持久化方式<br>RDB(Redis DataBase)<br>AOF(Append Of File)</li><li>RDB</li><li>1 RDB<br>在指定的时间间隔内将内存中的数据集快照(Snapshot)写入磁盘,恢复时将快照文件直接读到内存中。</li><li>2 备份<br>Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO操作的，这就确保了极高的性能；</li><li>3 适用<br>大规模数据的恢复且对于数据恢复的完整性不是非常敏感</li><li>4 优点<br>1）节省磁盘空间<br>2）恢复速度快</li><li>5 缺点<br>1）虽然Redis在fork时使用了写时拷贝技术,但是如果数据庞大时还是比较消耗性能。<br>2）在备份周期在一定间隔时间做一次备份，所以如果Redis意外down掉的话，就会丢失最后一次快照后的所有修改。</li><li>AOF</li><li>1 AOF<br>以日志的形式来记录每个写操作，将Redis执行过的所有写指令记录下来(读操作不记录)，只许追加文件但不可以改写文件，Redis启动之初会读取该文件重新构建数据，换言之，Redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</li><li>2 AOF同步频率设置：<br>1）始终同步<br>2）每秒同步<br>3）不主动进行同步</li><li>3 Rewrite:<br>AOF采用文件追加方式，文件会越来越大为避免出现此种情况，新增了重写机制,当AOF文件的大小超过所设定的阈值时，Redis就会启动AOF文件的内容压缩，只保留可以恢复数据的最小指令集.可以使用命令bgrewriteaof。</li></ol><p><strong>如何实现重写？</strong><br>AOF文件持续增长而过大时，会fork出一条新进程来将文件重写(也是先写临时文件最后再rename)，遍历新进程的内存中数据，每条记录有一条的Set语句。重写aof文件的操作，并没有读取旧的aof文件，而是<strong>将整个内存中的数据库内容用命令的方式重写了一个新的aof文件</strong>，这点和快照有点类似。<br><strong>何时重写</strong><br>系统载入时或者上次重写完毕时，Redis会记录此时AOF大小，设为base_size,如果Redis的AOF当前大小&gt;= base_size +base_size*100% (默认)或当前大小&gt;=64mb(默认)的情况下，Redis会对AOF进行重写。<br>3.4 AOF的优点：<br>1）备份机制更稳健，丢失数据概率更低。<br>2）可读的日志文本，通过操作AOF文件，可以处理误操作。<br>3.5 AOF的缺点：<br>1）比起RDB占用更多的磁盘空间。<br>2）恢复备份速度要慢。<br>3）每次读写都同步的话，有一定的性能压力。<br>4）存在个别Bug，造成不能恢复。<br><strong>注意：</strong><br>1）AOF和RDB同时开启，系统默认取AOF的数据<br>2）推荐AOF和RDB都使用<br>3）如果对数据不敏感，可以选单独用RDB<br>4）不建议单独用 AOF，因为可能会出现Bug<br>5）如果只是做纯内存缓存，可以都不用</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;Redis持久化方式&quot;&gt;&lt;a href=&quot;#Redis持久化方式&quot; class=&quot;headerlink&quot; title=&quot;Redis持久化方式&quot;&gt;&lt;/a&gt;Redis持久化方式&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;两个不同形式得持久化方式&lt;br&gt;RDB(Redis DataBa</summary>
-      
-    
-    
-    
-    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
-    
-    <category term="持久化方式" scheme="http://example.com/categories/Redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/"/>
-    
-    
-    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
-    
-    <category term="持久化方式" scheme="http://example.com/tags/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/"/>
     
   </entry>
   
