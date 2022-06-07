@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-06T13:34:29.637Z</updated>
+  <updated>2022-06-07T12:57:06.164Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>并发 | CyclicBarrier用于多线程计算数据并合并计算结果</title>
+    <link href="http://example.com/2022/06/07/CyclicBarrier%E7%94%A8%E4%BA%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%90%88%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C/"/>
+    <id>http://example.com/2022/06/07/CyclicBarrier%E7%94%A8%E4%BA%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%90%88%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C/</id>
+    <published>2022-06-07T12:51:58.000Z</published>
+    <updated>2022-06-07T12:57:06.164Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="CyclicBarrier用于多线程计算数据并合并计算结果"><a href="#CyclicBarrier用于多线程计算数据并合并计算结果" class="headerlink" title="CyclicBarrier用于多线程计算数据并合并计算结果"></a>CyclicBarrier用于多线程计算数据并合并计算结果</h1><p><strong>场景：</strong> 一个Excel保存了用户所有银行流水，每个Sheet保存一个账户近一年的每笔银行流水，现在<br>需要统计用户的日均银行流水，先用多线程处理每个sheet里的银行流水，都执行完之后，得到每个sheet<br>的日均银行流水，最后，再用barrierAction用这些线程的计算结果，计算出整个Excel的日均银行流水。<br><strong>代码：</strong></p><pre><code>package concurrency.cyclicbarrier;import java.util.Map.Entry;import java.util.concurrent.BrokenBarrierException;import java.util.concurrent.ConcurrentHashMap;import java.util.concurrent.CyclicBarrier;import java.util.concurrent.Executor;import java.util.concurrent.Executors;public class BankWaterService implements Runnable&#123;    //创建4个屏障，处理完之后执行当前类的run方法    private CyclicBarrier c = new CyclicBarrier(4, this);        //假设只有4个sheet，所以只启动4个线程    private Executor executor = Executors.newFixedThreadPool(4);        //保存每个sheet计算出的银流结果    private ConcurrentHashMap&lt;String, Integer&gt; sheetBankWaterCount = new ConcurrentHashMap&lt;String, Integer&gt;();        private void count()&#123;        for(int i = 0; i &lt; 4; i++)&#123;            executor.execute(new Runnable()&#123;                @Override                public void run() &#123;                    //计算当前sheet的银流数据，计算代码省略                    sheetBankWaterCount.put(Thread.currentThread().getName(), 1);                    //银流计算完成，插入一个屏障                    try&#123;                        c.await();                    &#125;catch(InterruptedException | BrokenBarrierException e)&#123;                        e.printStackTrace();                    &#125;                &#125;            &#125;);        &#125;    &#125;        @Override    public void run() &#123;        int result = 0;                //汇总每个sheet计算出的结果        for(Entry&lt;String, Integer&gt; sheet : sheetBankWaterCount.entrySet())&#123;            result += sheet.getValue();        &#125;                //将结果输出        sheetBankWaterCount.put(&quot;result&quot;, result);        System.out.println(result);    &#125;        public static void main(String[] args)&#123;        BankWaterService bankWaterCount = new BankWaterService();        bankWaterCount.count();    &#125;&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;CyclicBarrier用于多线程计算数据并合并计算结果&quot;&gt;&lt;a href=&quot;#CyclicBarrier用于多线程计算数据并合并计算结果&quot; class=&quot;headerlink&quot; title=&quot;CyclicBarrier用于多线程计算数据并合并计算结果&quot;&gt;&lt;/a</summary>
+      
+    
+    
+    
+    <category term="并发" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="CyclicBarrier" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/CyclicBarrier/"/>
+    
+    <category term="CyclicBarrier用于多线程计算数据并合并计算结果" scheme="http://example.com/categories/%E5%B9%B6%E5%8F%91/CyclicBarrier/CyclicBarrier%E7%94%A8%E4%BA%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%90%88%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C/"/>
+    
+    
+    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="CyclicBarrier" scheme="http://example.com/tags/CyclicBarrier/"/>
+    
+  </entry>
   
   <entry>
     <title>使用ForkJoin框架计算整数相加的结果</title>
@@ -575,32 +605,6 @@
     <category term="Redis" scheme="http://example.com/tags/Redis/"/>
     
     <category term="秒杀" scheme="http://example.com/tags/%E7%A7%92%E6%9D%80/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis | 事务</title>
-    <link href="http://example.com/2022/05/07/%E4%BA%8B%E5%8A%A1-2/"/>
-    <id>http://example.com/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</id>
-    <published>2022-05-07T12:03:15.000Z</published>
-    <updated>2022-05-07T12:11:56.112Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p><h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p><span id="more"></span><h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p><h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;事务&quot;&gt;&lt;a href=&quot;#事务&quot; class=&quot;headerlink&quot; title=&quot;事务&quot;&gt;&lt;/a&gt;事务&lt;/h1&gt;&lt;h2 id=&quot;Redis中事务的定义&quot;&gt;&lt;a href=&quot;#Redis中事务的定义&quot; class=&quot;headerlink&quot; title=&quot;Redis中事务的定义&quot;&gt;&lt;/a&gt;Redis中事务的定义&lt;/h2&gt;&lt;p&gt;Redis事务是一个单独的隔离操作：&lt;strong&gt;事务中的所有命令都会序列化、按顺序地执行&lt;/strong&gt;。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断&lt;br&gt;Redis事务的主要作用就是&lt;strong&gt;串联多个命令防止别的命令插队&lt;/strong&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;事务相关的命令-multi、exec、discard&quot;&gt;&lt;a href=&quot;#事务相关的命令-multi、exec、discard&quot; class=&quot;headerlink&quot; title=&quot;事务相关的命令(multi、exec、discard)&quot;&gt;&lt;/a&gt;事务相关的命令(multi、exec、discard)&lt;/h2&gt;&lt;p&gt;1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。&lt;br&gt;2.组队的过程中可以通过discard来放弃组队。 &lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
-    
-    <category term="事务" scheme="http://example.com/categories/Redis/%E4%BA%8B%E5%8A%A1/"/>
-    
-    
-    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
-    
-    <category term="事务" scheme="http://example.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
   </entry>
   
