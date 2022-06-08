@@ -2098,6 +2098,20 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | I/O密集型和计算密集型</title>
+    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
+<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java | HashMap的七种遍历方式</title>
     <url>/2022/04/23/HashMap%E7%9A%84%E4%B8%83%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="HashMap的七种遍历方式"><a href="#HashMap的七种遍历方式" class="headerlink" title="HashMap的七种遍历方式"></a>HashMap的七种遍历方式</h1><p><a href="https://mp.weixin.qq.com/s/zQBN3UvJDhRTKP6SzcZFKw">参考资料</a></p>
@@ -2173,20 +2187,6 @@ public class HashMapTraversalMethodsTest &#123;
       <tags>
         <tag>HashMap</tag>
         <tag>遍历</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | I/O密集型和计算密集型</title>
-    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
-<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -4217,6 +4217,109 @@ wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
+    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
+<pre><code>create table dept(
+int id primary key auto_increment not null,
+varchar(20) name
+)
+</code></pre>
+<p><strong>Dept.java（JavaBean）</strong></p>
+<pre><code>package com.oracle.bean;
+
+public class Dept &#123;
+    private int id;
+    private String name;
+    public Dept() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    public Dept(int id, String name) &#123;
+        super();
+        this.id = id;
+        this.name = name;
+    &#125;
+    public int getId() &#123;
+        return id;
+    &#125;
+    public void setId(int id) &#123;
+        this.id = id;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    
+    
+&#125;
+</code></pre>
+<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.Dept;
+import com.oracle.utils.DataSourceUtils;
+
+public class Test &#123;
+    
+    public static void main(String[] args) throws SQLException &#123;
+        //创建QueryRunner对象
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        //增加数据
+        //String sql = &quot;insert into dept(name) values(?)&quot;;
+        //qr.update(sql, &quot;需求部&quot;);
+        
+        //修改数据
+        //String sql = &quot;update dept set name=? where id=?&quot;;
+        //qr.update(sql, &quot;需求组&quot;, 4);
+        
+        //删除数据
+        //String sql = &quot;delete from dept where id=?&quot;;
+        //qr.update(sql, 4);
+        
+        //查询数据
+        //（1）查询结果为一行
+        //String sql = &quot;select * from dept where id=?&quot;;
+        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
+        //System.out.println(d.getId());
+        //System.out.println(d.getName());
+        
+        //（2）查询结果为多行
+//        String sql = &quot;select * from dept&quot;;
+//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
+//        for(Dept d:list) &#123;
+//            System.out.println(d.getId());
+//            System.out.println(d.getName());
+//        &#125;
+        
+        //（2）查询结果为聚合函数
+        String sql = &quot;select count(*) from dept&quot;;
+        
+        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
+        
+        System.out.println(i);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>QueryRunner和数据库增删改查操作</category>
+      </categories>
+  </entry>
+  <entry>
     <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
     <url>/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p>
@@ -4333,109 +4436,6 @@ to_word(all_links)
         <tag>requests</tag>
         <tag>BeautifulSoup</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
-    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
-<pre><code>create table dept(
-int id primary key auto_increment not null,
-varchar(20) name
-)
-</code></pre>
-<p><strong>Dept.java（JavaBean）</strong></p>
-<pre><code>package com.oracle.bean;
-
-public class Dept &#123;
-    private int id;
-    private String name;
-    public Dept() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    public Dept(int id, String name) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-    &#125;
-    public int getId() &#123;
-        return id;
-    &#125;
-    public void setId(int id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    
-    
-&#125;
-</code></pre>
-<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
-<pre><code>package com.oracle.test;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import com.oracle.bean.Dept;
-import com.oracle.utils.DataSourceUtils;
-
-public class Test &#123;
-    
-    public static void main(String[] args) throws SQLException &#123;
-        //创建QueryRunner对象
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        //增加数据
-        //String sql = &quot;insert into dept(name) values(?)&quot;;
-        //qr.update(sql, &quot;需求部&quot;);
-        
-        //修改数据
-        //String sql = &quot;update dept set name=? where id=?&quot;;
-        //qr.update(sql, &quot;需求组&quot;, 4);
-        
-        //删除数据
-        //String sql = &quot;delete from dept where id=?&quot;;
-        //qr.update(sql, 4);
-        
-        //查询数据
-        //（1）查询结果为一行
-        //String sql = &quot;select * from dept where id=?&quot;;
-        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
-        //System.out.println(d.getId());
-        //System.out.println(d.getName());
-        
-        //（2）查询结果为多行
-//        String sql = &quot;select * from dept&quot;;
-//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
-//        for(Dept d:list) &#123;
-//            System.out.println(d.getId());
-//            System.out.println(d.getName());
-//        &#125;
-        
-        //（2）查询结果为聚合函数
-        String sql = &quot;select count(*) from dept&quot;;
-        
-        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
-        
-        System.out.println(i);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>QueryRunner和数据库增删改查操作</category>
-      </categories>
   </entry>
   <entry>
     <title>SpringMVC | REST风格GetPostPutDelete请求</title>
@@ -11709,55 +11709,6 @@ public class TestEmpDept &#123;
       </tags>
   </entry>
   <entry>
-    <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
-    <url>/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</url>
-    <content><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
-<pre><code>import os
-import pdfplumber
-from openpyxl import Workbook
-
-path = &#39;PDF&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-key_words = &quot;主要会计数据&quot;
-
-for file in files:
-    with pdfplumber.open(file) as p:
-        wb = Workbook()  # 新建excel工作簿
-        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
-
-        # 获取关键词所在页及下一页的页码
-        pages_wanted = []
-        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
-            if key_words in page.extract_text():
-                pages_wanted.append(index)
-                pages_wanted.append(index + 1)
-                break
-
-        # 提取指定页码里的表格
-        for i in pages_wanted:
-            page = p.pages[i]
-            tables = page.extract_tables()  # 读取表格
-            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
-                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
-                for table in tables:  # 遍历所有列表
-                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
-                        ws.append(row)  # 写入excel表
-        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
-</code></pre>
-<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pdfplumber</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>pdfplumber</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pandas | 一键更新Excel中的图表</title>
     <url>/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p>
@@ -13601,6 +13552,55 @@ public class CountTask extends RecursiveTask&lt;Integer&gt;&#123;
       </tags>
   </entry>
   <entry>
+    <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
+    <url>/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</url>
+    <content><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
+<pre><code>import os
+import pdfplumber
+from openpyxl import Workbook
+
+path = &#39;PDF&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+key_words = &quot;主要会计数据&quot;
+
+for file in files:
+    with pdfplumber.open(file) as p:
+        wb = Workbook()  # 新建excel工作簿
+        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
+
+        # 获取关键词所在页及下一页的页码
+        pages_wanted = []
+        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
+            if key_words in page.extract_text():
+                pages_wanted.append(index)
+                pages_wanted.append(index + 1)
+                break
+
+        # 提取指定页码里的表格
+        for i in pages_wanted:
+            page = p.pages[i]
+            tables = page.extract_tables()  # 读取表格
+            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
+                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
+                for table in tables:  # 遍历所有列表
+                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
+                        ws.append(row)  # 写入excel表
+        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
+</code></pre>
+<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pdfplumber</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>pdfplumber</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | 使用filter解决项目编码问题</title>
     <url>/2022/01/11/%E4%BD%BF%E7%94%A8filter%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AE%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="使用filter解决项目编码问题"><a href="#使用filter解决项目编码问题" class="headerlink" title="使用filter解决项目编码问题"></a>使用filter解决项目编码问题</h1><p>在开发JavaWeb项目时，前端的编码使用的时utf-8编码方式，服务器端使用的是ISO-8859-1编码方式，故在开发中会出现乱码。</p>
@@ -14993,134 +14993,6 @@ public class PageDao &#123;
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | 分页插件PageHelper及PageHelper模拟分页</title>
-    <url>/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/</url>
-    <content><![CDATA[<h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p>
-<h2 id="模拟分页"><a href="#模拟分页" class="headerlink" title="模拟分页"></a>模拟分页</h2><p><strong>PageUtil.java</strong></p>
-<pre><code>package com.atguigu.test;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-
-import com.atguigu.bean.Emp;
-import com.github.pagehelper.PageInfo;
-
-/**
- * 首页 上一页 1 2 3 4 5 下一页 末页
- */
-public class PageUtil &#123;
-    public static String getPageInfo(PageInfo&lt;Emp&gt; pageInfo, HttpServletRequest request)&#123;
-        //String path = request.getContextPath() + &quot;/&quot;;
-        String path = &quot;/SSM/&quot;;
-        
-        StringBuilder builder = new StringBuilder();
-        
-        //拼接首页
-        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/1&#39;&gt;首页&lt;/a&gt;&quot;);
-        builder.append(&quot;&amp;nbsp;&quot;);
-        
-        //拼接上一页
-        if(pageInfo.isHasPreviousPage())&#123;
-            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPrePage()+&quot;&#39;&gt;上一页 &lt;/a&gt;&quot;);
-            builder.append(&quot;&amp;nbsp;&quot;);
-        &#125;else&#123;
-            builder.append(&quot;上一页&quot;);
-            builder.append(&quot;&amp;nbsp;&quot;);
-        &#125;
-        
-        //拼接页码
-        int[] nums = pageInfo.getNavigatepageNums();
-        for(int i : nums)&#123;
-            if(i == pageInfo.getPageNum())&#123;
-                builder.append(&quot;&lt;a style=&#39;color:red;&#39; href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);
-                builder.append(&quot;&amp;nbsp;&quot;);
-            &#125;else&#123;
-                builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);
-                builder.append(&quot;&amp;nbsp;&quot;);
-            &#125;
-        &#125;
-        
-        //拼接下一页
-        if(pageInfo.isHasNextPage())&#123;
-            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getNextPage()+&quot;&#39;&gt;下一页&lt;/a&gt;&quot;);
-            builder.append(&quot;&amp;nbsp;&quot;);
-        &#125;else&#123;
-            builder.append(&quot;下一页&quot;);
-            builder.append(&quot;&amp;nbsp;&quot;);
-        &#125;
-        
-        //拼接尾页
-        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPages()+&quot;&#39;&gt;尾页&lt;/a&gt;&quot;);
-        builder.append(&quot;&amp;nbsp;&quot;);
-        
-        return builder.toString();
-    &#125;
-&#125;
-</code></pre>
-<p><strong>TestPage.java</strong></p>
-<pre><code>package com.atguigu.test;
-
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpMapper;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
-public class TestPage &#123;
-    @Test
-    public void testPage() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        PageHelper.startPage(2, 2);
-        List&lt;Emp&gt; list = mapper.getAllEmp();
-        
-        PageInfo&lt;Emp&gt; pageInfo = new PageInfo&lt;&gt;(list, 5);
-//        System.out.println(pageInfo);
-//        System.out.println(Arrays.toString(pageInfo.getNavigatepageNums()));
-        
-        System.out.println(PageUtil.getPageInfo(pageInfo, null));
-        
-        
-        for (Emp emp : list) &#123;
-            System.out.println(emp);
-        &#125;
-    &#125;
-    
-    public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        return sqlSessionFactory;
-    &#125;
-&#125;
-</code></pre>
-<p><strong>返回结果</strong><br>字符串：</p>
-<pre><code>&lt;a href=&#39;/SSM/emps/1&#39;&gt;首页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;上一页 &lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;1&lt;/a&gt;&amp;nbsp;&lt;a style=&#39;color:red;&#39; href=&#39;/SSM/emps/2&#39;&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/4&#39;&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/5&#39;&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;下一页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/6&#39;&gt;尾页&lt;/a&gt;&amp;nbsp;
-</code></pre>
-<p>浏览器显示：<br><img src="/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/1.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>分页插件PageHelper及PageHelper模拟分页</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>分页插件PageHelper</tag>
-        <tag>PageHelper模拟分页</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | 划分数据集前对数据的shuffle</title>
     <url>/2021/07/02/%E5%88%92%E5%88%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%89%8D%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84shuffle/</url>
     <content><![CDATA[<h1 id="划分数据集前对数据的shuffle"><a href="#划分数据集前对数据的shuffle" class="headerlink" title="划分数据集前对数据的shuffle"></a>划分数据集前对数据的shuffle</h1><p>划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！<br>重要的事情说三遍！</p>
@@ -15336,6 +15208,134 @@ public class ThreadPoolCreationTest &#123;
       <tags>
         <tag>Java</tag>
         <tag>线程池</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis | 分页插件PageHelper及PageHelper模拟分页</title>
+    <url>/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/</url>
+    <content><![CDATA[<h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p>
+<h2 id="模拟分页"><a href="#模拟分页" class="headerlink" title="模拟分页"></a>模拟分页</h2><p><strong>PageUtil.java</strong></p>
+<pre><code>package com.atguigu.test;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
+import com.atguigu.bean.Emp;
+import com.github.pagehelper.PageInfo;
+
+/**
+ * 首页 上一页 1 2 3 4 5 下一页 末页
+ */
+public class PageUtil &#123;
+    public static String getPageInfo(PageInfo&lt;Emp&gt; pageInfo, HttpServletRequest request)&#123;
+        //String path = request.getContextPath() + &quot;/&quot;;
+        String path = &quot;/SSM/&quot;;
+        
+        StringBuilder builder = new StringBuilder();
+        
+        //拼接首页
+        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/1&#39;&gt;首页&lt;/a&gt;&quot;);
+        builder.append(&quot;&amp;nbsp;&quot;);
+        
+        //拼接上一页
+        if(pageInfo.isHasPreviousPage())&#123;
+            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPrePage()+&quot;&#39;&gt;上一页 &lt;/a&gt;&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;else&#123;
+            builder.append(&quot;上一页&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;
+        
+        //拼接页码
+        int[] nums = pageInfo.getNavigatepageNums();
+        for(int i : nums)&#123;
+            if(i == pageInfo.getPageNum())&#123;
+                builder.append(&quot;&lt;a style=&#39;color:red;&#39; href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);
+                builder.append(&quot;&amp;nbsp;&quot;);
+            &#125;else&#123;
+                builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);
+                builder.append(&quot;&amp;nbsp;&quot;);
+            &#125;
+        &#125;
+        
+        //拼接下一页
+        if(pageInfo.isHasNextPage())&#123;
+            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getNextPage()+&quot;&#39;&gt;下一页&lt;/a&gt;&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;else&#123;
+            builder.append(&quot;下一页&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;
+        
+        //拼接尾页
+        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPages()+&quot;&#39;&gt;尾页&lt;/a&gt;&quot;);
+        builder.append(&quot;&amp;nbsp;&quot;);
+        
+        return builder.toString();
+    &#125;
+&#125;
+</code></pre>
+<p><strong>TestPage.java</strong></p>
+<pre><code>package com.atguigu.test;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+public class TestPage &#123;
+    @Test
+    public void testPage() throws Exception&#123;
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
+        PageHelper.startPage(2, 2);
+        List&lt;Emp&gt; list = mapper.getAllEmp();
+        
+        PageInfo&lt;Emp&gt; pageInfo = new PageInfo&lt;&gt;(list, 5);
+//        System.out.println(pageInfo);
+//        System.out.println(Arrays.toString(pageInfo.getNavigatepageNums()));
+        
+        System.out.println(PageUtil.getPageInfo(pageInfo, null));
+        
+        
+        for (Emp emp : list) &#123;
+            System.out.println(emp);
+        &#125;
+    &#125;
+    
+    public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        return sqlSessionFactory;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>返回结果</strong><br>字符串：</p>
+<pre><code>&lt;a href=&#39;/SSM/emps/1&#39;&gt;首页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;上一页 &lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;1&lt;/a&gt;&amp;nbsp;&lt;a style=&#39;color:red;&#39; href=&#39;/SSM/emps/2&#39;&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/4&#39;&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/5&#39;&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;下一页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/6&#39;&gt;尾页&lt;/a&gt;&amp;nbsp;
+</code></pre>
+<p>浏览器显示：<br><img src="/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/1.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>分页插件PageHelper及PageHelper模拟分页</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>分页插件PageHelper</tag>
+        <tag>PageHelper模拟分页</tag>
       </tags>
   </entry>
   <entry>
@@ -26532,6 +26532,34 @@ controlthread.start()
         <tag>python</tag>
         <tag>多线程</tag>
         <tag>threading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>并发 | 线程池</title>
+    <url>/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/</url>
+    <content><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><strong>线程池的实现原理</strong><br><img src="/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/1.jpg"><br><strong>线程池的使用</strong><br>（1）线程池的创建</p>
+<pre><code>new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,unit,workQueue, handler)
+
+Parameters:
+    corePoolSize: the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set
+    maximumPoolSize: the maximum number of threads to allow in the pool
+    keepAliveTime: when the number of threads is greater than the core, this is the maximum time that excess idle threads will wait for new tasks before terminating.
+    unit the time: unit for the keepAliveTime argument
+    workQueue：the queue to use for holding tasks before they are executed. This queue will hold only the Runnable tasks submitted by the execute method.
+    threadFactory: set thread factory
+    handler: the handler to use when execution is blocked because the thread bounds and queue capacities are reached
+</code></pre>
+<p><a href="https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/">创建线程池的7种方式</a></p>
+<span id="more"></span>
+<p>（2）向线程池提交任务<br>    execute():用于提交不需要返回值的任务。<br>    submit():用于提交需要返回值的任务。<br>（3）关闭线程池<br>    shutdown()<br>    shutdownNow()<br><strong>线程池的配置</strong><br>（1）<br>CPU密集型任务：配置 CPU数量+1 个线程的线程池；<br>IO密集型任务：配置 2*CPU数量 个线程的线程池；<br>混合型任务：两个事务执行时间相差不大，如果可以拆分，将其分解成一个CPU密集型任务和一个IO密集型任务，如果两个任务的执行时间相差太大，则没有必要拆分。<br>（2）优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理，让优先级高的任务先执行。<br>（3）执行时间不同的任务可以交给不同规模的线程池来处理，或者可以使用优先级队列，让执行时间段的任务先执行。<br>（4）依赖数据库连接池的任务，因为线程提交SQL后选哟等待数据库返回结果，等待的时间越长，则CPU空闲时间越长，应该设置较大的线程数。<br>（5）建议使用有界队列。</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+        <category>线程池</category>
+      </categories>
+      <tags>
+        <tag>并发</tag>
+        <tag>线程池</tag>
       </tags>
   </entry>
   <entry>
