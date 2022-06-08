@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-08T02:39:50.977Z</updated>
+  <updated>2022-06-08T09:49:47.790Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://example.com/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/"/>
     <id>http://example.com/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/</id>
     <published>2022-06-08T01:59:41.000Z</published>
-    <updated>2022-06-08T02:39:50.977Z</updated>
+    <updated>2022-06-08T09:49:47.790Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><strong>线程池的实现原理</strong><br><img src="/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/1.jpg"><br><strong>线程池的使用</strong><br>（1）线程池的创建</p><pre><code>new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,unit,workQueue, handler)Parameters:    corePoolSize: the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set    maximumPoolSize: the maximum number of threads to allow in the pool    keepAliveTime: when the number of threads is greater than the core, this is the maximum time that excess idle threads will wait for new tasks before terminating.    unit the time: unit for the keepAliveTime argument    workQueue：the queue to use for holding tasks before they are executed. This queue will hold only the Runnable tasks submitted by the execute method.    threadFactory: set thread factory    handler: the handler to use when execution is blocked because the thread bounds and queue capacities are reached    workQueue:    ArrayBlockingQueue：基于数组结构的有界阻塞队列    LinkedBlockingQueue：基于链表结果的阻塞队列    SynchronousQueue：不存储元素的阻塞队列    PriorityBlockingQueue:具有优先级的无限阻塞队列handler:    AbortPolicy:直接抛出RejectedExecutionException异常    CallerRunsPolicy:使用调用者所在线程来执行任务    DiscardOldestPolicy：丢弃掉在队列中存在时间最久的任务    DiscardPolicy:默认丢弃任务，不进行任何通知</code></pre><p><a href="https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/">创建线程池的7种方式</a></p><span id="more"></span><p>（2）向线程池提交任务<br>    execute():用于提交不需要返回值的任务。<br>    submit():用于提交需要返回值的任务。<br>（3）关闭线程池<br>    shutdown()<br>    shutdownNow()<br><strong>线程池的配置</strong><br>（1）<br>CPU密集型任务：配置 CPU数量+1 个线程的线程池；<br>IO密集型任务：配置 2*CPU数量 个线程的线程池；<br>混合型任务：两个事务执行时间相差不大，如果可以拆分，将其分解成一个CPU密集型任务和一个IO密集型任务，如果两个任务的执行时间相差太大，则没有必要拆分。<br>（2）优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理，让优先级高的任务先执行。<br>（3）执行时间不同的任务可以交给不同规模的线程池来处理，或者可以使用优先级队列，让执行时间段的任务先执行。<br>（4）依赖数据库连接池的任务，因为线程提交SQL后选哟等待数据库返回结果，等待的时间越长，则CPU空闲时间越长，应该设置较大的线程数。<br>（5）建议使用有界队列。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><strong>线程池的实现原理</strong><br><img src="/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/1.jpg"><br><strong>线程池的使用</strong><br>（1）线程池的创建</p><pre><code>new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,unit,workQueue, handler)Parameters:    corePoolSize: the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set    maximumPoolSize: the maximum number of threads to allow in the pool    keepAliveTime: when the number of threads is greater than the core, this is the maximum time that excess idle threads will wait for new tasks before terminating.    unit the time: unit for the keepAliveTime argument    workQueue：the queue to use for holding tasks before they are executed. This queue will hold only the Runnable tasks submitted by the execute method.    threadFactory: set thread factory    handler: the handler to use when execution is blocked because the thread bounds and queue capacities are reached    workQueue:    ArrayBlockingQueue：基于数组结构的有界阻塞队列    LinkedBlockingQueue：基于链表结果的阻塞队列    SynchronousQueue：不存储元素的阻塞队列    PriorityBlockingQueue:具有优先级的无限阻塞队列handler:    AbortPolicy:直接抛出RejectedExecutionException异常    CallerRunsPolicy:使用调用者所在线程来执行任务    DiscardOldestPolicy：丢弃掉在队列中存在时间最久的任务    DiscardPolicy:默认丢弃任务，不进行任何通知</code></pre><p><a href="https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/">创建线程池的7种方式</a><br><a href="https://www.jianshu.com/p/e2053d455ef3">Executor框架</a></p><span id="more"></span><p>（2）向线程池提交任务<br>    execute():用于提交不需要返回值的任务。<br>    submit():用于提交需要返回值的任务。<br>（3）关闭线程池<br>    shutdown()<br>    shutdownNow()<br><strong>线程池的配置</strong><br>（1）<br>CPU密集型任务：配置 CPU数量+1 个线程的线程池；<br>IO密集型任务：配置 2*CPU数量 个线程的线程池；<br>混合型任务：两个事务执行时间相差不大，如果可以拆分，将其分解成一个CPU密集型任务和一个IO密集型任务，如果两个任务的执行时间相差太大，则没有必要拆分。<br>（2）优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理，让优先级高的任务先执行。<br>（3）执行时间不同的任务可以交给不同规模的线程池来处理，或者可以使用优先级队列，让执行时间段的任务先执行。<br>（4）依赖数据库连接池的任务，因为线程提交SQL后选哟等待数据库返回结果，等待的时间越长，则CPU空闲时间越长，应该设置较大的线程数。<br>（5）建议使用有界队列。</p>]]></content>
     
     
     <summary type="html">&lt;h1 id=&quot;线程池&quot;&gt;&lt;a href=&quot;#线程池&quot; class=&quot;headerlink&quot; title=&quot;线程池&quot;&gt;&lt;/a&gt;线程池&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;线程池的实现原理&lt;/strong&gt;&lt;br&gt;&lt;img src=&quot;/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/1.jpg&quot;&gt;&lt;br&gt;&lt;strong&gt;线程池的使用&lt;/strong&gt;&lt;br&gt;（1）线程池的创建&lt;/p&gt;
@@ -50,7 +50,7 @@ handler:
     DiscardOldestPolicy：丢弃掉在队列中存在时间最久的任务
     DiscardPolicy:默认丢弃任务，不进行任何通知
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;a href=&quot;https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/&quot;&gt;创建线程池的7种方式&lt;/a&gt;&lt;/p&gt;</summary>
+&lt;p&gt;&lt;a href=&quot;https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/&quot;&gt;创建线程池的7种方式&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.jianshu.com/p/e2053d455ef3&quot;&gt;Executor框架&lt;/a&gt;&lt;/p&gt;</summary>
     
     
     
@@ -62,6 +62,14 @@ handler:
     <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
     
     <category term="线程池" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
+    
+    <category term="Executor" scheme="http://example.com/tags/Executor/"/>
+    
+    <category term="Executors" scheme="http://example.com/tags/Executors/"/>
+    
+    <category term="ThreadPoolExecutor" scheme="http://example.com/tags/ThreadPoolExecutor/"/>
+    
+    <category term="ScheduledThreadPoolExecutor" scheme="http://example.com/tags/ScheduledThreadPoolExecutor/"/>
     
   </entry>
   
