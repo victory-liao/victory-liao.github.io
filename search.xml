@@ -1278,6 +1278,19 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | CPU or GPU?</title>
+    <url>/2021/06/21/CPU-or-GPU/</url>
+    <content><![CDATA[<h1 id="CPU-or-GPU"><a href="#CPU-or-GPU" class="headerlink" title="CPU or GPU?"></a>CPU or GPU?</h1><p>与CPU相比，GPU擅长SIMD(Single Instruction Multiple Data)计算.<br><a href="https://blog.csdn.net/luoyajingfeng2/article/details/90752019">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>脑电分类 | CNNLSTM混合分类脑电信号</title>
     <url>/2021/07/01/CNNLSTM%E6%B7%B7%E5%90%88%E5%88%86%E7%B1%BB%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7/</url>
     <content><![CDATA[<h1 id="使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号"><a href="#使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号" class="headerlink" title="使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号"></a>使用CNN-LSTM混合深度学习分类基于MUSE采集的运动想象EEG信号</h1><table>
@@ -1313,19 +1326,6 @@ public class Test &#123;
         <tag>脑电分类</tag>
         <tag>LSTM</tag>
         <tag>CNN+LSTM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | CPU or GPU?</title>
-    <url>/2021/06/21/CPU-or-GPU/</url>
-    <content><![CDATA[<h1 id="CPU-or-GPU"><a href="#CPU-or-GPU" class="headerlink" title="CPU or GPU?"></a>CPU or GPU?</h1><p>与CPU相比，GPU擅长SIMD(Single Instruction Multiple Data)计算.<br><a href="https://blog.csdn.net/luoyajingfeng2/article/details/90752019">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -5298,6 +5298,161 @@ public class EmpServiceImpl implements EmpService&#123;
       </tags>
   </entry>
   <entry>
+    <title>SSM | 批量删除</title>
+    <url>/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/</url>
+    <content><![CDATA[<h1 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h1><p>1.list.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;展示员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.servletContext.contextPath&#125;/js/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(function()&#123;
+        $(&quot;#selectAll&quot;).click(function()&#123;
+            $(&quot;[name=&#39;eid&#39;]&quot;).prop(&quot;checked&quot;, $(this).prop(&quot;checked&quot;));
+        &#125;);
+        
+        $(&quot;#deleteMore&quot;).click(function()&#123;
+            $(&quot;form&quot;).attr(&quot;action&quot;, $(this).attr(&quot;href&quot;)).submit();
+            return false;//关闭默认跳转
+        &#125;);
+    &#125;);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form method=&quot;post&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th&gt;
+                    &lt;input type=&quot;checkbox&quot; id=&quot;selectAll&quot;&gt;
+                &lt;/th&gt;
+                &lt;th&gt;EID&lt;/th&gt;
+                &lt;th&gt;ENAME&lt;/th&gt;
+                &lt;th&gt;AGE&lt;/th&gt;
+                &lt;th&gt;SEX&lt;/th&gt;
+                &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
+                &lt;th&gt;OPTIONS&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;
+                        &lt;input type=&quot;checkbox&quot; name=&quot;eid&quot; value=&quot;$&#123;emp.eid&#125;&quot;/&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
+                    &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
+                    &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
+                    &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
+                    &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
+                    &lt;td&gt;
+                        &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
+                        &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/c:forEach&gt;
+            &lt;tr&gt;
+                &lt;td colspan=&quot;10&quot;&gt;
+                    &lt;a id=&quot;deleteMore&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emps&quot;&gt;批量删除&lt;/a&gt;&amp;nbsp;
+                    $&#123;page&#125;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.EmpMapper.java</p>
+<pre><code>public interface EmpMapper &#123;
+    //获取所有的员工信息
+    List&lt;Emp&gt; getAllEmp();
+    
+    ......
+    
+    void deleteMore(String eids);
+&#125;
+</code></pre>
+<p>3.EmpMapper.xml</p>
+<pre><code>&lt;!-- void deleteMore(String eids); --&gt;
+&lt;delete id=&quot;deleteMore&quot;&gt;
+    delete from emp where eid in ($&#123;value&#125;)
+&lt;/delete&gt;
+</code></pre>
+<p>4.EmpService.java</p>
+<pre><code>public interface EmpService &#123;
+    ......
+    
+    void deleteMore(String eids);
+&#125;
+</code></pre>
+<p>5.EmpServiceImpl.java</p>
+<pre><code>@Service
+public class EmpServiceImpl implements EmpService&#123;
+    @Autowired
+    private EmpMapper empMapper;
+    
+    ......
+
+    @Override
+    public void deleteMore(String eids) &#123;
+        // TODO Auto-generated method stub
+        empMapper.deleteMore(eids);
+    &#125;
+&#125;
+</code></pre>
+<p>6.EmpController.java</p>
+<pre><code>@Controller
+public class EmpController &#123;
+
+    @Autowired
+    private EmpService service;
+    
+    ......
+    
+    @RequestMapping(value=&quot;/emps&quot;, method=RequestMethod.DELETE)
+    public String deleteMore(String eid)&#123;
+        //获取客户端name属性相同的多个元素的值，可以通过字符串直接获取，每个值以逗号分隔，也可以以数组直接获取
+        System.out.println(eid);
+        service.deleteMore(eid);
+        return &quot;redirect:/emps/1&quot;;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>批量删除</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>SSM</tag>
+        <tag>批量删除</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSM | SSM项目搭建</title>
+    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
+<span id="more"></span>
+<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>SSM项目搭建</category>
+      </categories>
+      <tags>
+        <tag>SSM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSM | 列表及分页</title>
     <url>/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="列表及分页"><a href="#列表及分页" class="headerlink" title="列表及分页"></a>列表及分页</h1><p>1.index.jsp(请求)</p>
@@ -5636,161 +5791,6 @@ public interface DeptMapper &#123;
       <tags>
         <tag>SSM</tag>
         <tag>分页</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SSM | 批量删除</title>
-    <url>/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/</url>
-    <content><![CDATA[<h1 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h1><p>1.list.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;展示员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.servletContext.contextPath&#125;/js/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-    $(function()&#123;
-        $(&quot;#selectAll&quot;).click(function()&#123;
-            $(&quot;[name=&#39;eid&#39;]&quot;).prop(&quot;checked&quot;, $(this).prop(&quot;checked&quot;));
-        &#125;);
-        
-        $(&quot;#deleteMore&quot;).click(function()&#123;
-            $(&quot;form&quot;).attr(&quot;action&quot;, $(this).attr(&quot;href&quot;)).submit();
-            return false;//关闭默认跳转
-        &#125;);
-    &#125;);
-&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form method=&quot;post&quot;&gt;
-        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;DELETE&quot;/&gt;
-        &lt;table&gt;
-            &lt;tr&gt;
-                &lt;th&gt;
-                    &lt;input type=&quot;checkbox&quot; id=&quot;selectAll&quot;&gt;
-                &lt;/th&gt;
-                &lt;th&gt;EID&lt;/th&gt;
-                &lt;th&gt;ENAME&lt;/th&gt;
-                &lt;th&gt;AGE&lt;/th&gt;
-                &lt;th&gt;SEX&lt;/th&gt;
-                &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
-                &lt;th&gt;OPTIONS&lt;/th&gt;
-            &lt;/tr&gt;
-            &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
-                &lt;tr&gt;
-                    &lt;td&gt;
-                        &lt;input type=&quot;checkbox&quot; name=&quot;eid&quot; value=&quot;$&#123;emp.eid&#125;&quot;/&gt;
-                    &lt;/td&gt;
-                    &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
-                    &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
-                    &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
-                    &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
-                    &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
-                    &lt;td&gt;
-                        &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
-                        &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
-                    &lt;/td&gt;
-                &lt;/tr&gt;
-            &lt;/c:forEach&gt;
-            &lt;tr&gt;
-                &lt;td colspan=&quot;10&quot;&gt;
-                    &lt;a id=&quot;deleteMore&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emps&quot;&gt;批量删除&lt;/a&gt;&amp;nbsp;
-                    $&#123;page&#125;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>2.EmpMapper.java</p>
-<pre><code>public interface EmpMapper &#123;
-    //获取所有的员工信息
-    List&lt;Emp&gt; getAllEmp();
-    
-    ......
-    
-    void deleteMore(String eids);
-&#125;
-</code></pre>
-<p>3.EmpMapper.xml</p>
-<pre><code>&lt;!-- void deleteMore(String eids); --&gt;
-&lt;delete id=&quot;deleteMore&quot;&gt;
-    delete from emp where eid in ($&#123;value&#125;)
-&lt;/delete&gt;
-</code></pre>
-<p>4.EmpService.java</p>
-<pre><code>public interface EmpService &#123;
-    ......
-    
-    void deleteMore(String eids);
-&#125;
-</code></pre>
-<p>5.EmpServiceImpl.java</p>
-<pre><code>@Service
-public class EmpServiceImpl implements EmpService&#123;
-    @Autowired
-    private EmpMapper empMapper;
-    
-    ......
-
-    @Override
-    public void deleteMore(String eids) &#123;
-        // TODO Auto-generated method stub
-        empMapper.deleteMore(eids);
-    &#125;
-&#125;
-</code></pre>
-<p>6.EmpController.java</p>
-<pre><code>@Controller
-public class EmpController &#123;
-
-    @Autowired
-    private EmpService service;
-    
-    ......
-    
-    @RequestMapping(value=&quot;/emps&quot;, method=RequestMethod.DELETE)
-    public String deleteMore(String eid)&#123;
-        //获取客户端name属性相同的多个元素的值，可以通过字符串直接获取，每个值以逗号分隔，也可以以数组直接获取
-        System.out.println(eid);
-        service.deleteMore(eid);
-        return &quot;redirect:/emps/1&quot;;
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>批量删除</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>SSM</tag>
-        <tag>批量删除</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SSM | SSM项目搭建</title>
-    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
-<span id="more"></span>
-<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>SSM项目搭建</category>
-      </categories>
-      <tags>
-        <tag>SSM</tag>
       </tags>
   </entry>
   <entry>
@@ -11958,6 +11958,110 @@ public class DeadLockDemo &#123;
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 下一个更大元素</title>
+    <url>/2021/08/27/%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0/</url>
+    <content><![CDATA[<h1 id="496-下一个更大元素"><a href="#496-下一个更大元素" class="headerlink" title="496.下一个更大元素"></a>496.下一个更大元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个 没有重复元素 的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。<br>请你找出 nums1 中每个元素在 nums2 中的下一个比其大的值。<br>nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出 -1 。</p>
+<span id="more"></span>
+<p><a href="https://leetcode-cn.com/problems/next-greater-element-i/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.暴力解法<br>对于每一个 nums1[i] 中的元素，先在 nums2 中找到它，然后向右遍历找到第 1 个大于 nums1[i] 的元素。<br>2.单调栈<br>步骤：<br>1）使用单调栈先对 nums2 中的每一个元素，求出它的右边第一个更大的元素；<br>2）将上一步的对应关系放入哈希表（HashMap）中；<br>3）再遍历数组 nums1，根据哈希表找出答案。<br>维护单调栈：<br>我们维护的栈恰好保证了单调性：栈中的元素从栈顶到栈底是单调不降的。<br>当我们遇到一个新的元素 nums2[i] 时，我们判断栈顶元素是否小于 nums2[i]，<br>如果是，那么栈顶元素的下一个更大元素即为 nums2[i]，我们将栈顶元素出栈。<br>重复这一操作，直到栈为空或者栈顶元素大于 nums2[i]。此时我们将 nums2[i] 入栈，<br>保持栈的单调性，并对接下来的 nums2[i + 1], nums2[i + 2] … 执行同样的操作。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
+    def nextGreaterElement(self, nums1, nums2):
+        &quot;&quot;&quot;
+        暴力解法
+        对于每一个 nums1[i] 中的元素，先在 nums2 中找到它，然后向右遍历找到第 1 个大于 nums1[i] 的元素。
+
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        &quot;&quot;&quot;
+        # 使用内置方法list.index()/list.append()
+        # next_greater_index = []  # 存储下一个更大元素下标的列表
+        #
+        # if len(nums1) &lt; 1:
+        #     return next_greater_index
+        #
+        # for num in nums1:  # 遍历nums1中的每一个元素
+        #     index = nums2.index(num)  # 定位nums1中的元素在nums2中的下标
+        #     for i in range(index+1, len(nums2)):  # 遍历nums1中元素在nums2中所在位置之后的元素
+        #         if nums2[i] &gt; num:  # 如果找到比nums1中元素更大的元素，则将下标加入下标列表
+        #             next_greater_index.append(nums2[i])
+        #             break
+        #     else:
+        #         next_greater_index.append(-1)
+        #
+        # return next_greater_index
+
+        # 不使用内置方法list.index()/list.append()
+        len1 = len(nums1)
+        len2 = len(nums2)
+
+        res = list()
+
+        if len1 &lt; 1:
+            return res
+
+        for i in range(len1):
+            cur_val = nums1[i]
+            j = 0
+            while j &lt; len2 and nums2[j] != cur_val:
+                j += 1
+
+            # nums2[j] = nums1[i]
+            j += 1
+            while j &lt; len2 and nums2[j] &lt; cur_val:
+                j += 1
+
+            if j == len2:
+                res[i] = -1
+                continue
+
+            res[i] = nums2[j]
+        return res
+
+    def nextGreaterElement1(self, nums1, nums2):
+        &quot;&quot;&quot;
+        栈（单调栈）
+
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        &quot;&quot;&quot;
+        stack = list()
+        map = &#123;&#125;
+        # 对nums2中的每一个元素，求出它的右边第一个更大的元素；
+        # 将对应关系放入哈希表（HashMap）中
+        for i in range(len(nums2)):
+            while len(stack) != 0 and stack[-1] &lt; nums2[i]:
+                map[stack.pop()] = nums2[i]
+
+            stack.append(nums2[i])
+
+        # 遍历数组nums1，根据哈希表找出答案
+        res = list()
+        for j in range(len(nums1)):
+            res.append(map.get(nums1[j], -1))
+
+        return res
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+
+    res_list = slt.nextGreaterElement1([4, 1, 2], [1, 3, 4, 2])
+
+    print(res_list)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>栈</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringMVC | 上传和下载文件</title>
     <url>/2022/03/16/%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h1 id="上传和下载文件"><a href="#上传和下载文件" class="headerlink" title="上传和下载文件"></a>上传和下载文件</h1><p>注意：上传文件需要在springMVC.xml中配置如下所示bean：</p>
@@ -12102,110 +12206,6 @@ public class TestUploadAndDownController&#123;
       <tags>
         <tag>Java</tag>
         <tag>SpringMVC</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 下一个更大元素</title>
-    <url>/2021/08/27/%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0/</url>
-    <content><![CDATA[<h1 id="496-下一个更大元素"><a href="#496-下一个更大元素" class="headerlink" title="496.下一个更大元素"></a>496.下一个更大元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个 没有重复元素 的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。<br>请你找出 nums1 中每个元素在 nums2 中的下一个比其大的值。<br>nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出 -1 。</p>
-<span id="more"></span>
-<p><a href="https://leetcode-cn.com/problems/next-greater-element-i/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.暴力解法<br>对于每一个 nums1[i] 中的元素，先在 nums2 中找到它，然后向右遍历找到第 1 个大于 nums1[i] 的元素。<br>2.单调栈<br>步骤：<br>1）使用单调栈先对 nums2 中的每一个元素，求出它的右边第一个更大的元素；<br>2）将上一步的对应关系放入哈希表（HashMap）中；<br>3）再遍历数组 nums1，根据哈希表找出答案。<br>维护单调栈：<br>我们维护的栈恰好保证了单调性：栈中的元素从栈顶到栈底是单调不降的。<br>当我们遇到一个新的元素 nums2[i] 时，我们判断栈顶元素是否小于 nums2[i]，<br>如果是，那么栈顶元素的下一个更大元素即为 nums2[i]，我们将栈顶元素出栈。<br>重复这一操作，直到栈为空或者栈顶元素大于 nums2[i]。此时我们将 nums2[i] 入栈，<br>保持栈的单调性，并对接下来的 nums2[i + 1], nums2[i + 2] … 执行同样的操作。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def nextGreaterElement(self, nums1, nums2):
-        &quot;&quot;&quot;
-        暴力解法
-        对于每一个 nums1[i] 中的元素，先在 nums2 中找到它，然后向右遍历找到第 1 个大于 nums1[i] 的元素。
-
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        &quot;&quot;&quot;
-        # 使用内置方法list.index()/list.append()
-        # next_greater_index = []  # 存储下一个更大元素下标的列表
-        #
-        # if len(nums1) &lt; 1:
-        #     return next_greater_index
-        #
-        # for num in nums1:  # 遍历nums1中的每一个元素
-        #     index = nums2.index(num)  # 定位nums1中的元素在nums2中的下标
-        #     for i in range(index+1, len(nums2)):  # 遍历nums1中元素在nums2中所在位置之后的元素
-        #         if nums2[i] &gt; num:  # 如果找到比nums1中元素更大的元素，则将下标加入下标列表
-        #             next_greater_index.append(nums2[i])
-        #             break
-        #     else:
-        #         next_greater_index.append(-1)
-        #
-        # return next_greater_index
-
-        # 不使用内置方法list.index()/list.append()
-        len1 = len(nums1)
-        len2 = len(nums2)
-
-        res = list()
-
-        if len1 &lt; 1:
-            return res
-
-        for i in range(len1):
-            cur_val = nums1[i]
-            j = 0
-            while j &lt; len2 and nums2[j] != cur_val:
-                j += 1
-
-            # nums2[j] = nums1[i]
-            j += 1
-            while j &lt; len2 and nums2[j] &lt; cur_val:
-                j += 1
-
-            if j == len2:
-                res[i] = -1
-                continue
-
-            res[i] = nums2[j]
-        return res
-
-    def nextGreaterElement1(self, nums1, nums2):
-        &quot;&quot;&quot;
-        栈（单调栈）
-
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        &quot;&quot;&quot;
-        stack = list()
-        map = &#123;&#125;
-        # 对nums2中的每一个元素，求出它的右边第一个更大的元素；
-        # 将对应关系放入哈希表（HashMap）中
-        for i in range(len(nums2)):
-            while len(stack) != 0 and stack[-1] &lt; nums2[i]:
-                map[stack.pop()] = nums2[i]
-
-            stack.append(nums2[i])
-
-        # 遍历数组nums1，根据哈希表找出答案
-        res = list()
-        for j in range(len(nums1)):
-            res.append(map.get(nums1[j], -1))
-
-        return res
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-
-    res_list = slt.nextGreaterElement1([4, 1, 2], [1, 3, 4, 2])
-
-    print(res_list)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>栈</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -17941,6 +17941,22 @@ if __name__ == &#39;__main__&#39;:
 <td align="center">响应速度优先</td>
 <td align="center">面向服务端应用，将来替换CMS</td>
 </tr>
+<tr>
+<td align="center">Shenandoah</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">ZGC</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
 </tbody></table>
 ]]></content>
       <categories>
@@ -22885,6 +22901,18 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 机器学习分类的一般步骤</title>
+    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习 | 机器学习中分类标签次数统计代码模板</title>
     <url>/2021/02/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%88%86%E7%B1%BB%E6%A0%87%E7%AD%BE%E6%AC%A1%E6%95%B0%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h1 id="机器学习中分类标签次数统计代码模板"><a href="#机器学习中分类标签次数统计代码模板" class="headerlink" title="机器学习中分类标签次数统计代码模板"></a>机器学习中分类标签次数统计代码模板</h1><p>在使用机器学习的算法进行分类时，很多时候我们需要去统计各个分类标签在数据集中出现的次数，它的实现代码模板如下：</p>
@@ -22900,18 +22928,6 @@ if __name__ == &quot;__main__&quot;:
     sorted_class_count = sorted(class_counts.items(), key=operator.itemgetter(1), reverse=True)
     return sorted_class_count
 </code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 机器学习分类的一般步骤</title>
-    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4/</url>
-    <content><![CDATA[<h1 id="机器学习分类的一般步骤"><a href="#机器学习分类的一般步骤" class="headerlink" title="机器学习分类的一般步骤"></a>机器学习分类的一般步骤</h1><p>1.get data from file<br>2.data preprocess<br>3.get data and label<br>4.design the model used here<br>5.train the model<br>6.validate the model<br>7.test the model<br>8.save the model with best accuracy<br>note: pay more attention on<br><b>1)how to deal with the source data that model can process.</b><br>In general,the size of the input of the model is [B, C, H, W],<br>where B is batch size,C is number of channels,H ans W is two dimension of the input data respectively.<br><b>2)how to calculate ‘in_features’ of the first fully connected layer</b>`</p>
 ]]></content>
       <categories>
         <category>机器学习</category>
@@ -23602,62 +23618,6 @@ X, Y = load(&quot;data.pkl&quot;)
       </tags>
   </entry>
   <entry>
-    <title>win32com | 汇总excel表</title>
-    <url>/2021/11/04/%E6%B1%87%E6%80%BBexcel%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="汇总excel表"><a href="#汇总excel表" class="headerlink" title="汇总excel表"></a>汇总excel表</h1><p>程序实现汇总多个excel表格并生成目录。</p>
-<span id="more"></span>
-<p>代码：</p>
-<pre><code>import os  # 用于获取目标文件所在路径
-import win32com
-import win32com
-
-path = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径
-files = []
-for file in os.listdir(path):
-    if file.endswith(&quot;.xls&quot;) or file.endswith(&quot;.xlsx&quot;):  # 只获取&quot;.xls&quot;后缀的文件
-        files.append(path + file)
-# print(files)
-excel_app = win32com.client.Dispatch(&quot;Excel.Application&quot;)
-excel_app.Visible = False  # 不显示Excel文件
-excel_app.DisplayAlerts = False
-
-# 新建excel工作簿
-wb = excel_app.Workbooks.Add()
-wb.SaveAs(os.getcwd() + &quot;\\汇总.xlsx&quot;)
-ws = wb.Worksheets(1)
-ws.Name = &quot;目录&quot;
-for i in range(len(files)):
-    file_name = files[i].split(&quot;\\&quot;)[-1].split(&quot;.&quot;)[0]
-    ws.Range(&quot;A&quot; + str(i + 1)).Value = file_name
-    # 读取子文件
-    wb_sub = excel_app.Workbooks.Open(files[i])
-    ws_sub = wb_sub.ActiveSheet  # #获取活动工作表
-
-    ws_sub.Copy(ws)  # 复制工作表到汇总表
-    wb.ActiveSheet.Name = file_name  # 更改工作表名
-    wb_sub.Close()
-    print(f&quot;已复制文件 &#123;file_name&#125;&quot;)
-
-# 将“目录”工作表移动到最前面
-first_sheet = files[0].split(&quot;\\&quot;)[-1].split(&quot;.&quot;)[0]
-wb.Worksheets(&quot;目录&quot;).Move(wb.Worksheets(first_sheet))
-
-wb.Save()
-wb.Close()
-excel_app.Quit()
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>win32com</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>win32com</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | 注入方式</title>
     <url>/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="依赖注入的两种方式"><a href="#依赖注入的两种方式" class="headerlink" title="依赖注入的两种方式"></a>依赖注入的两种方式</h1><ol>
@@ -23797,6 +23757,62 @@ public class Test &#123;
       <tags>
         <tag>p命名空间</tag>
         <tag>依赖注入的两种方式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32com | 汇总excel表</title>
+    <url>/2021/11/04/%E6%B1%87%E6%80%BBexcel%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="汇总excel表"><a href="#汇总excel表" class="headerlink" title="汇总excel表"></a>汇总excel表</h1><p>程序实现汇总多个excel表格并生成目录。</p>
+<span id="more"></span>
+<p>代码：</p>
+<pre><code>import os  # 用于获取目标文件所在路径
+import win32com
+import win32com
+
+path = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径
+files = []
+for file in os.listdir(path):
+    if file.endswith(&quot;.xls&quot;) or file.endswith(&quot;.xlsx&quot;):  # 只获取&quot;.xls&quot;后缀的文件
+        files.append(path + file)
+# print(files)
+excel_app = win32com.client.Dispatch(&quot;Excel.Application&quot;)
+excel_app.Visible = False  # 不显示Excel文件
+excel_app.DisplayAlerts = False
+
+# 新建excel工作簿
+wb = excel_app.Workbooks.Add()
+wb.SaveAs(os.getcwd() + &quot;\\汇总.xlsx&quot;)
+ws = wb.Worksheets(1)
+ws.Name = &quot;目录&quot;
+for i in range(len(files)):
+    file_name = files[i].split(&quot;\\&quot;)[-1].split(&quot;.&quot;)[0]
+    ws.Range(&quot;A&quot; + str(i + 1)).Value = file_name
+    # 读取子文件
+    wb_sub = excel_app.Workbooks.Open(files[i])
+    ws_sub = wb_sub.ActiveSheet  # #获取活动工作表
+
+    ws_sub.Copy(ws)  # 复制工作表到汇总表
+    wb.ActiveSheet.Name = file_name  # 更改工作表名
+    wb_sub.Close()
+    print(f&quot;已复制文件 &#123;file_name&#125;&quot;)
+
+# 将“目录”工作表移动到最前面
+first_sheet = files[0].split(&quot;\\&quot;)[-1].split(&quot;.&quot;)[0]
+wb.Worksheets(&quot;目录&quot;).Move(wb.Worksheets(first_sheet))
+
+wb.Save()
+wb.Close()
+excel_app.Quit()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>win32com</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>win32com</tag>
       </tags>
   </entry>
   <entry>
@@ -28896,6 +28912,20 @@ print(f3())
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 防止模型过拟合的6种必备方法</title>
+    <url>/2021/07/03/%E9%98%B2%E6%AD%A2%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88%E7%9A%846%E7%A7%8D%E5%BF%85%E5%A4%87%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="防止模型过拟合的6种必备方法"><a href="#防止模型过拟合的6种必备方法" class="headerlink" title="防止模型过拟合的6种必备方法"></a>防止模型过拟合的6种必备方法</h1><p>在训练机器学习模型时常常会遇到模型过拟合的情况，即模型在训练集上的表现良好，但是在验证集或者<br>测试集上表现相对较差；<br><b>常见的防止过拟合的方法：</b><br>1.使用K重交叉验证方法或者留一验证方法<br>2.数据增强<br>3.正则化<br>4.早停<br>5.Dropout<br>6.移除特征<br><a href="https://mp.weixin.qq.com/s/RP9iFbyw-aNMKx-UAOe-aA">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>过拟合</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java | 静态代理</title>
     <url>/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h1 id="静态代理案例"><a href="#静态代理案例" class="headerlink" title="静态代理案例"></a>静态代理案例</h1><p>通过静态代理来帮助发短信(短信发送类和代理类实现相同的接口)<br><strong>SmsService.java(接口)</strong></p>
@@ -28958,20 +28988,6 @@ public class Main &#123;
       <tags>
         <tag>Java</tag>
         <tag>静态代理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 防止模型过拟合的6种必备方法</title>
-    <url>/2021/07/03/%E9%98%B2%E6%AD%A2%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88%E7%9A%846%E7%A7%8D%E5%BF%85%E5%A4%87%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="防止模型过拟合的6种必备方法"><a href="#防止模型过拟合的6种必备方法" class="headerlink" title="防止模型过拟合的6种必备方法"></a>防止模型过拟合的6种必备方法</h1><p>在训练机器学习模型时常常会遇到模型过拟合的情况，即模型在训练集上的表现良好，但是在验证集或者<br>测试集上表现相对较差；<br><b>常见的防止过拟合的方法：</b><br>1.使用K重交叉验证方法或者留一验证方法<br>2.数据增强<br>3.正则化<br>4.早停<br>5.Dropout<br>6.移除特征<br><a href="https://mp.weixin.qq.com/s/RP9iFbyw-aNMKx-UAOe-aA">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>过拟合</tag>
       </tags>
   </entry>
   <entry>
