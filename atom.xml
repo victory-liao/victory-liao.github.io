@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-19T14:04:54.890Z</updated>
+  <updated>2022-06-20T03:59:19.933Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 多数元素</title>
+    <link href="http://example.com/2022/06/19/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/"/>
+    <id>http://example.com/2022/06/19/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/</id>
+    <published>2022-06-20T03:48:45.000Z</published>
+    <updated>2022-06-20T03:59:19.933Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="169-多数元素"><a href="#169-多数元素" class="headerlink" title="169.多数元素"></a>169.多数元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊n/2⌋ 的元素。<br>你可以假设数组是非空的，并且给定的数组总是存在多数元素。<br><a href="https://leetcode.cn/problems/majority-element">题目链接</a></p><span id="more"></span><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li><p>HashMap<br>使用哈希表统计每个元素出现的次数，返回哈希表中值最大的键。</p></li><li><p>排序<br>如果将数组 nums 中的所有元素按照单调递增或单调递减的顺序排序，那么下标为 ⌊n/2⌋ 的元素（下标从 0 开始）一定是众数。<br>因此，对数组进行排序并返回下标为⌊n/2⌋的数组元素。</p></li><li><p>随机化<br>因为超过 ⌊n/2⌋ 的数组下标被众数占据了，这样我们随机挑选一个下标对应的元素并验证，有很大的概率能找到众数。</p></li><li><p>分治<br>如果数 a 是数组 nums 的众数，如果我们将 nums 分成两部分，那么 a 必定是至少一部分的众数。<br>我们使用经典的分治算法递归求解，直到所有的子问题都是长度为 1 的数组。长度为 1 的子数组中唯一的数显然是众数，直接返回即可。如果回溯后某区间的长度大于 1，我们必须将左右子区间的值合并。如果它们的众数相同，那么显然这一段区间的众数是它们相同的值。否则，我们需要比较两个众数在整个区间内出现的次数来决定该区间的众数。</p></li><li><p>Boyer-Moore投票算法<br>如果我们把众数记为 +1+1+1，把其他数记为 −1-1−1，将它们全部加起来，显然和大于 0，从结果本身我们可以看出众数比其他数多。</p><h2 id="代码-java版本"><a href="#代码-java版本" class="headerlink" title="代码(java版本)"></a>代码(java版本)</h2><p> import java.util.Arrays;<br> import java.util.HashMap;<br> import java.util.Iterator;<br> import java.util.Map;<br> import java.util.Map.Entry;<br> import java.util.Random;</p><p> public class MajorityElement {</p><pre><code> private int randRange(Random rand, int min, int max)&#123;     return rand.nextInt(max - min) + min; &#125;  private int countOccurences(int[] nums, int num)&#123;     int count = 0;          for(int num1 : nums)&#123;         if(num == num1)&#123;             count++;         &#125;     &#125;          return count; &#125;  public int majorityElement(int[] nums)&#123;     Random rand = new Random();          int majorityCount = nums.length / 2;          while(true)&#123;         int candidate = nums[randRange(rand, 0, nums.length)];         if(countOccurences(nums, candidate) &gt; majorityCount)&#123;             return candidate;         &#125;     &#125; &#125;  private int countInRange(int[] nums, int num, int lo, int hi)&#123;     int count = 0;     for(int i = lo; i &lt;= hi; i++)&#123;         if(nums[i] == num)&#123;             count++;         &#125;     &#125;     return count; &#125;  private int majorityElementRec(int[] nums, int lo, int hi)&#123;     if(lo == hi)&#123;         return nums[lo];     &#125;          int mid = (hi - lo) / 2 + lo;     int left = majorityElementRec(nums, lo, mid);     int right = majorityElementRec(nums, mid + 1, hi);          if(left == right)&#123;         return left;     &#125;          int leftCount = countInRange(nums, left, lo, hi);     int rightCount = countInRange(nums, right, lo, hi);          return leftCount &gt; rightCount ? left : right; &#125;  //方法4：分治 public int majorityElement1(int[] nums)&#123;     return majorityElementRec(nums, 0, nums.length - 1); &#125;  //方法5：Boyer-Moore public int majorityElement2(int[] nums)&#123;     int count = 0;     Integer candidate = null;          for (int num : nums)&#123;         if(count == 0)&#123;             candidate = num;         &#125;         count += (num == candidate) ? 1 : -1;     &#125;          return candidate; &#125;  public static void main(String[] args) &#123;     int[] nums = new int[]&#123;2,2,1,1,1,2,2&#125;;          //方法1：HashMap</code></pre><p> //        Map&lt;String,Integer&gt; map = new HashMap&lt;&gt;();<br> //        for(Integer num : nums){<br> //            String tempNum = num.toString();<br> //            if(!map.keySet().contains(tempNum)){<br> //                map.put(tempNum, 1);<br> //<br> //            }else{<br> //                map.put(tempNum, map.get(tempNum) + 1);<br> //            }<br> //        }<br> //<br> //        Iterator&lt;Entry&lt;String, Integer&gt;&gt; iterator = map.entrySet().iterator();<br> //        for(;iterator.hasNext();){<br> //            Entry&lt;String, Integer&gt; next = iterator.next();<br> //            String key = next.getKey();<br> //            Integer value = next.getValue();<br> //            if(value &gt; (int)(nums.length / 2)){<br> //                System.out.println(key);<br> //            }<br> //        }</p><pre><code>     //方法2：排序</code></pre><p> //        Arrays.sort(nums);<br> //        System.out.println(nums[nums.length / 2]);</p><pre><code>     //方法3：随机化     MajorityElement majorityElement = new MajorityElement();     int majority1 = majorityElement.majorityElement(nums);     System.out.println(majority1);          //方法4：分治     int majority2 = majorityElement.majorityElement1(nums);     System.out.println(majority2);          //方法5：Boyer-Moore投票算法     int majority3 = majorityElement.majorityElement2(nums);     System.out.println(majority3); &#125;</code></pre><p> }</p></li></ol>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;169-多数元素&quot;&gt;&lt;a href=&quot;#169-多数元素&quot; class=&quot;headerlink&quot; title=&quot;169.多数元素&quot;&gt;&lt;/a&gt;169.多数元素&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊n/2⌋ 的元素。&lt;br&gt;你可以假设数组是非空的，并且给定的数组总是存在多数元素。&lt;br&gt;&lt;a href=&quot;https://leetcode.cn/problems/majority-element&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>JVM | 垃圾收集器</title>
@@ -605,34 +632,6 @@ handler:
     
     
     <category term="Redis" scheme="http://example.com/tags/Redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis | 集群搭建</title>
-    <link href="http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/>
-    <id>http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</id>
-    <published>2022-05-21T04:19:56.000Z</published>
-    <updated>2022-05-21T04:50:47.892Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6379.pid&quot;port 6379dbfilename &quot;dump6379.rdb&quot;cluster-enabled yescluster-config-file nodes-6379.confcluster-node-timeout 15000</code></pre><p>(2)redis6380.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6380.pid&quot;port 6380dbfilename &quot;dump6380.rdb&quot;cluster-enabled yescluster-config-file nodes-6380.confcluster-node-timeout 15000</code></pre><p>(3)redis6381.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6381.pid&quot;port 6381dbfilename &quot;dump6381.rdb&quot;cluster-enabled yescluster-config-file nodes-6381.confcluster-node-timeout 15000</code></pre><p>(4)redis6389.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6389.pid&quot;port 6389dbfilename &quot;dump6389.rdb&quot;cluster-enabled yescluster-config-file nodes-6389.confcluster-node-timeout 15000</code></pre><p>(5)redis6390.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6390.pid&quot;port 6390dbfilename &quot;dump6390.rdb&quot;cluster-enabled yescluster-config-file nodes-6390.confcluster-node-timeout 15000</code></pre><p>(6)redis6391.conf</p><pre><code>include /opt/myRedis/redis.confpidfile &quot;/var/run/redis6391.pid&quot;port 6391dbfilename &quot;dump6391.rdb&quot;cluster-enabled yescluster-config-file nodes-6391.confcluster-node-timeout 15000</code></pre><p>5.启动所有redis实例，nodes-xxxx.conf文件都生成正常。<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/1.PNG"><br>6.将六个实例组合到一个集群当中</p><pre><code>redis-cli --cluster create 192.168.1.108:6379 192.168.1.108:6380 192.168.1.108:6381 192.168.1.108:6389 192.168.1.108:6390 192.168.1.108:6391 --cluster-replicas 1</code></pre><p>7.启动客户端并查看集群<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/2.PNG"></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;Redis集群搭建&quot;&gt;&lt;a href=&quot;#Redis集群搭建&quot; class=&quot;headerlink&quot; title=&quot;Redis集群搭建&quot;&gt;&lt;/a&gt;Redis集群搭建&lt;/h1&gt;&lt;p&gt;1.下载Redis并将redis放到linux目录/opt下&lt;br&gt;2.在opt下创</summary>
-      
-    
-    
-    
-    <category term="Redis" scheme="http://example.com/categories/Redis/"/>
-    
-    <category term="集群搭建" scheme="http://example.com/categories/Redis/%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/>
-    
-    
-    <category term="Redis" scheme="http://example.com/tags/Redis/"/>
-    
-    <category term="集群" scheme="http://example.com/tags/%E9%9B%86%E7%BE%A4/"/>
     
   </entry>
   
