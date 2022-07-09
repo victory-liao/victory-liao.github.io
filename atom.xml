@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-07-09T12:39:48.073Z</updated>
+  <updated>2022-07-09T13:56:38.091Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 70.爬楼梯</title>
+    <link href="http://example.com/2022/07/09/%E7%88%AC%E6%A5%BC%E6%A2%AF/"/>
+    <id>http://example.com/2022/07/09/%E7%88%AC%E6%A5%BC%E6%A2%AF/</id>
+    <published>2022-07-09T13:40:07.000Z</published>
+    <updated>2022-07-09T13:56:38.091Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="70-爬楼梯"><a href="#70-爬楼梯" class="headerlink" title="70.爬楼梯"></a>70.爬楼梯</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>假设你正在爬楼梯。需要 n 阶你才能到达楼顶。<br>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？<br><a href="https://leetcode.cn/problems/climbing-stairs/">题目链接</a></p><span id="more"></span><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>f(n) = f(n-1) + f(n-2)</strong></p><ol><li><p>递归法<br>由f(1)=1,f(2)=2,f(3)=3,…,以此类推,f(n)=f(n-1)+f(n-2),使用递归法实现该问题，递归方程为f(n)=f(n-1)+f(n-2),<br>递归出口为f(1)=1,f(2)=2。</p></li><li><p>记忆化递归法<br>使用数组记录了每次计算的结果，避免递归法中的重复计算。</p></li><li><p>动态规划<br>动态规划转移方程：f(n)=f(n-1)+f(n-2)<br>边界条件：f(1)=1,f(2)=2</p></li><li><p>滚动数组<br>使用长度为3的数组实现爬楼梯问题，问题中涉及三个状态:状态1、状态2、状态3，每次更新状态时，先将状态2移动到状态1<br>的位置，再把状态3移动到状态2的位置，即将状态数组整体向前滚动一位。<br>例：<br>|1|2|3|—&gt;|2|3|5|</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p><pre><code> def climbStairs(self, n):     &quot;&quot;&quot;     递归法     :type n: int     :rtype: int     &quot;&quot;&quot;     if n == 1:         return 1     if n == 2:         return 2     return self.climbStairs(n - 1) + self.climbStairs(n - 2)  def climbStairs2(self, n):     &quot;&quot;&quot;     记忆化递归法     :type n: int     :rtype: int     &quot;&quot;&quot;     memo = []     return self.climbStairsMemo(n, memo)  def climbStairsMemo(self, n, memo):     if memo[n] &gt; 0:         return memo[n]     if n == 1:         memo[n] = 1     elif n == 2:         memo[n] = 2     else:         memo[n] = self.climbStairsMemo(n - 1, memo) + self.climbStairsMemo(n - 2, memo)     return memo[n]  def climbStairs3(self, n):     &quot;&quot;&quot;     动态规划     :type n: int     :rtype: int     &quot;&quot;&quot;     if n == 1:         return 1          dp = [1, 2]  # dp[0]=1, dp[1]=2     for i in range(2, n):         dp[i] = dp[i - 1] + dp[i - 2]     return dp[n-1]  def climbStairs4(self, n):     &quot;&quot;&quot;     滚动数组（斐波那契数列）     :type n: int     :rtype: int     &quot;&quot;&quot;     if n == 1:         return 1     first = 1     second = 2     for i in range(2, n):         third = first + second         first = second         second = third     return second     </code></pre><p> if <strong>name</strong> == “<strong>main</strong>“:</p><pre><code> slt = Solution() # numberOfSolutions = slt.climbStairs(2) # numberOfSolutions = slt.climbStairs2(2) # numberOfSolutions = slt.climbStairs3(2) numberOfSolutions = slt.climbStairs4(4) print(numberOfSolutions)</code></pre></li></ol>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;70-爬楼梯&quot;&gt;&lt;a href=&quot;#70-爬楼梯&quot; class=&quot;headerlink&quot; title=&quot;70.爬楼梯&quot;&gt;&lt;/a&gt;70.爬楼梯&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;假设你正在爬楼梯。需要 n 阶你才能到达楼顶。&lt;br&gt;每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？&lt;br&gt;&lt;a href=&quot;https://leetcode.cn/problems/climbing-stairs/&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="动态规划" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+    <category term="70.爬楼梯" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/70-%E7%88%AC%E6%A5%BC%E6%A2%AF/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>19. 删除链表中的倒数第N个节点</title>
@@ -604,40 +635,6 @@ handler:
     <category term="volatile" scheme="http://example.com/tags/volatile/"/>
     
     <category term="锁" scheme="http://example.com/tags/%E9%94%81/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>并发 | volatile、synchronized和原子操作</title>
-    <link href="http://example.com/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/"/>
-    <id>http://example.com/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/</id>
-    <published>2022-05-23T03:03:39.000Z</published>
-    <updated>2022-05-23T03:57:47.250Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="volatile、synchronized和原子操作"><a href="#volatile、synchronized和原子操作" class="headerlink" title="volatile、synchronized和原子操作"></a>volatile、synchronized和原子操作</h1><h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>volatile是轻量级的synchronized，它在多处理器并发中保证了<strong>共享变量的“可见性”</strong>。可见性是指当一个线程修改一个共享变量时<br>，另外一个线程能读到这个修改的值（Java内存模型确保所有线程看到这个变量的值是一致的）。</p><h3 id="volatile的两条实现原则"><a href="#volatile的两条实现原则" class="headerlink" title="volatile的两条实现原则"></a>volatile的两条实现原则</h3><p>（1）Lock前缀指令会引起处理器缓存回写到内存。<br>（2）一个处理器的缓存回写到内存会导致其他处理器的缓存无效。</p><h3 id="volatile的使用优化"><a href="#volatile的使用优化" class="headerlink" title="volatile的使用优化"></a>volatile的使用优化</h3><p>使用追加到64字节的方式来填满高速缓冲区的缓存行，避免头节点和尾节点加载到同一个缓存行，使头、尾节点在修改时不会互相锁定。</p><h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>JVM基于进入和推出Monitor对象来实现方法同步和代码块同步，但两者实现细节不一样。<br>代码块同步使用monitorenter和monitorexit指令实现的。monitorenter指令在编译后插入到同步代码块的开始位置，而monitorexit是<br>插入到方法结束处和异常处，JVM要博爱正每个monitorenter必须有对应的monitorexit与之配对。任何对象都有一个monitor与之关联，<br>当且一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象monitor的所有权，即尝试获得对象的锁。</p><h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>java如何实现原子操作？<br>通过循环CAS的方式实现原子操作。JVM中CAS操作使用处理器提供的CMPXCHG指令实现。自旋CAS实现的基本思路就是循环及进行CAS操作指导成功为止。</p><h3 id="使用CAS实现线程安全计数器"><a href="#使用CAS实现线程安全计数器" class="headerlink" title="使用CAS实现线程安全计数器"></a>使用CAS实现线程安全计数器</h3><pre><code>package concurrency;import java.util.ArrayList;import java.util.List;import java.util.concurrent.atomic.AtomicInteger;public class Counter &#123;    private AtomicInteger atomicI = new AtomicInteger(0);    private int i = 0;        public static void main(String[] args) &#123;        final Counter cas = new Counter();        List&lt;Thread&gt; ts = new ArrayList&lt;Thread&gt;(600);        long start = System.currentTimeMillis();        for(int j = 0; j &lt; 100; j++)&#123;            Thread t = new Thread(new Runnable()&#123;                @Override                public void run()&#123;                    for(int i = 0; i &lt; 10000; i++)&#123;                        cas.count();                        cas.safeCount();                    &#125;                &#125;            &#125;);            ts.add(t);        &#125;        for(Thread t : ts)&#123;            t.start();        &#125;        //等待所有线程执行完成        for(Thread t : ts)&#123;            try &#123;                t.join();            &#125; catch (InterruptedException e) &#123;                e.printStackTrace();            &#125;        &#125;        System.out.println(cas.i);        System.out.println(cas.atomicI.get());        System.out.println(System.currentTimeMillis() - start);    &#125;        //使用CAS实现线程安全计数器    private void safeCount()&#123;        for(;;)&#123;            int i = atomicI.get();            boolean suc = atomicI.compareAndSet(i, ++i);            if(suc)&#123;                break;            &#125;        &#125;    &#125;        //非线程安全计数器    private void count()&#123;        i++;    &#125;&#125;</code></pre><h2 id="CAS实现原子操作的三大问题"><a href="#CAS实现原子操作的三大问题" class="headerlink" title="CAS实现原子操作的三大问题"></a>CAS实现原子操作的三大问题</h2><p>（1）ABA问题。可以使用版本号解决。JDK Atomic AtomicStampedReference可以解决ABA问题。<br>（2）循环时间长开销大。自旋CAS如果长时间不成功，会给CPU带来非常大的执行开销。<br>（3）只能保证一个共享变量的原子操作。对多个共享变量操作可以使用锁/将多个共享变量合并成一个共享变量来操作（两个共享变量i=2,j=a,合并以下ij=2a,然后采用CAS来操作）。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;volatile、synchronized和原子操作&quot;&gt;&lt;a href=&quot;#volatile、synchronized和原子操作&quot; class=&quot;headerlink&quot; title=&quot;volatile、synchronized和原子操作&quot;&gt;&lt;/a&gt;volatile</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="volatile" scheme="http://example.com/tags/volatile/"/>
-    
-    <category term="synchronized" scheme="http://example.com/tags/synchronized/"/>
-    
-    <category term="原子操作" scheme="http://example.com/tags/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/"/>
     
   </entry>
   
