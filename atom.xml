@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-27T14:10:34.889Z</updated>
+  <updated>2022-07-09T12:39:48.073Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>19. 删除链表中的倒数第N个节点</title>
+    <link href="http://example.com/2022/07/09/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/"/>
+    <id>http://example.com/2022/07/09/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/</id>
+    <published>2022-07-09T12:32:37.000Z</published>
+    <updated>2022-07-09T12:39:48.073Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="19-删除链表中的倒数第N个节点"><a href="#19-删除链表中的倒数第N个节点" class="headerlink" title="19. 删除链表中的倒数第N个节点"></a>19. 删除链表中的倒数第N个节点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。<br><a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/">题目链接</a></p><span id="more"></span><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li><p>计算链表长度<br>删除链表的倒数第 n 个结点操作就等价于删除正数第L-n+1个节点，L为链表的长度</p></li><li><p>栈<br>遍历链表的同时将所有节点依次入栈，根据栈 先进后出 的原则，弹出栈的第n个节点就是需要删除的节点，并且弹出<br>第n个节点后的栈顶节点为待删除节点的前驱节点。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class ListNode(object):</p><pre><code> def __init__(self, val=0, next=None):     self.val = val     self.next = next</code></pre><p> class Solution(object):</p><pre><code> def removeNthFromEnd(self, linkedList, n):     &quot;&quot;&quot;     计算链表长度     :type head: ListNode     :type n: int     :rtype: ListNode     &quot;&quot;&quot;     dummy = ListNode(0, linkedList)     length = self.lenOfLinkedList(dummy)     print(length)     cur = dummy     for i in range(1, length - n):         cur = cur.next     cur.next = cur.next.next     return dummy.next  def removeNthFromEnd2(self, head, n):     &quot;&quot;&quot;栈&quot;&quot;&quot;     stack = list()     cur = head     while cur:         stack.append(cur)         cur = cur.next     for i in range(n):         stack.pop()              prev = stack[-1]     prev.next = prev.next.next     return head  def removeNthFromEnd3(self, head, n):     &quot;&quot;&quot;双指针&quot;&quot;&quot;     dummy = ListNode(0, head)     first = head     second = dummy     for i in range(n):         first = first.next          while first:         first = first.next         second = second.next          second.next = second.next.next     return dummy.next  def lenOfLinkedList(self, head):     if not head:         return 0     p = head     count = 0     while p is not None:         count += 1         p = p.next     return count  def createLinkedList(self, list):     head = r = ListNode(list[0])     for num in list[1:]:         node = ListNode(num)         r.next = node         r = node          return head  def traverseLinkedList(self, head):     if not head:         return     p = head     while p is not None:         print(p.val, end=&quot; &quot;)         p = p.next     print(&quot;&quot;)</code></pre><p> if <strong>name</strong> == “<strong>main</strong>“:</p><pre><code> slt = Solution() linkedList = slt.createLinkedList([1, 2, 3, 4, 5]) print(&quot;linked list:&quot;, end=&quot;&quot;) slt.traverseLinkedList(linkedList) length = slt.lenOfLinkedList(linkedList) print(&quot;length of linked list:&quot;, length) # newLinkedList = slt.removeNthFromEnd(linkedList, 2) # newLinkedList = slt.removeNthFromEnd2(linkedList, 2) newLinkedList = slt.removeNthFromEnd3(linkedList, 2) print(&quot;linked list after deleting the reversed n-th node:&quot;, end=&quot;&quot;) slt.traverseLinkedList(newLinkedList)</code></pre></li></ol>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;19-删除链表中的倒数第N个节点&quot;&gt;&lt;a href=&quot;#19-删除链表中的倒数第N个节点&quot; class=&quot;headerlink&quot; title=&quot;19. 删除链表中的倒数第N个节点&quot;&gt;&lt;/a&gt;19. 删除链表中的倒数第N个节点&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。&lt;br&gt;&lt;a href=&quot;https://leetcode.cn/problems/remove-nth-node-from-end-of-list/&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="链表" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/"/>
+    
+    <category term="19. 删除链表中的倒数第N个节点" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/19-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 15.三数之和</title>
@@ -609,38 +638,6 @@ handler:
     <category term="synchronized" scheme="http://example.com/tags/synchronized/"/>
     
     <category term="原子操作" scheme="http://example.com/tags/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>并发 | 上下文切换和死锁</title>
-    <link href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/"/>
-    <id>http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</id>
-    <published>2022-05-23T02:37:08.000Z</published>
-    <updated>2022-05-23T02:59:57.500Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="上下文切换和死锁"><a href="#上下文切换和死锁" class="headerlink" title="上下文切换和死锁"></a>上下文切换和死锁</h1><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，再切换前会保存上一个任务的<br>状态，以便切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。频繁的上下文<br>切换会影响多线程的执行速度。</p><h2 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h2><p>（1）无锁并发编程。多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁（如采用分段锁，不同的线程处理不同段的数据）<br>（2）CAS算法。<br>（3）使用最小线程。避免创建不需要的线程（任务很少，创建了很多线程，造成大量线程阻塞等待）</p><h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的条件"><a href="#死锁产生的条件" class="headerlink" title="死锁产生的条件"></a>死锁产生的条件</h3><p>（1）互斥。一个资源同一时刻只能被一个线程拥有。<br>（2）请求和保持。线程在请求新的资源时，不释放已经拥有的资源。<br>（3）不剥夺条件。进程所获得的资源在未使用完之前，不被其他的线程强行剥夺。<br>（4）循环等待。竞争资源的各个线程形成一个线程等待环路。</p><h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><p>破坏产生死锁的条件：<br>（2）在进程开始执行时就申请他所需的全部资源<br>（3）一个进程不能获得所需要的全部资源时便处于等待状态，等待期间他占有的资源将被隐式的释放重新加入到系统的资源列表中<br>，可以被其他的进程使用，而等待的进程只有重新获得自己原有的资源以及新申请的资源才可以重新启动、执行。<br>（4）资源有序分配（银行家算法）</p><h3 id="死锁Demo"><a href="#死锁Demo" class="headerlink" title="死锁Demo"></a>死锁Demo</h3><pre><code>package concurrency;public class DeadLockDemo &#123;    private static String A = &quot;A&quot;;    private static String B = &quot;B&quot;;        public static void main(String[] args) &#123;        new DeadLockDemo().deadLock();    &#125;        private void deadLock()&#123;        Thread t1 = new Thread(new Runnable()&#123;            @Override            public void run()&#123;                synchronized(A)&#123;                    try &#123;                        Thread.currentThread().sleep(2000);                    &#125; catch (InterruptedException e) &#123;                        e.printStackTrace();                    &#125;                    synchronized(B)&#123;                        System.out.println(&quot;1&quot;);                    &#125;                &#125;            &#125;        &#125;);                Thread t2 = new Thread(new Runnable()&#123;            @Override            public void run() &#123;                synchronized(B)&#123;                    synchronized(A)&#123;                        System.out.println(&quot;2&quot;);                    &#125;                &#125;            &#125;        &#125;);                t1.start();        t2.start();    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;上下文切换和死锁&quot;&gt;&lt;a href=&quot;#上下文切换和死锁&quot; class=&quot;headerlink&quot; title=&quot;上下文切换和死锁&quot;&gt;&lt;/a&gt;上下文切换和死锁&lt;/h1&gt;&lt;h2 id=&quot;上下文切换&quot;&gt;&lt;a href=&quot;#上下文切换&quot; class=&quot;headerlink</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="上下文切换" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="死锁" scheme="http://example.com/tags/%E6%AD%BB%E9%94%81/"/>
     
   </entry>
   
