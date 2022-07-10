@@ -190,6 +190,298 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/python%E4%B8%BA%E6%AF%8F%E4%B8%AA%E5%AD%A6%E7%94%9F%E5%87%BA%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/python%E4%B8%BA%E6%AF%8F%E4%B8%AA%E5%AD%A6%E7%94%9F%E5%87%BA%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E9%A2%98/" class="post-title-link" itemprop="url">random | python为每个学生出不一样的题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 02:01:54 / Modified: 02:05:21" itemprop="dateCreated datePublished" datetime="2021-10-29T02:01:54-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/random/" itemprop="url" rel="index"><span itemprop="name">random</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python为每个学生出不一样的题"><a href="#python为每个学生出不一样的题" class="headerlink" title="python为每个学生出不一样的题"></a>python为每个学生出不一样的题</h1><p>实现代码：</p>
+<pre><code>import random
+
+
+# 不重复随机整数生成函数
+def Random_num(num_max, num_qty):
+    &#39;&#39;&#39;
+    num_max:最大数
+    num_qty:生成随机数的个数
+    &#39;&#39;&#39;
+    num_list = []  # 储存生成的随机数
+    while len(num_list) &lt; num_qty:  # 控制随机数的个数
+        num = random.randint(2, num_max)  # 设定在此范围内取数
+        if num in num_list:  # 判断随机数是否重复
+            continue  # 若重复，则重新生成
+        else:
+            num_list.append(num)  # 将不重复的随机数放入列表
+    return num_list  # 生成完成后返回随机数列表
+
+
+# 定义函数，按随机数在题库中抽取对应编号的题目
+from openpyxl import load_workbook
+
+
+def Question(que_type, numbers):
+    &#39;&#39;&#39;
+    que_type:试题类型（&quot;单选题&quot;,&quot;多选题&quot;,&quot;判断题&quot;,&quot;填空题&quot;）
+    numbers:需要抽取的试题编号
+    &#39;&#39;&#39;
+    questions = []  # 储存抽取的题目
+    wb = load_workbook(&quot;题库.xlsx&quot;)  # 载入题库
+    if que_type == &quot;单选题&quot;:
+        ws = wb[que_type]
+        for i in numbers:  # 按随机生成的编号抽题
+            question = ws[&quot;B&quot; + str(i)].value  # 问题在B列
+            answerA = &quot;A：\t&quot; + str(ws[&quot;C&quot; + str(i)].value)  # 选项A在C列，&quot;\t&quot;相当于按一下tab键，在字符间产生间隔
+            answerB = &quot;B：\t&quot; + str(ws[&quot;D&quot; + str(i)].value)  # 选项B在D列
+            answerC = &quot;C：\t&quot; + str(ws[&quot;E&quot; + str(i)].value)  # 选项C在E列
+            answerD = &quot;D：\t&quot; + str(ws[&quot;F&quot; + str(i)].value)  # 选项D在F列
+            right_answer = ws[&quot;G&quot; + str(i)].value  # 正确答案在G列
+            single_question = [question, answerA, answerB, answerC, answerD, right_answer]  # 每行的数据存入列表
+            questions.append(single_question)  # 每个题目的数据存入总列表
+    elif que_type == &quot;多选题&quot;:
+        ws = wb[que_type]
+        for i in numbers:
+            question = ws[&quot;B&quot; + str(i)].value
+            answerA = &quot;A：\t&quot; + str(ws[&quot;C&quot; + str(i)].value)
+            answerB = &quot;B：\t&quot; + str(ws[&quot;D&quot; + str(i)].value)
+            answerC = &quot;C：\t&quot; + str(ws[&quot;E&quot; + str(i)].value)
+            answerD = &quot;D：\t&quot; + str(ws[&quot;F&quot; + str(i)].value)
+            right_answer = ws[&quot;H&quot; + str(i)].value
+            single_question = [question, answerA, answerB, answerC, answerD, right_answer]
+            if ws[&quot;G&quot; + str(i)].value:  # 有些题有E选项，有些没有，因此需要判断一下是否有E选项
+                answerE = &quot;E：\t&quot; + str(ws[&quot;G&quot; + str(i)].value)
+                single_question.insert(-1, answerE)  # 将E选项插入到答案前面，保持答案是最后一个元素
+            questions.append(single_question)
+    else:  # 判断题和填空题，内容只取题干和答案
+        ws = wb[que_type]
+        for i in numbers:
+            question = ws[&quot;B&quot; + str(i)].value
+            right_answer = ws[&quot;C&quot; + str(i)].value
+            single_question = [question, right_answer]
+            questions.append(single_question)
+
+    return questions
+
+
+# 写入考试题到word文件
+from docx import Document
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+
+def To_word(number, questions_data):
+    doc = Document(&quot;试题-模板.docx&quot;)
+
+    # 写入单选题
+    title1 = &quot;一、单项选择题（共40题，每题1分）&quot;
+    p = doc.add_paragraph()  # 插入段落
+    r = p.add_run(title1)  # 插入文字块
+    r.bold = True  # 字体加粗
+    r.font.size = Pt(12)  # 字号设为12磅
+    for index, i in enumerate(questions_data[&quot;单选题&quot;], start=1):  # 给题目从1开始编号
+        doc.add_paragraph(f&quot;&#123;index&#125;. &#123;i[0]&#125;&quot;)  # 题干部分在单独一段
+        doc.add_paragraph(f&quot;\t&#123;i[1]&#125;\t\t&#123;i[2]&#125;&quot;)  # 选项A和选项B在同一段落
+        doc.add_paragraph(f&quot;\t&#123;i[3]&#125;\t\t&#123;i[4]&#125;&quot;)  # 选项C和选项D在同一段落
+
+    # 写入多选题
+    title2 = &quot;二、多项选择题（共20题，每题2分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title2)
+    r.bold = True
+    r.font.size = Pt(12)
+    for index, i in enumerate(questions_data[&quot;多选题&quot;], start=1):
+        doc.add_paragraph(f&quot;&#123;index&#125;. &#123;i[0]&#125;&quot;)
+        doc.add_paragraph(f&quot;\t&#123;i[1]&#125;\t\t&#123;i[2]&#125;&quot;)
+        doc.add_paragraph(f&quot;\t&#123;i[3]&#125;\t\t&#123;i[4]&#125;&quot;)
+        if len(i) == 7:  # 判断是否有E选项，若有，则新建一段落写入
+            doc.add_paragraph(f&quot;\t&#123;i[5]&#125;&quot;)
+
+    # 写入判断题
+    title3 = &quot;三、判断题（共10题，每题1分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title3)
+    r.bold = True
+    r.font.size = Pt(12)
+    for index, i in enumerate(questions_data[&quot;判断题&quot;], start=1):
+        doc.add_paragraph(f&quot;\t&#123;index&#125;. &#123;i[0]&#125;&quot;)
+
+    # 写入填空题
+    title4 = &quot;四、填空题（共10题，每题1分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title4)
+    r.bold = True
+    r.font.size = Pt(12)
+    for index, i in enumerate(questions_data[&quot;填空题&quot;], start=1):
+        doc.add_paragraph(f&quot;\t&#123;index&#125;. &#123;i[0]&#125;&quot;)
+
+    doc.save(f&quot;试卷及答案\\考试题&#123;number&#125;.docx&quot;)
+
+
+# 写入答案
+from docx import Document
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+
+def Answer(number, questions_data):
+    doc = Document()
+    # 全局字体设为“宋体”
+    doc.styles[&#39;Normal&#39;].font.name = u&#39;宋体&#39;
+    doc.styles[&#39;Normal&#39;]._element.rPr.rFonts.set(qn(&#39;w:eastAsia&#39;), u&#39;宋体&#39;)
+
+    title = &quot;计算机系2020第二学期期末考试题(答案)&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title)
+    r.bold = True
+    r.font.size = Pt(20)
+    # 写入单选题答案
+    title1 = &quot;一、单项选择题答案（共40题，每题1分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title1)
+    r.bold = True
+    r.font.size = Pt(12)
+
+    p = doc.add_paragraph()
+    for index, i in enumerate(questions_data[&quot;单选题&quot;], start=1):
+        p.add_run(f&quot;&#123;index&#125;. &#123;i[-1]&#125;\t&quot;)
+        if index % 10 == 0:  # 每段只显示10个答案
+            p = doc.add_paragraph()  # 满10个，则新建段落
+
+    # 写入多选题答案
+    title2 = &quot;二、多项选择题答案（共20题，每题2分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title2)
+    r.bold = True
+    r.font.size = Pt(12)
+    p = doc.add_paragraph()
+    for index, i in enumerate(questions_data[&quot;多选题&quot;], start=1):
+        p.add_run(f&quot;&#123;index&#125;. &#123;i[-1]&#125;\t&quot;)
+        if index % 3 == 0:
+            p = doc.add_paragraph()
+
+            # 写入判断题答案
+    title3 = &quot;三、判断题答案（共10题，每题1分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title3)
+    r.bold = True
+    r.font.size = Pt(12)
+    p = doc.add_paragraph()
+    for index, i in enumerate(questions_data[&quot;判断题&quot;], start=1):
+        p.add_run(f&quot;&#123;index&#125;. &#123;i[-1]&#125;\t&quot;)
+        if index % 5 == 0:  # 每段只显示5个答案
+            p = doc.add_paragraph()  # 满5个，则新建段落
+
+    # 写入填空题
+    title4 = &quot;四、填空题答案（共10题，每题1分）&quot;
+    p = doc.add_paragraph()
+    r = p.add_run(title4)
+    r.bold = True
+    r.font.size = Pt(12)
+    p = doc.add_paragraph()
+    for index, i in enumerate(questions_data[&quot;填空题&quot;], start=1):
+        p.add_run(f&quot;&#123;index&#125;. &#123;i[-1]&#125;\t\t&quot;)
+        if index % 2 == 0:  # 每段只显示2个答案
+            p = doc.add_paragraph()  # 满2个，则新建段落
+
+    doc.save(f&quot;试卷及答案\\考试题&#123;number&#125;答案.docx&quot;)
+
+
+# 主函数
+for number in range(1, 21):  # 不同的试卷数量，此处为20套
+    # 生成随机题目编号
+    num_single_choice = Random_num(566, 40)
+    num_mult_choice = Random_num(196, 20)
+    num_judgment = Random_num(418, 10)
+    num_completion = Random_num(190, 10)
+    # 将生成的编号存入字典`question_num`
+    question_num = &#123;&quot;单选题号&quot;: num_single_choice,
+                    &quot;多选题号&quot;: num_mult_choice,
+                    &quot;判断题号&quot;: num_judgment,
+                    &quot;填空题号&quot;: num_completion
+                    &#125;
+    # 根据随机生成的题目编号去题库选题，并存入`questions_data`
+    questions_data = &#123;
+        &quot;单选题&quot;: Question(&quot;单选题&quot;, question_num[&quot;单选题号&quot;]),
+        &quot;多选题&quot;: Question(&quot;多选题&quot;, question_num[&quot;多选题号&quot;]),
+        &quot;判断题&quot;: Question(&quot;判断题&quot;, question_num[&quot;判断题号&quot;]),
+        &quot;填空题&quot;: Question(&quot;填空题&quot;, question_num[&quot;填空题号&quot;])
+    &#125;
+    # 将试题写入word文档，并保存
+    To_word(number, questions_data)
+    # 将试题答案写入word文档，并保存
+    Answer(number, questions_data)
+    print(f&quot;试卷&#123;number&#125;及答案完成！&quot;)
+</code></pre>
+<p><a href="试题-模板.docx">试题-模板.docx</a><br><a href="题库.xlsx">题库.xlsx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1283,93 +1575,10 @@ doc.save(&#39;替换后_设置格式.docx&#39;)
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jieba | python词频分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-27 05:58:21 / Modified: 06:04:43" itemprop="dateCreated datePublished" datetime="2021-10-27T05:58:21-08:00">2021-10-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/jieba/" itemprop="url" rel="index"><span itemprop="name">jieba</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="python词频分析"><a href="#python词频分析" class="headerlink" title="python词频分析"></a>python词频分析</h1><p>程序分析了”主要业务”文件夹的所有文件中的文本信息的词频(分别存储在”词频”文件夹中)</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1437,20 +1646,20 @@ doc.save(&#39;替换后_设置格式.docx&#39;)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">420</span>
+          <span class="site-state-item-count">421</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">271</span>
+        <span class="site-state-item-count">272</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">301</span>
+        <span class="site-state-item-count">303</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

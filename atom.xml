@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-07-10T02:50:10.240Z</updated>
+  <updated>2022-07-10T03:42:42.508Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pyqrcode | 生成二维码</title>
+    <link href="http://example.com/2022/07/09/%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81/"/>
+    <id>http://example.com/2022/07/09/%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81/</id>
+    <published>2022-07-10T03:12:23.000Z</published>
+    <updated>2022-07-10T03:42:42.508Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="生成二维码"><a href="#生成二维码" class="headerlink" title="生成二维码"></a>生成二维码</h1><p><strong>代码：</strong></p><pre><code>import pyqrcode  # pip install pyqrcodeimport png  # pip install pypnglink = &quot;https://victory-liao.github.io/&quot;qrCode = pyqrcode.create(link)qrCode.png(&quot;my blog.png&quot;, scale=10)</code></pre><p><strong>结果：</strong><br>![](./生成二维码/my blog.png)<br><strong>注：如果要生成其他链接的二维码，只需要替换link变量中的值！</strong></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;生成二维码&quot;&gt;&lt;a href=&quot;#生成二维码&quot; class=&quot;headerlink&quot; title=&quot;生成二维码&quot;&gt;&lt;/a&gt;生成二维码&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;代码：&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import pyqrcode  # pip</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="第三方库" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    
+    <category term="pyqrcode" scheme="http://example.com/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pyqrcode/"/>
+    
+    
+    <category term="二维码" scheme="http://example.com/tags/%E4%BA%8C%E7%BB%B4%E7%A0%81/"/>
+    
+    <category term="pyqrcode" scheme="http://example.com/tags/pyqrcode/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 9.回文数</title>
@@ -602,36 +633,6 @@ handler:
     <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
     
     <category term="等待/通知机制" scheme="http://example.com/tags/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>并发 | 等待超时模式构造简单的数据库连接池</title>
-    <link href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
-    <id>http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/</id>
-    <published>2022-05-29T07:33:57.000Z</published>
-    <updated>2022-05-30T06:49:15.728Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p><pre><code>package concurrency.connetionPool;import java.lang.reflect.InvocationHandler;import java.lang.reflect.Method;import java.lang.reflect.Proxy;import java.sql.Connection;import java.util.LinkedList;import java.util.concurrent.TimeUnit;class ConnectionDriver&#123;    static class ConnectionHandler implements InvocationHandler&#123;        @Override        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;            if(method.getName().equals(&quot;commit&quot;))&#123;                TimeUnit.MILLISECONDS.sleep(100);            &#125;            return null;        &#125;    &#125;        //创建一个Connection的代理，在commit时休眠100毫秒    public static final Connection createConnection()&#123;        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());    &#125;&#125;public class ConnectionPool &#123;    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();        public ConnectionPool(int initialSize)&#123;        if(initialSize &gt; 0)&#123;            for(int i = 0; i &lt; initialSize; i++)&#123;                pool.addLast(ConnectionDriver.createConnection());            &#125;        &#125;    &#125;        public void releaseConnection(Connection connection)&#123;        if(connection != null)&#123;            synchronized(pool)&#123;                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接                pool.addLast(connection);                pool.notifyAll();            &#125;        &#125;    &#125;        //在mills内无法获取到连接，将会返回null    public Connection fetchConnection(long mills) throws InterruptedException&#123;        synchronized(pool)&#123;            //完全超时            if(mills &lt; 0)&#123;                while(pool.isEmpty())&#123;                    pool.wait();                &#125;                return pool.removeFirst();//Removes and returns the first element from this list.            &#125;else&#123;                long future = System.currentTimeMillis() + mills;                long remaining = mills;                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;                    pool.wait(remaining);                    remaining = future - System.currentTimeMillis();                &#125;                Connection result = null;                if(!pool.isEmpty())&#123;                    result = pool.removeFirst();                &#125;                return result;            &#125;        &#125;    &#125;&#125;</code></pre><p><strong>ConnectionPoolTest.java</strong></p><pre><code>package concurrency.connetionPool;import java.sql.Connection;import java.util.concurrent.CountDownLatch;import java.util.concurrent.atomic.AtomicInteger;public class ConnectionPoolTest &#123;    static ConnectionPool pool = new ConnectionPool(10);        //保证所有ConnectionRunner能够同时开始    static CountDownLatch start = new CountDownLatch(1);        //main线程将会等待所有ConnectionRunner结束后才能继续执行    static CountDownLatch end;        public static void main(String[] args) throws InterruptedException&#123;        //线程数量，可以修改线程数量进行观察        int threadCount = 50;        end = new CountDownLatch(threadCount);        int count = 20;        AtomicInteger got = new AtomicInteger();        AtomicInteger notGot = new AtomicInteger();        for(int i = 0; i &lt; threadCount; i++)&#123;            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);            thread.start();        &#125;        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。        System.out.println(&quot;total invoke: &quot; + (threadCount * count));        System.out.println(&quot;got connection: &quot; + got);        System.out.println(&quot;not got connection: &quot; + notGot);    &#125;    static class ConnectionRunner implements Runnable&#123;        int count;        AtomicInteger got;        AtomicInteger notGot;                public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;            this.count = count;            this.got = got;            this.notGot = notGot;        &#125;                public void run()&#123;            try&#123;                start.await();            &#125;catch(Exception ex)&#123;                            &#125;            while(count &gt; 0)&#123;                try&#123;                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null                    //分别统计连接获取的数量got和未获取到的数量notGot                    Connection connection = pool.fetchConnection(1000);                    if(connection != null)&#123;                        try&#123;                            connection.createStatement();                            connection.commit();                        &#125;finally&#123;                            pool.releaseConnection(connection);                            got.incrementAndGet();                        &#125;                    &#125;else&#123;                        notGot.incrementAndGet();                    &#125;                &#125;catch(Exception ex)&#123;                                    &#125;finally&#123;                    count--;                &#125;                            &#125;            end.countDown();        &#125;    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;等待超时模式构造简单的数据库连接池&quot;&gt;&lt;a href=&quot;#等待超时模式构造简单的数据库连接池&quot; class=&quot;headerlink&quot; title=&quot;等待超时模式构造简单的数据库连接池&quot;&gt;&lt;/a&gt;等待超时模式构造简单的数据库连接池&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;Co</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="等待超时模式构造简单的数据库连接池" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
