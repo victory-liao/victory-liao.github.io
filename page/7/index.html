@@ -190,6 +190,168 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/java%E5%BC%95%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/java%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">Java | java引用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-24 20:32:36 / Modified: 20:33:44" itemprop="dateCreated datePublished" datetime="2022-03-24T20:32:36-08:00">2022-03-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%BC%BA%E8%BD%AF%E5%BC%B1%E8%99%9A%E5%9B%9B%E5%A4%A7%E5%BC%95%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">强软弱虚四大引用</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="强软弱虚四大引用"><a href="#强软弱虚四大引用" class="headerlink" title="强软弱虚四大引用"></a>强软弱虚四大引用</h1><pre><code>import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class StudentClass&#123;
+    @Override
+    protected void finalize() throws Throwable&#123;
+        System.out.println(&quot;student对象被回收了&quot;);
+    &#125;
+&#125;
+
+public class ReferencesTest &#123;
+    public static void main(String[] args) &#123;
+        
+        /**
+         * 强引用
+         * 只要某个对象有强引用与之关联，这个对象永远不会被回收，即使内存不足，JVM宁愿抛出OOM，也不会去回收。
+         */
+        //StudentClass student = new StudentClass();
+        //student = null;//断开强引用与对象之间的关联
+        //System.gc();
+        
+        
+        /**
+         * 软引用
+         * 内存不足时，JVM会回收软引用关联的对象
+         * 
+         * 比较适合用作缓存，当内存足够，可以正常的拿到缓存，当内存不够，就会先干掉缓存，不至于马上抛出OOM。
+         */
+//        SoftReference&lt;byte[]&gt; softReference = new SoftReference&lt;byte[]&gt;(new byte[1024*1024*10]);
+//        System.out.println(softReference.get());
+//        System.gc();
+//        System.out.println(softReference.get());
+//        byte[] bytes = new byte[1024 * 1024 * 10];
+//        System.out.println(softReference.get());
+        
+        /**
+         * 弱引用
+         * 不管内存是否足够，只要发生GC，都会被回收
+         */
+//        WeakReference&lt;byte[]&gt; weakReference = new WeakReference&lt;byte[]&gt;(new byte[1]);
+//        System.out.println(weakReference.get());
+//        System.gc();
+//        System.out.println(weakReference.get());
+        
+//        [B@15db9742
+//         null
+        
+        /**
+         * 虚引用
+         * 特点一：无法通过虚引用来获取对一个对象的真实引用
+         * 特点二：虚引用必须与ReferenceQueue一起使用，当GC准备回收一个对象，如果发现它还有虚引用，就会在回收之前，把这个虚引用加入到与之关联的ReferenceQueue中。
+         * 
+         * 
+         * Unlike soft and weak references, phantom references are not
+ automatically cleared by the garbage collector as they are enqueued.  An
+object that is reachable via phantom references will remain so until all
+such references are cleared or themselves become unreachable.
+         */
+        ReferenceQueue&lt;Object&gt; referenceQueue = new ReferenceQueue&lt;&gt;();
+        List&lt;byte[]&gt; bytes = new ArrayList&lt;&gt;();
+        PhantomReference&lt;StudentClass&gt; reference = new PhantomReference&lt;StudentClass&gt;(new StudentClass(),referenceQueue);
+        
+        new Thread(() -&gt; &#123;
+            for (int i = 0; i &lt; 100;i++ ) &#123;
+                bytes.add(new byte[1024 * 1024]);
+            &#125;
+        &#125;).start();
+ 
+        new Thread(() -&gt; &#123;
+            while (true) &#123;
+                Reference poll = referenceQueue.poll();
+                if (poll != null) &#123;
+                    System.out.println(&quot;虚引用被回收了：&quot; + poll);
+                &#125;
+            &#125;
+        &#125;).start();
+        Scanner scanner = new Scanner(System.in);
+        scanner.hasNext();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/ConfusionMatrix/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1042,104 +1204,6 @@ class OperationFactory&#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/16/%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/16/%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">SpringMVC | 上传和下载文件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-16 02:01:39 / Modified: 02:07:30" itemprop="dateCreated datePublished" datetime="2022-03-16T02:01:39-08:00">2022-03-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/" itemprop="url" rel="index"><span itemprop="name">SpringMVC</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringMVC/%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">上传和下载文件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="上传和下载文件"><a href="#上传和下载文件" class="headerlink" title="上传和下载文件"></a>上传和下载文件</h1><p>注意：上传文件需要在springMVC.xml中配置如下所示bean：</p>
-<pre><code>&lt;!-- 
-    处理文件，将客户端上传的File文件处理为MultipartFile
-    注意：文件解析器bean中的id必须设置为multipartResolver 
---&gt;
-&lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;
-    &lt;!-- 设置文件解析的编码，注意一定要和页面的pageEncoding保持一致 --&gt;
-    &lt;property name=&quot;defaultEncoding&quot; value=&quot;UTF-8&quot;&gt;&lt;/property&gt;
-    &lt;!-- 设置最大上传文件大小 --&gt;
-    &lt;property name=&quot;maxUploadSize&quot; value=&quot;88888888&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/03/16/%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1211,14 +1275,14 @@ class OperationFactory&#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">422</span>
+          <span class="site-state-item-count">423</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">273</span>
+        <span class="site-state-item-count">275</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
