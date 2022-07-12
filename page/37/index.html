@@ -190,6 +190,107 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="post-title-link" itemprop="url">支持向量机</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-20 18:10:16" itemprop="dateCreated datePublished" datetime="2021-03-20T18:10:16-08:00">2021-03-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-03 03:58:45" itemprop="dateModified" datetime="2021-07-03T03:58:45-08:00">2021-07-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/SVM/" itemprop="url" rel="index"><span itemprop="name">SVM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="支持向量机-Support-Vector-Machine-SVM"><a href="#支持向量机-Support-Vector-Machine-SVM" class="headerlink" title="支持向量机(Support Vector Machine,SVM)"></a>支持向量机(Support Vector Machine,SVM)</h1><p>支持向量机是我们用于分类的一种算法。</p>
+<h2 id="小故事理解SVM"><a href="#小故事理解SVM" class="headerlink" title="小故事理解SVM:"></a>小故事理解SVM:</h2><p>当一个分类问题，数据是线性可分的，也就是用一根棍就可以将两种小球分开的时候，我们只要将棍的位置放在让小球距离棍的距离最大化的位置即可，寻找这个最大间隔的过程，就叫做最优化。但是，现实往往是很残酷的，一般的数据是线性不可分的，也就是找不到一个棍将两种小球很好的分类。这个时候，我们就需要像大侠一样，将小球拍起，用一张纸代替小棍将小球进行分类。想要让数据飞起，我们需要的东西就是核函数(kernel)，用于切分小球的纸，就是超平面。<br>问题是从线性可分延伸到线性不可分的</p>
+<h2 id="线性SVM"><a href="#线性SVM" class="headerlink" title="线性SVM"></a>线性SVM</h2><p><img src="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/1.png"><br>上图中的(a)是已有的数据，红色和蓝色分别代表两个不同的类别。数据显然是线性可分的，但是将两类数据点分开的直线显然不止一条。上图的(b)和(c)分别给出了B、C两种不同的分类方案，其中黑色实线为分界线，术语称为“决策面”。每个决策面对应了一个线性分类器。虽然从分类结果上看，分类器A和分类器B的效果是相同的。但是他们的性能是有差距的，看下图：<br><img src="/2021/03/20/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/2.png"><br>在”决策面”不变的情况下，我又添加了一个红点。可以看到，分类器B依然能很好的分类结果，而分类器C则出现了分类错误。显然分类器B的”决策面”放置的位置优于分类器C的”决策面”放置的位置，SVM算法也是这么认为的，它的依据就是分类器B的分类间隔比分类器C的分类间隔大。这里涉及到第一个SVM独有的概念”分类间隔”。在保证决策面方向不变且不会出现错分样本的情况下移动决策面，会在原来的决策面两侧找到两个极限位置（越过该位置就会产生错分现象），如虚线所示。虚线的位置由决策面的方向和距离原决策面最近的几个样本的位置决定。而这两条平行虚线正中间的分界线就是在保持当前决策面方向不变的前提下的最优决策面。两条虚线之间的垂直距离就是这个最优决策面对应的分类间隔。显然每一个可能把数据集正确分开的方向都有一个最优决策面（有些方向无论如何移动决策面的位置也不可能将两类样本完全分开），而不同方向的最优决策面的分类间隔通常是不同的，那个具有“最大间隔”的决策面就是SVM要寻找的最优解。而这个真正的最优解对应的两侧虚线所穿过的样本点，就是SVM中的支持样本点，称为”支持向量”。</p>
+<h2 id="数学建模"><a href="#数学建模" class="headerlink" title="数学建模"></a>数学建模</h2><p>决策面方程<br>分类间隔方程<br>约束条件</p>
+<h2 id="最优化问题的两个基本因素："><a href="#最优化问题的两个基本因素：" class="headerlink" title="最优化问题的两个基本因素："></a>最优化问题的两个基本因素：</h2><p>1.目标函数 你希望什么东西的什么指标达到最好<br>2.优化对象 你期望通过改变哪些因素来使你的目标函数达到最优<br>Example:<br>在线性SVM算法中，目标函数就是分类间隔，优化对象就是决策面</p>
+<h2 id="最优化问题的分类："><a href="#最优化问题的分类：" class="headerlink" title="最优化问题的分类："></a>最优化问题的分类：</h2><p>1.无约束优化问题 min f(x)<br>求解方法：费马大定理(求f(x)的导数，令其为0，求得候选最优值，再在这些候选值中验证；如果是凸函数，可以保证是最优解)<br>2.有等式约束的优化问题<br>min f(x)<br>s.t. hi(x)=0,i=1,2,…,n<br>求解方法：拉格朗日乘子法(把等式约束hi(x)用一个系数与f(x)写成一个式子，称为拉格朗日函数，而系数称为拉格朗日乘子。通过拉格朗日函数对各个变量求导，令其为0，求得候选值集合，然后验证求得最优值)<br>3.有不等式约束的优化问题<br>min f(x)<br>s.t. gi(x)&lt;=0,i=1,2,…,n<br>hj(x)=0,j=1,2,…,m<br>求解方法：拉格朗日+KKT条件 把所有的等式、不等式约束与f(x)写成一个式子，也叫拉格朗日函数，系数也称为拉格朗日乘子，通过一些条件可以求出最优值的必要条件，这个条件称为KKT条件。</p>
+<p>KKT条件的全称是Karush-Kuhn-Tucker条件，KKT条件是说最优值条件必须满足以下条件：<br>条件一：经过拉格朗日函数处理之后的新目标函数L(w,b,α)对x求导为零：<br>条件二：h(x) = 0；<br>条件三：α*g(x) = 0；</p>
+<p><b>使用拉格朗日方程的目的：</b><br>将约束条件放到目标函数中，将有约束优化问题转换为无约束优化问题（我们知道我们要求解的是最小化问题，所以一个直观的想法是如果我能够构造一个函数，使得该函数在可行解区域内与原目标函数完全一致，而在可行解区域外的数值非常大，甚至是无穷大，那么这个没有约束条件的新目标函数的优化问题就与原来有约束条件的原始目标函数的优化问题是等价的问题。）</p>
+<p>使用拉格朗日获得的函数使用求导方法求解依然困难，进而需要对问题进行一次转换，即使用一个数学技巧：拉格朗日对偶(将最小值和最大值的计算位置交换)</p>
+<p><b>拉个朗日优化问题的两个步骤：</b><br>1.将有约束的原始目标函数转换为无约束的新构造的拉格朗日目标函数<br>2.使用拉格朗日对偶性，将不易求解的优化问题转化为容易求解的优化问题</p>
+<p><b>求解对偶问题的三个步骤：</b><br>1.首先要让L(w,b,α)关于w和b最小化<br>2.求对α的极大<br>3.利用SMO算法求解对偶问题中的拉格朗日乘子</p>
+<h2 id="SMO算法"><a href="#SMO算法" class="headerlink" title="SMO算法"></a>SMO算法</h2><p>1996年，John Platt发布了一个称为SMO的强大算法，用于训练SVM。SMO表示序列最小化(Sequential Minimal Optimizaion)。Platt的SMO算法是将大优化问题分解为多个小优化问题来求解的。这些小优化问题往往很容易求解，并且对它们进行顺序求解的结果与将它们作为整体来求解的结果完全一致的。在结果完全相同的同时，SMO算法的求解时间短很多。</p>
+<p><b>SMO算法的目标:</b><br>求出一系列alpha和b，一旦求出了这些alpha，就很容易计算出权重向量w并得到分隔超平面。</p>
+<p><b>SMO算法的工作原理是：</b><br>每次循环中选择两个alpha进行优化处理。一旦找到了一对合适的alpha，那么就增大其中一个同时减小另一个。这里所谓的”合适”就是指两个alpha必须符合以下两个条件，条件之一就是两个alpha必须要在间隔边界之外，而且第二个条件则是这两个alpha还没有进行过区间化处理或者不在边界上。</p>
+<p><b>注意：</b><br>实际上，对于目标函数，是存在一个假设(数据100%线性可分)的，但现实中的数据都不那么干净，这时我们就可以通过引入松弛变量ξ(slack variable)和惩罚参数C来允许有些数据点可以处于超平面的错误的一侧—&gt;约束条件的改变—&gt;目标函数的改变</p>
+<h2 id="SMO算法优化"><a href="#SMO算法优化" class="headerlink" title="SMO算法优化"></a>SMO算法优化</h2><p>启发式选择第二个alpha值</p>
+<h2 id="非线性SVM"><a href="#非线性SVM" class="headerlink" title="非线性SVM"></a>非线性SVM</h2><h3 id="核技巧"><a href="#核技巧" class="headerlink" title="核技巧"></a>核技巧</h3><p>对于非线性情况：SVM的处理方式是选择一个核函数。简而言之：在线性不可分的情况下，SVM通过某种事先选择的非线性映射（核函数）将输入变量映到一个高维特征空间，将其变成在高维空间线性可分，在这个高维空间中构造最优分类超平面。</p>
+<h3 id="建立非线性学习器分为两步："><a href="#建立非线性学习器分为两步：" class="headerlink" title="建立非线性学习器分为两步："></a>建立非线性学习器分为两步：</h3><p>1.首先使用一个非线性映射将数据变换到一个特征空间F；<br>2.然后在特征空间使用线性学习器分类。</p>
+<h3 id="核函数方法"><a href="#核函数方法" class="headerlink" title="核函数方法"></a>核函数方法</h3><p>在特征空间中直接计算内积 &lt;ϕ(xi),ϕ(x)&gt;的方法称为核函数方法</p>
+<p>核是一个函数k，对所有x,z∈X，满足k(x,z)=&lt;ϕ(xi),ϕ(x)&gt;，这里ϕ(·)是从原始输入空间X到内积空间F的映射。</p>
+<p>简而言之：如果不是用核技术，就会先计算线性映ϕ(x1)和ϕ(x2)，然后计算这它们的内积，使用了核技术之后，先把ϕ(x1)和ϕ(x2)的一般表达式&lt;ϕ(x1),ϕ(x2)&gt;=k(&lt;ϕ(x1),ϕ(x2) &gt;)计算出来，这里的&lt;·，·&gt;表示内积，k(·，·)就是对应的核函数</p>
+<p>将内积替换成核函数的方式被称为核技巧(kernel trick)。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="SVM的优缺点"><a href="#SVM的优缺点" class="headerlink" title="SVM的优缺点"></a>SVM的优缺点</h3><p>优点：<br>1.可用于线性/非线性分类，也可以用于回归，泛化错误率低，也就是说具有良好的学习能力，且学到的结果具有很好的推广性。<br>2.可以解决小样本情况下的机器学习问题，可以解决高维问题，可以避免神经网络结构选择和局部极小点问题。<br>3.SVM是最好的现成的分类器，现成是指不加修改可直接使用。并且能够得到较低的错误率，SVM可以对训练集之外的数据点做很好的分类决策。</p>
+<p>缺点：对参数调节和和函数的选择敏感。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/19/%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -924,88 +1025,6 @@ plt.show()
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E4%BC%AA%E8%BF%B9%E5%8E%BB%E9%99%A4%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E6%80%BB%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/%E4%BC%AA%E8%BF%B9%E5%8E%BB%E9%99%A4%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">伪迹移除 | 伪迹去除方法比较总结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-02-25 16:46:24" itemprop="dateCreated datePublished" datetime="2021-02-25T16:46:24-08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-07-03 05:16:18" itemprop="dateModified" datetime="2021-07-03T05:16:18-08:00">2021-07-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/" itemprop="url" rel="index"><span itemprop="name">EEG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Research-and-Paper/EEG/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/" itemprop="url" rel="index"><span itemprop="name">伪迹移除</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="伪迹去除方法比较总结"><a href="#伪迹去除方法比较总结" class="headerlink" title="伪迹去除方法比较总结"></a>伪迹去除方法比较总结</h1><p>1.(定性比较 or 定量比较)很难对不同伪迹去除方法基于它们去除伪迹的能力进行一个比较，通常只能做一个<b>定性(qualitative)</b>的比较<br>2.(自动 or 半自动)很多基于EEG的应用需要<b>自动信息处理</b>，尤其是一些对<b>在线/实时(需要效率很高的算法和足够低的计算复杂度)</b>有要求的应用。基于<b>BSS(盲源分离)</b>的方法通常是<b>半自动</b>的,因为伪迹成分的识别需要一些训练或参数选择/调整。涉及ICA的伪迹检测/去除方法需要另一个方法才能实现全过程的自动<br>3.(单通道 or 多通道)基于<b>盲源分离</b>的方法需要<b>多通道</b>才能起作用，通道数量越多，越能很好的分离出单个的源(这种方法不能用于低通道 e.g. 4-6或者基于单通道的应用)。基于<b>小波变换和经验模态分解</b>的方法可以通过将单个数据序列分解为多个成分进行<b>单通道</b>分析。<br>4.(参考信号)大多数方法需要参考信号。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1077,20 +1096,20 @@ plt.show()
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">421</span>
+          <span class="site-state-item-count">422</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">272</span>
+        <span class="site-state-item-count">273</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">303</span>
+        <span class="site-state-item-count">304</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

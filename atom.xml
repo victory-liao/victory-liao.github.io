@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-07-10T08:02:50.193Z</updated>
+  <updated>2022-07-12T08:01:20.625Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 102.二叉树的层序遍历</title>
+    <link href="http://example.com/2022/07/11/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/"/>
+    <id>http://example.com/2022/07/11/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/</id>
+    <published>2022-07-12T07:58:32.000Z</published>
+    <updated>2022-07-12T08:01:20.625Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="102-二叉树的层序遍历"><a href="#102-二叉树的层序遍历" class="headerlink" title="102.二叉树的层序遍历"></a>102.二叉树的层序遍历</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。<br><a href="https://leetcode.cn/problems/binary-tree-level-order-traversal/">题目链接</a></p><span id="more"></span><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>f(n) = f(n-1) + f(n-2)</strong></p><ol><li><p>递归法<br>根据题目要求，我们需要遍历二叉树，并将相同层次的节点归入同一个数组；</p><pre><code> 可以通过传入辅助的level参数决定层次，就可以将同一level的放入同一数组。</code></pre></li><li><p>迭代法（使用队列）<br>使用队列进行实现，弹出当前层节点的同时，依次加入下一层节点；由于队列先进先出的特性，当前层的节点会被先访问。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h1 id="Definition-for-a-binary-tree-node"><a href="#Definition-for-a-binary-tree-node" class="headerlink" title="Definition for a binary tree node."></a>Definition for a binary tree node.</h1><p> class TreeNode(object):</p><pre><code> def __init__(self, val=0, left=None, right=None):     self.val = val     self.left = left     self.right = right</code></pre><p> class Queue(object):</p><pre><code> &quot;&quot;&quot;实现一个队列&quot;&quot;&quot;  def __init__(self):     self.__list = []  def enqueue(self, elem):     &quot;&quot;&quot;入队&quot;&quot;&quot;     self.__list.append(elem)  def dequeue(self):     &quot;&quot;&quot;出队&quot;&quot;&quot;     return self.__list.pop(0)  def is_empty(self):     return not self.__list  def size(self):     &quot;&quot;&quot;队列的大小&quot;&quot;&quot;     return len(self.__list)</code></pre><p> class Solution(object):</p><pre><code> def levelOrder(self, root):     &quot;&quot;&quot;使用队列对树进行层序遍历，无返回值&quot;&quot;&quot;     if not root:         return     queue = Queue()     queue.enqueue(root)     while queue.size() != 0:         node = queue.dequeue()         print(node.val)         if node.left is not None:             queue.enqueue(node.left)         if node.right is not None:             queue.enqueue(node.right)  def levelOrder1(self, root):     &quot;&quot;&quot;     递归法          根据题目要求，我们需要遍历二叉树，并将相同层次的节点归入同一个数组；     可以通过传入辅助的level参数决定层次，就可以将同一level的放入同一数组。     &quot;&quot;&quot;     def helper(node, level):         if len(levels) == level:  # 每一层都需要创建一个数组             levels.append([])                  levels[level].append(node.val)  # 向对应层的数组中加入节点                  # 递归，层次+1         if node.left is not None:             helper(node.left, level + 1)         if node.right is not None:             helper(node.right, level + 1)          levels = []     if root is None:         return levels     helper(root, 0)     return levels  def levelOrder2(self, root):     &quot;&quot;&quot;     迭代法          使用队列进行实现，弹出当前层节点的同时，依次加入下一层节点；由于队列先进先出的特性，当前层的节点会被先访问。     &quot;&quot;&quot;     answer = []     level = []     dummy = TreeNode(1001)     queue = Queue()          if not root:         return answer          queue.enqueue(root)     queue.enqueue(dummy)          while not queue.is_empty():         current = queue.dequeue()         if current == dummy:             answer.append(level)             level = list()             if not queue.is_empty():                 queue.enqueue(dummy)         else:             level.append(current.val)             if current.left is not None:                 queue.enqueue(current.left)             if current.right is not None:                 queue.enqueue(current.right)          return answer</code></pre><p> if <strong>name</strong> == “<strong>main</strong>“:</p><pre><code> # create the binary tree root = TreeNode(3) node2 = TreeNode(9) node3 = TreeNode(20) node4 = TreeNode(15) node5 = TreeNode(7) root.left = node2 root.right = node3 node3.left = node4 node3.right = node5  slt = Solution() # slt.levelOrder(root) # res = slt.levelOrder1(root) res = slt.levelOrder2(root) print(res)</code></pre></li></ol>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;102-二叉树的层序遍历&quot;&gt;&lt;a href=&quot;#102-二叉树的层序遍历&quot; class=&quot;headerlink&quot; title=&quot;102.二叉树的层序遍历&quot;&gt;&lt;/a&gt;102.二叉树的层序遍历&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。&lt;br&gt;&lt;a href=&quot;https://leetcode.cn/problems/binary-tree-level-order-traversal/&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="树" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/"/>
+    
+    <category term="102.二叉树的层序遍历" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/102-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+    <category term="二叉树" scheme="http://example.com/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
+    
+    <category term="层序遍历" scheme="http://example.com/tags/%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/"/>
+    
+  </entry>
   
   <entry>
     <title>pyqrcode | 生成二维码</title>
@@ -601,38 +634,6 @@ handler:
     <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
     
     <category term="线程池" scheme="http://example.com/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>并发 | 等待/通知机制</title>
-    <link href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/"/>
-    <id>http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/</id>
-    <published>2022-05-29T07:37:56.000Z</published>
-    <updated>2022-05-30T06:51:06.543Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p><pre><code>package concurrency;import java.text.SimpleDateFormat;import java.util.Date;import java.util.concurrent.TimeUnit;public class WaitNotify &#123;    static boolean flag = true;    static Object lock = new Object();        public static void main(String[] args) throws InterruptedException &#123;        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);        waitThread.start();        TimeUnit.SECONDS.sleep(1);        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);        notifyThread.start();    &#125;        static class Wait implements Runnable&#123;        @Override        public void run()&#123;            //加锁，用于lock的Monitor            synchronized(lock)&#123;                //当条件不满足时，继续wait，同时释放了lock的锁                while(flag)&#123;                    try &#123;                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));                        lock.wait();                    &#125; catch (InterruptedException e) &#123;                    &#125;                &#125;                //条件满足时，完成工作                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));            &#125;        &#125;    &#125;        static class Notify implements Runnable&#123;        @Override        public void run() &#123;            synchronized(lock)&#123;                //获取lock的锁，然后进行通知，通知时不会释放lock的锁                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));                lock.notifyAll();                flag = false;                SleepUtils.second(5);            &#125;                        //再次加锁            synchronized(lock)&#123;                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));                SleepUtils.second(5);            &#125;                    &#125;    &#125;&#125;</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;等待-通知机制&quot;&gt;&lt;a href=&quot;#等待-通知机制&quot; class=&quot;headerlink&quot; title=&quot;等待/通知机制&quot;&gt;&lt;/a&gt;等待/通知机制&lt;/h1&gt;&lt;p&gt;等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="等待/通知机制" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="等待/通知机制" scheme="http://example.com/tags/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/"/>
     
   </entry>
   
