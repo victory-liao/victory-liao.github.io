@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-07-12T10:11:33.961Z</updated>
+  <updated>2022-07-15T03:41:03.985Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python | pyhon+selenium测试WebTours网站登录注册功能</title>
+    <link href="http://example.com/2022/07/14/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"/>
+    <id>http://example.com/2022/07/14/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/</id>
+    <published>2022-07-15T03:30:30.000Z</published>
+    <updated>2022-07-15T03:41:03.985Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="pyhon-selenium测试WebTours网站登录注册功能"><a href="#pyhon-selenium测试WebTours网站登录注册功能" class="headerlink" title="pyhon+selenium测试WebTours网站登录注册功能"></a>pyhon+selenium测试WebTours网站登录注册功能</h1><h2 id="Web-Tours下载、安装"><a href="#Web-Tours下载、安装" class="headerlink" title="Web Tours下载、安装"></a>Web Tours下载、安装</h2><p><a href="https://blog.csdn.net/weixin_45129277/article/details/114013243">WebTours下载、安装</a></p><h2 id="安装selenium"><a href="#安装selenium" class="headerlink" title="安装selenium"></a>安装selenium</h2><p>在终端输入以下命令安装selenium:</p><pre><code>pip install selenium</code></pre><h2 id="测试注册功能"><a href="#测试注册功能" class="headerlink" title="测试注册功能"></a>测试注册功能</h2><p>注：本示例使用Firfox浏览器进行测试<br><a href="自动化测试/user.txt">user.txt</a></p><pre><code>file = open(&quot;user.txt&quot;, &quot;r&quot;)for line in file:    username = line.split()[0]    password = line.split()[1]    # 注册    driver = webdriver.Firefox()    driver.get(&quot;http://localhost:1080/webtours&quot;)    driver.switch_to_default_content()    driver.switch_to_frame(&quot;body&quot;)    driver.switch_to_frame(&quot;info&quot;)    # driver.find_element_by_link_text(&quot;sign up now&quot;).click()    driver.find_element_by_partial_link_text(&quot;sign up&quot;).click()    sleep(3)    driver.switch_to_default_content()    driver.switch_to_frame(&quot;body&quot;)    driver.switch_to_frame(&quot;info&quot;)    driver.find_element_by_name(&quot;username&quot;).send_keys(username)    driver.find_element_by_name(&quot;password&quot;).send_keys(password)    driver.find_element_by_name(&quot;passwordConfirm&quot;).send_keys(password)    driver.find_element_by_name(&quot;register&quot;).click()    sleep(3)    driver.switch_to_default_content()    driver.switch_to_frame(&quot;body&quot;)    driver.switch_to_frame(&quot;info&quot;)    expect = &quot;Thank you, &quot; + username    actual = driver.find_element_by_tag_name(&quot;body&quot;).text    if expect in actual:        print(&quot;测试通过&quot;)    else:        print(&quot;测试失败&quot;)driver.quit()</code></pre><h2 id="测试登录、订票功能"><a href="#测试登录、订票功能" class="headerlink" title="测试登录、订票功能"></a>测试登录、订票功能</h2><pre><code>from selenium import webdriverfrom time import sleepfrom selenium.webdriver.support.select import Selectdriver = webdriver.Firefox()driver.get(&quot;http://localhost:1080/webtours&quot;)sleep(3)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)actual = driver.find_element_by_tag_name(&quot;body&quot;).textif &quot;Welcome to the Web Tours site&quot; in actual:    print(&quot;打开网站成功&quot;)else:    print(&quot;打开网站失败&quot;)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;navbar&quot;)driver.find_element_by_name(&quot;username&quot;).send_keys(&quot;jojo&quot;)driver.find_element_by_name(&quot;password&quot;).send_keys(&quot;bean&quot;)driver.find_element_by_name(&quot;login&quot;).click()sleep(3)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)actual = driver.find_element_by_tag_name(&quot;body&quot;).textif &quot;Welcome, jojo&quot; in actual:    print(&quot;登录成功&quot;)else:    print(&quot;登录失败&quot;)sleep(3)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;navbar&quot;)driver.find_element_by_xpath(&quot;//img[@alt=&#39;Search Flights Button&#39;]&quot;).click()sleep(3)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)Select(driver.find_element_by_name(&quot;depart&quot;)).select_by_visible_text(&quot;Denver&quot;)Select(driver.find_element_by_name(&quot;arrive&quot;)).select_by_visible_text(&quot;London&quot;)driver.find_element_by_name(&quot;findFlights&quot;).click()sleep(3)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)driver.find_elements_by_name(&quot;outboundFlight&quot;)[1].click()driver.find_element_by_name(&quot;reserveFlights&quot;).click()sleep(1)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)driver.find_element_by_name(&quot;buyFlights&quot;).click()sleep(1)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)actual = driver.find_element_by_tag_name(&quot;body&quot;).textif &quot;Thank you for booking through Web Tours.&quot; in actual:    print(&quot;订票成功&quot;)else:    print(&quot;订票失败&quot;)sleep(3)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)driver.find_element_by_name(&quot;Book Another&quot;).click()sleep(1)driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;navbar&quot;)driver.find_element_by_xpath(&quot;//img[@alt=&#39;SignOff Button&#39;]&quot;).click()driver.switch_to_default_content()driver.switch_to_frame(&quot;body&quot;)driver.switch_to_frame(&quot;info&quot;)actual = driver.find_element_by_tag_name(&quot;body&quot;).textif &quot;Welcome to the Web Tours site&quot; in actual:    print(&quot;注销成功&quot;)else:    print(&quot;注销失败&quot;)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;pyhon-selenium测试WebTours网站登录注册功能&quot;&gt;&lt;a href=&quot;#pyhon-selenium测试WebTours网站登录注册功能&quot; class=&quot;headerlink&quot; title=&quot;pyhon+selenium测试WebTours网站登录</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="自动化测试" scheme="http://example.com/categories/python/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="selenium" scheme="http://example.com/categories/python/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/selenium/"/>
+    
+    <category term="pyhon+selenium测试webtours网站登录注册功能" scheme="http://example.com/categories/python/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/selenium/pyhon-selenium%E6%B5%8B%E8%AF%95webtours%E7%BD%91%E7%AB%99%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="自动化测试" scheme="http://example.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="selenium" scheme="http://example.com/tags/selenium/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 104.二叉树的最大深度</title>
@@ -604,38 +638,6 @@ handler:
     <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
     
     <category term="基于线程池技术的简单Web服务器" scheme="http://example.com/tags/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E7%AE%80%E5%8D%95Web%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>并发 | CountDownLatch</title>
-    <link href="http://example.com/2022/05/30/CountDownLatch/"/>
-    <id>http://example.com/2022/05/30/CountDownLatch/</id>
-    <published>2022-05-31T02:01:48.000Z</published>
-    <updated>2022-06-07T13:17:45.566Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><p>CountDownLatch允许一个或多个线程等待其他线程完成操作。<br>例如：</p><pre><code>CountDownLatch c = new CountDownLatch(2)；</code></pre><p>CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.<br>当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前<br>线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的<strong>N个点，可以是N个线程，也可以<br>是1个线程里的N个步骤</strong>。<br><strong>注：CountDownLatch的计数器智能使用一次</strong></p><span id="more"></span><p><strong>示例代码1</strong></p><pre><code>package concurrency.countdownlatch;import java.util.concurrent.CountDownLatch;public class CountDownLatchTest1 &#123;    static CountDownLatch c = new CountDownLatch(2);        public static void main(String[] args) throws InterruptedException &#123;        new Thread(new Runnable()&#123;            @Override            public void run() &#123;                System.out.println(&quot;parser1 finished&quot;);                c.countDown();            &#125;        &#125;).start();                new Thread(new Runnable()&#123;            @Override            public void run() &#123;                System.out.println(&quot;parser2 finished&quot;);                c.countDown();            &#125;        &#125;).start();        c.await();        System.out.println(&quot;all parsers finished&quot;);    &#125;&#125;</code></pre><p><strong>示例代码2</strong></p><pre><code>package concurrency.countdownlatch;import java.util.concurrent.CountDownLatch;public class CountDownLatchTest2 &#123;    static CountDownLatch c = new CountDownLatch(2);    public static void main(String[] args) throws InterruptedException &#123;        new Thread(new Runnable()&#123;            @Override            public void run() &#123;                System.out.println(&quot;1&quot;);                c.countDown();                System.out.println(&quot;2&quot;);                c.countDown();            &#125;        &#125;).start();        c.await();        System.out.println(&quot;3&quot;);    &#125; &#125;</code></pre><p><a href="https://blog.csdn.net/hbtj_1216/article/details/109655995">CountDownLatch</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;CountDownLatch&quot;&gt;&lt;a href=&quot;#CountDownLatch&quot; class=&quot;headerlink&quot; title=&quot;CountDownLatch&quot;&gt;&lt;/a&gt;CountDownLatch&lt;/h1&gt;&lt;p&gt;CountDownLatch允许一个或多个线程等待其他线程完成操作。&lt;br&gt;例如：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;CountDownLatch c = new CountDownLatch(2)；
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.&lt;br&gt;当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前&lt;br&gt;线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的&lt;strong&gt;N个点，可以是N个线程，也可以&lt;br&gt;是1个线程里的N个步骤&lt;/strong&gt;。&lt;br&gt;&lt;strong&gt;注：CountDownLatch的计数器智能使用一次&lt;/strong&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Java" scheme="http://example.com/categories/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="CountDownLatch" scheme="http://example.com/categories/Java/%E5%B9%B6%E5%8F%91/CountDownLatch/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="CountDownLatch" scheme="http://example.com/tags/CountDownLatch/"/>
     
   </entry>
   
