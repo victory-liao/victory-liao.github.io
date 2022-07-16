@@ -190,6 +190,160 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/" class="post-title-link" itemprop="url">python-docx | Python检查word文件中的特殊标记词是否与文件名中的一致</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 04:43:47 / Modified: 04:46:11" itemprop="dateCreated datePublished" datetime="2021-10-29T04:43:47-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/" itemprop="url" rel="index"><span itemprop="name">python-docx</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python检查word文件中的特殊标记词是否与文件名中的一致"><a href="#Python检查word文件中的特殊标记词是否与文件名中的一致" class="headerlink" title="Python检查word文件中的特殊标记词是否与文件名中的一致"></a>Python检查word文件中的特殊标记词是否与文件名中的一致</h1><p>公司的部分文件分为“内部”和“外部”。正常情况下，这个标识在文件名及文件首页左上角都有标注。然鹅，有时候操作一下，忘记改了，或者忘记标注了。就需要回头去一个一个地整理，非常麻烦。这种重复的，繁杂的操作，尽快冲Python来，人类还是应该多做做其它更有意思的事。</p>
+<p>代码：</p>
+<pre><code>import os
+from win32com import client as wc  # 导入模块
+import docx
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+# 将文件夹内的所有doc转存为docx文件
+path = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径
+files = []
+for file in os.listdir(path):
+    if file.endswith(&quot;.doc&quot;):  # 排除文件夹内的其他干扰文件，只获取&quot;.doc&quot;后缀的word文件
+        files.append(path+file)
+
+word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
+for file in files:
+    doc = word.Document(file)  # 打开word文件
+    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
+    doc.Close()  # 关闭原来word文件
+word.Quit()
+
+for file in files:  # 删除doc文件
+    os.remove(file)
+
+# 获取所有docx文件路径
+docx_files = []
+for file in os.listdir(path):  # 排除文件夹内的其它干扰文件，只获取&quot;.doc&quot;后缀的word文件
+    if file.endswith(&quot;.docx&quot;):
+        docx_files.append(path+file)
+
+counter = 0  # 计数器，用于记录有多少文件没被处理
+
+for file in docx_files:
+    file_head = file.split(&#39;.&#39;)[0].rstrip()  # 文件名头，类似这样的“C:\\Users\\文件\\测试”
+    file_tail = file.split(&#39;\\&#39;)[-1]  # 文件名尾，类似这样“测试.docx”
+    mark_words = [&quot;公开&quot;, &quot;内部&quot;]
+    mark_fileName = file_head[-3:-1]  # 文件名中倒数第2,3个文字
+
+    doc = docx.Document(file)
+    mark_doc = doc.paragraphs[0].text  # 文件中首段文字
+    # 比对标记词
+    if mark_doc in mark_words:  # 判断文件中有无标记
+        if mark_fileName in mark_words:  # 判断文件名中有无标记
+            if mark_doc == mark_fileName:  # 如果二者标记相同
+                counter += 1
+                pass
+            else:  # 二者标记不同
+                os.rename(file, file.replace(mark_fileName, mark_doc))  # 重命名文件
+                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_doc&#125;】&quot;)
+        else:
+            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_doc&#125;）.docx&quot;)  # 文件名中无标记，则加标记
+            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_doc&#125;】&quot;)
+    else:
+        # 文中无标记，则在首段前插入一段，写入标记
+        p = doc.paragraphs[0]
+        pNew = p.insert_paragraph_before()
+        run = pNew.add_run(mark_words[0])  # 写为“公开”
+        # 字体设置
+        run.font.size = Pt(16)
+        run.font.name = &quot;黑体&quot;
+        r = run._element.rPr.rFonts
+        r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)
+
+        doc.save(file)
+        print(f&quot;【&#123;file_tail&#125;】内容增加标识为【&#123;mark_words[0]&#125;】&quot;)
+
+        if mark_fileName in mark_words:  # 查看文件名中是否有标记
+            if mark_fileName == mark_words[0]:  # 标记是否为“公开”
+                pass
+            else:  # 标记不是“公开”则替换
+                os.rename(file, file.replace(mark_fileName, mark_words[0]))  # 重命名文件
+                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_words[0]&#125;】&quot;)
+        else:
+            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_words[0]&#125;）.docx&quot;)  # 文件名中无标记，则加标记
+            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_words[0]&#125;】&quot;)
+
+print(f&quot;完成！共检查&#123;len(docx_files)&#125;个文件,处理了 &#123;len(docx_files) - counter&#125; 个文件。&quot;)
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E6%96%B0%E6%96%87%E7%AB%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1586,121 +1740,6 @@ To_word(data, &quot;加法题&quot;)
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/" class="post-title-link" itemprop="url">pdfplumber | 一键提取PDF中的表格到Excel</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-10-28 18:28:29" itemprop="dateCreated datePublished" datetime="2021-10-28T18:28:29-08:00">2021-10-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-10-29 00:32:01" itemprop="dateModified" datetime="2021-10-29T00:32:01-08:00">2021-10-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pdfplumber/" itemprop="url" rel="index"><span itemprop="name">pdfplumber</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
-<pre><code>import os
-import pdfplumber
-from openpyxl import Workbook
-
-path = &#39;PDF&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-key_words = &quot;主要会计数据&quot;
-
-for file in files:
-    with pdfplumber.open(file) as p:
-        wb = Workbook()  # 新建excel工作簿
-        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
-
-        # 获取关键词所在页及下一页的页码
-        pages_wanted = []
-        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
-            if key_words in page.extract_text():
-                pages_wanted.append(index)
-                pages_wanted.append(index + 1)
-                break
-
-        # 提取指定页码里的表格
-        for i in pages_wanted:
-            page = p.pages[i]
-            tables = page.extract_tables()  # 读取表格
-            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
-                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
-                for table in tables:  # 遍历所有列表
-                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
-                        ws.append(row)  # 写入excel表
-        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
-</code></pre>
-<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1772,14 +1811,14 @@ for file in files:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">425</span>
+          <span class="site-state-item-count">426</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">280</span>
+        <span class="site-state-item-count">281</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
