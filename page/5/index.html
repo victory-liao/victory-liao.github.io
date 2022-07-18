@@ -190,6 +190,135 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">Redis | 集群搭建</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-05-20 20:19:56 / Modified: 20:50:47" itemprop="dateCreated datePublished" datetime="2022-05-20T20:19:56-08:00">2022-05-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">集群搭建</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p>
+<pre><code>include /opt/myRedis/redis.conf
+pidfile &quot;/var/run/redis6379.pid&quot;
+port 6379
+dbfilename &quot;dump6379.rdb&quot;
+cluster-enabled yes
+cluster-config-file nodes-6379.conf
+cluster-node-timeout 15000
+</code></pre>
+<p>(2)redis6380.conf</p>
+<pre><code>include /opt/myRedis/redis.conf
+pidfile &quot;/var/run/redis6380.pid&quot;
+port 6380
+dbfilename &quot;dump6380.rdb&quot;
+cluster-enabled yes
+cluster-config-file nodes-6380.conf
+cluster-node-timeout 15000
+</code></pre>
+<p>(3)redis6381.conf</p>
+<pre><code>include /opt/myRedis/redis.conf
+pidfile &quot;/var/run/redis6381.pid&quot;
+port 6381
+dbfilename &quot;dump6381.rdb&quot;
+cluster-enabled yes
+cluster-config-file nodes-6381.conf
+cluster-node-timeout 15000
+</code></pre>
+<p>(4)redis6389.conf</p>
+<pre><code>include /opt/myRedis/redis.conf
+pidfile &quot;/var/run/redis6389.pid&quot;
+port 6389
+dbfilename &quot;dump6389.rdb&quot;
+cluster-enabled yes
+cluster-config-file nodes-6389.conf
+cluster-node-timeout 15000
+</code></pre>
+<p>(5)redis6390.conf</p>
+<pre><code>include /opt/myRedis/redis.conf
+pidfile &quot;/var/run/redis6390.pid&quot;
+port 6390
+dbfilename &quot;dump6390.rdb&quot;
+cluster-enabled yes
+cluster-config-file nodes-6390.conf
+cluster-node-timeout 15000
+</code></pre>
+<p>(6)redis6391.conf</p>
+<pre><code>include /opt/myRedis/redis.conf
+pidfile &quot;/var/run/redis6391.pid&quot;
+port 6391
+dbfilename &quot;dump6391.rdb&quot;
+cluster-enabled yes
+cluster-config-file nodes-6391.conf
+cluster-node-timeout 15000
+</code></pre>
+<p>5.启动所有redis实例，nodes-xxxx.conf文件都生成正常。<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/1.PNG"><br>6.将六个实例组合到一个集群当中</p>
+<pre><code>redis-cli --cluster create 192.168.1.108:6379 192.168.1.108:6380 192.168.1.108:6381 192.168.1.108:6389 192.168.1.108:6390 192.168.1.108:6391 --cluster-replicas 1
+</code></pre>
+<p>7.启动客户端并查看集群<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/2.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/15/Redis%E5%85%B3%E9%97%AD%E6%9C%8D%E5%8A%A1%E6%8A%A5%E9%94%99/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1056,120 +1185,6 @@ public class ThreadPoolCreationTest &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/23/ThreadLocal/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/23/ThreadLocal/" class="post-title-link" itemprop="url">Java | ThreadLocal</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-23 20:07:49 / Modified: 20:10:42" itemprop="dateCreated datePublished" datetime="2022-04-23T20:07:49-08:00">2022-04-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/ThreadLocal/" itemprop="url" rel="index"><span itemprop="name">ThreadLocal</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p>
-<p><strong>代码：</strong></p>
-<pre><code>import java.text.SimpleDateFormat;
-import java.util.Random;
-
-public class ThreadLocalTest implements Runnable&#123;
-
-    //private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = ThreadLocal.withInitial(()-&gt;new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;));
-    private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = new ThreadLocal&lt;SimpleDateFormat&gt;()&#123;
-        @Override
-        protected SimpleDateFormat initialValue()&#123;
-            return new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;);
-        &#125;
-    &#125;;
-    
-    @Override
-    public void run() &#123;
-        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; default formatter=&quot;+formatter.get().toPattern());
-        try &#123;
-            Thread.sleep(new Random().nextInt(1000));
-        &#125; catch (InterruptedException e) &#123;
-            e.printStackTrace();
-        &#125;
-        formatter.set(new SimpleDateFormat());
-        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; current formatter=&quot;+formatter.get().toPattern());
-        
-    &#125;
-    
-    public static void main(String[] args) throws InterruptedException&#123;
-        ThreadLocalTest obj = new ThreadLocalTest();
-        for(int i=0;i&lt;10;i++)&#123;
-            Thread t = new Thread(obj, &quot;&quot;+i);
-            Thread.sleep(new Random().nextInt(1000));
-            t.start();
-        &#125;
-    &#125;
-    
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1241,14 +1256,14 @@ public class ThreadLocalTest implements Runnable&#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">434</span>
+          <span class="site-state-item-count">435</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">329</span>
+        <span class="site-state-item-count">330</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

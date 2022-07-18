@@ -190,6 +190,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习 | 决策树</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-22 19:07:49" itemprop="dateCreated datePublished" datetime="2021-02-22T19:07:49-08:00">2021-02-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-03 05:14:33" itemprop="dateModified" datetime="2021-07-03T05:14:33-08:00">2021-07-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Decision-Tree/" itemprop="url" rel="index"><span itemprop="name">Decision Tree</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>决策树(Decision Tree)是一种基本的<b>分类与回归方法</b>。决策树由结点(Node)和有向边(Directed Edge)组成。结点有两种类型：内部结点(Internnal Node)和叶结点(Leaf Node)。内部结点表示一个特征或属性，叶结点表示一个类。决策树还有一个唯一的根结点(Root Node)。</p>
+<p>我们可以把<b>决策树</b>看成一个<b>if-then规则的集合</b>,将决策树转换成if-then规则的过程是这样的：<br><br>由决策树的根结点到叶结点的每一条路径构建一条规则；路径上内部结点的特征对应着规则的条件，而叶结点对应着规则的结论。<br><br>决策树的路径或其对应的if-then规则集合具有一个重要性质：<b>互斥并且完备</b>(每一个实例都只能被一条路径或一条规则所覆盖(覆盖：实例的特征与路径上的特征一致或实例满足规则的条件))。<br></p>
+<h2 id="决策树做预测的步骤"><a href="#决策树做预测的步骤" class="headerlink" title="决策树做预测的步骤"></a>决策树做预测的步骤</h2><p>1.收集数据<br>2.准备数据(将收集的数据按照一定规则整理出来,方便后续进行处理)<br>3.分析数据(在决策树构造完成后，检查决策树图形是否符合预期)<br>4.训练算法(构造决策树/决策树学习—&gt;构造一个决策树的数据结构)<br>5.测试算法(使用经验树计算错误率。当错误率达到可接受范围，这个决策树就可以投放使用)<br>6.使用算法(<b>决策树可以更好地理解数据的内在含义</b>)</p>
+<h2 id="如何构建决策树？—构建决策树的3个步骤"><a href="#如何构建决策树？—构建决策树的3个步骤" class="headerlink" title="如何构建决策树？—构建决策树的3个步骤"></a>如何构建决策树？—构建决策树的3个步骤</h2><h3 id="1-特征选择"><a href="#1-特征选择" class="headerlink" title="1.特征选择"></a>1.特征选择</h3><p><b>特征选择就是决定用哪个特征来划分特征空间</b><br><b>特征选择在于选取训练数据具有分类能力的特征</b><br>特征选择的标准：信息增益(Information Gain)/信息增益比。信息增益：在划分数据集之后信息发生的变化。<br><b style="color:red">Note:信息增益最高的特征是最好的选择</b></p>
+<h4 id="1-1香农熵-熵-信息论之父克劳德-香农：集合信息的度量方式。"><a href="#1-1香农熵-熵-信息论之父克劳德-香农：集合信息的度量方式。" class="headerlink" title="1.1香农熵(熵)-信息论之父克劳德.香农：集合信息的度量方式。"></a>1.1香农熵(熵)-信息论之父克劳德.香农：集合信息的度量方式。</h4><p>熵定义为信息的期望值。在信息论与概率论中，熵是表示随机变脸不确定性的度量。如果待分类的事物可能划分在多个分类之中，则符号xi的信息定义为：<br><br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/1.png"><br>其中p(xi)是该分类的概率。<br><br>通过上式，我们可以得到所有类别的信息。为了计算<b>熵，我们需要计算所有类别所有可能值包含的信息期望值</b>(<b>数学期望-反应随机变量平均取值的大小<b>)，公式如下：<br><br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/2.png"><br>其中n是分类的数目。<b>熵越大，随机变量的不确定性就越大。</b></b></b></p>
+<p>当熵中的概率由数据估计(特别是最大似然估计-Maximum Likelihood Estimation)得到时，所对应的熵称为<b>经验熵</b>(Empirical Entropy)</p>
+<p>我们定义样本数据表中的数据为训练数据集D，则训练数据集D的经验熵为H(D)，|D|表示其样本容量，及样本个数。设有K个类Ck, = 1,2,3,…,K,|Ck|为属于类Ck的样本个数，因此经验熵公式就可以写为 ：<br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/3.png"></p>
+<h4 id="1-2信息增益"><a href="#1-2信息增益" class="headerlink" title="1.2信息增益"></a>1.2信息增益</h4><p>如何选择特征，需要看信息增益。也就是说，信息增益是相对特征而言的，信息增益越大，特征对最终的分类结果影响也就越大，我们就应该选择对最终分类结果影响最大的那个特征作为我们的分类特征。</p>
+<p><b>条件熵H(Y|X)</b>表示在一直随机变量X的条件下随机变量Y的不确定性，随机变量X给定条件下随机变量Y的条件熵(Conditional Entropy)H(Y|X)，定义为X给定条件下Y的条件概率分布的熵对X的数学期望：<br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/4.jpg"><br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/5.jpg"><br>当条件熵中的概率由数据估计(特别是极大似然估计)得到时，岁对应的条件熵称为<b>条件经验熵</b>(empirical conditional entropy)。</p>
+<p>特征A对训练数据集D的信息增益g(D,A)，定义为集合D的经验熵H(D)与特征A给定条件下D的经验条件熵H(D|A)之差，即：<br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/6.jpg"><br><b>Note:</b>一般地，熵H(D)与条件熵H(D|A)之差称为互信息(mutual information)。决策树学习中的信息增益等价于训练数据集中类与特征的互信息。</p>
+<p>设特征A有n个不同的取值{a1,a2,···,an}，根据特征A的取值将D划分为n个子集{D1,D2，···,Dn}，|Di|为Di的样本个数。记子集Di中属于Ck的样本的集合为Dik，即Dik = Di ∩ Ck，|Dik|为Dik的样本个数。于是经验条件熵的公式可以些为：<br><img src="/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/7.jpg"></p>
+<h2>总结</h2>
+<h3>决策树的一些优点</h3>
+1.<b>易于理解和解释</b>。决策树可以<b>可视化</b>。<br>
+2.<b>几乎不需要数据预处理</b>。其他方法经常需要数据标准化，创建虚拟变量和删除缺失值。决策树还不支持缺失值。<br>
+3.使用树的<b>花费</b>(例如预测数据)是训练数据点(data points)数量的<b>对数</b>。<br>
+4.可以<b>同时处理数值变量和分类变量</b>。其他方法大都适用于分析一种变量的集合。<br>
+5.可以处理<b>多值输出</b>变量问题<br>
+6.使用<b>白盒模型</b>.如果一个情况被观察到，使用逻辑判断容易表示这种规则。相反，如果是<b>黑盒模型</b>(例如<b>人工神经网络</b>)，结果会非常<b>难解释</b>。<br>
+7.即使对真实模型来说，假设无效的情况下，也可以较好的使用<br>
+<h3>决策树的一些缺点</h3>
+1.决策树学习可能创建一个过于复杂的树，并不能很好的预测数据。也就是<b>过拟合</b>。修剪机制（现在不支持），<b>设置一个叶子节点需要的最小样本数量，或者数的最大深度，可以避免过拟合</b>。<br>
+2.<b>决策树可能是不稳定的</b>，因为即使非常小的变异，可能会产生一颗完全不同的树。这个问题通过decision trees with an ensemble来缓解。<br>
+3.<b>概念难以学习</b>，因为决策树没有很好的解释他们，例如，XOR, parity or multiplexer problems(奇偶校验或多路复用器问题)。<br>
+4.<b>如果某些分类占优势，决策树将会创建一棵有偏差的树</b>。因此，建议在训练之前，先抽样使样本均衡。<br>
+
+<p><a target="_blank" rel="noopener" href="https://cuijiahua.com/blog/2017/11/ml_2_decision_tree_1.html">参考资源1</a><br><a target="_blank" rel="noopener" href="https://cuijiahua.com/blog/2017/11/ml_3_decision_tree_2.html">参考资源2</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -988,84 +1092,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/" class="post-title-link" itemprop="url">电脑使用小技巧 | windows关闭弹框广告</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-28 18:38:38" itemprop="dateCreated datePublished" datetime="2021-01-28T18:38:38-08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-06 19:17:05" itemprop="dateModified" datetime="2021-11-06T19:17:05-08:00">2021-11-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%B5%E8%84%91%E4%BD%BF%E7%94%A8%E5%B0%8F%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">电脑使用小技巧</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%B5%E8%84%91%E4%BD%BF%E7%94%A8%E5%B0%8F%E6%8A%80%E5%B7%A7/%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/" itemprop="url" rel="index"><span itemprop="name">关闭弹框广告</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="如何关闭烦人的桌面广告弹框"><a href="#如何关闭烦人的桌面广告弹框" class="headerlink" title="如何关闭烦人的桌面广告弹框"></a>如何关闭烦人的桌面广告弹框</h1><p>1.打开“控制面板”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/1.png"><br>2.进入“网络和Internet”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/2.png"><br>3.进入“Internet选项”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/3.png"><br>4.选择“隐私”选项卡，勾选“启用弹出窗口阻止程序”，然后点“设置”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/4.png"><br>5.阻止级别选“高”，点击“关闭”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/5.png"><br>6.重启电脑</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1137,14 +1163,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">434</span>
+          <span class="site-state-item-count">435</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">329</span>
+        <span class="site-state-item-count">330</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
