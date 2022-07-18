@@ -6227,54 +6227,6 @@ public class TestController &#123;
       </tags>
   </entry>
   <entry>
-    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
-    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
-<pre><code>/**
- * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
- * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
- */
-//往作用域中放值方式1
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public ModelAndView param()&#123;
-//        ModelAndView mav = new ModelAndView();
-//        //javaWEB： request.setAttribute(xxx) 
-//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
-//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
-//        return mav;
-//    &#125;
-    
-    //往作用域中放值方式2
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public String param(Map&lt;String, Object&gt; map)&#123;
-//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
-//        return &quot;success&quot;;//返回视图名称
-//    &#125;
-
-//往作用域中放值方式3
-@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-public String param(Model model)&#123;
-    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
-    return &quot;success&quot;;//返回视图名称
-&#125;
-</code></pre>
-<p>并在param.jsp页面获取request作用域中的值</p>
-<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
-    $&#123;username&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>处理请求过程中往作用域中放值的三种方式</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
-        <tag>ModelAndView</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SpringMVC | 处理请求数据</title>
     <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="处理请求数据"><a href="#处理请求数据" class="headerlink" title="处理请求数据"></a>处理请求数据</h1><p>1.项目目录<br><img src="/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/1.PNG"></p>
@@ -6528,6 +6480,54 @@ public class ParamController &#123;
         <tag>CookieValue注解</tag>
         <tag>使用POJO获取客户端数据</tag>
         <tag>获取servletAPI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
+    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
+<pre><code>/**
+ * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
+ * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
+ */
+//往作用域中放值方式1
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public ModelAndView param()&#123;
+//        ModelAndView mav = new ModelAndView();
+//        //javaWEB： request.setAttribute(xxx) 
+//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
+//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
+//        return mav;
+//    &#125;
+    
+    //往作用域中放值方式2
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public String param(Map&lt;String, Object&gt; map)&#123;
+//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
+//        return &quot;success&quot;;//返回视图名称
+//    &#125;
+
+//往作用域中放值方式3
+@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+public String param(Model model)&#123;
+    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
+    return &quot;success&quot;;//返回视图名称
+&#125;
+</code></pre>
+<p>并在param.jsp页面获取request作用域中的值</p>
+<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
+    $&#123;username&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>处理请求过程中往作用域中放值的三种方式</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+        <tag>ModelAndView</tag>
       </tags>
   </entry>
   <entry>
@@ -7901,32 +7901,6 @@ such references are cleared or themselves become unreachable.
       </tags>
   </entry>
   <entry>
-    <title>json</title>
-    <url>/2022/03/13/json/</url>
-    <content><![CDATA[<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>1.json有两种对象<br>（1）json对象：{key1:value1,key2:value2,…}<br>（2）json数组：[value1,value2,…]<br>2.解析方式<br>（1）Json对象解析方式：对象.key<br>（2）json数组解析方式：for循环遍历<br>3.java对象转换json<br>（1）Bean和map—&gt;json对象<br>（2）List—&gt;json数组</p>
-<p><strong>示例：</strong><br>数据：<br>    user：id=1,username=admin,age=23,sex=男</p>
-<p>Xml方式:</p>
-<pre><code>&lt;userinfo&gt;
-    &lt;user&gt;
-        &lt;id&gt;1&lt;/id&gt;
-        &lt;username&gt;admin&lt;/username&gt;
-        &lt;age&gt;23&lt;/age&gt;
-        &lt;sex&gt;男&lt;/sex&gt;
-    &lt;/user&gt;
-&lt;/userinfo&gt;
-</code></pre>
-<p>Json方式:</p>
-<pre><code>&#123;id:1,username:admin,age:23,sex:男&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>json</category>
-      </categories>
-      <tags>
-        <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | jdbc</title>
     <url>/2022/01/25/jdbc/</url>
     <content><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
@@ -7950,6 +7924,32 @@ such references are cleared or themselves become unreachable.
       <tags>
         <tag>Java</tag>
         <tag>jdbc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>json</title>
+    <url>/2022/03/13/json/</url>
+    <content><![CDATA[<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>1.json有两种对象<br>（1）json对象：{key1:value1,key2:value2,…}<br>（2）json数组：[value1,value2,…]<br>2.解析方式<br>（1）Json对象解析方式：对象.key<br>（2）json数组解析方式：for循环遍历<br>3.java对象转换json<br>（1）Bean和map—&gt;json对象<br>（2）List—&gt;json数组</p>
+<p><strong>示例：</strong><br>数据：<br>    user：id=1,username=admin,age=23,sex=男</p>
+<p>Xml方式:</p>
+<pre><code>&lt;userinfo&gt;
+    &lt;user&gt;
+        &lt;id&gt;1&lt;/id&gt;
+        &lt;username&gt;admin&lt;/username&gt;
+        &lt;age&gt;23&lt;/age&gt;
+        &lt;sex&gt;男&lt;/sex&gt;
+    &lt;/user&gt;
+&lt;/userinfo&gt;
+</code></pre>
+<p>Json方式:</p>
+<pre><code>&#123;id:1,username:admin,age:23,sex:男&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>json</category>
+      </categories>
+      <tags>
+        <tag>json</tag>
       </tags>
   </entry>
   <entry>
