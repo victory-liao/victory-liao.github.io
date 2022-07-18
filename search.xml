@@ -6227,6 +6227,54 @@ public class TestController &#123;
       </tags>
   </entry>
   <entry>
+    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
+    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
+<pre><code>/**
+ * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
+ * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
+ */
+//往作用域中放值方式1
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public ModelAndView param()&#123;
+//        ModelAndView mav = new ModelAndView();
+//        //javaWEB： request.setAttribute(xxx) 
+//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
+//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
+//        return mav;
+//    &#125;
+    
+    //往作用域中放值方式2
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public String param(Map&lt;String, Object&gt; map)&#123;
+//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
+//        return &quot;success&quot;;//返回视图名称
+//    &#125;
+
+//往作用域中放值方式3
+@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+public String param(Model model)&#123;
+    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
+    return &quot;success&quot;;//返回视图名称
+&#125;
+</code></pre>
+<p>并在param.jsp页面获取request作用域中的值</p>
+<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
+    $&#123;username&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>处理请求过程中往作用域中放值的三种方式</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+        <tag>ModelAndView</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringMVC | 处理请求数据</title>
     <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="处理请求数据"><a href="#处理请求数据" class="headerlink" title="处理请求数据"></a>处理请求数据</h1><p>1.项目目录<br><img src="/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/1.PNG"></p>
@@ -6480,54 +6528,6 @@ public class ParamController &#123;
         <tag>CookieValue注解</tag>
         <tag>使用POJO获取客户端数据</tag>
         <tag>获取servletAPI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
-    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
-<pre><code>/**
- * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
- * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
- */
-//往作用域中放值方式1
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public ModelAndView param()&#123;
-//        ModelAndView mav = new ModelAndView();
-//        //javaWEB： request.setAttribute(xxx) 
-//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
-//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
-//        return mav;
-//    &#125;
-    
-    //往作用域中放值方式2
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public String param(Map&lt;String, Object&gt; map)&#123;
-//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
-//        return &quot;success&quot;;//返回视图名称
-//    &#125;
-
-//往作用域中放值方式3
-@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-public String param(Model model)&#123;
-    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
-    return &quot;success&quot;;//返回视图名称
-&#125;
-</code></pre>
-<p>并在param.jsp页面获取request作用域中的值</p>
-<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
-    $&#123;username&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>处理请求过程中往作用域中放值的三种方式</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
-        <tag>ModelAndView</tag>
       </tags>
   </entry>
   <entry>
@@ -7901,32 +7901,6 @@ such references are cleared or themselves become unreachable.
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | jdbc</title>
-    <url>/2022/01/25/jdbc/</url>
-    <content><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;c3p0-config&gt;
-    &lt;default-config&gt;
-        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
-        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
-        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
-        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
-    &lt;/default-config&gt; 
-&lt;/c3p0-config&gt; 
-</code></pre>
-<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>jdbc封装类和数据库连接池</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>jdbc</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>json</title>
     <url>/2022/03/13/json/</url>
     <content><![CDATA[<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>1.json有两种对象<br>（1）json对象：{key1:value1,key2:value2,…}<br>（2）json数组：[value1,value2,…]<br>2.解析方式<br>（1）Json对象解析方式：对象.key<br>（2）json数组解析方式：for循环遍历<br>3.java对象转换json<br>（1）Bean和map—&gt;json对象<br>（2）List—&gt;json数组</p>
@@ -7950,6 +7924,32 @@ such references are cleared or themselves become unreachable.
       </categories>
       <tags>
         <tag>json</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb项目开发 | jdbc</title>
+    <url>/2022/01/25/jdbc/</url>
+    <content><![CDATA[<h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;c3p0-config&gt;
+    &lt;default-config&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
+    &lt;/default-config&gt; 
+&lt;/c3p0-config&gt; 
+</code></pre>
+<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>jdbc封装类和数据库连接池</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>jdbc</tag>
       </tags>
   </entry>
   <entry>
@@ -8754,6 +8754,20 @@ print(data2)
       </tags>
   </entry>
   <entry>
+    <title>python | python中的iter()与next()</title>
+    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
+    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
+<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
+<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>random | python为每个学生出不一样的题</title>
     <url>/2021/10/29/python%E4%B8%BA%E6%AF%8F%E4%B8%AA%E5%AD%A6%E7%94%9F%E5%87%BA%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E9%A2%98/</url>
     <content><![CDATA[<h1 id="python为每个学生出不一样的题"><a href="#python为每个学生出不一样的题" class="headerlink" title="python为每个学生出不一样的题"></a>python为每个学生出不一样的题</h1><p>实现代码：</p>
@@ -9079,20 +9093,6 @@ To_word(data, &quot;加法题&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>random</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | python中的iter()与next()</title>
-    <url>/2021/02/26/python%E4%B8%AD%E7%9A%84iter-%E4%B8%8Enext/</url>
-    <content><![CDATA[<h1 id="python中的iter-与next"><a href="#python中的iter-与next" class="headerlink" title="python中的iter()与next()"></a>python中的iter()与next()</h1><p>可迭代对象(Iterable)：可以直接作用于for循环的对象</p>
-<p>分类：<br>1.集合数据类型 list、tuple、dict、set、str<br>2.generator(包括生成器和带yield的generator function)<br>Note:生成器不但可以作用于 for 循环，还可以被 next() 函数不断调用并返回下一个值</p>
-<p>生成器都是Iterator,但list、tuple、dict、str、set虽然是Iterable,却不是Iterator，可以使用iter()函数把list…Iterable编程Iterator</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -10126,6 +10126,22 @@ re.search(r&quot;dogs&quot;,s)#匹配成功
       </tags>
   </entry>
   <entry>
+    <title>python | re sub的使用方法</title>
+    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
+<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>re</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>re</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>matplotlib | recorded EEG visualization</title>
     <url>/2021/10/12/recorded-EEG-visualization/</url>
     <content><![CDATA[<h1 id="recorded-EEG-visualization"><a href="#recorded-EEG-visualization" class="headerlink" title="recorded EEG visualization"></a>recorded EEG visualization</h1><p>在做脑电（EEG）的相关研究时,通常我们需要使用公开的脑电数据集合，公开数据集包含了以及采集好的脑电数据。<br>我们可以使用python的第三方库matplotlib将数据集中的脑电数据进行可视化。</p>
@@ -10211,22 +10227,6 @@ print(&quot;脑电波绘制完成！&quot;)
       </categories>
       <tags>
         <tag>matplotlib</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | re sub的使用方法</title>
-    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
-<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>re</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>re</tag>
       </tags>
   </entry>
   <entry>
@@ -11564,16 +11564,6 @@ public class Counter &#123;
       </tags>
   </entry>
   <entry>
-    <title>电脑使用小技巧 | windows关闭弹框广告</title>
-    <url>/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/</url>
-    <content><![CDATA[<h1 id="如何关闭烦人的桌面广告弹框"><a href="#如何关闭烦人的桌面广告弹框" class="headerlink" title="如何关闭烦人的桌面广告弹框"></a>如何关闭烦人的桌面广告弹框</h1><p>1.打开“控制面板”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/1.png"><br>2.进入“网络和Internet”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/2.png"><br>3.进入“Internet选项”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/3.png"><br>4.选择“隐私”选项卡，勾选“启用弹出窗口阻止程序”，然后点“设置”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/4.png"><br>5.阻止级别选“高”，点击“关闭”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/5.png"><br>6.重启电脑</p>
-]]></content>
-      <categories>
-        <category>电脑使用小技巧</category>
-        <category>关闭弹框广告</category>
-      </categories>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | web服务器tomcat和eclipse的集成</title>
     <url>/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/</url>
     <content><![CDATA[<h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
@@ -11589,6 +11579,16 @@ public class Counter &#123;
         <tag>Java</tag>
         <tag>web服务器和eclipse的集成</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>电脑使用小技巧 | windows关闭弹框广告</title>
+    <url>/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/</url>
+    <content><![CDATA[<h1 id="如何关闭烦人的桌面广告弹框"><a href="#如何关闭烦人的桌面广告弹框" class="headerlink" title="如何关闭烦人的桌面广告弹框"></a>如何关闭烦人的桌面广告弹框</h1><p>1.打开“控制面板”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/1.png"><br>2.进入“网络和Internet”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/2.png"><br>3.进入“Internet选项”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/3.png"><br>4.选择“隐私”选项卡，勾选“启用弹出窗口阻止程序”，然后点“设置”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/4.png"><br>5.阻止级别选“高”，点击“关闭”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/5.png"><br>6.重启电脑</p>
+]]></content>
+      <categories>
+        <category>电脑使用小技巧</category>
+        <category>关闭弹框广告</category>
+      </categories>
   </entry>
   <entry>
     <title>wxPython | wxPython控件</title>
@@ -14942,22 +14942,6 @@ a = a.reshape((5,1))
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 几种web服务器的比较</title>
-    <url>/2020/10/31/%E5%87%A0%E7%A7%8Dweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%AF%94%E8%BE%83/</url>
-    <content><![CDATA[<h1 id="几种web服务器的比较"><a href="#几种web服务器的比较" class="headerlink" title="几种web服务器的比较"></a>几种web服务器的比较</h1><h2 id="select版服务器"><a href="#select版服务器" class="headerlink" title="select版服务器"></a>select版服务器</h2><p>优点：跨平台<br>缺点：<br>单个进程能够监视的文件描述符的数量存在最大限制（1024）<br>轮询检测，效率较低</p>
-<h2 id="poll版服务器"><a href="#poll版服务器" class="headerlink" title="poll版服务器"></a>poll版服务器</h2><p>优点：解决了套接字有上限的问题<br>缺点：轮询检测</p>
-<h2 id="epoll版服务器"><a href="#epoll版服务器" class="headerlink" title="epoll版服务器"></a>epoll版服务器</h2><p>优点：<br>没有1024的最大限制<br>事件通知机制，效率较高</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机器学习 | 决策树</title>
     <url>/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/</url>
     <content><![CDATA[<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>决策树(Decision Tree)是一种基本的<b>分类与回归方法</b>。决策树由结点(Node)和有向边(Directed Edge)组成。结点有两种类型：内部结点(Internnal Node)和叶结点(Leaf Node)。内部结点表示一个特征或属性，叶结点表示一个类。决策树还有一个唯一的根结点(Root Node)。</p>
@@ -14995,6 +14979,22 @@ a = a.reshape((5,1))
       <tags>
         <tag>机器学习</tag>
         <tag>决策树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 几种web服务器的比较</title>
+    <url>/2020/10/31/%E5%87%A0%E7%A7%8Dweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%AF%94%E8%BE%83/</url>
+    <content><![CDATA[<h1 id="几种web服务器的比较"><a href="#几种web服务器的比较" class="headerlink" title="几种web服务器的比较"></a>几种web服务器的比较</h1><h2 id="select版服务器"><a href="#select版服务器" class="headerlink" title="select版服务器"></a>select版服务器</h2><p>优点：跨平台<br>缺点：<br>单个进程能够监视的文件描述符的数量存在最大限制（1024）<br>轮询检测，效率较低</p>
+<h2 id="poll版服务器"><a href="#poll版服务器" class="headerlink" title="poll版服务器"></a>poll版服务器</h2><p>优点：解决了套接字有上限的问题<br>缺点：轮询检测</p>
+<h2 id="epoll版服务器"><a href="#epoll版服务器" class="headerlink" title="epoll版服务器"></a>epoll版服务器</h2><p>优点：<br>没有1024的最大限制<br>事件通知机制，效率较高</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -24282,6 +24282,30 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 机器学习中分类标签次数统计代码模板</title>
+    <url>/2021/02/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%88%86%E7%B1%BB%E6%A0%87%E7%AD%BE%E6%AC%A1%E6%95%B0%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
+    <content><![CDATA[<h1 id="机器学习中分类标签次数统计代码模板"><a href="#机器学习中分类标签次数统计代码模板" class="headerlink" title="机器学习中分类标签次数统计代码模板"></a>机器学习中分类标签次数统计代码模板</h1><p>在使用机器学习的算法进行分类时，很多时候我们需要去统计各个分类标签在数据集中出现的次数，它的实现代码模板如下：</p>
+<pre><code>def class_count(class_list):  # class_list:数据集数据的所有标签列表
+    # 存放各个分类出现的次数
+    class_counts = &#123;&#125;
+    # 统计class_list中每个元素出现的次数
+    for cla in class_list:
+        if cla not in class_counts.keys():
+            class_counts[cla] = 0
+        class_counts[cla] += 1
+    # 排序
+    sorted_class_count = sorted(class_counts.items(), key=operator.itemgetter(1), reverse=True)
+    return sorted_class_count
+</code></pre>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 657.机器人能够返回原点</title>
     <url>/2021/09/03/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%83%BD%E5%90%A6%E8%BF%94%E5%9B%9E%E5%8E%9F%E7%82%B9/</url>
     <content><![CDATA[<h1 id="657-机器人能够返回原点"><a href="#657-机器人能够返回原点" class="headerlink" title="657.机器人能够返回原点"></a>657.机器人能够返回原点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。<br>移动顺序由字符串表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有 R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。<br>注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。</p>
@@ -24336,30 +24360,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 机器学习中分类标签次数统计代码模板</title>
-    <url>/2021/02/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%88%86%E7%B1%BB%E6%A0%87%E7%AD%BE%E6%AC%A1%E6%95%B0%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
-    <content><![CDATA[<h1 id="机器学习中分类标签次数统计代码模板"><a href="#机器学习中分类标签次数统计代码模板" class="headerlink" title="机器学习中分类标签次数统计代码模板"></a>机器学习中分类标签次数统计代码模板</h1><p>在使用机器学习的算法进行分类时，很多时候我们需要去统计各个分类标签在数据集中出现的次数，它的实现代码模板如下：</p>
-<pre><code>def class_count(class_list):  # class_list:数据集数据的所有标签列表
-    # 存放各个分类出现的次数
-    class_counts = &#123;&#125;
-    # 统计class_list中每个元素出现的次数
-    for cla in class_list:
-        if cla not in class_counts.keys():
-            class_counts[cla] = 0
-        class_counts[cla] += 1
-    # 排序
-    sorted_class_count = sorted(class_counts.items(), key=operator.itemgetter(1), reverse=True)
-    return sorted_class_count
-</code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
       </tags>
   </entry>
   <entry>
