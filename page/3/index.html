@@ -190,6 +190,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/07/Semaphore/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/07/Semaphore/" class="post-title-link" itemprop="url">并发 | Semaphore</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-06-07 06:02:35 / Modified: 06:11:47" itemprop="dateCreated datePublished" datetime="2022-06-07T06:02:35-08:00">2022-06-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91/Semaphore/" itemprop="url" rel="index"><span itemprop="name">Semaphore</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>Semaphore（信号量）是用来控制同时访问特定资源的数量，它通过协调各个线程，以保证合理的使用公共资源。<br><strong>应用场景：</strong><br>Semaphore可以用于做<strong>流量控制</strong>，特别是公共资源优先的应用场景，比如<strong>数据库连接</strong>。<br><strong>示例代码：</strong></p>
+<pre><code>package concurrency.semaphore;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreTest &#123;
+    private static final int THREAD_COUNT = 30;
+    
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+    
+    private static Semaphore s = new Semaphore(10);
+    
+    public static void main(String[] args) &#123;
+        for(int i = 0; i &lt; THREAD_COUNT; i++)&#123;//虽然有30个线程在执行，但是只允许10个并发执行
+            threadPool.execute(new Runnable()&#123;
+                @Override
+                public void run()&#123;
+                    try&#123;
+                        s.acquire();
+                        System.out.println(&quot;save data&quot;);
+                        s.release();
+                    &#125;catch(InterruptedException e)&#123;
+                        e.printStackTrace();
+                    &#125;
+                &#125;
+            &#125;);
+        &#125;
+        threadPool.shutdown();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/07/Java%E4%B8%AD%E7%9A%8413%E4%B8%AA%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1243,243 +1347,10 @@ public class WaitNotify &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 等待超时模式构造简单的数据库连接池</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-28 23:33:57" itemprop="dateCreated datePublished" datetime="2022-05-28T23:33:57-08:00">2022-05-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-29 22:49:15" itemprop="dateModified" datetime="2022-05-29T22:49:15-08:00">2022-05-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">等待超时模式构造简单的数据库连接池</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p>
-<pre><code>package concurrency.connetionPool;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
-
-class ConnectionDriver&#123;
-    static class ConnectionHandler implements InvocationHandler&#123;
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-            if(method.getName().equals(&quot;commit&quot;))&#123;
-                TimeUnit.MILLISECONDS.sleep(100);
-            &#125;
-            return null;
-        &#125;
-    &#125;
-    
-    //创建一个Connection的代理，在commit时休眠100毫秒
-    public static final Connection createConnection()&#123;
-        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());
-    &#125;
-&#125;
-
-public class ConnectionPool &#123;
-    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();
-    
-    public ConnectionPool(int initialSize)&#123;
-        if(initialSize &gt; 0)&#123;
-            for(int i = 0; i &lt; initialSize; i++)&#123;
-                pool.addLast(ConnectionDriver.createConnection());
-            &#125;
-        &#125;
-    &#125;
-    
-    public void releaseConnection(Connection connection)&#123;
-        if(connection != null)&#123;
-            synchronized(pool)&#123;
-                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接
-                pool.addLast(connection);
-                pool.notifyAll();
-            &#125;
-        &#125;
-    &#125;
-    
-    //在mills内无法获取到连接，将会返回null
-    public Connection fetchConnection(long mills) throws InterruptedException&#123;
-        synchronized(pool)&#123;
-            //完全超时
-            if(mills &lt; 0)&#123;
-                while(pool.isEmpty())&#123;
-                    pool.wait();
-                &#125;
-                return pool.removeFirst();//Removes and returns the first element from this list.
-            &#125;else&#123;
-                long future = System.currentTimeMillis() + mills;
-                long remaining = mills;
-                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;
-                    pool.wait(remaining);
-                    remaining = future - System.currentTimeMillis();
-                &#125;
-                Connection result = null;
-                if(!pool.isEmpty())&#123;
-                    result = pool.removeFirst();
-                &#125;
-                return result;
-            &#125;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p><strong>ConnectionPoolTest.java</strong></p>
-<pre><code>package concurrency.connetionPool;
-
-import java.sql.Connection;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
-
-public class ConnectionPoolTest &#123;
-    static ConnectionPool pool = new ConnectionPool(10);
-    
-    //保证所有ConnectionRunner能够同时开始
-    static CountDownLatch start = new CountDownLatch(1);
-    
-    //main线程将会等待所有ConnectionRunner结束后才能继续执行
-    static CountDownLatch end;
-    
-    public static void main(String[] args) throws InterruptedException&#123;
-        //线程数量，可以修改线程数量进行观察
-        int threadCount = 50;
-        end = new CountDownLatch(threadCount);
-        int count = 20;
-        AtomicInteger got = new AtomicInteger();
-        AtomicInteger notGot = new AtomicInteger();
-        for(int i = 0; i &lt; threadCount; i++)&#123;
-            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);
-            thread.start();
-        &#125;
-        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
-        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
-        System.out.println(&quot;total invoke: &quot; + (threadCount * count));
-        System.out.println(&quot;got connection: &quot; + got);
-        System.out.println(&quot;not got connection: &quot; + notGot);
-    &#125;
-    static class ConnectionRunner implements Runnable&#123;
-        int count;
-        AtomicInteger got;
-        AtomicInteger notGot;
-        
-        public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;
-            this.count = count;
-            this.got = got;
-            this.notGot = notGot;
-        &#125;
-        
-        public void run()&#123;
-            try&#123;
-                start.await();
-            &#125;catch(Exception ex)&#123;
-                
-            &#125;
-            while(count &gt; 0)&#123;
-                try&#123;
-                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null
-                    //分别统计连接获取的数量got和未获取到的数量notGot
-                    Connection connection = pool.fetchConnection(1000);
-                    if(connection != null)&#123;
-                        try&#123;
-                            connection.createStatement();
-                            connection.commit();
-                        &#125;finally&#123;
-                            pool.releaseConnection(connection);
-                            got.incrementAndGet();
-                        &#125;
-                    &#125;else&#123;
-                        notGot.incrementAndGet();
-                    &#125;
-                &#125;catch(Exception ex)&#123;
-                    
-                &#125;finally&#123;
-                    count--;
-                &#125;
-                
-            &#125;
-            end.countDown();
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/44/">44</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1547,20 +1418,20 @@ public class ConnectionPoolTest &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">430</span>
+          <span class="site-state-item-count">431</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">324</span>
+        <span class="site-state-item-count">326</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">315</span>
+        <span class="site-state-item-count">317</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
