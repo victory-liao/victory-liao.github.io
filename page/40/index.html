@@ -190,6 +190,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">ICA | 鸡尾酒宴会问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-21 21:20:27" itemprop="dateCreated datePublished" datetime="2021-02-21T21:20:27-08:00">2021-02-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-03 05:13:57" itemprop="dateModified" datetime="2021-07-03T05:13:57-08:00">2021-07-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/" itemprop="url" rel="index"><span itemprop="name">EEG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/%E4%BC%AA%E8%BF%B9%E7%A7%BB%E9%99%A4/" itemprop="url" rel="index"><span itemprop="name">伪迹移除</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
+<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -982,136 +1066,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/ubuntu%E4%B8%8B%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/ubuntu%E4%B8%8B%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">python | ubuntu下虚拟环境的安装与配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-28 12:53:40" itemprop="dateCreated datePublished" datetime="2021-01-28T12:53:40-08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-07-03 05:11:54" itemprop="dateModified" datetime="2021-07-03T05:11:54-08:00">2021-07-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ubuntu下虚拟环境的安装与配置"><a href="#ubuntu下虚拟环境的安装与配置" class="headerlink" title="ubuntu下虚拟环境的安装与配置"></a>ubuntu下虚拟环境的安装与配置</h1><h2 id="为什么要搭建虚拟环境"><a href="#为什么要搭建虚拟环境" class="headerlink" title="为什么要搭建虚拟环境?"></a>为什么要搭建虚拟环境?</h2><pre><code>如果在一台电脑上, 有不同项目, 需要用到同一个包的不同版本, 新版本会覆盖以前的版本, 其它的项目就可能无法正常运行了.。
-解决方法：虚拟环境
-    作用：虚拟环境可以搭建独立的python运行环境`, 使得单个项目的运行环境与其它项目互不影响。
-    所有的虚拟环境都位于/home/用户名下的隐藏目录.virtualenvs下。
-</code></pre>
-<h2 id="如何搭建虚拟环境"><a href="#如何搭建虚拟环境" class="headerlink" title="如何搭建虚拟环境?"></a>如何搭建虚拟环境?</h2><pre><code>安装虚拟环境的命令：
-sudo pip install virtualenvo
-sudo pip install virtualenvwrapper
-
-安装完虚拟环境后，如果提示找不到mkvirtualenv命令，须配置环境变量：
-
-# 1、创建目录用来存放虚拟环境
-mkdir \$HOME/.virtualenvs
-# 2、打开~/.bashrc文件，并添加如下：
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
-# 3、运行
-source ~/.bashrc
-
-创建虚拟环境的命令 :
-在python3中，创建虚拟环境
-
-mkvirtualenv -p python3 虚拟环境名称
-例 ：
-mkvirtualenv -p python3 django_py3
-</code></pre>
-<p>创建成功后会自动工作在这个虚拟环境上,工作在虚拟环境上, 提示符最前面会出现 “虚拟环境名称”。<br>如何使用虚拟环境?</p>
-<pre><code>查看虚拟环境的命令 :
-
-workon 两次tab键 或者 回车
-
-使用虚拟环境的命令：
-
-workon 虚拟环境名称
-例 ：使用名为django_py3的虚拟环境
-workon django_py3
-
-退出虚拟环境的命令 :
-
-deactivate
-
-删除虚拟环境的命令 :
-
-rmvirtualenv 虚拟环境名称
-例 ：删除虚拟环境django_py3
-先退出：deactivate
-再删除：rmvirtualenv django_py3
-</code></pre>
-<h2 id="如何在虚拟环境中安装工具包"><a href="#如何在虚拟环境中安装工具包" class="headerlink" title="如何在虚拟环境中安装工具包"></a>如何在虚拟环境中安装工具包</h2><p>workon进入虚拟环境后，再使用pip进行包的安装，其安装方法和普通的安装方式一样。</p>
-<pre><code>安装指定Django版本示例:
-
-pip install django==1.11.11
-
-python3下的安装路径：
-
-~/.virtualenvs/django_py3/lib/python3.5/site-packages/
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1183,14 +1137,14 @@ python3下的安装路径：
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">433</span>
+          <span class="site-state-item-count">434</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">328</span>
+        <span class="site-state-item-count">329</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

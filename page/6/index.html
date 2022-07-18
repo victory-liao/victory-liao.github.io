@@ -190,6 +190,129 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">单例模式 | 双重检验锁方式实现单例模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-23 18:43:26 / Modified: 18:56:03" itemprop="dateCreated datePublished" datetime="2022-04-23T18:43:26-08:00">2022-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href>参考资料</a></p>
+<pre><code>package SingletonTest;
+
+class Singleton&#123;
+    private volatile static Singleton instance;
+    
+    private Singleton()&#123;
+        
+    &#125;
+    
+    public static Singleton getInstance()&#123;
+        if(instance == null)&#123;
+            synchronized (Singleton.class) &#123;
+                if(instance == null)&#123;
+                    instance = new Singleton();
+                &#125;
+                //instance = new Singleton();
+            &#125;
+        &#125;
+        return instance;
+    &#125;
+&#125;
+
+public class MyThread extends Thread&#123;
+    @Override
+    public void run()&#123;
+        System.out.println(Singleton.getInstance().hashCode());
+    &#125;
+    
+    public static void main(String[] args)&#123;
+        MyThread[] myThread = new MyThread[10];
+        for(int i=0;i&lt;myThread.length;i++)&#123;
+            myThread[i] = new MyThread();
+        &#125;
+        
+        for(int i=0;i&lt;myThread.length;i++)&#123;
+            myThread[i].start();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>双重锁的运行结果：</strong></p>
+<pre><code>1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+1156205522
+</code></pre>
+<p><strong>去掉第二重锁的运行结果（产生了多例）：</strong></p>
+<pre><code>1700548907
+1486202908
+1486202908
+1700548907
+1486202908
+1486202908
+1700548907
+1486202908
+1486202908
+1700548907
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/23/HashMap%E7%9A%84%E4%B8%83%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1465,413 +1588,6 @@ public void testMBG() throws Exception &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/09/%E5%8A%A8%E6%80%81SQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/09/%E5%8A%A8%E6%80%81SQL/" class="post-title-link" itemprop="url">MyBatis | 动态SQL</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-09 01:33:11 / Modified: 01:37:21" itemprop="dateCreated datePublished" datetime="2022-04-09T01:33:11-08:00">2022-04-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%8A%A8%E6%80%81SQL/" itemprop="url" rel="index"><span itemprop="name">动态SQL</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>1.项目目录<br><img src="/2022/04/09/%E5%8A%A8%E6%80%81SQL/1.PNG"><br>2.EmpMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpMapper &#123;
-    //根据eid,ename,age,sex多条件查询员工信息
-    List&lt;Emp&gt; getEmpListByMoreTJ(Emp emp);
-    
-    //根据eid,ename,age,sex其中一个查询员工信息
-    List&lt;Emp&gt; getEmpListByChoose(Emp emp);
-    
-    //添加员工信息，将0|1--&gt;女|男
-    void insertEmp(Emp emp);
-    
-    //根据eid所组成的字符串进行批量删除
-    void deleteMoreEmp(String eids);
-    
-    //通过list集合实现批量删除
-    //void deleteMoreByList(List&lt;Integer&gt; eids);
-    void deleteMoreByList(@Param(&quot;eids&quot;)List&lt;Integer&gt; eids);
-    
-    //批量添加
-    void insertMoreByArray(Emp[] emps);
-    
-    //批量修改
-    void updateMoreByArray(@Param(&quot;emps&quot;)Emp[] emps);
-&#125;
-</code></pre>
-<p>3.EmpMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpMapper&quot;&gt;
-    &lt;!--
-         &lt;sql id=&quot;&quot;&gt;&lt;/sql&gt;:设置一段SQL片段，即公共SQL，可以被当前映射文件中所有的SQL语句所访问
-     --&gt;
-    &lt;sql id=&quot;empColumns&quot;&gt;
-        select eid,ename,age,sex,did from emp
-    &lt;/sql&gt;
-
-    &lt;!-- List&lt;Emp&gt; getEmpListByMoreTJ(); --&gt;
-    &lt;!--
-        多条件查询：若页面中没有设置此条件，SQL语句中一定不能有该条件
-     --&gt;
-    &lt;!--
-        &lt;if test=&quot;&quot;&gt;&lt;/if&gt;:通过test表达式拼接SQL 
-        &lt;where&gt;:添加where关键字并去掉多余的and
-        &lt;trim prefix=&quot;&quot; suffix=&quot;&quot; prefixOverrides=&quot;&quot; suffixOverrides=&quot;&quot;&gt;:截取并拼接
-        prefix:在操作的SQL语句前加入某些内容
-        suffix:在操作的SQL语句后加入某些内容
-        prefixOverrides:把操作的SQL语句前的某些内容去掉
-        suffixOverrides:把操作的SQL语句后的某些内容去掉
-     --&gt;
-    &lt;select id=&quot;getEmpListByMoreTJ&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex,did from emp
-        where 1 = 1
-        &lt;if test=&quot;eid != null&quot;&gt;
-            and eid=#&#123;eid&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-            and ename=#&#123;ename&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;age != null&quot;&gt;
-            and age=#&#123;age&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-            and sex=#&#123;sex&#125;
-        &lt;/if&gt; --&gt;
-        
-        
-        &lt;!-- select eid,ename,age,sex,did from emp
-        &lt;where&gt;
-            &lt;if test=&quot;eid != null&quot;&gt;
-                and eid=#&#123;eid&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                and ename=#&#123;ename&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;age != null&quot;&gt;
-                and age=#&#123;age&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-                and sex=#&#123;sex&#125;
-            &lt;/if&gt;
-        &lt;/where&gt; --&gt;
-        
-        &lt;!-- select eid,ename,age,sex,did from emp --&gt;
-        &lt;include refid=&quot;empColumns&quot;&gt;&lt;/include&gt;
-        &lt;trim prefix=&quot;where&quot; suffixOverrides=&quot;and|or&quot;&gt;
-            &lt;if test=&quot;eid != null&quot;&gt;
-                eid=#&#123;eid&#125; and
-            &lt;/if&gt;
-            &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                ename=#&#123;ename&#125; and
-            &lt;/if&gt;
-            &lt;if test=&quot;age != null&quot;&gt;
-                age=#&#123;age&#125; or
-            &lt;/if&gt;
-            &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-                sex=#&#123;sex&#125;
-            &lt;/if&gt;
-        &lt;/trim&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- List&lt;Emp&gt; getEmpListByChoose(Emp emp); --&gt;
-    &lt;!--
-        &lt;choose&gt;选择某一个when或otherwise执行
-            &lt;when test=&quot;&quot;&gt;&lt;/when&gt;：通过test表达式拼接SQL
-            .
-            .
-            .
-            &lt;otherwise&gt;&lt;/otherwise&gt;:当when都不符合条件，就会选择otherwise拼接SQL语句
-        &lt;/choose&gt; 
-     --&gt;
-    &lt;select id=&quot;getEmpListByChoose&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp
-        where 
-        &lt;choose&gt;
-            &lt;when test=&quot;eid != null&quot;&gt;
-                eid = #&#123;eid&#125;
-            &lt;/when&gt;
-            &lt;when test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                ename = #&#123;ename&#125;
-            &lt;/when&gt;
-            &lt;when test=&quot;age != null&quot;&gt;
-                age = #&#123;age&#125;
-            &lt;/when&gt;
-            &lt;otherwise&gt;
-                sex = #&#123;sex&#125;
-            &lt;/otherwise&gt;
-        &lt;/choose&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- void insertEmp(Emp emp); --&gt;
-    &lt;insert id=&quot;insertEmp&quot;&gt;
-        insert into emp(eid,ename,age,sex) values(
-            null,
-            #&#123;ename&#125;,
-            #&#123;age&#125;,
-            &lt;choose&gt;
-                &lt;when test=&quot;sex == 0&quot;&gt;&#39;女&#39;&lt;/when&gt;
-                &lt;when test=&quot;sex == 1&quot;&gt;&#39;男&#39;&lt;/when&gt;
-                &lt;otherwise&gt;&#39;不详&#39;&lt;/otherwise&gt;
-            &lt;/choose&gt;
-        )
-    &lt;/insert&gt;
-    
-    &lt;!-- void deleteMoreEmp(String eids); --&gt;
-    &lt;delete id=&quot;deleteMoreEmp&quot;&gt;
-        delete from emp where eid in ($&#123;value&#125;)
-    &lt;/delete&gt;
-    
-    &lt;!-- void deleteMoreByList(List&lt;Integer&gt; eids); --&gt;
-    &lt;!--
-        &lt;foreach collection=&quot;eids&quot; item=&quot;&quot; close=&quot;&quot; open=&quot;&quot; separator=&quot;&quot; index=&quot;&quot;&gt;&lt;/foreach&gt;
-        对一个数组或集合进行遍历
-        collection:指定要遍历的集合或数组
-        item:设置别名
-        close:设置循环体的结束内容
-        open:设置循环体的开始内容
-        separator:设置每一次循环之间的分隔符
-        index:若遍历的是list集合，index代表下标；若遍历的是map结合，index代表键
-     --&gt;
-     &lt;!--
-        delete from emp where eid in ();
-        delete from emp where eid = 1 or eid = 2 or eid = 3 
-      --&gt;
-    &lt;delete id=&quot;deleteMoreByList&quot;&gt;
-        &lt;!-- delete from emp where eid in 
-        &lt;foreach collection=&quot;list&quot; item=&quot;eid&quot; separator=&quot;,&quot; open=&quot;(&quot; close=&quot;)&quot;&gt;
-            #&#123;eid&#125;
-        &lt;/foreach&gt; --&gt;
-        
-        delete from emp where
-        &lt;!-- &lt;foreach collection=&quot;list&quot; item=&quot;eid&quot; separator=&quot;or&quot;&gt;
-            eid = #&#123;eid&#125;
-        &lt;/foreach&gt; --&gt;
-        &lt;foreach collection=&quot;eids&quot; item=&quot;eid&quot; separator=&quot;or&quot;&gt;
-            eid = #&#123;eid&#125;
-        &lt;/foreach&gt;
-    &lt;/delete&gt;
-    
-    &lt;!--
-        delete:
-            delete from emp where eid in ();
-            delete from emp where eid = 1 or eid = 2 or eid = 3 
-        select:
-            select * from emp where eid in ();
-            select * from emp where eid = 1 or eid = 2 or eid = 3 
-        update:
-            把每条数据修改成相同内容
-            update emp set ... where eid in ();
-            update emp set ... where eid = 1 or eid = 2 or eid = 3 
-            把每条数据修改成对应内容,注意必须在链接地址（url）后添加?allowMultiQueries=true
-            update emp set ... where eid=1;
-            update emp set ... where eid=2;
-            update emp set ... where eid=3;
-        insert:
-            insert into emp values(),(),()
-     --&gt;
-     
-     &lt;!-- void insertMoreByArray(Emp[] emps); --&gt;
-     &lt;insert id=&quot;insertMoreByArray&quot;&gt;
-        insert into emp values
-        &lt;foreach collection=&quot;array&quot; item=&quot;emp&quot; separator=&quot;,&quot;&gt;
-            (null,#&#123;emp.ename&#125;,#&#123;emp.age&#125;,#&#123;emp.sex&#125;,1)
-        &lt;/foreach&gt;
-     &lt;/insert&gt;
-     
-     &lt;!-- void updateMoreByArray(@Param(&quot;emps&quot;)Emp[] emps); --&gt;
-     &lt;update id=&quot;updateMoreByArray&quot;&gt;
-        &lt;foreach collection=&quot;emps&quot; item=&quot;emp&quot;&gt;
-            update emp set ename=#&#123;emp.ename&#125;, age=#&#123;emp.age&#125;, sex=#&#123;emp.sex&#125; where eid = #&#123;emp.eid&#125;;
-        &lt;/foreach&gt;
-     &lt;/update&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.TestDynamicSQl.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpMapper;
-
-public class TestDynamicSQL &#123;
-    @Test
-    public void TestMore() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-        //批量删除
-//        List&lt;Integer&gt; eids = new ArrayList&lt;&gt;();
-//        eids.add(10);
-//        eids.add(16);
-//        eids.add(17);
-//        mapper.deleteMoreByList(eids);//只能删除id为1的员工
-        
-        //批量添加
-        //Emp[] emps = new Emp[3];
-        //Emp[] emps = new Emp[]&#123;&#125;;
-        //Emp[] emps = &#123;&#125;;
-//        Emp emp1 = new Emp(null, &quot;a&quot;,23,&quot;男&quot;);
-//        Emp emp2 = new Emp(null, &quot;aa&quot;,23,&quot;男&quot;);
-//        Emp emp3 = new Emp(null, &quot;aaa&quot;,23,&quot;男&quot;);
-//        Emp[] emps = &#123;emp1, emp2, emp3&#125;;
-//        mapper.insertMoreByArray(emps);
-        
-        //批量修改(需要在jdbc.url后加?allowMultiQueries=true)
-        //jdbc.url=jdbc:mysql://localhost:3306/ssm?allowMultiQueries=true
-        Emp emp1 = new Emp(20, &quot;a1&quot;,233,&quot;女&quot;);
-        Emp emp2 = new Emp(21, &quot;aa1&quot;,233,&quot;女&quot;);
-        Emp emp3 = new Emp(22, &quot;aaa1&quot;,233,&quot;女&quot;);
-        Emp[] emps = &#123;emp1, emp2, emp3&#125;;
-        mapper.updateMoreByArray(emps);
-    &#125;
-    
-    @Test
-    public void TestChoose() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-        //测试1
-        //Emp emp = new Emp();
-//        emp.setEid(1);
-//        emp.setEname(&quot;张三&quot;);
-//        emp.setAge(12);
-        //emp.setSex(&quot;1&quot;);
-//        List&lt;Emp&gt; list = mapper.getEmpListByChoose(emp);
-//        for (Emp e : list) &#123;
-//            System.out.println(e);
-//        &#125;
-        
-        //测试2
-//        Emp emp = new Emp();
-//        emp.setEname(&quot;张三&quot;);
-//        emp.setAge(12);    
-//        emp.setSex(&quot;1&quot;);
-//        mapper.insertEmp(emp);
-        
-        Emp emp = new Emp();
-        emp.setEname(&quot;张三三&quot;);
-        emp.setAge(12);    
-        emp.setSex(&quot;123&quot;);
-        mapper.insertEmp(emp);
-    &#125;
-    
-    @Test
-    public void TestIf() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        Emp emp = new Emp();
-        //emp.setEid(1);
-        emp.setEname(&quot;张三&quot;);
-        emp.setAge(12);
-        //emp.setSex(&quot;1&quot;);
-        List&lt;Emp&gt; list = mapper.getEmpListByMoreTJ(emp);
-        for (Emp e : list) &#123;
-            System.out.println(e);
-        &#125;
-    &#125;
-    
-    public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        return sqlSessionFactory;
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1943,14 +1659,14 @@ public class TestDynamicSQL &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">433</span>
+          <span class="site-state-item-count">434</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">328</span>
+        <span class="site-state-item-count">329</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
