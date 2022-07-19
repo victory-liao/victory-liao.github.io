@@ -12780,6 +12780,101 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 121.买卖股票的最佳时机</title>
+    <url>/2022/07/18/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/</url>
+    <content><![CDATA[<h1 id="121-买卖股票的最佳时机"><a href="#121-买卖股票的最佳时机" class="headerlink" title="121.买卖股票的最佳时机"></a>121.买卖股票的最佳时机</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。<br>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。<br>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p>
+<p>示例 1：<br>输入：[7,1,5,3,6,4]<br>输出：5<br>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。<br>     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p>
+<p>示例 2：<br>输入：prices = [7,6,4,3,1]<br>输出：0<br>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p>
+<p><a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li><p>暴力法</p>
+</li>
+<li><p>一次遍历<br>遍历一遍数组，计算每次 到当天为止 的最小股票价格和最大利润。</p>
+</li>
+</ol>
+<p><strong>3. 动态规划</strong><br>动态规划一般分为一维、二维、多维（使用状态压缩），对应形式为 dp(i)、dp(i)(j)、二进制dp(i)(j)。<br>（1）动态规划做题步骤<br>    明确 dp(i) 应该表示什么（二维情况：dp(i)(j)）；<br>    根据 dp(i)和 dp(i−1) 的关系得出状态转移方程；<br>    确定初始条件，如 dp(0)。<br>（2）本题思路<br>其实方法一的思路不是凭空想象的，而是由动态规划的思想演变而来。这里介绍一维动态规划思想。<br>dp[i] 表示前 i 天的最大利润，因为我们始终要使利润最大化，则：</p>
+<pre><code>dp[i]=max(dp[i−1],prices[i]−minprice)
+</code></pre>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
+    def maxProfit(self, prices):
+        &quot;&quot;&quot;
+        暴力法(超出时间限制)
+        :type prices: List[int]
+        :rtype: int
+        &quot;&quot;&quot;
+        # ans = 0
+        #
+        # for i in range(0, len(prices)):
+        #     for j in range(i + 1, len(prices)):
+        #         ans = max(ans, prices[j] - prices[i])
+        #
+        # return ans
+        
+        if len(prices) &lt; 2:
+            return 0
+        result = max([prices[j] - prices[i] for i in range(0, len(prices)) for j in range(i + 1, len(prices))])
+        return result if result &gt; 0 else 0
+    
+    def maxProfit1(self, prices):
+        &quot;&quot;&quot;一次遍历&quot;&quot;&quot;
+        minprice = max(prices)  # 记录最小的股值
+        maxprofit = 0  #
+        
+        # 循环迭代输入的prices，当前价格小于最小的股值时修改minprice，
+        # 当前获得的利润大于最大的利润时修改maxprofit
+        for price in prices:
+            maxprofit = max(price - minprice, maxprofit)
+            minprice = min(price, minprice)
+            
+        return maxprofit
+    
+    def maxProfit2(self, prices):
+        &quot;&quot;&quot;动态规划（按照估值最低点列动态规划方程）&quot;&quot;&quot;
+        maxprofit = 0
+        dp = [prices[0] for j in range(0, len(prices))]
+        for i in range(1, len(prices)):
+            dp[i] = min(dp[i-1], prices[i])
+            maxprofit = max(maxprofit, prices[i] - dp[i])
+        return maxprofit
+    
+    def maxProfit3(self, prices):
+        &quot;&quot;&quot;动态规划（按照最大利润列动态规划方程）&quot;&quot;&quot;
+        minprice = max(prices)
+        dp = [0]*len(prices)
+        
+        for i in range(1, len(prices)):
+            minprice = min(minprice, prices[i])
+            dp[i] = max(dp[i - 1], prices[i] - minprice)
+        
+        return dp[-1]
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    prices = [7, 1, 5, 3, 6, 4]
+    # prices = [7, 6, 4, 3, 1]
+    # profit = slt.maxProfit(prices)
+    # profit = slt.maxProfit1(prices)
+    # profit = slt.maxProfit2(prices)
+    profit = slt.maxProfit3(prices)
+    print(profit)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>数组</category>
+        <category>121.买卖股票的最佳时机</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>动态规划</tag>
+        <tag>leetcode</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring | 事务管理</title>
     <url>/2022/03/07/%E4%BA%8B%E5%8A%A1-1/</url>
     <content><![CDATA[<h1 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h1><p>1.项目目录<br><img src="/2022/03/07/%E4%BA%8B%E5%8A%A1-1/1.PNG"><br>book包—&gt;使用注解管理事务<br>book_xml—&gt;使用xml方式管理事务</p>
@@ -16032,6 +16127,71 @@ public class ThreadTest &#123;
       </tags>
   </entry>
   <entry>
+    <title>基于JavaWeb的网上购物商城 | 删除购物车中的商品</title>
+    <url>/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/</url>
+    <content><![CDATA[<h1 id="删除购物车中的商品"><a href="#删除购物车中的商品" class="headerlink" title="删除购物车中的商品"></a>删除购物车中的商品</h1><p><strong>实现功能：</strong><br>用户点击购物车中购物项后面的删除将这个购物项删除，总计金额减去当前购物项小计。<br><img src="/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/1.PNG"></p>
+<span id="more"></span>
+<p><strong>cart.jsp</strong><br>为删除链接增加onclick属性，并使用js实现delCart方法。</p>
+<pre><code>&lt;td&gt;
+    &lt;a href=&quot;javascript:;&quot; class=&quot;delete&quot; onclick=&quot;delCart(&#39;$&#123;en.value.pro.pid&#125;&#39;, &#39;$&#123;en.value.subTotal&#125;&#39;)&quot;&gt;删除&lt;/a&gt;
+&lt;/td&gt;
+......
+&lt;script type=&quot;text/javascript&quot;&gt;
+    function delCart(pid, money)&#123;
+        location.href=&quot;$&#123;pageContext.request.contextPath&#125;/product?method=delCart&amp;pid=&quot;+pid+&quot;&amp;money=&quot;+money;
+    &#125;
+&lt;/script&gt;
+</code></pre>
+<p><strong>ProductServlet.java</strong><br>在ProductServlet.java的doGet方法中添加delCart的判断，并完成delCart方法。</p>
+<pre><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+    String method = request.getParameter(&quot;method&quot;);
+    if(&quot;getProById&quot;.equals(method)) &#123;
+        getProById(request, response);
+    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;
+        findListByCate(request, response);
+    &#125;else if(&quot;cart&quot;.equals(method)) &#123;
+        cart(request, response);
+    &#125;else if(&quot;delCart&quot;.equals(method)) &#123;
+        delCart(request, response);
+    &#125;
+&#125;
+
+public void delCart(HttpServletRequest request, HttpServletResponse response) &#123;
+    // TODO Auto-generated method stub
+    try &#123;
+        String pid = request.getParameter(&quot;pid&quot;);
+        String money = request.getParameter(&quot;money&quot;);
+        //获取购物车
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute(&quot;cart&quot;);
+        HashMap&lt;String, CartItem&gt; map = cart.getMap();
+        CartItem c = map.remove(pid);
+        double subTotal = c.getSubTotal();
+        //购物车金额-小计
+        cart.setSubMoney(cart.getSubMoney()-subTotal);
+        //返回购物车页面
+        request.getRequestDispatcher(&quot;/cart.jsp&quot;).forward(request, response);
+    &#125; catch (Exception e) &#123;
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    &#125; 
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>项目经历</category>
+        <category>JavaWeb</category>
+        <category>基于JavaWeb的网上购物商城</category>
+        <category>删除购物车中的商品</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>JavaWeb</tag>
+        <tag>基于JavaWeb的网上购物商城</tag>
+        <tag>删除购物车中的商品</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 83.删除有序链表中的重复元素</title>
     <url>/2021/08/27/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/</url>
     <content><![CDATA[<h1 id="83-删除有序链表中的重复元素"><a href="#83-删除有序链表中的重复元素" class="headerlink" title="83.删除有序链表中的重复元素"></a>83.删除有序链表中的重复元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除所有重复的元素，使每个元素 只出现一次 。<br>返回同样按升序排列的结果链表。</p>
@@ -16117,71 +16277,6 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于JavaWeb的网上购物商城 | 删除购物车中的商品</title>
-    <url>/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/</url>
-    <content><![CDATA[<h1 id="删除购物车中的商品"><a href="#删除购物车中的商品" class="headerlink" title="删除购物车中的商品"></a>删除购物车中的商品</h1><p><strong>实现功能：</strong><br>用户点击购物车中购物项后面的删除将这个购物项删除，总计金额减去当前购物项小计。<br><img src="/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/1.PNG"></p>
-<span id="more"></span>
-<p><strong>cart.jsp</strong><br>为删除链接增加onclick属性，并使用js实现delCart方法。</p>
-<pre><code>&lt;td&gt;
-    &lt;a href=&quot;javascript:;&quot; class=&quot;delete&quot; onclick=&quot;delCart(&#39;$&#123;en.value.pro.pid&#125;&#39;, &#39;$&#123;en.value.subTotal&#125;&#39;)&quot;&gt;删除&lt;/a&gt;
-&lt;/td&gt;
-......
-&lt;script type=&quot;text/javascript&quot;&gt;
-    function delCart(pid, money)&#123;
-        location.href=&quot;$&#123;pageContext.request.contextPath&#125;/product?method=delCart&amp;pid=&quot;+pid+&quot;&amp;money=&quot;+money;
-    &#125;
-&lt;/script&gt;
-</code></pre>
-<p><strong>ProductServlet.java</strong><br>在ProductServlet.java的doGet方法中添加delCart的判断，并完成delCart方法。</p>
-<pre><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-    String method = request.getParameter(&quot;method&quot;);
-    if(&quot;getProById&quot;.equals(method)) &#123;
-        getProById(request, response);
-    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;
-        findListByCate(request, response);
-    &#125;else if(&quot;cart&quot;.equals(method)) &#123;
-        cart(request, response);
-    &#125;else if(&quot;delCart&quot;.equals(method)) &#123;
-        delCart(request, response);
-    &#125;
-&#125;
-
-public void delCart(HttpServletRequest request, HttpServletResponse response) &#123;
-    // TODO Auto-generated method stub
-    try &#123;
-        String pid = request.getParameter(&quot;pid&quot;);
-        String money = request.getParameter(&quot;money&quot;);
-        //获取购物车
-        HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute(&quot;cart&quot;);
-        HashMap&lt;String, CartItem&gt; map = cart.getMap();
-        CartItem c = map.remove(pid);
-        double subTotal = c.getSubTotal();
-        //购物车金额-小计
-        cart.setSubMoney(cart.getSubMoney()-subTotal);
-        //返回购物车页面
-        request.getRequestDispatcher(&quot;/cart.jsp&quot;).forward(request, response);
-    &#125; catch (Exception e) &#123;
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    &#125; 
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>项目经历</category>
-        <category>JavaWeb</category>
-        <category>基于JavaWeb的网上购物商城</category>
-        <category>删除购物车中的商品</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>JavaWeb</tag>
-        <tag>基于JavaWeb的网上购物商城</tag>
-        <tag>删除购物车中的商品</tag>
       </tags>
   </entry>
   <entry>
@@ -23426,19 +23521,6 @@ doc.save(&#39;data\制造业必修课.docx&#39;)
       </tags>
   </entry>
   <entry>
-    <title>数据中的缺失值的处理</title>
-    <url>/2021/03/19/%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="数据中的缺失值的处理"><a href="#数据中的缺失值的处理" class="headerlink" title="数据中的缺失值的处理"></a>数据中的缺失值的处理</h1><p>1.使用可用特征的均值来填补缺失值；<br>2.使用特殊值来填补缺失值，如-1；<br>3.忽略有缺失值的样本；<br>4.使用相似样本的均值添补缺失值；<br>5.使用另外的机器学习算法预测缺失值。</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>数据缺失值处理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 61.旋转链表</title>
     <url>/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="61-旋转链表"><a href="#61-旋转链表" class="headerlink" title="61.旋转链表"></a>61.旋转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。</p>
@@ -23643,6 +23725,19 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据中的缺失值的处理</title>
+    <url>/2021/03/19/%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%9A%84%E7%BC%BA%E5%A4%B1%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="数据中的缺失值的处理"><a href="#数据中的缺失值的处理" class="headerlink" title="数据中的缺失值的处理"></a>数据中的缺失值的处理</h1><p>1.使用可用特征的均值来填补缺失值；<br>2.使用特殊值来填补缺失值，如-1；<br>3.忽略有缺失值的样本；<br>4.使用相似样本的均值添补缺失值；<br>5.使用另外的机器学习算法预测缺失值。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>数据缺失值处理</tag>
       </tags>
   </entry>
   <entry>
@@ -24282,30 +24377,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>机器学习 | 机器学习中分类标签次数统计代码模板</title>
-    <url>/2021/02/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%88%86%E7%B1%BB%E6%A0%87%E7%AD%BE%E6%AC%A1%E6%95%B0%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
-    <content><![CDATA[<h1 id="机器学习中分类标签次数统计代码模板"><a href="#机器学习中分类标签次数统计代码模板" class="headerlink" title="机器学习中分类标签次数统计代码模板"></a>机器学习中分类标签次数统计代码模板</h1><p>在使用机器学习的算法进行分类时，很多时候我们需要去统计各个分类标签在数据集中出现的次数，它的实现代码模板如下：</p>
-<pre><code>def class_count(class_list):  # class_list:数据集数据的所有标签列表
-    # 存放各个分类出现的次数
-    class_counts = &#123;&#125;
-    # 统计class_list中每个元素出现的次数
-    for cla in class_list:
-        if cla not in class_counts.keys():
-            class_counts[cla] = 0
-        class_counts[cla] += 1
-    # 排序
-    sorted_class_count = sorted(class_counts.items(), key=operator.itemgetter(1), reverse=True)
-    return sorted_class_count
-</code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 657.机器人能够返回原点</title>
     <url>/2021/09/03/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%83%BD%E5%90%A6%E8%BF%94%E5%9B%9E%E5%8E%9F%E7%82%B9/</url>
     <content><![CDATA[<h1 id="657-机器人能够返回原点"><a href="#657-机器人能够返回原点" class="headerlink" title="657.机器人能够返回原点"></a>657.机器人能够返回原点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。<br>移动顺序由字符串表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有 R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。<br>注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。</p>
@@ -24360,6 +24431,30 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习 | 机器学习中分类标签次数统计代码模板</title>
+    <url>/2021/02/23/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%88%86%E7%B1%BB%E6%A0%87%E7%AD%BE%E6%AC%A1%E6%95%B0%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
+    <content><![CDATA[<h1 id="机器学习中分类标签次数统计代码模板"><a href="#机器学习中分类标签次数统计代码模板" class="headerlink" title="机器学习中分类标签次数统计代码模板"></a>机器学习中分类标签次数统计代码模板</h1><p>在使用机器学习的算法进行分类时，很多时候我们需要去统计各个分类标签在数据集中出现的次数，它的实现代码模板如下：</p>
+<pre><code>def class_count(class_list):  # class_list:数据集数据的所有标签列表
+    # 存放各个分类出现的次数
+    class_counts = &#123;&#125;
+    # 统计class_list中每个元素出现的次数
+    for cla in class_list:
+        if cla not in class_counts.keys():
+            class_counts[cla] = 0
+        class_counts[cla] += 1
+    # 排序
+    sorted_class_count = sorted(class_counts.items(), key=operator.itemgetter(1), reverse=True)
+    return sorted_class_count
+</code></pre>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
       </tags>
   </entry>
   <entry>

@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-07-18T12:25:38.509Z</updated>
+  <updated>2022-07-19T07:19:39.249Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,51 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 121.买卖股票的最佳时机</title>
+    <link href="http://example.com/2022/07/18/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/"/>
+    <id>http://example.com/2022/07/18/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/</id>
+    <published>2022-07-19T07:11:24.000Z</published>
+    <updated>2022-07-19T07:19:39.249Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="121-买卖股票的最佳时机"><a href="#121-买卖股票的最佳时机" class="headerlink" title="121.买卖股票的最佳时机"></a>121.买卖股票的最佳时机</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。<br>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。<br>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p><p>示例 1：<br>输入：[7,1,5,3,6,4]<br>输出：5<br>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。<br>     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p><p>示例 2：<br>输入：prices = [7,6,4,3,1]<br>输出：0<br>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p><p><a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li><p>暴力法</p></li><li><p>一次遍历<br>遍历一遍数组，计算每次 到当天为止 的最小股票价格和最大利润。</p></li></ol><p><strong>3. 动态规划</strong><br>动态规划一般分为一维、二维、多维（使用状态压缩），对应形式为 dp(i)、dp(i)(j)、二进制dp(i)(j)。<br>（1）动态规划做题步骤<br>    明确 dp(i) 应该表示什么（二维情况：dp(i)(j)）；<br>    根据 dp(i)和 dp(i−1) 的关系得出状态转移方程；<br>    确定初始条件，如 dp(0)。<br>（2）本题思路<br>其实方法一的思路不是凭空想象的，而是由动态规划的思想演变而来。这里介绍一维动态规划思想。<br>dp[i] 表示前 i 天的最大利润，因为我们始终要使利润最大化，则：</p><pre><code>dp[i]=max(dp[i−1],prices[i]−minprice)</code></pre><span id="more"></span><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    def maxProfit(self, prices):        &quot;&quot;&quot;        暴力法(超出时间限制)        :type prices: List[int]        :rtype: int        &quot;&quot;&quot;        # ans = 0        #        # for i in range(0, len(prices)):        #     for j in range(i + 1, len(prices)):        #         ans = max(ans, prices[j] - prices[i])        #        # return ans                if len(prices) &lt; 2:            return 0        result = max([prices[j] - prices[i] for i in range(0, len(prices)) for j in range(i + 1, len(prices))])        return result if result &gt; 0 else 0        def maxProfit1(self, prices):        &quot;&quot;&quot;一次遍历&quot;&quot;&quot;        minprice = max(prices)  # 记录最小的股值        maxprofit = 0  #                # 循环迭代输入的prices，当前价格小于最小的股值时修改minprice，        # 当前获得的利润大于最大的利润时修改maxprofit        for price in prices:            maxprofit = max(price - minprice, maxprofit)            minprice = min(price, minprice)                    return maxprofit        def maxProfit2(self, prices):        &quot;&quot;&quot;动态规划（按照估值最低点列动态规划方程）&quot;&quot;&quot;        maxprofit = 0        dp = [prices[0] for j in range(0, len(prices))]        for i in range(1, len(prices)):            dp[i] = min(dp[i-1], prices[i])            maxprofit = max(maxprofit, prices[i] - dp[i])        return maxprofit        def maxProfit3(self, prices):        &quot;&quot;&quot;动态规划（按照最大利润列动态规划方程）&quot;&quot;&quot;        minprice = max(prices)        dp = [0]*len(prices)                for i in range(1, len(prices)):            minprice = min(minprice, prices[i])            dp[i] = max(dp[i - 1], prices[i] - minprice)                return dp[-1]if __name__ == &quot;__main__&quot;:    slt = Solution()    prices = [7, 1, 5, 3, 6, 4]    # prices = [7, 6, 4, 3, 1]    # profit = slt.maxProfit(prices)    # profit = slt.maxProfit1(prices)    # profit = slt.maxProfit2(prices)    profit = slt.maxProfit3(prices)    print(profit)</code></pre>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;121-买卖股票的最佳时机&quot;&gt;&lt;a href=&quot;#121-买卖股票的最佳时机&quot; class=&quot;headerlink&quot; title=&quot;121.买卖股票的最佳时机&quot;&gt;&lt;/a&gt;121.买卖股票的最佳时机&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。&lt;br&gt;你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。&lt;br&gt;返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。&lt;/p&gt;
+&lt;p&gt;示例 1：&lt;br&gt;输入：[7,1,5,3,6,4]&lt;br&gt;输出：5&lt;br&gt;解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。&lt;br&gt;     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。&lt;/p&gt;
+&lt;p&gt;示例 2：&lt;br&gt;输入：prices = [7,6,4,3,1]&lt;br&gt;输出：0&lt;br&gt;解释：在这种情况下, 没有交易完成, 所以最大利润为 0。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/best-time-to-buy-and-sell-stock&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;暴力法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;一次遍历&lt;br&gt;遍历一遍数组，计算每次 到当天为止 的最小股票价格和最大利润。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;3. 动态规划&lt;/strong&gt;&lt;br&gt;动态规划一般分为一维、二维、多维（使用状态压缩），对应形式为 dp(i)、dp(i)(j)、二进制dp(i)(j)。&lt;br&gt;（1）动态规划做题步骤&lt;br&gt;    明确 dp(i) 应该表示什么（二维情况：dp(i)(j)）；&lt;br&gt;    根据 dp(i)和 dp(i−1) 的关系得出状态转移方程；&lt;br&gt;    确定初始条件，如 dp(0)。&lt;br&gt;（2）本题思路&lt;br&gt;其实方法一的思路不是凭空想象的，而是由动态规划的思想演变而来。这里介绍一维动态规划思想。&lt;br&gt;dp[i] 表示前 i 天的最大利润，因为我们始终要使利润最大化，则：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dp[i]=max(dp[i−1],prices[i]−minprice)
+&lt;/code&gt;&lt;/pre&gt;</summary>
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
+    
+    <category term="121.买卖股票的最佳时机" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/121-%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/tags/%E6%95%B0%E7%BB%84/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 136.只出现一次的数字</title>
@@ -669,34 +714,6 @@
     <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JVM | JDK监控和故障处理常用工具总结</title>
-    <link href="http://example.com/2022/06/22/JDK%E7%9B%91%E6%8E%A7%E5%92%8C%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/"/>
-    <id>http://example.com/2022/06/22/JDK%E7%9B%91%E6%8E%A7%E5%92%8C%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/</id>
-    <published>2022-06-23T03:03:09.000Z</published>
-    <updated>2022-07-17T13:33:05.573Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="JDK监控和故障处理常用工具总结"><a href="#JDK监控和故障处理常用工具总结" class="headerlink" title="JDK监控和故障处理常用工具总结"></a>JDK监控和故障处理常用工具总结</h1><ol><li>jps:查看所有java进程<br>JVM Process Status Tool,用于查看所有Java进程的启动类、传入参数和Java虚拟机参数等信息。</li></ol><p>jps命令类似于Linux中的ps命令。</p><p>jps:显示虚拟机执行主类名称以及这些进程的本地虚拟机唯一ID。</p><p><strong>jps命令常用参数：</strong><br>    jps -q:只输出进程的本地虚拟机唯一ID。<br>    jps -l:输出主类的全名，如果进程执行的是 Jar 包，输出 Jar 路径。<br>    jps -v：输出虚拟机进程启动时 JVM 参数。<br>    jps -m：输出传递给 Java 进程 main() 函数的参数。</p><span id="more"></span><p><strong>示例：</strong> 我们写一个简单的HelloWorld程序来测试以上命令，HelloWorld程序如下：</p><pre><code>package leetcode;public class HelloWorld &#123;    public static void main(String[] args) throws InterruptedException &#123;        System.out.println(&quot;Hello World&quot;);        Thread.sleep(100000);    &#125;&#125;</code></pre><p>运行程序并测试以上命令：<br>运行：Run As –&gt; Run Configurations –&gt; 在Program arguments中添加 a=1 b=2 –&gt; run<br><img src="/2022/06/22/JDK%E7%9B%91%E6%8E%A7%E5%92%8C%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/1.png"><br>2. jstat:监视虚拟机各种运行状态信息<br>JVM Statistics Monitoring Tool,用于收集HotSpot虚拟机各方面的运行数据。</p><p>jstat（JVM Statistics Monitoring Tool） 使用于监视虚拟机各种运行状态信息的命令行工具。 它可以显示本地或者远程（需要远程主机提供 RMI 支持）虚拟机进程中的类信息、内存、垃圾收集、JIT 编译等运行数据，在没有 GUI，只提供了纯文本控制台环境的服务器上，它将是运行期间定位虚拟机性能问题的首选工具。</p><p><strong>jstat 命令使用格式：</strong></p><pre><code>jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</code></pre><p>比如 jstat -gc -h3 31736 1000 10表示分析进程 id 为 31736 的 gc 情况，每隔 1000ms 打印一次记录，打印 10 次停止，每 3 行后打印指标头部。</p><p><strong>常见的 option 如下：</strong><br>    jstat -class vmid ：显示 ClassLoader 的相关信息；<br>    jstat -compiler vmid ：显示 JIT 编译的相关信息；<br>    jstat -gc vmid ：显示与 GC 相关的堆信息；<br>    jstat -gccapacity vmid ：显示各个代的容量及使用情况；<br>    jstat -gcnew vmid ：显示新生代信息；<br>    jstat -gcnewcapcacity vmid ：显示新生代大小与使用情况；<br>    jstat -gcold vmid ：显示老年代和永久代的行为统计，从jdk1.8开始,该选项仅表示老年代，因为永久代被移除了；<br>    jstat -gcoldcapacity vmid ：显示老年代的大小；<br>    jstat -gcpermcapacity vmid ：显示永久代大小，从jdk1.8开始,该选项不存在了，因为永久代被移除了；<br>    jstat -gcutil vmid ：显示垃圾收集信息；<br>另外，加上 -t参数可以在输出信息上加一个 Timestamp 列，显示程序的运行时间。<br>3. jinfo：实时地查看和调整虚拟机各项参数<br>Configuration Info for Java,显示虚拟机配置信息。</p><p>jinfo vmid :输出当前 jvm 进程的全部参数和系统属性 (第一部分是系统的属性，第二部分是 JVM 的参数)。</p><p>jinfo -flag name vmid :输出对应名称的参数的具体值。比如输出 MaxHeapSize、查看当前 jvm 进程是否开启打印 GC 日志 ( -XX:PrintGCDetails :详细 GC 日志模式，这两个都是默认关闭的)。</p><pre><code>C:\Users\SnailClimb&gt;jinfo  -flag MaxHeapSize 17340-XX:MaxHeapSize=2124414976C:\Users\SnailClimb&gt;jinfo  -flag PrintGC 17340-XX:-PrintGC</code></pre><p>使用 jinfo 可以在不重启虚拟机的情况下，可以动态的修改 jvm 的参数。尤其在线上的环境特别有用,请看下面的例子：</p><p>jinfo -flag [+|-]name vmid 开启或者关闭对应名称的参数。</p><pre><code>C:\Users\SnailClimb&gt;jinfo  -flag  PrintGC 17340-XX:-PrintGCC:\Users\SnailClimb&gt;jinfo  -flag  +PrintGC 17340C:\Users\SnailClimb&gt;jinfo  -flag  PrintGC 17340-XX:+PrintGC</code></pre><ol start="4"><li>jmap<br>Memory Map for Java,生成虚拟机的内存转储快照（heapdump文件）、</li></ol><p>jmap（Memory Map for Java）命令用于生成堆转储快照。 如果不使用 jmap 命令，要想获取 Java 堆转储，可以使用 “-XX:+HeapDumpOnOutOfMemoryError” 参数，可以让虚拟机在 OOM 异常出现之后自动生成 dump 文件，Linux 命令下可以通过 kill -3 发送进程退出信号也能拿到 dump 文件。</p><p>jmap 的作用并不仅仅是为了获取 dump 文件，它还可以查询 finalizer 执行队列、Java 堆和永久代的详细信息，如空间使用率、当前使用的是哪种收集器等。和jinfo一样，jmap有不少功能在 Windows 平台下也是受限制的。</p><p>示例：将指定应用程序的堆快照输出到桌面。后面，可以通过 jhat、Visual VM 等工具分析该堆文件。</p><pre><code>C:\Users\SnailClimb&gt;jmap -dump:format=b,file=C:\Users\SnailClimb\Desktop\heap.hprof 17340Dumping heap to C:\Users\SnailClimb\Desktop\heap.hprof ...Heap dump file created</code></pre><ol start="5"><li>jhat<br>JVM Heap Analysis Tool,用于分析堆转储快照，它会建立一个HTTP/Web服务器，让用户可以在浏览器上查看分析结果。</li></ol><p>jhat 用于分析 heapdump 文件，它会建立一个 HTTP/HTML 服务器，让用户可以在浏览器上查看分析结果。</p><pre><code>C:\Users\SnailClimb&gt;jhat C:\Users\SnailClimb\Desktop\heap.hprofReading from C:\Users\SnailClimb\Desktop\heap.hprof...Dump file created Sat May 04 12:30:31 CST 2019Snapshot read, resolving...Resolving 131419 objects...Chasing references, expect 26 dots..........................Eliminating duplicate references..........................Snapshot resolved.Started HTTP server on port 7000Server is ready.</code></pre><p>访问 <a href="http://localhost:7000/">http://localhost:7000/</a><br>6. jstack<br>Stack Trace for Java,生成虚拟机当前时刻的线程快照，线程快照就是当前虚拟机内每一条线程正在执行的方法堆栈的集合。</p><p>jstack（Stack Trace for Java）命令用于生成虚拟机当前时刻的线程快照。线程快照就是当前虚拟机内每一条线程正在执行的方法堆栈的集合.</p><p>生成线程快照的目的主要是定位线程长时间出现停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间等待等都是导致线程长时间停顿的原因。线程出现停顿的时候通过jstack来查看各个线程的调用堆栈，就可以知道没有响应的线程到底在后台做些什么事情，或者在等待些什么资源。</p><p>下面是一个线程死锁的代码。我们下面会通过 jstack 命令进行死锁检查，输出死锁信息，找到发生死锁的线程。</p><pre><code>public class DeadLockDemo &#123;    private static Object resource1 = new Object();//资源 1    private static Object resource2 = new Object();//资源 2    public static void main(String[] args) &#123;        new Thread(() -&gt; &#123;            synchronized (resource1) &#123;                System.out.println(Thread.currentThread() + &quot;get resource1&quot;);                try &#123;                    Thread.sleep(1000);                &#125; catch (InterruptedException e) &#123;                    e.printStackTrace();                &#125;                System.out.println(Thread.currentThread() + &quot;waiting get resource2&quot;);                synchronized (resource2) &#123;                    System.out.println(Thread.currentThread() + &quot;get resource2&quot;);                &#125;            &#125;        &#125;, &quot;线程 1&quot;).start();        new Thread(() -&gt; &#123;            synchronized (resource2) &#123;                System.out.println(Thread.currentThread() + &quot;get resource2&quot;);                try &#123;                    Thread.sleep(1000);                &#125; catch (InterruptedException e) &#123;                    e.printStackTrace();                &#125;                System.out.println(Thread.currentThread() + &quot;waiting get resource1&quot;);                synchronized (resource1) &#123;                    System.out.println(Thread.currentThread() + &quot;get resource1&quot;);                &#125;            &#125;        &#125;, &quot;线程 2&quot;).start();    &#125;&#125;</code></pre><p><strong>Output</strong></p><pre><code>Thread[线程 1,5,main]get resource1Thread[线程 2,5,main]get resource2Thread[线程 1,5,main]waiting get resource2Thread[线程 2,5,main]waiting get resource1</code></pre><p>线程 A 通过 synchronized (resource1) 获得 resource1 的监视器锁，然后通过 Thread.sleep(1000);让线程 A 休眠 1s 为的是让线程 B 得到执行然后获取到 resource2 的监视器锁。线程 A 和线程 B 休眠结束了都开始企图请求获取对方的资源，然后这两个线程就会陷入互相等待的状态，这也就产生了死锁。</p><p><strong>通过 jstack 命令分析：</strong></p><pre><code>C:\Users\SnailClimb&gt;jps13792 KotlinCompileDaemon7360 NettyClient2173967972 Launcher8932 Launcher9256 DeadLockDemo10764 Jps17340 NettyServerC:\Users\SnailClimb&gt;jstack 9256</code></pre><p>输出的部分内容如下：</p><pre><code>Found one Java-level deadlock:=============================&quot;线程 2&quot;:  waiting to lock monitor 0x000000000333e668 (object 0x00000000d5efe1c0, a java.lang.Object),  which is held by &quot;线程 1&quot;&quot;线程 1&quot;:  waiting to lock monitor 0x000000000333be88 (object 0x00000000d5efe1d0, a java.lang.Object),  which is held by &quot;线程 2&quot;Java stack information for the threads listed above:===================================================&quot;线程 2&quot;:        at DeadLockDemo.lambda$main$1(DeadLockDemo.java:31)        - waiting to lock &lt;0x00000000d5efe1c0&gt; (a java.lang.Object)        - locked &lt;0x00000000d5efe1d0&gt; (a java.lang.Object)        at DeadLockDemo$$Lambda$2/1078694789.run(Unknown Source)        at java.lang.Thread.run(Thread.java:748)&quot;线程 1&quot;:        at DeadLockDemo.lambda$main$0(DeadLockDemo.java:16)        - waiting to lock &lt;0x00000000d5efe1d0&gt; (a java.lang.Object)        - locked &lt;0x00000000d5efe1c0&gt; (a java.lang.Object)        at DeadLockDemo$$Lambda$1/1324119927.run(Unknown Source)        at java.lang.Thread.run(Thread.java:748)Found 1 deadlock.</code></pre><p>可以看到 jstack 命令已经帮我们找到发生死锁的线程的具体信息。</p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;JDK监控和故障处理常用工具总结&quot;&gt;&lt;a href=&quot;#JDK监控和故障处理常用工具总结&quot; class=&quot;headerlink&quot; title=&quot;JDK监控和故障处理常用工具总结&quot;&gt;&lt;/a&gt;JDK监控和故障处理常用工具总结&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;jps:查看所有java进程&lt;br&gt;JVM Process Status Tool,用于查看所有Java进程的启动类、传入参数和Java虚拟机参数等信息。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;jps命令类似于Linux中的ps命令。&lt;/p&gt;
-&lt;p&gt;jps:显示虚拟机执行主类名称以及这些进程的本地虚拟机唯一ID。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;jps命令常用参数：&lt;/strong&gt;&lt;br&gt;    jps -q:只输出进程的本地虚拟机唯一ID。&lt;br&gt;    jps -l:输出主类的全名，如果进程执行的是 Jar 包，输出 Jar 路径。&lt;br&gt;    jps -v：输出虚拟机进程启动时 JVM 参数。&lt;br&gt;    jps -m：输出传递给 Java 进程 main() 函数的参数。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="JVM" scheme="http://example.com/categories/JVM/"/>
-    
-    <category term="JDK监控和故障处理常用工具总结" scheme="http://example.com/categories/JVM/JDK%E7%9B%91%E6%8E%A7%E5%92%8C%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/"/>
-    
-    
-    <category term="JVM" scheme="http://example.com/tags/JVM/"/>
     
   </entry>
   
