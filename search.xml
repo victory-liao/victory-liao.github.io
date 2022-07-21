@@ -1486,78 +1486,6 @@ driver.quit()
       </tags>
   </entry>
   <entry>
-    <title>并发 | CountDownLatch</title>
-    <url>/2022/05/30/CountDownLatch/</url>
-    <content><![CDATA[<h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><p>CountDownLatch允许一个或多个线程等待其他线程完成操作。<br>例如：</p>
-<pre><code>CountDownLatch c = new CountDownLatch(2)；
-</code></pre>
-<p>CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.<br>当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前<br>线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的<strong>N个点，可以是N个线程，也可以<br>是1个线程里的N个步骤</strong>。<br><strong>注：CountDownLatch的计数器智能使用一次</strong></p>
-<span id="more"></span>
-<p><strong>示例代码1</strong></p>
-<pre><code>package concurrency.countdownlatch;
-
-import java.util.concurrent.CountDownLatch;
-
-public class CountDownLatchTest1 &#123;
-    static CountDownLatch c = new CountDownLatch(2);
-    
-    public static void main(String[] args) throws InterruptedException &#123;
-        new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                System.out.println(&quot;parser1 finished&quot;);
-                c.countDown();
-            &#125;
-        &#125;).start();
-        
-        new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                System.out.println(&quot;parser2 finished&quot;);
-                c.countDown();
-            &#125;
-        &#125;).start();
-        c.await();
-        System.out.println(&quot;all parsers finished&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>示例代码2</strong></p>
-<pre><code>package concurrency.countdownlatch;
-
-import java.util.concurrent.CountDownLatch;
-
-public class CountDownLatchTest2 &#123;
-    static CountDownLatch c = new CountDownLatch(2);
-    public static void main(String[] args) throws InterruptedException &#123;
-        new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                System.out.println(&quot;1&quot;);
-                c.countDown();
-                System.out.println(&quot;2&quot;);
-                c.countDown();
-            &#125;
-        &#125;).start();
-        c.await();
-        System.out.println(&quot;3&quot;);
-    &#125; 
-&#125;
-</code></pre>
-<p><a href="https://blog.csdn.net/hbtj_1216/article/details/109655995">CountDownLatch</a></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>并发</category>
-        <category>CountDownLatch</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>并发</tag>
-        <tag>CountDownLatch</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>并发 | CyclicBarrier用于多线程计算数据并合并计算结果</title>
     <url>/2022/06/07/CyclicBarrier%E7%94%A8%E4%BA%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%90%88%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C/</url>
     <content><![CDATA[<h1 id="CyclicBarrier用于多线程计算数据并合并计算结果"><a href="#CyclicBarrier用于多线程计算数据并合并计算结果" class="headerlink" title="CyclicBarrier用于多线程计算数据并合并计算结果"></a>CyclicBarrier用于多线程计算数据并合并计算结果</h1><p><strong>CyclicBarrier</strong><br>CyclicBarrier让一组线程到达一个屏障（同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，<br>所有被屏障拦截的线程才会继续执行。<br><strong>注：CyclicBarrier的计数器可以使用reset()方法重置</strong></p>
@@ -1894,6 +1822,78 @@ for ... in query[11:20]
       </tags>
   </entry>
   <entry>
+    <title>并发 | CountDownLatch</title>
+    <url>/2022/05/30/CountDownLatch/</url>
+    <content><![CDATA[<h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><p>CountDownLatch允许一个或多个线程等待其他线程完成操作。<br>例如：</p>
+<pre><code>CountDownLatch c = new CountDownLatch(2)；
+</code></pre>
+<p>CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.<br>当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前<br>线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的<strong>N个点，可以是N个线程，也可以<br>是1个线程里的N个步骤</strong>。<br><strong>注：CountDownLatch的计数器智能使用一次</strong></p>
+<span id="more"></span>
+<p><strong>示例代码1</strong></p>
+<pre><code>package concurrency.countdownlatch;
+
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchTest1 &#123;
+    static CountDownLatch c = new CountDownLatch(2);
+    
+    public static void main(String[] args) throws InterruptedException &#123;
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                System.out.println(&quot;parser1 finished&quot;);
+                c.countDown();
+            &#125;
+        &#125;).start();
+        
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                System.out.println(&quot;parser2 finished&quot;);
+                c.countDown();
+            &#125;
+        &#125;).start();
+        c.await();
+        System.out.println(&quot;all parsers finished&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>示例代码2</strong></p>
+<pre><code>package concurrency.countdownlatch;
+
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchTest2 &#123;
+    static CountDownLatch c = new CountDownLatch(2);
+    public static void main(String[] args) throws InterruptedException &#123;
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                System.out.println(&quot;1&quot;);
+                c.countDown();
+                System.out.println(&quot;2&quot;);
+                c.countDown();
+            &#125;
+        &#125;).start();
+        c.await();
+        System.out.println(&quot;3&quot;);
+    &#125; 
+&#125;
+</code></pre>
+<p><a href="https://blog.csdn.net/hbtj_1216/article/details/109655995">CountDownLatch</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>并发</category>
+        <category>CountDownLatch</category>
+      </categories>
+      <tags>
+        <tag>并发</tag>
+        <tag>Java</tag>
+        <tag>CountDownLatch</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Computer Vision | DogsVSCats</title>
     <url>/2021/11/16/DogsVSCats/</url>
     <content><![CDATA[<h1 id="Dogs-VS-Cats"><a href="#Dogs-VS-Cats" class="headerlink" title="Dogs VS Cats"></a>Dogs VS Cats</h1><h2 id="猫狗大战任务"><a href="#猫狗大战任务" class="headerlink" title="猫狗大战任务"></a>猫狗大战任务</h2><p>猫狗大战是来源于Kaggle的一个比赛项目，任务为给定一个有猫狗照片数据集，设计一种算法对测试集中的猫狗图片进行分类。<br><strong>比赛项目网址：</strong><br><a href="https://www.kaggle.com/">https://www.kaggle.com/</a><br><strong>网络</strong></p>
@@ -1921,22 +1921,6 @@ layer11: Linear(64, 2)
       </tags>
   </entry>
   <entry>
-    <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
-    <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
-    <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
-<h1 id="Target-EEG-Pathology-Detection"><a href="#Target-EEG-Pathology-Detection" class="headerlink" title="Target: EEG Pathology Detection"></a>Target: EEG Pathology Detection</h1><h1 id="Proposed-Methonds"><a href="#Proposed-Methonds" class="headerlink" title="Proposed Methonds:"></a>Proposed Methonds:</h1><p>Method One:Shallow CNN Model<br>Method Two:Deep CNN Model(AlexNet)<br>Method Three:Fusion stategy based on a multiplayer perception<br>Fusion of CNN features of several distinct temporal segments of the EEG signal</p>
-<p><b style="color:red">In future study:investigate different fusion strategies</b></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-      </categories>
-      <tags>
-        <tag>CNN</tag>
-        <tag>论文</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>脑电基础知识 | 简单了解EEG</title>
     <url>/2020/10/11/EEG-introduction/</url>
     <content><![CDATA[<h1 id="简单了解EEG"><a href="#简单了解EEG" class="headerlink" title="简单了解EEG"></a>简单了解EEG</h1><h2 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h2><p>EEG is the electrical response of brain cells in the cerebral cortex.</p>
@@ -1957,6 +1941,22 @@ layer11: Linear(64, 2)
       </categories>
       <tags>
         <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
+    <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
+    <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
+<h1 id="Target-EEG-Pathology-Detection"><a href="#Target-EEG-Pathology-Detection" class="headerlink" title="Target: EEG Pathology Detection"></a>Target: EEG Pathology Detection</h1><h1 id="Proposed-Methonds"><a href="#Proposed-Methonds" class="headerlink" title="Proposed Methonds:"></a>Proposed Methonds:</h1><p>Method One:Shallow CNN Model<br>Method Two:Deep CNN Model(AlexNet)<br>Method Three:Fusion stategy based on a multiplayer perception<br>Fusion of CNN features of several distinct temporal segments of the EEG signal</p>
+<p><b style="color:red">In future study:investigate different fusion strategies</b></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+      </categories>
+      <tags>
+        <tag>CNN</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -2198,6 +2198,20 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | I/O密集型和计算密集型</title>
+    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
+<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java | HashMap的七种遍历方式</title>
     <url>/2022/04/23/HashMap%E7%9A%84%E4%B8%83%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="HashMap的七种遍历方式"><a href="#HashMap的七种遍历方式" class="headerlink" title="HashMap的七种遍历方式"></a>HashMap的七种遍历方式</h1><p><a href="https://mp.weixin.qq.com/s/zQBN3UvJDhRTKP6SzcZFKw">参考资料</a></p>
@@ -2273,20 +2287,6 @@ public class HashMapTraversalMethodsTest &#123;
       <tags>
         <tag>HashMap</tag>
         <tag>遍历</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | I/O密集型和计算密集型</title>
-    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
-<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -2639,130 +2639,6 @@ public class AtomicIntegerFieldUpdaterTest &#123;
       </tags>
   </entry>
   <entry>
-    <title>Java | Java判断对象是否相等</title>
-    <url>/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/</url>
-    <content><![CDATA[<h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
-<span id="more"></span>
-
-<pre><code>class Monkey&#123;
-    private String name;
-    private int age;
-    
-    public Monkey(String name, int age)&#123;
-        this.setName(name);
-        this.setAge(age);
-    &#125;
-
-    public String getName() &#123;
-        return this.name;
-    &#125;
-
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-
-    public int getAge() &#123;
-        return age;
-    &#125;
-
-    public void setAge(int age) &#123;
-        this.age = age;
-    &#125;
-&#125;
-</code></pre>
-<h2 id="Java中如何判断两个对象是否相等"><a href="#Java中如何判断两个对象是否相等" class="headerlink" title="Java中如何判断两个对象是否相等"></a>Java中如何判断两个对象是否相等</h2><p>Java通过hashCode()和equals的结果共同决定两个对象是否相等</p>
-<h3 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode()"></a>hashCode()</h3><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。hashCode() 定义在JDK<br>的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
-<h3 id="equals"><a href="#equals" class="headerlink" title="equals()"></a>equals()</h3><p>equals它的作用也是判断两个对象是否相等，如果对象重写了equals()方法，<br>比较两个对象的内容是否相等；如果没有重写，比较两个对象的地址是否相同，<br>价于“==”。同样的，equals()定义在JDK的Object.java中，这就意味着Java<br>中的任何类都包含有equals()函数。<br><strong>注意：通常我们可以通过重写hashCode()和equals()来自定义两个对象相等的标准，且若重写，<br>必须同时对两个方法进行重写。</strong></p>
-<h2 id="重写hashCode-和equals"><a href="#重写hashCode-和equals" class="headerlink" title="重写hashCode()和equals()"></a>重写hashCode()和equals()</h2><p>我们只需再上面定义的Monkey类中重写这两个方法即可；equals方法直接返回true,也就是说对<br>这个类产生的任意两个对象进行比较都会返回ture；hashCode()方法返回一个固定的值，这里取4。</p>
-<pre><code>class Monkey&#123;
-    ...
-    
-    public boolean equals(Object obj) &#123;
-        return true;
-    &#125;
-    
-    public int hashCode() &#123;
-        return 4;
-    &#125;
-    
-    ...
-&#125;
-</code></pre>
-<h2 id="写测试类"><a href="#写测试类" class="headerlink" title="写测试类"></a>写测试类</h2><p>下面我们创建一个HashCodeAndEqualsTest测试类进行测试。</p>
-<pre><code>public class HashCodeAndEqualsTest &#123;
-    
-    public static void main(String[] args) &#123;
-        // TODO Auto-generated method stub
-        Monkey monkey1 = new Monkey(&quot;wu kong&quot;, 10);
-        Monkey monkey2 = monkey1;
-        Monkey monkey3 = new Monkey(&quot;liu er&quot;,  5);
-        
-        System.out.println(&quot;monkey1&#39;s name:&quot; + monkey1.getName() + &quot;,age:&quot; + monkey1.getAge());
-        System.out.println(&quot;monkey2&#39;s name:&quot; + monkey2.getName() + &quot;,age:&quot; + monkey2.getAge());
-        System.out.println(&quot;monkey3&#39;s name:&quot; + monkey3.getName() + &quot;,age:&quot; + monkey3.getAge());
-        
-        System.out.println(&quot;monkey1&#39;s hash code:&quot; + monkey1.hashCode());
-        System.out.println(&quot;monkey2&#39;s hash code:&quot; + monkey2.hashCode());
-        System.out.println(&quot;monkey3&#39;s hash code:&quot; + monkey3.hashCode());
-        
-        System.out.println(&quot;Is monkey1 equal to monkey2:&quot; + monkey1.equals(monkey2));
-        System.out.println(&quot;Is monkey1 equal to monkey3:&quot; + monkey1.equals(monkey3));
-    &#125;
-
-&#125;
-</code></pre>
-<h3 id="1-没有重写方法的程序执行结果"><a href="#1-没有重写方法的程序执行结果" class="headerlink" title="1.没有重写方法的程序执行结果"></a>1.没有重写方法的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:366712642
-monkey2&#39;s hash code:366712642
-monkey3&#39;s hash code:1829164700
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:false
-</code></pre>
-<p>monkey1和monkey2指向堆上的同一个对象，故monkey1.equals(monkey2)的结果为true,monkey1和<br>monkey3指向堆上两个不同的对象，故equals()方法返回false。</p>
-<h3 id="2-重写后的程序执行结果"><a href="#2-重写后的程序执行结果" class="headerlink" title="2.重写后的程序执行结果"></a>2.重写后的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:4
-monkey2&#39;s hash code:4
-monkey3&#39;s hash code:4
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:true
-</code></pre>
-<p>由于我们对equals和hashCode方法进行了重写，重新确定了对象相等的标准，故monkey1和monkey3为<br>“同一对象”。</p>
-<h3 id="3-只重写equals方法时，程序的执行结果"><a href="#3-只重写equals方法时，程序的执行结果" class="headerlink" title="3.只重写equals方法时，程序的执行结果"></a>3.只重写equals方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:366712642
-monkey2&#39;s hash code:366712642
-monkey3&#39;s hash code:1829164700
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:true
-</code></pre>
-<p>重写了equals方法后，monkey1和monkey3两个对象被认为指向同一实例，但他们的hash code不同</p>
-<h3 id="4-只重写hashCode方法时，程序的执行结果"><a href="#4-只重写hashCode方法时，程序的执行结果" class="headerlink" title="4.只重写hashCode方法时，程序的执行结果"></a>4.只重写hashCode方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:4
-monkey2&#39;s hash code:4
-monkey3&#39;s hash code:4
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:false
-</code></pre>
-<p>虽然monkey1、monkey2的hash code相同，但equals方法返回false。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>判断两个对象是否相等</category>
-      </categories>
-      <tags>
-        <tag>equals</tag>
-        <tag>hashCode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | JdbcTemplate增删改查</title>
     <url>/2022/03/07/JdbcTemplate/</url>
     <content><![CDATA[<h1 id="JdbcTemplate增删改查"><a href="#JdbcTemplate增删改查" class="headerlink" title="JdbcTemplate增删改查"></a>JdbcTemplate增删改查</h1><p>1.项目目录<br><img src="/2022/03/07/JdbcTemplate/1.PNG"><br>2.Emp.java</p>
@@ -2940,6 +2816,130 @@ public class TestJdbcTemplate &#123;
       <tags>
         <tag>spring</tag>
         <tag>JdbcTemplate</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java | Java判断对象是否相等</title>
+    <url>/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/</url>
+    <content><![CDATA[<h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
+<span id="more"></span>
+
+<pre><code>class Monkey&#123;
+    private String name;
+    private int age;
+    
+    public Monkey(String name, int age)&#123;
+        this.setName(name);
+        this.setAge(age);
+    &#125;
+
+    public String getName() &#123;
+        return this.name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public int getAge() &#123;
+        return age;
+    &#125;
+
+    public void setAge(int age) &#123;
+        this.age = age;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="Java中如何判断两个对象是否相等"><a href="#Java中如何判断两个对象是否相等" class="headerlink" title="Java中如何判断两个对象是否相等"></a>Java中如何判断两个对象是否相等</h2><p>Java通过hashCode()和equals的结果共同决定两个对象是否相等</p>
+<h3 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode()"></a>hashCode()</h3><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。hashCode() 定义在JDK<br>的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
+<h3 id="equals"><a href="#equals" class="headerlink" title="equals()"></a>equals()</h3><p>equals它的作用也是判断两个对象是否相等，如果对象重写了equals()方法，<br>比较两个对象的内容是否相等；如果没有重写，比较两个对象的地址是否相同，<br>价于“==”。同样的，equals()定义在JDK的Object.java中，这就意味着Java<br>中的任何类都包含有equals()函数。<br><strong>注意：通常我们可以通过重写hashCode()和equals()来自定义两个对象相等的标准，且若重写，<br>必须同时对两个方法进行重写。</strong></p>
+<h2 id="重写hashCode-和equals"><a href="#重写hashCode-和equals" class="headerlink" title="重写hashCode()和equals()"></a>重写hashCode()和equals()</h2><p>我们只需再上面定义的Monkey类中重写这两个方法即可；equals方法直接返回true,也就是说对<br>这个类产生的任意两个对象进行比较都会返回ture；hashCode()方法返回一个固定的值，这里取4。</p>
+<pre><code>class Monkey&#123;
+    ...
+    
+    public boolean equals(Object obj) &#123;
+        return true;
+    &#125;
+    
+    public int hashCode() &#123;
+        return 4;
+    &#125;
+    
+    ...
+&#125;
+</code></pre>
+<h2 id="写测试类"><a href="#写测试类" class="headerlink" title="写测试类"></a>写测试类</h2><p>下面我们创建一个HashCodeAndEqualsTest测试类进行测试。</p>
+<pre><code>public class HashCodeAndEqualsTest &#123;
+    
+    public static void main(String[] args) &#123;
+        // TODO Auto-generated method stub
+        Monkey monkey1 = new Monkey(&quot;wu kong&quot;, 10);
+        Monkey monkey2 = monkey1;
+        Monkey monkey3 = new Monkey(&quot;liu er&quot;,  5);
+        
+        System.out.println(&quot;monkey1&#39;s name:&quot; + monkey1.getName() + &quot;,age:&quot; + monkey1.getAge());
+        System.out.println(&quot;monkey2&#39;s name:&quot; + monkey2.getName() + &quot;,age:&quot; + monkey2.getAge());
+        System.out.println(&quot;monkey3&#39;s name:&quot; + monkey3.getName() + &quot;,age:&quot; + monkey3.getAge());
+        
+        System.out.println(&quot;monkey1&#39;s hash code:&quot; + monkey1.hashCode());
+        System.out.println(&quot;monkey2&#39;s hash code:&quot; + monkey2.hashCode());
+        System.out.println(&quot;monkey3&#39;s hash code:&quot; + monkey3.hashCode());
+        
+        System.out.println(&quot;Is monkey1 equal to monkey2:&quot; + monkey1.equals(monkey2));
+        System.out.println(&quot;Is monkey1 equal to monkey3:&quot; + monkey1.equals(monkey3));
+    &#125;
+
+&#125;
+</code></pre>
+<h3 id="1-没有重写方法的程序执行结果"><a href="#1-没有重写方法的程序执行结果" class="headerlink" title="1.没有重写方法的程序执行结果"></a>1.没有重写方法的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:366712642
+monkey2&#39;s hash code:366712642
+monkey3&#39;s hash code:1829164700
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:false
+</code></pre>
+<p>monkey1和monkey2指向堆上的同一个对象，故monkey1.equals(monkey2)的结果为true,monkey1和<br>monkey3指向堆上两个不同的对象，故equals()方法返回false。</p>
+<h3 id="2-重写后的程序执行结果"><a href="#2-重写后的程序执行结果" class="headerlink" title="2.重写后的程序执行结果"></a>2.重写后的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:4
+monkey2&#39;s hash code:4
+monkey3&#39;s hash code:4
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:true
+</code></pre>
+<p>由于我们对equals和hashCode方法进行了重写，重新确定了对象相等的标准，故monkey1和monkey3为<br>“同一对象”。</p>
+<h3 id="3-只重写equals方法时，程序的执行结果"><a href="#3-只重写equals方法时，程序的执行结果" class="headerlink" title="3.只重写equals方法时，程序的执行结果"></a>3.只重写equals方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:366712642
+monkey2&#39;s hash code:366712642
+monkey3&#39;s hash code:1829164700
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:true
+</code></pre>
+<p>重写了equals方法后，monkey1和monkey3两个对象被认为指向同一实例，但他们的hash code不同</p>
+<h3 id="4-只重写hashCode方法时，程序的执行结果"><a href="#4-只重写hashCode方法时，程序的执行结果" class="headerlink" title="4.只重写hashCode方法时，程序的执行结果"></a>4.只重写hashCode方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:4
+monkey2&#39;s hash code:4
+monkey3&#39;s hash code:4
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:false
+</code></pre>
+<p>虽然monkey1、monkey2的hash code相同，但equals方法返回false。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>判断两个对象是否相等</category>
+      </categories>
+      <tags>
+        <tag>equals</tag>
+        <tag>hashCode</tag>
       </tags>
   </entry>
   <entry>
@@ -3282,6 +3282,30 @@ plt.show()
       </tags>
   </entry>
   <entry>
+    <title>参考文献 | Multimodal Emotion Recognition Method based on Facial expressions and EEG</title>
+    <url>/2022/01/04/MultimodalEmotionRecognition/</url>
+    <content><![CDATA[<h1 id="Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG"><a href="#Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG" class="headerlink" title="Multimodal Emotion Recognition Method based on Facial expressions and EEG"></a>Multimodal Emotion Recognition Method based on Facial expressions and EEG</h1><h2 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h2><p>To solve the <strong>multimodal emtoion recognition</strong> problem, the emotion recognition results<br>were calculated using the <strong>Monte Carlo method</strong> to combine the recognition results of<br><strong>facical expressions</strong> and <strong>EEG</strong> in the multimodal emotion recognition.</p>
+<span id="more"></span>
+<h2 id="Unimodal-experiment"><a href="#Unimodal-experiment" class="headerlink" title="Unimodal experiment"></a>Unimodal experiment</h2><ol>
+<li>They trained a <strong>CNN</strong> model using the FER2013 public dataset as a facial expressions classifier.</li>
+<li>A <strong>SVM</strong> was used to classify the EEG data.</li>
+</ol>
+<p><img src="/2022/01/04/MultimodalEmotionRecognition/unimodal.jpg"></p>
+<h2 id="Multimodal-experiment"><a href="#Multimodal-experiment" class="headerlink" title="Multimodal experiment"></a>Multimodal experiment</h2><p>Combine the recognition results of facical expressions and EEG in the multimodal emotion recognition using the Monte Carlo method<br><img src="/2022/01/04/MultimodalEmotionRecognition/multimodal.jpg"></p>
+<h2 id="Cite-this-paper"><a href="#Cite-this-paper" class="headerlink" title="Cite this paper"></a>Cite this paper</h2><p><a href="https://doi.org/10.1016/j.bspc.2021.103029">https://doi.org/10.1016/j.bspc.2021.103029</a></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电分类</category>
+        <category>参考文献</category>
+      </categories>
+      <tags>
+        <tag>脑电分类</tag>
+        <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | MapReduce</title>
     <url>/2021/11/07/MapReduce/</url>
     <content><![CDATA[<h1 id="map-and-reduce"><a href="#map-and-reduce" class="headerlink" title="map and reduce"></a>map and reduce</h1><p>1.map()<br>map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。</p>
@@ -3320,30 +3344,6 @@ reduce(jiecheng, [i for i in range(1, n+1)])
         <tag>python</tag>
         <tag>map</tag>
         <tag>reduce</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>参考文献 | Multimodal Emotion Recognition Method based on Facial expressions and EEG</title>
-    <url>/2022/01/04/MultimodalEmotionRecognition/</url>
-    <content><![CDATA[<h1 id="Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG"><a href="#Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG" class="headerlink" title="Multimodal Emotion Recognition Method based on Facial expressions and EEG"></a>Multimodal Emotion Recognition Method based on Facial expressions and EEG</h1><h2 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h2><p>To solve the <strong>multimodal emtoion recognition</strong> problem, the emotion recognition results<br>were calculated using the <strong>Monte Carlo method</strong> to combine the recognition results of<br><strong>facical expressions</strong> and <strong>EEG</strong> in the multimodal emotion recognition.</p>
-<span id="more"></span>
-<h2 id="Unimodal-experiment"><a href="#Unimodal-experiment" class="headerlink" title="Unimodal experiment"></a>Unimodal experiment</h2><ol>
-<li>They trained a <strong>CNN</strong> model using the FER2013 public dataset as a facial expressions classifier.</li>
-<li>A <strong>SVM</strong> was used to classify the EEG data.</li>
-</ol>
-<p><img src="/2022/01/04/MultimodalEmotionRecognition/unimodal.jpg"></p>
-<h2 id="Multimodal-experiment"><a href="#Multimodal-experiment" class="headerlink" title="Multimodal experiment"></a>Multimodal experiment</h2><p>Combine the recognition results of facical expressions and EEG in the multimodal emotion recognition using the Monte Carlo method<br><img src="/2022/01/04/MultimodalEmotionRecognition/multimodal.jpg"></p>
-<h2 id="Cite-this-paper"><a href="#Cite-this-paper" class="headerlink" title="Cite this paper"></a>Cite this paper</h2><p><a href="https://doi.org/10.1016/j.bspc.2021.103029">https://doi.org/10.1016/j.bspc.2021.103029</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电分类</category>
-        <category>参考文献</category>
-      </categories>
-      <tags>
-        <tag>脑电分类</tag>
-        <tag>EEG</tag>
       </tags>
   </entry>
   <entry>
@@ -4142,22 +4142,6 @@ insert into table_name() values(),(),()
       </tags>
   </entry>
   <entry>
-    <title>GPU | NVIDIAGeForceGTX1650驱动安装</title>
-    <url>/2021/10/09/NVIDIAGeForceGTX1650%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<h1 id="NVIDIAGeForceGTX1650驱动安装"><a href="#NVIDIAGeForceGTX1650驱动安装" class="headerlink" title="NVIDIAGeForceGTX1650驱动安装"></a>NVIDIAGeForceGTX1650驱动安装</h1><p>当我们想使用GPU（可以用来加速）来跑深度学习代码前，需要进行显卡驱动安装，我的显卡是NVIDIA GeForce GTX 1650。</p>
-<p><strong>需要安装：</strong><br>1.Cuda<br>2.CuDNN<br><strong>下载地址：</strong><br><a href="https://developer.nvidia.com/cuda-toolkit">Cuda</a><br><a href=" https://developer.nvidia.com/cudnn">CuDNN</a><br><strong>我的显卡使用的Cuda、CuDNN版本：</strong><br>1.Cuda-10.1<br>2.CuDNN-7.6<br>3.Tensorflow-gpu-1.15.0(可选，在这里我是想用来加速Tensorflow代码的训练)</p>
-<p><strong>注意：深度学习框架、python、Cuda、CuDNN版本的对应以及Cuda与自己显卡的兼容性</strong><br><a href="https://blog.csdn.net/s_hikki/article/details/106107778">NVIDIA GeForce GTX 1650驱动安装</a><br><a href="https://tensorflow.google.cn/install/source_windows#configuration_options">版本对应参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>GPU</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>GPU</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PIL | PIL.Image.crop()</title>
     <url>/2021/11/22/PILImageCrop/</url>
     <content><![CDATA[<h1 id="PIL-Image-crop"><a href="#PIL-Image-crop" class="headerlink" title="PIL.Image.crop()"></a>PIL.Image.crop()</h1><p>程序使用PIL.Image.crop()将一张图片切割成9张小图片。</p>
@@ -4193,6 +4177,22 @@ for j in range(3):
       <tags>
         <tag>python</tag>
         <tag>PIL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GPU | NVIDIAGeForceGTX1650驱动安装</title>
+    <url>/2021/10/09/NVIDIAGeForceGTX1650%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<h1 id="NVIDIAGeForceGTX1650驱动安装"><a href="#NVIDIAGeForceGTX1650驱动安装" class="headerlink" title="NVIDIAGeForceGTX1650驱动安装"></a>NVIDIAGeForceGTX1650驱动安装</h1><p>当我们想使用GPU（可以用来加速）来跑深度学习代码前，需要进行显卡驱动安装，我的显卡是NVIDIA GeForce GTX 1650。</p>
+<p><strong>需要安装：</strong><br>1.Cuda<br>2.CuDNN<br><strong>下载地址：</strong><br><a href="https://developer.nvidia.com/cuda-toolkit">Cuda</a><br><a href=" https://developer.nvidia.com/cudnn">CuDNN</a><br><strong>我的显卡使用的Cuda、CuDNN版本：</strong><br>1.Cuda-10.1<br>2.CuDNN-7.6<br>3.Tensorflow-gpu-1.15.0(可选，在这里我是想用来加速Tensorflow代码的训练)</p>
+<p><strong>注意：深度学习框架、python、Cuda、CuDNN版本的对应以及Cuda与自己显卡的兼容性</strong><br><a href="https://blog.csdn.net/s_hikki/article/details/106107778">NVIDIA GeForce GTX 1650驱动安装</a><br><a href="https://tensorflow.google.cn/install/source_windows#configuration_options">版本对应参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>GPU</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>GPU</tag>
       </tags>
   </entry>
   <entry>
@@ -4901,6 +4901,26 @@ public class RESTController &#123;
       </tags>
   </entry>
   <entry>
+    <title>Redis | 集群</title>
+    <url>/2022/05/13/Redis%E9%9B%86%E7%BE%A4/</url>
+    <content><![CDATA[<h1 id="Redis集群"><a href="#Redis集群" class="headerlink" title="Redis集群"></a>Redis集群</h1><ol>
+<li>问题<br>1）服务器内存容量不够，redis如何进行扩容？<br>2）大量并发写操作， redis如何分摊？</li>
+<li>集群<br>Redis 集群实现了对Redis的水平扩容，即<strong>启动N个redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的1/N</strong>。<br>注：Redis 集群通过分区（partition）来提供一定程度的可用性（availability）： 即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。</li>
+<li>slots<br>一个 Redis 集群包含 16384 个插槽（hash slot）， 数据库中的每个键都属于这 16384 个插槽的其中一个， 集群使用公式 CRC16(key) % 16384 来计算键 key 属于哪个槽， 其中 CRC16(key) 语句用于计算键 key 的 CRC16 校验和 。<br>集群中的每个节点负责处理一部分插槽。举个例子， 如果一个集群可以有主节点，其中：节点A负责处理0号至5500号插槽，节点B负责处理5501号至11000号插槽，节点C负责处理11001号至16383号插槽。</li>
+<li>集群的优点<br>1）实现扩容<br>2）分摊压力<br>3）无中心配置相对简单</li>
+<li>集群的缺点<br>1）多键操作是不被支持的（这些键有可能存在不同的服务器上，可以通过{}来定义组的概念，从而使key中{}内相同内容的键值对放到一个slot中去。）<br>2）多键的Redis事务是不被支持的。lua脚本不被支持。<br>3）由于集群方案出现较晚，很多公司已经采用了其他的集群方案，而代理或者客户端分片的方案想要迁移至redis cluster，需要整体迁移而不是逐步过渡，复杂度较大。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>集群</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>集群</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis | 持久化方式</title>
     <url>/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="Redis持久化方式"><a href="#Redis持久化方式" class="headerlink" title="Redis持久化方式"></a>Redis持久化方式</h1><ol>
@@ -4925,26 +4945,6 @@ public class RESTController &#123;
       <tags>
         <tag>Redis</tag>
         <tag>持久化方式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis | 集群</title>
-    <url>/2022/05/13/Redis%E9%9B%86%E7%BE%A4/</url>
-    <content><![CDATA[<h1 id="Redis集群"><a href="#Redis集群" class="headerlink" title="Redis集群"></a>Redis集群</h1><ol>
-<li>问题<br>1）服务器内存容量不够，redis如何进行扩容？<br>2）大量并发写操作， redis如何分摊？</li>
-<li>集群<br>Redis 集群实现了对Redis的水平扩容，即<strong>启动N个redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的1/N</strong>。<br>注：Redis 集群通过分区（partition）来提供一定程度的可用性（availability）： 即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。</li>
-<li>slots<br>一个 Redis 集群包含 16384 个插槽（hash slot）， 数据库中的每个键都属于这 16384 个插槽的其中一个， 集群使用公式 CRC16(key) % 16384 来计算键 key 属于哪个槽， 其中 CRC16(key) 语句用于计算键 key 的 CRC16 校验和 。<br>集群中的每个节点负责处理一部分插槽。举个例子， 如果一个集群可以有主节点，其中：节点A负责处理0号至5500号插槽，节点B负责处理5501号至11000号插槽，节点C负责处理11001号至16383号插槽。</li>
-<li>集群的优点<br>1）实现扩容<br>2）分摊压力<br>3）无中心配置相对简单</li>
-<li>集群的缺点<br>1）多键操作是不被支持的（这些键有可能存在不同的服务器上，可以通过{}来定义组的概念，从而使key中{}内相同内容的键值对放到一个slot中去。）<br>2）多键的Redis事务是不被支持的。lua脚本不被支持。<br>3）由于集群方案出现较晚，很多公司已经采用了其他的集群方案，而代理或者客户端分片的方案想要迁移至redis cluster，需要整体迁移而不是逐步过渡，复杂度较大。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>集群</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-        <tag>集群</tag>
       </tags>
   </entry>
   <entry>
@@ -6753,23 +6753,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>UML | UML中的事物分类</title>
-    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
-<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
-<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
-<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
-<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
-<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
-]]></content>
-      <categories>
-        <category>UML</category>
-      </categories>
-      <tags>
-        <tag>UML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>VGG | 使用3x3卷积核的优点</title>
     <url>/2021/11/15/VGG3x3%E5%8D%B7%E7%A7%AF%E6%A0%B8%E7%9A%84%E4%BC%98%E7%82%B9/</url>
     <content><![CDATA[<h1 id="VGG使用3x3卷积核的优点"><a href="#VGG使用3x3卷积核的优点" class="headerlink" title="VGG使用3x3卷积核的优点"></a>VGG使用3x3卷积核的优点</h1><p>2个3x3的卷积核串联和一个5x5的卷积核拥有相同的感受野，但是，2个3x3的卷积核拥有更少的参数，<br>对于通道为1的5x5特征图得到通道为1的输出特征图，前者有3x3x2=18个参数，后者5x5=25个参数，<br>其次，多个3x3的卷积核比一个较大的尺寸的卷积核加入了更多的非线性函数，增强了模型的非线性表达能力。<br><strong>1x1卷积核的作用：</strong> 改变通道数目，保持尺度不变情况下增强非线性表达能力，可以实现跨通道的信息交互。</p>
@@ -6784,6 +6767,23 @@ if __name__ == &quot;__main__&quot;:
         <tag>深度学习</tag>
         <tag>CNN</tag>
         <tag>VGG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>UML | UML中的事物分类</title>
+    <url>/2021/05/23/UML%E4%B8%AD%E7%9A%84%E4%BA%8B%E7%89%A9%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="UML中的事物分类"><a href="#UML中的事物分类" class="headerlink" title="UML中的事物分类"></a>UML中的事物分类</h1><p>1.结构事物<br>模型的<strong>静态部分</strong>，是UML模型中的名词，描述概念或物理元素。<br><strong>包括</strong>：类(class),(接口)interface,协作(collaboration),用例(use case),主动类(active class),构件(component),节点(node)</p>
+<p>2.行为事物<br>模型的<strong>动态部分</strong>，描述了跨越时间和空间的行为。<br><strong>包括</strong>：交互(interaction)，状态机(state machine)</p>
+<p><strong>交互</strong>：由在特定语境中共同完成一定任务的一组对象之间交换的<strong>消息</strong>组成，描述一个对象群体的行为或单个操作的行为</p>
+<p><strong>状态机</strong>：描述了一个对象或一个交互在<strong>生命期内响应事件</strong>所经历的<strong>状态序列</strong></p>
+<p>3.分组事物<br>分组事物是一些由<strong>模型分解成的组织部分</strong>，最主要的是<strong>包</strong></p>
+<p>4.注释事物<br>用来描述、说明和标注模型的任何元素，主要是<strong>注解</strong></p>
+]]></content>
+      <categories>
+        <category>UML</category>
+      </categories>
+      <tags>
+        <tag>UML</tag>
       </tags>
   </entry>
   <entry>
@@ -11537,8 +11537,8 @@ public class Counter &#123;
         <category>并发</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>volatile</tag>
         <tag>synchronized</tag>
         <tag>原子操作</tag>
@@ -11557,8 +11557,8 @@ public class Counter &#123;
         <category>volatile写读的内存语义和锁的释放获取的内存语义</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>volatile</tag>
         <tag>锁</tag>
       </tags>
@@ -12296,8 +12296,8 @@ public class DeadLockDemo &#123;
         <category>上下文切换</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>死锁</tag>
       </tags>
   </entry>
@@ -17426,6 +17426,23 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>CNN | 卷积神经网络之卷积计算作用与思想</title>
+    <url>/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/</url>
+    <content><![CDATA[<h1 id="卷积神经网络之卷积计算作用与思想"><a href="#卷积神经网络之卷积计算作用与思想" class="headerlink" title="卷积神经网络之卷积计算作用与思想"></a>卷积神经网络之卷积计算作用与思想</h1><p><a href="https://www.cnblogs.com/shine-lee/p/9932226.html">卷积神经网络之卷积计算、作用与思想</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+        <category>卷积</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
+        <tag>卷积</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CNN | 卷积的三种模式</title>
     <url>/2021/11/14/%E5%8D%B7%E7%A7%AF%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="卷积的三种模式"><a href="#卷积的三种模式" class="headerlink" title="卷积的三种模式"></a>卷积的三种模式</h1><p>通常用外部api进行卷积的时候，会面临mode选择<br>其实这三种不同模式是对卷积核移动范围的不同限制<br>设 image的大小是7x7，filter的大小是3x3</p>
@@ -17444,23 +17461,6 @@ if __name__ == &#39;__main__&#39;:
         <tag>valid</tag>
         <tag>same</tag>
         <tag>full</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CNN | 卷积神经网络之卷积计算作用与思想</title>
-    <url>/2021/11/15/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E6%80%9D%E6%83%B3/</url>
-    <content><![CDATA[<h1 id="卷积神经网络之卷积计算作用与思想"><a href="#卷积神经网络之卷积计算作用与思想" class="headerlink" title="卷积神经网络之卷积计算作用与思想"></a>卷积神经网络之卷积计算作用与思想</h1><p><a href="https://www.cnblogs.com/shine-lee/p/9932226.html">卷积神经网络之卷积计算、作用与思想</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-        <category>卷积</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
-        <tag>卷积</tag>
       </tags>
   </entry>
   <entry>
@@ -19723,8 +19723,8 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
         <category>基于线程池技术的简单Web服务器</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>基于线程池技术的简单Web服务器</tag>
       </tags>
   </entry>
@@ -21865,10 +21865,10 @@ wb.save(&quot;./data/data_chinese.xlsx&quot;)
   </entry>
   <entry>
     <title>SpringBoot | 我的第一个springboot程序</title>
-    <url>/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F/</url>
+    <url>/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F1/</url>
     <content><![CDATA[<h1 id="我的第一个springboot程序"><a href="#我的第一个springboot程序" class="headerlink" title="我的第一个springboot程序"></a>我的第一个springboot程序</h1><h2 id="使用IDEA快速创建springboot项目"><a href="#使用IDEA快速创建springboot项目" class="headerlink" title="使用IDEA快速创建springboot项目"></a>使用IDEA快速创建springboot项目</h2><ol>
-<li>File –&gt; New —&gt; Project… —&gt; 按照下图填写项目相关信息并创建springboot项目<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F/1.png"><br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F/2.png"><br>注：记得勾选web项目依赖<br>创建好的springboot项目项目目录如下：<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F/3.png"></li>
-<li>编写HelloWorld程序<br>(1)在下图中所示的位置（HelloworldApplication.java同级目录）创建controller包，并编写HelloController.java<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F/4.png"><br>(2)HelloController.java</li>
+<li>File –&gt; New —&gt; Project… —&gt; 按照下图填写项目相关信息并创建springboot项目<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F1/1.png"><br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F1/2.png"><br>注：记得勾选web项目依赖<br>创建好的springboot项目项目目录如下：<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F1/3.png"></li>
+<li>编写HelloWorld程序<br>(1)在下图中所示的位置（HelloworldApplication.java同级目录）创建controller包，并编写HelloController.java<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F1/4.png"><br>(2)HelloController.java</li>
 </ol>
 <pre><code>package com.victory.helloworld.controller;
 
@@ -21911,7 +21911,7 @@ _|&quot;&quot;&quot;&quot;&quot;|_|&quot;&quot;&quot;&quot;&quot;|_|&quot;&quot;
 2022-07-20 14:59:13.847  INFO 20892 --- [           main] c.v.helloworld.HelloworldApplication     : Started HelloworldApplication in 0.92 seconds (JVM running for 1.261)
 </code></pre>
 <ol start="4">
-<li>在浏览器地址栏输入localhost：8080/hello/hello访问<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F/5.png"></li>
+<li>在浏览器地址栏输入localhost：8080/hello/hello访问<br><img src="/2022/07/19/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAspringboot%E7%A8%8B%E5%BA%8F1/5.png"></li>
 </ol>
 ]]></content>
       <categories>
@@ -28193,8 +28193,8 @@ public class WaitNotify &#123;
         <category>等待/通知机制</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>等待/通知机制</tag>
       </tags>
   </entry>
@@ -28412,8 +28412,8 @@ public class ConnectionPoolTest &#123;
         <category>等待超时模式构造简单的数据库连接池</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -28811,8 +28811,8 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
         <category>线程池</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>线程池</tag>
       </tags>
   </entry>
@@ -28980,28 +28980,6 @@ print(max(word_frequency, key=word_frequency.get))
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 网络中常见的协议以及术语</title>
-    <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
-    <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
-<p>ARP(地址解析协议)—&gt;根据IP地址找MAC地址</p>
-<p>RARP(反向地址解析协议)—&gt;根据MAC地址找IP地址</p>
-<p>MAC(媒体访问控制地址)—&gt;网卡的编号</p>
-<p>IP:标记逻辑上的地址</p>
-<p>mac：标记实际转发数据时的设备地址</p>
-<p>DHCP(动态主机配置协议):发现当前局域网内没有IP的电脑，给这台电脑自动分配IP</p>
-<p>netmask:和ip地址一起来确定网络号</p>
-<p>默认网关：发送的ip不在同一个网段内，那么会把这个数据转发给默认网关<br><b>Note:</b><br>MAC地址在两个设备之间通信时在变化<br>IP地址在整个通信过程中都不会发生变化</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>协议</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 13.罗马数字转整数</title>
     <url>/2021/08/27/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/</url>
     <content><![CDATA[<h1 id="13-罗马数字转整数"><a href="#13-罗马数字转整数" class="headerlink" title="13.罗马数字转整数"></a>13.罗马数字转整数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。</p>
@@ -29081,6 +29059,28 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>leetcode</tag>
         <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 网络中常见的协议以及术语</title>
+    <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
+    <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
+<p>ARP(地址解析协议)—&gt;根据IP地址找MAC地址</p>
+<p>RARP(反向地址解析协议)—&gt;根据MAC地址找IP地址</p>
+<p>MAC(媒体访问控制地址)—&gt;网卡的编号</p>
+<p>IP:标记逻辑上的地址</p>
+<p>mac：标记实际转发数据时的设备地址</p>
+<p>DHCP(动态主机配置协议):发现当前局域网内没有IP的电脑，给这台电脑自动分配IP</p>
+<p>netmask:和ip地址一起来确定网络号</p>
+<p>默认网关：发送的ip不在同一个网段内，那么会把这个数据转发给默认网关<br><b>Note:</b><br>MAC地址在两个设备之间通信时在变化<br>IP地址在整个通信过程中都不会发生变化</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>协议</tag>
       </tags>
   </entry>
   <entry>
@@ -30458,8 +30458,8 @@ public class ReadWriteLockCache &#123;
         <category>读写锁+HashMap实现线程安全的HashMap</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>锁</tag>
       </tags>
   </entry>
