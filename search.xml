@@ -1524,20 +1524,6 @@ driver.quit()
       </tags>
   </entry>
   <entry>
-    <title>GPU | CPU和GPU的设计区别</title>
-    <url>/2021/10/11/CPU%E5%92%8CGPU%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="CPU和GPU的设计区别"><a href="#CPU和GPU的设计区别" class="headerlink" title="CPU和GPU的设计区别"></a>CPU和GPU的设计区别</h1><p><a href="https://www.cnblogs.com/biglucky/p/4223565.html">点击链接查看CPU和GPU的设计区别！！！</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>GPU</category>
-      </categories>
-      <tags>
-        <tag>GPU</tag>
-        <tag>CPU</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>参考文献 | Remaining Useful Life Prediction of Machining Tools by 1D-CNN LSTM Network</title>
     <url>/2021/11/09/CnnLstmForRemainingUsefulLifePrediction/</url>
     <content><![CDATA[<h1 id="Remaining-Useful-Life-Prediction-of-Machining-Tools-by-1D-CNN-LSTM-Network"><a href="#Remaining-Useful-Life-Prediction-of-Machining-Tools-by-1D-CNN-LSTM-Network" class="headerlink" title="Remaining Useful Life Prediction of Machining Tools by 1D-CNN LSTM Network"></a>Remaining Useful Life Prediction of Machining Tools by 1D-CNN LSTM Network</h1><h2 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h2><p>use a 1D-CNN LSTM network architecture for machining tools RUL prediction</p>
@@ -1564,6 +1550,20 @@ driver.quit()
       <tags>
         <tag>CNN+LSTM</tag>
         <tag>反向传播算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GPU | CPU和GPU的设计区别</title>
+    <url>/2021/10/11/CPU%E5%92%8CGPU%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="CPU和GPU的设计区别"><a href="#CPU和GPU的设计区别" class="headerlink" title="CPU和GPU的设计区别"></a>CPU和GPU的设计区别</h1><p><a href="https://www.cnblogs.com/biglucky/p/4223565.html">点击链接查看CPU和GPU的设计区别！！！</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>GPU</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+        <tag>CPU</tag>
       </tags>
   </entry>
   <entry>
@@ -1650,115 +1650,6 @@ public class CountDownLatchTest2 &#123;
         <tag>Java</tag>
         <tag>并发</tag>
         <tag>CountDownLatch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | DTL中的url反向解析</title>
-    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
-    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
-<span id="more"></span>
-
-<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
-<pre><code>INSTALLED_APPS = (
-    &#39;django.contrib.admin&#39;,
-    &#39;django.contrib.auth&#39;,
-    &#39;django.contrib.contenttypes&#39;,
-    &#39;django.contrib.sessions&#39;,
-    &#39;django.contrib.messages&#39;,
-    &#39;django.contrib.staticfiles&#39;,
-    &#39;app_name&#39;
-)
-</code></pre>
-<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
-<pre><code>from django.conf.urls import include, url
-from django.contrib import admin
-
-urlpatterns = [
-    url(r&#39;^admin/&#39;, include(admin.site.urls)),
-    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
-]
-/*
-app_name:创建的应用名，为项目下的应用文件夹
-app_name.urls:应用的urls，应用文件夹下的urls.py
-*/
-</code></pre>
-<p>2.配置应用url(app_anme/urls.py)</p>
-<pre><code>from django.conf.urls import url
-import views
-
-urlpatterns = [
-    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
-    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
-]
-</code></pre>
-<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
-<pre><code>from django.shortcuts import render
-from models import *
-
-
-def index(request):
-    context = &#123;&#125;
-
-    return render(request, &#39;app_name/index.html&#39;, context)
-
-
-def show(request, id1, id2):
-    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
-    return render(request, &#39;app_name/show.html&#39;, context)
-</code></pre>
-<p>4.定义模板<br>index.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
-&lt;hr&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>show.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&#123;&#123;id1&#125;&#125;
-&#123;&#123;id2&#125;&#125;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
-<pre><code>TEMPLATES = [
-    &#123;
-        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
-        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
-        &#39;APP_DIRS&#39;: True,
-        &#39;OPTIONS&#39;: &#123;
-            &#39;context_processors&#39;: [
-                &#39;django.template.context_processors.debug&#39;,
-                &#39;django.template.context_processors.request&#39;,
-                &#39;django.contrib.auth.context_processors.auth&#39;,
-                &#39;django.contrib.messages.context_processors.messages&#39;,
-            ],
-        &#125;,
-    &#125;,
-]
-</code></pre>
-<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-        <tag>DTL</tag>
       </tags>
   </entry>
   <entry>
@@ -1902,6 +1793,115 @@ public class BankWaterService implements Runnable&#123;
       </tags>
   </entry>
   <entry>
+    <title>Django | DTL中的url反向解析</title>
+    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
+<span id="more"></span>
+
+<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
+<pre><code>INSTALLED_APPS = (
+    &#39;django.contrib.admin&#39;,
+    &#39;django.contrib.auth&#39;,
+    &#39;django.contrib.contenttypes&#39;,
+    &#39;django.contrib.sessions&#39;,
+    &#39;django.contrib.messages&#39;,
+    &#39;django.contrib.staticfiles&#39;,
+    &#39;app_name&#39;
+)
+</code></pre>
+<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
+<pre><code>from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r&#39;^admin/&#39;, include(admin.site.urls)),
+    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
+]
+/*
+app_name:创建的应用名，为项目下的应用文件夹
+app_name.urls:应用的urls，应用文件夹下的urls.py
+*/
+</code></pre>
+<p>2.配置应用url(app_anme/urls.py)</p>
+<pre><code>from django.conf.urls import url
+import views
+
+urlpatterns = [
+    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
+    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
+]
+</code></pre>
+<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
+<pre><code>from django.shortcuts import render
+from models import *
+
+
+def index(request):
+    context = &#123;&#125;
+
+    return render(request, &#39;app_name/index.html&#39;, context)
+
+
+def show(request, id1, id2):
+    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
+    return render(request, &#39;app_name/show.html&#39;, context)
+</code></pre>
+<p>4.定义模板<br>index.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
+&lt;hr&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>show.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&#123;&#123;id1&#125;&#125;
+&#123;&#123;id2&#125;&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
+<pre><code>TEMPLATES = [
+    &#123;
+        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
+        &#39;APP_DIRS&#39;: True,
+        &#39;OPTIONS&#39;: &#123;
+            &#39;context_processors&#39;: [
+                &#39;django.template.context_processors.debug&#39;,
+                &#39;django.template.context_processors.request&#39;,
+                &#39;django.contrib.auth.context_processors.auth&#39;,
+                &#39;django.contrib.messages.context_processors.messages&#39;,
+            ],
+        &#125;,
+    &#125;,
+]
+</code></pre>
+<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+        <tag>DTL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | Django中使用MySQL数据库</title>
     <url>/2021/07/25/Django%E4%B8%AD%E4%BD%BF%E7%94%A8MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
     <content><![CDATA[<h1 id="Django中使用MySQL数据库"><a href="#Django中使用MySQL数据库" class="headerlink" title="Django中使用MySQL数据库"></a>Django中使用MySQL数据库</h1><p>1.在虚拟环境中安装mysql包</p>
@@ -1989,33 +1989,6 @@ for ... in query[11:20]
       </tags>
   </entry>
   <entry>
-    <title>Computer Vision | DogsVSCats</title>
-    <url>/2021/11/16/DogsVSCats/</url>
-    <content><![CDATA[<h1 id="Dogs-VS-Cats"><a href="#Dogs-VS-Cats" class="headerlink" title="Dogs VS Cats"></a>Dogs VS Cats</h1><h2 id="猫狗大战任务"><a href="#猫狗大战任务" class="headerlink" title="猫狗大战任务"></a>猫狗大战任务</h2><p>猫狗大战是来源于Kaggle的一个比赛项目，任务为给定一个有猫狗照片数据集，设计一种算法对测试集中的猫狗图片进行分类。<br><strong>比赛项目网址：</strong><br><a href="https://www.kaggle.com/">https://www.kaggle.com/</a><br><strong>网络</strong></p>
-<pre><code>layer1: Conv2d(3, 16, 3, padding=1)
-layer2: relu():
-layer3: max_pool2d(2)
-layer4: Conv2d(16, 16, 3, padding=1)
-layer5: relu()
-layer6: max_pool2d(2)
-layer7: Linear(50*50*16, 128)
-layer8: relu()
-layer9: Linear(128, 64)
-layer10: relu()
-layer11: Linear(64, 2)
-</code></pre>
-]]></content>
-      <categories>
-        <category>项目经历</category>
-        <category>Deep Learning</category>
-        <category>Computer Vision</category>
-        <category>Dogs VS Cats</category>
-      </categories>
-      <tags>
-        <tag>Dogs VS Cats</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>EEG | EEG Pathology Detection Based on Deep Learning</title>
     <url>/2020/11/05/EEG-Pathology-Detection-Based-on-Deep-Learning/</url>
     <content><![CDATA[<p>EEG Pathology Detection Based on Deep Learning</p>
@@ -2052,6 +2025,33 @@ layer11: Linear(64, 2)
       </categories>
       <tags>
         <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Computer Vision | DogsVSCats</title>
+    <url>/2021/11/16/DogsVSCats/</url>
+    <content><![CDATA[<h1 id="Dogs-VS-Cats"><a href="#Dogs-VS-Cats" class="headerlink" title="Dogs VS Cats"></a>Dogs VS Cats</h1><h2 id="猫狗大战任务"><a href="#猫狗大战任务" class="headerlink" title="猫狗大战任务"></a>猫狗大战任务</h2><p>猫狗大战是来源于Kaggle的一个比赛项目，任务为给定一个有猫狗照片数据集，设计一种算法对测试集中的猫狗图片进行分类。<br><strong>比赛项目网址：</strong><br><a href="https://www.kaggle.com/">https://www.kaggle.com/</a><br><strong>网络</strong></p>
+<pre><code>layer1: Conv2d(3, 16, 3, padding=1)
+layer2: relu():
+layer3: max_pool2d(2)
+layer4: Conv2d(16, 16, 3, padding=1)
+layer5: relu()
+layer6: max_pool2d(2)
+layer7: Linear(50*50*16, 128)
+layer8: relu()
+layer9: Linear(128, 64)
+layer10: relu()
+layer11: Linear(64, 2)
+</code></pre>
+]]></content>
+      <categories>
+        <category>项目经历</category>
+        <category>Deep Learning</category>
+        <category>Computer Vision</category>
+        <category>Dogs VS Cats</category>
+      </categories>
+      <tags>
+        <tag>Dogs VS Cats</tag>
       </tags>
   </entry>
   <entry>
@@ -4453,6 +4453,133 @@ print(f&quot;完成！共检查&#123;len(docx_files)&#125;个文件,处理了 &#
       </tags>
   </entry>
   <entry>
+    <title>xlrd | Python汇总各单位Excel档领料记录并加总每日领用次数</title>
+    <url>/2021/10/29/Python%E6%B1%87%E6%80%BB%E5%90%84%E5%8D%95%E4%BD%8DExcel%E6%A1%A3%E9%A2%86%E6%96%99%E8%AE%B0%E5%BD%95%E5%B9%B6%E5%8A%A0%E6%80%BB%E6%AF%8F%E6%97%A5%E9%A2%86%E7%94%A8%E6%AC%A1%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="Python汇总各单位Excel档领料记录并加总每日领用次数"><a href="#Python汇总各单位Excel档领料记录并加总每日领用次数" class="headerlink" title="Python汇总各单位Excel档领料记录并加总每日领用次数"></a>Python汇总各单位Excel档领料记录并加总每日领用次数</h1><p><a href="https://www.cnblogs.com/insane-Mr-Li/p/9092619.html">xlrd详解</a><br>代码：</p>
+<pre><code>import time
+import xlrd
+import datetime
+
+
+# 读取xls文件中的数据
+def Get_data(file):
+    wb = xlrd.open_workbook(file)  # 读取工作簿
+    ws = wb.sheets()[0]  # 选第一个工作表
+    data = &#123;&#125;
+
+    for row in range(7, ws.nrows - 2):
+        dept = ws.cell(2, 16).value  # 部门
+        dept_id = ws.cell(3, 16).value  # 部门编号
+        dt = ws.cell(row, 0).value  # 时间
+        if type(dt) is float:
+            date_time = xlrd.xldate.xldate_as_datetime(dt, 0)
+        else:
+            date_time = datetime.datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)
+        business = ws.cell(row, 2).value  # 业务类型
+        model = ws.cell(row, 3).value  # 品种
+        qty = ws.cell(row, 4).value  # 数量
+        unit_price = ws.cell(row, 6).value  # 单价
+        price = ws.cell(row, 8).value  # 总价
+        reward = ws.cell(row, 9).value  # 额外值
+        discount = ws.cell(row, 11).value  # 调整
+        balance = ws.cell(row, 13).value  # 剩余
+        location = str(ws.cell(row, 15).value).strip()  # 库位
+        operator = ws.cell(row, 17).value  # 操作员
+        date = date_time.date()  # 日期
+        time = date_time.time()  # 时间
+        info_list = [dept, dept_id, date_time, business, model, qty, unit_price, price, reward, discount,
+                     balance, location, operator, date, time]
+        data.setdefault(date, [])  # 以日期为键
+        if info_list[3] != &quot;备注&quot;:  # 不要业务类型为“备注”的数据
+            data[date].append(info_list)
+
+    # 增加当日领取次数
+    for key in data.keys():
+        for i in data[key]:
+            i.append(len(data[key]))
+
+    return data
+
+
+import os  # 用于获取目标文件所在路径
+
+path = os.getcwd() + &quot;\\记录\\&quot;  # 文件夹绝对路径
+files = []
+for file in os.listdir(path):
+    if file.endswith(&quot;.xls&quot;):  # 只获取&quot;.xls&quot;后缀的文件
+        files.append(path + file)
+# print(files)
+
+# Get_data(files[0])
+
+
+def Get_current_time():
+    time_stamp = time.time()  # 当前时间的时间戳
+    local_time = time.localtime(time_stamp)  #
+    str_time = time.strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)
+    return str_time
+
+
+# print(Get_current_time())
+
+# 汇总数据到主文件
+from openpyxl import Workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,
+         &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]
+
+wb = Workbook()
+ws = wb.active
+ws.merge_cells(&quot;A1:P1&quot;)  # 合并首行单元格
+ws.cell(1, 1).value = &quot;领料明细汇总表&quot;
+ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)
+ws.row_dimensions[1].height = 22.2  # 设置首行行高
+ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)  # 设置对齐
+ws.append(title)  # 写入字段行
+
+# 写入各部门领料的数据
+for file in files:
+    data = Get_data(file)
+    for key in data.keys():
+        for i in data[key]:
+            ws.append(i)
+
+# 设置字号，对齐，缩小字体填充，加边框
+# Font(bold=True)可加粗字体
+for row_number in range(2, ws.max_row + 1):
+    for col_number in range(1, 17):
+        c = ws.cell(row=row_number, column=col_number)
+        c.font = Font(size=9)
+        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+
+# 设置列宽
+col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)
+col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]
+for i in range(len(col_name)):
+    ws.column_dimensions[col_name[i]].width = col_width[i]
+
+# 分组隐藏列
+ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)
+ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)
+
+wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
+</code></pre>
+<p>记录：<br><a href="工程部领料明细.xls">工程部领料明细.xls</a><br><a href="生产部领料明细.xls">生产部领料明细.xls</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>xlrd</category>
+      </categories>
+      <tags>
+        <tag>openpyxl</tag>
+        <tag>xlrd</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
     <url>/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p>
@@ -4916,133 +5043,6 @@ public class RESTController &#123;
       </tags>
   </entry>
   <entry>
-    <title>xlrd | Python汇总各单位Excel档领料记录并加总每日领用次数</title>
-    <url>/2021/10/29/Python%E6%B1%87%E6%80%BB%E5%90%84%E5%8D%95%E4%BD%8DExcel%E6%A1%A3%E9%A2%86%E6%96%99%E8%AE%B0%E5%BD%95%E5%B9%B6%E5%8A%A0%E6%80%BB%E6%AF%8F%E6%97%A5%E9%A2%86%E7%94%A8%E6%AC%A1%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="Python汇总各单位Excel档领料记录并加总每日领用次数"><a href="#Python汇总各单位Excel档领料记录并加总每日领用次数" class="headerlink" title="Python汇总各单位Excel档领料记录并加总每日领用次数"></a>Python汇总各单位Excel档领料记录并加总每日领用次数</h1><p><a href="https://www.cnblogs.com/insane-Mr-Li/p/9092619.html">xlrd详解</a><br>代码：</p>
-<pre><code>import time
-import xlrd
-import datetime
-
-
-# 读取xls文件中的数据
-def Get_data(file):
-    wb = xlrd.open_workbook(file)  # 读取工作簿
-    ws = wb.sheets()[0]  # 选第一个工作表
-    data = &#123;&#125;
-
-    for row in range(7, ws.nrows - 2):
-        dept = ws.cell(2, 16).value  # 部门
-        dept_id = ws.cell(3, 16).value  # 部门编号
-        dt = ws.cell(row, 0).value  # 时间
-        if type(dt) is float:
-            date_time = xlrd.xldate.xldate_as_datetime(dt, 0)
-        else:
-            date_time = datetime.datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)
-        business = ws.cell(row, 2).value  # 业务类型
-        model = ws.cell(row, 3).value  # 品种
-        qty = ws.cell(row, 4).value  # 数量
-        unit_price = ws.cell(row, 6).value  # 单价
-        price = ws.cell(row, 8).value  # 总价
-        reward = ws.cell(row, 9).value  # 额外值
-        discount = ws.cell(row, 11).value  # 调整
-        balance = ws.cell(row, 13).value  # 剩余
-        location = str(ws.cell(row, 15).value).strip()  # 库位
-        operator = ws.cell(row, 17).value  # 操作员
-        date = date_time.date()  # 日期
-        time = date_time.time()  # 时间
-        info_list = [dept, dept_id, date_time, business, model, qty, unit_price, price, reward, discount,
-                     balance, location, operator, date, time]
-        data.setdefault(date, [])  # 以日期为键
-        if info_list[3] != &quot;备注&quot;:  # 不要业务类型为“备注”的数据
-            data[date].append(info_list)
-
-    # 增加当日领取次数
-    for key in data.keys():
-        for i in data[key]:
-            i.append(len(data[key]))
-
-    return data
-
-
-import os  # 用于获取目标文件所在路径
-
-path = os.getcwd() + &quot;\\记录\\&quot;  # 文件夹绝对路径
-files = []
-for file in os.listdir(path):
-    if file.endswith(&quot;.xls&quot;):  # 只获取&quot;.xls&quot;后缀的文件
-        files.append(path + file)
-# print(files)
-
-# Get_data(files[0])
-
-
-def Get_current_time():
-    time_stamp = time.time()  # 当前时间的时间戳
-    local_time = time.localtime(time_stamp)  #
-    str_time = time.strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)
-    return str_time
-
-
-# print(Get_current_time())
-
-# 汇总数据到主文件
-from openpyxl import Workbook
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,
-         &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]
-
-wb = Workbook()
-ws = wb.active
-ws.merge_cells(&quot;A1:P1&quot;)  # 合并首行单元格
-ws.cell(1, 1).value = &quot;领料明细汇总表&quot;
-ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)
-ws.row_dimensions[1].height = 22.2  # 设置首行行高
-ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)  # 设置对齐
-ws.append(title)  # 写入字段行
-
-# 写入各部门领料的数据
-for file in files:
-    data = Get_data(file)
-    for key in data.keys():
-        for i in data[key]:
-            ws.append(i)
-
-# 设置字号，对齐，缩小字体填充，加边框
-# Font(bold=True)可加粗字体
-for row_number in range(2, ws.max_row + 1):
-    for col_number in range(1, 17):
-        c = ws.cell(row=row_number, column=col_number)
-        c.font = Font(size=9)
-        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
-
-# 设置列宽
-col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)
-col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]
-for i in range(len(col_name)):
-    ws.column_dimensions[col_name[i]].width = col_width[i]
-
-# 分组隐藏列
-ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)
-ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)
-
-wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
-</code></pre>
-<p>记录：<br><a href="工程部领料明细.xls">工程部领料明细.xls</a><br><a href="生产部领料明细.xls">生产部领料明细.xls</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>xlrd</category>
-      </categories>
-      <tags>
-        <tag>openpyxl</tag>
-        <tag>xlrd</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Redis | 集群搭建</title>
     <url>/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p>
@@ -5492,6 +5492,175 @@ SELECT * FROM dept RIGHT OUTER JOIN emp ON emp.`dept_id`=dept.`id` AND emp.`gend
       </tags>
   </entry>
   <entry>
+    <title>SSM | 修改</title>
+    <url>/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;展示员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;th&gt;EID&lt;/th&gt;
+            &lt;th&gt;ENAME&lt;/th&gt;
+            &lt;th&gt;AGE&lt;/th&gt;
+            &lt;th&gt;SEX&lt;/th&gt;
+            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
+            &lt;th&gt;OPTIONS&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
+                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+        &lt;tr&gt;
+            &lt;td colspan=&quot;10&quot;&gt;
+                $&#123;page&#125;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.update.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;修改员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
+        &lt;form:hidden path=&quot;eid&quot;/&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;ENAME&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;ename&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;AGE&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;age&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;sex&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;DEPARTMENT&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td colspan=&quot;2&quot;&gt;
+                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.EmpController.java</p>
+<pre><code>@Controller
+public class EmpController &#123;
+
+    @Autowired
+    private EmpService service;
+    
+    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
+    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
+        //要修改的员工信息
+        Emp emp = service.getEmpByEid(eid);
+        
+        //所有的部门信息
+        List&lt;Dept&gt; deptList = service.getAllDept();
+        
+        //获取存储性别的map集合
+        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
+        sex.put(&quot;0&quot;, &quot;女&quot;);
+        sex.put(&quot;1&quot;, &quot;男&quot;);
+        
+        map.put(&quot;emp&quot;, emp);
+        map.put(&quot;deptList&quot;, deptList);
+        map.put(&quot;sex&quot;, sex);
+        
+        return &quot;update&quot;;
+    &#125;
+    
+    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
+    public String updateEmp(Emp emp)&#123;
+        service.updateEmp(emp);
+        return &quot;redirect:/emps/1&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.EmpService.java</p>
+<pre><code>public interface EmpService &#123;
+    ......
+    
+    List&lt;Dept&gt; getAllDept();
+&#125;
+</code></pre>
+<p>5.EmpServiceImpl.java</p>
+<pre><code>@Service
+public class EmpServiceImpl implements EmpService&#123;
+    @Autowired
+    private EmpMapper empMapper;
+    
+    @Autowired
+    private DeptMapper deptMapper;
+    
+    ......
+    
+    @Override
+    public List&lt;Dept&gt; getAllDept() &#123;
+        // TODO Auto-generated method stub
+        return deptMapper.getAllDept();
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>修改</category>
+      </categories>
+      <tags>
+        <tag>SSM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSM | 列表及分页</title>
     <url>/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="列表及分页"><a href="#列表及分页" class="headerlink" title="列表及分页"></a>列表及分页</h1><p>1.index.jsp(请求)</p>
@@ -5833,175 +6002,6 @@ public interface DeptMapper &#123;
       </tags>
   </entry>
   <entry>
-    <title>SSM | 修改</title>
-    <url>/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;展示员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table&gt;
-        &lt;tr&gt;
-            &lt;th&gt;EID&lt;/th&gt;
-            &lt;th&gt;ENAME&lt;/th&gt;
-            &lt;th&gt;AGE&lt;/th&gt;
-            &lt;th&gt;SEX&lt;/th&gt;
-            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
-            &lt;th&gt;OPTIONS&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
-                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-        &lt;tr&gt;
-            &lt;td colspan=&quot;10&quot;&gt;
-                $&#123;page&#125;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>2.update.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;修改员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
-        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
-        &lt;form:hidden path=&quot;eid&quot;/&gt;
-        &lt;table&gt;
-            &lt;tr&gt;
-                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;ENAME&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;ename&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;AGE&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;age&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;sex&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;DEPARTMENT&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td colspan=&quot;2&quot;&gt;
-                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/form:form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3.EmpController.java</p>
-<pre><code>@Controller
-public class EmpController &#123;
-
-    @Autowired
-    private EmpService service;
-    
-    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
-    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
-        //要修改的员工信息
-        Emp emp = service.getEmpByEid(eid);
-        
-        //所有的部门信息
-        List&lt;Dept&gt; deptList = service.getAllDept();
-        
-        //获取存储性别的map集合
-        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
-        sex.put(&quot;0&quot;, &quot;女&quot;);
-        sex.put(&quot;1&quot;, &quot;男&quot;);
-        
-        map.put(&quot;emp&quot;, emp);
-        map.put(&quot;deptList&quot;, deptList);
-        map.put(&quot;sex&quot;, sex);
-        
-        return &quot;update&quot;;
-    &#125;
-    
-    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
-    public String updateEmp(Emp emp)&#123;
-        service.updateEmp(emp);
-        return &quot;redirect:/emps/1&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>4.EmpService.java</p>
-<pre><code>public interface EmpService &#123;
-    ......
-    
-    List&lt;Dept&gt; getAllDept();
-&#125;
-</code></pre>
-<p>5.EmpServiceImpl.java</p>
-<pre><code>@Service
-public class EmpServiceImpl implements EmpService&#123;
-    @Autowired
-    private EmpMapper empMapper;
-    
-    @Autowired
-    private DeptMapper deptMapper;
-    
-    ......
-    
-    @Override
-    public List&lt;Dept&gt; getAllDept() &#123;
-        // TODO Auto-generated method stub
-        return deptMapper.getAllDept();
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>修改</category>
-      </categories>
-      <tags>
-        <tag>SSM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SSM | 批量删除</title>
     <url>/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/</url>
     <content><![CDATA[<h1 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h1><p>1.list.jsp</p>
@@ -6322,6 +6322,54 @@ public class TestController &#123;
       </tags>
   </entry>
   <entry>
+    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
+    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
+<pre><code>/**
+ * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
+ * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
+ */
+//往作用域中放值方式1
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public ModelAndView param()&#123;
+//        ModelAndView mav = new ModelAndView();
+//        //javaWEB： request.setAttribute(xxx) 
+//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
+//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
+//        return mav;
+//    &#125;
+    
+    //往作用域中放值方式2
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public String param(Map&lt;String, Object&gt; map)&#123;
+//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
+//        return &quot;success&quot;;//返回视图名称
+//    &#125;
+
+//往作用域中放值方式3
+@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+public String param(Model model)&#123;
+    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
+    return &quot;success&quot;;//返回视图名称
+&#125;
+</code></pre>
+<p>并在param.jsp页面获取request作用域中的值</p>
+<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
+    $&#123;username&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>处理请求过程中往作用域中放值的三种方式</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+        <tag>ModelAndView</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringMVC | 处理请求数据</title>
     <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="处理请求数据"><a href="#处理请求数据" class="headerlink" title="处理请求数据"></a>处理请求数据</h1><p>1.项目目录<br><img src="/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/1.PNG"></p>
@@ -6575,54 +6623,6 @@ public class ParamController &#123;
         <tag>CookieValue注解</tag>
         <tag>使用POJO获取客户端数据</tag>
         <tag>获取servletAPI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
-    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
-<pre><code>/**
- * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
- * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
- */
-//往作用域中放值方式1
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public ModelAndView param()&#123;
-//        ModelAndView mav = new ModelAndView();
-//        //javaWEB： request.setAttribute(xxx) 
-//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
-//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
-//        return mav;
-//    &#125;
-    
-    //往作用域中放值方式2
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public String param(Map&lt;String, Object&gt; map)&#123;
-//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
-//        return &quot;success&quot;;//返回视图名称
-//    &#125;
-
-//往作用域中放值方式3
-@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-public String param(Model model)&#123;
-    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
-    return &quot;success&quot;;//返回视图名称
-&#125;
-</code></pre>
-<p>并在param.jsp页面获取request作用域中的值</p>
-<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
-    $&#123;username&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>处理请求过程中往作用域中放值的三种方式</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
-        <tag>ModelAndView</tag>
       </tags>
   </entry>
   <entry>
@@ -7517,11 +7517,13 @@ Five:销毁
       </tags>
   </entry>
   <entry>
-    <title>Django | django中两种模板目录设置</title>
-    <url>/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="django中两种模板目录设置"><a href="#django中两种模板目录设置" class="headerlink" title="django中两种模板目录设置"></a>django中两种模板目录设置</h1><p>在进行django项目开发中，我们需要创建一个用于存放模板的文件夹，模板文件夹通常放在以下两个位置之一。<br>第一种的项目目录为蓝色框所框选的目录，第二种的项目目录为红色框所框选的目录。<br><img src="/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/content.png"></p>
-<h2 id="位置（1）的优缺点："><a href="#位置（1）的优缺点：" class="headerlink" title="位置（1）的优缺点："></a>位置（1）的优缺点：</h2><p><strong>优点：</strong> 便于移植（首次开发完application应用，可将application应用移植到其他项目）<br><strong>缺点：</strong> 项目下的每个应用都有一个templates文件夹，不便于管理</p>
-<h2 id="位置（2）的优缺点："><a href="#位置（2）的优缺点：" class="headerlink" title="位置（2）的优缺点："></a>位置（2）的优缺点：</h2><p><strong>优点：</strong> 便于管理模板文件<br><strong>缺点：</strong> 不方便移植到其他项目中</p>
+    <title>Django | django中模板文件中的链接地址怎么写</title>
+    <url>/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/</url>
+    <content><![CDATA[<h1 id="django中模板文件中的链接地址怎么写"><a href="#django中模板文件中的链接地址怎么写" class="headerlink" title="django中模板文件中的链接地址怎么写?"></a>django中模板文件中的链接地址怎么写?</h1><p>在进行django项目开发中，通常会遇到一个场景：我们在当前页面点击一个链接，跳转到其他的页面，<br>那么在当前页面中的这个标签中的地址我们应该如何去写？</p>
+<span id="more"></span>
+
+<p><img src="/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/1.png"><br>假定我们当前处于 <a href="http://www.xxx.com/doc/a.html">www.xxx.com/doc/a.html</a> ,我们需要跳转到 b.html，那么我们可以这样写标签中的url,<br><a href="/b.html">,在这里url中的第一个斜杠代表的是根目录（www.xxx.com），之后浏览器将会把这个url<br>解析为 www.xxx.com/b.html。</a></p>
+<p>另一种情况：<br>假设我们将标签中的url写为 <a href="b.html"></a>,浏览器将会把此url地址解析为 <a href="http://www.xxx.com/doc/b.html">www.xxx.com/doc/b.html</a> ,<br>前面没有斜杠即从为当前目录。</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -7533,13 +7535,11 @@ Five:销毁
       </tags>
   </entry>
   <entry>
-    <title>Django | django中模板文件中的链接地址怎么写</title>
-    <url>/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/</url>
-    <content><![CDATA[<h1 id="django中模板文件中的链接地址怎么写"><a href="#django中模板文件中的链接地址怎么写" class="headerlink" title="django中模板文件中的链接地址怎么写?"></a>django中模板文件中的链接地址怎么写?</h1><p>在进行django项目开发中，通常会遇到一个场景：我们在当前页面点击一个链接，跳转到其他的页面，<br>那么在当前页面中的这个标签中的地址我们应该如何去写？</p>
-<span id="more"></span>
-
-<p><img src="/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/1.png"><br>假定我们当前处于 <a href="http://www.xxx.com/doc/a.html">www.xxx.com/doc/a.html</a> ,我们需要跳转到 b.html，那么我们可以这样写标签中的url,<br><a href="/b.html">,在这里url中的第一个斜杠代表的是根目录（www.xxx.com），之后浏览器将会把这个url<br>解析为 www.xxx.com/b.html。</a></p>
-<p>另一种情况：<br>假设我们将标签中的url写为 <a href="b.html"></a>,浏览器将会把此url地址解析为 <a href="http://www.xxx.com/doc/b.html">www.xxx.com/doc/b.html</a> ,<br>前面没有斜杠即从为当前目录。</p>
+    <title>Django | django中两种模板目录设置</title>
+    <url>/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="django中两种模板目录设置"><a href="#django中两种模板目录设置" class="headerlink" title="django中两种模板目录设置"></a>django中两种模板目录设置</h1><p>在进行django项目开发中，我们需要创建一个用于存放模板的文件夹，模板文件夹通常放在以下两个位置之一。<br>第一种的项目目录为蓝色框所框选的目录，第二种的项目目录为红色框所框选的目录。<br><img src="/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/content.png"></p>
+<h2 id="位置（1）的优缺点："><a href="#位置（1）的优缺点：" class="headerlink" title="位置（1）的优缺点："></a>位置（1）的优缺点：</h2><p><strong>优点：</strong> 便于移植（首次开发完application应用，可将application应用移植到其他项目）<br><strong>缺点：</strong> 项目下的每个应用都有一个templates文件夹，不便于管理</p>
+<h2 id="位置（2）的优缺点："><a href="#位置（2）的优缺点：" class="headerlink" title="位置（2）的优缺点："></a>位置（2）的优缺点：</h2><p><strong>优点：</strong> 便于管理模板文件<br><strong>缺点：</strong> 不方便移植到其他项目中</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -9144,73 +9144,6 @@ for number in range(1, 21):  # 不同的试卷数量，此处为20套
       </tags>
   </entry>
   <entry>
-    <title>python | 分块拆分txt文件中的数据</title>
-    <url>/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
-<pre><code># -*- coding:utf-8 -*-
-# 读取txt文件中的数据
-file = open(&quot;数据.txt&quot;)
-lines = file.readlines()
-# print(lines[:5])
-
-data = &#123;&#125;  # 储存分割的数据
-line_list = []  # 中转列表
-last_id = &quot;start&quot;  # 数据分块标识
-for line in lines:
-    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
-    ID = row_data[0]  # 获得ID
-    if last_id == &quot;start&quot;:  # 用于处理数据第一行
-        line_list.append(line)  # 将第一行数据放入中转列表
-    else:  # 不是第一行数据，则按如下执行
-        if ID != last_id:  # 如果出现新的数据块
-            if last_id in data:  # 新的数据块的ID已存在字典data中
-                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
-            else:  # 新的数据快的ID不在字典data中
-                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
-            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
-        else:  # 没出现新的数据块
-            line_list.append(line)  # 将数据继续加入中转列表
-    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
-
-# 将最后一个文字块的数据放入字典
-if last_id in data:
-    data[last_id].append(line_list)
-else:
-    data[last_id] = [line_list]
-
-# print(data[&#39;89031&#39;])
-
-# for i in data.keys():
-#     for block in data[i]:
-#         print(block)
-#         print(&quot;- -&quot;*50)
-
-
-# 写入数据函数
-def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
-    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
-    for i in range(len(data_list)):
-        file.write(data_list[i])
-    file.close()  # 保存数据并关闭
-
-
-# 批量写入数据
-for ID in data.keys():
-    for i in range(len(data[ID])):
-        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
-        
-</code></pre>
-<p><a href="数据.txt">数据.txt</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>random | python出数学练习题</title>
     <url>/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/</url>
     <content><![CDATA[<h1 id="python出数学练习题"><a href="#python出数学练习题" class="headerlink" title="python出数学练习题"></a>python出数学练习题</h1><p>实现代码：</p>
@@ -9303,6 +9236,73 @@ To_word(data, &quot;加法题&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>random</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 分块拆分txt文件中的数据</title>
+    <url>/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
+<pre><code># -*- coding:utf-8 -*-
+# 读取txt文件中的数据
+file = open(&quot;数据.txt&quot;)
+lines = file.readlines()
+# print(lines[:5])
+
+data = &#123;&#125;  # 储存分割的数据
+line_list = []  # 中转列表
+last_id = &quot;start&quot;  # 数据分块标识
+for line in lines:
+    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
+    ID = row_data[0]  # 获得ID
+    if last_id == &quot;start&quot;:  # 用于处理数据第一行
+        line_list.append(line)  # 将第一行数据放入中转列表
+    else:  # 不是第一行数据，则按如下执行
+        if ID != last_id:  # 如果出现新的数据块
+            if last_id in data:  # 新的数据块的ID已存在字典data中
+                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
+            else:  # 新的数据快的ID不在字典data中
+                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
+            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
+        else:  # 没出现新的数据块
+            line_list.append(line)  # 将数据继续加入中转列表
+    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
+
+# 将最后一个文字块的数据放入字典
+if last_id in data:
+    data[last_id].append(line_list)
+else:
+    data[last_id] = [line_list]
+
+# print(data[&#39;89031&#39;])
+
+# for i in data.keys():
+#     for block in data[i]:
+#         print(block)
+#         print(&quot;- -&quot;*50)
+
+
+# 写入数据函数
+def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
+    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
+    for i in range(len(data_list)):
+        file.write(data_list[i])
+    file.close()  # 保存数据并关闭
+
+
+# 批量写入数据
+for ID in data.keys():
+    for i in range(len(data[ID])):
+        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
+        
+</code></pre>
+<p><a href="数据.txt">数据.txt</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -10253,22 +10253,6 @@ for picture in pictures:
       </tags>
   </entry>
   <entry>
-    <title>python | re sub的使用方法</title>
-    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
-<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>re</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>re</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | re.match与re.search的区别</title>
     <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
@@ -10282,6 +10266,22 @@ re.search(r&quot;dogs&quot;,s)#匹配成功
       </categories>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | re sub的使用方法</title>
+    <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
+<p><a href="https://www.jianshu.com/p/8c1d1a38f9b9">使用方法</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>re</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>re</tag>
       </tags>
   </entry>
   <entry>
@@ -11339,21 +11339,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | tcp与udp的稳定性</title>
-    <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
-    <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>TCP</tag>
-        <tag>UDP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络编程 | tcp三次握手四次挥手</title>
     <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
     <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
@@ -11366,6 +11351,21 @@ if __name__ == &quot;__main__&quot;:
         <tag>网络编程</tag>
         <tag>三次握手</tag>
         <tag>四次挥手</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | tcp与udp的稳定性</title>
+    <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>TCP</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -11707,6 +11707,23 @@ public class Counter &#123;
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | web服务器tomcat和eclipse的集成</title>
+    <url>/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/</url>
+    <content><![CDATA[<h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
+<h2 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h2><p>将下载的后缀为.zip的压缩文件解压即可（本项目使用tomcat 7）<br>将文件解压到不包含中文文件名的路径下（例：D://tomcat//）</p>
+<h2 id="将tomcat服务器集成到eclipse中"><a href="#将tomcat服务器集成到eclipse中" class="headerlink" title="将tomcat服务器集成到eclipse中"></a>将tomcat服务器集成到eclipse中</h2><p>1.在eclipse菜单栏中点击window–&gt;preferences,然后按照下图所示顺序点击。<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/1.PNG"><br>2.按照下图所示步骤添加服务器，选择版本7<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/2.PNG"><br>3.选择下载并解压的tomcat服务器并选择jre<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/3.PNG"><br>4.在菜单栏选择windown–&gt;show view–&gt;Other..–&gt;Server–&gt;Servers来显示配置的tomcat服务器<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/4.PNG"><br>注：可以通过点击上图中的启动按钮和关闭按钮来关闭/停止服务器<br>5.双击上图中的服务器并按照下图将Deploy path修改为webapps<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/5.PNG"><br>6.通过浏览器访问该服务器<br>在浏览器地址栏输入localhost:8080来访问（先通过启动按钮启动服务器）<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/6.PNG"><br>如果端口8080被占用，可以在tomcat目录下/conf/server.xml中修改端口号。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>web服务器和eclipse的集成</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>web服务器和eclipse的集成</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>电脑使用小技巧 | windows关闭弹框广告</title>
     <url>/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/</url>
     <content><![CDATA[<h1 id="如何关闭烦人的桌面广告弹框"><a href="#如何关闭烦人的桌面广告弹框" class="headerlink" title="如何关闭烦人的桌面广告弹框"></a>如何关闭烦人的桌面广告弹框</h1><p>1.打开“控制面板”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/1.png"><br>2.进入“网络和Internet”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/2.png"><br>3.进入“Internet选项”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/3.png"><br>4.选择“隐私”选项卡，勾选“启用弹出窗口阻止程序”，然后点“设置”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/4.png"><br>5.阻止级别选“高”，点击“关闭”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/5.png"><br>6.重启电脑</p>
@@ -11922,23 +11939,6 @@ app.MainLoop()
       <tags>
         <tag>python</tag>
         <tag>wxPython</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaWeb项目开发 | web服务器tomcat和eclipse的集成</title>
-    <url>/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/</url>
-    <content><![CDATA[<h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
-<h2 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h2><p>将下载的后缀为.zip的压缩文件解压即可（本项目使用tomcat 7）<br>将文件解压到不包含中文文件名的路径下（例：D://tomcat//）</p>
-<h2 id="将tomcat服务器集成到eclipse中"><a href="#将tomcat服务器集成到eclipse中" class="headerlink" title="将tomcat服务器集成到eclipse中"></a>将tomcat服务器集成到eclipse中</h2><p>1.在eclipse菜单栏中点击window–&gt;preferences,然后按照下图所示顺序点击。<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/1.PNG"><br>2.按照下图所示步骤添加服务器，选择版本7<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/2.PNG"><br>3.选择下载并解压的tomcat服务器并选择jre<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/3.PNG"><br>4.在菜单栏选择windown–&gt;show view–&gt;Other..–&gt;Server–&gt;Servers来显示配置的tomcat服务器<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/4.PNG"><br>注：可以通过点击上图中的启动按钮和关闭按钮来关闭/停止服务器<br>5.双击上图中的服务器并按照下图将Deploy path修改为webapps<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/5.PNG"><br>6.通过浏览器访问该服务器<br>在浏览器地址栏输入localhost:8080来访问（先通过启动按钮启动服务器）<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/6.PNG"><br>如果端口8080被占用，可以在tomcat目录下/conf/server.xml中修改端口号。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>web服务器和eclipse的集成</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>web服务器和eclipse的集成</tag>
       </tags>
   </entry>
   <entry>
@@ -15662,6 +15662,200 @@ public int getCount(String cid) throws SQLException &#123;
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | 分页</title>
+    <url>/2022/01/12/%E5%88%86%E9%A1%B5/</url>
+    <content><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><h2 id="项目目录"><a href="#项目目录" class="headerlink" title="项目目录"></a>项目目录</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG"></p>
+<span id="more"></span>
+<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/2.PNG"></p>
+<h2 id="分页后台实现"><a href="#分页后台实现" class="headerlink" title="分页后台实现"></a>分页后台实现</h2><ol>
+<li>paging.jsp(发出分页查询请求)</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;/paging/page?pageNumber=1&quot;&gt;分页查询&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
+<li>PageServlet.java(处理请求)</li>
+</ol>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.oracle.bean.PageBean;
+import com.oracle.service.PageService;
+
+public class PageServlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        //获取前台传递的当前页
+        String pn = request.getParameter(&quot;pageNumber&quot;);
+        int pageNumber = Integer.parseInt(pn);
+        int pageSize = 2;
+        
+        PageService ps = new PageService();
+        PageBean pb = ps.getPageBean(pageNumber, pageSize);
+        
+        //把pb放入request域对象中
+        request.setAttribute(&quot;pb&quot;, pb);
+        //请求转发到前台页面
+        request.getRequestDispatcher(&quot;/paging1.jsp&quot;).forward(request, response);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>PageService.java(编写业务逻辑)</li>
+</ol>
+<pre><code>package com.oracle.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.oracle.bean.PageBean;
+import com.oracle.bean.Product;
+import com.oracle.dao.PageDao;
+
+public class PageService &#123;
+
+    public PageBean getPageBean(int pageNumber, int pageSize) &#123;
+        PageBean pb = null;
+        try &#123;
+            // TODO Auto-generated method stub
+            PageDao pd = new PageDao();
+            
+            //组装PageBean
+            pb = new PageBean(pageSize, pageNumber);
+            
+            //查询当前页显示的数据
+            List&lt;Product&gt; list = pd.getProList(pb);
+            
+            //查询总条数
+            int count = pd.getCount();
+            
+            //把数据放如pagebean中
+            pb.setList(list);
+            pb.setTotalSize(count);
+        &#125; catch (Exception e) &#123;
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        &#125;
+        
+        return pb;
+    &#125;
+&#125;
+</code></pre>
+<ol start="5">
+<li>PageDao.java(操作数据库)</li>
+</ol>
+<pre><code>package com.oracle.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.PageBean;
+import com.oracle.bean.Product;
+import com.oracle.utils.DataSourceUtils;
+
+public class PageDao &#123;
+
+    public List&lt;Product&gt; getProList(PageBean pb) throws SQLException &#123;
+        // TODO Auto-generated method stub
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        String sql = &quot;select * from product limit ?,?&quot;;
+        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class), pb.getIndex(), pb.getPageSize());
+        return list;
+    &#125;
+
+    public int getCount() throws SQLException &#123;
+        // TODO Auto-generated method stub
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        String sql = &quot;select coutn(*) from product&quot;;
+        
+        int count = ((Long)qr.query(sql, new ScalarHandler())).intValue();
+        
+        return count;
+    &#125;
+
+&#125;
+</code></pre>
+<h2 id="分页前台实现"><a href="#分页前台实现" class="headerlink" title="分页前台实现"></a>分页前台实现</h2><ol>
+<li>paging1.jsp(展示分页查询结果)</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;
+        &lt;tr&gt;
+            &lt;th&gt;商品id&lt;/th&gt;
+            &lt;th&gt;商品名称&lt;/th&gt;
+            &lt;th&gt;商品价格&lt;/th&gt;
+            &lt;th&gt;商品描述&lt;/th&gt;
+        &lt;/tr&gt;
+        
+        &lt;c:forEach items=&quot;$&#123;pb.list&#125;&quot; var=&quot;pro&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;pro.id&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;pro.pname&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;pro.price&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;pro.pdesc&#125;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+    &lt;/table&gt;
+    
+    &lt;center&gt;
+        &lt;c:forEach begin=&quot;1&quot; end=&quot;$&#123;pb.totalCount&#125;&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;
+            &lt;a href=&quot;/paging/page?pageNumber=$&#123;n&#125;&quot;&gt;$&#123;n&#125;&lt;/a&gt;
+        &lt;/c:forEach&gt;
+    &lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
+<li>效果<br><img src="/2022/01/12/%E5%88%86%E9%A1%B5/3.PNG"></li>
+</ol>
+<p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/4.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>分页</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>分页</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis | 分页插件PageHelper及PageHelper模拟分页</title>
     <url>/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p>
@@ -16215,200 +16409,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | 分页</title>
-    <url>/2022/01/12/%E5%88%86%E9%A1%B5/</url>
-    <content><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><h2 id="项目目录"><a href="#项目目录" class="headerlink" title="项目目录"></a>项目目录</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG"></p>
-<span id="more"></span>
-<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/2.PNG"></p>
-<h2 id="分页后台实现"><a href="#分页后台实现" class="headerlink" title="分页后台实现"></a>分页后台实现</h2><ol>
-<li>paging.jsp(发出分页查询请求)</li>
-</ol>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;/paging/page?pageNumber=1&quot;&gt;分页查询&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<ol start="2">
-<li>PageServlet.java(处理请求)</li>
-</ol>
-<pre><code>package com.oracle.servlet;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.oracle.bean.PageBean;
-import com.oracle.service.PageService;
-
-public class PageServlet extends HttpServlet &#123;
-    private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        //获取前台传递的当前页
-        String pn = request.getParameter(&quot;pageNumber&quot;);
-        int pageNumber = Integer.parseInt(pn);
-        int pageSize = 2;
-        
-        PageService ps = new PageService();
-        PageBean pb = ps.getPageBean(pageNumber, pageSize);
-        
-        //把pb放入request域对象中
-        request.setAttribute(&quot;pb&quot;, pb);
-        //请求转发到前台页面
-        request.getRequestDispatcher(&quot;/paging1.jsp&quot;).forward(request, response);
-    &#125;
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        doGet(request, response);
-    &#125;
-&#125;
-</code></pre>
-<ol start="3">
-<li>PageService.java(编写业务逻辑)</li>
-</ol>
-<pre><code>package com.oracle.service;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import com.oracle.bean.PageBean;
-import com.oracle.bean.Product;
-import com.oracle.dao.PageDao;
-
-public class PageService &#123;
-
-    public PageBean getPageBean(int pageNumber, int pageSize) &#123;
-        PageBean pb = null;
-        try &#123;
-            // TODO Auto-generated method stub
-            PageDao pd = new PageDao();
-            
-            //组装PageBean
-            pb = new PageBean(pageSize, pageNumber);
-            
-            //查询当前页显示的数据
-            List&lt;Product&gt; list = pd.getProList(pb);
-            
-            //查询总条数
-            int count = pd.getCount();
-            
-            //把数据放如pagebean中
-            pb.setList(list);
-            pb.setTotalSize(count);
-        &#125; catch (Exception e) &#123;
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        &#125;
-        
-        return pb;
-    &#125;
-&#125;
-</code></pre>
-<ol start="5">
-<li>PageDao.java(操作数据库)</li>
-</ol>
-<pre><code>package com.oracle.dao;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import com.oracle.bean.PageBean;
-import com.oracle.bean.Product;
-import com.oracle.utils.DataSourceUtils;
-
-public class PageDao &#123;
-
-    public List&lt;Product&gt; getProList(PageBean pb) throws SQLException &#123;
-        // TODO Auto-generated method stub
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        String sql = &quot;select * from product limit ?,?&quot;;
-        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class), pb.getIndex(), pb.getPageSize());
-        return list;
-    &#125;
-
-    public int getCount() throws SQLException &#123;
-        // TODO Auto-generated method stub
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        String sql = &quot;select coutn(*) from product&quot;;
-        
-        int count = ((Long)qr.query(sql, new ScalarHandler())).intValue();
-        
-        return count;
-    &#125;
-
-&#125;
-</code></pre>
-<h2 id="分页前台实现"><a href="#分页前台实现" class="headerlink" title="分页前台实现"></a>分页前台实现</h2><ol>
-<li>paging1.jsp(展示分页查询结果)</li>
-</ol>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;
-        &lt;tr&gt;
-            &lt;th&gt;商品id&lt;/th&gt;
-            &lt;th&gt;商品名称&lt;/th&gt;
-            &lt;th&gt;商品价格&lt;/th&gt;
-            &lt;th&gt;商品描述&lt;/th&gt;
-        &lt;/tr&gt;
-        
-        &lt;c:forEach items=&quot;$&#123;pb.list&#125;&quot; var=&quot;pro&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;$&#123;pro.id&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;pro.pname&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;pro.price&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;pro.pdesc&#125;&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-    &lt;/table&gt;
-    
-    &lt;center&gt;
-        &lt;c:forEach begin=&quot;1&quot; end=&quot;$&#123;pb.totalCount&#125;&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;
-            &lt;a href=&quot;/paging/page?pageNumber=$&#123;n&#125;&quot;&gt;$&#123;n&#125;&lt;/a&gt;
-        &lt;/c:forEach&gt;
-    &lt;/center&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<ol start="2">
-<li>效果<br><img src="/2022/01/12/%E5%88%86%E9%A1%B5/3.PNG"></li>
-</ol>
-<p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/4.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>分页</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>分页</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于JavaWeb的网上购物商城 | 删除购物车中的商品</title>
     <url>/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/</url>
     <content><![CDATA[<h1 id="删除购物车中的商品"><a href="#删除购物车中的商品" class="headerlink" title="删除购物车中的商品"></a>删除购物车中的商品</h1><p><strong>实现功能：</strong><br>用户点击购物车中购物项后面的删除将这个购物项删除，总计金额减去当前购物项小计。<br><img src="/2022/01/15/%E5%88%A0%E9%99%A4%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81/1.PNG"></p>
@@ -16775,122 +16775,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>Java | 动态代理</title>
-    <url>/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p>
-<p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
-<p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p>
-<pre><code>package hireroom;
-
-public interface HireRoom &#123;
-    void hireRoom(String chaoxiang, String buju, int price);
-&#125;
-</code></pre>
-<p><strong>HireRoomImpl.java(实现类)</strong></p>
-<pre><code>package hireroom;
-
-public class HireRoomImpl implements HireRoom&#123;
-
-    @Override
-    public void hireRoom(String chaoxiang, String buju, int price) &#123;
-        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>Agency.java(中介/代理类)</strong></p>
-<pre><code>package hireroom;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
-public class Agency implements InvocationHandler&#123;
-    private Object target;
-    
-    public Agency(Object target)&#123;
-        this.target = target;
-    &#125;
-    
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-        System.out.println(&quot;before&quot;);
-        Object result = method.invoke(target, args);
-        System.out.println(&quot;after&quot;);
-        return result;
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>AgencyFactory.java(中介/代理工厂)</strong></p>
-<pre><code>package hireroom;
-
-import java.lang.reflect.Proxy;
-
-public class AgencyFactory &#123;
-    public static Object getProxy(Object target)&#123;
-        return Proxy.newProxyInstance(target.getClass().getClassLoader(), 
-                target.getClass().getInterfaces(), 
-                new Agency(target));
-    &#125;
-&#125;
-</code></pre>
-<p><strong>Main.java(测试)</strong></p>
-<pre><code>package hireroom;
-
-public class Main &#123;
-    public static void main(String[] args) &#123;
-        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
-        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p>
-<pre><code>package hireroom;
-
-public interface HireCar &#123;
-    void hireCar(String brand, int price);
-&#125;
-</code></pre>
-<p><strong>HireCarImpl.java(实现类)</strong></p>
-<pre><code>package hireroom;
-
-public class HireCarImpl implements HireCar&#123;
-
-    @Override
-    public void hireCar(String brand, int price) &#123;
-        System.out.println(&quot;租车：&quot;+brand+price);
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>Main.java</strong></p>
-<pre><code>package hireroom;
-
-public class Main &#123;
-    public static void main(String[] args) &#123;
-        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
-        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
-        
-        HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());
-        hireCar.hireCar(&quot;宝马&quot;, 150000);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>动态代理</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>动态代理</tag>
-        <tag>JDK动态代理机制</tag>
-        <tag>CGLIB动态代理机制</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MyBatis | 动态SQL</title>
     <url>/2022/04/09/%E5%8A%A8%E6%80%81SQL/</url>
     <content><![CDATA[<h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>1.项目目录<br><img src="/2022/04/09/%E5%8A%A8%E6%80%81SQL/1.PNG"><br>2.EmpMapper.java</p>
@@ -17231,6 +17115,122 @@ public class TestDynamicSQL &#123;
       <tags>
         <tag>MyBatis</tag>
         <tag>动态SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java | 动态代理</title>
+    <url>/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p>
+<p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
+<p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p>
+<pre><code>package hireroom;
+
+public interface HireRoom &#123;
+    void hireRoom(String chaoxiang, String buju, int price);
+&#125;
+</code></pre>
+<p><strong>HireRoomImpl.java(实现类)</strong></p>
+<pre><code>package hireroom;
+
+public class HireRoomImpl implements HireRoom&#123;
+
+    @Override
+    public void hireRoom(String chaoxiang, String buju, int price) &#123;
+        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>Agency.java(中介/代理类)</strong></p>
+<pre><code>package hireroom;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
+public class Agency implements InvocationHandler&#123;
+    private Object target;
+    
+    public Agency(Object target)&#123;
+        this.target = target;
+    &#125;
+    
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+        System.out.println(&quot;before&quot;);
+        Object result = method.invoke(target, args);
+        System.out.println(&quot;after&quot;);
+        return result;
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>AgencyFactory.java(中介/代理工厂)</strong></p>
+<pre><code>package hireroom;
+
+import java.lang.reflect.Proxy;
+
+public class AgencyFactory &#123;
+    public static Object getProxy(Object target)&#123;
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(), 
+                target.getClass().getInterfaces(), 
+                new Agency(target));
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Main.java(测试)</strong></p>
+<pre><code>package hireroom;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
+        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p>
+<pre><code>package hireroom;
+
+public interface HireCar &#123;
+    void hireCar(String brand, int price);
+&#125;
+</code></pre>
+<p><strong>HireCarImpl.java(实现类)</strong></p>
+<pre><code>package hireroom;
+
+public class HireCarImpl implements HireCar&#123;
+
+    @Override
+    public void hireCar(String brand, int price) &#123;
+        System.out.println(&quot;租车：&quot;+brand+price);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>Main.java</strong></p>
+<pre><code>package hireroom;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
+        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
+        
+        HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());
+        hireCar.hireCar(&quot;宝马&quot;, 150000);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>动态代理</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>动态代理</tag>
+        <tag>JDK动态代理机制</tag>
+        <tag>CGLIB动态代理机制</tag>
       </tags>
   </entry>
   <entry>
@@ -18230,6 +18230,73 @@ wb.save(&quot;产品清单-合并单元.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
+    <url>/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
+    <content><![CDATA[<h1 id="合并word表格中上下行那内容相同的单元格"><a href="#合并word表格中上下行那内容相同的单元格" class="headerlink" title="合并word表格中上下行那内容相同的单元格"></a>合并word表格中上下行那内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
+<span id="more"></span>
+<pre><code>from docx import Document
+
+
+# 定义合并单元格的函数
+def Merge_cells(table, target_list, start_row, col):
+    &quot;&quot;&quot;
+    table: 是需要操作的表格
+    target_list: 是目标列表，即含有重复数据的列表
+    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）
+    col: 是需要处理数据的列
+    &quot;&quot;&quot;
+    start = 0  # 开始行计数
+    end = 0  # 结束行计数
+    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始
+    for i in range(len(target_list)):  # 遍历列表
+        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下
+            reference = target_list[i]  # 基准变成列表中下一个字符串
+            end = i - 1
+            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
+            start = end + 1
+        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作
+            end = i
+            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
+
+
+doc = Document(&quot;收货记录.docx&quot;)
+# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据
+table = doc.tables[0]  # 已确定是第一个表格，其索引是0
+supplier = []  # 存储供应商名称
+pn = []  # 存储物料编码
+max_row = len(table.rows)  # 获取第最大一行
+
+# 读取第二行到29行，第2，3列中的数据
+for i in range(1, max_row - 1):
+    supplier_name = table.rows[i].cells[1].text  # cells[1]指表格第二列
+    supplier.append(supplier_name)
+
+for i in range(1, max_row - 1):
+    material_pn = table.rows[i].cells[2].text  # cells[2]指表格第三列
+    pn.append(material_pn)
+
+Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1
+Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2
+
+# 重新往第2和第3列写入数据，以覆盖之前重复的数据
+for row in range(1, len(supplier) + 1):
+    table.cell(row, 1).text = supplier[row - 2]
+    table.cell(row, 2).text = pn[row - 2]
+doc.save(&quot;收货记录-合并单元格.docx&quot;)
+</code></pre>
+<p><a href="收货记录.docx">收货记录.docx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>python-docx</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>python-docx</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 21.合并两个有序链表</title>
     <url>/2021/08/27/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="21-合并两个有序链表"><a href="#21-合并两个有序链表" class="headerlink" title="21.合并两个有序链表"></a>21.合并两个有序链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。</p>
@@ -18505,73 +18572,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
-    <url>/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
-    <content><![CDATA[<h1 id="合并word表格中上下行那内容相同的单元格"><a href="#合并word表格中上下行那内容相同的单元格" class="headerlink" title="合并word表格中上下行那内容相同的单元格"></a>合并word表格中上下行那内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
-<span id="more"></span>
-<pre><code>from docx import Document
-
-
-# 定义合并单元格的函数
-def Merge_cells(table, target_list, start_row, col):
-    &quot;&quot;&quot;
-    table: 是需要操作的表格
-    target_list: 是目标列表，即含有重复数据的列表
-    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）
-    col: 是需要处理数据的列
-    &quot;&quot;&quot;
-    start = 0  # 开始行计数
-    end = 0  # 结束行计数
-    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始
-    for i in range(len(target_list)):  # 遍历列表
-        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下
-            reference = target_list[i]  # 基准变成列表中下一个字符串
-            end = i - 1
-            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
-            start = end + 1
-        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作
-            end = i
-            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
-
-
-doc = Document(&quot;收货记录.docx&quot;)
-# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据
-table = doc.tables[0]  # 已确定是第一个表格，其索引是0
-supplier = []  # 存储供应商名称
-pn = []  # 存储物料编码
-max_row = len(table.rows)  # 获取第最大一行
-
-# 读取第二行到29行，第2，3列中的数据
-for i in range(1, max_row - 1):
-    supplier_name = table.rows[i].cells[1].text  # cells[1]指表格第二列
-    supplier.append(supplier_name)
-
-for i in range(1, max_row - 1):
-    material_pn = table.rows[i].cells[2].text  # cells[2]指表格第三列
-    pn.append(material_pn)
-
-Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1
-Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2
-
-# 重新往第2和第3列写入数据，以覆盖之前重复的数据
-for row in range(1, len(supplier) + 1):
-    table.cell(row, 1).text = supplier[row - 2]
-    table.cell(row, 2).text = pn[row - 2]
-doc.save(&quot;收货记录-合并单元格.docx&quot;)
-</code></pre>
-<p><a href="收货记录.docx">收货记录.docx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>python-docx</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python-docx | 向Word文档中添加图片</title>
     <url>/2021/10/24/%E5%90%91Word%E6%96%87%E6%A1%A3%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9B%BE%E7%89%87/</url>
     <content><![CDATA[<h1 id="向Word文档中添加图片"><a href="#向Word文档中添加图片" class="headerlink" title="向Word文档中添加图片"></a>向Word文档中添加图片</h1><p>以下代码使用python-docx向Word文档中的指定位置添加图片</p>
@@ -18741,21 +18741,6 @@ doc.save(&quot;收货记录3.docx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 吴恩达课后作业</title>
-    <url>/2021/06/23/%E5%90%B4%E6%81%A9%E8%BE%BE%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A/</url>
-    <content><![CDATA[<h1 id="吴恩达课后作业"><a href="#吴恩达课后作业" class="headerlink" title="吴恩达课后作业"></a>吴恩达课后作业</h1><p>这是在b站学习吴恩达深度学习课程时发现的课后作业实现，非常详细！！！点赞！！！</p>
-<p><a href="https://blog.csdn.net/u013733326/article/details/79827273">链接：吴恩达深度学习课后作业</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>学习资料</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>吴恩达</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | 命名空间查找顺序</title>
     <url>/2021/11/07/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="命名空间查找顺序"><a href="#命名空间查找顺序" class="headerlink" title="命名空间查找顺序"></a>命名空间查找顺序</h1><h2 id="命名空间的三种形式"><a href="#命名空间的三种形式" class="headerlink" title="命名空间的三种形式"></a>命名空间的三种形式</h2><p>1.内置命名空间（Built-in names）： 用于存放Python 的内置函数的空间，比如，print，input等不需要定义即可使用的函数就处在内置命名空间。<br>2.全局命名空间（Global names）：模块中定义的名称，记录了模块的变量，包括函数、类、其它导入的模块、模块级的变量和常量。<br>3.局部命名空间（Local names）：函数中定义的名称，记录了函数的变量，包括函数的参数和局部定义的变量。在函数内定义的局部变量，在函数执行结束后就会失效，即无法在函数外直接调用函数内定义的变量。<br><img src="/2021/11/07/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F/namespace.png"></p>
@@ -18784,6 +18769,21 @@ function1()
       <tags>
         <tag>python</tag>
         <tag>命名空间</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 吴恩达课后作业</title>
+    <url>/2021/06/23/%E5%90%B4%E6%81%A9%E8%BE%BE%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A/</url>
+    <content><![CDATA[<h1 id="吴恩达课后作业"><a href="#吴恩达课后作业" class="headerlink" title="吴恩达课后作业"></a>吴恩达课后作业</h1><p>这是在b站学习吴恩达深度学习课程时发现的课后作业实现，非常详细！！！点赞！！！</p>
+<p><a href="https://blog.csdn.net/u013733326/article/details/79827273">链接：吴恩达深度学习课后作业</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>学习资料</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>吴恩达</tag>
       </tags>
   </entry>
   <entry>
@@ -20666,6 +20666,76 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 551.学生出勤记录1</title>
+    <url>/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</url>
+    <content><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p>
+<p>示例 1：<br>输入：s = “PPALLP”<br>输出：true<br>解释：学生缺勤次数少于 2 次，且不存在 3 天或以上的连续迟到记录。</p>
+<p><a href>题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.一次遍历<br>可奖励的出勤记录要求缺勤次数少于 2 和连续迟到次数少于 3。判断出勤记录是否可奖励，只需要遍历出勤记录，判断这两个条件是否同时满足即可。<br>遍历过程中，记录缺勤次数和连续迟到次数，根据遍历到的字符更新缺勤次数和连续迟到次数：<br>    如果遇到 ‘A’，即缺勤，则将缺勤次数加 1，否则缺勤次数不变；<br>    如果遇到 ‘L’，即迟到，则将连续迟到次数加 1，否则将连续迟到次数清零。<br>如果在更新缺勤次数和连续迟到次数之后，出现缺勤次数大于或等于 2 或者连续迟到次数大于或等于 3，则该出勤记录不满足可奖励的要求，返回 false。如果遍历结束时未出现出勤记录不满足可奖励的要求的情况，则返回 true。</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def checkRecord(self, s: str) -&gt; bool:
+        # 统计字符串中出现‘A’的的次数
+        count_A = s.count(&#39;A&#39;)
+        # 字符串中是否有连续3个以上的‘L&#39;
+        for i in range(len(s)):
+            if i + 2 &lt; len(s) and s[i] == &#39;L&#39; and s[i+1] == &#39;L&#39; and s[i+2] == &#39;L&#39;:
+                    return False
+
+        return True if count_A &lt; 2 else False
+
+    def checkRecord1(self, s: str) -&gt; bool:
+        absents = lates = 0
+        for char in s:
+            if char == &quot;A&quot;:
+                absents += 1
+                lates = 0
+            elif char == &quot;L&quot;:
+                lates += 1
+            else:
+                lates = 0
+
+            if lates &gt;= 3 or absents &gt; 1:
+                return False
+
+        return True
+        # absents = lates = 0
+        # for i, c in enumerate(s):
+        #     if c == &quot;A&quot;:
+        #         absents += 1
+        #         if absents &gt;= 2:
+        #             return False
+        #
+        #     if c == &quot;L&quot;:
+        #         lates += 1
+        #         if lates &gt;= 3:
+        #             return False
+        #     else:
+        #         lates = 0
+        #
+        # return True
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    # res = slt.checkRecord2(&quot;PPALLL&quot;)
+    res = slt.checkRecord2(&quot;PPALLP&quot;)
+    print(res)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+        <category>551.学生出勤记录1</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 43.字符串相乘</title>
     <url>/2021/09/05/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E4%B9%98/</url>
     <content><![CDATA[<h1 id="43-字符串相乘"><a href="#43-字符串相乘" class="headerlink" title="43.字符串相乘"></a>43.字符串相乘</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。</p>
@@ -20808,76 +20878,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 551.学生出勤记录1</title>
-    <url>/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</url>
-    <content><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p>
-<p>示例 1：<br>输入：s = “PPALLP”<br>输出：true<br>解释：学生缺勤次数少于 2 次，且不存在 3 天或以上的连续迟到记录。</p>
-<p><a href>题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.一次遍历<br>可奖励的出勤记录要求缺勤次数少于 2 和连续迟到次数少于 3。判断出勤记录是否可奖励，只需要遍历出勤记录，判断这两个条件是否同时满足即可。<br>遍历过程中，记录缺勤次数和连续迟到次数，根据遍历到的字符更新缺勤次数和连续迟到次数：<br>    如果遇到 ‘A’，即缺勤，则将缺勤次数加 1，否则缺勤次数不变；<br>    如果遇到 ‘L’，即迟到，则将连续迟到次数加 1，否则将连续迟到次数清零。<br>如果在更新缺勤次数和连续迟到次数之后，出现缺勤次数大于或等于 2 或者连续迟到次数大于或等于 3，则该出勤记录不满足可奖励的要求，返回 false。如果遍历结束时未出现出勤记录不满足可奖励的要求的情况，则返回 true。</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def checkRecord(self, s: str) -&gt; bool:
-        # 统计字符串中出现‘A’的的次数
-        count_A = s.count(&#39;A&#39;)
-        # 字符串中是否有连续3个以上的‘L&#39;
-        for i in range(len(s)):
-            if i + 2 &lt; len(s) and s[i] == &#39;L&#39; and s[i+1] == &#39;L&#39; and s[i+2] == &#39;L&#39;:
-                    return False
-
-        return True if count_A &lt; 2 else False
-
-    def checkRecord1(self, s: str) -&gt; bool:
-        absents = lates = 0
-        for char in s:
-            if char == &quot;A&quot;:
-                absents += 1
-                lates = 0
-            elif char == &quot;L&quot;:
-                lates += 1
-            else:
-                lates = 0
-
-            if lates &gt;= 3 or absents &gt; 1:
-                return False
-
-        return True
-        # absents = lates = 0
-        # for i, c in enumerate(s):
-        #     if c == &quot;A&quot;:
-        #         absents += 1
-        #         if absents &gt;= 2:
-        #             return False
-        #
-        #     if c == &quot;L&quot;:
-        #         lates += 1
-        #         if lates &gt;= 3:
-        #             return False
-        #     else:
-        #         lates = 0
-        #
-        # return True
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    # res = slt.checkRecord2(&quot;PPALLL&quot;)
-    res = slt.checkRecord2(&quot;PPALLP&quot;)
-    print(res)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-        <category>551.学生出勤记录1</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 28.实现strStr()</title>
     <url>/2021/08/27/%E5%AE%9E%E7%8E%B0strStr%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="28-实现strStr"><a href="#28-实现strStr" class="headerlink" title="28.实现strStr()"></a>28.实现strStr()</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>实现 strStr() 函数。<br>给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。<br><a href="https://leetcode-cn.com/problems/implement-strstr/">题目链接</a></p>
@@ -20997,6 +20997,83 @@ if __name__ == &quot;__main__&quot;:
         <tag>leetcode</tag>
         <tag>字符串</tag>
         <tag>kmp算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多线程 | 实现线程体的两种方式</title>
+    <url>/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import threading
+import time
+
+
+# 线程体函数
+def thread_body():
+    # 当前线程对象
+    t = threading.current_thread()
+    for n in range(5):
+        # 当前线程名
+        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+        # 线程休眠
+        time.sleep(2)
+    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = threading.Thread(target=thread_body)
+# 创建线程对象t2
+t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+<p>2.自定义线程类实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import time
+import threading
+
+
+class SmallThread(threading.Thread):
+    def __init__(self, name=None):
+        super().__init__(name=name)
+
+    # 线程体函数
+    def run(self):
+        # 当前线程对象
+        t = threading.current_thread()
+        for n in range(5):
+            # 当前线程名
+            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+            # 线程休眠
+            time.sleep(2)
+        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = SmallThread()  # 通过自定义线程类，创建线程对象
+# 创建线程对象t2
+t2 = SmallThread(name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>threading</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>多线程</tag>
+        <tag>threading</tag>
       </tags>
   </entry>
   <entry>
@@ -21665,83 +21742,6 @@ app.MainLoop()  # 进入主事件循环
       </tags>
   </entry>
   <entry>
-    <title>多线程 | 实现线程体的两种方式</title>
-    <url>/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
-<pre><code># coding=utf-8
-
-import threading
-import time
-
-
-# 线程体函数
-def thread_body():
-    # 当前线程对象
-    t = threading.current_thread()
-    for n in range(5):
-        # 当前线程名
-        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
-        # 线程休眠
-        time.sleep(2)
-    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
-
-
-# 主线程
-# 创建线程对象t1
-t1 = threading.Thread(target=thread_body)
-# 创建线程对象t2
-t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
-# 启动线程t1
-t1.start()
-# 启动线程t2
-t2.start()
-</code></pre>
-<p>2.自定义线程类实现线程体<br>代码实例：</p>
-<pre><code># coding=utf-8
-
-import time
-import threading
-
-
-class SmallThread(threading.Thread):
-    def __init__(self, name=None):
-        super().__init__(name=name)
-
-    # 线程体函数
-    def run(self):
-        # 当前线程对象
-        t = threading.current_thread()
-        for n in range(5):
-            # 当前线程名
-            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
-            # 线程休眠
-            time.sleep(2)
-        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
-
-
-# 主线程
-# 创建线程对象t1
-t1 = SmallThread()  # 通过自定义线程类，创建线程对象
-# 创建线程对象t2
-t2 = SmallThread(name=&#39;MyThread&#39;)
-# 启动线程t1
-t1.start()
-# 启动线程t2
-t2.start()
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>threading</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>多线程</tag>
-        <tag>threading</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>入门指南 | 开发遇到问题怎么解决？</title>
     <url>/2021/02/20/%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%EF%BC%9F/</url>
     <content><![CDATA[<h1 id="开发遇到问题怎么解决？"><a href="#开发遇到问题怎么解决？" class="headerlink" title="开发遇到问题怎么解决？"></a>开发遇到问题怎么解决？</h1><p>我们在做开发的过程中常常会遇到这样、那样的问题，软件安装出错、配置出错、代码运行报错等等令人十分痛苦的问题，那么我们遇到问题时应该怎样去solve?<br><b>Answer:</b>我们在开发中遇到的百分之八九十的问题可以通过<br><b style="color:red">“官方文档+github+stack overflow”</b>去解决！</p>
@@ -21749,59 +21749,6 @@ t2.start()
       <categories>
         <category>入门指南</category>
       </categories>
-  </entry>
-  <entry>
-    <title>SpringMVC | 异常处理</title>
-    <url>/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>1.在SpringMVC配置文件（springMVC.xml）中做以下配置：</p>
-<pre><code>&lt;!-- 异常处理 --&gt;
-&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;
-    &lt;property name=&quot;exceptionMappings&quot;&gt;
-        &lt;props&gt;
-            &lt;prop key=&quot;java.lang.NullPointerException&quot;&gt;error&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-<span id="more"></span>
-<p>2.index.jsp</p>
-<pre><code>&lt;a href=&quot;testException&quot;&gt;测试异常&lt;/a&gt;
-</code></pre>
-<p>3.TestExceptionController.java</p>
-<pre><code>package com.atguigu.controller;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-@Controller
-public class TestExceptionController &#123;
-    @RequestMapping(value=&quot;/testException&quot;, method=RequestMethod.GET)
-    public String testException()&#123;
-        String s = null;
-        System.err.println(s.substring(0, 5));
-        return &quot;success&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>4.error.jsp</p>
-<pre><code>&lt;a href=&quot;&quot;&gt;操作异常，请稍后重试&lt;/a&gt;
-
-$&#123;exception&#125;
-</code></pre>
-<p>5.运行结果<br><img src="/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/1.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>异常处理</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>SpringMVC</tag>
-        <tag>异常处理</tag>
-      </tags>
   </entry>
   <entry>
     <title>spring | 引用外部属性文件</title>
@@ -21889,17 +21836,56 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
-    <title>基础知识 | 归一化</title>
-    <url>/2021/02/21/%E5%BD%92%E4%B8%80%E5%8C%96/</url>
-    <content><![CDATA[<h1 id="归一化-Normalization"><a href="#归一化-Normalization" class="headerlink" title="归一化(Normalization)"></a>归一化(Normalization)</h1><p>在使用机器学习算法进行分类工作时，有时候我们发现某个特征对计算结果的影响最大，然而本质上用于分类的几个特征是同等重要的，而某个特征对计算结果影响大这一现象的原因仅仅是因为这个特征的特征值值比其他特征值大。因此<b style="color:red">在处理这种不同范围的特征值时，我们通常采用的方法是将数值归一化</b>，如将取值范围处理为0到1/-1到1之间。<br><b>例</b>：将任意取值范围的特征值转化为0到1区间内的值:<br><b style="red">newValue = (oldValue - min)/(max-min)</b><br>其中min和max分别是数据集中的最小特征值和最大特征值<br><b>Note:改变数值范围增加了分类器的复杂度</b></p>
+    <title>SpringMVC | 异常处理</title>
+    <url>/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>1.在SpringMVC配置文件（springMVC.xml）中做以下配置：</p>
+<pre><code>&lt;!-- 异常处理 --&gt;
+&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;
+    &lt;property name=&quot;exceptionMappings&quot;&gt;
+        &lt;props&gt;
+            &lt;prop key=&quot;java.lang.NullPointerException&quot;&gt;error&lt;/prop&gt;
+        &lt;/props&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<span id="more"></span>
+<p>2.index.jsp</p>
+<pre><code>&lt;a href=&quot;testException&quot;&gt;测试异常&lt;/a&gt;
+</code></pre>
+<p>3.TestExceptionController.java</p>
+<pre><code>package com.atguigu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class TestExceptionController &#123;
+    @RequestMapping(value=&quot;/testException&quot;, method=RequestMethod.GET)
+    public String testException()&#123;
+        String s = null;
+        System.err.println(s.substring(0, 5));
+        return &quot;success&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.error.jsp</p>
+<pre><code>&lt;a href=&quot;&quot;&gt;操作异常，请稍后重试&lt;/a&gt;
+
+$&#123;exception&#125;
+</code></pre>
+<p>5.运行结果<br><img src="/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/1.PNG"></p>
 ]]></content>
       <categories>
-        <category>机器学习</category>
-        <category>基础知识</category>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>异常处理</category>
       </categories>
       <tags>
-        <tag>机器学习</tag>
-        <tag>归一化</tag>
+        <tag>Java</tag>
+        <tag>SpringMVC</tag>
+        <tag>异常处理</tag>
       </tags>
   </entry>
   <entry>
@@ -21913,6 +21899,20 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>装系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基础知识 | 归一化</title>
+    <url>/2021/02/21/%E5%BD%92%E4%B8%80%E5%8C%96/</url>
+    <content><![CDATA[<h1 id="归一化-Normalization"><a href="#归一化-Normalization" class="headerlink" title="归一化(Normalization)"></a>归一化(Normalization)</h1><p>在使用机器学习算法进行分类工作时，有时候我们发现某个特征对计算结果的影响最大，然而本质上用于分类的几个特征是同等重要的，而某个特征对计算结果影响大这一现象的原因仅仅是因为这个特征的特征值值比其他特征值大。因此<b style="color:red">在处理这种不同范围的特征值时，我们通常采用的方法是将数值归一化</b>，如将取值范围处理为0到1/-1到1之间。<br><b>例</b>：将任意取值范围的特征值转化为0到1区间内的值:<br><b style="red">newValue = (oldValue - min)/(max-min)</b><br>其中min和max分别是数据集中的最小特征值和最大特征值<br><b>Note:改变数值范围增加了分类器的复杂度</b></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>基础知识</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>归一化</tag>
       </tags>
   </entry>
   <entry>
@@ -22004,501 +22004,6 @@ wb.save(&quot;./data/data_chinese.xlsx&quot;)
       <tags>
         <tag>深度学习</tag>
         <tag>感知机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python-docx | 批量修改word文件中的段落格式</title>
-    <url>/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="批量修改word文件中的段落格式"><a href="#批量修改word文件中的段落格式" class="headerlink" title="批量修改word文件中的段落格式"></a>批量修改word文件中的段落格式</h1><p>实现代码：</p>
-<pre><code>import os
-import docx
-# 定义字体格式
-from docx.shared import Pt  # 用于设定字体大小（磅值）
-from docx.oxml.ns import qn  # 用于应用中文字体
-
-
-def F_title(run):
-    # 标题文字
-    run.font.size = Pt(22)  # 文字大小磅值
-    run.bold = True  # 加粗
-    run.font.name = &quot;方正小标宋_GBK&quot;  # 字体
-    r = run._element.rPr.rFonts
-    r.set(qn(&quot;w:eastAsia&quot;), &quot;方正小标宋_GBK&quot;)  # 字体
-
-
-def F_name_dept(run):
-    # 姓名，部门，日期
-    run.font.size = Pt(17)  # 文字大小磅值
-    run.bold = False  # 加粗
-    run.font.name = &quot;楷体&quot;  # 字体
-    r = run._element.rPr.rFonts
-    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
-
-
-def F_main(run):
-    # 正文的格式
-    run.font.size = Pt(17)  # 文字大小磅值
-    run.bold = False  # 加粗
-    run.font.name = &quot;仿宋&quot;  # 字体
-    r = run._element.rPr.rFonts
-    r.set(qn(&quot;w:eastAsia&quot;), &quot;仿宋&quot;)  # 字体
-
-
-def F_title1(run):
-    # 标题一的格式
-    run.font.size = Pt(17)  # 文字大小磅值
-    run.bold = False  # 加粗
-    run.font.name = &quot;黑体&quot;  # 字体
-    r = run._element.rPr.rFonts
-    r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)  # 字体
-
-
-def F_title2(run):
-    # 标题二的格式
-    run.font.size = Pt(17)  # 文字大小磅值
-    run.bold = True  # 加粗
-    run.font.name = &quot;楷体&quot;  # 字体
-    r = run._element.rPr.rFonts
-    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
-
-
-# 获取待处理的文件的路径
-path = &#39;待处理文件&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-# print(files)
-# 逐个提取文件，设置字体格式
-for file in files:
-    doc = docx.Document(file)
-    for run in doc.paragraphs[0].runs:  # 总标题字体格式
-        F_title(run)
-
-    for para in doc.paragraphs[1:3]:  # 部门、姓名及日期字体格式
-        for run in para.runs:
-            F_name_dept(run)
-
-    title1 = [&quot;一、&quot;, &quot;二、&quot;, &quot;三、&quot;, &quot;四、&quot;]  # 标题一的唯一特征字符串
-    title2 = [&quot;1、&quot;, &quot;2、&quot;, &quot;3、&quot;, &quot;4、&quot;]  # 标题二的唯一特征字符串
-    for para in doc.paragraphs[3:]:
-        if any(i in para.text for i in title1):  # 若该段落是标题一，则应用标题一的字体格式
-            for run in para.runs:
-                F_title1(run)
-        elif any(j in para.text for j in title2):  # 若该段落是标题二，则应用标题二的字体格式
-            for run in para.runs:
-                F_title2(run)
-        else:
-            for run in para.runs:  # 其余都应用正文的字体格式
-                F_main(run)
-    doc.save(&#39;已处理文件\\&#123;&#125;&#39;.format(file.split(&quot;\\&quot;)[1]))
-    
-</code></pre>
-<p>已处理文件：<br><a href="报告-何十.docx">报告-何十.docx</a><br><a href="报告-刘七.docx">报告-刘七.docx</a><br><a href="报告-张三.docx">报告-张三.docx</a><br><a href="报告-朱八.docx">报告-朱八</a><br><a href="报告-李四.docx">报告-李四.docx</a><br><a href="报告-猪八戒.docx">报告-猪八戒.docx</a><br><a href="报告-王五.docx">报告-王五.docx</a><br><a href="报告-秦九.docx">报告-秦九.docx</a><br><a href="报告-赵六.docx">报告-赵六.docx</a><br><a href="报告-黄二.docx">报告-黄二.docx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>python-docx</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pypiwin32 | 批量发送不同内容的邮件给不同的收件人</title>
-    <url>/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/</url>
-    <content><![CDATA[<h1 id="批量发送不同内容的邮件给不同的收件人"><a href="#批量发送不同内容的邮件给不同的收件人" class="headerlink" title="批量发送不同内容的邮件给不同的收件人"></a>批量发送不同内容的邮件给不同的收件人</h1><p>程序实现自动将’年假_按部门’下各个部门的年假情况Excel表格发送给’邮件地址.xlsx’中各个部门的负责人。</p>
-<span id="more"></span>
-<p>实现代码：</p>
-<pre><code>import os
-from openpyxl import load_workbook
-
-wb = load_workbook(&quot;邮件地址.xlsx&quot;)
-ws = wb.active
-address = &#123;&#125;
-for i in range(2, ws.max_row + 1):
-    dept = ws[&quot;A&quot; + str(i)].value
-    to_add = ws[&quot;B&quot; + str(i)].value
-    cc_add = ws[&quot;C&quot; + str(i)].value
-    address[dept] = [to_add, cc_add]
-
-import win32com.client as win32
-
-
-def Send_mail(to_add, cc_add, file_path, dept):
-    &#39;&#39;&#39;
-    传入参数说明：
-    to_add,收件人地址
-    cc_add,抄送地址
-    file_path,附件路径
-    dept,部门名称
-    &#39;&#39;&#39;
-    outlook = win32.Dispatch(&#39;Outlook.Application&#39;)  # 调用windows outlook应用
-    mail = outlook.CreateItem(0)  # 创建邮件
-    mail.to = to_add  # 收件人
-    mail.cc = cc_add  # 抄送人
-    mail.Subject = &quot;&#123;&#125;年假情况&quot;.format(dept)  # 主题
-    mail.Attachments.Add(file_path)  # 添加附件。若有多个附件，则多调用几次即可
-    mail.Body = &#39;&#39;&#39;Dear All,\n这是&#123;&#125;的年假情况，请查收！谢谢。\n\nBest regards!\n人事部 小李&#39;&#39;&#39;.format(dept)  # 正文内容
-    mail.Send()  # 发送邮件
-
-
-# 发送邮件到各部门
-for dept in address.keys():
-    to_add = address[dept][0]
-    cc_add = address[dept][1]
-    file_path = os.getcwd() + &#39;\\年假_按部门\\年假情况_&#123;&#125;.xlsx&#39;.format(dept)
-    Send_mail(to_add, cc_add, file_path, dept)
-
-print(&quot;邮件发送完成。&quot;)
-</code></pre>
-<p>‘年假_按部门’文件夹包括以下内容：<br><a href="年假情况_人事部.xlsx">年假情况_人事部.xlsx</a><br><a href="年假情况_关务部.xlsx">年假情况_关务部.xlsx</a><br><a href="年假情况_品质部.xlsx">年假情况_品质部.xlsx</a><br><a href="年假情况_工程部.xlsx">年假情况_工程部.xlsx</a><br><a href="年假情况_总务部.xlsx">年假情况_总务部.xlsx</a><br><a href="年假情况_物料部.xlsx">年假情况_物料部.xlsx</a><br><a href="年假情况_生产部.xlsx">年假情况_生产部.xlsx</a><br><a href="年假情况_研发部.xlsx">年假情况_研发部.xlsx</a><br><a href="年假情况_船务部.xlsx">年假情况_船务部.xlsx</a><br><a href="年假情况_采购部.xlsx">年假情况_采购部.xlsx</a></p>
-<p><a href="邮件地址.xlsx">邮件地址.xlsx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pypiwin32</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>pypiwin32</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PIL | 批量压缩图片</title>
-    <url>/2021/10/24/%E6%89%B9%E9%87%8F%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<h1 id="批量压缩图片"><a href="#批量压缩图片" class="headerlink" title="批量压缩图片"></a>批量压缩图片</h1><p>实现代码：</p>
-<pre><code># 将图片按修改时间排序(这样才能与图片的描述一致)，将路径存入列表，以便后面逐个插入图片时调用
-import os
-from PIL import Image
-from docx import Document
-
-path = &quot;6s_pictures&quot;
-list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
-list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
-print(list_p)
-
-# 按比例缩小图片尺寸
-for infile in list_p:
-    im = Image.open(infile)
-    (x, y) = im.size  # 读取图片尺寸（像素）
-    x_s = 165  # 定义缩小后的标准宽度
-    y_s = int(y * x_s / x)  # 基于标准宽度计算缩小后的高度
-    out = im.resize((x_s, y_s), Image.ANTIALIAS)  # 改变尺寸，保持图片高品质
-    out.save(r&quot;6s_pictures_new\&#123;&#125;&quot;.format(infile.split(&quot;\\&quot;)[-1]))
-
-path = &quot;6s_pictures_new&quot;
-list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
-list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
-
-doc = Document(&quot;6S稽查问题模板.docx&quot;)
-table = doc.tables[0]  # 已确定是第一个表格，其索引是0
-
-# 增加需要的行，以便足够填入数据
-for i in range(len(list_p) - 1):
-    table.add_row()
-
-# 写入数据及图片
-for row in range(1, len(list_p) + 1):
-    # 插入图片
-    run = table.cell(row, 2).paragraphs[0].add_run()  # 新增一个文字块
-    picture = run.add_picture(list_p[row - 1])  # 插入图片
-
-doc.save(&quot;6S稽查问题.docx&quot;)
-</code></pre>
-<p><a href="https://github.com/victory-liao/victory-liao.github.io/tree/master/source/images/6s_pictures">6s_pictures</a><br><a href="6S稽查问题模板.docx">6S稽查问题模板.docx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>PIL</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>PIL</tag>
-        <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>win32api | 批量打印文件</title>
-    <url>/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p>
-<pre><code>import win32api
-
-
-def Print(fileName):
-    win32api.ShellExecute(
-        0,  # 指定父窗口句柄，搞不懂
-        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序
-        fileName,  # 要打印的文件名
-        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机
-        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂
-        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0
-    )
-
-
-# 获取待打印文件的路径
-import os
-
-path = &#39;文件&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-
-# 批量打印
-for file in files:
-    Print(file)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>win32api</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>os</tag>
-        <tag>win32api</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>os | 批量新建文件夹</title>
-    <url>/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
-    <content><![CDATA[<h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p>
-<span id="more"></span>
-<p>代码：</p>
-<pre><code>import os
-from datetime import datetime
-from time import time, localtime, strftime
-from tkinter import Tk, Entry, Button, Listbox, X, Y, END, Scrollbar, RIGHT, BOTTOM, HORIZONTAL, StringVar, Label
-from tkinter.filedialog import askdirectory
-
-
-class MainGUI():
-    def __init__(self):
-        myWindow = Tk()
-        myWindow.title(&quot;批量新建文件夹&quot;)
-        # 设置窗口大小
-        myWindow.geometry(&#39;590x400&#39;)
-        # 增加标签
-        self.label_1 = Label(myWindow, text=&#39; 目标目录:&#39;)
-        self.label_1.place(x=10, y=10, width=70, height=30)
-        self.label_2 = Label(myWindow, text=&#39;文件夹数量:&#39;)
-        self.label_2.place(x=10, y=50, width=70, height=30)
-
-        # 增加文本框
-        addr = StringVar(value=&#39;C:\\Users\\xxxx\\Desktop&#39;)  # 文本框默认显示的内容
-        self.input_entry = Entry(myWindow, highlightcolor=&#39;red&#39;, highlightthickness=1, textvariable=addr)
-        self.input_entry.place(x=80, y=10, width=410, height=30)
-        self.btn_in = Button(myWindow, text=&#39;选择目录&#39;, command=self.select_dir1, width=10, height=1)
-        self.btn_in.place(x=500, y=10)
-
-        folder_quantity = str(self.get_folder_qty())  # 从日志文件`log.txt`中读取最近使用过的文件夹数量
-        def_qty = StringVar(value=folder_quantity)
-        self.folderQty_entry = Entry(myWindow, highlightcolor=&#39;blue&#39;, highlightthickness=1, textvariable=def_qty)
-        self.folderQty_entry.place(x=80, y=50, width=410, height=30)
-        self.btn_exe = Button(myWindow, text=&#39;执行新建&#39;, command=self.create_folders, width=10, height=1)
-        self.btn_exe.place(x=500, y=50)
-
-        # 增加列表框
-        self.result_show = Listbox(myWindow, bg=&#39;Azure&#39;)
-        self.result_show.place(x=10, y=100, width=570, height=290)
-        self.sbY = Scrollbar(self.result_show, command=self.result_show.yview)  # 在列表框中增加Y轴滚动条
-        self.sbY.pack(side=RIGHT, fill=Y)
-        self.result_show.config(yscrollcommand=self.sbY.set)
-        self.sbX = Scrollbar(self.result_show, command=self.result_show.xview, orient=HORIZONTAL)  # 在列表框中增加X轴滚动条
-        self.sbX.pack(side=BOTTOM, fill=X)
-        self.result_show.config(xscrollcommand=self.sbX.set)
-
-        myWindow.mainloop()
-
-    def select_dir1(self):
-        self.input_entry.delete(0, END)
-        self.input_entry.insert(0, askdirectory(initialdir=&quot;D:\\&quot;))
-
-    def create_folders(self):
-        date = self.get_current_date()  # 获取日期
-        qty = int(self.folderQty_entry.get())  # 获取文本框中文件夹数量，并转为整数
-        for i in range(1, qty + 1):
-            folder = self.input_entry.get() + &quot;\\&quot; + date + &#39;-&#39; + str(i)
-            # 判断是否已经存在该目录
-            if not os.path.exists(folder):
-                # 目录不存在，进行创建操作
-                os.makedirs(folder)  # 使用os.makedirs()方法创建目录
-                f = f&quot;目录新建成功：&#123;folder&#125;&quot;  # 创建一个显示项
-                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中
-            else:
-                f = f&quot;目录已存在：&#123;folder&#125;&quot;  # 创建一个显示项
-                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中
-        f = &quot;-&quot; * 100  # 创建分割线
-        self.result_show.insert(&quot;end&quot;, f)  # 将分割线添加到列表框
-        f = f&quot;程序运行完成，请关闭窗口退出.&quot;  # 创建一个显示项
-        self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框
-        f = &quot; &quot; * 100
-        self.result_show.insert(&quot;end&quot;, f)  # 将以上空格添加到列表框
-        self.save_recent_folder_qty()  # 保存最新的文件夹数量
-
-    @staticmethod
-    def get_current_date():
-        time_stamp = time()
-        local_time = localtime(time_stamp)
-        str_time_month = int(strftime(&#39;%m&#39;, local_time))
-        str_time_day = int(strftime(&#39;%d&#39;, local_time))
-        return str(str_time_month) + &quot;.&quot; + str(str_time_day)
-
-    @staticmethod
-    def get_folder_qty():
-        &#39;&#39;&#39;从log.txt文件中获取最近的文件夹数量，若没有则返回0&#39;&#39;&#39;
-        log_file = os.getcwd() + &quot;\\log.txt&quot;
-        if os.path.exists(log_file):
-            with open(log_file, &quot;r&quot;) as f:
-                qty = f.readline()
-                return int(qty)
-        else:
-            return 0
-
-    def save_recent_folder_qty(self):
-        &quot;&quot;&quot;保存最近的文件夹数量&quot;&quot;&quot;
-        log_file = os.getcwd() + &quot;\\log.txt&quot;
-        with open(log_file, &quot;w&quot;) as f:
-            recent_qty = str(self.folderQty_entry.get())
-            f.write(recent_qty)
-
-
-if __name__ == &quot;__main__&quot;:
-    MainGUI()
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>os</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>os</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python-pptx | 批量生成PPT版荣誉证书</title>
-    <url>/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/</url>
-    <content><![CDATA[<h1 id="批量生成PPT版荣誉证书"><a href="#批量生成PPT版荣誉证书" class="headerlink" title="批量生成PPT版荣誉证书"></a>批量生成PPT版荣誉证书</h1><p>以下代码实现了根据一个excel名单和一个荣誉证书模板批量生成名单中所有人的荣誉证书。</p>
-<span id="more"></span>
-
-<pre><code>import time
-from pptx import Presentation
-from openpyxl import load_workbook
-
-prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)
-slide = prs.slides.add_slide(prs.slide_layouts[0])  # 第一个模板的第0个板式
-for ph in slide.placeholders:  # 遍历这页PPT的所有占位符
-    phf = ph.placeholder_format  # 获取占位符的格式
-    print(phf.idx)  # 打印其ID编号
-    ph.text = str(phf.idx)  # 将编号写入PPT对应的位置中，以便后面一一对应
-# 以上读取到占位符的ID方便后面调用
-prs.save(r&#39;data\荣誉证书模板-占位符编号.pptx&#39;)
-
-
-wb = load_workbook(r&quot;data\名单.xlsx&quot;)
-ws = wb.active
-data = &#123;&#125;
-for row in range(2, ws.max_row + 1):
-    class_id = ws[&#39;A&#39; + str(row)].value
-    name = ws[&#39;B&#39; + str(row)].value
-    data.setdefault(class_id, [])
-    data[class_id].append(name)
-
-t0 = time.time()  # 程序开始运行的时间
-
-prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)
-slide_layout = prs.slide_layouts[0]  # 调用设置好的母版，因为是母版的第一版式，所以取[0]
-for class_id in data:
-    for name in data[class_id]:
-        slide = prs.slides.add_slide(slide_layout)  # 以母版的版式为基础新增一页幻灯片
-        # 往幻灯片中写入内容
-        slide.placeholders[10].text = &quot;&#123;&#125; 班 &#123;&#125; 同学：&quot;.format(class_id, name)  # 此处是班级和姓名
-        slide.placeholders[11].text = &quot;在2019-2020学年度第一学期获得&quot;
-        slide.placeholders[12].text = &quot;“好孩子”称号。&quot;
-        slide.placeholders[13].text = &quot;特发此证，以资鼓励。&quot;
-        slide.placeholders[14].text = &quot;市幼儿园&quot;
-        slide.placeholders[15].text = &quot;2020年1月&quot;
-prs.save(&#39;data\荣誉证书(总).pptx&#39;)
-t1 = time.time()
-
-print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)
-</code></pre>
-<p><a href="荣誉证书模板.pptx">荣誉证书模板.pptx</a><br><a href="名单.xlsx">下载名单.xlsx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>python-pptx</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>python-pptx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 448.找到所有数组中消失的数字</title>
-    <url>/2022/07/18/%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E6%95%B0%E7%BB%84%E4%B8%AD%E6%B6%88%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/</url>
-    <content><![CDATA[<h1 id="448-找到所有数组中消失的数字"><a href="#448-找到所有数组中消失的数字" class="headerlink" title="448.找到所有数组中消失的数字"></a>448.找到所有数组中消失的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。</p>
-<p>示例 1：<br>输入：nums = [4,3,2,7,8,2,3,1]<br>输出：[5,6]</p>
-<p><a href="https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>可以通过集合求差集的方式实现<br>set1 = {4,3,2,7,8,2,3,1}<br>set2 = {1,2,3,4,5,6}<br>set2 - set1即为题目所求</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def findDisappearedNumbers(self, nums):
-        &quot;&quot;&quot;
-        :type nums: List[int]
-        :rtype: List[int]
-        &quot;&quot;&quot;
-        # 超出时间限制
-        # result = []
-        # for i in range(1, len(nums)+1):
-        #     if i not in nums:
-        #         result.append(i)
-        # return result
-
-        # 超出时间限制
-        # return [i for i in range(1, len(nums)+1) if i not in nums]
-
-        # 集合求差集
-        set1 = set(nums)
-        set2 = set([i for i in range(1, len(nums) + 1)])
-        return list(set2.difference(set1))
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    nums = [4, 3, 2, 7, 8, 2, 3, 1]
-    result = slt.findDisappearedNumbers(nums)
-    print(result)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>数组</category>
-        <category>448.找到所有数组中消失的数字</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>数组</tag>
-        <tag>集合</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 把隐藏层数量当做参数</title>
-    <url>/2021/06/24/%E6%8A%8A%E9%9A%90%E8%97%8F%E5%B1%82%E6%95%B0%E9%87%8F%E5%BD%93%E5%81%9A%E5%8F%82%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="把隐藏层数量当做参数"><a href="#把隐藏层数量当做参数" class="headerlink" title="把隐藏层数量当做参数"></a>把隐藏层数量当做参数</h1><p>在搭建深度网络时，不一定非要使用很多隐藏层，在刚开始解决一个新问题时，通常可以从<br>logistic回归开始，再试试一到两个隐层，把隐藏层数量当做参数、超参数一样去调试，这样<br>去找比较合适的深度。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -22724,6 +22229,501 @@ body &#123;
         <tag>JavaWeb</tag>
         <tag>基于JavaWeb的网上购物商城</tag>
         <tag>我的订单</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python-docx | 批量修改word文件中的段落格式</title>
+    <url>/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="批量修改word文件中的段落格式"><a href="#批量修改word文件中的段落格式" class="headerlink" title="批量修改word文件中的段落格式"></a>批量修改word文件中的段落格式</h1><p>实现代码：</p>
+<pre><code>import os
+import docx
+# 定义字体格式
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+
+def F_title(run):
+    # 标题文字
+    run.font.size = Pt(22)  # 文字大小磅值
+    run.bold = True  # 加粗
+    run.font.name = &quot;方正小标宋_GBK&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;方正小标宋_GBK&quot;)  # 字体
+
+
+def F_name_dept(run):
+    # 姓名，部门，日期
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;楷体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
+
+
+def F_main(run):
+    # 正文的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;仿宋&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;仿宋&quot;)  # 字体
+
+
+def F_title1(run):
+    # 标题一的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;黑体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)  # 字体
+
+
+def F_title2(run):
+    # 标题二的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = True  # 加粗
+    run.font.name = &quot;楷体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
+
+
+# 获取待处理的文件的路径
+path = &#39;待处理文件&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+# print(files)
+# 逐个提取文件，设置字体格式
+for file in files:
+    doc = docx.Document(file)
+    for run in doc.paragraphs[0].runs:  # 总标题字体格式
+        F_title(run)
+
+    for para in doc.paragraphs[1:3]:  # 部门、姓名及日期字体格式
+        for run in para.runs:
+            F_name_dept(run)
+
+    title1 = [&quot;一、&quot;, &quot;二、&quot;, &quot;三、&quot;, &quot;四、&quot;]  # 标题一的唯一特征字符串
+    title2 = [&quot;1、&quot;, &quot;2、&quot;, &quot;3、&quot;, &quot;4、&quot;]  # 标题二的唯一特征字符串
+    for para in doc.paragraphs[3:]:
+        if any(i in para.text for i in title1):  # 若该段落是标题一，则应用标题一的字体格式
+            for run in para.runs:
+                F_title1(run)
+        elif any(j in para.text for j in title2):  # 若该段落是标题二，则应用标题二的字体格式
+            for run in para.runs:
+                F_title2(run)
+        else:
+            for run in para.runs:  # 其余都应用正文的字体格式
+                F_main(run)
+    doc.save(&#39;已处理文件\\&#123;&#125;&#39;.format(file.split(&quot;\\&quot;)[1]))
+    
+</code></pre>
+<p>已处理文件：<br><a href="报告-何十.docx">报告-何十.docx</a><br><a href="报告-刘七.docx">报告-刘七.docx</a><br><a href="报告-张三.docx">报告-张三.docx</a><br><a href="报告-朱八.docx">报告-朱八</a><br><a href="报告-李四.docx">报告-李四.docx</a><br><a href="报告-猪八戒.docx">报告-猪八戒.docx</a><br><a href="报告-王五.docx">报告-王五.docx</a><br><a href="报告-秦九.docx">报告-秦九.docx</a><br><a href="报告-赵六.docx">报告-赵六.docx</a><br><a href="报告-黄二.docx">报告-黄二.docx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>python-docx</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>python-docx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PIL | 批量压缩图片</title>
+    <url>/2021/10/24/%E6%89%B9%E9%87%8F%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<h1 id="批量压缩图片"><a href="#批量压缩图片" class="headerlink" title="批量压缩图片"></a>批量压缩图片</h1><p>实现代码：</p>
+<pre><code># 将图片按修改时间排序(这样才能与图片的描述一致)，将路径存入列表，以便后面逐个插入图片时调用
+import os
+from PIL import Image
+from docx import Document
+
+path = &quot;6s_pictures&quot;
+list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
+list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
+print(list_p)
+
+# 按比例缩小图片尺寸
+for infile in list_p:
+    im = Image.open(infile)
+    (x, y) = im.size  # 读取图片尺寸（像素）
+    x_s = 165  # 定义缩小后的标准宽度
+    y_s = int(y * x_s / x)  # 基于标准宽度计算缩小后的高度
+    out = im.resize((x_s, y_s), Image.ANTIALIAS)  # 改变尺寸，保持图片高品质
+    out.save(r&quot;6s_pictures_new\&#123;&#125;&quot;.format(infile.split(&quot;\\&quot;)[-1]))
+
+path = &quot;6s_pictures_new&quot;
+list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
+list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
+
+doc = Document(&quot;6S稽查问题模板.docx&quot;)
+table = doc.tables[0]  # 已确定是第一个表格，其索引是0
+
+# 增加需要的行，以便足够填入数据
+for i in range(len(list_p) - 1):
+    table.add_row()
+
+# 写入数据及图片
+for row in range(1, len(list_p) + 1):
+    # 插入图片
+    run = table.cell(row, 2).paragraphs[0].add_run()  # 新增一个文字块
+    picture = run.add_picture(list_p[row - 1])  # 插入图片
+
+doc.save(&quot;6S稽查问题.docx&quot;)
+</code></pre>
+<p><a href="https://github.com/victory-liao/victory-liao.github.io/tree/master/source/images/6s_pictures">6s_pictures</a><br><a href="6S稽查问题模板.docx">6S稽查问题模板.docx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>PIL</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>PIL</tag>
+        <tag>python-docx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pypiwin32 | 批量发送不同内容的邮件给不同的收件人</title>
+    <url>/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/</url>
+    <content><![CDATA[<h1 id="批量发送不同内容的邮件给不同的收件人"><a href="#批量发送不同内容的邮件给不同的收件人" class="headerlink" title="批量发送不同内容的邮件给不同的收件人"></a>批量发送不同内容的邮件给不同的收件人</h1><p>程序实现自动将’年假_按部门’下各个部门的年假情况Excel表格发送给’邮件地址.xlsx’中各个部门的负责人。</p>
+<span id="more"></span>
+<p>实现代码：</p>
+<pre><code>import os
+from openpyxl import load_workbook
+
+wb = load_workbook(&quot;邮件地址.xlsx&quot;)
+ws = wb.active
+address = &#123;&#125;
+for i in range(2, ws.max_row + 1):
+    dept = ws[&quot;A&quot; + str(i)].value
+    to_add = ws[&quot;B&quot; + str(i)].value
+    cc_add = ws[&quot;C&quot; + str(i)].value
+    address[dept] = [to_add, cc_add]
+
+import win32com.client as win32
+
+
+def Send_mail(to_add, cc_add, file_path, dept):
+    &#39;&#39;&#39;
+    传入参数说明：
+    to_add,收件人地址
+    cc_add,抄送地址
+    file_path,附件路径
+    dept,部门名称
+    &#39;&#39;&#39;
+    outlook = win32.Dispatch(&#39;Outlook.Application&#39;)  # 调用windows outlook应用
+    mail = outlook.CreateItem(0)  # 创建邮件
+    mail.to = to_add  # 收件人
+    mail.cc = cc_add  # 抄送人
+    mail.Subject = &quot;&#123;&#125;年假情况&quot;.format(dept)  # 主题
+    mail.Attachments.Add(file_path)  # 添加附件。若有多个附件，则多调用几次即可
+    mail.Body = &#39;&#39;&#39;Dear All,\n这是&#123;&#125;的年假情况，请查收！谢谢。\n\nBest regards!\n人事部 小李&#39;&#39;&#39;.format(dept)  # 正文内容
+    mail.Send()  # 发送邮件
+
+
+# 发送邮件到各部门
+for dept in address.keys():
+    to_add = address[dept][0]
+    cc_add = address[dept][1]
+    file_path = os.getcwd() + &#39;\\年假_按部门\\年假情况_&#123;&#125;.xlsx&#39;.format(dept)
+    Send_mail(to_add, cc_add, file_path, dept)
+
+print(&quot;邮件发送完成。&quot;)
+</code></pre>
+<p>‘年假_按部门’文件夹包括以下内容：<br><a href="年假情况_人事部.xlsx">年假情况_人事部.xlsx</a><br><a href="年假情况_关务部.xlsx">年假情况_关务部.xlsx</a><br><a href="年假情况_品质部.xlsx">年假情况_品质部.xlsx</a><br><a href="年假情况_工程部.xlsx">年假情况_工程部.xlsx</a><br><a href="年假情况_总务部.xlsx">年假情况_总务部.xlsx</a><br><a href="年假情况_物料部.xlsx">年假情况_物料部.xlsx</a><br><a href="年假情况_生产部.xlsx">年假情况_生产部.xlsx</a><br><a href="年假情况_研发部.xlsx">年假情况_研发部.xlsx</a><br><a href="年假情况_船务部.xlsx">年假情况_船务部.xlsx</a><br><a href="年假情况_采购部.xlsx">年假情况_采购部.xlsx</a></p>
+<p><a href="邮件地址.xlsx">邮件地址.xlsx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pypiwin32</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>pypiwin32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32api | 批量打印文件</title>
+    <url>/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p>
+<pre><code>import win32api
+
+
+def Print(fileName):
+    win32api.ShellExecute(
+        0,  # 指定父窗口句柄，搞不懂
+        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序
+        fileName,  # 要打印的文件名
+        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机
+        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂
+        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0
+    )
+
+
+# 获取待打印文件的路径
+import os
+
+path = &#39;文件&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+
+# 批量打印
+for file in files:
+    Print(file)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>win32api</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+        <tag>win32api</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>os | 批量新建文件夹</title>
+    <url>/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p>
+<span id="more"></span>
+<p>代码：</p>
+<pre><code>import os
+from datetime import datetime
+from time import time, localtime, strftime
+from tkinter import Tk, Entry, Button, Listbox, X, Y, END, Scrollbar, RIGHT, BOTTOM, HORIZONTAL, StringVar, Label
+from tkinter.filedialog import askdirectory
+
+
+class MainGUI():
+    def __init__(self):
+        myWindow = Tk()
+        myWindow.title(&quot;批量新建文件夹&quot;)
+        # 设置窗口大小
+        myWindow.geometry(&#39;590x400&#39;)
+        # 增加标签
+        self.label_1 = Label(myWindow, text=&#39; 目标目录:&#39;)
+        self.label_1.place(x=10, y=10, width=70, height=30)
+        self.label_2 = Label(myWindow, text=&#39;文件夹数量:&#39;)
+        self.label_2.place(x=10, y=50, width=70, height=30)
+
+        # 增加文本框
+        addr = StringVar(value=&#39;C:\\Users\\xxxx\\Desktop&#39;)  # 文本框默认显示的内容
+        self.input_entry = Entry(myWindow, highlightcolor=&#39;red&#39;, highlightthickness=1, textvariable=addr)
+        self.input_entry.place(x=80, y=10, width=410, height=30)
+        self.btn_in = Button(myWindow, text=&#39;选择目录&#39;, command=self.select_dir1, width=10, height=1)
+        self.btn_in.place(x=500, y=10)
+
+        folder_quantity = str(self.get_folder_qty())  # 从日志文件`log.txt`中读取最近使用过的文件夹数量
+        def_qty = StringVar(value=folder_quantity)
+        self.folderQty_entry = Entry(myWindow, highlightcolor=&#39;blue&#39;, highlightthickness=1, textvariable=def_qty)
+        self.folderQty_entry.place(x=80, y=50, width=410, height=30)
+        self.btn_exe = Button(myWindow, text=&#39;执行新建&#39;, command=self.create_folders, width=10, height=1)
+        self.btn_exe.place(x=500, y=50)
+
+        # 增加列表框
+        self.result_show = Listbox(myWindow, bg=&#39;Azure&#39;)
+        self.result_show.place(x=10, y=100, width=570, height=290)
+        self.sbY = Scrollbar(self.result_show, command=self.result_show.yview)  # 在列表框中增加Y轴滚动条
+        self.sbY.pack(side=RIGHT, fill=Y)
+        self.result_show.config(yscrollcommand=self.sbY.set)
+        self.sbX = Scrollbar(self.result_show, command=self.result_show.xview, orient=HORIZONTAL)  # 在列表框中增加X轴滚动条
+        self.sbX.pack(side=BOTTOM, fill=X)
+        self.result_show.config(xscrollcommand=self.sbX.set)
+
+        myWindow.mainloop()
+
+    def select_dir1(self):
+        self.input_entry.delete(0, END)
+        self.input_entry.insert(0, askdirectory(initialdir=&quot;D:\\&quot;))
+
+    def create_folders(self):
+        date = self.get_current_date()  # 获取日期
+        qty = int(self.folderQty_entry.get())  # 获取文本框中文件夹数量，并转为整数
+        for i in range(1, qty + 1):
+            folder = self.input_entry.get() + &quot;\\&quot; + date + &#39;-&#39; + str(i)
+            # 判断是否已经存在该目录
+            if not os.path.exists(folder):
+                # 目录不存在，进行创建操作
+                os.makedirs(folder)  # 使用os.makedirs()方法创建目录
+                f = f&quot;目录新建成功：&#123;folder&#125;&quot;  # 创建一个显示项
+                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中
+            else:
+                f = f&quot;目录已存在：&#123;folder&#125;&quot;  # 创建一个显示项
+                self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中
+        f = &quot;-&quot; * 100  # 创建分割线
+        self.result_show.insert(&quot;end&quot;, f)  # 将分割线添加到列表框
+        f = f&quot;程序运行完成，请关闭窗口退出.&quot;  # 创建一个显示项
+        self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框
+        f = &quot; &quot; * 100
+        self.result_show.insert(&quot;end&quot;, f)  # 将以上空格添加到列表框
+        self.save_recent_folder_qty()  # 保存最新的文件夹数量
+
+    @staticmethod
+    def get_current_date():
+        time_stamp = time()
+        local_time = localtime(time_stamp)
+        str_time_month = int(strftime(&#39;%m&#39;, local_time))
+        str_time_day = int(strftime(&#39;%d&#39;, local_time))
+        return str(str_time_month) + &quot;.&quot; + str(str_time_day)
+
+    @staticmethod
+    def get_folder_qty():
+        &#39;&#39;&#39;从log.txt文件中获取最近的文件夹数量，若没有则返回0&#39;&#39;&#39;
+        log_file = os.getcwd() + &quot;\\log.txt&quot;
+        if os.path.exists(log_file):
+            with open(log_file, &quot;r&quot;) as f:
+                qty = f.readline()
+                return int(qty)
+        else:
+            return 0
+
+    def save_recent_folder_qty(self):
+        &quot;&quot;&quot;保存最近的文件夹数量&quot;&quot;&quot;
+        log_file = os.getcwd() + &quot;\\log.txt&quot;
+        with open(log_file, &quot;w&quot;) as f:
+            recent_qty = str(self.folderQty_entry.get())
+            f.write(recent_qty)
+
+
+if __name__ == &quot;__main__&quot;:
+    MainGUI()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>os</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 448.找到所有数组中消失的数字</title>
+    <url>/2022/07/18/%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E6%95%B0%E7%BB%84%E4%B8%AD%E6%B6%88%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/</url>
+    <content><![CDATA[<h1 id="448-找到所有数组中消失的数字"><a href="#448-找到所有数组中消失的数字" class="headerlink" title="448.找到所有数组中消失的数字"></a>448.找到所有数组中消失的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。</p>
+<p>示例 1：<br>输入：nums = [4,3,2,7,8,2,3,1]<br>输出：[5,6]</p>
+<p><a href="https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>可以通过集合求差集的方式实现<br>set1 = {4,3,2,7,8,2,3,1}<br>set2 = {1,2,3,4,5,6}<br>set2 - set1即为题目所求</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
+    def findDisappearedNumbers(self, nums):
+        &quot;&quot;&quot;
+        :type nums: List[int]
+        :rtype: List[int]
+        &quot;&quot;&quot;
+        # 超出时间限制
+        # result = []
+        # for i in range(1, len(nums)+1):
+        #     if i not in nums:
+        #         result.append(i)
+        # return result
+
+        # 超出时间限制
+        # return [i for i in range(1, len(nums)+1) if i not in nums]
+
+        # 集合求差集
+        set1 = set(nums)
+        set2 = set([i for i in range(1, len(nums) + 1)])
+        return list(set2.difference(set1))
+
+
+if __name__ == &quot;__main__&quot;:
+    slt = Solution()
+    nums = [4, 3, 2, 7, 8, 2, 3, 1]
+    result = slt.findDisappearedNumbers(nums)
+    print(result)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>数组</category>
+        <category>448.找到所有数组中消失的数字</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>数组</tag>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python-pptx | 批量生成PPT版荣誉证书</title>
+    <url>/2021/10/16/%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90PPT%E7%89%88%E8%8D%A3%E8%AA%89%E8%AF%81%E4%B9%A6/</url>
+    <content><![CDATA[<h1 id="批量生成PPT版荣誉证书"><a href="#批量生成PPT版荣誉证书" class="headerlink" title="批量生成PPT版荣誉证书"></a>批量生成PPT版荣誉证书</h1><p>以下代码实现了根据一个excel名单和一个荣誉证书模板批量生成名单中所有人的荣誉证书。</p>
+<span id="more"></span>
+
+<pre><code>import time
+from pptx import Presentation
+from openpyxl import load_workbook
+
+prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)
+slide = prs.slides.add_slide(prs.slide_layouts[0])  # 第一个模板的第0个板式
+for ph in slide.placeholders:  # 遍历这页PPT的所有占位符
+    phf = ph.placeholder_format  # 获取占位符的格式
+    print(phf.idx)  # 打印其ID编号
+    ph.text = str(phf.idx)  # 将编号写入PPT对应的位置中，以便后面一一对应
+# 以上读取到占位符的ID方便后面调用
+prs.save(r&#39;data\荣誉证书模板-占位符编号.pptx&#39;)
+
+
+wb = load_workbook(r&quot;data\名单.xlsx&quot;)
+ws = wb.active
+data = &#123;&#125;
+for row in range(2, ws.max_row + 1):
+    class_id = ws[&#39;A&#39; + str(row)].value
+    name = ws[&#39;B&#39; + str(row)].value
+    data.setdefault(class_id, [])
+    data[class_id].append(name)
+
+t0 = time.time()  # 程序开始运行的时间
+
+prs = Presentation(r&#39;data\荣誉证书模板.pptx&#39;)
+slide_layout = prs.slide_layouts[0]  # 调用设置好的母版，因为是母版的第一版式，所以取[0]
+for class_id in data:
+    for name in data[class_id]:
+        slide = prs.slides.add_slide(slide_layout)  # 以母版的版式为基础新增一页幻灯片
+        # 往幻灯片中写入内容
+        slide.placeholders[10].text = &quot;&#123;&#125; 班 &#123;&#125; 同学：&quot;.format(class_id, name)  # 此处是班级和姓名
+        slide.placeholders[11].text = &quot;在2019-2020学年度第一学期获得&quot;
+        slide.placeholders[12].text = &quot;“好孩子”称号。&quot;
+        slide.placeholders[13].text = &quot;特发此证，以资鼓励。&quot;
+        slide.placeholders[14].text = &quot;市幼儿园&quot;
+        slide.placeholders[15].text = &quot;2020年1月&quot;
+prs.save(&#39;data\荣誉证书(总).pptx&#39;)
+t1 = time.time()
+
+print(&#39;程序用时：&#39;, str(round(t1 - t0)) + &#39;秒。&#39;)
+</code></pre>
+<p><a href="荣誉证书模板.pptx">荣誉证书模板.pptx</a><br><a href="名单.xlsx">下载名单.xlsx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>python-pptx</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>python-pptx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 把隐藏层数量当做参数</title>
+    <url>/2021/06/24/%E6%8A%8A%E9%9A%90%E8%97%8F%E5%B1%82%E6%95%B0%E9%87%8F%E5%BD%93%E5%81%9A%E5%8F%82%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="把隐藏层数量当做参数"><a href="#把隐藏层数量当做参数" class="headerlink" title="把隐藏层数量当做参数"></a>把隐藏层数量当做参数</h1><p>在搭建深度网络时，不一定非要使用很多隐藏层，在刚开始解决一个新问题时，通常可以从<br>logistic回归开始，再试试一到两个隐层，把隐藏层数量当做参数、超参数一样去调试，这样<br>去找比较合适的深度。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -25984,6 +25984,39 @@ public class User &#123;
       </tags>
   </entry>
   <entry>
+    <title>励志 | 活法</title>
+    <url>/2021/07/22/%E6%B4%BB%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="活法"><a href="#活法" class="headerlink" title="活法"></a>活法</h1><p>读了稻盛和夫的活法，书中的每一字每一句都可以作为人生哲学和信条，下面记录了自己应该首先去学习、去执行的一些人生哲学：</p>
+<span id="more"></span>
+
+<h2 id="只有主动追求的东西才可能到手"><a href="#只有主动追求的东西才可能到手" class="headerlink" title="只有主动追求的东西才可能到手"></a>只有主动追求的东西才可能到手</h2><p>“心不唤物，物不至”，只有自己内心渴望的事情，才能将它呼唤到可能事先的射程之内。</p>
+<h2 id="只要思考达到每个细节，目标就一定能实现"><a href="#只要思考达到每个细节，目标就一定能实现" class="headerlink" title="只要思考达到每个细节，目标就一定能实现"></a>只要思考达到每个细节，目标就一定能实现</h2><p>在我们的人生中，想要做成某件事，我们首先要描画它的理想状态，然后把实现它的过程在头脑中模拟演练，<br>一直到“看见”它的结果为止。你事先能“看见”的东西就能做成，“看不见”的东西就做不成。</p>
+<h2 id="心态决定命运"><a href="#心态决定命运" class="headerlink" title="心态决定命运"></a>心态决定命运</h2><p>人的命运绝不是天定的，它不是在事先铺设好的轨道上运行的，根据我们的意志，命运既可以变好，也可以变坏。</p>
+<h2 id="原理原则"><a href="#原理原则" class="headerlink" title="原理原则"></a>原理原则</h2><p>作为人，何为正确？</p>
+<h2 id="人生方程式"><a href="#人生方程式" class="headerlink" title="人生方程式"></a>人生方程式</h2><p>人生·工作的结果 = 思维方式 x 热情 x 能力</p>
+<h2 id="自己的人生之戏如何编演"><a href="#自己的人生之戏如何编演" class="headerlink" title="自己的人生之戏如何编演"></a>自己的人生之戏如何编演</h2><p>人生是一出戏，我们每个人都是戏里的主角。不仅如此，而且这戏剧的导演、编剧、主演都可由自己单肩独挑。其实这出戏也<br>只能自编自演，这就是我们的人生。</p>
+<h2 id="不在现场流汗什么也学不到"><a href="#不在现场流汗什么也学不到" class="headerlink" title="不在现场流汗什么也学不到"></a>不在现场流汗什么也学不到</h2><p>体验重于知识，“知”未必等于“会”。进入信息社会，进入偏重知识的时代，认为“只要知道自然就会了”的人越来越多了。这种<br>看法大错特错。“会”和“知”中间有一条鸿沟，只有靠现场的经验才能填补。</p>
+<h2 id="成为自我燃烧型的人"><a href="#成为自我燃烧型的人" class="headerlink" title="成为自我燃烧型的人"></a>成为自我燃烧型的人</h2><p>要成为自燃型的人，最好最有效的办法是“喜欢自己的工作”，能做成事情的人，他们不仅自我燃烧而且其能量还可与周围人分享。</p>
+<h2 id="我正在干一件了不起的工作"><a href="#我正在干一件了不起的工作" class="headerlink" title="我正在干一件了不起的工作"></a>我正在干一件了不起的工作</h2><p>在你讨厌工作，觉得难以忍受时，你还是要多加忍耐，要决心朝前走，要发奋努力，这将改变你的人生。</p>
+<h2 id="喜欢与投入"><a href="#喜欢与投入" class="headerlink" title="喜欢与投入"></a>喜欢与投入</h2><p>“喜欢”和“投入”是硬币的正反两面，两者之间是因果循环的关系：因为喜欢就会投入工作；在投入工作的过程中就会产生喜欢。</p>
+<h2 id="看似复杂的现象，其实不过是简单事物的投影而已"><a href="#看似复杂的现象，其实不过是简单事物的投影而已" class="headerlink" title="看似复杂的现象，其实不过是简单事物的投影而已"></a>看似复杂的现象，其实不过是简单事物的投影而已</h2><h2 id="生存的意义和目的"><a href="#生存的意义和目的" class="headerlink" title="生存的意义和目的"></a>生存的意义和目的</h2><p>相对于浩瀚宇宙的历史长河，我们的人生不过是一闪而过。但正因为如此，在我们稍纵即逝的人生中，我们的灵魂在终结时的价值<br>必须高于降生时的价值，这才是我们生存的意义和目的。</p>
+<h2 id="“六项精进”-磨炼心志的指针"><a href="#“六项精进”-磨炼心志的指针" class="headerlink" title="“六项精进”-磨炼心志的指针"></a>“六项精进”-磨炼心志的指针</h2><p>1.付出不亚于任何人的努力<br>2.谦虚戒骄<br>3.天天反省<br>4.活着就要感谢<br>5.积善行、思利他<br>6.不要有感性的烦恼</p>
+<h2 id="率直之心"><a href="#率直之心" class="headerlink" title="率直之心"></a>率直之心</h2><p>所谓率直之心并不是别人要你向右转你就向右转，并不是盲目顺从，而是抱着谦虚的态度，如实承认自己的弱点和不足，然后不惜一切<br>努力奋斗。具备一对虚心聆听他人意见的大耳朵，具备一双真诚审视自己的大眼睛，耳聪目明，充分发挥耳朵、眼睛的作用。</p>
+<p>把发自内心的喜悦之情、感恩之心直率地表达出来，可以成为一种动力，激励我们持续这种枯燥的研究和单调的工作。不管什么小事，<br>只要开心，只要赶集，就要率直地表达出来，不绕圈子，不装深沉。</p>
+<h2 id="在做出结论之前，先设置一个“理性的缓冲器”"><a href="#在做出结论之前，先设置一个“理性的缓冲器”" class="headerlink" title="在做出结论之前，先设置一个“理性的缓冲器”"></a>在做出结论之前，先设置一个“理性的缓冲器”</h2><h2 id="喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中"><a href="#喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中" class="headerlink" title="喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中"></a>喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中</h2><h2 id="踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献"><a href="#踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献" class="headerlink" title="踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献"></a>踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献</h2><h2 id="养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为"><a href="#养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为" class="headerlink" title="养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为"></a>养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为</h2><h2 id="主宰人生的两只看不见的手"><a href="#主宰人生的两只看不见的手" class="headerlink" title="主宰人生的两只看不见的手"></a>主宰人生的两只看不见的手</h2><p>主宰人生的两只看不见的手，一只叫命运，一只叫因果报应法则。<br>我们身上发生的各种事情，都有其产生的原因。这原因不是别的，就是我们自己的思想和行为。你在想什么做什么，都成为因，而<br>必生其果，你对所生结果如何应对，又成为因，有必有所果。<br>人生超脱命运的轨迹，那是因为因果法则这个力量在发挥作用；而另一方面，善行有时并不立即产生善果，那是因为命运的力量在干扰。<br>在这里，因果报应法则要强于命运的法则。因此，由上苍决定的命运也可以用自己的力量加以改变。</p>
+<h2 id="为善不见其益，如草里冬瓜自暗应长"><a href="#为善不见其益，如草里冬瓜自暗应长" class="headerlink" title="为善不见其益，如草里冬瓜自暗应长"></a>为善不见其益，如草里冬瓜自暗应长</h2><p>我们人生的意义是什么？人生的目的在哪里？<br>要带着一颗比降生是稍稍善良、稍稍美丽的心灵离开人世，从生至死都要尽力去思善行善，陶冶人格，使人生终点时灵魂的品格比起点时有所提升。</p>
+<p>在此我定下一个目标，一定要在n年后重读此书，看看自己的感悟与此时此刻有何不同，自己有没有按照书中的“活法”去生活、工作、学习！</p>
+]]></content>
+      <categories>
+        <category>书籍</category>
+        <category>励志类</category>
+      </categories>
+      <tags>
+        <tag>书籍</tag>
+        <tag>活法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于JavaWeb的网上购物商城 | 注册和登录</title>
     <url>/2022/01/13/%E6%B3%A8%E5%86%8C%E5%92%8C%E7%99%BB%E5%BD%95/</url>
     <content><![CDATA[<h1 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h1><p>以下代码实现网上购物商城的用户注册和登录功能。</p>
@@ -26412,39 +26445,6 @@ public class UserDao &#123;
       </tags>
   </entry>
   <entry>
-    <title>励志 | 活法</title>
-    <url>/2021/07/22/%E6%B4%BB%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="活法"><a href="#活法" class="headerlink" title="活法"></a>活法</h1><p>读了稻盛和夫的活法，书中的每一字每一句都可以作为人生哲学和信条，下面记录了自己应该首先去学习、去执行的一些人生哲学：</p>
-<span id="more"></span>
-
-<h2 id="只有主动追求的东西才可能到手"><a href="#只有主动追求的东西才可能到手" class="headerlink" title="只有主动追求的东西才可能到手"></a>只有主动追求的东西才可能到手</h2><p>“心不唤物，物不至”，只有自己内心渴望的事情，才能将它呼唤到可能事先的射程之内。</p>
-<h2 id="只要思考达到每个细节，目标就一定能实现"><a href="#只要思考达到每个细节，目标就一定能实现" class="headerlink" title="只要思考达到每个细节，目标就一定能实现"></a>只要思考达到每个细节，目标就一定能实现</h2><p>在我们的人生中，想要做成某件事，我们首先要描画它的理想状态，然后把实现它的过程在头脑中模拟演练，<br>一直到“看见”它的结果为止。你事先能“看见”的东西就能做成，“看不见”的东西就做不成。</p>
-<h2 id="心态决定命运"><a href="#心态决定命运" class="headerlink" title="心态决定命运"></a>心态决定命运</h2><p>人的命运绝不是天定的，它不是在事先铺设好的轨道上运行的，根据我们的意志，命运既可以变好，也可以变坏。</p>
-<h2 id="原理原则"><a href="#原理原则" class="headerlink" title="原理原则"></a>原理原则</h2><p>作为人，何为正确？</p>
-<h2 id="人生方程式"><a href="#人生方程式" class="headerlink" title="人生方程式"></a>人生方程式</h2><p>人生·工作的结果 = 思维方式 x 热情 x 能力</p>
-<h2 id="自己的人生之戏如何编演"><a href="#自己的人生之戏如何编演" class="headerlink" title="自己的人生之戏如何编演"></a>自己的人生之戏如何编演</h2><p>人生是一出戏，我们每个人都是戏里的主角。不仅如此，而且这戏剧的导演、编剧、主演都可由自己单肩独挑。其实这出戏也<br>只能自编自演，这就是我们的人生。</p>
-<h2 id="不在现场流汗什么也学不到"><a href="#不在现场流汗什么也学不到" class="headerlink" title="不在现场流汗什么也学不到"></a>不在现场流汗什么也学不到</h2><p>体验重于知识，“知”未必等于“会”。进入信息社会，进入偏重知识的时代，认为“只要知道自然就会了”的人越来越多了。这种<br>看法大错特错。“会”和“知”中间有一条鸿沟，只有靠现场的经验才能填补。</p>
-<h2 id="成为自我燃烧型的人"><a href="#成为自我燃烧型的人" class="headerlink" title="成为自我燃烧型的人"></a>成为自我燃烧型的人</h2><p>要成为自燃型的人，最好最有效的办法是“喜欢自己的工作”，能做成事情的人，他们不仅自我燃烧而且其能量还可与周围人分享。</p>
-<h2 id="我正在干一件了不起的工作"><a href="#我正在干一件了不起的工作" class="headerlink" title="我正在干一件了不起的工作"></a>我正在干一件了不起的工作</h2><p>在你讨厌工作，觉得难以忍受时，你还是要多加忍耐，要决心朝前走，要发奋努力，这将改变你的人生。</p>
-<h2 id="喜欢与投入"><a href="#喜欢与投入" class="headerlink" title="喜欢与投入"></a>喜欢与投入</h2><p>“喜欢”和“投入”是硬币的正反两面，两者之间是因果循环的关系：因为喜欢就会投入工作；在投入工作的过程中就会产生喜欢。</p>
-<h2 id="看似复杂的现象，其实不过是简单事物的投影而已"><a href="#看似复杂的现象，其实不过是简单事物的投影而已" class="headerlink" title="看似复杂的现象，其实不过是简单事物的投影而已"></a>看似复杂的现象，其实不过是简单事物的投影而已</h2><h2 id="生存的意义和目的"><a href="#生存的意义和目的" class="headerlink" title="生存的意义和目的"></a>生存的意义和目的</h2><p>相对于浩瀚宇宙的历史长河，我们的人生不过是一闪而过。但正因为如此，在我们稍纵即逝的人生中，我们的灵魂在终结时的价值<br>必须高于降生时的价值，这才是我们生存的意义和目的。</p>
-<h2 id="“六项精进”-磨炼心志的指针"><a href="#“六项精进”-磨炼心志的指针" class="headerlink" title="“六项精进”-磨炼心志的指针"></a>“六项精进”-磨炼心志的指针</h2><p>1.付出不亚于任何人的努力<br>2.谦虚戒骄<br>3.天天反省<br>4.活着就要感谢<br>5.积善行、思利他<br>6.不要有感性的烦恼</p>
-<h2 id="率直之心"><a href="#率直之心" class="headerlink" title="率直之心"></a>率直之心</h2><p>所谓率直之心并不是别人要你向右转你就向右转，并不是盲目顺从，而是抱着谦虚的态度，如实承认自己的弱点和不足，然后不惜一切<br>努力奋斗。具备一对虚心聆听他人意见的大耳朵，具备一双真诚审视自己的大眼睛，耳聪目明，充分发挥耳朵、眼睛的作用。</p>
-<p>把发自内心的喜悦之情、感恩之心直率地表达出来，可以成为一种动力，激励我们持续这种枯燥的研究和单调的工作。不管什么小事，<br>只要开心，只要赶集，就要率直地表达出来，不绕圈子，不装深沉。</p>
-<h2 id="在做出结论之前，先设置一个“理性的缓冲器”"><a href="#在做出结论之前，先设置一个“理性的缓冲器”" class="headerlink" title="在做出结论之前，先设置一个“理性的缓冲器”"></a>在做出结论之前，先设置一个“理性的缓冲器”</h2><h2 id="喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中"><a href="#喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中" class="headerlink" title="喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中"></a>喜悦从苦劳与艰辛中渗出，工作的乐趣潜藏在超越困难的过程之中</h2><h2 id="踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献"><a href="#踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献" class="headerlink" title="踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献"></a>踏上社会，要转变角色，要为周围的人服务，要为团队、为企业做贡献</h2><h2 id="养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为"><a href="#养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为" class="headerlink" title="养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为"></a>养成在更大视野内观察事物的眼光，从更大的视角、以相对的观点来审视自己的行为</h2><h2 id="主宰人生的两只看不见的手"><a href="#主宰人生的两只看不见的手" class="headerlink" title="主宰人生的两只看不见的手"></a>主宰人生的两只看不见的手</h2><p>主宰人生的两只看不见的手，一只叫命运，一只叫因果报应法则。<br>我们身上发生的各种事情，都有其产生的原因。这原因不是别的，就是我们自己的思想和行为。你在想什么做什么，都成为因，而<br>必生其果，你对所生结果如何应对，又成为因，有必有所果。<br>人生超脱命运的轨迹，那是因为因果法则这个力量在发挥作用；而另一方面，善行有时并不立即产生善果，那是因为命运的力量在干扰。<br>在这里，因果报应法则要强于命运的法则。因此，由上苍决定的命运也可以用自己的力量加以改变。</p>
-<h2 id="为善不见其益，如草里冬瓜自暗应长"><a href="#为善不见其益，如草里冬瓜自暗应长" class="headerlink" title="为善不见其益，如草里冬瓜自暗应长"></a>为善不见其益，如草里冬瓜自暗应长</h2><p>我们人生的意义是什么？人生的目的在哪里？<br>要带着一颗比降生是稍稍善良、稍稍美丽的心灵离开人世，从生至死都要尽力去思善行善，陶冶人格，使人生终点时灵魂的品格比起点时有所提升。</p>
-<p>在此我定下一个目标，一定要在n年后重读此书，看看自己的感悟与此时此刻有何不同，自己有没有按照书中的“活法”去生活、工作、学习！</p>
-]]></content>
-      <categories>
-        <category>书籍</category>
-        <category>励志类</category>
-      </categories>
-      <tags>
-        <tag>书籍</tag>
-        <tag>活法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | 深度学习pytorch训练代码模板</title>
     <url>/2021/11/21/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0pytorch%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h1 id="深度学习pytorch训练代码模板"><a href="#深度学习pytorch训练代码模板" class="headerlink" title="深度学习pytorch训练代码模板"></a>深度学习pytorch训练代码模板</h1><p><a href="https://zhuanlan.zhihu.com/p/396666255?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">查看模板！</a></p>
@@ -26542,176 +26542,6 @@ public void clearCart(HttpServletRequest request, HttpServletResponse response) 
         <tag>JavaWeb</tag>
         <tag>基于JavaWeb的网上购物商城</tag>
         <tag>清空购物车</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>requests | 爬取精美壁纸</title>
-    <url>/2021/11/06/%E7%88%AC%E5%8F%96%E7%B2%BE%E7%BE%8E%E5%A3%81%E7%BA%B8/</url>
-    <content><![CDATA[<h1 id="爬取精美壁纸"><a href="#爬取精美壁纸" class="headerlink" title="爬取精美壁纸"></a>爬取精美壁纸</h1><p><strong>爬取目标：</strong> Wallhaven网站中Toplist标签下前50页共1196张精美壁纸。<br><a href="https://mp.weixin.qq.com/s/BiJKm4SnL6qCLEK91xcDIQ">参考资料</a></p>
-<p><strong>代码：</strong></p>
-<pre><code># -*- coding:utf-8 -*-
-import os
-import requests
-from lxml import etree
-
-
-# 1.获取每页的html信息
-headers = &#123;
-    &#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) &#39;
-                  &#39;Chrome/95.0.4638.54 Safari/537.36 &#39;
-&#125;
-
-
-# 定义获取每页html信息的函数
-def get_html_info(page):
-    url = f&#39;https://wallhaven.cc/toplist?page=&#123;page&#125;&#39;
-    resp = requests.get(url, headers=headers)
-    print(resp.text)
-    resp_html = etree.HTML(resp.text)
-    return resp_html
-
-
-# 2.解析url信息+下载图片
-def get_pic(resp_html):
-    pic_url_list = []
-    lis = resp_html.xpath(&#39;//*[@id=&quot;thumbs&quot;]/section[1]/ul/li&#39;)  # 获取该页所有缩略图包含的信息
-    for li in lis:
-        pic_url = li.xpath(&#39;./figure/a/@href&#39;)[0]  # 获取存放在缩略图信息中的缩略图原图网址
-        pic_url_list.append(pic_url)
-    for pic_url in pic_url_list:
-        resp2 = requests.get(pic_url, headers=headers)
-        r_html2 = etree.HTML(resp2.text)
-        pic_size = r_html2.xpath(&#39;//*[@id=&quot;showcase-sidebar&quot;]/div/div[1]/h3/text()&#39;)[0]  # 用照片分辨率作为名称一部分
-        final_url = r_html2.xpath(&#39;//*[@id=&quot;wallpaper&quot;]/@src&#39;)[0]  # 获取原图下载地址
-        pic = requests.get(url=final_url, headers=headers).content
-        if not os.path.exists(&#39;Wallhaven&#39;):
-            os.mkdir(&#39;Wallhaven&#39;)
-        with open(&#39;Wallhaven\\&#39; + pic_size + final_url[-10:], mode=&#39;wb&#39;) as f:
-            f.write(pic)  # 保存图片
-            print(pic_size + final_url[-10:] + &#39;，下载完毕，已下载&#123;&#125;张壁纸&#39;.format(len(os.listdir(&#39;Wallhaven&#39;))))
-
-
-# 3.构建main()函数运行程序
-def main():
-    page_range = range(1,51) # 爬取1-50页的壁纸
-    for i in page_range:
-        r = get_html_info(i)
-        get_pic(r)
-        print(f&#39;===============第&#123;i&#125;页下载完毕=============&#39;)
-
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>requests</category>
-      </categories>
-      <tags>
-        <tag>requests</tag>
-        <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 70.爬楼梯</title>
-    <url>/2022/07/09/%E7%88%AC%E6%A5%BC%E6%A2%AF/</url>
-    <content><![CDATA[<h1 id="70-爬楼梯"><a href="#70-爬楼梯" class="headerlink" title="70.爬楼梯"></a>70.爬楼梯</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>假设你正在爬楼梯。需要 n 阶你才能到达楼顶。<br>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？<br><a href="https://leetcode.cn/problems/climbing-stairs/">题目链接</a></p>
-<span id="more"></span>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>f(n) = f(n-1) + f(n-2)</strong></p>
-<ol>
-<li><p>递归法<br>由f(1)=1,f(2)=2,f(3)=3,…,以此类推,f(n)=f(n-1)+f(n-2),使用递归法实现该问题，递归方程为f(n)=f(n-1)+f(n-2),<br>递归出口为f(1)=1,f(2)=2。</p>
-</li>
-<li><p>记忆化递归法<br>使用数组记录了每次计算的结果，避免递归法中的重复计算。</p>
-</li>
-<li><p>动态规划<br>动态规划转移方程：f(n)=f(n-1)+f(n-2)<br>边界条件：f(1)=1,f(2)=2</p>
-</li>
-<li><p>滚动数组<br>使用长度为3的数组实现爬楼梯问题，问题中涉及三个状态:状态1、状态2、状态3，每次更新状态时，先将状态2移动到状态1<br>的位置，再把状态3移动到状态2的位置，即将状态数组整体向前滚动一位。<br>例：<br>|1|2|3|—&gt;|2|3|5|</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p>
-<pre><code> def climbStairs(self, n):
-     &quot;&quot;&quot;
-     递归法
-     :type n: int
-     :rtype: int
-     &quot;&quot;&quot;
-     if n == 1:
-         return 1
-     if n == 2:
-         return 2
-     return self.climbStairs(n - 1) + self.climbStairs(n - 2)
- 
- def climbStairs2(self, n):
-     &quot;&quot;&quot;
-     记忆化递归法
-     :type n: int
-     :rtype: int
-     &quot;&quot;&quot;
-     memo = []
-     return self.climbStairsMemo(n, memo)
- 
- def climbStairsMemo(self, n, memo):
-     if memo[n] &gt; 0:
-         return memo[n]
-     if n == 1:
-         memo[n] = 1
-     elif n == 2:
-         memo[n] = 2
-     else:
-         memo[n] = self.climbStairsMemo(n - 1, memo) + self.climbStairsMemo(n - 2, memo)
-     return memo[n]
- 
- def climbStairs3(self, n):
-     &quot;&quot;&quot;
-     动态规划
-     :type n: int
-     :rtype: int
-     &quot;&quot;&quot;
-     if n == 1:
-         return 1
-     dp = [1, 2]
-     for i in range(2, n):
-         dp.append(dp[i-1]+dp[i-2])  # dp[i] = dp[i-1] + dp[i-2]
-     return dp[n-1]
- 
- def climbStairs4(self, n):
-     &quot;&quot;&quot;
-     滚动数组（斐波那契数列）
-     :type n: int
-     :rtype: int
-     &quot;&quot;&quot;
-     if n == 1:
-         return 1
-     first = 1
-     second = 2
-     for i in range(2, n):
-         third = first + second
-         first = second
-         second = third
-     return second
-     
-</code></pre>
-<p> if <strong>name</strong> == “<strong>main</strong>“:</p>
-<pre><code> slt = Solution()
- # numberOfSolutions = slt.climbStairs(2)
- # numberOfSolutions = slt.climbStairs2(2)
- # numberOfSolutions = slt.climbStairs3(2)
- numberOfSolutions = slt.climbStairs4(4)
- print(numberOfSolutions)
-</code></pre>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>动态规划</category>
-        <category>70.爬楼梯</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>动态规划</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -26941,6 +26771,76 @@ for n in g:
       </tags>
   </entry>
   <entry>
+    <title>requests | 爬取精美壁纸</title>
+    <url>/2021/11/06/%E7%88%AC%E5%8F%96%E7%B2%BE%E7%BE%8E%E5%A3%81%E7%BA%B8/</url>
+    <content><![CDATA[<h1 id="爬取精美壁纸"><a href="#爬取精美壁纸" class="headerlink" title="爬取精美壁纸"></a>爬取精美壁纸</h1><p><strong>爬取目标：</strong> Wallhaven网站中Toplist标签下前50页共1196张精美壁纸。<br><a href="https://mp.weixin.qq.com/s/BiJKm4SnL6qCLEK91xcDIQ">参考资料</a></p>
+<p><strong>代码：</strong></p>
+<pre><code># -*- coding:utf-8 -*-
+import os
+import requests
+from lxml import etree
+
+
+# 1.获取每页的html信息
+headers = &#123;
+    &#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) &#39;
+                  &#39;Chrome/95.0.4638.54 Safari/537.36 &#39;
+&#125;
+
+
+# 定义获取每页html信息的函数
+def get_html_info(page):
+    url = f&#39;https://wallhaven.cc/toplist?page=&#123;page&#125;&#39;
+    resp = requests.get(url, headers=headers)
+    print(resp.text)
+    resp_html = etree.HTML(resp.text)
+    return resp_html
+
+
+# 2.解析url信息+下载图片
+def get_pic(resp_html):
+    pic_url_list = []
+    lis = resp_html.xpath(&#39;//*[@id=&quot;thumbs&quot;]/section[1]/ul/li&#39;)  # 获取该页所有缩略图包含的信息
+    for li in lis:
+        pic_url = li.xpath(&#39;./figure/a/@href&#39;)[0]  # 获取存放在缩略图信息中的缩略图原图网址
+        pic_url_list.append(pic_url)
+    for pic_url in pic_url_list:
+        resp2 = requests.get(pic_url, headers=headers)
+        r_html2 = etree.HTML(resp2.text)
+        pic_size = r_html2.xpath(&#39;//*[@id=&quot;showcase-sidebar&quot;]/div/div[1]/h3/text()&#39;)[0]  # 用照片分辨率作为名称一部分
+        final_url = r_html2.xpath(&#39;//*[@id=&quot;wallpaper&quot;]/@src&#39;)[0]  # 获取原图下载地址
+        pic = requests.get(url=final_url, headers=headers).content
+        if not os.path.exists(&#39;Wallhaven&#39;):
+            os.mkdir(&#39;Wallhaven&#39;)
+        with open(&#39;Wallhaven\\&#39; + pic_size + final_url[-10:], mode=&#39;wb&#39;) as f:
+            f.write(pic)  # 保存图片
+            print(pic_size + final_url[-10:] + &#39;，下载完毕，已下载&#123;&#125;张壁纸&#39;.format(len(os.listdir(&#39;Wallhaven&#39;))))
+
+
+# 3.构建main()函数运行程序
+def main():
+    page_range = range(1,51) # 爬取1-50页的壁纸
+    for i in page_range:
+        r = get_html_info(i)
+        get_pic(r)
+        print(f&#39;===============第&#123;i&#125;页下载完毕=============&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>requests</category>
+      </categories>
+      <tags>
+        <tag>requests</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>openpyxl | 用Python在Excel中查找并替换数据</title>
     <url>/2021/10/25/%E7%94%A8Python%E5%9C%A8Excel%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%B9%B6%E6%9B%BF%E6%8D%A2%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="用Python在Excel中查找并替换数据"><a href="#用Python在Excel中查找并替换数据" class="headerlink" title="用Python在Excel中查找并替换数据"></a>用Python在Excel中查找并替换数据</h1><p>实现代码：</p>
@@ -26985,93 +26885,6 @@ wb.save(&#39;原表-替换.xlsx&#39;)
       <tags>
         <tag>python</tag>
         <tag>openpyxl</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 232.用栈实现队列</title>
-    <url>/2021/08/27/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<h1 id="232-用栈实现队列"><a href="#232-用栈实现队列" class="headerlink" title="232.用栈实现队列"></a>232.用栈实现队列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：<br>实现 MyQueue 类：<br>    void push(int x) 将元素 x 推到队列的末尾<br>    int pop() 从队列的开头移除并返回元素<br>    int peek() 返回队列开头的元素<br>    boolean empty() 如果队列为空，返回 true ；否则，返回 false<br>说明：<br>    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。<br>    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</p>
-<p><a href="https://leetcode-cn.com/problems/implement-queue-using-stacks/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用两个栈实现队列，一个栈作为输入栈（入队），一个对作为输出栈（出队/取队头元素）。<br>入队操作的实现：将元素压入输入栈<br>出队操作的实现：弹出输出栈栈顶元素，若输出栈为空，输入栈不为空，则将输入栈所有元素出栈并压入输出栈，接着再弹出输出栈栈顶元素。<br>队列判空：输入栈和输出栈同时为空时队列为空。</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class MyQueue(object):
-    &quot;&quot;&quot;用2个栈实现队列&quot;&quot;&quot;
-    def __init__(self):
-        &quot;&quot;&quot;
-        Initialize your data structure here.
-        &quot;&quot;&quot;
-        self.stack1 = list()
-        self.stack2 = list()
-
-    def push(self, x):
-        &quot;&quot;&quot;
-        Push element x to the back of queue.
-        :type x: int
-        :rtype: None
-        &quot;&quot;&quot;
-        self.stack1.append(x)
-
-    def pop(self):
-        &quot;&quot;&quot;
-        Removes the element from in front of queue and returns that element.
-        :rtype: int
-        &quot;&quot;&quot;
-        if len(self.stack2) != 0:
-            return self.stack2.pop()
-        else:
-            for _ in range(len(self.stack1)):
-                self.stack2.append(self.stack1.pop())
-            return self.stack2.pop()
-
-    def peek(self):
-        &quot;&quot;&quot;
-        Get the front element.
-        :rtype: int
-        &quot;&quot;&quot;
-        if len(self.stack2) != 0:
-            return self.stack2[-1]
-        else:
-            for _ in range(len(self.stack1)):
-                self.stack2.append(self.stack1.pop())
-            return self.stack2[-1]
-
-
-    def empty(self):
-        &quot;&quot;&quot;
-        Returns whether the queue is empty.
-        :rtype: bool
-        &quot;&quot;&quot;
-        return not self.stack1 and not self.stack2
-
-
-# Your MyQueue object will be instantiated and called as such:
-# obj = MyQueue()
-# obj.push(x)
-# param_2 = obj.pop()
-# param_3 = obj.peek()
-# param_4 = obj.empty()
-
-
-if __name__ == &quot;__main__&quot;:
-    my_queue = MyQueue()
-    my_queue.push(1)
-    my_queue.push(2)
-    print(&quot;当前队头元素为：&#123;&#125;&quot;.format(my_queue.peek()))
-    print(&quot;当前出队元素为：&#123;&#125;&quot;.format(my_queue.pop()))
-    print(&quot;当前队列空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_queue.empty() is True else &quot;no&quot;))
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>栈</category>
-        <category>232.用栈实现队列</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>栈</tag>
-        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -27198,6 +27011,93 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 232.用栈实现队列</title>
+    <url>/2021/08/27/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<h1 id="232-用栈实现队列"><a href="#232-用栈实现队列" class="headerlink" title="232.用栈实现队列"></a>232.用栈实现队列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：<br>实现 MyQueue 类：<br>    void push(int x) 将元素 x 推到队列的末尾<br>    int pop() 从队列的开头移除并返回元素<br>    int peek() 返回队列开头的元素<br>    boolean empty() 如果队列为空，返回 true ；否则，返回 false<br>说明：<br>    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。<br>    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</p>
+<p><a href="https://leetcode-cn.com/problems/implement-queue-using-stacks/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用两个栈实现队列，一个栈作为输入栈（入队），一个对作为输出栈（出队/取队头元素）。<br>入队操作的实现：将元素压入输入栈<br>出队操作的实现：弹出输出栈栈顶元素，若输出栈为空，输入栈不为空，则将输入栈所有元素出栈并压入输出栈，接着再弹出输出栈栈顶元素。<br>队列判空：输入栈和输出栈同时为空时队列为空。</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class MyQueue(object):
+    &quot;&quot;&quot;用2个栈实现队列&quot;&quot;&quot;
+    def __init__(self):
+        &quot;&quot;&quot;
+        Initialize your data structure here.
+        &quot;&quot;&quot;
+        self.stack1 = list()
+        self.stack2 = list()
+
+    def push(self, x):
+        &quot;&quot;&quot;
+        Push element x to the back of queue.
+        :type x: int
+        :rtype: None
+        &quot;&quot;&quot;
+        self.stack1.append(x)
+
+    def pop(self):
+        &quot;&quot;&quot;
+        Removes the element from in front of queue and returns that element.
+        :rtype: int
+        &quot;&quot;&quot;
+        if len(self.stack2) != 0:
+            return self.stack2.pop()
+        else:
+            for _ in range(len(self.stack1)):
+                self.stack2.append(self.stack1.pop())
+            return self.stack2.pop()
+
+    def peek(self):
+        &quot;&quot;&quot;
+        Get the front element.
+        :rtype: int
+        &quot;&quot;&quot;
+        if len(self.stack2) != 0:
+            return self.stack2[-1]
+        else:
+            for _ in range(len(self.stack1)):
+                self.stack2.append(self.stack1.pop())
+            return self.stack2[-1]
+
+
+    def empty(self):
+        &quot;&quot;&quot;
+        Returns whether the queue is empty.
+        :rtype: bool
+        &quot;&quot;&quot;
+        return not self.stack1 and not self.stack2
+
+
+# Your MyQueue object will be instantiated and called as such:
+# obj = MyQueue()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.peek()
+# param_4 = obj.empty()
+
+
+if __name__ == &quot;__main__&quot;:
+    my_queue = MyQueue()
+    my_queue.push(1)
+    my_queue.push(2)
+    print(&quot;当前队头元素为：&#123;&#125;&quot;.format(my_queue.peek()))
+    print(&quot;当前出队元素为：&#123;&#125;&quot;.format(my_queue.pop()))
+    print(&quot;当前队列空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_queue.empty() is True else &quot;no&quot;))
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>栈</category>
+        <category>232.用栈实现队列</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>栈</tag>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 17.电话号码的字母组合</title>
     <url>/2021/09/04/%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E5%AD%97%E6%AF%8D%E7%BB%84%E5%90%88/</url>
     <content><![CDATA[<h1 id="17-电话号码的字母组合"><a href="#17-电话号码的字母组合" class="headerlink" title="17.电话号码的字母组合"></a>17.电话号码的字母组合</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。<br>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p>
@@ -27308,6 +27208,106 @@ if __name__ == &#39;__main__&#39;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 70.爬楼梯</title>
+    <url>/2022/07/09/%E7%88%AC%E6%A5%BC%E6%A2%AF/</url>
+    <content><![CDATA[<h1 id="70-爬楼梯"><a href="#70-爬楼梯" class="headerlink" title="70.爬楼梯"></a>70.爬楼梯</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>假设你正在爬楼梯。需要 n 阶你才能到达楼顶。<br>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？<br><a href="https://leetcode.cn/problems/climbing-stairs/">题目链接</a></p>
+<span id="more"></span>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>f(n) = f(n-1) + f(n-2)</strong></p>
+<ol>
+<li><p>递归法<br>由f(1)=1,f(2)=2,f(3)=3,…,以此类推,f(n)=f(n-1)+f(n-2),使用递归法实现该问题，递归方程为f(n)=f(n-1)+f(n-2),<br>递归出口为f(1)=1,f(2)=2。</p>
+</li>
+<li><p>记忆化递归法<br>使用数组记录了每次计算的结果，避免递归法中的重复计算。</p>
+</li>
+<li><p>动态规划<br>动态规划转移方程：f(n)=f(n-1)+f(n-2)<br>边界条件：f(1)=1,f(2)=2</p>
+</li>
+<li><p>滚动数组<br>使用长度为3的数组实现爬楼梯问题，问题中涉及三个状态:状态1、状态2、状态3，每次更新状态时，先将状态2移动到状态1<br>的位置，再把状态3移动到状态2的位置，即将状态数组整体向前滚动一位。<br>例：<br>|1|2|3|—&gt;|2|3|5|</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p>
+<pre><code> def climbStairs(self, n):
+     &quot;&quot;&quot;
+     递归法
+     :type n: int
+     :rtype: int
+     &quot;&quot;&quot;
+     if n == 1:
+         return 1
+     if n == 2:
+         return 2
+     return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+ 
+ def climbStairs2(self, n):
+     &quot;&quot;&quot;
+     记忆化递归法
+     :type n: int
+     :rtype: int
+     &quot;&quot;&quot;
+     memo = []
+     return self.climbStairsMemo(n, memo)
+ 
+ def climbStairsMemo(self, n, memo):
+     if memo[n] &gt; 0:
+         return memo[n]
+     if n == 1:
+         memo[n] = 1
+     elif n == 2:
+         memo[n] = 2
+     else:
+         memo[n] = self.climbStairsMemo(n - 1, memo) + self.climbStairsMemo(n - 2, memo)
+     return memo[n]
+ 
+ def climbStairs3(self, n):
+     &quot;&quot;&quot;
+     动态规划
+     :type n: int
+     :rtype: int
+     &quot;&quot;&quot;
+     if n == 1:
+         return 1
+     dp = [1, 2]
+     for i in range(2, n):
+         dp.append(dp[i-1]+dp[i-2])  # dp[i] = dp[i-1] + dp[i-2]
+     return dp[n-1]
+ 
+ def climbStairs4(self, n):
+     &quot;&quot;&quot;
+     滚动数组（斐波那契数列）
+     :type n: int
+     :rtype: int
+     &quot;&quot;&quot;
+     if n == 1:
+         return 1
+     first = 1
+     second = 2
+     for i in range(2, n):
+         third = first + second
+         first = second
+         second = third
+     return second
+     
+</code></pre>
+<p> if <strong>name</strong> == “<strong>main</strong>“:</p>
+<pre><code> slt = Solution()
+ # numberOfSolutions = slt.climbStairs(2)
+ # numberOfSolutions = slt.climbStairs2(2)
+ # numberOfSolutions = slt.climbStairs3(2)
+ numberOfSolutions = slt.climbStairs4(4)
+ print(numberOfSolutions)
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>动态规划</category>
+        <category>70.爬楼梯</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>动态规划</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -29290,17 +29290,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>期刊 | 脑电期刊</title>
-    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
-    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>脑电期刊</category>
-        <category>Biomedical Signal Processing and Control</category>
-      </categories>
-  </entry>
-  <entry>
     <title>EEG | 脑电数据集下载网站</title>
     <url>/2021/04/17/%E8%84%91%E7%94%B5%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99/</url>
     <content><![CDATA[<h1 id="脑电数据集下载网站"><a href="#脑电数据集下载网站" class="headerlink" title="脑电数据集下载网站"></a>脑电数据集下载网站</h1><p><a href="www.physionet.org">网站1</a></p>
@@ -29314,6 +29303,17 @@ if __name__ == &quot;__main__&quot;:
         <tag>EEG</tag>
         <tag>数据集</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>期刊 | 脑电期刊</title>
+    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
+    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>脑电期刊</category>
+        <category>Biomedical Signal Processing and Control</category>
+      </categories>
   </entry>
   <entry>
     <title>selenium | pyhon+selenium测试WebTours网站登录注册功能</title>
@@ -31439,23 +31439,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>ICA | 鸡尾酒宴会问题</title>
-    <url>/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
-<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>ICA</tag>
-        <tag>鸡尾酒宴会问题</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | 高阶函数</title>
     <url>/2021/11/07/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h1><p>高阶函数：一个函数可以接收另一个函数作为参数，这种函数就称为高阶函数</p>
@@ -31494,6 +31477,23 @@ print(func_xy(1,2,SS))
       <tags>
         <tag>python</tag>
         <tag>高阶函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ICA | 鸡尾酒宴会问题</title>
+    <url>/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
+<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>ICA</tag>
+        <tag>鸡尾酒宴会问题</tag>
       </tags>
   </entry>
   <entry>
