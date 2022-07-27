@@ -1653,6 +1653,115 @@ public class CountDownLatchTest2 &#123;
       </tags>
   </entry>
   <entry>
+    <title>Django | DTL中的url反向解析</title>
+    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
+<span id="more"></span>
+
+<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
+<pre><code>INSTALLED_APPS = (
+    &#39;django.contrib.admin&#39;,
+    &#39;django.contrib.auth&#39;,
+    &#39;django.contrib.contenttypes&#39;,
+    &#39;django.contrib.sessions&#39;,
+    &#39;django.contrib.messages&#39;,
+    &#39;django.contrib.staticfiles&#39;,
+    &#39;app_name&#39;
+)
+</code></pre>
+<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
+<pre><code>from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r&#39;^admin/&#39;, include(admin.site.urls)),
+    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
+]
+/*
+app_name:创建的应用名，为项目下的应用文件夹
+app_name.urls:应用的urls，应用文件夹下的urls.py
+*/
+</code></pre>
+<p>2.配置应用url(app_anme/urls.py)</p>
+<pre><code>from django.conf.urls import url
+import views
+
+urlpatterns = [
+    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
+    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
+]
+</code></pre>
+<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
+<pre><code>from django.shortcuts import render
+from models import *
+
+
+def index(request):
+    context = &#123;&#125;
+
+    return render(request, &#39;app_name/index.html&#39;, context)
+
+
+def show(request, id1, id2):
+    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
+    return render(request, &#39;app_name/show.html&#39;, context)
+</code></pre>
+<p>4.定义模板<br>index.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
+&lt;hr&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>show.html</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&#123;&#123;id1&#125;&#125;
+&#123;&#123;id2&#125;&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
+<pre><code>TEMPLATES = [
+    &#123;
+        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
+        &#39;APP_DIRS&#39;: True,
+        &#39;OPTIONS&#39;: &#123;
+            &#39;context_processors&#39;: [
+                &#39;django.template.context_processors.debug&#39;,
+                &#39;django.template.context_processors.request&#39;,
+                &#39;django.contrib.auth.context_processors.auth&#39;,
+                &#39;django.contrib.messages.context_processors.messages&#39;,
+            ],
+        &#125;,
+    &#125;,
+]
+</code></pre>
+<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+        <tag>DTL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>并发 | CyclicBarrier用于多线程计算数据并合并计算结果</title>
     <url>/2022/06/07/CyclicBarrier%E7%94%A8%E4%BA%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%90%88%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C/</url>
     <content><![CDATA[<h1 id="CyclicBarrier用于多线程计算数据并合并计算结果"><a href="#CyclicBarrier用于多线程计算数据并合并计算结果" class="headerlink" title="CyclicBarrier用于多线程计算数据并合并计算结果"></a>CyclicBarrier用于多线程计算数据并合并计算结果</h1><p><strong>CyclicBarrier</strong><br>CyclicBarrier让一组线程到达一个屏障（同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，<br>所有被屏障拦截的线程才会继续执行。<br><strong>注：CyclicBarrier的计数器可以使用reset()方法重置</strong></p>
@@ -1790,115 +1899,6 @@ public class BankWaterService implements Runnable&#123;
       <tags>
         <tag>并发</tag>
         <tag>CyclicBarrier</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | DTL中的url反向解析</title>
-    <url>/2021/07/30/DTL%E4%B8%AD%E7%9A%84url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90/</url>
-    <content><![CDATA[<h1 id="DTL中的url反向解析"><a href="#DTL中的url反向解析" class="headerlink" title="DTL中的url反向解析"></a>DTL中的url反向解析</h1><p><strong>反向解析：</strong> 根据配置的url来动态生成链接地址<br><strong>语法：</strong> { % url ‘namespace:name’ p1 p2 %}<br><strong>好处：</strong> 如果改变了url配置不需要再去改每一个链接地址</p>
-<span id="more"></span>
-
-<h2 id="反向解析举例"><a href="#反向解析举例" class="headerlink" title="反向解析举例"></a>反向解析举例</h2><p>1.注册应用(settings.py)</p>
-<pre><code>INSTALLED_APPS = (
-    &#39;django.contrib.admin&#39;,
-    &#39;django.contrib.auth&#39;,
-    &#39;django.contrib.contenttypes&#39;,
-    &#39;django.contrib.sessions&#39;,
-    &#39;django.contrib.messages&#39;,
-    &#39;django.contrib.staticfiles&#39;,
-    &#39;app_name&#39;
-)
-</code></pre>
-<p>1.配置主url(project_name/urls.py project_name为项目文件夹)</p>
-<pre><code>from django.conf.urls import include, url
-from django.contrib import admin
-
-urlpatterns = [
-    url(r&#39;^admin/&#39;, include(admin.site.urls)),
-    url(r&#39;^&#39;, include(&#39;app_name.urls&#39;, namespace=&#39;app_name&#39;))
-]
-/*
-app_name:创建的应用名，为项目下的应用文件夹
-app_name.urls:应用的urls，应用文件夹下的urls.py
-*/
-</code></pre>
-<p>2.配置应用url(app_anme/urls.py)</p>
-<pre><code>from django.conf.urls import url
-import views
-
-urlpatterns = [
-    url(r&#39;^$&#39;, views.index, name=&#39;index&#39;),
-    url(r&#39;^(\d+)/(\d+)$&#39;, views.show, name=&#39;show&#39;),
-]
-</code></pre>
-<p>3.定义视图(app_name/views.py)<br>app_name/index.html处于project_name/templates/app_name/</p>
-<pre><code>from django.shortcuts import render
-from models import *
-
-
-def index(request):
-    context = &#123;&#125;
-
-    return render(request, &#39;app_name/index.html&#39;, context)
-
-
-def show(request, id1, id2):
-    context = &#123;&#39;id1&#39;: id1, &#39;id2&#39;: id2&#125;
-    return render(request, &#39;app_name/show.html&#39;, context)
-</code></pre>
-<p>4.定义模板<br>index.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;a href=&quot;&#123;% url 'app_name:show' '123' '456' %&#125;&quot;&gt;显示&lt;/a&gt;
-&lt;hr&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>show.html</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&#123;&#123;id1&#125;&#125;
-&#123;&#123;id2&#125;&#125;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.配置模板路径DIRS（settings.py）<br>模板文件夹templates在project_name文件夹下</p>
-<pre><code>TEMPLATES = [
-    &#123;
-        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
-        &#39;DIRS&#39;: [os.path.join(BASE_DIR, &#39;templates&#39;)],
-        &#39;APP_DIRS&#39;: True,
-        &#39;OPTIONS&#39;: &#123;
-            &#39;context_processors&#39;: [
-                &#39;django.template.context_processors.debug&#39;,
-                &#39;django.template.context_processors.request&#39;,
-                &#39;django.contrib.auth.context_processors.auth&#39;,
-                &#39;django.contrib.messages.context_processors.messages&#39;,
-            ],
-        &#125;,
-    &#125;,
-]
-</code></pre>
-<p>6.运行服务器，在浏览器地址栏输入 localhost:8000/123/456,请求服务器。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-        <tag>DTL</tag>
       </tags>
   </entry>
   <entry>
@@ -4453,133 +4453,6 @@ print(f&quot;完成！共检查&#123;len(docx_files)&#125;个文件,处理了 &#
       </tags>
   </entry>
   <entry>
-    <title>xlrd | Python汇总各单位Excel档领料记录并加总每日领用次数</title>
-    <url>/2021/10/29/Python%E6%B1%87%E6%80%BB%E5%90%84%E5%8D%95%E4%BD%8DExcel%E6%A1%A3%E9%A2%86%E6%96%99%E8%AE%B0%E5%BD%95%E5%B9%B6%E5%8A%A0%E6%80%BB%E6%AF%8F%E6%97%A5%E9%A2%86%E7%94%A8%E6%AC%A1%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="Python汇总各单位Excel档领料记录并加总每日领用次数"><a href="#Python汇总各单位Excel档领料记录并加总每日领用次数" class="headerlink" title="Python汇总各单位Excel档领料记录并加总每日领用次数"></a>Python汇总各单位Excel档领料记录并加总每日领用次数</h1><p><a href="https://www.cnblogs.com/insane-Mr-Li/p/9092619.html">xlrd详解</a><br>代码：</p>
-<pre><code>import time
-import xlrd
-import datetime
-
-
-# 读取xls文件中的数据
-def Get_data(file):
-    wb = xlrd.open_workbook(file)  # 读取工作簿
-    ws = wb.sheets()[0]  # 选第一个工作表
-    data = &#123;&#125;
-
-    for row in range(7, ws.nrows - 2):
-        dept = ws.cell(2, 16).value  # 部门
-        dept_id = ws.cell(3, 16).value  # 部门编号
-        dt = ws.cell(row, 0).value  # 时间
-        if type(dt) is float:
-            date_time = xlrd.xldate.xldate_as_datetime(dt, 0)
-        else:
-            date_time = datetime.datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)
-        business = ws.cell(row, 2).value  # 业务类型
-        model = ws.cell(row, 3).value  # 品种
-        qty = ws.cell(row, 4).value  # 数量
-        unit_price = ws.cell(row, 6).value  # 单价
-        price = ws.cell(row, 8).value  # 总价
-        reward = ws.cell(row, 9).value  # 额外值
-        discount = ws.cell(row, 11).value  # 调整
-        balance = ws.cell(row, 13).value  # 剩余
-        location = str(ws.cell(row, 15).value).strip()  # 库位
-        operator = ws.cell(row, 17).value  # 操作员
-        date = date_time.date()  # 日期
-        time = date_time.time()  # 时间
-        info_list = [dept, dept_id, date_time, business, model, qty, unit_price, price, reward, discount,
-                     balance, location, operator, date, time]
-        data.setdefault(date, [])  # 以日期为键
-        if info_list[3] != &quot;备注&quot;:  # 不要业务类型为“备注”的数据
-            data[date].append(info_list)
-
-    # 增加当日领取次数
-    for key in data.keys():
-        for i in data[key]:
-            i.append(len(data[key]))
-
-    return data
-
-
-import os  # 用于获取目标文件所在路径
-
-path = os.getcwd() + &quot;\\记录\\&quot;  # 文件夹绝对路径
-files = []
-for file in os.listdir(path):
-    if file.endswith(&quot;.xls&quot;):  # 只获取&quot;.xls&quot;后缀的文件
-        files.append(path + file)
-# print(files)
-
-# Get_data(files[0])
-
-
-def Get_current_time():
-    time_stamp = time.time()  # 当前时间的时间戳
-    local_time = time.localtime(time_stamp)  #
-    str_time = time.strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)
-    return str_time
-
-
-# print(Get_current_time())
-
-# 汇总数据到主文件
-from openpyxl import Workbook
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,
-         &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]
-
-wb = Workbook()
-ws = wb.active
-ws.merge_cells(&quot;A1:P1&quot;)  # 合并首行单元格
-ws.cell(1, 1).value = &quot;领料明细汇总表&quot;
-ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)
-ws.row_dimensions[1].height = 22.2  # 设置首行行高
-ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)  # 设置对齐
-ws.append(title)  # 写入字段行
-
-# 写入各部门领料的数据
-for file in files:
-    data = Get_data(file)
-    for key in data.keys():
-        for i in data[key]:
-            ws.append(i)
-
-# 设置字号，对齐，缩小字体填充，加边框
-# Font(bold=True)可加粗字体
-for row_number in range(2, ws.max_row + 1):
-    for col_number in range(1, 17):
-        c = ws.cell(row=row_number, column=col_number)
-        c.font = Font(size=9)
-        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
-
-# 设置列宽
-col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)
-col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]
-for i in range(len(col_name)):
-    ws.column_dimensions[col_name[i]].width = col_width[i]
-
-# 分组隐藏列
-ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)
-ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)
-
-wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
-</code></pre>
-<p>记录：<br><a href="工程部领料明细.xls">工程部领料明细.xls</a><br><a href="生产部领料明细.xls">生产部领料明细.xls</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>xlrd</category>
-      </categories>
-      <tags>
-        <tag>openpyxl</tag>
-        <tag>xlrd</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
     <url>/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p>
@@ -5043,6 +4916,133 @@ public class RESTController &#123;
       </tags>
   </entry>
   <entry>
+    <title>xlrd | Python汇总各单位Excel档领料记录并加总每日领用次数</title>
+    <url>/2021/10/29/Python%E6%B1%87%E6%80%BB%E5%90%84%E5%8D%95%E4%BD%8DExcel%E6%A1%A3%E9%A2%86%E6%96%99%E8%AE%B0%E5%BD%95%E5%B9%B6%E5%8A%A0%E6%80%BB%E6%AF%8F%E6%97%A5%E9%A2%86%E7%94%A8%E6%AC%A1%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="Python汇总各单位Excel档领料记录并加总每日领用次数"><a href="#Python汇总各单位Excel档领料记录并加总每日领用次数" class="headerlink" title="Python汇总各单位Excel档领料记录并加总每日领用次数"></a>Python汇总各单位Excel档领料记录并加总每日领用次数</h1><p><a href="https://www.cnblogs.com/insane-Mr-Li/p/9092619.html">xlrd详解</a><br>代码：</p>
+<pre><code>import time
+import xlrd
+import datetime
+
+
+# 读取xls文件中的数据
+def Get_data(file):
+    wb = xlrd.open_workbook(file)  # 读取工作簿
+    ws = wb.sheets()[0]  # 选第一个工作表
+    data = &#123;&#125;
+
+    for row in range(7, ws.nrows - 2):
+        dept = ws.cell(2, 16).value  # 部门
+        dept_id = ws.cell(3, 16).value  # 部门编号
+        dt = ws.cell(row, 0).value  # 时间
+        if type(dt) is float:
+            date_time = xlrd.xldate.xldate_as_datetime(dt, 0)
+        else:
+            date_time = datetime.datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)
+        business = ws.cell(row, 2).value  # 业务类型
+        model = ws.cell(row, 3).value  # 品种
+        qty = ws.cell(row, 4).value  # 数量
+        unit_price = ws.cell(row, 6).value  # 单价
+        price = ws.cell(row, 8).value  # 总价
+        reward = ws.cell(row, 9).value  # 额外值
+        discount = ws.cell(row, 11).value  # 调整
+        balance = ws.cell(row, 13).value  # 剩余
+        location = str(ws.cell(row, 15).value).strip()  # 库位
+        operator = ws.cell(row, 17).value  # 操作员
+        date = date_time.date()  # 日期
+        time = date_time.time()  # 时间
+        info_list = [dept, dept_id, date_time, business, model, qty, unit_price, price, reward, discount,
+                     balance, location, operator, date, time]
+        data.setdefault(date, [])  # 以日期为键
+        if info_list[3] != &quot;备注&quot;:  # 不要业务类型为“备注”的数据
+            data[date].append(info_list)
+
+    # 增加当日领取次数
+    for key in data.keys():
+        for i in data[key]:
+            i.append(len(data[key]))
+
+    return data
+
+
+import os  # 用于获取目标文件所在路径
+
+path = os.getcwd() + &quot;\\记录\\&quot;  # 文件夹绝对路径
+files = []
+for file in os.listdir(path):
+    if file.endswith(&quot;.xls&quot;):  # 只获取&quot;.xls&quot;后缀的文件
+        files.append(path + file)
+# print(files)
+
+# Get_data(files[0])
+
+
+def Get_current_time():
+    time_stamp = time.time()  # 当前时间的时间戳
+    local_time = time.localtime(time_stamp)  #
+    str_time = time.strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)
+    return str_time
+
+
+# print(Get_current_time())
+
+# 汇总数据到主文件
+from openpyxl import Workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,
+         &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]
+
+wb = Workbook()
+ws = wb.active
+ws.merge_cells(&quot;A1:P1&quot;)  # 合并首行单元格
+ws.cell(1, 1).value = &quot;领料明细汇总表&quot;
+ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)
+ws.row_dimensions[1].height = 22.2  # 设置首行行高
+ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)  # 设置对齐
+ws.append(title)  # 写入字段行
+
+# 写入各部门领料的数据
+for file in files:
+    data = Get_data(file)
+    for key in data.keys():
+        for i in data[key]:
+            ws.append(i)
+
+# 设置字号，对齐，缩小字体填充，加边框
+# Font(bold=True)可加粗字体
+for row_number in range(2, ws.max_row + 1):
+    for col_number in range(1, 17):
+        c = ws.cell(row=row_number, column=col_number)
+        c.font = Font(size=9)
+        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+        c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+
+# 设置列宽
+col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)
+col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]
+for i in range(len(col_name)):
+    ws.column_dimensions[col_name[i]].width = col_width[i]
+
+# 分组隐藏列
+ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)
+ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)
+
+wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
+</code></pre>
+<p>记录：<br><a href="工程部领料明细.xls">工程部领料明细.xls</a><br><a href="生产部领料明细.xls">生产部领料明细.xls</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>xlrd</category>
+      </categories>
+      <tags>
+        <tag>openpyxl</tag>
+        <tag>xlrd</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis | 集群搭建</title>
     <url>/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p>
@@ -5492,175 +5492,6 @@ SELECT * FROM dept RIGHT OUTER JOIN emp ON emp.`dept_id`=dept.`id` AND emp.`gend
       </tags>
   </entry>
   <entry>
-    <title>SSM | 修改</title>
-    <url>/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;展示员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table&gt;
-        &lt;tr&gt;
-            &lt;th&gt;EID&lt;/th&gt;
-            &lt;th&gt;ENAME&lt;/th&gt;
-            &lt;th&gt;AGE&lt;/th&gt;
-            &lt;th&gt;SEX&lt;/th&gt;
-            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
-            &lt;th&gt;OPTIONS&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
-                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-        &lt;tr&gt;
-            &lt;td colspan=&quot;10&quot;&gt;
-                $&#123;page&#125;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>2.update.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;修改员工信息&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
-        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
-        &lt;form:hidden path=&quot;eid&quot;/&gt;
-        &lt;table&gt;
-            &lt;tr&gt;
-                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;ENAME&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;ename&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;AGE&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:input path=&quot;age&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;sex&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;DEPARTMENT&lt;/td&gt;
-                &lt;td&gt;
-                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td colspan=&quot;2&quot;&gt;
-                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/form:form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3.EmpController.java</p>
-<pre><code>@Controller
-public class EmpController &#123;
-
-    @Autowired
-    private EmpService service;
-    
-    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
-    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
-        //要修改的员工信息
-        Emp emp = service.getEmpByEid(eid);
-        
-        //所有的部门信息
-        List&lt;Dept&gt; deptList = service.getAllDept();
-        
-        //获取存储性别的map集合
-        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
-        sex.put(&quot;0&quot;, &quot;女&quot;);
-        sex.put(&quot;1&quot;, &quot;男&quot;);
-        
-        map.put(&quot;emp&quot;, emp);
-        map.put(&quot;deptList&quot;, deptList);
-        map.put(&quot;sex&quot;, sex);
-        
-        return &quot;update&quot;;
-    &#125;
-    
-    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
-    public String updateEmp(Emp emp)&#123;
-        service.updateEmp(emp);
-        return &quot;redirect:/emps/1&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>4.EmpService.java</p>
-<pre><code>public interface EmpService &#123;
-    ......
-    
-    List&lt;Dept&gt; getAllDept();
-&#125;
-</code></pre>
-<p>5.EmpServiceImpl.java</p>
-<pre><code>@Service
-public class EmpServiceImpl implements EmpService&#123;
-    @Autowired
-    private EmpMapper empMapper;
-    
-    @Autowired
-    private DeptMapper deptMapper;
-    
-    ......
-    
-    @Override
-    public List&lt;Dept&gt; getAllDept() &#123;
-        // TODO Auto-generated method stub
-        return deptMapper.getAllDept();
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>修改</category>
-      </categories>
-      <tags>
-        <tag>SSM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SSM | 列表及分页</title>
     <url>/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="列表及分页"><a href="#列表及分页" class="headerlink" title="列表及分页"></a>列表及分页</h1><p>1.index.jsp(请求)</p>
@@ -6002,17 +5833,169 @@ public interface DeptMapper &#123;
       </tags>
   </entry>
   <entry>
-    <title>SSM | SSM项目搭建</title>
-    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
-<span id="more"></span>
-<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
+    <title>SSM | 修改</title>
+    <url>/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;展示员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;th&gt;EID&lt;/th&gt;
+            &lt;th&gt;ENAME&lt;/th&gt;
+            &lt;th&gt;AGE&lt;/th&gt;
+            &lt;th&gt;SEX&lt;/th&gt;
+            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
+            &lt;th&gt;OPTIONS&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
+                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+        &lt;tr&gt;
+            &lt;td colspan=&quot;10&quot;&gt;
+                $&#123;page&#125;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.update.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;修改员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
+        &lt;form:hidden path=&quot;eid&quot;/&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;ENAME&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;ename&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;AGE&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;age&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;sex&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;DEPARTMENT&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td colspan=&quot;2&quot;&gt;
+                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.EmpController.java</p>
+<pre><code>@Controller
+public class EmpController &#123;
+
+    @Autowired
+    private EmpService service;
+    
+    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
+    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
+        //要修改的员工信息
+        Emp emp = service.getEmpByEid(eid);
+        
+        //所有的部门信息
+        List&lt;Dept&gt; deptList = service.getAllDept();
+        
+        //获取存储性别的map集合
+        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
+        sex.put(&quot;0&quot;, &quot;女&quot;);
+        sex.put(&quot;1&quot;, &quot;男&quot;);
+        
+        map.put(&quot;emp&quot;, emp);
+        map.put(&quot;deptList&quot;, deptList);
+        map.put(&quot;sex&quot;, sex);
+        
+        return &quot;update&quot;;
+    &#125;
+    
+    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
+    public String updateEmp(Emp emp)&#123;
+        service.updateEmp(emp);
+        return &quot;redirect:/emps/1&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.EmpService.java</p>
+<pre><code>public interface EmpService &#123;
+    ......
+    
+    List&lt;Dept&gt; getAllDept();
+&#125;
+</code></pre>
+<p>5.EmpServiceImpl.java</p>
+<pre><code>@Service
+public class EmpServiceImpl implements EmpService&#123;
+    @Autowired
+    private EmpMapper empMapper;
+    
+    @Autowired
+    private DeptMapper deptMapper;
+    
+    ......
+    
+    @Override
+    public List&lt;Dept&gt; getAllDept() &#123;
+        // TODO Auto-generated method stub
+        return deptMapper.getAllDept();
+    &#125;
+&#125;
+</code></pre>
 ]]></content>
       <categories>
         <category>Java</category>
         <category>框架</category>
         <category>SSM</category>
-        <category>SSM项目搭建</category>
+        <category>修改</category>
       </categories>
       <tags>
         <tag>SSM</tag>
@@ -6154,6 +6137,23 @@ public class EmpController &#123;
         <tag>Java</tag>
         <tag>SSM</tag>
         <tag>批量删除</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSM | SSM项目搭建</title>
+    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
+<span id="more"></span>
+<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>SSM项目搭建</category>
+      </categories>
+      <tags>
+        <tag>SSM</tag>
       </tags>
   </entry>
   <entry>
@@ -7673,6 +7673,54 @@ ALLOWED_HOSTS = [&#39;*&#39;]
       </tags>
   </entry>
   <entry>
+    <title>线程池 | execute和submit方法的区别</title>
+    <url>/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="execute-和submit-的区别"><a href="#execute-和submit-的区别" class="headerlink" title="execute()和submit()的区别"></a>execute()和submit()的区别</h1><ol>
+<li>线程池类关系如下：<br><img src="/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/1658586453860.png"></li>
+</ol>
+<span id="more"></span>
+<p><img src="/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/1658586628228.png"></p>
+<ol>
+<li><p>由类关系可以得到线程池的架构图</p>
+<p><img src="/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/1658586004069.png" alt="1658586004069"></p>
+</li>
+<li><p>由下图可以看出Executor接口中的<strong>execute()只能执行Runnable类型的任务</strong></p>
+</li>
+</ol>
+<p><img src="/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/1658586548515.png" alt="1658586548515"></p>
+<ol>
+<li><p>由下图可以看出ExecutorService中的<strong>submit()方法可以既可以执行Runnable类型的任务也可以执行Callable类型的任务</strong></p>
+<p><img src="/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/1658586523414.png" alt="1658586523414"></p>
+</li>
+<li><p>由Executor接口的源码可以看出<strong>execute()方法无返回值</strong></p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Executes the given command at some time in the future.  The command</span></span><br><span class="line"><span class="comment">     * may execute in a new thread, in a pooled thread, or in the calling</span></span><br><span class="line"><span class="comment">     * thread, at the discretion of the &#123;<span class="doctag">@code</span> Executor&#125; implementation.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> command the runnable task</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if this task cannot be</span></span><br><span class="line"><span class="comment">     * accepted for execution</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if command is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>由ExecutorService接口的源码可以看出<strong>submit()方法有返回值且返回值为Future类型</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ExecutorService</span> <span class="keyword">extends</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initiates an orderly shutdown in which previously submitted</span></span><br><span class="line"><span class="comment">     * tasks are executed, but no new tasks will be accepted.</span></span><br><span class="line"><span class="comment">     * Invocation has no additional effect if already shut down.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;This method does not wait for previously submitted tasks to</span></span><br><span class="line"><span class="comment">     * complete execution.  Use &#123;<span class="doctag">@link</span> #awaitTermination awaitTermination&#125;</span></span><br><span class="line"><span class="comment">     * to do that.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> SecurityException if a security manager exists and</span></span><br><span class="line"><span class="comment">     *         shutting down this ExecutorService may manipulate</span></span><br><span class="line"><span class="comment">     *         threads that the caller is not permitted to modify</span></span><br><span class="line"><span class="comment">     *         because it does not hold &#123;<span class="doctag">@link</span></span></span><br><span class="line"><span class="comment">     *         java.lang.RuntimePermission&#125;&#123;<span class="doctag">@code</span> (&quot;modifyThread&quot;)&#125;,</span></span><br><span class="line"><span class="comment">     *         or the security manager&#x27;s &#123;<span class="doctag">@code</span> checkAccess&#125; method</span></span><br><span class="line"><span class="comment">     *         denies access.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Attempts to stop all actively executing tasks, halts the</span></span><br><span class="line"><span class="comment">     * processing of waiting tasks, and returns a list of the tasks</span></span><br><span class="line"><span class="comment">     * that were awaiting execution.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;This method does not wait for actively executing tasks to</span></span><br><span class="line"><span class="comment">     * terminate.  Use &#123;<span class="doctag">@link</span> #awaitTermination awaitTermination&#125; to</span></span><br><span class="line"><span class="comment">     * do that.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;There are no guarantees beyond best-effort attempts to stop</span></span><br><span class="line"><span class="comment">     * processing actively executing tasks.  For example, typical</span></span><br><span class="line"><span class="comment">     * implementations will cancel via &#123;<span class="doctag">@link</span> Thread#interrupt&#125;, so any</span></span><br><span class="line"><span class="comment">     * task that fails to respond to interrupts may never terminate.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> list of tasks that never commenced execution</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> SecurityException if a security manager exists and</span></span><br><span class="line"><span class="comment">     *         shutting down this ExecutorService may manipulate</span></span><br><span class="line"><span class="comment">     *         threads that the caller is not permitted to modify</span></span><br><span class="line"><span class="comment">     *         because it does not hold &#123;<span class="doctag">@link</span></span></span><br><span class="line"><span class="comment">     *         java.lang.RuntimePermission&#125;&#123;<span class="doctag">@code</span> (&quot;modifyThread&quot;)&#125;,</span></span><br><span class="line"><span class="comment">     *         or the security manager&#x27;s &#123;<span class="doctag">@code</span> checkAccess&#125; method</span></span><br><span class="line"><span class="comment">     *         denies access.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;Runnable&gt; <span class="title">shutdownNow</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns &#123;<span class="doctag">@code</span> true&#125; if this executor has been shut down.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if this executor has been shut down</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isShutdown</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns &#123;<span class="doctag">@code</span> true&#125; if all tasks have completed following shut down.</span></span><br><span class="line"><span class="comment">     * Note that &#123;<span class="doctag">@code</span> isTerminated&#125; is never &#123;<span class="doctag">@code</span> true&#125; unless</span></span><br><span class="line"><span class="comment">     * either &#123;<span class="doctag">@code</span> shutdown&#125; or &#123;<span class="doctag">@code</span> shutdownNow&#125; was called first.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if all tasks have completed following shut down</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isTerminated</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Blocks until all tasks have completed execution after a shutdown</span></span><br><span class="line"><span class="comment">     * request, or the timeout occurs, or the current thread is</span></span><br><span class="line"><span class="comment">     * interrupted, whichever happens first.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeout the maximum time to wait</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> unit the time unit of the timeout argument</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if this executor terminated and</span></span><br><span class="line"><span class="comment">     *         &#123;<span class="doctag">@code</span> false&#125; if the timeout elapsed before termination</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException if interrupted while waiting</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">awaitTermination</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Submits a value-returning task for execution and returns a</span></span><br><span class="line"><span class="comment">     * Future representing the pending results of the task. The</span></span><br><span class="line"><span class="comment">     * Future&#x27;s &#123;<span class="doctag">@code</span> get&#125; method will return the task&#x27;s result upon</span></span><br><span class="line"><span class="comment">     * successful completion.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * If you would like to immediately block waiting</span></span><br><span class="line"><span class="comment">     * for a task, you can use constructions of the form</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@code</span> result = exec.submit(aCallable).get();&#125;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;Note: The &#123;<span class="doctag">@link</span> Executors&#125; class includes a set of methods</span></span><br><span class="line"><span class="comment">     * that can convert some other common closure-like objects,</span></span><br><span class="line"><span class="comment">     * for example, &#123;<span class="doctag">@link</span> java.security.PrivilegedAction&#125; to</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@link</span> Callable&#125; form so they can be submitted.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> task the task to submit</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt; the type of the task&#x27;s result</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> a Future representing pending completion of the task</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if the task cannot be</span></span><br><span class="line"><span class="comment">     *         scheduled for execution</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the task is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Callable&lt;T&gt; task)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Submits a Runnable task for execution and returns a Future</span></span><br><span class="line"><span class="comment">     * representing that task. The Future&#x27;s &#123;<span class="doctag">@code</span> get&#125; method will</span></span><br><span class="line"><span class="comment">     * return the given result upon successful completion.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> task the task to submit</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> result the result to return</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt; the type of the result</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> a Future representing pending completion of the task</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if the task cannot be</span></span><br><span class="line"><span class="comment">     *         scheduled for execution</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the task is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Runnable task, T result)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Submits a Runnable task for execution and returns a Future</span></span><br><span class="line"><span class="comment">     * representing that task. The Future&#x27;s &#123;<span class="doctag">@code</span> get&#125; method will</span></span><br><span class="line"><span class="comment">     * return &#123;<span class="doctag">@code</span> null&#125; upon &lt;em&gt;successful&lt;/em&gt; completion.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> task the task to submit</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> a Future representing pending completion of the task</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if the task cannot be</span></span><br><span class="line"><span class="comment">     *         scheduled for execution</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the task is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Future&lt;?&gt; submit(Runnable task);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Executes the given tasks, returning a list of Futures holding</span></span><br><span class="line"><span class="comment">     * their status and results when all complete.</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@link</span> Future#isDone&#125; is &#123;<span class="doctag">@code</span> true&#125; for each</span></span><br><span class="line"><span class="comment">     * element of the returned list.</span></span><br><span class="line"><span class="comment">     * Note that a &lt;em&gt;completed&lt;/em&gt; task could have</span></span><br><span class="line"><span class="comment">     * terminated either normally or by throwing an exception.</span></span><br><span class="line"><span class="comment">     * The results of this method are undefined if the given</span></span><br><span class="line"><span class="comment">     * collection is modified while this operation is in progress.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tasks the collection of tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt; the type of the values returned from the tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> a list of Futures representing the tasks, in the same</span></span><br><span class="line"><span class="comment">     *         sequential order as produced by the iterator for the</span></span><br><span class="line"><span class="comment">     *         given task list, each of which has completed</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException if interrupted while waiting, in</span></span><br><span class="line"><span class="comment">     *         which case unfinished tasks are cancelled</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if tasks or any of its elements are &#123;<span class="doctag">@code</span> null&#125;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if any task cannot be</span></span><br><span class="line"><span class="comment">     *         scheduled for execution</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)</span><br><span class="line">        <span class="keyword">throws</span> InterruptedException;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Executes the given tasks, returning a list of Futures holding</span></span><br><span class="line"><span class="comment">     * their status and results</span></span><br><span class="line"><span class="comment">     * when all complete or the timeout expires, whichever happens first.</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@link</span> Future#isDone&#125; is &#123;<span class="doctag">@code</span> true&#125; for each</span></span><br><span class="line"><span class="comment">     * element of the returned list.</span></span><br><span class="line"><span class="comment">     * Upon return, tasks that have not completed are cancelled.</span></span><br><span class="line"><span class="comment">     * Note that a &lt;em&gt;completed&lt;/em&gt; task could have</span></span><br><span class="line"><span class="comment">     * terminated either normally or by throwing an exception.</span></span><br><span class="line"><span class="comment">     * The results of this method are undefined if the given</span></span><br><span class="line"><span class="comment">     * collection is modified while this operation is in progress.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tasks the collection of tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeout the maximum time to wait</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> unit the time unit of the timeout argument</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt; the type of the values returned from the tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> a list of Futures representing the tasks, in the same</span></span><br><span class="line"><span class="comment">     *         sequential order as produced by the iterator for the</span></span><br><span class="line"><span class="comment">     *         given task list. If the operation did not time out,</span></span><br><span class="line"><span class="comment">     *         each task will have completed. If it did time out, some</span></span><br><span class="line"><span class="comment">     *         of these tasks will not have completed.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException if interrupted while waiting, in</span></span><br><span class="line"><span class="comment">     *         which case unfinished tasks are cancelled</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if tasks, any of its elements, or</span></span><br><span class="line"><span class="comment">     *         unit are &#123;<span class="doctag">@code</span> null&#125;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if any task cannot be scheduled</span></span><br><span class="line"><span class="comment">     *         for execution</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,</span><br><span class="line">                                  <span class="keyword">long</span> timeout, TimeUnit unit)</span><br><span class="line">        <span class="keyword">throws</span> InterruptedException;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Executes the given tasks, returning the result</span></span><br><span class="line"><span class="comment">     * of one that has completed successfully (i.e., without throwing</span></span><br><span class="line"><span class="comment">     * an exception), if any do. Upon normal or exceptional return,</span></span><br><span class="line"><span class="comment">     * tasks that have not completed are cancelled.</span></span><br><span class="line"><span class="comment">     * The results of this method are undefined if the given</span></span><br><span class="line"><span class="comment">     * collection is modified while this operation is in progress.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tasks the collection of tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt; the type of the values returned from the tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the result returned by one of the tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException if interrupted while waiting</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if tasks or any element task</span></span><br><span class="line"><span class="comment">     *         subject to execution is &#123;<span class="doctag">@code</span> null&#125;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalArgumentException if tasks is empty</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ExecutionException if no task successfully completes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if tasks cannot be scheduled</span></span><br><span class="line"><span class="comment">     *         for execution</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">invokeAny</span><span class="params">(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Executes the given tasks, returning the result</span></span><br><span class="line"><span class="comment">     * of one that has completed successfully (i.e., without throwing</span></span><br><span class="line"><span class="comment">     * an exception), if any do before the given timeout elapses.</span></span><br><span class="line"><span class="comment">     * Upon normal or exceptional return, tasks that have not</span></span><br><span class="line"><span class="comment">     * completed are cancelled.</span></span><br><span class="line"><span class="comment">     * The results of this method are undefined if the given</span></span><br><span class="line"><span class="comment">     * collection is modified while this operation is in progress.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tasks the collection of tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeout the maximum time to wait</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> unit the time unit of the timeout argument</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt; the type of the values returned from the tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the result returned by one of the tasks</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException if interrupted while waiting</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if tasks, or unit, or any element</span></span><br><span class="line"><span class="comment">     *         task subject to execution is &#123;<span class="doctag">@code</span> null&#125;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> TimeoutException if the given timeout elapses before</span></span><br><span class="line"><span class="comment">     *         any task successfully completes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ExecutionException if no task successfully completes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> RejectedExecutionException if tasks cannot be scheduled</span></span><br><span class="line"><span class="comment">     *         for execution</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">invokeAny</span><span class="params">(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,</span></span></span><br><span class="line"><span class="params"><span class="function">                    <span class="keyword">long</span> timeout, TimeUnit unit)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> InterruptedException, ExecutionException, TimeoutException</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>execute()只能执行Runnable类型的任务，方法无返回值</li>
+<li>submit()方法可以既可以执行Runnable类型的任务也可以执行Callable类型的任务，方法有返回值且返回值为Future类型</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>并发</category>
+        <category>线程池</category>
+        <category>execute()和submit()方法的区别</category>
+      </categories>
+      <tags>
+        <tag>线程池</tag>
+        <tag>execute()</tag>
+        <tag>submit()</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | filter</title>
     <url>/2022/01/11/filter/</url>
     <content><![CDATA[<h1 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h1><h2 id="filter-1"><a href="#filter-1" class="headerlink" title="filter"></a>filter</h2><ol>
@@ -9096,6 +9144,73 @@ for number in range(1, 21):  # 不同的试卷数量，此处为20套
       </tags>
   </entry>
   <entry>
+    <title>python | 分块拆分txt文件中的数据</title>
+    <url>/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
+<pre><code># -*- coding:utf-8 -*-
+# 读取txt文件中的数据
+file = open(&quot;数据.txt&quot;)
+lines = file.readlines()
+# print(lines[:5])
+
+data = &#123;&#125;  # 储存分割的数据
+line_list = []  # 中转列表
+last_id = &quot;start&quot;  # 数据分块标识
+for line in lines:
+    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
+    ID = row_data[0]  # 获得ID
+    if last_id == &quot;start&quot;:  # 用于处理数据第一行
+        line_list.append(line)  # 将第一行数据放入中转列表
+    else:  # 不是第一行数据，则按如下执行
+        if ID != last_id:  # 如果出现新的数据块
+            if last_id in data:  # 新的数据块的ID已存在字典data中
+                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
+            else:  # 新的数据快的ID不在字典data中
+                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
+            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
+        else:  # 没出现新的数据块
+            line_list.append(line)  # 将数据继续加入中转列表
+    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
+
+# 将最后一个文字块的数据放入字典
+if last_id in data:
+    data[last_id].append(line_list)
+else:
+    data[last_id] = [line_list]
+
+# print(data[&#39;89031&#39;])
+
+# for i in data.keys():
+#     for block in data[i]:
+#         print(block)
+#         print(&quot;- -&quot;*50)
+
+
+# 写入数据函数
+def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
+    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
+    for i in range(len(data_list)):
+        file.write(data_list[i])
+    file.close()  # 保存数据并关闭
+
+
+# 批量写入数据
+for ID in data.keys():
+    for i in range(len(data[ID])):
+        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
+        
+</code></pre>
+<p><a href="数据.txt">数据.txt</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>random | python出数学练习题</title>
     <url>/2021/10/29/python%E5%87%BA%E6%95%B0%E5%AD%A6%E7%BB%83%E4%B9%A0%E9%A2%98/</url>
     <content><![CDATA[<h1 id="python出数学练习题"><a href="#python出数学练习题" class="headerlink" title="python出数学练习题"></a>python出数学练习题</h1><p>实现代码：</p>
@@ -9188,73 +9303,6 @@ To_word(data, &quot;加法题&quot;)
         <tag>python</tag>
         <tag>python-docx</tag>
         <tag>random</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | 分块拆分txt文件中的数据</title>
-    <url>/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
-<pre><code># -*- coding:utf-8 -*-
-# 读取txt文件中的数据
-file = open(&quot;数据.txt&quot;)
-lines = file.readlines()
-# print(lines[:5])
-
-data = &#123;&#125;  # 储存分割的数据
-line_list = []  # 中转列表
-last_id = &quot;start&quot;  # 数据分块标识
-for line in lines:
-    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
-    ID = row_data[0]  # 获得ID
-    if last_id == &quot;start&quot;:  # 用于处理数据第一行
-        line_list.append(line)  # 将第一行数据放入中转列表
-    else:  # 不是第一行数据，则按如下执行
-        if ID != last_id:  # 如果出现新的数据块
-            if last_id in data:  # 新的数据块的ID已存在字典data中
-                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
-            else:  # 新的数据快的ID不在字典data中
-                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
-            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
-        else:  # 没出现新的数据块
-            line_list.append(line)  # 将数据继续加入中转列表
-    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
-
-# 将最后一个文字块的数据放入字典
-if last_id in data:
-    data[last_id].append(line_list)
-else:
-    data[last_id] = [line_list]
-
-# print(data[&#39;89031&#39;])
-
-# for i in data.keys():
-#     for block in data[i]:
-#         print(block)
-#         print(&quot;- -&quot;*50)
-
-
-# 写入数据函数
-def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
-    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
-    for i in range(len(data_list)):
-        file.write(data_list[i])
-    file.close()  # 保存数据并关闭
-
-
-# 批量写入数据
-for ID in data.keys():
-    for i in range(len(data[ID])):
-        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
-        
-</code></pre>
-<p><a href="数据.txt">数据.txt</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -10205,22 +10253,6 @@ for picture in pictures:
       </tags>
   </entry>
   <entry>
-    <title>python | re.match与re.search的区别</title>
-    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
-re.match(r&quot;dogs&quot;,s)#匹配失败
-re.search(r&quot;dogs&quot;,s)#匹配成功
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | re sub的使用方法</title>
     <url>/2021/08/27/re-sub%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="re-sub的使用方法"><a href="#re-sub的使用方法" class="headerlink" title="re.sub的使用方法"></a>re.sub的使用方法</h1><p>re.sub()实现相对复杂的替换</p>
@@ -10234,6 +10266,22 @@ re.search(r&quot;dogs&quot;,s)#匹配成功
       <tags>
         <tag>python</tag>
         <tag>re</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | re.match与re.search的区别</title>
+    <url>/2020/11/08/re-match%E4%B8%8Ere-search%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="re-match与re-search的区别"><a href="#re-match与re-search的区别" class="headerlink" title="re.match与re.search的区别"></a>re.match与re.search的区别</h1><p>re.match从字符串的起始位置匹配一个模式，如果字符串开始不符合正则表达式，则匹配失败。<br>re.search匹配整个字符串，直到找到一个匹配</p>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><pre><code>s = &quot;Cats are smarter than dogs&quot;
+re.match(r&quot;dogs&quot;,s)#匹配失败
+re.search(r&quot;dogs&quot;,s)#匹配成功
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -11291,21 +11339,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | tcp三次握手四次挥手</title>
-    <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
-    <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>三次握手</tag>
-        <tag>四次挥手</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络编程 | tcp与udp的稳定性</title>
     <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
     <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
@@ -11318,6 +11351,21 @@ if __name__ == &quot;__main__&quot;:
         <tag>网络编程</tag>
         <tag>TCP</tag>
         <tag>UDP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | tcp三次握手四次挥手</title>
+    <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
+    <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>三次握手</tag>
+        <tag>四次挥手</tag>
       </tags>
   </entry>
   <entry>
@@ -11659,23 +11707,6 @@ public class Counter &#123;
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | web服务器tomcat和eclipse的集成</title>
-    <url>/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/</url>
-    <content><![CDATA[<h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
-<h2 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h2><p>将下载的后缀为.zip的压缩文件解压即可（本项目使用tomcat 7）<br>将文件解压到不包含中文文件名的路径下（例：D://tomcat//）</p>
-<h2 id="将tomcat服务器集成到eclipse中"><a href="#将tomcat服务器集成到eclipse中" class="headerlink" title="将tomcat服务器集成到eclipse中"></a>将tomcat服务器集成到eclipse中</h2><p>1.在eclipse菜单栏中点击window–&gt;preferences,然后按照下图所示顺序点击。<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/1.PNG"><br>2.按照下图所示步骤添加服务器，选择版本7<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/2.PNG"><br>3.选择下载并解压的tomcat服务器并选择jre<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/3.PNG"><br>4.在菜单栏选择windown–&gt;show view–&gt;Other..–&gt;Server–&gt;Servers来显示配置的tomcat服务器<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/4.PNG"><br>注：可以通过点击上图中的启动按钮和关闭按钮来关闭/停止服务器<br>5.双击上图中的服务器并按照下图将Deploy path修改为webapps<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/5.PNG"><br>6.通过浏览器访问该服务器<br>在浏览器地址栏输入localhost:8080来访问（先通过启动按钮启动服务器）<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/6.PNG"><br>如果端口8080被占用，可以在tomcat目录下/conf/server.xml中修改端口号。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>web服务器和eclipse的集成</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>web服务器和eclipse的集成</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>电脑使用小技巧 | windows关闭弹框广告</title>
     <url>/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/</url>
     <content><![CDATA[<h1 id="如何关闭烦人的桌面广告弹框"><a href="#如何关闭烦人的桌面广告弹框" class="headerlink" title="如何关闭烦人的桌面广告弹框"></a>如何关闭烦人的桌面广告弹框</h1><p>1.打开“控制面板”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/1.png"><br>2.进入“网络和Internet”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/2.png"><br>3.进入“Internet选项”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/3.png"><br>4.选择“隐私”选项卡，勾选“启用弹出窗口阻止程序”，然后点“设置”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/4.png"><br>5.阻止级别选“高”，点击“关闭”<br><img src="/2021/01/28/windows%E5%85%B3%E9%97%AD%E5%BC%B9%E6%A1%86%E5%B9%BF%E5%91%8A/5.png"><br>6.重启电脑</p>
@@ -11891,6 +11922,23 @@ app.MainLoop()
       <tags>
         <tag>python</tag>
         <tag>wxPython</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb项目开发 | web服务器tomcat和eclipse的集成</title>
+    <url>/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/</url>
+    <content><![CDATA[<h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
+<h2 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h2><p>将下载的后缀为.zip的压缩文件解压即可（本项目使用tomcat 7）<br>将文件解压到不包含中文文件名的路径下（例：D://tomcat//）</p>
+<h2 id="将tomcat服务器集成到eclipse中"><a href="#将tomcat服务器集成到eclipse中" class="headerlink" title="将tomcat服务器集成到eclipse中"></a>将tomcat服务器集成到eclipse中</h2><p>1.在eclipse菜单栏中点击window–&gt;preferences,然后按照下图所示顺序点击。<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/1.PNG"><br>2.按照下图所示步骤添加服务器，选择版本7<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/2.PNG"><br>3.选择下载并解压的tomcat服务器并选择jre<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/3.PNG"><br>4.在菜单栏选择windown–&gt;show view–&gt;Other..–&gt;Server–&gt;Servers来显示配置的tomcat服务器<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/4.PNG"><br>注：可以通过点击上图中的启动按钮和关闭按钮来关闭/停止服务器<br>5.双击上图中的服务器并按照下图将Deploy path修改为webapps<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/5.PNG"><br>6.通过浏览器访问该服务器<br>在浏览器地址栏输入localhost:8080来访问（先通过启动按钮启动服务器）<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/6.PNG"><br>如果端口8080被占用，可以在tomcat目录下/conf/server.xml中修改端口号。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>web服务器和eclipse的集成</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>web服务器和eclipse的集成</tag>
       </tags>
   </entry>
   <entry>
@@ -15614,200 +15662,6 @@ public int getCount(String cid) throws SQLException &#123;
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb项目开发 | 分页</title>
-    <url>/2022/01/12/%E5%88%86%E9%A1%B5/</url>
-    <content><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><h2 id="项目目录"><a href="#项目目录" class="headerlink" title="项目目录"></a>项目目录</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG"></p>
-<span id="more"></span>
-<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/2.PNG"></p>
-<h2 id="分页后台实现"><a href="#分页后台实现" class="headerlink" title="分页后台实现"></a>分页后台实现</h2><ol>
-<li>paging.jsp(发出分页查询请求)</li>
-</ol>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;/paging/page?pageNumber=1&quot;&gt;分页查询&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<ol start="2">
-<li>PageServlet.java(处理请求)</li>
-</ol>
-<pre><code>package com.oracle.servlet;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.oracle.bean.PageBean;
-import com.oracle.service.PageService;
-
-public class PageServlet extends HttpServlet &#123;
-    private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        //获取前台传递的当前页
-        String pn = request.getParameter(&quot;pageNumber&quot;);
-        int pageNumber = Integer.parseInt(pn);
-        int pageSize = 2;
-        
-        PageService ps = new PageService();
-        PageBean pb = ps.getPageBean(pageNumber, pageSize);
-        
-        //把pb放入request域对象中
-        request.setAttribute(&quot;pb&quot;, pb);
-        //请求转发到前台页面
-        request.getRequestDispatcher(&quot;/paging1.jsp&quot;).forward(request, response);
-    &#125;
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-        doGet(request, response);
-    &#125;
-&#125;
-</code></pre>
-<ol start="3">
-<li>PageService.java(编写业务逻辑)</li>
-</ol>
-<pre><code>package com.oracle.service;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import com.oracle.bean.PageBean;
-import com.oracle.bean.Product;
-import com.oracle.dao.PageDao;
-
-public class PageService &#123;
-
-    public PageBean getPageBean(int pageNumber, int pageSize) &#123;
-        PageBean pb = null;
-        try &#123;
-            // TODO Auto-generated method stub
-            PageDao pd = new PageDao();
-            
-            //组装PageBean
-            pb = new PageBean(pageSize, pageNumber);
-            
-            //查询当前页显示的数据
-            List&lt;Product&gt; list = pd.getProList(pb);
-            
-            //查询总条数
-            int count = pd.getCount();
-            
-            //把数据放如pagebean中
-            pb.setList(list);
-            pb.setTotalSize(count);
-        &#125; catch (Exception e) &#123;
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        &#125;
-        
-        return pb;
-    &#125;
-&#125;
-</code></pre>
-<ol start="5">
-<li>PageDao.java(操作数据库)</li>
-</ol>
-<pre><code>package com.oracle.dao;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import com.oracle.bean.PageBean;
-import com.oracle.bean.Product;
-import com.oracle.utils.DataSourceUtils;
-
-public class PageDao &#123;
-
-    public List&lt;Product&gt; getProList(PageBean pb) throws SQLException &#123;
-        // TODO Auto-generated method stub
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        String sql = &quot;select * from product limit ?,?&quot;;
-        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class), pb.getIndex(), pb.getPageSize());
-        return list;
-    &#125;
-
-    public int getCount() throws SQLException &#123;
-        // TODO Auto-generated method stub
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        String sql = &quot;select coutn(*) from product&quot;;
-        
-        int count = ((Long)qr.query(sql, new ScalarHandler())).intValue();
-        
-        return count;
-    &#125;
-
-&#125;
-</code></pre>
-<h2 id="分页前台实现"><a href="#分页前台实现" class="headerlink" title="分页前台实现"></a>分页前台实现</h2><ol>
-<li>paging1.jsp(展示分页查询结果)</li>
-</ol>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;
-        &lt;tr&gt;
-            &lt;th&gt;商品id&lt;/th&gt;
-            &lt;th&gt;商品名称&lt;/th&gt;
-            &lt;th&gt;商品价格&lt;/th&gt;
-            &lt;th&gt;商品描述&lt;/th&gt;
-        &lt;/tr&gt;
-        
-        &lt;c:forEach items=&quot;$&#123;pb.list&#125;&quot; var=&quot;pro&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;$&#123;pro.id&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;pro.pname&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;pro.price&#125;&lt;/td&gt;
-                &lt;td&gt;$&#123;pro.pdesc&#125;&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-    &lt;/table&gt;
-    
-    &lt;center&gt;
-        &lt;c:forEach begin=&quot;1&quot; end=&quot;$&#123;pb.totalCount&#125;&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;
-            &lt;a href=&quot;/paging/page?pageNumber=$&#123;n&#125;&quot;&gt;$&#123;n&#125;&lt;/a&gt;
-        &lt;/c:forEach&gt;
-    &lt;/center&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<ol start="2">
-<li>效果<br><img src="/2022/01/12/%E5%88%86%E9%A1%B5/3.PNG"></li>
-</ol>
-<p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/4.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>分页</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>分页</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MyBatis | 分页插件PageHelper及PageHelper模拟分页</title>
     <url>/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p>
@@ -16222,6 +16076,57 @@ public class ThreadTest &#123;
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 26.删除有序数组中的重复项</title>
+    <url>/2022/07/19/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/</url>
+    <content><![CDATA[<h1 id="26-删除有序数组中的重复项"><a href="#26-删除有序数组中的重复项" class="headerlink" title="26.删除有序数组中的重复项"></a>26.删除有序数组中的重复项</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个 升序排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。<br>由于在某些语言中不能改变数组的长度，所以必须将结果放在数组nums的第一部分。更规范地说，如果在删除重复项之后有 k 个元素，那么 nums 的前 k 个元素应该保存最终结果。<br>将最终结果插入 nums 的前 k 个位置后返回 k 。<br>不要使用额外的空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。</p>
+<p>示例 1：<br>输入：nums = [1,1,2]<br>输出：2, nums = [1,2,_]<br>解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。</p>
+<p><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li><p>双指针<br>（1）如果数组为空，返回0<br>（2）如果数组只有一个元素，返回1<br>（3）如果数组中有超过两个元素，第一个元素肯定不会被删除，所以从第二位位置开始删除重复元素，设置两个指针，一个快指针<br>fast，一个慢指针slow，快指针fast用来遍历数组寻找下一个不重复元素，慢指针slow指向存放下一个不重复元素的位置；每当<br>fast指针遍历到一个新的不重复元素（fast指向的元素不等于fast-1位置的元素），就将该元素复制到慢指针slow执行的位置，<br>同时慢指针slow指向下一个位置，快指针fast继续寻找下一个不重复元素，依次类推。</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p>
+<pre><code> def removeDuplicates(self, nums):
+     &quot;&quot;&quot;
+     双指针
+     :type nums: List[int]
+     :rtype: int
+     &quot;&quot;&quot;
+     if not nums:
+         return 0
+     
+     n = len(nums)
+     fast = slow = 1
+     while fast &lt; n:
+         if nums[fast] != nums[fast - 1]:
+             nums[slow] = nums[fast]
+             slow += 1
+         fast += 1
+     return slow
+ 
+</code></pre>
+<p> if <strong>name</strong> == “<strong>main</strong>“:</p>
+<pre><code> slt = Solution()
+ nums = [1, 1, 2]
+ result = slt.removeDuplicates(nums)
+ print(result)
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>数组</category>
+        <category>26.删除有序数组中的重复项</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>数组</tag>
+        <tag>双指针</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 83.删除有序链表中的重复元素</title>
     <url>/2021/08/27/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/</url>
     <content><![CDATA[<h1 id="83-删除有序链表中的重复元素"><a href="#83-删除有序链表中的重复元素" class="headerlink" title="83.删除有序链表中的重复元素"></a>83.删除有序链表中的重复元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除所有重复的元素，使每个元素 只出现一次 。<br>返回同样按升序排列的结果链表。</p>
@@ -16307,6 +16212,200 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb项目开发 | 分页</title>
+    <url>/2022/01/12/%E5%88%86%E9%A1%B5/</url>
+    <content><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><h2 id="项目目录"><a href="#项目目录" class="headerlink" title="项目目录"></a>项目目录</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG"></p>
+<span id="more"></span>
+<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/2.PNG"></p>
+<h2 id="分页后台实现"><a href="#分页后台实现" class="headerlink" title="分页后台实现"></a>分页后台实现</h2><ol>
+<li>paging.jsp(发出分页查询请求)</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;/paging/page?pageNumber=1&quot;&gt;分页查询&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
+<li>PageServlet.java(处理请求)</li>
+</ol>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.oracle.bean.PageBean;
+import com.oracle.service.PageService;
+
+public class PageServlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        //获取前台传递的当前页
+        String pn = request.getParameter(&quot;pageNumber&quot;);
+        int pageNumber = Integer.parseInt(pn);
+        int pageSize = 2;
+        
+        PageService ps = new PageService();
+        PageBean pb = ps.getPageBean(pageNumber, pageSize);
+        
+        //把pb放入request域对象中
+        request.setAttribute(&quot;pb&quot;, pb);
+        //请求转发到前台页面
+        request.getRequestDispatcher(&quot;/paging1.jsp&quot;).forward(request, response);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>PageService.java(编写业务逻辑)</li>
+</ol>
+<pre><code>package com.oracle.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.oracle.bean.PageBean;
+import com.oracle.bean.Product;
+import com.oracle.dao.PageDao;
+
+public class PageService &#123;
+
+    public PageBean getPageBean(int pageNumber, int pageSize) &#123;
+        PageBean pb = null;
+        try &#123;
+            // TODO Auto-generated method stub
+            PageDao pd = new PageDao();
+            
+            //组装PageBean
+            pb = new PageBean(pageSize, pageNumber);
+            
+            //查询当前页显示的数据
+            List&lt;Product&gt; list = pd.getProList(pb);
+            
+            //查询总条数
+            int count = pd.getCount();
+            
+            //把数据放如pagebean中
+            pb.setList(list);
+            pb.setTotalSize(count);
+        &#125; catch (Exception e) &#123;
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        &#125;
+        
+        return pb;
+    &#125;
+&#125;
+</code></pre>
+<ol start="5">
+<li>PageDao.java(操作数据库)</li>
+</ol>
+<pre><code>package com.oracle.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.PageBean;
+import com.oracle.bean.Product;
+import com.oracle.utils.DataSourceUtils;
+
+public class PageDao &#123;
+
+    public List&lt;Product&gt; getProList(PageBean pb) throws SQLException &#123;
+        // TODO Auto-generated method stub
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        String sql = &quot;select * from product limit ?,?&quot;;
+        List&lt;Product&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Product.class), pb.getIndex(), pb.getPageSize());
+        return list;
+    &#125;
+
+    public int getCount() throws SQLException &#123;
+        // TODO Auto-generated method stub
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        String sql = &quot;select coutn(*) from product&quot;;
+        
+        int count = ((Long)qr.query(sql, new ScalarHandler())).intValue();
+        
+        return count;
+    &#125;
+
+&#125;
+</code></pre>
+<h2 id="分页前台实现"><a href="#分页前台实现" class="headerlink" title="分页前台实现"></a>分页前台实现</h2><ol>
+<li>paging1.jsp(展示分页查询结果)</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table border=&quot;1px&quot; width=&quot;60%&quot; height=&quot;200px&quot; align=&quot;center&quot;&gt;
+        &lt;tr&gt;
+            &lt;th&gt;商品id&lt;/th&gt;
+            &lt;th&gt;商品名称&lt;/th&gt;
+            &lt;th&gt;商品价格&lt;/th&gt;
+            &lt;th&gt;商品描述&lt;/th&gt;
+        &lt;/tr&gt;
+        
+        &lt;c:forEach items=&quot;$&#123;pb.list&#125;&quot; var=&quot;pro&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;pro.id&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;pro.pname&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;pro.price&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;pro.pdesc&#125;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+    &lt;/table&gt;
+    
+    &lt;center&gt;
+        &lt;c:forEach begin=&quot;1&quot; end=&quot;$&#123;pb.totalCount&#125;&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;
+            &lt;a href=&quot;/paging/page?pageNumber=$&#123;n&#125;&quot;&gt;$&#123;n&#125;&lt;/a&gt;
+        &lt;/c:forEach&gt;
+    &lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ol start="2">
+<li>效果<br><img src="/2022/01/12/%E5%88%86%E9%A1%B5/3.PNG"></li>
+</ol>
+<p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/4.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>分页</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>分页</tag>
       </tags>
   </entry>
   <entry>
@@ -16676,6 +16775,122 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Java | 动态代理</title>
+    <url>/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p>
+<p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
+<p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p>
+<pre><code>package hireroom;
+
+public interface HireRoom &#123;
+    void hireRoom(String chaoxiang, String buju, int price);
+&#125;
+</code></pre>
+<p><strong>HireRoomImpl.java(实现类)</strong></p>
+<pre><code>package hireroom;
+
+public class HireRoomImpl implements HireRoom&#123;
+
+    @Override
+    public void hireRoom(String chaoxiang, String buju, int price) &#123;
+        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>Agency.java(中介/代理类)</strong></p>
+<pre><code>package hireroom;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
+public class Agency implements InvocationHandler&#123;
+    private Object target;
+    
+    public Agency(Object target)&#123;
+        this.target = target;
+    &#125;
+    
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+        System.out.println(&quot;before&quot;);
+        Object result = method.invoke(target, args);
+        System.out.println(&quot;after&quot;);
+        return result;
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>AgencyFactory.java(中介/代理工厂)</strong></p>
+<pre><code>package hireroom;
+
+import java.lang.reflect.Proxy;
+
+public class AgencyFactory &#123;
+    public static Object getProxy(Object target)&#123;
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(), 
+                target.getClass().getInterfaces(), 
+                new Agency(target));
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Main.java(测试)</strong></p>
+<pre><code>package hireroom;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
+        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p>
+<pre><code>package hireroom;
+
+public interface HireCar &#123;
+    void hireCar(String brand, int price);
+&#125;
+</code></pre>
+<p><strong>HireCarImpl.java(实现类)</strong></p>
+<pre><code>package hireroom;
+
+public class HireCarImpl implements HireCar&#123;
+
+    @Override
+    public void hireCar(String brand, int price) &#123;
+        System.out.println(&quot;租车：&quot;+brand+price);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>Main.java</strong></p>
+<pre><code>package hireroom;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
+        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
+        
+        HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());
+        hireCar.hireCar(&quot;宝马&quot;, 150000);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>动态代理</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>动态代理</tag>
+        <tag>JDK动态代理机制</tag>
+        <tag>CGLIB动态代理机制</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis | 动态SQL</title>
     <url>/2022/04/09/%E5%8A%A8%E6%80%81SQL/</url>
     <content><![CDATA[<h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>1.项目目录<br><img src="/2022/04/09/%E5%8A%A8%E6%80%81SQL/1.PNG"><br>2.EmpMapper.java</p>
@@ -17019,122 +17234,6 @@ public class TestDynamicSQL &#123;
       </tags>
   </entry>
   <entry>
-    <title>Java | 动态代理</title>
-    <url>/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="动态代理案例-JDK-动态代理机制"><a href="#动态代理案例-JDK-动态代理机制" class="headerlink" title="动态代理案例(JDK 动态代理机制)"></a>动态代理案例(JDK 动态代理机制)</h1><p>假设我们需要通过中介租房子（告诉中介对房子的要求，由中介代我们租房子）</p>
-<p><strong>JDK动态代理机制和CGLIB动态代理机制的区别</strong><br>1.JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。<br>2.就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
-<p><a href="https://gitee.com/victory-liao/JavaGuide/blob/main/docs/java/basis/proxy.md">动态代理和静态代理的区别、两种动态代理的区别</a><br><strong>HireRoom.java(接口)</strong></p>
-<pre><code>package hireroom;
-
-public interface HireRoom &#123;
-    void hireRoom(String chaoxiang, String buju, int price);
-&#125;
-</code></pre>
-<p><strong>HireRoomImpl.java(实现类)</strong></p>
-<pre><code>package hireroom;
-
-public class HireRoomImpl implements HireRoom&#123;
-
-    @Override
-    public void hireRoom(String chaoxiang, String buju, int price) &#123;
-        System.out.println(&quot;我委托中介租一个朝向：&quot; + chaoxiang + &quot;，布局：&quot; + buju + &quot;，价格：&quot; + price + &quot;的房子&quot;);
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>Agency.java(中介/代理类)</strong></p>
-<pre><code>package hireroom;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
-public class Agency implements InvocationHandler&#123;
-    private Object target;
-    
-    public Agency(Object target)&#123;
-        this.target = target;
-    &#125;
-    
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-        System.out.println(&quot;before&quot;);
-        Object result = method.invoke(target, args);
-        System.out.println(&quot;after&quot;);
-        return result;
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>AgencyFactory.java(中介/代理工厂)</strong></p>
-<pre><code>package hireroom;
-
-import java.lang.reflect.Proxy;
-
-public class AgencyFactory &#123;
-    public static Object getProxy(Object target)&#123;
-        return Proxy.newProxyInstance(target.getClass().getClassLoader(), 
-                target.getClass().getInterfaces(), 
-                new Agency(target));
-    &#125;
-&#125;
-</code></pre>
-<p><strong>Main.java(测试)</strong></p>
-<pre><code>package hireroom;
-
-public class Main &#123;
-    public static void main(String[] args) &#123;
-        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
-        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>运行结果1</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/1.PNG"><br>再假设我们现在又有了想通过中介租车的需求，只需要再添加租车接口和实现类，然后通过上面的代理类完成租车。这也是动态代理的优点<br><strong>HireCar.java(接口)</strong></p>
-<pre><code>package hireroom;
-
-public interface HireCar &#123;
-    void hireCar(String brand, int price);
-&#125;
-</code></pre>
-<p><strong>HireCarImpl.java(实现类)</strong></p>
-<pre><code>package hireroom;
-
-public class HireCarImpl implements HireCar&#123;
-
-    @Override
-    public void hireCar(String brand, int price) &#123;
-        System.out.println(&quot;租车：&quot;+brand+price);
-    &#125;
-
-&#125;
-</code></pre>
-<p><strong>Main.java</strong></p>
-<pre><code>package hireroom;
-
-public class Main &#123;
-    public static void main(String[] args) &#123;
-        HireRoom hireRoom = (HireRoom) AgencyFactory.getProxy(new HireRoomImpl());
-        hireRoom.hireRoom(&quot;坐南朝北&quot;, &quot;两室一厅&quot;, 200000);
-        
-        HireCar hireCar = (HireCar) AgencyFactory.getProxy(new HireCarImpl());
-        hireCar.hireCar(&quot;宝马&quot;, 150000);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>运行结果2</strong><br><img src="/2022/03/10/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/2.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>动态代理</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>动态代理</tag>
-        <tag>JDK动态代理机制</tag>
-        <tag>CGLIB动态代理机制</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | 动态代理之数学计算器</title>
     <url>/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
     <content><![CDATA[<h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p>
@@ -17385,57 +17484,6 @@ public class SingletonTest &#123;
       <tags>
         <tag>设计模式</tag>
         <tag>单例模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 26.删除有序数组中的重复项</title>
-    <url>/2022/07/19/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/</url>
-    <content><![CDATA[<h1 id="26-删除有序数组中的重复项"><a href="#26-删除有序数组中的重复项" class="headerlink" title="26.删除有序数组中的重复项"></a>26.删除有序数组中的重复项</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个 升序排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。<br>由于在某些语言中不能改变数组的长度，所以必须将结果放在数组nums的第一部分。更规范地说，如果在删除重复项之后有 k 个元素，那么 nums 的前 k 个元素应该保存最终结果。<br>将最终结果插入 nums 的前 k 个位置后返回 k 。<br>不要使用额外的空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。</p>
-<p>示例 1：<br>输入：nums = [1,1,2]<br>输出：2, nums = [1,2,_]<br>解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。</p>
-<p><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li><p>双指针<br>（1）如果数组为空，返回0<br>（2）如果数组只有一个元素，返回1<br>（3）如果数组中有超过两个元素，第一个元素肯定不会被删除，所以从第二位位置开始删除重复元素，设置两个指针，一个快指针<br>fast，一个慢指针slow，快指针fast用来遍历数组寻找下一个不重复元素，慢指针slow指向存放下一个不重复元素的位置；每当<br>fast指针遍历到一个新的不重复元素（fast指向的元素不等于fast-1位置的元素），就将该元素复制到慢指针slow执行的位置，<br>同时慢指针slow指向下一个位置，快指针fast继续寻找下一个不重复元素，依次类推。</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p>
-<pre><code> def removeDuplicates(self, nums):
-     &quot;&quot;&quot;
-     双指针
-     :type nums: List[int]
-     :rtype: int
-     &quot;&quot;&quot;
-     if not nums:
-         return 0
-     
-     n = len(nums)
-     fast = slow = 1
-     while fast &lt; n:
-         if nums[fast] != nums[fast - 1]:
-             nums[slow] = nums[fast]
-             slow += 1
-         fast += 1
-     return slow
- 
-</code></pre>
-<p> if <strong>name</strong> == “<strong>main</strong>“:</p>
-<pre><code> slt = Solution()
- nums = [1, 1, 2]
- result = slt.removeDuplicates(nums)
- print(result)
-</code></pre>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>数组</category>
-        <category>26.删除有序数组中的重复项</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>数组</tag>
-        <tag>双指针</tag>
       </tags>
   </entry>
   <entry>
@@ -18182,73 +18230,6 @@ wb.save(&quot;产品清单-合并单元.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
-    <url>/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
-    <content><![CDATA[<h1 id="合并word表格中上下行那内容相同的单元格"><a href="#合并word表格中上下行那内容相同的单元格" class="headerlink" title="合并word表格中上下行那内容相同的单元格"></a>合并word表格中上下行那内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
-<span id="more"></span>
-<pre><code>from docx import Document
-
-
-# 定义合并单元格的函数
-def Merge_cells(table, target_list, start_row, col):
-    &quot;&quot;&quot;
-    table: 是需要操作的表格
-    target_list: 是目标列表，即含有重复数据的列表
-    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）
-    col: 是需要处理数据的列
-    &quot;&quot;&quot;
-    start = 0  # 开始行计数
-    end = 0  # 结束行计数
-    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始
-    for i in range(len(target_list)):  # 遍历列表
-        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下
-            reference = target_list[i]  # 基准变成列表中下一个字符串
-            end = i - 1
-            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
-            start = end + 1
-        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作
-            end = i
-            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
-
-
-doc = Document(&quot;收货记录.docx&quot;)
-# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据
-table = doc.tables[0]  # 已确定是第一个表格，其索引是0
-supplier = []  # 存储供应商名称
-pn = []  # 存储物料编码
-max_row = len(table.rows)  # 获取第最大一行
-
-# 读取第二行到29行，第2，3列中的数据
-for i in range(1, max_row - 1):
-    supplier_name = table.rows[i].cells[1].text  # cells[1]指表格第二列
-    supplier.append(supplier_name)
-
-for i in range(1, max_row - 1):
-    material_pn = table.rows[i].cells[2].text  # cells[2]指表格第三列
-    pn.append(material_pn)
-
-Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1
-Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2
-
-# 重新往第2和第3列写入数据，以覆盖之前重复的数据
-for row in range(1, len(supplier) + 1):
-    table.cell(row, 1).text = supplier[row - 2]
-    table.cell(row, 2).text = pn[row - 2]
-doc.save(&quot;收货记录-合并单元格.docx&quot;)
-</code></pre>
-<p><a href="收货记录.docx">收货记录.docx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>python-docx</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 21.合并两个有序链表</title>
     <url>/2021/08/27/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="21-合并两个有序链表"><a href="#21-合并两个有序链表" class="headerlink" title="21.合并两个有序链表"></a>21.合并两个有序链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。</p>
@@ -18521,6 +18502,73 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python-docx | 合并word表格中上下行那内容相同的单元格</title>
+    <url>/2021/10/21/%E5%90%88%E5%B9%B6word%E8%A1%A8%E6%A0%BC%E4%B8%AD%E4%B8%8A%E4%B8%8B%E8%A1%8C%E9%82%A3%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8D%95%E5%85%83%E6%A0%BC/</url>
+    <content><![CDATA[<h1 id="合并word表格中上下行那内容相同的单元格"><a href="#合并word表格中上下行那内容相同的单元格" class="headerlink" title="合并word表格中上下行那内容相同的单元格"></a>合并word表格中上下行那内容相同的单元格</h1><p>以下代码实现自动合并excel表格中上下行内容相同的单元格</p>
+<span id="more"></span>
+<pre><code>from docx import Document
+
+
+# 定义合并单元格的函数
+def Merge_cells(table, target_list, start_row, col):
+    &quot;&quot;&quot;
+    table: 是需要操作的表格
+    target_list: 是目标列表，即含有重复数据的列表
+    start_row: 是开始行，即表格中开始比对数据的行（需要将标题除开）
+    col: 是需要处理数据的列
+    &quot;&quot;&quot;
+    start = 0  # 开始行计数
+    end = 0  # 结束行计数
+    reference = target_list[0]  # 设定基准，以列表中的第一个字符串开始
+    for i in range(len(target_list)):  # 遍历列表
+        if target_list[i] != reference:  # 开始比对，如果内容不同执行如下
+            reference = target_list[i]  # 基准变成列表中下一个字符串
+            end = i - 1
+            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
+            start = end + 1
+        if i == len(target_list) - 1:  # 遍历到最后一行，按如下操作
+            end = i
+            table.cell(start + start_row, col).merge(table.cell(end + start_row, col))
+
+
+doc = Document(&quot;收货记录.docx&quot;)
+# 读取word文档中的第一个表格的第二和第三列除标题和尾部总数行的数据
+table = doc.tables[0]  # 已确定是第一个表格，其索引是0
+supplier = []  # 存储供应商名称
+pn = []  # 存储物料编码
+max_row = len(table.rows)  # 获取第最大一行
+
+# 读取第二行到29行，第2，3列中的数据
+for i in range(1, max_row - 1):
+    supplier_name = table.rows[i].cells[1].text  # cells[1]指表格第二列
+    supplier.append(supplier_name)
+
+for i in range(1, max_row - 1):
+    material_pn = table.rows[i].cells[2].text  # cells[2]指表格第三列
+    pn.append(material_pn)
+
+Merge_cells(table, supplier, 1, 1)  # 开始合并行为2，索引为1；供应商名称是在2列，索引为1
+Merge_cells(table, pn, 1, 2)  # 开始合并行为2，索引为1；物料编码是在3列，索引为2
+
+# 重新往第2和第3列写入数据，以覆盖之前重复的数据
+for row in range(1, len(supplier) + 1):
+    table.cell(row, 1).text = supplier[row - 2]
+    table.cell(row, 2).text = pn[row - 2]
+doc.save(&quot;收货记录-合并单元格.docx&quot;)
+</code></pre>
+<p><a href="收货记录.docx">收货记录.docx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>python-docx</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>python-docx</tag>
       </tags>
   </entry>
   <entry>
@@ -20745,6 +20793,21 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Django | 安装mysql_python失败</title>
+    <url>/2021/07/25/%E5%AE%89%E8%A3%85mysql-python%E5%A4%B1%E8%B4%A5/</url>
+    <content><![CDATA[<h1 id="安装mysql-python失败"><a href="#安装mysql-python失败" class="headerlink" title="安装mysql_python失败"></a>安装mysql_python失败</h1><p><a href="https://blog.csdn.net/qq_37431752/article/details/87965695">解决办法！！！</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 551.学生出勤记录1</title>
     <url>/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</url>
     <content><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p>
@@ -20812,21 +20875,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | 安装mysql_python失败</title>
-    <url>/2021/07/25/%E5%AE%89%E8%A3%85mysql-python%E5%A4%B1%E8%B4%A5/</url>
-    <content><![CDATA[<h1 id="安装mysql-python失败"><a href="#安装mysql-python失败" class="headerlink" title="安装mysql_python失败"></a>安装mysql_python失败</h1><p><a href="https://blog.csdn.net/qq_37431752/article/details/87965695">解决办法！！！</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -20949,83 +20997,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>leetcode</tag>
         <tag>字符串</tag>
         <tag>kmp算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多线程 | 实现线程体的两种方式</title>
-    <url>/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
-<pre><code># coding=utf-8
-
-import threading
-import time
-
-
-# 线程体函数
-def thread_body():
-    # 当前线程对象
-    t = threading.current_thread()
-    for n in range(5):
-        # 当前线程名
-        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
-        # 线程休眠
-        time.sleep(2)
-    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
-
-
-# 主线程
-# 创建线程对象t1
-t1 = threading.Thread(target=thread_body)
-# 创建线程对象t2
-t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
-# 启动线程t1
-t1.start()
-# 启动线程t2
-t2.start()
-</code></pre>
-<p>2.自定义线程类实现线程体<br>代码实例：</p>
-<pre><code># coding=utf-8
-
-import time
-import threading
-
-
-class SmallThread(threading.Thread):
-    def __init__(self, name=None):
-        super().__init__(name=name)
-
-    # 线程体函数
-    def run(self):
-        # 当前线程对象
-        t = threading.current_thread()
-        for n in range(5):
-            # 当前线程名
-            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
-            # 线程休眠
-            time.sleep(2)
-        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
-
-
-# 主线程
-# 创建线程对象t1
-t1 = SmallThread()  # 通过自定义线程类，创建线程对象
-# 创建线程对象t2
-t2 = SmallThread(name=&#39;MyThread&#39;)
-# 启动线程t1
-t1.start()
-# 启动线程t2
-t2.start()
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>threading</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>多线程</tag>
-        <tag>threading</tag>
       </tags>
   </entry>
   <entry>
@@ -21694,6 +21665,83 @@ app.MainLoop()  # 进入主事件循环
       </tags>
   </entry>
   <entry>
+    <title>多线程 | 实现线程体的两种方式</title>
+    <url>/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import threading
+import time
+
+
+# 线程体函数
+def thread_body():
+    # 当前线程对象
+    t = threading.current_thread()
+    for n in range(5):
+        # 当前线程名
+        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+        # 线程休眠
+        time.sleep(2)
+    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = threading.Thread(target=thread_body)
+# 创建线程对象t2
+t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+<p>2.自定义线程类实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import time
+import threading
+
+
+class SmallThread(threading.Thread):
+    def __init__(self, name=None):
+        super().__init__(name=name)
+
+    # 线程体函数
+    def run(self):
+        # 当前线程对象
+        t = threading.current_thread()
+        for n in range(5):
+            # 当前线程名
+            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+            # 线程休眠
+            time.sleep(2)
+        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = SmallThread()  # 通过自定义线程类，创建线程对象
+# 创建线程对象t2
+t2 = SmallThread(name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>threading</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>多线程</tag>
+        <tag>threading</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>入门指南 | 开发遇到问题怎么解决？</title>
     <url>/2021/02/20/%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%EF%BC%9F/</url>
     <content><![CDATA[<h1 id="开发遇到问题怎么解决？"><a href="#开发遇到问题怎么解决？" class="headerlink" title="开发遇到问题怎么解决？"></a>开发遇到问题怎么解决？</h1><p>我们在做开发的过程中常常会遇到这样、那样的问题，软件安装出错、配置出错、代码运行报错等等令人十分痛苦的问题，那么我们遇到问题时应该怎样去solve?<br><b>Answer:</b>我们在开发中遇到的百分之八九十的问题可以通过<br><b style="color:red">“官方文档+github+stack overflow”</b>去解决！</p>
@@ -21959,231 +22007,6 @@ wb.save(&quot;./data/data_chinese.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>基于JavaWeb的网上购物商城 | 我的订单</title>
-    <url>/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/</url>
-    <content><![CDATA[<h1 id="我的订单"><a href="#我的订单" class="headerlink" title="我的订单"></a>我的订单</h1><p><strong>实现功能：</strong><br>当用户点击”我的订单时“展示用户提交过的所有订单信息、购买商品信息等。<br><img src="/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/1.PNG"></p>
-<span id="more"></span>
-<p><strong>header.jsp</strong><br>更改”我的订单”链接的地址。</p>
-<pre><code>&lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;
-    &lt;ol class=&quot;list-inline&quot;&gt;
-        &lt;c:if test=&quot;$&#123;empty user&#125;&quot;&gt;
-            &lt;li&gt;&lt;a href=&quot;login.jsp&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;register.jsp&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;
-        &lt;/c:if&gt;
-        &lt;c:if test=&quot;$&#123;not empty user&#125;&quot;&gt;
-            &lt;li&gt;$&#123;user.username&#125;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;cart.jsp&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;$&#123;pageContext.request.contextPath&#125;/product?method=myOrder&quot;&gt;我的订单&lt;/a&gt;&lt;/li&gt;
-        &lt;/c:if&gt;
-    &lt;/ol&gt;
-&lt;/div&gt;
-</code></pre>
-<p><strong>ProductServlet.java</strong><br>在ProductServlet的doGet方法中添加myOrder的判断并完成myOrder方法。</p>
-<pre><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
-    String method = request.getParameter(&quot;method&quot;);
-    if(&quot;getProById&quot;.equals(method)) &#123;
-        getProById(request, response);
-    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;
-        findListByCate(request, response);
-    &#125;else if(&quot;cart&quot;.equals(method)) &#123;
-        cart(request, response);
-    &#125;else if(&quot;delCart&quot;.equals(method)) &#123;
-        delCart(request, response);
-    &#125;else if(&quot;clearCart&quot;.equals(method)) &#123;
-        clearCart(request, response);
-    &#125;else if(&quot;showOrder&quot;.equals(method)) &#123;
-        showOrder(request, response);
-    &#125;else if(&quot;submitOrder&quot;.equals(method)) &#123;
-        submitOrder(request, response);
-    &#125;else if(&quot;myOrder&quot;.equals(method)) &#123;
-        myOrder(request, response);
-    &#125;
-&#125;
-
-public void myOrder(HttpServletRequest request, HttpServletResponse response) &#123;
-    // TODO Auto-generated method stub
-    try &#123;
-        User user = (User)request.getSession().getAttribute(&quot;user&quot;);
-        String uid = user.getUid();
-        
-        ProductService ps = new ProductService();
-        List&lt;Order&gt; list = ps.findOrderList(uid);
-        
-        //循环读出item项
-        for(Order o:list) &#123;
-            List&lt;OrderItem&gt; arr = ps.findItemList(o.getOid());
-            
-            for(OrderItem oo:arr) &#123;
-                Product pro = ps.getProById(oo.getPid());
-                oo.setPro(pro);
-            &#125;
-            o.setList(arr);
-        &#125;
-        
-        //返回到订单列表页面
-        request.setAttribute(&quot;list&quot;, list);
-        try &#123;
-            request.getRequestDispatcher(&quot;/order_list.jsp&quot;).forward(request, response);
-        &#125; catch (Exception e) &#123;
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        &#125; 
-    &#125; catch (SQLException e) &#123;
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    &#125;
-&#125;
-</code></pre>
-<p><strong>ProductService.java</strong><br>在ProductService中添加findOrderList、findItemList方法。</p>
-<pre><code>public List&lt;Order&gt; findOrderList(String uid) throws SQLException &#123;
-    // TODO Auto-generated method stub
-    ProductDao pd = new ProductDao();
-    List&lt;Order&gt; list = pd.findOrderList(uid);
-    return list;
-&#125;
-
-public List&lt;OrderItem&gt; findItemList(String oid) throws SQLException &#123;
-    // TODO Auto-generated method stub
-    ProductDao pd = new ProductDao();
-    List&lt;OrderItem&gt; list = pd.findItemList(oid);
-    return list;
-&#125;
-</code></pre>
-<p><strong>ProductDao.java</strong><br>在ProductDao中添加findOrderList、findItemList方法。</p>
-<pre><code>public List&lt;Order&gt; findOrderList(String uid) throws SQLException &#123;
-    // TODO Auto-generated method stub
-    QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-    
-    String sql = &quot;select * from orders where uid=? order by ordertime desc&quot;;
-    
-    List&lt;Order&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Order.class), uid);
-    return list;
-&#125;
-
-public List&lt;OrderItem&gt; findItemList(String oid) throws SQLException &#123;
-    // TODO Auto-generated method stub
-    QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-    
-    String sql = &quot;select * from orderitem where oid=?&quot;;
-    
-    List&lt;OrderItem&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(OrderItem.class), oid);
-    return list;
-&#125;
-</code></pre>
-<p><strong>order_list.jsp</strong><br>在order_list.jsp页面解析所有订单。</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-
-&lt;head&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-&lt;title&gt;会员登录&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;css/bootstrap.min.css&quot; type=&quot;text/css&quot; /&gt;
-&lt;script src=&quot;js/jquery-1.11.3.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;js/bootstrap.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-&lt;!-- 引入自定义css文件 style.css --&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot; type=&quot;text/css&quot; /&gt;
-
-&lt;style&gt;
-body &#123;
-    margin-top: 20px;
-    margin: 0 auto;
-&#125;
-
-.carousel-inner .item img &#123;
-    width: 100%;
-    height: 300px;
-&#125;
-&lt;/style&gt;
-&lt;/head&gt;
-
-&lt;body&gt;
-    &lt;!-- 引入header.jsp --&gt;
-    &lt;jsp:include page=&quot;/header.jsp&quot;&gt;&lt;/jsp:include&gt;
-
-    &lt;div class=&quot;container&quot;&gt;
-        &lt;div class=&quot;row&quot;&gt;
-            &lt;div style=&quot;margin: 0 auto; margin-top: 10px; width: 950px;&quot;&gt;
-                &lt;strong&gt;我的订单&lt;/strong&gt;
-                &lt;table class=&quot;table table-bordered&quot;&gt;
-                    &lt;tbody&gt;
-                        &lt;c:forEach items=&quot;$&#123;list&#125;&quot; var=&quot;orders&quot;&gt;
-                                &lt;tr class=&quot;success&quot;&gt;
-                                    &lt;th colspan=&quot;2&quot;&gt;订单编号:$&#123;orders.oid&#125;&lt;/th&gt;
-                                    &lt;th colspan=&quot;2&quot; style=&quot;text-align:center&quot;&gt;订单时间:$&#123;orders.ordertime&#125;&lt;/th&gt;
-                                    &lt;th colspan=&quot;1&quot; &gt;是否支付:
-                                        &lt;c:if test=&quot;$&#123;orders.state==1&#125;&quot;&gt;已支付&lt;/c:if&gt;
-                                        &lt;c:if test=&quot;$&#123;orders.state==0&#125;&quot;&gt;未支付&lt;/c:if&gt;
-                                    &lt;/th&gt;
-                                &lt;/tr&gt;
-                                &lt;tr class=&quot;warning&quot;&gt;
-                                    &lt;th&gt;图片&lt;/th&gt;
-                                    &lt;th&gt;商品&lt;/th&gt;
-                                    &lt;th&gt;价格&lt;/th&gt;
-                                    &lt;th&gt;数量&lt;/th&gt;
-                                    &lt;th&gt;小计&lt;/th&gt;
-                                &lt;/tr&gt;
-                                &lt;c:forEach items=&quot;$&#123;orders.list&#125;&quot; var=&quot;item&quot;&gt;
-                                    &lt;tr class=&quot;active&quot;&gt;
-                                        &lt;td width=&quot;60&quot; width=&quot;40%&quot;&gt;&lt;input type=&quot;hidden&quot; name=&quot;id&quot;
-                                            value=&quot;22&quot;&gt; &lt;img src=&quot;$&#123;pageContext.request.contextPath&#125;/$&#123;item.pro.pimage&#125;&quot; width=&quot;70&quot;
-                                            height=&quot;60&quot;&gt;&lt;/td&gt;
-                                        &lt;td width=&quot;30%&quot;&gt;&lt;a target=&quot;_blank&quot;&gt;$&#123;item.pro.pname&#125;&lt;/a&gt;&lt;/td&gt;
-                                        &lt;td width=&quot;20%&quot;&gt;￥$&#123;item.pro.shop_price&#125;&lt;/td&gt;
-                                        &lt;td width=&quot;10%&quot;&gt;$&#123;item.count&#125;&lt;/td&gt;
-                                        &lt;td width=&quot;15%&quot;&gt;&lt;span class=&quot;subtotal&quot;&gt;￥$&#123;item.subtotal&#125;&lt;/span&gt;&lt;/td&gt;
-                                    &lt;/tr&gt;
-                                &lt;/c:forEach&gt;
-                                
-                        &lt;/c:forEach&gt;
-                        
-                    &lt;/tbody&gt;
-                &lt;/table&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div style=&quot;text-align: center;&quot;&gt;
-            &lt;ul class=&quot;pagination&quot;&gt;
-                &lt;li class=&quot;disabled&quot;&gt;&lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot;&gt;&lt;span
-                        aria-hidden=&quot;true&quot;&gt;&amp;laquo;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;#&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;2&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;3&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;4&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;5&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;6&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;7&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;8&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;9&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;#&quot; aria-label=&quot;Next&quot;&gt; &lt;span aria-hidden=&quot;true&quot;&gt;&amp;raquo;&lt;/span&gt;
-                &lt;/a&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;!-- 引入footer.jsp --&gt;
-    &lt;jsp:include page=&quot;/footer.jsp&quot;&gt;&lt;/jsp:include&gt;
-    
-&lt;/body&gt;
-
-&lt;/html&gt;
-</code></pre>
-]]></content>
-      <categories>
-        <category>项目经历</category>
-        <category>JavaWeb</category>
-        <category>基于JavaWeb的网上购物商城</category>
-        <category>我的订单</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>JavaWeb</tag>
-        <tag>基于JavaWeb的网上购物商城</tag>
-        <tag>我的订单</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python-docx | 批量修改word文件中的段落格式</title>
     <url>/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="批量修改word文件中的段落格式"><a href="#批量修改word文件中的段落格式" class="headerlink" title="批量修改word文件中的段落格式"></a>批量修改word文件中的段落格式</h1><p>实现代码：</p>
@@ -22281,61 +22104,6 @@ for file in files:
       </tags>
   </entry>
   <entry>
-    <title>PIL | 批量压缩图片</title>
-    <url>/2021/10/24/%E6%89%B9%E9%87%8F%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<h1 id="批量压缩图片"><a href="#批量压缩图片" class="headerlink" title="批量压缩图片"></a>批量压缩图片</h1><p>实现代码：</p>
-<pre><code># 将图片按修改时间排序(这样才能与图片的描述一致)，将路径存入列表，以便后面逐个插入图片时调用
-import os
-from PIL import Image
-from docx import Document
-
-path = &quot;6s_pictures&quot;
-list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
-list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
-print(list_p)
-
-# 按比例缩小图片尺寸
-for infile in list_p:
-    im = Image.open(infile)
-    (x, y) = im.size  # 读取图片尺寸（像素）
-    x_s = 165  # 定义缩小后的标准宽度
-    y_s = int(y * x_s / x)  # 基于标准宽度计算缩小后的高度
-    out = im.resize((x_s, y_s), Image.ANTIALIAS)  # 改变尺寸，保持图片高品质
-    out.save(r&quot;6s_pictures_new\&#123;&#125;&quot;.format(infile.split(&quot;\\&quot;)[-1]))
-
-path = &quot;6s_pictures_new&quot;
-list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
-list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
-
-doc = Document(&quot;6S稽查问题模板.docx&quot;)
-table = doc.tables[0]  # 已确定是第一个表格，其索引是0
-
-# 增加需要的行，以便足够填入数据
-for i in range(len(list_p) - 1):
-    table.add_row()
-
-# 写入数据及图片
-for row in range(1, len(list_p) + 1):
-    # 插入图片
-    run = table.cell(row, 2).paragraphs[0].add_run()  # 新增一个文字块
-    picture = run.add_picture(list_p[row - 1])  # 插入图片
-
-doc.save(&quot;6S稽查问题.docx&quot;)
-</code></pre>
-<p><a href="https://github.com/victory-liao/victory-liao.github.io/tree/master/source/images/6s_pictures">6s_pictures</a><br><a href="6S稽查问题模板.docx">6S稽查问题模板.docx</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>PIL</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>PIL</tag>
-        <tag>python-docx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pypiwin32 | 批量发送不同内容的邮件给不同的收件人</title>
     <url>/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/</url>
     <content><![CDATA[<h1 id="批量发送不同内容的邮件给不同的收件人"><a href="#批量发送不同内容的邮件给不同的收件人" class="headerlink" title="批量发送不同内容的邮件给不同的收件人"></a>批量发送不同内容的邮件给不同的收件人</h1><p>程序实现自动将’年假_按部门’下各个部门的年假情况Excel表格发送给’邮件地址.xlsx’中各个部门的负责人。</p>
@@ -22395,6 +22163,61 @@ print(&quot;邮件发送完成。&quot;)
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pypiwin32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PIL | 批量压缩图片</title>
+    <url>/2021/10/24/%E6%89%B9%E9%87%8F%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<h1 id="批量压缩图片"><a href="#批量压缩图片" class="headerlink" title="批量压缩图片"></a>批量压缩图片</h1><p>实现代码：</p>
+<pre><code># 将图片按修改时间排序(这样才能与图片的描述一致)，将路径存入列表，以便后面逐个插入图片时调用
+import os
+from PIL import Image
+from docx import Document
+
+path = &quot;6s_pictures&quot;
+list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
+list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
+print(list_p)
+
+# 按比例缩小图片尺寸
+for infile in list_p:
+    im = Image.open(infile)
+    (x, y) = im.size  # 读取图片尺寸（像素）
+    x_s = 165  # 定义缩小后的标准宽度
+    y_s = int(y * x_s / x)  # 基于标准宽度计算缩小后的高度
+    out = im.resize((x_s, y_s), Image.ANTIALIAS)  # 改变尺寸，保持图片高品质
+    out.save(r&quot;6s_pictures_new\&#123;&#125;&quot;.format(infile.split(&quot;\\&quot;)[-1]))
+
+path = &quot;6s_pictures_new&quot;
+list_p = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取图片的文件名,并拼接完整路径
+list_p.sort(key=lambda path: os.path.getmtime(path))  # 将列表中的文件按其修改时间排序，os.path.getmtime() 函数是获取文件最后修改时间
+
+doc = Document(&quot;6S稽查问题模板.docx&quot;)
+table = doc.tables[0]  # 已确定是第一个表格，其索引是0
+
+# 增加需要的行，以便足够填入数据
+for i in range(len(list_p) - 1):
+    table.add_row()
+
+# 写入数据及图片
+for row in range(1, len(list_p) + 1):
+    # 插入图片
+    run = table.cell(row, 2).paragraphs[0].add_run()  # 新增一个文字块
+    picture = run.add_picture(list_p[row - 1])  # 插入图片
+
+doc.save(&quot;6S稽查问题.docx&quot;)
+</code></pre>
+<p><a href="https://github.com/victory-liao/victory-liao.github.io/tree/master/source/images/6s_pictures">6s_pictures</a><br><a href="6S稽查问题模板.docx">6S稽查问题模板.docx</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>PIL</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>PIL</tag>
+        <tag>python-docx</tag>
       </tags>
   </entry>
   <entry>
@@ -22676,6 +22499,231 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于JavaWeb的网上购物商城 | 我的订单</title>
+    <url>/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/</url>
+    <content><![CDATA[<h1 id="我的订单"><a href="#我的订单" class="headerlink" title="我的订单"></a>我的订单</h1><p><strong>实现功能：</strong><br>当用户点击”我的订单时“展示用户提交过的所有订单信息、购买商品信息等。<br><img src="/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/1.PNG"></p>
+<span id="more"></span>
+<p><strong>header.jsp</strong><br>更改”我的订单”链接的地址。</p>
+<pre><code>&lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;
+    &lt;ol class=&quot;list-inline&quot;&gt;
+        &lt;c:if test=&quot;$&#123;empty user&#125;&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;login.jsp&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;register.jsp&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;
+        &lt;/c:if&gt;
+        &lt;c:if test=&quot;$&#123;not empty user&#125;&quot;&gt;
+            &lt;li&gt;$&#123;user.username&#125;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;cart.jsp&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;$&#123;pageContext.request.contextPath&#125;/product?method=myOrder&quot;&gt;我的订单&lt;/a&gt;&lt;/li&gt;
+        &lt;/c:if&gt;
+    &lt;/ol&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>ProductServlet.java</strong><br>在ProductServlet的doGet方法中添加myOrder的判断并完成myOrder方法。</p>
+<pre><code>public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+    String method = request.getParameter(&quot;method&quot;);
+    if(&quot;getProById&quot;.equals(method)) &#123;
+        getProById(request, response);
+    &#125;else if(&quot;findListByCate&quot;.equals(method)) &#123;
+        findListByCate(request, response);
+    &#125;else if(&quot;cart&quot;.equals(method)) &#123;
+        cart(request, response);
+    &#125;else if(&quot;delCart&quot;.equals(method)) &#123;
+        delCart(request, response);
+    &#125;else if(&quot;clearCart&quot;.equals(method)) &#123;
+        clearCart(request, response);
+    &#125;else if(&quot;showOrder&quot;.equals(method)) &#123;
+        showOrder(request, response);
+    &#125;else if(&quot;submitOrder&quot;.equals(method)) &#123;
+        submitOrder(request, response);
+    &#125;else if(&quot;myOrder&quot;.equals(method)) &#123;
+        myOrder(request, response);
+    &#125;
+&#125;
+
+public void myOrder(HttpServletRequest request, HttpServletResponse response) &#123;
+    // TODO Auto-generated method stub
+    try &#123;
+        User user = (User)request.getSession().getAttribute(&quot;user&quot;);
+        String uid = user.getUid();
+        
+        ProductService ps = new ProductService();
+        List&lt;Order&gt; list = ps.findOrderList(uid);
+        
+        //循环读出item项
+        for(Order o:list) &#123;
+            List&lt;OrderItem&gt; arr = ps.findItemList(o.getOid());
+            
+            for(OrderItem oo:arr) &#123;
+                Product pro = ps.getProById(oo.getPid());
+                oo.setPro(pro);
+            &#125;
+            o.setList(arr);
+        &#125;
+        
+        //返回到订单列表页面
+        request.setAttribute(&quot;list&quot;, list);
+        try &#123;
+            request.getRequestDispatcher(&quot;/order_list.jsp&quot;).forward(request, response);
+        &#125; catch (Exception e) &#123;
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        &#125; 
+    &#125; catch (SQLException e) &#123;
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    &#125;
+&#125;
+</code></pre>
+<p><strong>ProductService.java</strong><br>在ProductService中添加findOrderList、findItemList方法。</p>
+<pre><code>public List&lt;Order&gt; findOrderList(String uid) throws SQLException &#123;
+    // TODO Auto-generated method stub
+    ProductDao pd = new ProductDao();
+    List&lt;Order&gt; list = pd.findOrderList(uid);
+    return list;
+&#125;
+
+public List&lt;OrderItem&gt; findItemList(String oid) throws SQLException &#123;
+    // TODO Auto-generated method stub
+    ProductDao pd = new ProductDao();
+    List&lt;OrderItem&gt; list = pd.findItemList(oid);
+    return list;
+&#125;
+</code></pre>
+<p><strong>ProductDao.java</strong><br>在ProductDao中添加findOrderList、findItemList方法。</p>
+<pre><code>public List&lt;Order&gt; findOrderList(String uid) throws SQLException &#123;
+    // TODO Auto-generated method stub
+    QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+    
+    String sql = &quot;select * from orders where uid=? order by ordertime desc&quot;;
+    
+    List&lt;Order&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Order.class), uid);
+    return list;
+&#125;
+
+public List&lt;OrderItem&gt; findItemList(String oid) throws SQLException &#123;
+    // TODO Auto-generated method stub
+    QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+    
+    String sql = &quot;select * from orderitem where oid=?&quot;;
+    
+    List&lt;OrderItem&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(OrderItem.class), oid);
+    return list;
+&#125;
+</code></pre>
+<p><strong>order_list.jsp</strong><br>在order_list.jsp页面解析所有订单。</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;会员登录&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;css/bootstrap.min.css&quot; type=&quot;text/css&quot; /&gt;
+&lt;script src=&quot;js/jquery-1.11.3.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;js/bootstrap.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;!-- 引入自定义css文件 style.css --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot; type=&quot;text/css&quot; /&gt;
+
+&lt;style&gt;
+body &#123;
+    margin-top: 20px;
+    margin: 0 auto;
+&#125;
+
+.carousel-inner .item img &#123;
+    width: 100%;
+    height: 300px;
+&#125;
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;!-- 引入header.jsp --&gt;
+    &lt;jsp:include page=&quot;/header.jsp&quot;&gt;&lt;/jsp:include&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;row&quot;&gt;
+            &lt;div style=&quot;margin: 0 auto; margin-top: 10px; width: 950px;&quot;&gt;
+                &lt;strong&gt;我的订单&lt;/strong&gt;
+                &lt;table class=&quot;table table-bordered&quot;&gt;
+                    &lt;tbody&gt;
+                        &lt;c:forEach items=&quot;$&#123;list&#125;&quot; var=&quot;orders&quot;&gt;
+                                &lt;tr class=&quot;success&quot;&gt;
+                                    &lt;th colspan=&quot;2&quot;&gt;订单编号:$&#123;orders.oid&#125;&lt;/th&gt;
+                                    &lt;th colspan=&quot;2&quot; style=&quot;text-align:center&quot;&gt;订单时间:$&#123;orders.ordertime&#125;&lt;/th&gt;
+                                    &lt;th colspan=&quot;1&quot; &gt;是否支付:
+                                        &lt;c:if test=&quot;$&#123;orders.state==1&#125;&quot;&gt;已支付&lt;/c:if&gt;
+                                        &lt;c:if test=&quot;$&#123;orders.state==0&#125;&quot;&gt;未支付&lt;/c:if&gt;
+                                    &lt;/th&gt;
+                                &lt;/tr&gt;
+                                &lt;tr class=&quot;warning&quot;&gt;
+                                    &lt;th&gt;图片&lt;/th&gt;
+                                    &lt;th&gt;商品&lt;/th&gt;
+                                    &lt;th&gt;价格&lt;/th&gt;
+                                    &lt;th&gt;数量&lt;/th&gt;
+                                    &lt;th&gt;小计&lt;/th&gt;
+                                &lt;/tr&gt;
+                                &lt;c:forEach items=&quot;$&#123;orders.list&#125;&quot; var=&quot;item&quot;&gt;
+                                    &lt;tr class=&quot;active&quot;&gt;
+                                        &lt;td width=&quot;60&quot; width=&quot;40%&quot;&gt;&lt;input type=&quot;hidden&quot; name=&quot;id&quot;
+                                            value=&quot;22&quot;&gt; &lt;img src=&quot;$&#123;pageContext.request.contextPath&#125;/$&#123;item.pro.pimage&#125;&quot; width=&quot;70&quot;
+                                            height=&quot;60&quot;&gt;&lt;/td&gt;
+                                        &lt;td width=&quot;30%&quot;&gt;&lt;a target=&quot;_blank&quot;&gt;$&#123;item.pro.pname&#125;&lt;/a&gt;&lt;/td&gt;
+                                        &lt;td width=&quot;20%&quot;&gt;￥$&#123;item.pro.shop_price&#125;&lt;/td&gt;
+                                        &lt;td width=&quot;10%&quot;&gt;$&#123;item.count&#125;&lt;/td&gt;
+                                        &lt;td width=&quot;15%&quot;&gt;&lt;span class=&quot;subtotal&quot;&gt;￥$&#123;item.subtotal&#125;&lt;/span&gt;&lt;/td&gt;
+                                    &lt;/tr&gt;
+                                &lt;/c:forEach&gt;
+                                
+                        &lt;/c:forEach&gt;
+                        
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;text-align: center;&quot;&gt;
+            &lt;ul class=&quot;pagination&quot;&gt;
+                &lt;li class=&quot;disabled&quot;&gt;&lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot;&gt;&lt;span
+                        aria-hidden=&quot;true&quot;&gt;&amp;laquo;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;#&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;2&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;3&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;4&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;5&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;6&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;7&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;8&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;9&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot; aria-label=&quot;Next&quot;&gt; &lt;span aria-hidden=&quot;true&quot;&gt;&amp;raquo;&lt;/span&gt;
+                &lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 引入footer.jsp --&gt;
+    &lt;jsp:include page=&quot;/footer.jsp&quot;&gt;&lt;/jsp:include&gt;
+    
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+]]></content>
+      <categories>
+        <category>项目经历</category>
+        <category>JavaWeb</category>
+        <category>基于JavaWeb的网上购物商城</category>
+        <category>我的订单</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>JavaWeb</tag>
+        <tag>基于JavaWeb的网上购物商城</tag>
+        <tag>我的订单</tag>
       </tags>
   </entry>
   <entry>
@@ -26940,6 +26988,93 @@ wb.save(&#39;原表-替换.xlsx&#39;)
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 232.用栈实现队列</title>
+    <url>/2021/08/27/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<h1 id="232-用栈实现队列"><a href="#232-用栈实现队列" class="headerlink" title="232.用栈实现队列"></a>232.用栈实现队列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：<br>实现 MyQueue 类：<br>    void push(int x) 将元素 x 推到队列的末尾<br>    int pop() 从队列的开头移除并返回元素<br>    int peek() 返回队列开头的元素<br>    boolean empty() 如果队列为空，返回 true ；否则，返回 false<br>说明：<br>    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。<br>    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</p>
+<p><a href="https://leetcode-cn.com/problems/implement-queue-using-stacks/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用两个栈实现队列，一个栈作为输入栈（入队），一个对作为输出栈（出队/取队头元素）。<br>入队操作的实现：将元素压入输入栈<br>出队操作的实现：弹出输出栈栈顶元素，若输出栈为空，输入栈不为空，则将输入栈所有元素出栈并压入输出栈，接着再弹出输出栈栈顶元素。<br>队列判空：输入栈和输出栈同时为空时队列为空。</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class MyQueue(object):
+    &quot;&quot;&quot;用2个栈实现队列&quot;&quot;&quot;
+    def __init__(self):
+        &quot;&quot;&quot;
+        Initialize your data structure here.
+        &quot;&quot;&quot;
+        self.stack1 = list()
+        self.stack2 = list()
+
+    def push(self, x):
+        &quot;&quot;&quot;
+        Push element x to the back of queue.
+        :type x: int
+        :rtype: None
+        &quot;&quot;&quot;
+        self.stack1.append(x)
+
+    def pop(self):
+        &quot;&quot;&quot;
+        Removes the element from in front of queue and returns that element.
+        :rtype: int
+        &quot;&quot;&quot;
+        if len(self.stack2) != 0:
+            return self.stack2.pop()
+        else:
+            for _ in range(len(self.stack1)):
+                self.stack2.append(self.stack1.pop())
+            return self.stack2.pop()
+
+    def peek(self):
+        &quot;&quot;&quot;
+        Get the front element.
+        :rtype: int
+        &quot;&quot;&quot;
+        if len(self.stack2) != 0:
+            return self.stack2[-1]
+        else:
+            for _ in range(len(self.stack1)):
+                self.stack2.append(self.stack1.pop())
+            return self.stack2[-1]
+
+
+    def empty(self):
+        &quot;&quot;&quot;
+        Returns whether the queue is empty.
+        :rtype: bool
+        &quot;&quot;&quot;
+        return not self.stack1 and not self.stack2
+
+
+# Your MyQueue object will be instantiated and called as such:
+# obj = MyQueue()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.peek()
+# param_4 = obj.empty()
+
+
+if __name__ == &quot;__main__&quot;:
+    my_queue = MyQueue()
+    my_queue.push(1)
+    my_queue.push(2)
+    print(&quot;当前队头元素为：&#123;&#125;&quot;.format(my_queue.peek()))
+    print(&quot;当前出队元素为：&#123;&#125;&quot;.format(my_queue.pop()))
+    print(&quot;当前队列空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_queue.empty() is True else &quot;no&quot;))
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>栈</category>
+        <category>232.用栈实现队列</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>栈</tag>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 255.用两个队列实现栈</title>
     <url>/2021/08/27/%E7%94%A8%E4%B8%A4%E4%B8%AA%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88/</url>
     <content><![CDATA[<h1 id="225-用队列实现栈"><a href="#225-用队列实现栈" class="headerlink" title="225.用队列实现栈"></a>225.用队列实现栈</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（push、top、pop 和 empty）。<br>实现 MyStack 类：<br>    void push(int x) 将元素 x 压入栈顶。<br>    int pop() 移除并返回栈顶元素。<br>    int top() 返回栈顶元素。<br>    boolean empty() 如果栈是空的，返回 true ；否则，返回 false 。</p>
@@ -27054,93 +27189,6 @@ if __name__ == &quot;__main__&quot;:
         <category>leetcode</category>
         <category>栈</category>
         <category>255.用两个队列实现栈</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>栈</tag>
-        <tag>队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 232.用栈实现队列</title>
-    <url>/2021/08/27/%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<h1 id="232-用栈实现队列"><a href="#232-用栈实现队列" class="headerlink" title="232.用栈实现队列"></a>232.用栈实现队列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：<br>实现 MyQueue 类：<br>    void push(int x) 将元素 x 推到队列的末尾<br>    int pop() 从队列的开头移除并返回元素<br>    int peek() 返回队列开头的元素<br>    boolean empty() 如果队列为空，返回 true ；否则，返回 false<br>说明：<br>    你只能使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。<br>    你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</p>
-<p><a href="https://leetcode-cn.com/problems/implement-queue-using-stacks/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用两个栈实现队列，一个栈作为输入栈（入队），一个对作为输出栈（出队/取队头元素）。<br>入队操作的实现：将元素压入输入栈<br>出队操作的实现：弹出输出栈栈顶元素，若输出栈为空，输入栈不为空，则将输入栈所有元素出栈并压入输出栈，接着再弹出输出栈栈顶元素。<br>队列判空：输入栈和输出栈同时为空时队列为空。</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class MyQueue(object):
-    &quot;&quot;&quot;用2个栈实现队列&quot;&quot;&quot;
-    def __init__(self):
-        &quot;&quot;&quot;
-        Initialize your data structure here.
-        &quot;&quot;&quot;
-        self.stack1 = list()
-        self.stack2 = list()
-
-    def push(self, x):
-        &quot;&quot;&quot;
-        Push element x to the back of queue.
-        :type x: int
-        :rtype: None
-        &quot;&quot;&quot;
-        self.stack1.append(x)
-
-    def pop(self):
-        &quot;&quot;&quot;
-        Removes the element from in front of queue and returns that element.
-        :rtype: int
-        &quot;&quot;&quot;
-        if len(self.stack2) != 0:
-            return self.stack2.pop()
-        else:
-            for _ in range(len(self.stack1)):
-                self.stack2.append(self.stack1.pop())
-            return self.stack2.pop()
-
-    def peek(self):
-        &quot;&quot;&quot;
-        Get the front element.
-        :rtype: int
-        &quot;&quot;&quot;
-        if len(self.stack2) != 0:
-            return self.stack2[-1]
-        else:
-            for _ in range(len(self.stack1)):
-                self.stack2.append(self.stack1.pop())
-            return self.stack2[-1]
-
-
-    def empty(self):
-        &quot;&quot;&quot;
-        Returns whether the queue is empty.
-        :rtype: bool
-        &quot;&quot;&quot;
-        return not self.stack1 and not self.stack2
-
-
-# Your MyQueue object will be instantiated and called as such:
-# obj = MyQueue()
-# obj.push(x)
-# param_2 = obj.pop()
-# param_3 = obj.peek()
-# param_4 = obj.empty()
-
-
-if __name__ == &quot;__main__&quot;:
-    my_queue = MyQueue()
-    my_queue.push(1)
-    my_queue.push(2)
-    print(&quot;当前队头元素为：&#123;&#125;&quot;.format(my_queue.peek()))
-    print(&quot;当前出队元素为：&#123;&#125;&quot;.format(my_queue.pop()))
-    print(&quot;当前队列空：&#123;&#125;&quot;.format(&quot;yes&quot; if my_queue.empty() is True else &quot;no&quot;))
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>栈</category>
-        <category>232.用栈实现队列</category>
       </categories>
       <tags>
         <tag>算法</tag>
@@ -29242,6 +29290,17 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>期刊 | 脑电期刊</title>
+    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
+    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>脑电期刊</category>
+        <category>Biomedical Signal Processing and Control</category>
+      </categories>
+  </entry>
+  <entry>
     <title>EEG | 脑电数据集下载网站</title>
     <url>/2021/04/17/%E8%84%91%E7%94%B5%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99/</url>
     <content><![CDATA[<h1 id="脑电数据集下载网站"><a href="#脑电数据集下载网站" class="headerlink" title="脑电数据集下载网站"></a>脑电数据集下载网站</h1><p><a href="www.physionet.org">网站1</a></p>
@@ -29255,17 +29314,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>EEG</tag>
         <tag>数据集</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>期刊 | 脑电期刊</title>
-    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
-    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>脑电期刊</category>
-        <category>Biomedical Signal Processing and Control</category>
-      </categories>
   </entry>
   <entry>
     <title>selenium | pyhon+selenium测试WebTours网站登录注册功能</title>
@@ -31391,6 +31439,23 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>ICA | 鸡尾酒宴会问题</title>
+    <url>/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
+<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>ICA</tag>
+        <tag>鸡尾酒宴会问题</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 高阶函数</title>
     <url>/2021/11/07/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h1><p>高阶函数：一个函数可以接收另一个函数作为参数，这种函数就称为高阶函数</p>
@@ -31429,23 +31494,6 @@ print(func_xy(1,2,SS))
       <tags>
         <tag>python</tag>
         <tag>高阶函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ICA | 鸡尾酒宴会问题</title>
-    <url>/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
-<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>ICA</tag>
-        <tag>鸡尾酒宴会问题</tag>
       </tags>
   </entry>
   <entry>
