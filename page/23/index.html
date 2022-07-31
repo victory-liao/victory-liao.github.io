@@ -190,6 +190,261 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%87%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%87%E7%AB%A0/" class="post-title-link" itemprop="url">requests | python爬虫爬取会计师网站的指定文章</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 02:52:51 / Modified: 04:05:14" itemprop="dateCreated datePublished" datetime="2021-10-29T02:52:51-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/" itemprop="url" rel="index"><span itemprop="name">requests</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python爬虫爬取会计师网站的指定文章"><a href="#python爬虫爬取会计师网站的指定文章" class="headerlink" title="python爬虫爬取会计师网站的指定文章"></a>python爬虫爬取会计师网站的指定文章</h1><p>还没学习爬虫，没看懂！有缘再见！后会有期！</p>
+<p>贴上代码：</p>
+<pre><code>import requests
+import os
+import json
+
+
+print(&quot;开始爬取文章......&quot;)
+header = &#123;
+    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 &#39;
+                  &#39;Safari/537.36&#39;&#125;
+
+form_data = &#123;&#39;_q&#39;: &#39;Article.list&#39;,
+             &#39;siteId&#39;: &#39;7e0b3b27-2622-4aa7-b6f8-abfe5c5df922&#39;,
+             &#39;catalogId&#39;: &#39;34f92da3-d6d0-4e96-899f-d7f581c18162&#39;,
+             &#39;pub&#39;: &#39;true&#39;,
+             &#39;limit&#39;: 5000,
+             &#39;start&#39;: 1&#125;
+
+# 这是异步加载，请求方法是POST
+url = &quot;http://www.bicpa.org.cn/dtzj/zxgg/getArticles.action&quot;
+res = requests.post(url, data=form_data, headers=header)
+
+article_data0 = res.text.split(&quot;&#123;success:true,datas:&quot;)[1]  # 去掉字符串前面的无用信息“&#123;success:true,datas:”
+article_data = article_data0.split(&quot;,total:&quot;)[0]  # 去掉字符串后面的无用信息“,total:4946&#125;”
+
+obj = json.loads(article_data)
+# 获取标题含有“委员会专家提示”的文章的标题，发布时间和链接
+path = r&quot;http://www.bicpa.org.cn&quot;
+articles = []
+for info in obj:
+    if &quot;委员会专家提示&quot; in info[&#39;title&#39;]:
+        article = &#123;
+            &quot;标题&quot;: info[&#39;title&#39;].strip(),  # strip()去除首尾空格
+            &quot;发布时间&quot;: info[&#39;publishDate&#39;],
+            &quot;链接&quot;: path + info[&#39;url&#39;] + info[&#39;primaryKey&#39;] + &quot;.html&quot;
+        &#125;
+        articles.append(article)
+
+
+import requests
+from bs4 import BeautifulSoup
+import docx
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+import random
+import time
+
+
+# 获取想要的文章并批量写入word文件
+def Get_article_to_word(url, date):
+    user_agent_list = [
+        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36&quot;,
+        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36&quot;,
+        &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36&quot;,
+        &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36&quot;,
+        &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36&quot;,
+        &quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)&quot;,
+        &quot;Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10.5; en-US; rv:1.9.2.15) Gecko/20110303 Firefox/3.6.15&quot;
+    ]
+    header = &#123;&#39;User-Agent&#39;: random.choice(user_agent_list)&#125;
+    wb_data = requests.get(url, headers=header)
+    soup = BeautifulSoup(wb_data.content)
+    title = soup.select(&#39;.headword&#39;)[0].text.strip()  # 获得标题
+    content1 = soup.select(&quot;.MsoNormal&quot;)  # 针对正文布局为 class = &quot;MsoNormal&quot;
+    content2 = soup.select(&quot;#art_content&quot;)  # 针对正文布局为 id = &quot;art_content&quot;
+
+    doc = docx.Document()  # 新建空白word文档
+    # 设定全局字体
+    doc.styles[&#39;Normal&#39;].font.name = u&#39;宋体&#39;
+    doc.styles[&#39;Normal&#39;]._element.rPr.rFonts.set(qn(&#39;w:eastAsia&#39;), u&#39;宋体&#39;)
+
+    # 写入标题行，并设置字体格式
+    p = doc.add_paragraph()
+    r = p.add_run(title)
+    r.bold = True
+    r.font.size = Pt(18)
+
+    doc.add_paragraph(date)  # 写入日期
+    doc.add_paragraph(url)  # 写入文章链接
+
+    dirs = os.getcwd() + &quot;\\文章&quot;
+    if not os.path.exists(dirs):
+        os.makedirs(dirs)
+
+    # 写入正文
+    for i in content2:
+        doc.add_paragraph(i.text)
+    for i in content1:
+        doc.add_paragraph(i.text)
+    doc.save(f&quot;&#123;dirs&#125;\\&#123;title&#125;.docx&quot;)
+
+
+# 遍历所有文章的链接，调用以上函数执行
+for art in articles:
+    Get_article_to_word(art[&quot;链接&quot;], art[&quot;发布时间&quot;])
+    print(&quot;&#123;&#125; 下载完成。&quot;.format(art[&#39;标题&#39;]))
+    if articles.index(art) % 30 == 29:  # 每获取30篇文章，暂停5秒，避免频繁请求被服务器切断连接
+        time.sleep(5)
+
+print(f&quot;共下载 &#123;len(articles)&#125; 篇文章。&quot;)
+print(&quot;程序运行完成，关闭窗口退出.&quot;)
+input()
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/listdir%E5%92%8Cwalk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/listdir%E5%92%8Cwalk/" class="post-title-link" itemprop="url">os | os.listdir()和os.walk()</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-29 02:21:40 / Modified: 02:27:08" itemprop="dateCreated datePublished" datetime="2021-10-29T02:21:40-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/os/" itemprop="url" rel="index"><span itemprop="name">os</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="os-listdir-和os-walk"><a href="#os-listdir-和os-walk" class="headerlink" title="os.listdir()和os.walk()"></a>os.listdir()和os.walk()</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5c3b45d672d5">os.listdir()和os.walk()</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1414,230 +1669,6 @@ for file in files:
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/" class="post-title-link" itemprop="url">python-docx | python替换word文档中的文字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-28 05:39:45 / Modified: 05:42:04" itemprop="dateCreated datePublished" datetime="2021-10-28T05:39:45-08:00">2021-10-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/" itemprop="url" rel="index"><span itemprop="name">python-docx</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="python替换word文档中的文字"><a href="#python替换word文档中的文字" class="headerlink" title="python替换word文档中的文字"></a>python替换word文档中的文字</h1><p>实现代码：</p>
-<pre><code># -*- coding:utf-8 -*-
-import docx
-
-
-# # 定义函数替换文字块中的字符
-# def info_update(doc, old_info, new_info):
-#     for para in doc.paragraphs:  # 遍历段落
-#         for run in para.runs:  # 遍历文字块
-#             # run.text = run.text.replace(old_info, new_info)  # 替换
-#             print(run.text)
-#
-#
-# doc = docx.Document(&#39;替换前.docx&#39;)
-# info_update(doc, &#39;第四次&#39;, &#39;第五次&#39;)
-# info_update(doc, &#39;2019&#39;, &#39;2020&#39;)
-# info_update(doc, &#39;18&#39;, &#39;10&#39;)
-# doc.save(&#39;替换后.docx&#39;)
-
-# doc = docx.Document(&#39;替换前.docx&#39;)
-# for para in doc.paragraphs:  # 遍历段落
-#     for run in para.runs:  # 遍历文字块
-#         # run.text = run.text.replace(old_info, new_info)  # 替换
-#         print(run.text)
-
-# # 按段落查看文字
-# doc = docx.Document(&#39;替换前.docx&#39;)
-# for para in doc.paragraphs:
-#     print(para.text)
-
-import docx
-from docx.shared import Pt  # 用于设定字体大小(磅值)
-from docx.oxml.ns import qn  # 用于应用中文字体
-
-
-def info_update(doc, old_info, new_info):
-    for para in doc.paragraphs:
-        para.text = para.text.replace(old_info, new_info)
-
-    # 设置第一段（标题）的文字格式
-    for run in doc.paragraphs[0].runs:
-        run.font.size = Pt(14)  # 文字大小磅值
-        run.bold = True  # 加粗
-        run.font.name = &quot;微软雅黑&quot;  # 字体选择
-        # 中文字体应用，固定写法
-        r = run._element.rPr.rFonts  # 字体，固定写法
-        r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)  # 字体
-
-    # 设置第二及后续段落的文字格式
-    for para in doc.paragraphs[1:]:
-        for run in para.runs:
-            run.font.size = Pt(12)  # 文字大小
-            run.bold = False  # 不加粗
-            run.font.name = &quot;微软雅黑&quot;  # 字体选择
-            # 中文字体应用，固定写法
-            r = run._element.rPr.rFonts
-            r.set(qn(&quot;w:eastAsia&quot;), &quot;微软雅黑&quot;)
-
-
-doc = docx.Document(&#39;替换前.docx&#39;)
-info_update(doc, &quot;第四次&quot;, &quot;第五次&quot;)
-info_update(doc, &quot;2019&quot;, &quot;2020&quot;)
-info_update(doc, &quot;18&quot;, &quot;10&quot;)
-doc.save(&#39;替换后_设置格式.docx&#39;)
-</code></pre>
-<p><a href="替换前.docx">替换前.docx</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E8%AF%8D%E4%BA%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/28/%E8%AF%8D%E4%BA%91/" class="post-title-link" itemprop="url">wordcloud | 词云</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-28 00:45:50 / Modified: 00:51:27" itemprop="dateCreated datePublished" datetime="2021-10-28T00:45:50-08:00">2021-10-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/wordcloud/" itemprop="url" rel="index"><span itemprop="name">wordcloud</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h1><p>根据文章中的关键词的词频生成词云图。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/28/%E8%AF%8D%E4%BA%91/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1709,20 +1740,20 @@ doc.save(&#39;替换后_设置格式.docx&#39;)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">442</span>
+          <span class="site-state-item-count">444</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">338</span>
+        <span class="site-state-item-count">340</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">323</span>
+        <span class="site-state-item-count">325</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
