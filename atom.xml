@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-08-03T14:33:39.781Z</updated>
+  <updated>2022-08-06T13:41:58.057Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 228.汇总区间</title>
+    <link href="http://example.com/2022/08/06/%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/"/>
+    <id>http://example.com/2022/08/06/%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/</id>
+    <published>2022-08-06T13:35:31.000Z</published>
+    <updated>2022-08-06T13:41:58.057Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="228-汇总区间"><a href="#228-汇总区间" class="headerlink" title="228.汇总区间"></a>228.汇总区间</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个  无重复元素 的 有序 整数数组 nums 。<br>返回数组中的连续区间范围列表。<br>列表中的每个区间范围 [a,b] 应该按如下格式输出：<br>    “a-&gt;b” ，如果 a != b<br>    “a” ，如果 a == b</p><p>示例 1：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,1,2,4,5,7]</span><br><span class="line">输出：[&quot;0-&gt;2&quot;,&quot;4-&gt;5&quot;,&quot;7&quot;]</span><br><span class="line">解释：区间范围是：</span><br><span class="line">[0,2] --&gt; &quot;0-&gt;2&quot;</span><br><span class="line">[4,5] --&gt; &quot;4-&gt;5&quot;</span><br><span class="line">[7,7] --&gt; &quot;7&quot;</span><br></pre></td></tr></table></figure><p><a href="https://leetcode.cn/problems/summary-ranges">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li>一次遍历<br>我们从数组的位置 0 出发，向右遍历。每次遇到相邻元素之间的差值大于 1 时，我们就找到了一个区间。遍历完数组之后，就能得到一系列的区间的列表。<br>在遍历过程中，维护下标 low 和 high 分别记录区间的起点和终点，对于任何区间都有 low≤high。当得到一个区间时，根据 low 和 high 的值生成区间的字符串表示。<br>(1)当 low&lt;high 时，区间的字符串表示为 “low→high”；<br>(2)当 low=high 时，区间的字符串表示为 “low”。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">summaryRanges</span>(<span class="params">self, nums</span>):</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[str]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> nums:</span><br><span class="line"><span class="keyword">return</span> []</span><br><span class="line">result = []</span><br><span class="line">temp_list = [nums[<span class="number">0</span>]]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(nums)):</span><br><span class="line"><span class="keyword">if</span> nums[i] == nums[i - <span class="number">1</span>] + <span class="number">1</span>:</span><br><span class="line">temp_list.append(nums[i])</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">if</span> temp_list[<span class="number">0</span>] == temp_list[-<span class="number">1</span>]:</span><br><span class="line">result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]) + <span class="string">&quot;-&gt;&quot;</span> + <span class="built_in">str</span>(temp_list[-<span class="number">1</span>]))</span><br><span class="line">temp_list = <span class="built_in">list</span>()</span><br><span class="line">temp_list.append(nums[i])</span><br><span class="line"><span class="keyword">if</span> temp_list:</span><br><span class="line"><span class="keyword">if</span> temp_list[<span class="number">0</span>] == temp_list[-<span class="number">1</span>]:</span><br><span class="line">result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]) + <span class="string">&quot;-&gt;&quot;</span> + <span class="built_in">str</span>(temp_list[-<span class="number">1</span>]))</span><br><span class="line"><span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">summaryRanges1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">result = []</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line">n = <span class="built_in">len</span>(nums)</span><br><span class="line"><span class="keyword">while</span> i &lt; n:</span><br><span class="line">low = i</span><br><span class="line">i += <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt; n <span class="keyword">and</span> nums[i] == nums[i - <span class="number">1</span>] + <span class="number">1</span>:</span><br><span class="line">i += <span class="number">1</span></span><br><span class="line">high = i - <span class="number">1</span></span><br><span class="line">temp = <span class="built_in">str</span>(nums[low])</span><br><span class="line"><span class="keyword">if</span> low &lt; high:</span><br><span class="line">temp += <span class="string">&quot;-&gt;&quot;</span></span><br><span class="line">temp += <span class="built_in">str</span>(nums[high])</span><br><span class="line">result.append(temp)</span><br><span class="line"><span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">slt = Solution()</span><br><span class="line">nums = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line"><span class="comment"># nums = [0, 2, 3, 4, 6, 8, 9]</span></span><br><span class="line"><span class="comment"># nums = []</span></span><br><span class="line"><span class="comment"># result = slt.summaryRanges(nums)</span></span><br><span class="line">result = slt.summaryRanges1(nums)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;228-汇总区间&quot;&gt;&lt;a href=&quot;#228-汇总区间&quot; class=&quot;headerlink&quot; title=&quot;228.汇总区间&quot;&gt;&lt;/a&gt;228.汇总区间&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; </summary>
+      
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
+    
+    <category term="228.汇总区间" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/228-%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/tags/%E6%95%B0%E7%BB%84/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode | 219.存在重复元素2</title>
@@ -698,38 +732,6 @@
     <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
     
     <category term="二叉树" scheme="http://example.com/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 53.最大子数组和</title>
-    <link href="http://example.com/2022/07/16/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/"/>
-    <id>http://example.com/2022/07/16/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/</id>
-    <published>2022-07-16T09:28:28.000Z</published>
-    <updated>2022-07-16T09:57:03.523Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="53-最大子数组和"><a href="#53-最大子数组和" class="headerlink" title="53.最大子数组和"></a>53.最大子数组和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。<br>子数组 是数组中的一个连续部分。</p><p>示例 1：<br>输入：nums = [-2,1,-3,4,-1,2,1,-5,4]<br>输出：6<br>解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</p><p><a href="https://leetcode.cn/problems/maximum-subarray/">题目链接</a></p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):    def maxSubArray(self, nums):        &quot;&quot;&quot;        动态规划                用f(i)代表以第i个数结尾的连续子数组的最大和，那么我们的目标就是求                            max&#123;f(i)&#125;,0&lt;=i&lt;=n-1        如何求 f(i) 呢？        我们可以考虑 nums[i] 单独成为一段还是加入 f(i−1)对应的那一段，这取决于 nums[i] 和 f(i−1)+nums[i] 的大小，        我们希望获得一个比较大的，于是可以写出这样的动态规划转移方程：                            f(i)=max&#123;f(i-1)+nums[i], nums[i]&#125;        :type nums: List[int]        :rtype: int        &quot;&quot;&quot;        # pre = 0        # maxAns = nums[0]        # for x in nums:        #     pre = max(pre + x, x)        #     maxAns = max(maxAns, pre)        # return maxAns                fi_array = [nums[0]]        for i in range(1, len(nums)):            fi_array.append(max(fi_array[i-1]+nums[i], nums[i]))        return max(fi_array)        def maxSubArray1(self, nums):        &quot;&quot;&quot;        动态规划                若前一个元素大于0，则将其加到当前元素上        &quot;&quot;&quot;        for i in range(1, len(nums)):            # 若前一个元素大于0，则将其加到当前元素上            if nums[i - 1] &gt; 0:                nums[i] += nums[i-1]        return max(nums)  # 返回修改过的数组中的最大值            def maxSubArray2(self, nums):        &quot;&quot;&quot;        贪心算法                # 若当前指针所指元素之前的和小于0，则丢弃当前元素之前的数列        &quot;&quot;&quot;        if not nums:  # 设置边界条件（列表为空）            return -2147483648        cur_sum = max_sum = nums[0]  # 当前和和最大和设置为列表第一个元素        for i in range(1, len(nums)):            # 若当前指针所指元素之前的和小于0，则丢弃当前元素之前的数列            cur_sum = max(nums[i], cur_sum+nums[i])                        # 将当前和与最大和作比较，取最大            max_sum = max(cur_sum, max_sum)                return max_sumif __name__ == &quot;__main__&quot;:    slt = Solution()    nums = list([-2, 1, -3, 4, -1, 2, 1, -5, 4])    res = slt.maxSubArray(nums)    # res = slt.maxSubArray1(nums)    print(res)</code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;53-最大子数组和&quot;&gt;&lt;a href=&quot;#53-最大子数组和&quot; class=&quot;headerlink&quot; title=&quot;53.最大子数组和&quot;&gt;&lt;/a&gt;53.最大子数组和&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerli</summary>
-      
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
-    
-    <category term="53.最大子数组和" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/53-%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/"/>
-    
-    
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
     
   </entry>
   

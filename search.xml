@@ -13437,6 +13437,24 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>Redis | 事务</title>
+    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
+    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
+<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
+<span id="more"></span>
+<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
+<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>事务</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | 事务</title>
     <url>/2022/01/26/%E4%BA%8B%E5%8A%A1/</url>
     <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
@@ -13500,24 +13518,6 @@ public class Test1 &#123;
         <tag>Java</tag>
         <tag>事务</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis | 事务</title>
-    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
-    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
-<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
-<span id="more"></span>
-<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
-<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>事务</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
@@ -21994,6 +21994,19 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>装系统 | 微软官网工具安装纯净win10</title>
+    <url>/2021/11/06/%E5%BE%AE%E8%BD%AF%E5%AE%98%E7%BD%91%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E7%BA%AF%E5%87%80win10/</url>
+    <content><![CDATA[<h1 id="微软官网工具安装纯净win10"><a href="#微软官网工具安装纯净win10" class="headerlink" title="微软官网工具安装纯净win10"></a>微软官网工具安装纯净win10</h1><p><a href="https://zhuanlan.zhihu.com/p/92129617">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>电脑使用小技巧</category>
+        <category>装系统</category>
+      </categories>
+      <tags>
+        <tag>装系统</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基础知识 | 归一化</title>
     <url>/2021/02/21/%E5%BD%92%E4%B8%80%E5%8C%96/</url>
     <content><![CDATA[<h1 id="归一化-Normalization"><a href="#归一化-Normalization" class="headerlink" title="归一化(Normalization)"></a>归一化(Normalization)</h1><p>在使用机器学习算法进行分类工作时，有时候我们发现某个特征对计算结果的影响最大，然而本质上用于分类的几个特征是同等重要的，而某个特征对计算结果影响大这一现象的原因仅仅是因为这个特征的特征值值比其他特征值大。因此<b style="color:red">在处理这种不同范围的特征值时，我们通常采用的方法是将数值归一化</b>，如将取值范围处理为0到1/-1到1之间。<br><b>例</b>：将任意取值范围的特征值转化为0到1区间内的值:<br><b style="red">newValue = (oldValue - min)/(max-min)</b><br>其中min和max分别是数据集中的最小特征值和最大特征值<br><b>Note:改变数值范围增加了分类器的复杂度</b></p>
@@ -22005,19 +22018,6 @@ public class Test &#123;
       <tags>
         <tag>机器学习</tag>
         <tag>归一化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>装系统 | 微软官网工具安装纯净win10</title>
-    <url>/2021/11/06/%E5%BE%AE%E8%BD%AF%E5%AE%98%E7%BD%91%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E7%BA%AF%E5%87%80win10/</url>
-    <content><![CDATA[<h1 id="微软官网工具安装纯净win10"><a href="#微软官网工具安装纯净win10" class="headerlink" title="微软官网工具安装纯净win10"></a>微软官网工具安装纯净win10</h1><p><a href="https://zhuanlan.zhihu.com/p/92129617">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>电脑使用小技巧</category>
-        <category>装系统</category>
-      </categories>
-      <tags>
-        <tag>装系统</tag>
       </tags>
   </entry>
   <entry>
@@ -22489,46 +22489,6 @@ doc.save(&quot;6S稽查问题.docx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>win32api | 批量打印文件</title>
-    <url>/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p>
-<pre><code>import win32api
-
-
-def Print(fileName):
-    win32api.ShellExecute(
-        0,  # 指定父窗口句柄，搞不懂
-        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序
-        fileName,  # 要打印的文件名
-        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机
-        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂
-        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0
-    )
-
-
-# 获取待打印文件的路径
-import os
-
-path = &#39;文件&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-
-# 批量打印
-for file in files:
-    Print(file)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>win32api</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>os</tag>
-        <tag>win32api</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pypiwin32 | 批量发送不同内容的邮件给不同的收件人</title>
     <url>/2021/10/27/%E6%89%B9%E9%87%8F%E5%8F%91%E9%80%81%E4%B8%8D%E5%90%8C%E5%86%85%E5%AE%B9%E7%9A%84%E9%82%AE%E4%BB%B6%E7%BB%99%E4%B8%8D%E5%90%8C%E7%9A%84%E6%94%B6%E4%BB%B6%E4%BA%BA/</url>
     <content><![CDATA[<h1 id="批量发送不同内容的邮件给不同的收件人"><a href="#批量发送不同内容的邮件给不同的收件人" class="headerlink" title="批量发送不同内容的邮件给不同的收件人"></a>批量发送不同内容的邮件给不同的收件人</h1><p>程序实现自动将’年假_按部门’下各个部门的年假情况Excel表格发送给’邮件地址.xlsx’中各个部门的负责人。</p>
@@ -22588,6 +22548,46 @@ print(&quot;邮件发送完成。&quot;)
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pypiwin32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>win32api | 批量打印文件</title>
+    <url>/2021/10/29/%E6%89%B9%E9%87%8F%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="定义打印函数，以便重复调用"><a href="#定义打印函数，以便重复调用" class="headerlink" title="定义打印函数，以便重复调用"></a>定义打印函数，以便重复调用</h1><p>实现代码：</p>
+<pre><code>import win32api
+
+
+def Print(fileName):
+    win32api.ShellExecute(
+        0,  # 指定父窗口句柄，搞不懂
+        &quot;print&quot;,  # 指定操作，这里的&quot;print&quot;表示启动打印应用程序
+        fileName,  # 要打印的文件名
+        None,  # 打印机设置，若是&quot;None&quot;，则使用windows设置的默认打印机
+        &quot;.&quot;,  # 指定默认目录，照抄的，搞不懂
+        0  # 若fileName参数是一个可执行程序，则此参数指定程序窗口的初始显示方式，否则此参数应设置为0
+    )
+
+
+# 获取待打印文件的路径
+import os
+
+path = &#39;文件&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+
+# 批量打印
+for file in files:
+    Print(file)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>win32api</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+        <tag>win32api</tag>
       </tags>
   </entry>
   <entry>
@@ -24664,6 +24664,45 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 朴素贝叶斯</title>
+    <url>/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/</url>
+    <content><![CDATA[<h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>朴素贝叶斯算法(Naive Bayes)是<b>有监督(supervised)</b>的学习算法，解决的是<b>分类</b>问题(例如：客户是否流失、是否值得投资、信用等级评定等<b>多分类</b>问题)</p>
+<span id="more"></span>
+<h2 id="朴素贝叶斯理论"><a href="#朴素贝叶斯理论" class="headerlink" title="朴素贝叶斯理论"></a>朴素贝叶斯理论</h2><p><b style="color:red">朴素贝叶斯理论的核心思想：选择具有最高概率的决策</b></p>
+<p>假设现在我们用p1(x,y)表示数据点(x,y)属于类别1的概率，用p2(x,y)表示数据点(x,y)属于类别2的概率，那么对于一个新的数据点，可以用以下规则来进行判断：</p>
+<li>如果p1(x,y) > p2(x,y),那么类别为1</li>
+<li>如果p1(x,y) < p2(x,y),那么类别为2</li>
+
+<h2 id="条件概率-Conditional-probability"><a href="#条件概率-Conditional-probability" class="headerlink" title="条件概率(Conditional probability)"></a>条件概率(Conditional probability)</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>条件概率指在事件B发生的情况下，事件A发生的概率，用P(A|B)来表示。</p>
+<h3 id="条件概率计算公式"><a href="#条件概率计算公式" class="headerlink" title="条件概率计算公式"></a>条件概率计算公式</h3><p><b style="color:red">P(A|B)=P(B|A)P(A)/P(B)</b></p>
+<h2 id="全概率公式"><a href="#全概率公式" class="headerlink" title="全概率公式"></a>全概率公式</h2><p><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/1.jpg"><br>全概率公式：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/2.jpg"><br>条件概率的另一种写法：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/3.jpg"></p>
+<h2 id="贝叶斯推断"><a href="#贝叶斯推断" class="headerlink" title="贝叶斯推断"></a>贝叶斯推断</h2><p>对条件概率公式进行变形，得到：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/4.jpg"><br>其中，P(A)称为“<b>先验概率</b>”(Prior probability),即在B事件发生之前，我们对A事件概率的一个判断。<br><br>P(A|B)称为“<b>后验概率</b>”，即在B事件发生之后，我们对A事件概率的重新判断。<br><br>P(B|A)/P(B)称为“可能性函数”，即调整因子，使得预估概率更接近真实概率。可能性函数&gt;1：意味着先验概率被增强，事件A发生的可能性变大；可能性函数=1：意味着B事件无助于判断事件A的可能性；可能性函数&lt;1:意味着先验概率被削弱，事件A的可能性变小</p>
+<p>因此，我们可以把条件概率理解成：<br><b>后验概率 = 先验概率 * 调整因子</b></p>
+<p><b style="color:red">贝叶斯推断的含义：我们先预估一个“先验概率”，然后加入实验结果，看这个实验结果到底是增强还是削弱了“先验概率”，由此得到更接近事实的”后验概率”</b></p>
+<h2 id="朴素贝叶斯推断"><a href="#朴素贝叶斯推断" class="headerlink" title="朴素贝叶斯推断"></a>朴素贝叶斯推断</h2><p>贝叶斯和朴素贝叶斯的概念是不同的，区别就在于“朴素”二字，朴素贝叶斯对条件概率分布做了条件独立性的假设。<br></p>
+<p>假设有n个特征：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/5.jpg"><br>由于每个特征都是独立的，故：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/6.jpg"></p>
+<h2 id="朴素贝叶斯改进之拉普拉斯平滑"><a href="#朴素贝叶斯改进之拉普拉斯平滑" class="headerlink" title="朴素贝叶斯改进之拉普拉斯平滑"></a>朴素贝叶斯改进之拉普拉斯平滑</h2><p>1.利用贝叶斯分类器进行分类时，要计算多个概率的乘积，如果其中有一个概率值为0，那么最后的结果为0。<br>solution:拉普拉斯平滑(Laplace Smoothing)-加一平滑(比较常用的平滑方法，可以解决0概率问题)<br>2.很多很小的数相乘，造成下溢出<br>solution:可以通过求对数避免下溢出或浮点数舍入导致的错误</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="朴素贝叶斯推断的一些优点："><a href="#朴素贝叶斯推断的一些优点：" class="headerlink" title="朴素贝叶斯推断的一些优点："></a>朴素贝叶斯推断的一些优点：</h3><li>生成式模型，通过计算概率来进行分类，可以用来处理<b>多分类问题</b></li>
+<li>对小规模数据表现很好，适合<b>多分类任务</b>，适合增量式训练，算法也比较简单</li>
+<li>简单易懂、学习效率高，在某些领域的分类问题中能够与决策树、神经网络相媲美</li>
+
+<h3 id="朴素贝叶斯推断的一些缺点："><a href="#朴素贝叶斯推断的一些缺点：" class="headerlink" title="朴素贝叶斯推断的一些缺点："></a>朴素贝叶斯推断的一些缺点：</h3><li>对输入数据的表现形式敏感</li>
+<li>由于朴素贝叶斯的“朴素”特点(算法以自变量之间的独立性(条件特征独立)和连续变量的正态性假设为前提)，所以会带来一些准确率上的损失</li>
+<li>需要计算先验概率，分类决策存在错误率</li>
+
+<p><a href="https://cuijiahua.com/blog/2017/11/ml_4_bayes_1.html">参考资源1</a><br><a href="https://cuijiahua.com/blog/2017/11/ml_5_bayes_2.html">参考资源2</a></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>Naive Bayes</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>朴素贝叶斯</tag>
+        <tag>Naive Bayes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 657.机器人能够返回原点</title>
     <url>/2021/09/03/%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%83%BD%E5%90%A6%E8%BF%94%E5%9B%9E%E5%8E%9F%E7%82%B9/</url>
     <content><![CDATA[<h1 id="657-机器人能够返回原点"><a href="#657-机器人能够返回原点" class="headerlink" title="657.机器人能够返回原点"></a>657.机器人能够返回原点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。<br>移动顺序由字符串表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有 R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。<br>注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。</p>
@@ -24718,45 +24757,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 朴素贝叶斯</title>
-    <url>/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/</url>
-    <content><![CDATA[<h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>朴素贝叶斯算法(Naive Bayes)是<b>有监督(supervised)</b>的学习算法，解决的是<b>分类</b>问题(例如：客户是否流失、是否值得投资、信用等级评定等<b>多分类</b>问题)</p>
-<span id="more"></span>
-<h2 id="朴素贝叶斯理论"><a href="#朴素贝叶斯理论" class="headerlink" title="朴素贝叶斯理论"></a>朴素贝叶斯理论</h2><p><b style="color:red">朴素贝叶斯理论的核心思想：选择具有最高概率的决策</b></p>
-<p>假设现在我们用p1(x,y)表示数据点(x,y)属于类别1的概率，用p2(x,y)表示数据点(x,y)属于类别2的概率，那么对于一个新的数据点，可以用以下规则来进行判断：</p>
-<li>如果p1(x,y) > p2(x,y),那么类别为1</li>
-<li>如果p1(x,y) < p2(x,y),那么类别为2</li>
-
-<h2 id="条件概率-Conditional-probability"><a href="#条件概率-Conditional-probability" class="headerlink" title="条件概率(Conditional probability)"></a>条件概率(Conditional probability)</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>条件概率指在事件B发生的情况下，事件A发生的概率，用P(A|B)来表示。</p>
-<h3 id="条件概率计算公式"><a href="#条件概率计算公式" class="headerlink" title="条件概率计算公式"></a>条件概率计算公式</h3><p><b style="color:red">P(A|B)=P(B|A)P(A)/P(B)</b></p>
-<h2 id="全概率公式"><a href="#全概率公式" class="headerlink" title="全概率公式"></a>全概率公式</h2><p><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/1.jpg"><br>全概率公式：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/2.jpg"><br>条件概率的另一种写法：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/3.jpg"></p>
-<h2 id="贝叶斯推断"><a href="#贝叶斯推断" class="headerlink" title="贝叶斯推断"></a>贝叶斯推断</h2><p>对条件概率公式进行变形，得到：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/4.jpg"><br>其中，P(A)称为“<b>先验概率</b>”(Prior probability),即在B事件发生之前，我们对A事件概率的一个判断。<br><br>P(A|B)称为“<b>后验概率</b>”，即在B事件发生之后，我们对A事件概率的重新判断。<br><br>P(B|A)/P(B)称为“可能性函数”，即调整因子，使得预估概率更接近真实概率。可能性函数&gt;1：意味着先验概率被增强，事件A发生的可能性变大；可能性函数=1：意味着B事件无助于判断事件A的可能性；可能性函数&lt;1:意味着先验概率被削弱，事件A的可能性变小</p>
-<p>因此，我们可以把条件概率理解成：<br><b>后验概率 = 先验概率 * 调整因子</b></p>
-<p><b style="color:red">贝叶斯推断的含义：我们先预估一个“先验概率”，然后加入实验结果，看这个实验结果到底是增强还是削弱了“先验概率”，由此得到更接近事实的”后验概率”</b></p>
-<h2 id="朴素贝叶斯推断"><a href="#朴素贝叶斯推断" class="headerlink" title="朴素贝叶斯推断"></a>朴素贝叶斯推断</h2><p>贝叶斯和朴素贝叶斯的概念是不同的，区别就在于“朴素”二字，朴素贝叶斯对条件概率分布做了条件独立性的假设。<br></p>
-<p>假设有n个特征：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/5.jpg"><br>由于每个特征都是独立的，故：<br><img src="/2021/03/05/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/6.jpg"></p>
-<h2 id="朴素贝叶斯改进之拉普拉斯平滑"><a href="#朴素贝叶斯改进之拉普拉斯平滑" class="headerlink" title="朴素贝叶斯改进之拉普拉斯平滑"></a>朴素贝叶斯改进之拉普拉斯平滑</h2><p>1.利用贝叶斯分类器进行分类时，要计算多个概率的乘积，如果其中有一个概率值为0，那么最后的结果为0。<br>solution:拉普拉斯平滑(Laplace Smoothing)-加一平滑(比较常用的平滑方法，可以解决0概率问题)<br>2.很多很小的数相乘，造成下溢出<br>solution:可以通过求对数避免下溢出或浮点数舍入导致的错误</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="朴素贝叶斯推断的一些优点："><a href="#朴素贝叶斯推断的一些优点：" class="headerlink" title="朴素贝叶斯推断的一些优点："></a>朴素贝叶斯推断的一些优点：</h3><li>生成式模型，通过计算概率来进行分类，可以用来处理<b>多分类问题</b></li>
-<li>对小规模数据表现很好，适合<b>多分类任务</b>，适合增量式训练，算法也比较简单</li>
-<li>简单易懂、学习效率高，在某些领域的分类问题中能够与决策树、神经网络相媲美</li>
-
-<h3 id="朴素贝叶斯推断的一些缺点："><a href="#朴素贝叶斯推断的一些缺点：" class="headerlink" title="朴素贝叶斯推断的一些缺点："></a>朴素贝叶斯推断的一些缺点：</h3><li>对输入数据的表现形式敏感</li>
-<li>由于朴素贝叶斯的“朴素”特点(算法以自变量之间的独立性(条件特征独立)和连续变量的正态性假设为前提)，所以会带来一些准确率上的损失</li>
-<li>需要计算先验概率，分类决策存在错误率</li>
-
-<p><a href="https://cuijiahua.com/blog/2017/11/ml_4_bayes_1.html">参考资源1</a><br><a href="https://cuijiahua.com/blog/2017/11/ml_5_bayes_2.html">参考资源2</a></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>Naive Bayes</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>朴素贝叶斯</tag>
-        <tag>Naive Bayes</tag>
       </tags>
   </entry>
   <entry>
@@ -24881,6 +24881,19 @@ Note:
       </tags>
   </entry>
   <entry>
+    <title>机器学习 | 机器学习常用的两种验证方法</title>
+    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="机器学习常用的两种验证方法"><a href="#机器学习常用的两种验证方法" class="headerlink" title="机器学习常用的两种验证方法"></a>机器学习常用的两种验证方法</h1><p>1.Leave One Subject Out<br>2.K Fold Cross Validation</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>验证方法</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>脑电分类 | 机器学习实现脑电分类</title>
     <url>/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="机器学习实现脑电分类"><a href="#机器学习实现脑电分类" class="headerlink" title="机器学习实现脑电分类"></a>机器学习实现脑电分类</h1><p><img src="/2021/02/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E7%8E%B0%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/1.jpg"></p>
@@ -24894,19 +24907,6 @@ Note:
         <tag>脑电分类</tag>
         <tag>机器学习</tag>
         <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机器学习 | 机器学习常用的两种验证方法</title>
-    <url>/2021/05/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="机器学习常用的两种验证方法"><a href="#机器学习常用的两种验证方法" class="headerlink" title="机器学习常用的两种验证方法"></a>机器学习常用的两种验证方法</h1><p>1.Leave One Subject Out<br>2.K Fold Cross Validation</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>验证方法</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
       </tags>
   </entry>
   <entry>
@@ -25563,6 +25563,30 @@ excel_app.Quit()
       <tags>
         <tag>python</tag>
         <tag>win32com</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 228.汇总区间</title>
+    <url>/2022/08/06/%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/</url>
+    <content><![CDATA[<h1 id="228-汇总区间"><a href="#228-汇总区间" class="headerlink" title="228.汇总区间"></a>228.汇总区间</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个  无重复元素 的 有序 整数数组 nums 。<br>返回数组中的连续区间范围列表。<br>列表中的每个区间范围 [a,b] 应该按如下格式输出：<br>    “a-&gt;b” ，如果 a != b<br>    “a” ，如果 a == b</p>
+<p>示例 1：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">输入：nums = [0,1,2,4,5,7]</span><br><span class="line">输出：[&quot;0-&gt;2&quot;,&quot;4-&gt;5&quot;,&quot;7&quot;]</span><br><span class="line">解释：区间范围是：</span><br><span class="line">[0,2] --&gt; &quot;0-&gt;2&quot;</span><br><span class="line">[4,5] --&gt; &quot;4-&gt;5&quot;</span><br><span class="line">[7,7] --&gt; &quot;7&quot;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://leetcode.cn/problems/summary-ranges">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>一次遍历<br>我们从数组的位置 0 出发，向右遍历。每次遇到相邻元素之间的差值大于 1 时，我们就找到了一个区间。遍历完数组之后，就能得到一系列的区间的列表。<br>在遍历过程中，维护下标 low 和 high 分别记录区间的起点和终点，对于任何区间都有 low≤high。当得到一个区间时，根据 low 和 high 的值生成区间的字符串表示。<br>(1)当 low&lt;high 时，区间的字符串表示为 “low→high”；<br>(2)当 low=high 时，区间的字符串表示为 “low”。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">summaryRanges</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[str]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">not</span> nums:</span><br><span class="line">			<span class="keyword">return</span> []</span><br><span class="line">		result = []</span><br><span class="line">		temp_list = [nums[<span class="number">0</span>]]</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(nums)):</span><br><span class="line">			<span class="keyword">if</span> nums[i] == nums[i - <span class="number">1</span>] + <span class="number">1</span>:</span><br><span class="line">				temp_list.append(nums[i])</span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="keyword">if</span> temp_list[<span class="number">0</span>] == temp_list[-<span class="number">1</span>]:</span><br><span class="line">					result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]))</span><br><span class="line">				<span class="keyword">else</span>:</span><br><span class="line">					result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]) + <span class="string">&quot;-&gt;&quot;</span> + <span class="built_in">str</span>(temp_list[-<span class="number">1</span>]))</span><br><span class="line">				temp_list = <span class="built_in">list</span>()</span><br><span class="line">				temp_list.append(nums[i])</span><br><span class="line">		<span class="keyword">if</span> temp_list:</span><br><span class="line">			<span class="keyword">if</span> temp_list[<span class="number">0</span>] == temp_list[-<span class="number">1</span>]:</span><br><span class="line">				result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]))</span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]) + <span class="string">&quot;-&gt;&quot;</span> + <span class="built_in">str</span>(temp_list[-<span class="number">1</span>]))</span><br><span class="line">		<span class="keyword">return</span> result</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">summaryRanges1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		result = []</span><br><span class="line">		i = <span class="number">0</span></span><br><span class="line">		n = <span class="built_in">len</span>(nums)</span><br><span class="line">		<span class="keyword">while</span> i &lt; n:</span><br><span class="line">			low = i</span><br><span class="line">			i += <span class="number">1</span></span><br><span class="line">			<span class="keyword">while</span> i &lt; n <span class="keyword">and</span> nums[i] == nums[i - <span class="number">1</span>] + <span class="number">1</span>:</span><br><span class="line">				i += <span class="number">1</span></span><br><span class="line">			high = i - <span class="number">1</span></span><br><span class="line">			temp = <span class="built_in">str</span>(nums[low])</span><br><span class="line">			<span class="keyword">if</span> low &lt; high:</span><br><span class="line">				temp += <span class="string">&quot;-&gt;&quot;</span></span><br><span class="line">				temp += <span class="built_in">str</span>(nums[high])</span><br><span class="line">			result.append(temp)</span><br><span class="line">		<span class="keyword">return</span> result</span><br><span class="line">			</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	nums = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line">	<span class="comment"># nums = [0, 2, 3, 4, 6, 8, 9]</span></span><br><span class="line">	<span class="comment"># nums = []</span></span><br><span class="line">	<span class="comment"># result = slt.summaryRanges(nums)</span></span><br><span class="line">	result = slt.summaryRanges1(nums)</span><br><span class="line">	<span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>数组</category>
+        <category>228.汇总区间</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>数组</tag>
       </tags>
   </entry>
   <entry>
@@ -26589,18 +26613,6 @@ public class UserDao &#123;
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 深度学习基础问题</title>
-    <url>/2021/11/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="深度学习基础问题"><a href="#深度学习基础问题" class="headerlink" title="深度学习基础问题"></a>深度学习基础问题</h1><p><a href="https://mp.weixin.qq.com/s/KcIlkLyNROxC_TUbCDhEmg">深度学习基础问题</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | 深度学习中常用的几种激活函数</title>
     <url>/2021/06/22/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="深度学习中常用的几种激活函数"><a href="#深度学习中常用的几种激活函数" class="headerlink" title="深度学习中常用的几种激活函数"></a>深度学习中常用的几种激活函数</h1><p>使用一个神经网络时，需要决定使用哪种激活函数用隐藏层上，哪种用在输出节点上。<br><b style="color:red">在不同的神经网络层中，激活函数可以不同</b><br><b>几种常用的激活函数：</b><br><img src="/2021/06/22/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/1.png"></p>
@@ -26618,6 +26630,18 @@ public class UserDao &#123;
       <tags>
         <tag>深度学习</tag>
         <tag>激活函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 深度学习基础问题</title>
+    <url>/2021/11/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="深度学习基础问题"><a href="#深度学习基础问题" class="headerlink" title="深度学习基础问题"></a>深度学习基础问题</h1><p><a href="https://mp.weixin.qq.com/s/KcIlkLyNROxC_TUbCDhEmg">深度学习基础问题</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
