@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-08-10T03:55:39.493Z</updated>
+  <updated>2022-08-12T03:11:10.270Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 268.丢失的数字</title>
+    <link href="http://example.com/2022/08/11/%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/"/>
+    <id>http://example.com/2022/08/11/%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/</id>
+    <published>2022-08-12T03:02:18.000Z</published>
+    <updated>2022-08-12T03:11:10.270Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="268-丢失的数字"><a href="#268-丢失的数字" class="headerlink" title="268.丢失的数字"></a>268.丢失的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。</p><p>示例 1：<br>输入：nums = [3,0,1]<br>输出：2<br>解释：n = 3，因为有 3 个数字，所以所有的数字都在范围 [0,3] 内。2 是丢失的数字，因为它没有出现在 nums 中。</p><p>示例 2：<br>输入：nums = [0,1]<br>输出：2<br>解释：n = 2，因为有 2 个数字，所以所有的数字都在范围 [0,2] 内。2 是丢失的数字，因为它没有出现在 nums 中。</p><p><a href="https://leetcode.cn/problems/missing-number">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li>一次遍历<br>遍历0~n的数字，如果不在nums数组中，则将其返回。</li><li>排序<br>将数组排序之后，即可根据数组中每个下标处的元素是否和下标相等，得到丢失的数字。</li></ol><p><strong>注：</strong> 如果长度为n的数组（下标为0<del>n-1）元素与下标都相等，则丢失元素为n<br>3. 位运算<br>数组 nums 中有 n 个数，在这 n 个数的后面添加从 0 到 n 的每个整数，则添加了 n+1 个整数，共有 2n+1 个整数。<br>在 2n+1 个整数中，丢失的数字只在后面 n+1 个整数中出现一次，其余的数字在前面 n 个整数中（即数组中）和后面 n+1 个整数中各出现一次，即其余的数字都出现了两次。<br>根据出现的次数的奇偶性，可以使用按位异或运算得到丢失的数字。按位异或运算 ⊕ 满足交换律和结合律，且对任意整数 x 都满足 x⊕x=0 和 x⊕0=x。<br>由于上述 2n+12n+12n+1 个整数中，丢失的数字出现了一次，其余的数字都出现了两次，因此对上述 2n+12n+12n+1 个整数进行按位异或运算，结果即为丢失的数字。<br>4. 数学<br>丢失的数字 = 0</del>n的和 - nums数组的和</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">missingNumber</span>(<span class="params">self, nums</span>):</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        一次遍历</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        遍历0~n，如果数字不在nums中，就将它返回</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums) + <span class="number">1</span>):</span><br><span class="line"><span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> nums:</span><br><span class="line"><span class="keyword">return</span> i</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">missingNumber1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        将数组排序之后，即可根据数组中每个下标处的元素是否和下标相等，得到丢失的数字。</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        注：如果长度为n的数组（下标为0~n-1）元素与下标都相等，则丢失元素为n</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">nums.sort()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line"><span class="keyword">if</span> i != num:</span><br><span class="line"><span class="keyword">return</span> i</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="built_in">len</span>(nums)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">missingNumber2</span>(<span class="params">self, nums</span>):</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    位运算</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">xor = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">xor ^= i ^ num</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> xor ^ <span class="built_in">len</span>(nums)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">missingNumber3</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">n = <span class="built_in">len</span>(nums)</span><br><span class="line"></span><br><span class="line">total = (n*(n+<span class="number">1</span>)) // <span class="number">2</span></span><br><span class="line">nums_sum = <span class="built_in">sum</span>(nums)</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> total - nums_sum</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">slt = Solution()</span><br><span class="line">nums = [<span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line"><span class="comment"># missing_number = slt.missingNumber(nums)</span></span><br><span class="line"><span class="comment"># missing_number = slt.missingNumber1(nums)</span></span><br><span class="line"><span class="comment"># missing_number = slt.missingNumber2(nums)</span></span><br><span class="line">missing_number = slt.missingNumber3(nums)</span><br><span class="line"><span class="built_in">print</span>(missing_number)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;268-丢失的数字&quot;&gt;&lt;a href=&quot;#268-丢失的数字&quot; class=&quot;headerlink&quot; title=&quot;268.丢失的数字&quot;&gt;&lt;/a&gt;268.丢失的数字&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerli</summary>
+      
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
+    
+    <category term="268.丢失的数字" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/268-%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+    <category term="数组" scheme="http://example.com/tags/%E6%95%B0%E7%BB%84/"/>
+    
+  </entry>
   
   <entry>
     <title>python | 文件操作</title>
@@ -684,41 +718,6 @@
     <category term="树" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/"/>
     
     <category term="543.二叉树的直径" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/543-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%9B%B4%E5%BE%84/"/>
-    
-    
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-    <category term="二叉树" scheme="http://example.com/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 226.翻转二叉树</title>
-    <link href="http://example.com/2022/07/16/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
-    <id>http://example.com/2022/07/16/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</id>
-    <published>2022-07-16T13:47:31.000Z</published>
-    <updated>2022-07-16T13:54:40.435Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="226-翻转二叉树"><a href="#226-翻转二叉树" class="headerlink" title="226.翻转二叉树"></a>226.翻转二叉树</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。</p><p>示例 1：<br>输入：root = [4,2,7,1,3,6,9]<br>输出：[4,7,2,9,6,3,1]</p><p><a href="https://leetcode.cn/problems/invert-binary-tree">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li>递归法<br>分析题目输入和输出发现，输出的左右子树的位置跟输入正好是相反的，于是我们可以递归的交换左右子树来实现。<br>其实就是交换一下左右节点，然后再递归的交换左节点，右节点<br>递归的两个条件如下：<br> 终止条件：当前节点为 null 时返回<br> 交换当前节点的左右节点，再递归的交换当前节点的左节点，递归的交换当前节点的右节点时间复杂度：每个元素都必须访问一次，所以是 O(n)<br>空间复杂度：最坏的情况下，需要存放 O(h) 个函数调用(h是树的高度)，所以是 O(h)<span id="more"></span></li><li>迭代法<br>递归实现也就是深度优先遍历的方式，那么对应的就是广度优先遍历。<br>广度优先遍历需要额外的数据结构–队列，来存放临时遍历到的元素。</li></ol><p>我们需要先将根节点放入到队列中，然后不断的迭代队列中的元素。<br>对当前元素调换其左右子树的位置，然后：<br>    判断其左子树是否为空，不为空就放入队列中<br>    判断其右子树是否为空，不为空就放入队列中</p><p>时间复杂度：同样每个节点都需要入队列/出队列一次，所以是 O(n)<br>空间复杂度：最坏的情况下会包含所有的叶子节点，完全二叉树叶子节点是 n/2个，所以时间复杂度是 0(n)</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class TreeNode(object):  # Definition for a binary tree node.    def __init__(self, val=0, left=None, right=None):        self.val = val        self.left = left        self.right = rightclass Solution(object):    def invertTree(self, root):        &quot;&quot;&quot;        递归法（深度优先遍历方式）        :type root: TreeNode        :rtype: TreeNode        &quot;&quot;&quot;        if not root:            return root                left = self.invertTree(root.left)        right = self.invertTree(root.right)        root.left, root.right = right, left        return root        def invertTree1(self, root):        &quot;&quot;&quot;迭代法（广度优先遍历方式，需要辅助队列）&quot;&quot;&quot;        if not root:            return root        # 将二叉树的节点逐层放入队列中，再迭代处理队列中的元素        queue = [root]        while queue:            # 每次都从队列中拿一个节点，并交换这个节点的左右子树            tmp = queue.pop(0)            tmp.left, tmp.right = tmp.right, tmp.left            # 如果当前节点的左子树不空，则放入队列等待后续处理            if tmp.left:                queue.append(tmp.left)            if tmp.right:                queue.append(tmp.right)        return root        def preorder_traverse(self, root):        if not root:            return        print(root.val)        self.preorder_traverse(root.left)        self.preorder_traverse(root.right)if __name__ == &quot;__main__&quot;:    root = TreeNode(4)    node2 = TreeNode(2)    node3 = TreeNode(7)    node4 = TreeNode(1)    node5 = TreeNode(3)    node6 = TreeNode(6)    node7 = TreeNode(9)    root.left = node2    root.right = node3    node2.left = node4    node2.right = node5    node3.left = node6    node3.right = node7        slt = Solution()    # invertTree = slt.invertTree(root)    invertTree = slt.invertTree1(root)    slt.preorder_traverse(invertTree)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;226-翻转二叉树&quot;&gt;&lt;a href=&quot;#226-翻转二叉树&quot; class=&quot;headerlink&quot; title=&quot;226.翻转二叉树&quot;&gt;&lt;/a&gt;226.翻转二叉树&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。&lt;/p&gt;
-&lt;p&gt;示例 1：&lt;br&gt;输入：root = [4,2,7,1,3,6,9]&lt;br&gt;输出：[4,7,2,9,6,3,1]&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/invert-binary-tree&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;递归法&lt;br&gt;分析题目输入和输出发现，输出的左右子树的位置跟输入正好是相反的，于是我们可以递归的交换左右子树来实现。&lt;br&gt;其实就是交换一下左右节点，然后再递归的交换左节点，右节点&lt;br&gt;递归的两个条件如下：&lt;br&gt; 终止条件：当前节点为 null 时返回&lt;br&gt; 交换当前节点的左右节点，再递归的交换当前节点的左节点，递归的交换当前节点的右节点时间复杂度：每个元素都必须访问一次，所以是 O(n)&lt;br&gt;空间复杂度：最坏的情况下，需要存放 O(h) 个函数调用(h是树的高度)，所以是 O(h)&lt;/li&gt;&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="树" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/"/>
-    
-    <category term="226.翻转二叉树" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/226-%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
     
     
     <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>

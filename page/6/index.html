@@ -190,6 +190,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" class="post-title-link" itemprop="url">并发 | 上下文切换和死锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-05-22 18:37:08 / Modified: 18:59:57" itemprop="dateCreated datePublished" datetime="2022-05-22T18:37:08-08:00">2022-05-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" itemprop="url" rel="index"><span itemprop="name">上下文切换</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="上下文切换和死锁"><a href="#上下文切换和死锁" class="headerlink" title="上下文切换和死锁"></a>上下文切换和死锁</h1><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，再切换前会保存上一个任务的<br>状态，以便切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。频繁的上下文<br>切换会影响多线程的执行速度。</p>
+<h2 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h2><p>（1）无锁并发编程。多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁（如采用分段锁，不同的线程处理不同段的数据）<br>（2）CAS算法。<br>（3）使用最小线程。避免创建不需要的线程（任务很少，创建了很多线程，造成大量线程阻塞等待）</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的条件"><a href="#死锁产生的条件" class="headerlink" title="死锁产生的条件"></a>死锁产生的条件</h3><p>（1）互斥。一个资源同一时刻只能被一个线程拥有。<br>（2）请求和保持。线程在请求新的资源时，不释放已经拥有的资源。<br>（3）不剥夺条件。进程所获得的资源在未使用完之前，不被其他的线程强行剥夺。<br>（4）循环等待。竞争资源的各个线程形成一个线程等待环路。</p>
+<h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><p>破坏产生死锁的条件：<br>（2）在进程开始执行时就申请他所需的全部资源<br>（3）一个进程不能获得所需要的全部资源时便处于等待状态，等待期间他占有的资源将被隐式的释放重新加入到系统的资源列表中<br>，可以被其他的进程使用，而等待的进程只有重新获得自己原有的资源以及新申请的资源才可以重新启动、执行。<br>（4）资源有序分配（银行家算法）</p>
+<h3 id="死锁Demo"><a href="#死锁Demo" class="headerlink" title="死锁Demo"></a>死锁Demo</h3><pre><code>package concurrency;
+
+public class DeadLockDemo &#123;
+    private static String A = &quot;A&quot;;
+    private static String B = &quot;B&quot;;
+    
+    public static void main(String[] args) &#123;
+        new DeadLockDemo().deadLock();
+    &#125;
+    
+    private void deadLock()&#123;
+        Thread t1 = new Thread(new Runnable()&#123;
+            @Override
+            public void run()&#123;
+                synchronized(A)&#123;
+                    try &#123;
+                        Thread.currentThread().sleep(2000);
+                    &#125; catch (InterruptedException e) &#123;
+                        e.printStackTrace();
+                    &#125;
+                    synchronized(B)&#123;
+                        System.out.println(&quot;1&quot;);
+                    &#125;
+                &#125;
+            &#125;
+        &#125;);
+        
+        Thread t2 = new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                synchronized(B)&#123;
+                    synchronized(A)&#123;
+                        System.out.println(&quot;2&quot;);
+                    &#125;
+                &#125;
+            &#125;
+        &#125;);
+        
+        t1.start();
+        t2.start();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -958,85 +1080,6 @@ cluster-node-timeout 15000
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/" class="post-title-link" itemprop="url">Redis | Jedis实现手机号验证码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-05-06 18:19:55 / Modified: 18:28:05" itemprop="dateCreated datePublished" datetime="2022-05-06T18:19:55-08:00">2022-05-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Jedis实现手机号验证码</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Jedis实现手机号验证码"><a href="#Jedis实现手机号验证码" class="headerlink" title="Jedis实现手机号验证码"></a>Jedis实现手机号验证码</h1><p><img src="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG"><br><strong>要求</strong><br>1.输入手机号，点击发送后随机生成6位数字码，2分钟有效<br>2.输入验证码，点击验证，返回成功或失败<br>3.每个手机号每天只能输入3次</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1108,14 +1151,14 @@ cluster-node-timeout 15000
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">447</span>
+          <span class="site-state-item-count">448</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">343</span>
+        <span class="site-state-item-count">344</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
