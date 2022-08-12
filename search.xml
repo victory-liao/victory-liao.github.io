@@ -3323,36 +3323,6 @@ numyy:复制 光标所在行开始向下的num行<br><br>
       </tags>
   </entry>
   <entry>
-    <title>机器学习 | Logistic回归</title>
-    <url>/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/</url>
-    <content><![CDATA[<h1 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h1><p>Logistic回归是一种<b>分类</b>算法，通常用于<b>二分类</b>问题(例如：明天是否会下雨)，但也可以用于多分类问题。</p>
-<span id="more"></span>
-<h2 id="Logistic回归与梯度上升算法"><a href="#Logistic回归与梯度上升算法" class="headerlink" title="Logistic回归与梯度上升算法"></a>Logistic回归与梯度上升算法</h2><h3 id="Logistic回归-1"><a href="#Logistic回归-1" class="headerlink" title="Logistic回归"></a>Logistic回归</h3><p><b>回归：</b>利用一条直线对一些数据点进行拟合的过程。</p>
-<p>Logistic回归是分类方法，它利用的是Sigmoid函数阈值在[0,1]这个特性。</p>
-<p><b>Logistic回归进行分类的主要思想：</b>根据现有数据对分类边界线建立回归公式，以此进行分类</p>
-<p>其实，Logistic回归本质上是一个基于条件概率的判别模型(Discriminative Model)。</p>
-<p><b>Sigmoid函数(Logistic函数)：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/1.png"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/2.jpg"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/3.png"><br>整合成一个公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/5.jpg"></p>
-<p><b>Sigmoid函数的图像：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/6.png"><br>z是一个矩阵，θ是参数列向量(要求解的)，x是样本列向量(给定的数据集)。θ^T表示θ的转置。g(z)函数实现了任意实数到[0,1]的映射，这样我们的数据集([x0,x1,…,xn])，不管是大于1或者小于0，都可以映射到[0,1]区间进行分类。hθ(x)给出了输出为1的概率。比如当hθ(x)=0.7，那么说明有70%的概率输出为1。输出为0的概率是输出为1的补集，也就是30%。</p>
-<p>如果我们有合适的参数列向量θ([θ0,θ1,…θn]^T)，以及样本列向量x([x0,x1,…,xn])，那么我们对样本x分类就可以通过上述公式计算出一个概率，如果这个概率大于0.5，我们就可以说样本是正样本，否则样本是负样本。</p>
-<p><b>如何得到合适的参数向量θ？</b><br>根据sigmoid函数的特性，我们可以做出如下的假设：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/7.jpg"><br>两个概率公式合而为一：(损失函数-Loss Function)<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/8.jpg"><br>取对数：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/9.jpg"><br>这个损失函数，是对于一个样本而言的。给定一个样本，我们就可以通过这个损失函数求出，样本所属类别的概率，而这个概率越大越好，所以也就是求解这个损失函数的最大值。既然概率出来了，那么最大似然估计也该出场了。假定样本与样本之间相互独立，那么整个样本集生成的概率即为所有样本生成概率的乘积，再将公式对数化，便可得到如下公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/10.png"><br>其中，m为样本的总数，y(i)表示第i个样本的类别，x(i)表示第i个样本，需要注意的是θ是多维向量，x(i)也是多维向量。</p>
-<p>综上所述，满足J(θ)的最大的θ值即是我们需要求解的模型。</p>
-<p>怎么求解使J(θ)最大的θ值呢？因为是<b>求最大值</b>，所以我们需要使用<b>梯度上升算法</b>。如果面对的问题是求解使J(θ)<b>最小</b>的θ值，那么我们就需要使用<b>梯度下降算法</b>。面对我们这个问题，如果使<b>J(θ) := -J(θ)</b>，那么问题就从求极大值转换成求极小值了，使用的算法就从梯度上升算法变成了梯度下降算法，它们的思想都是相同的，学会其一，就也会了另一个。</p>
-<h3 id="梯度上升算法"><a href="#梯度上升算法" class="headerlink" title="梯度上升算法"></a>梯度上升算法</h3><p>爬坡这个动作用数学公式表达即为：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/11.png"><br>其中，α为步长，也就是学习速率，控制更新的幅度。<br>梯度上升迭代公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/12.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><b>Logistic回归的一般过程：</b><br>1.收集数据：采用任意方法收集数据。<br>2.准备数据：由于需要进行距离计算，因此要求数据类型为数值型。另外，结构化数据格式则最佳。<br>3.分析数据：采用任意方法对数据进行分析。<br>4.训练算法：大部分时间将用于训练，训练的目的是为了找到最佳的分类回归系数。<br>5.测试算法：一旦训练步骤完成，分类将会很快。<br>6.使用算法：首先，我们需要输入一些数据，并将其转换成对应的结构化数值；接着，基于训练好的回归系数，就可以对这些数值进行简单的回归计算，判定它们属于哪个类别；在这之后，我们就可以在输出的类别上做一些其他分析工作。</p>
-<p><b>Logistic回归的优缺点</b><br>优点：实现简单，易于理解和实现；计算代价不高，速度很快，存储资源低。<br>缺点：容易欠拟合，分类精度可能不高。</p>
-<p><b>其他</b><br>1.Logistic回归的目的是寻找一个非线性函数Sigmoid的最佳拟合参数，求解过程可以由最优化算法完成。<br><br>2.改进的一些最优化算法，比如sag。它可以在新数据到来时就完成参数更新，而不需要重新读取整个数据集来进行批量处理。<br><br>机器学习的一个重要问题就是如何处理缺失数据。这个问题没有标准答案，取决于实际应用中的需求。现有一些解决方案，每种方案都各有优缺点。<br><br>3.我们需要根据数据的情况，这是Sklearn的参数，以期达到更好的分类效果。</p>
-<p><a href="https://cuijiahua.com/blog/2017/11/ml_6_logistic_1.html">参考资料1</a><br><a href="https://cuijiahua.com/blog/2017/11/ml_7_logistic_2.html">参考资料2</a></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>Logistic Regression</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>可视化 | Logistic回归可视化主要代码</title>
     <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
     <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
@@ -3415,6 +3385,36 @@ reduce(jiecheng, [i for i in range(1, n+1)])
         <tag>python</tag>
         <tag>map</tag>
         <tag>reduce</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习 | Logistic回归</title>
+    <url>/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/</url>
+    <content><![CDATA[<h1 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h1><p>Logistic回归是一种<b>分类</b>算法，通常用于<b>二分类</b>问题(例如：明天是否会下雨)，但也可以用于多分类问题。</p>
+<span id="more"></span>
+<h2 id="Logistic回归与梯度上升算法"><a href="#Logistic回归与梯度上升算法" class="headerlink" title="Logistic回归与梯度上升算法"></a>Logistic回归与梯度上升算法</h2><h3 id="Logistic回归-1"><a href="#Logistic回归-1" class="headerlink" title="Logistic回归"></a>Logistic回归</h3><p><b>回归：</b>利用一条直线对一些数据点进行拟合的过程。</p>
+<p>Logistic回归是分类方法，它利用的是Sigmoid函数阈值在[0,1]这个特性。</p>
+<p><b>Logistic回归进行分类的主要思想：</b>根据现有数据对分类边界线建立回归公式，以此进行分类</p>
+<p>其实，Logistic回归本质上是一个基于条件概率的判别模型(Discriminative Model)。</p>
+<p><b>Sigmoid函数(Logistic函数)：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/1.png"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/2.jpg"><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/3.png"><br>整合成一个公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/5.jpg"></p>
+<p><b>Sigmoid函数的图像：</b><br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/6.png"><br>z是一个矩阵，θ是参数列向量(要求解的)，x是样本列向量(给定的数据集)。θ^T表示θ的转置。g(z)函数实现了任意实数到[0,1]的映射，这样我们的数据集([x0,x1,…,xn])，不管是大于1或者小于0，都可以映射到[0,1]区间进行分类。hθ(x)给出了输出为1的概率。比如当hθ(x)=0.7，那么说明有70%的概率输出为1。输出为0的概率是输出为1的补集，也就是30%。</p>
+<p>如果我们有合适的参数列向量θ([θ0,θ1,…θn]^T)，以及样本列向量x([x0,x1,…,xn])，那么我们对样本x分类就可以通过上述公式计算出一个概率，如果这个概率大于0.5，我们就可以说样本是正样本，否则样本是负样本。</p>
+<p><b>如何得到合适的参数向量θ？</b><br>根据sigmoid函数的特性，我们可以做出如下的假设：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/7.jpg"><br>两个概率公式合而为一：(损失函数-Loss Function)<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/8.jpg"><br>取对数：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/9.jpg"><br>这个损失函数，是对于一个样本而言的。给定一个样本，我们就可以通过这个损失函数求出，样本所属类别的概率，而这个概率越大越好，所以也就是求解这个损失函数的最大值。既然概率出来了，那么最大似然估计也该出场了。假定样本与样本之间相互独立，那么整个样本集生成的概率即为所有样本生成概率的乘积，再将公式对数化，便可得到如下公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/10.png"><br>其中，m为样本的总数，y(i)表示第i个样本的类别，x(i)表示第i个样本，需要注意的是θ是多维向量，x(i)也是多维向量。</p>
+<p>综上所述，满足J(θ)的最大的θ值即是我们需要求解的模型。</p>
+<p>怎么求解使J(θ)最大的θ值呢？因为是<b>求最大值</b>，所以我们需要使用<b>梯度上升算法</b>。如果面对的问题是求解使J(θ)<b>最小</b>的θ值，那么我们就需要使用<b>梯度下降算法</b>。面对我们这个问题，如果使<b>J(θ) := -J(θ)</b>，那么问题就从求极大值转换成求极小值了，使用的算法就从梯度上升算法变成了梯度下降算法，它们的思想都是相同的，学会其一，就也会了另一个。</p>
+<h3 id="梯度上升算法"><a href="#梯度上升算法" class="headerlink" title="梯度上升算法"></a>梯度上升算法</h3><p>爬坡这个动作用数学公式表达即为：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/11.png"><br>其中，α为步长，也就是学习速率，控制更新的幅度。<br>梯度上升迭代公式：<br><img src="/2021/03/06/Logistic%E5%9B%9E%E5%BD%92/12.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><b>Logistic回归的一般过程：</b><br>1.收集数据：采用任意方法收集数据。<br>2.准备数据：由于需要进行距离计算，因此要求数据类型为数值型。另外，结构化数据格式则最佳。<br>3.分析数据：采用任意方法对数据进行分析。<br>4.训练算法：大部分时间将用于训练，训练的目的是为了找到最佳的分类回归系数。<br>5.测试算法：一旦训练步骤完成，分类将会很快。<br>6.使用算法：首先，我们需要输入一些数据，并将其转换成对应的结构化数值；接着，基于训练好的回归系数，就可以对这些数值进行简单的回归计算，判定它们属于哪个类别；在这之后，我们就可以在输出的类别上做一些其他分析工作。</p>
+<p><b>Logistic回归的优缺点</b><br>优点：实现简单，易于理解和实现；计算代价不高，速度很快，存储资源低。<br>缺点：容易欠拟合，分类精度可能不高。</p>
+<p><b>其他</b><br>1.Logistic回归的目的是寻找一个非线性函数Sigmoid的最佳拟合参数，求解过程可以由最优化算法完成。<br><br>2.改进的一些最优化算法，比如sag。它可以在新数据到来时就完成参数更新，而不需要重新读取整个数据集来进行批量处理。<br><br>机器学习的一个重要问题就是如何处理缺失数据。这个问题没有标准答案，取决于实际应用中的需求。现有一些解决方案，每种方案都各有优缺点。<br><br>3.我们需要根据数据的情况，这是Sklearn的参数，以期达到更好的分类效果。</p>
+<p><a href="https://cuijiahua.com/blog/2017/11/ml_6_logistic_1.html">参考资料1</a><br><a href="https://cuijiahua.com/blog/2017/11/ml_7_logistic_2.html">参考资料2</a></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>Logistic Regression</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
       </tags>
   </entry>
   <entry>
@@ -3740,6 +3740,212 @@ public class TestCRUD &#123;
       </tags>
   </entry>
   <entry>
+    <title>MyBatis | 获取参数值的两种方式</title>
+    <url>/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
+<h2 id="不同的参数类型，-和-的不同取值方式："><a href="#不同的参数类型，-和-的不同取值方式：" class="headerlink" title="不同的参数类型，${}和#{}的不同取值方式："></a>不同的参数类型，${}和#{}的不同取值方式：</h2><p>1、当传输参数为单个String或基本数据类型和其包装类型<br>#{}：可以以任意的名字获取参数值<br>${}：只能以${value}或${_parameter}获取<br>2、当传输参数为JavaBean时<br>#{}和${}都可以通过属性名直接获取属性值，但是要注意${}的单引号问题<br>3、当传输多个参数时，mybatis会默认将这些参数放在map集合中<br>两种方式：<br>（1）键为0，1，2，3…N-1,以参数为值<br>（2）键为param1,param2,param3…paramN，以参数为值<br>#{}:#{0}、#{1}；#{param1}、#{param2}<br>${}:#{param1}、{param2}，但是要注意${}的单引号问题<br>4、当传输Map参数时<br>#{}和${}都可以通过键的名字直接获取值，但是要注意${}的单引号问题<br>5、命名参数<br>可以通过@Param(“key”)为map集合指定键的名字<br>Emp getEmpByEidAndEnameByParam(@Param(“eid”)String eid, @Param(“ename”)String ename);<br>6、当传输参数为List或Array,mybatis会将List或Array放在map中<br>List以list为键，Array以array为键</p>
+<h2 id="Statement与PreparedStatement"><a href="#Statement与PreparedStatement" class="headerlink" title="Statement与PreparedStatement"></a>Statement与PreparedStatement</h2><pre><code>package com.atguigu.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
+import com.atguigu.bean.Emp;
+
+public class TestJDBC &#123;
+    public static void main(String[] args) throws Exception &#123;
+        Class.forName(&quot;&quot;);
+        Connection conn = DriverManager.getConnection(&quot;&quot;,&quot;&quot;,&quot;&quot;);
+        //可以使用通配符赋值
+        PreparedStatement ps = conn.prepareStatement(&quot;insert into emp values(null, ?, ?,?&quot;);
+        ps.setString(1, &quot;root&quot;);
+        ps.setString(2, &quot;23&quot;);
+        ps.setString(3, &quot;男&quot;);
+        ps.executeUpdate();
+        
+        Statement statement = conn.createStatement();
+        Emp emp = new Emp(null, &quot;a&quot;, 1, &quot;b&quot;);
+        //不可以使用通配符赋值
+        statement.executeUpdate(&quot;insert into emp values(null, &#39;&quot;+emp.getEname()+&quot;&#39;, &quot;+emp.getAge()+&quot;, &#39;&quot;+emp.getSex()+&quot;&#39;)&quot;);
+    &#125;
+&#125;
+</code></pre>
+<span id="more"></span>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/1.PNG"><br>2.ParamMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.atguigu.bean.Emp;
+
+public interface ParamMapper &#123;
+    //添加员工信息
+    void insertEmp(Emp emp);
+    
+    //获取名字中包含以name开头且后面多一个任意字符的员工信息
+    List&lt;Emp&gt; getAllEmp(String name);
+        
+    //删除名字中包含name的员工信息
+    void deleteEmp(String name);
+    
+    //根据eid获取员工信息
+    Emp getEmpByEid(String eid);
+    
+    //根据eid和ename获取员工信息
+    Emp getEmpByEidAndEname(String eid, String ename);
+    
+    //根据map查询员工信息
+    Emp getEmpByMap(Map&lt;String, Object&gt; map);
+    
+    //根据eid和ename获取员工信息
+    Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename);
+&#125;
+</code></pre>
+<p>3.ParamMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.ParamMapper&quot;&gt;
+    &lt;!--
+        useGeneratedKeys:可以使用自动生成的主键 
+        keyProperty:将自动生成的主键赋值给传递过来的参数的哪一个属性
+     --&gt;
+    &lt;insert id=&quot;insertEmp&quot; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;eid&quot;&gt;
+        &lt;!-- insert into emp values(null, #&#123;ename&#125;, #&#123;age&#125;, #&#123;sex&#125;) --&gt;
+        
+        insert into emp values(null, &#39;$&#123;ename&#125;&#39;, $&#123;age&#125;, &#39;$&#123;sex&#125;&#39;)
+    &lt;/insert&gt;
+    
+    &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
+        &lt;!-- 模糊查询 --&gt;
+        select eid,ename,age,sex from emp where ename like &#39;$&#123;value&#125;_&#39;
+    &lt;/select&gt;
+    
+    &lt;delete id=&quot;deleteEmp&quot;&gt;
+        &lt;!-- 批量删除 --&gt;
+        delete from emp where ename like &#39;%$&#123;value&#125;%&#39;
+    &lt;/delete&gt;
+    
+    &lt;!-- Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eid&#125; --&gt;
+        
+        &lt;!-- 参数与接口中的参数不一致也可以 --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eids&#125; --&gt;
+        
+
+        &lt;!-- 
+            报错：
+            org.apache.ibatis.reflection.ReflectionException: 
+            There is no getter for property named &#39;eid&#39; in 
+            &#39;class java.lang.String&#39; 
+        --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;eid&#125; --&gt;
+        
+        &lt;!-- 成功 --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;value&#125; --&gt;
+        
+        select eid,ename,age,sex from emp where eid = $&#123;_parameter&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- Emp getEmpByEidAndEname(String eid, String ename); --&gt;
+    &lt;select id=&quot;getEmpByEidAndEname&quot; resultType=&quot;Emp&quot;&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;0&#125; and ename=#&#123;1&#125; --&gt;
+        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;param1&#125; and ename=#&#123;param2&#125; --&gt;
+        
+        select eid,ename,age,sex from emp where eid=$&#123;param1&#125; and ename=&#39;$&#123;param2&#125;&#39;
+        &lt;!-- select eid,ename,age,sex from emp where eid=$&#123;0&#125; and ename=$&#123;1&#125; --&gt;&lt;!-- 不可行 --&gt;
+    &lt;/select&gt;
+    
+    &lt;!-- Emp getEmpByMap(Map&lt;String, Object&gt; map); --&gt;
+    &lt;select id=&quot;getEmpByMap&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=$&#123;eid&#125; and ename=&#39;$&#123;ename&#125;&#39;
+    &lt;/select&gt;
+    
+    &lt;!-- Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename); --&gt;
+    &lt;select id=&quot;getEmpByEidAndEnameByParam&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125; and ename=#&#123;ename&#125;
+    &lt;/select&gt;
+
+    
+&lt;/mapper&gt;
+</code></pre>
+<p>4.TestParam.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.ParamMapper;
+
+
+public class TestParam &#123;
+    @Test
+    public void testCRUD() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+//        SqlSession sqlSession = sqlSessionFactory.openSession();//需要手动处理事务
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);//自动处理事务
+        ParamMapper mapper = sqlSession.getMapper(ParamMapper.class);
+        
+        //获取名字中包含admin的所有员工信息(模糊查询)
+//        List&lt;Emp&gt; allEmp = mapper.getAllEmp(&quot;admin&quot;);
+//        System.out.println(allEmp);
+        
+        //删除名字中包含admin的所有员工信息(批量删除)
+//        mapper.deleteEmp(&quot;admin&quot;);
+        
+        
+//        Emp emp = new Emp(null, &quot;admin&quot;, 23, &quot;男&quot;);
+//        mapper.insertEmp(emp);
+//        System.out.println(emp.getEid());
+        
+//        Emp emp = mapper.getEmpByEid(&quot;1&quot;);
+//        System.out.println(emp);
+        
+//        Emp emp = mapper.getEmpByEidAndEname(&quot;1&quot;, &quot;张三&quot;);
+//        System.out.println(emp);
+        
+//        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
+//        map.put(&quot;eid&quot;, &quot;1&quot;);
+//        map.put(&quot;ename&quot;, &quot;张三&quot;);
+//        Emp emp = mapper.getEmpByMap(map);
+//        System.out.println(emp);
+        
+        Emp emp = mapper.getEmpByEidAndEnameByParam(&quot;1&quot;, &quot;张三&quot;);
+        System.out.println(emp);
+    &#125;
+&#125; 
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>MyBatis获取参数值的两种方式</category>
+      </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis | MyBatis搭建过程</title>
     <url>/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="MyBatis搭建过程"><a href="#MyBatis搭建过程" class="headerlink" title="MyBatis搭建过程"></a>MyBatis搭建过程</h1><p>1.导入MyBatis框架的jar包、Mysql驱动包、log4j的jar包</p>
@@ -3975,212 +4181,6 @@ public class TestMybatis &#123;
       <tags>
         <tag>Java</tag>
         <tag>MyBatis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MyBatis | 获取参数值的两种方式</title>
-    <url>/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="MyBatis获取参数值的两种方式"><a href="#MyBatis获取参数值的两种方式" class="headerlink" title="MyBatis获取参数值的两种方式"></a>MyBatis获取参数值的两种方式</h1><p>1.${}:insert into emp values(null,admin,23,男)<br>Statement:<br>    必须使用字符串拼接的方式操作SQL，一定要注意单引号问题<br>    不能防止SQL注入<br>2.#{}:insert into emp values(null,?,?,?)<br>PreparedStatement：<br>    可以使用通配符操作SQL，因为在为String赋值时可以自动加单引号，因此不需要注意单引号问题<br>    <strong>可以防止SQL注入</strong><br>使用建议：**建议使用#{}**，在特殊情况下，需要使用${}，例如模糊查询和批量删除</p>
-<h2 id="不同的参数类型，-和-的不同取值方式："><a href="#不同的参数类型，-和-的不同取值方式：" class="headerlink" title="不同的参数类型，${}和#{}的不同取值方式："></a>不同的参数类型，${}和#{}的不同取值方式：</h2><p>1、当传输参数为单个String或基本数据类型和其包装类型<br>#{}：可以以任意的名字获取参数值<br>${}：只能以${value}或${_parameter}获取<br>2、当传输参数为JavaBean时<br>#{}和${}都可以通过属性名直接获取属性值，但是要注意${}的单引号问题<br>3、当传输多个参数时，mybatis会默认将这些参数放在map集合中<br>两种方式：<br>（1）键为0，1，2，3…N-1,以参数为值<br>（2）键为param1,param2,param3…paramN，以参数为值<br>#{}:#{0}、#{1}；#{param1}、#{param2}<br>${}:#{param1}、{param2}，但是要注意${}的单引号问题<br>4、当传输Map参数时<br>#{}和${}都可以通过键的名字直接获取值，但是要注意${}的单引号问题<br>5、命名参数<br>可以通过@Param(“key”)为map集合指定键的名字<br>Emp getEmpByEidAndEnameByParam(@Param(“eid”)String eid, @Param(“ename”)String ename);<br>6、当传输参数为List或Array,mybatis会将List或Array放在map中<br>List以list为键，Array以array为键</p>
-<h2 id="Statement与PreparedStatement"><a href="#Statement与PreparedStatement" class="headerlink" title="Statement与PreparedStatement"></a>Statement与PreparedStatement</h2><pre><code>package com.atguigu.test;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-
-import com.atguigu.bean.Emp;
-
-public class TestJDBC &#123;
-    public static void main(String[] args) throws Exception &#123;
-        Class.forName(&quot;&quot;);
-        Connection conn = DriverManager.getConnection(&quot;&quot;,&quot;&quot;,&quot;&quot;);
-        //可以使用通配符赋值
-        PreparedStatement ps = conn.prepareStatement(&quot;insert into emp values(null, ?, ?,?&quot;);
-        ps.setString(1, &quot;root&quot;);
-        ps.setString(2, &quot;23&quot;);
-        ps.setString(3, &quot;男&quot;);
-        ps.executeUpdate();
-        
-        Statement statement = conn.createStatement();
-        Emp emp = new Emp(null, &quot;a&quot;, 1, &quot;b&quot;);
-        //不可以使用通配符赋值
-        statement.executeUpdate(&quot;insert into emp values(null, &#39;&quot;+emp.getEname()+&quot;&#39;, &quot;+emp.getAge()+&quot;, &#39;&quot;+emp.getSex()+&quot;&#39;)&quot;);
-    &#125;
-&#125;
-</code></pre>
-<span id="more"></span>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E5%80%BC%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/1.PNG"><br>2.ParamMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.atguigu.bean.Emp;
-
-public interface ParamMapper &#123;
-    //添加员工信息
-    void insertEmp(Emp emp);
-    
-    //获取名字中包含以name开头且后面多一个任意字符的员工信息
-    List&lt;Emp&gt; getAllEmp(String name);
-        
-    //删除名字中包含name的员工信息
-    void deleteEmp(String name);
-    
-    //根据eid获取员工信息
-    Emp getEmpByEid(String eid);
-    
-    //根据eid和ename获取员工信息
-    Emp getEmpByEidAndEname(String eid, String ename);
-    
-    //根据map查询员工信息
-    Emp getEmpByMap(Map&lt;String, Object&gt; map);
-    
-    //根据eid和ename获取员工信息
-    Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename);
-&#125;
-</code></pre>
-<p>3.ParamMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.ParamMapper&quot;&gt;
-    &lt;!--
-        useGeneratedKeys:可以使用自动生成的主键 
-        keyProperty:将自动生成的主键赋值给传递过来的参数的哪一个属性
-     --&gt;
-    &lt;insert id=&quot;insertEmp&quot; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;eid&quot;&gt;
-        &lt;!-- insert into emp values(null, #&#123;ename&#125;, #&#123;age&#125;, #&#123;sex&#125;) --&gt;
-        
-        insert into emp values(null, &#39;$&#123;ename&#125;&#39;, $&#123;age&#125;, &#39;$&#123;sex&#125;&#39;)
-    &lt;/insert&gt;
-    
-    &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- 模糊查询 --&gt;
-        select eid,ename,age,sex from emp where ename like &#39;$&#123;value&#125;_&#39;
-    &lt;/select&gt;
-    
-    &lt;delete id=&quot;deleteEmp&quot;&gt;
-        &lt;!-- 批量删除 --&gt;
-        delete from emp where ename like &#39;%$&#123;value&#125;%&#39;
-    &lt;/delete&gt;
-    
-    &lt;!-- Emp getEmpByEid(String eid); --&gt;
-    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eid&#125; --&gt;
-        
-        &lt;!-- 参数与接口中的参数不一致也可以 --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;eids&#125; --&gt;
-        
-
-        &lt;!-- 
-            报错：
-            org.apache.ibatis.reflection.ReflectionException: 
-            There is no getter for property named &#39;eid&#39; in 
-            &#39;class java.lang.String&#39; 
-        --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;eid&#125; --&gt;
-        
-        &lt;!-- 成功 --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid = $&#123;value&#125; --&gt;
-        
-        select eid,ename,age,sex from emp where eid = $&#123;_parameter&#125;
-    &lt;/select&gt;
-    
-    &lt;!-- Emp getEmpByEidAndEname(String eid, String ename); --&gt;
-    &lt;select id=&quot;getEmpByEidAndEname&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;0&#125; and ename=#&#123;1&#125; --&gt;
-        &lt;!-- select eid,ename,age,sex from emp where eid=#&#123;param1&#125; and ename=#&#123;param2&#125; --&gt;
-        
-        select eid,ename,age,sex from emp where eid=$&#123;param1&#125; and ename=&#39;$&#123;param2&#125;&#39;
-        &lt;!-- select eid,ename,age,sex from emp where eid=$&#123;0&#125; and ename=$&#123;1&#125; --&gt;&lt;!-- 不可行 --&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- Emp getEmpByMap(Map&lt;String, Object&gt; map); --&gt;
-    &lt;select id=&quot;getEmpByMap&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp where eid=$&#123;eid&#125; and ename=&#39;$&#123;ename&#125;&#39;
-    &lt;/select&gt;
-    
-    &lt;!-- Emp getEmpByEidAndEnameByParam(@Param(&quot;eid&quot;)String eid, @Param(&quot;ename&quot;)String ename); --&gt;
-    &lt;select id=&quot;getEmpByEidAndEnameByParam&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp where eid=#&#123;eid&#125; and ename=#&#123;ename&#125;
-    &lt;/select&gt;
-
-    
-&lt;/mapper&gt;
-</code></pre>
-<p>4.TestParam.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.ParamMapper;
-
-
-public class TestParam &#123;
-    @Test
-    public void testCRUD() throws IOException&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-//        SqlSession sqlSession = sqlSessionFactory.openSession();//需要手动处理事务
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);//自动处理事务
-        ParamMapper mapper = sqlSession.getMapper(ParamMapper.class);
-        
-        //获取名字中包含admin的所有员工信息(模糊查询)
-//        List&lt;Emp&gt; allEmp = mapper.getAllEmp(&quot;admin&quot;);
-//        System.out.println(allEmp);
-        
-        //删除名字中包含admin的所有员工信息(批量删除)
-//        mapper.deleteEmp(&quot;admin&quot;);
-        
-        
-//        Emp emp = new Emp(null, &quot;admin&quot;, 23, &quot;男&quot;);
-//        mapper.insertEmp(emp);
-//        System.out.println(emp.getEid());
-        
-//        Emp emp = mapper.getEmpByEid(&quot;1&quot;);
-//        System.out.println(emp);
-        
-//        Emp emp = mapper.getEmpByEidAndEname(&quot;1&quot;, &quot;张三&quot;);
-//        System.out.println(emp);
-        
-//        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
-//        map.put(&quot;eid&quot;, &quot;1&quot;);
-//        map.put(&quot;ename&quot;, &quot;张三&quot;);
-//        Emp emp = mapper.getEmpByMap(map);
-//        System.out.println(emp);
-        
-        Emp emp = mapper.getEmpByEidAndEnameByParam(&quot;1&quot;, &quot;张三&quot;);
-        System.out.println(emp);
-    &#125;
-&#125; 
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>MyBatis获取参数值的两种方式</category>
-      </categories>
-      <tags>
-        <tag>Mybatis</tag>
       </tags>
   </entry>
   <entry>
@@ -4580,6 +4580,109 @@ wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
+    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
+<pre><code>create table dept(
+int id primary key auto_increment not null,
+varchar(20) name
+)
+</code></pre>
+<p><strong>Dept.java（JavaBean）</strong></p>
+<pre><code>package com.oracle.bean;
+
+public class Dept &#123;
+    private int id;
+    private String name;
+    public Dept() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    public Dept(int id, String name) &#123;
+        super();
+        this.id = id;
+        this.name = name;
+    &#125;
+    public int getId() &#123;
+        return id;
+    &#125;
+    public void setId(int id) &#123;
+        this.id = id;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    
+    
+&#125;
+</code></pre>
+<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.Dept;
+import com.oracle.utils.DataSourceUtils;
+
+public class Test &#123;
+    
+    public static void main(String[] args) throws SQLException &#123;
+        //创建QueryRunner对象
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        //增加数据
+        //String sql = &quot;insert into dept(name) values(?)&quot;;
+        //qr.update(sql, &quot;需求部&quot;);
+        
+        //修改数据
+        //String sql = &quot;update dept set name=? where id=?&quot;;
+        //qr.update(sql, &quot;需求组&quot;, 4);
+        
+        //删除数据
+        //String sql = &quot;delete from dept where id=?&quot;;
+        //qr.update(sql, 4);
+        
+        //查询数据
+        //（1）查询结果为一行
+        //String sql = &quot;select * from dept where id=?&quot;;
+        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
+        //System.out.println(d.getId());
+        //System.out.println(d.getName());
+        
+        //（2）查询结果为多行
+//        String sql = &quot;select * from dept&quot;;
+//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
+//        for(Dept d:list) &#123;
+//            System.out.println(d.getId());
+//            System.out.println(d.getName());
+//        &#125;
+        
+        //（2）查询结果为聚合函数
+        String sql = &quot;select count(*) from dept&quot;;
+        
+        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
+        
+        System.out.println(i);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaWeb项目开发</category>
+        <category>QueryRunner和数据库增删改查操作</category>
+      </categories>
+  </entry>
+  <entry>
     <title>requests | Python爬取博客的所有文章并存为带目录的word文档</title>
     <url>/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p>
@@ -4696,109 +4799,6 @@ to_word(all_links)
         <tag>requests</tag>
         <tag>BeautifulSoup</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>JavaWeb项目开发 | QueryRunner和数据库增删改查操作</title>
-    <url>/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
-<pre><code>create table dept(
-int id primary key auto_increment not null,
-varchar(20) name
-)
-</code></pre>
-<p><strong>Dept.java（JavaBean）</strong></p>
-<pre><code>package com.oracle.bean;
-
-public class Dept &#123;
-    private int id;
-    private String name;
-    public Dept() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    public Dept(int id, String name) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-    &#125;
-    public int getId() &#123;
-        return id;
-    &#125;
-    public void setId(int id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    
-    
-&#125;
-</code></pre>
-<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
-<pre><code>package com.oracle.test;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import com.oracle.bean.Dept;
-import com.oracle.utils.DataSourceUtils;
-
-public class Test &#123;
-    
-    public static void main(String[] args) throws SQLException &#123;
-        //创建QueryRunner对象
-        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
-        
-        //增加数据
-        //String sql = &quot;insert into dept(name) values(?)&quot;;
-        //qr.update(sql, &quot;需求部&quot;);
-        
-        //修改数据
-        //String sql = &quot;update dept set name=? where id=?&quot;;
-        //qr.update(sql, &quot;需求组&quot;, 4);
-        
-        //删除数据
-        //String sql = &quot;delete from dept where id=?&quot;;
-        //qr.update(sql, 4);
-        
-        //查询数据
-        //（1）查询结果为一行
-        //String sql = &quot;select * from dept where id=?&quot;;
-        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
-        //System.out.println(d.getId());
-        //System.out.println(d.getName());
-        
-        //（2）查询结果为多行
-//        String sql = &quot;select * from dept&quot;;
-//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
-//        for(Dept d:list) &#123;
-//            System.out.println(d.getId());
-//            System.out.println(d.getName());
-//        &#125;
-        
-        //（2）查询结果为聚合函数
-        String sql = &quot;select count(*) from dept&quot;;
-        
-        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
-        
-        System.out.println(i);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaWeb项目开发</category>
-        <category>QueryRunner和数据库增删改查操作</category>
-      </categories>
   </entry>
   <entry>
     <title>SpringMVC | REST风格GetPostPutDelete请求</title>
@@ -8691,6 +8691,34 @@ print(s.name)
       </tags>
   </entry>
   <entry>
+    <title>pygame最小开发框架</title>
+    <url>/2021/05/21/pygame%E6%9C%80%E5%B0%8F%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<h1 id="pygame最小开发框架"><a href="#pygame最小开发框架" class="headerlink" title="pygame最小开发框架"></a>pygame最小开发框架</h1><pre><code>import pygame, sys
+
+pygame.init()
+screen = pygame.display.set_mode((1206, 780))
+pygame.display.set_caption(&quot;Pygame&quot;)
+
+while True:
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                        sys.exit()
+
+        pygame.display.update()
+</code></pre>
+<p><img src="/2021/05/21/pygame%E6%9C%80%E5%B0%8F%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/pygame.jpg" alt="pygame最小开发框架"></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pygame</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pygame</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | python @property</title>
     <url>/2021/05/20/python-property/</url>
     <content><![CDATA[<h1 id="python-property"><a href="#python-property" class="headerlink" title="python property"></a>python property</h1><pre><code>class Test(object):
@@ -8722,34 +8750,6 @@ print(t.num)
       </categories>
       <tags>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pygame最小开发框架</title>
-    <url>/2021/05/21/pygame%E6%9C%80%E5%B0%8F%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<h1 id="pygame最小开发框架"><a href="#pygame最小开发框架" class="headerlink" title="pygame最小开发框架"></a>pygame最小开发框架</h1><pre><code>import pygame, sys
-
-pygame.init()
-screen = pygame.display.set_mode((1206, 780))
-pygame.display.set_caption(&quot;Pygame&quot;)
-
-while True:
-        for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                        sys.exit()
-
-        pygame.display.update()
-</code></pre>
-<p><img src="/2021/05/21/pygame%E6%9C%80%E5%B0%8F%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/pygame.jpg" alt="pygame最小开发框架"></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pygame</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pygame</tag>
       </tags>
   </entry>
   <entry>
@@ -9981,6 +9981,29 @@ doc.save(&#39;替换后_设置格式.docx&#39;)
       </tags>
   </entry>
   <entry>
+    <title>pyinstaller | python程序打包</title>
+    <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
+    <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
+</code></pre>
+<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
+pyinstaller -F program.py ---&gt; 打包成单个可执行文件
+</code></pre>
+<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
+<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pyinstaller</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pyinstaller</tag>
+        <tag>程序打包</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>requests | python爬虫爬取会计师网站的指定文章</title>
     <url>/2021/10/29/python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%87%E7%AB%A0/</url>
     <content><![CDATA[<h1 id="python爬虫爬取会计师网站的指定文章"><a href="#python爬虫爬取会计师网站的指定文章" class="headerlink" title="python爬虫爬取会计师网站的指定文章"></a>python爬虫爬取会计师网站的指定文章</h1><p>还没学习爬虫，没看懂！有缘再见！后会有期！</p>
@@ -10101,29 +10124,6 @@ input()
         <tag>random</tag>
         <tag>BeautifulSoup4</tag>
         <tag>time</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pyinstaller | python程序打包</title>
-    <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
-<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
-</code></pre>
-<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
-pyinstaller -F program.py ---&gt; 打包成单个可执行文件
-</code></pre>
-<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
-<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pyinstaller</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pyinstaller</tag>
-        <tag>程序打包</tag>
       </tags>
   </entry>
   <entry>
@@ -10742,6 +10742,37 @@ public class Demo3Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>numpy | shuffle数据</title>
+    <url>/2021/11/15/shuffle%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<h1 id="shuffle数据"><a href="#shuffle数据" class="headerlink" title="shuffle数据"></a>shuffle数据</h1><p>在使用大量的数据来训练深度学习模型时，我们有可能需要对训练数据和数据标签进行shuffle(打乱)操作。</p>
+<span id="more"></span>
+<p><strong>show you the example code:</strong></p>
+<pre><code>data = np.array([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]])
+y = np.array([1, 2, 3, 4, 5])
+
+print(&#39;-------原数据：----------&#39;)
+print(&#39;数据：&#39;, data)
+print(&#39;标签：&#39;, y)
+print(&#39;-------打乱数据：----------&#39;)
+np.random.seed(116)
+np.random.shuffle(data)
+np.random.seed(116)
+np.random.shuffle(y)
+print(&#39;数据：&#39;, data)
+print(&#39;标签：&#39;, y )
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>numpy</category>
+      </categories>
+      <tags>
+        <tag>numpy</tag>
+        <tag>shuffle</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | session实现用户登录</title>
     <url>/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/</url>
     <content><![CDATA[<h1 id="session实现用户登录"><a href="#session实现用户登录" class="headerlink" title="session实现用户登录"></a>session实现用户登录</h1><p>下面将使用session实现用户登录，如下图所示效果：<br><img src="/2021/07/29/session%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95/login.gif"></p>
@@ -10848,37 +10879,6 @@ login.html
       </categories>
       <tags>
         <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy | shuffle数据</title>
-    <url>/2021/11/15/shuffle%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<h1 id="shuffle数据"><a href="#shuffle数据" class="headerlink" title="shuffle数据"></a>shuffle数据</h1><p>在使用大量的数据来训练深度学习模型时，我们有可能需要对训练数据和数据标签进行shuffle(打乱)操作。</p>
-<span id="more"></span>
-<p><strong>show you the example code:</strong></p>
-<pre><code>data = np.array([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]])
-y = np.array([1, 2, 3, 4, 5])
-
-print(&#39;-------原数据：----------&#39;)
-print(&#39;数据：&#39;, data)
-print(&#39;标签：&#39;, y)
-print(&#39;-------打乱数据：----------&#39;)
-np.random.seed(116)
-np.random.shuffle(data)
-np.random.seed(116)
-np.random.shuffle(y)
-print(&#39;数据：&#39;, data)
-print(&#39;标签：&#39;, y )
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>numpy</category>
-      </categories>
-      <tags>
-        <tag>numpy</tag>
-        <tag>shuffle</tag>
       </tags>
   </entry>
   <entry>
@@ -21251,6 +21251,24 @@ t2.start()
       </tags>
   </entry>
   <entry>
+    <title>伪迹移除 | 小波变换</title>
+    <url>/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/</url>
+    <content><![CDATA[<h1 id="小波变换-Wavelet-Transform-WT"><a href="#小波变换-Wavelet-Transform-WT" class="headerlink" title="小波变换(Wavelet Transform,WT)"></a>小波变换(Wavelet Transform,WT)</h1><p>小波变化是一个时间尺度的表示方法，它把信号分解成时间和尺度的基函数(母小波基函数的扩展/变体)</p>
+<h2 id="一些基于小波理论的技术"><a href="#一些基于小波理论的技术" class="headerlink" title="一些基于小波理论的技术"></a>一些基于小波理论的技术</h2><p>1.wavelet packets<br>2.wavelet approximation and decomposition<br>3.discrete and continuous wavelet transform<br>…<br>其中，最常用的技术是离散小波变换(Discrete Wavelet Transform);<br>离散小波变换是由离散输入的连续小波变换得到的；<br>离散小波变换将信号输入到低通滤波器中，得到低频分量，进入高通滤波器得到高频分量。</p>
+<h2 id="离散小波变换进行2级分解的示例结构"><a href="#离散小波变换进行2级分解的示例结构" class="headerlink" title="离散小波变换进行2级分解的示例结构"></a>离散小波变换进行2级分解的示例结构</h2><p><img src="/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/1.png"><br>where g[n] is a low pass filter and h[n] is a high pass filter</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+        <tag>EEG</tag>
+        <tag>小波变换</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 101.对称二叉树</title>
     <url>/2022/07/16/%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
     <content><![CDATA[<h1 id="101-对称二叉树"><a href="#101-对称二叉树" class="headerlink" title="101.对称二叉树"></a>101.对称二叉树</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个二叉树的根节点 root ， 检查它是否轴对称。</p>
@@ -21329,24 +21347,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>二叉树</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | 小波变换</title>
-    <url>/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/</url>
-    <content><![CDATA[<h1 id="小波变换-Wavelet-Transform-WT"><a href="#小波变换-Wavelet-Transform-WT" class="headerlink" title="小波变换(Wavelet Transform,WT)"></a>小波变换(Wavelet Transform,WT)</h1><p>小波变化是一个时间尺度的表示方法，它把信号分解成时间和尺度的基函数(母小波基函数的扩展/变体)</p>
-<h2 id="一些基于小波理论的技术"><a href="#一些基于小波理论的技术" class="headerlink" title="一些基于小波理论的技术"></a>一些基于小波理论的技术</h2><p>1.wavelet packets<br>2.wavelet approximation and decomposition<br>3.discrete and continuous wavelet transform<br>…<br>其中，最常用的技术是离散小波变换(Discrete Wavelet Transform);<br>离散小波变换是由离散输入的连续小波变换得到的；<br>离散小波变换将信号输入到低通滤波器中，得到低频分量，进入高通滤波器得到高频分量。</p>
-<h2 id="离散小波变换进行2级分解的示例结构"><a href="#离散小波变换进行2级分解的示例结构" class="headerlink" title="离散小波变换进行2级分解的示例结构"></a>离散小波变换进行2级分解的示例结构</h2><p><img src="/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/1.png"><br>where g[n] is a low pass filter and h[n] is a high pass filter</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>EEG</tag>
-        <tag>小波变换</tag>
       </tags>
   </entry>
   <entry>
