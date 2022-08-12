@@ -2734,6 +2734,130 @@ public class AtomicIntegerFieldUpdaterTest &#123;
       </tags>
   </entry>
   <entry>
+    <title>Java | Java判断对象是否相等</title>
+    <url>/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/</url>
+    <content><![CDATA[<h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
+<span id="more"></span>
+
+<pre><code>class Monkey&#123;
+    private String name;
+    private int age;
+    
+    public Monkey(String name, int age)&#123;
+        this.setName(name);
+        this.setAge(age);
+    &#125;
+
+    public String getName() &#123;
+        return this.name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public int getAge() &#123;
+        return age;
+    &#125;
+
+    public void setAge(int age) &#123;
+        this.age = age;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="Java中如何判断两个对象是否相等"><a href="#Java中如何判断两个对象是否相等" class="headerlink" title="Java中如何判断两个对象是否相等"></a>Java中如何判断两个对象是否相等</h2><p>Java通过hashCode()和equals的结果共同决定两个对象是否相等</p>
+<h3 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode()"></a>hashCode()</h3><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。hashCode() 定义在JDK<br>的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
+<h3 id="equals"><a href="#equals" class="headerlink" title="equals()"></a>equals()</h3><p>equals它的作用也是判断两个对象是否相等，如果对象重写了equals()方法，<br>比较两个对象的内容是否相等；如果没有重写，比较两个对象的地址是否相同，<br>价于“==”。同样的，equals()定义在JDK的Object.java中，这就意味着Java<br>中的任何类都包含有equals()函数。<br><strong>注意：通常我们可以通过重写hashCode()和equals()来自定义两个对象相等的标准，且若重写，<br>必须同时对两个方法进行重写。</strong></p>
+<h2 id="重写hashCode-和equals"><a href="#重写hashCode-和equals" class="headerlink" title="重写hashCode()和equals()"></a>重写hashCode()和equals()</h2><p>我们只需再上面定义的Monkey类中重写这两个方法即可；equals方法直接返回true,也就是说对<br>这个类产生的任意两个对象进行比较都会返回ture；hashCode()方法返回一个固定的值，这里取4。</p>
+<pre><code>class Monkey&#123;
+    ...
+    
+    public boolean equals(Object obj) &#123;
+        return true;
+    &#125;
+    
+    public int hashCode() &#123;
+        return 4;
+    &#125;
+    
+    ...
+&#125;
+</code></pre>
+<h2 id="写测试类"><a href="#写测试类" class="headerlink" title="写测试类"></a>写测试类</h2><p>下面我们创建一个HashCodeAndEqualsTest测试类进行测试。</p>
+<pre><code>public class HashCodeAndEqualsTest &#123;
+    
+    public static void main(String[] args) &#123;
+        // TODO Auto-generated method stub
+        Monkey monkey1 = new Monkey(&quot;wu kong&quot;, 10);
+        Monkey monkey2 = monkey1;
+        Monkey monkey3 = new Monkey(&quot;liu er&quot;,  5);
+        
+        System.out.println(&quot;monkey1&#39;s name:&quot; + monkey1.getName() + &quot;,age:&quot; + monkey1.getAge());
+        System.out.println(&quot;monkey2&#39;s name:&quot; + monkey2.getName() + &quot;,age:&quot; + monkey2.getAge());
+        System.out.println(&quot;monkey3&#39;s name:&quot; + monkey3.getName() + &quot;,age:&quot; + monkey3.getAge());
+        
+        System.out.println(&quot;monkey1&#39;s hash code:&quot; + monkey1.hashCode());
+        System.out.println(&quot;monkey2&#39;s hash code:&quot; + monkey2.hashCode());
+        System.out.println(&quot;monkey3&#39;s hash code:&quot; + monkey3.hashCode());
+        
+        System.out.println(&quot;Is monkey1 equal to monkey2:&quot; + monkey1.equals(monkey2));
+        System.out.println(&quot;Is monkey1 equal to monkey3:&quot; + monkey1.equals(monkey3));
+    &#125;
+
+&#125;
+</code></pre>
+<h3 id="1-没有重写方法的程序执行结果"><a href="#1-没有重写方法的程序执行结果" class="headerlink" title="1.没有重写方法的程序执行结果"></a>1.没有重写方法的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:366712642
+monkey2&#39;s hash code:366712642
+monkey3&#39;s hash code:1829164700
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:false
+</code></pre>
+<p>monkey1和monkey2指向堆上的同一个对象，故monkey1.equals(monkey2)的结果为true,monkey1和<br>monkey3指向堆上两个不同的对象，故equals()方法返回false。</p>
+<h3 id="2-重写后的程序执行结果"><a href="#2-重写后的程序执行结果" class="headerlink" title="2.重写后的程序执行结果"></a>2.重写后的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:4
+monkey2&#39;s hash code:4
+monkey3&#39;s hash code:4
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:true
+</code></pre>
+<p>由于我们对equals和hashCode方法进行了重写，重新确定了对象相等的标准，故monkey1和monkey3为<br>“同一对象”。</p>
+<h3 id="3-只重写equals方法时，程序的执行结果"><a href="#3-只重写equals方法时，程序的执行结果" class="headerlink" title="3.只重写equals方法时，程序的执行结果"></a>3.只重写equals方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:366712642
+monkey2&#39;s hash code:366712642
+monkey3&#39;s hash code:1829164700
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:true
+</code></pre>
+<p>重写了equals方法后，monkey1和monkey3两个对象被认为指向同一实例，但他们的hash code不同</p>
+<h3 id="4-只重写hashCode方法时，程序的执行结果"><a href="#4-只重写hashCode方法时，程序的执行结果" class="headerlink" title="4.只重写hashCode方法时，程序的执行结果"></a>4.只重写hashCode方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
+monkey2&#39;s name:wu kong,age:10
+monkey3&#39;s name:liu er,age:5
+monkey1&#39;s hash code:4
+monkey2&#39;s hash code:4
+monkey3&#39;s hash code:4
+Is monkey1 equal to monkey2:true
+Is monkey1 equal to monkey3:false
+</code></pre>
+<p>虽然monkey1、monkey2的hash code相同，但equals方法返回false。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>判断两个对象是否相等</category>
+      </categories>
+      <tags>
+        <tag>equals</tag>
+        <tag>hashCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring | JdbcTemplate增删改查</title>
     <url>/2022/03/07/JdbcTemplate/</url>
     <content><![CDATA[<h1 id="JdbcTemplate增删改查"><a href="#JdbcTemplate增删改查" class="headerlink" title="JdbcTemplate增删改查"></a>JdbcTemplate增删改查</h1><p>1.项目目录<br><img src="/2022/03/07/JdbcTemplate/1.PNG"><br>2.Emp.java</p>
@@ -2911,130 +3035,6 @@ public class TestJdbcTemplate &#123;
       <tags>
         <tag>spring</tag>
         <tag>JdbcTemplate</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java | Java判断对象是否相等</title>
-    <url>/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/</url>
-    <content><![CDATA[<h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
-<span id="more"></span>
-
-<pre><code>class Monkey&#123;
-    private String name;
-    private int age;
-    
-    public Monkey(String name, int age)&#123;
-        this.setName(name);
-        this.setAge(age);
-    &#125;
-
-    public String getName() &#123;
-        return this.name;
-    &#125;
-
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-
-    public int getAge() &#123;
-        return age;
-    &#125;
-
-    public void setAge(int age) &#123;
-        this.age = age;
-    &#125;
-&#125;
-</code></pre>
-<h2 id="Java中如何判断两个对象是否相等"><a href="#Java中如何判断两个对象是否相等" class="headerlink" title="Java中如何判断两个对象是否相等"></a>Java中如何判断两个对象是否相等</h2><p>Java通过hashCode()和equals的结果共同决定两个对象是否相等</p>
-<h3 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode()"></a>hashCode()</h3><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。hashCode() 定义在JDK<br>的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
-<h3 id="equals"><a href="#equals" class="headerlink" title="equals()"></a>equals()</h3><p>equals它的作用也是判断两个对象是否相等，如果对象重写了equals()方法，<br>比较两个对象的内容是否相等；如果没有重写，比较两个对象的地址是否相同，<br>价于“==”。同样的，equals()定义在JDK的Object.java中，这就意味着Java<br>中的任何类都包含有equals()函数。<br><strong>注意：通常我们可以通过重写hashCode()和equals()来自定义两个对象相等的标准，且若重写，<br>必须同时对两个方法进行重写。</strong></p>
-<h2 id="重写hashCode-和equals"><a href="#重写hashCode-和equals" class="headerlink" title="重写hashCode()和equals()"></a>重写hashCode()和equals()</h2><p>我们只需再上面定义的Monkey类中重写这两个方法即可；equals方法直接返回true,也就是说对<br>这个类产生的任意两个对象进行比较都会返回ture；hashCode()方法返回一个固定的值，这里取4。</p>
-<pre><code>class Monkey&#123;
-    ...
-    
-    public boolean equals(Object obj) &#123;
-        return true;
-    &#125;
-    
-    public int hashCode() &#123;
-        return 4;
-    &#125;
-    
-    ...
-&#125;
-</code></pre>
-<h2 id="写测试类"><a href="#写测试类" class="headerlink" title="写测试类"></a>写测试类</h2><p>下面我们创建一个HashCodeAndEqualsTest测试类进行测试。</p>
-<pre><code>public class HashCodeAndEqualsTest &#123;
-    
-    public static void main(String[] args) &#123;
-        // TODO Auto-generated method stub
-        Monkey monkey1 = new Monkey(&quot;wu kong&quot;, 10);
-        Monkey monkey2 = monkey1;
-        Monkey monkey3 = new Monkey(&quot;liu er&quot;,  5);
-        
-        System.out.println(&quot;monkey1&#39;s name:&quot; + monkey1.getName() + &quot;,age:&quot; + monkey1.getAge());
-        System.out.println(&quot;monkey2&#39;s name:&quot; + monkey2.getName() + &quot;,age:&quot; + monkey2.getAge());
-        System.out.println(&quot;monkey3&#39;s name:&quot; + monkey3.getName() + &quot;,age:&quot; + monkey3.getAge());
-        
-        System.out.println(&quot;monkey1&#39;s hash code:&quot; + monkey1.hashCode());
-        System.out.println(&quot;monkey2&#39;s hash code:&quot; + monkey2.hashCode());
-        System.out.println(&quot;monkey3&#39;s hash code:&quot; + monkey3.hashCode());
-        
-        System.out.println(&quot;Is monkey1 equal to monkey2:&quot; + monkey1.equals(monkey2));
-        System.out.println(&quot;Is monkey1 equal to monkey3:&quot; + monkey1.equals(monkey3));
-    &#125;
-
-&#125;
-</code></pre>
-<h3 id="1-没有重写方法的程序执行结果"><a href="#1-没有重写方法的程序执行结果" class="headerlink" title="1.没有重写方法的程序执行结果"></a>1.没有重写方法的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:366712642
-monkey2&#39;s hash code:366712642
-monkey3&#39;s hash code:1829164700
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:false
-</code></pre>
-<p>monkey1和monkey2指向堆上的同一个对象，故monkey1.equals(monkey2)的结果为true,monkey1和<br>monkey3指向堆上两个不同的对象，故equals()方法返回false。</p>
-<h3 id="2-重写后的程序执行结果"><a href="#2-重写后的程序执行结果" class="headerlink" title="2.重写后的程序执行结果"></a>2.重写后的程序执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:4
-monkey2&#39;s hash code:4
-monkey3&#39;s hash code:4
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:true
-</code></pre>
-<p>由于我们对equals和hashCode方法进行了重写，重新确定了对象相等的标准，故monkey1和monkey3为<br>“同一对象”。</p>
-<h3 id="3-只重写equals方法时，程序的执行结果"><a href="#3-只重写equals方法时，程序的执行结果" class="headerlink" title="3.只重写equals方法时，程序的执行结果"></a>3.只重写equals方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:366712642
-monkey2&#39;s hash code:366712642
-monkey3&#39;s hash code:1829164700
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:true
-</code></pre>
-<p>重写了equals方法后，monkey1和monkey3两个对象被认为指向同一实例，但他们的hash code不同</p>
-<h3 id="4-只重写hashCode方法时，程序的执行结果"><a href="#4-只重写hashCode方法时，程序的执行结果" class="headerlink" title="4.只重写hashCode方法时，程序的执行结果"></a>4.只重写hashCode方法时，程序的执行结果</h3><pre><code>monkey1&#39;s name:wu kong,age:10
-monkey2&#39;s name:wu kong,age:10
-monkey3&#39;s name:liu er,age:5
-monkey1&#39;s hash code:4
-monkey2&#39;s hash code:4
-monkey3&#39;s hash code:4
-Is monkey1 equal to monkey2:true
-Is monkey1 equal to monkey3:false
-</code></pre>
-<p>虽然monkey1、monkey2的hash code相同，但equals方法返回false。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>判断两个对象是否相等</category>
-      </categories>
-      <tags>
-        <tag>equals</tag>
-        <tag>hashCode</tag>
       </tags>
   </entry>
   <entry>
@@ -8588,33 +8588,6 @@ wb.save(&quot;物料表.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>pandas | 文本数据处理</title>
-    <url>/2021/11/06/pandas%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="pandas文本数据处理"><a href="#pandas文本数据处理" class="headerlink" title="pandas文本数据处理"></a>pandas文本数据处理</h1><p><a href="https://mp.weixin.qq.com/s/xmG8QizkbXJIBcqdT3nN-g">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pandas</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pandas</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法</title>
-    <url>/2021/01/28/pip%E5%AE%89%E8%A3%85%E5%87%BA%E7%8E%B0Cannot-fetch-index-base-URL-http-pypi-python-org-simple-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法"><a href="#pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法" class="headerlink" title="pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法"></a>pip安装出现Cannot fetch index base URL <a href="http://pypi.python.org/simple/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">http://pypi.python.org/simple/解决方法</a></h1><p>1.sudo vi .pip/pip.conf<br>2.添加以下内容<br>[global]<br>index-url=<a href="http://pypi.doubanio.com/simple/">http://pypi.doubanio.com/simple/</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>itertools | product</title>
     <url>/2021/09/04/product/</url>
     <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
@@ -8635,6 +8608,18 @@ print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.p
       <tags>
         <tag>python</tag>
         <tag>itertools</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法</title>
+    <url>/2021/01/28/pip%E5%AE%89%E8%A3%85%E5%87%BA%E7%8E%B0Cannot-fetch-index-base-URL-http-pypi-python-org-simple-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法"><a href="#pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法" class="headerlink" title="pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法"></a>pip安装出现Cannot fetch index base URL <a href="http://pypi.python.org/simple/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">http://pypi.python.org/simple/解决方法</a></h1><p>1.sudo vi .pip/pip.conf<br>2.添加以下内容<br>[global]<br>index-url=<a href="http://pypi.doubanio.com/simple/">http://pypi.doubanio.com/simple/</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -8676,6 +8661,21 @@ print(s.name)
         <tag>python</tag>
         <tag>property</tag>
         <tag>property装饰器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pandas | 文本数据处理</title>
+    <url>/2021/11/06/pandas%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="pandas文本数据处理"><a href="#pandas文本数据处理" class="headerlink" title="pandas文本数据处理"></a>pandas文本数据处理</h1><p><a href="https://mp.weixin.qq.com/s/xmG8QizkbXJIBcqdT3nN-g">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pandas</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pandas</tag>
       </tags>
   </entry>
   <entry>
@@ -8765,20 +8765,6 @@ print(t.num)
       </tags>
   </entry>
   <entry>
-    <title>python | python zip()函数</title>
-    <url>/2021/05/20/python-zip-%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="python-zip-函数"><a href="#python-zip-函数" class="headerlink" title="python zip()函数"></a>python zip()函数</h1><p>example:<br>1.zip() 压缩(zip)<br>case 1:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(list1)]) # ([1, 2, 3],), ([4, 5, 6],), ([7, 8, 9],)</p>
-<p>case 2:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>list2 = [[7, 8, 9], [4, 5, 6], [1, 2, 3]]<br>print([row for row in zip(list1, list2)])  # [([1, 2, 3], [7, 8, 9]), ([4, 5, 6], [4, 5, 6]), ([7, 8, 9], [1, 2, 3])]</p>
-<p>2.zip(*) 解压(unzip)<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(*list1)])  # [(1, 4, 7), (2, 5, 8), (3, 6, 9)]</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | python 广播</title>
     <url>/2021/06/21/python-%E5%B9%BF%E6%92%AD/</url>
     <content><![CDATA[<h1 id="python-广播"><a href="#python-广播" class="headerlink" title="python 广播"></a>python 广播</h1><pre><code>&quot;&quot;&quot;
@@ -8806,6 +8792,20 @@ percentage = 100*A/cal.reshape(1,4)
 print(percentage)
 </code></pre>
 <p><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=21">参考吴恩达深度学习视频</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | python zip()函数</title>
+    <url>/2021/05/20/python-zip-%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="python-zip-函数"><a href="#python-zip-函数" class="headerlink" title="python zip()函数"></a>python zip()函数</h1><p>example:<br>1.zip() 压缩(zip)<br>case 1:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(list1)]) # ([1, 2, 3],), ([4, 5, 6],), ([7, 8, 9],)</p>
+<p>case 2:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>list2 = [[7, 8, 9], [4, 5, 6], [1, 2, 3]]<br>print([row for row in zip(list1, list2)])  # [([1, 2, 3], [7, 8, 9]), ([4, 5, 6], [4, 5, 6]), ([7, 8, 9], [1, 2, 3])]</p>
+<p>2.zip(*) 解压(unzip)<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(*list1)])  # [(1, 4, 7), (2, 5, 8), (3, 6, 9)]</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -11300,6 +11300,21 @@ public class TestBySpring &#123;
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | tcp三次握手四次挥手</title>
+    <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
+    <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>三次握手</tag>
+        <tag>四次挥手</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | sqrt</title>
     <url>/2021/10/27/sqrt/</url>
     <content><![CDATA[<h1 id="69-sqrt-x"><a href="#69-sqrt-x" class="headerlink" title="69.sqrt(x)"></a>69.sqrt(x)</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。<br>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。<br>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p>
@@ -11336,21 +11351,6 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | tcp三次握手四次挥手</title>
-    <url>/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
-    <content><![CDATA[<h1 id="使用tcp协议进行通信过程中的三次握手和四次挥手"><a href="#使用tcp协议进行通信过程中的三次握手和四次挥手" class="headerlink" title="使用tcp协议进行通信过程中的三次握手和四次挥手"></a>使用tcp协议进行通信过程中的三次握手和四次挥手</h1><p>TCP在真正的读写操作之前，server与client之间必须建立一个连接。<br>当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接。<br>连接的<strong>建立</strong>通过<strong>三次握手</strong>，<strong>释放</strong>则需要<strong>四次挥手</strong><br><img src="/2020/10/26/tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/tcp.JPG" alt="tcp三次握手和四次挥手"></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>三次握手</tag>
-        <tag>四次挥手</tag>
       </tags>
   </entry>
   <entry>
@@ -11942,6 +11942,20 @@ app.MainLoop()
       </tags>
   </entry>
   <entry>
+    <title>深度学习基础 | 一文深层解决模型过拟合</title>
+    <url>/2021/11/05/%E4%B8%80%E6%96%87%E6%B7%B1%E5%B1%82%E8%A7%A3%E5%86%B3%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88/</url>
+    <content><![CDATA[<h1 id="一文深层解决模型过拟合"><a href="#一文深层解决模型过拟合" class="headerlink" title="一文深层解决模型过拟合"></a>一文深层解决模型过拟合</h1><p><a href="https://mp.weixin.qq.com/s/RBSewyWPdUnywKplVDzeLA">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>过拟合</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis | 一对多自定义映射、分步查询和延迟加载</title>
     <url>/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
     <content><![CDATA[<h1 id="一对多自定义映射、分步查询和延迟加载"><a href="#一对多自定义映射、分步查询和延迟加载" class="headerlink" title="一对多自定义映射、分步查询和延迟加载"></a>一对多自定义映射、分步查询和延迟加载</h1><p>1.项目目录<br><img src="/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>2.Dept.java<br>在”一”方添加List&lt;多&gt;</p>
@@ -12076,33 +12090,6 @@ public class TestEmpDept &#123;
       </tags>
   </entry>
   <entry>
-    <title>深度学习基础 | 一文深层解决模型过拟合</title>
-    <url>/2021/11/05/%E4%B8%80%E6%96%87%E6%B7%B1%E5%B1%82%E8%A7%A3%E5%86%B3%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88/</url>
-    <content><![CDATA[<h1 id="一文深层解决模型过拟合"><a href="#一文深层解决模型过拟合" class="headerlink" title="一文深层解决模型过拟合"></a>一文深层解决模型过拟合</h1><p><a href="https://mp.weixin.qq.com/s/RBSewyWPdUnywKplVDzeLA">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>过拟合</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习基础 | 一文看懂各种神经网络优化算法</title>
-    <url>/2021/11/05/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="一文看懂各种神经网络优化算法"><a href="#一文看懂各种神经网络优化算法" class="headerlink" title="一文看懂各种神经网络优化算法"></a>一文看懂各种神经网络优化算法</h1><p><a href="https://mp.weixin.qq.com/s/gRrZImMydyCDBNCTIgVYXw">一文看懂各种神经网络优化算法</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>优化算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
     <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
     <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
@@ -12117,6 +12104,19 @@ public class TestEmpDept &#123;
         <tag>一维卷积</tag>
         <tag>二维卷积</tag>
         <tag>三维卷积</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习基础 | 一文看懂各种神经网络优化算法</title>
+    <url>/2021/11/05/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="一文看懂各种神经网络优化算法"><a href="#一文看懂各种神经网络优化算法" class="headerlink" title="一文看懂各种神经网络优化算法"></a>一文看懂各种神经网络优化算法</h1><p><a href="https://mp.weixin.qq.com/s/gRrZImMydyCDBNCTIgVYXw">一文看懂各种神经网络优化算法</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>优化算法</tag>
       </tags>
   </entry>
   <entry>
@@ -12736,7 +12736,7 @@ with request.urlopen(url) as response:
 <li>一次遍历<br>遍历0~n的数字，如果不在nums数组中，则将其返回。</li>
 <li>排序<br>将数组排序之后，即可根据数组中每个下标处的元素是否和下标相等，得到丢失的数字。</li>
 </ol>
-<p><strong>注：</strong> 如果长度为n的数组（下标为0<del>n-1）元素与下标都相等，则丢失元素为n<br>3. 位运算<br>数组 nums 中有 n 个数，在这 n 个数的后面添加从 0 到 n 的每个整数，则添加了 n+1 个整数，共有 2n+1 个整数。<br>在 2n+1 个整数中，丢失的数字只在后面 n+1 个整数中出现一次，其余的数字在前面 n 个整数中（即数组中）和后面 n+1 个整数中各出现一次，即其余的数字都出现了两次。<br>根据出现的次数的奇偶性，可以使用按位异或运算得到丢失的数字。按位异或运算 ⊕ 满足交换律和结合律，且对任意整数 x 都满足 x⊕x=0 和 x⊕0=x。<br>由于上述 2n+12n+12n+1 个整数中，丢失的数字出现了一次，其余的数字都出现了两次，因此对上述 2n+12n+12n+1 个整数进行按位异或运算，结果即为丢失的数字。<br>4. 数学<br>丢失的数字 = 0</del>n的和 - nums数组的和</p>
+<p><strong>注：</strong> 如果长度为n的数组（下标为0<del>n-1）元素与下标都相等，则丢失元素为n<br>3. 位运算<br>数组 nums 中有 n 个数，在这 n 个数的后面添加从 0 到 n 的每个整数，则添加了 n+1 个整数，共有 2n+1 个整数。<br>在 2n+1 个整数中，丢失的数字只在后面 n+1 个整数中出现一次，其余的数字在前面 n 个整数中（即数组中）和后面 n+1 个整数中各出现一次，即其余的数字都出现了两次。<br>根据出现的次数的奇偶性，可以使用按位异或运算得到丢失的数字。按位异或运算^满足交换律和结合律，且对任意整数 x 都满足 x^x=0 和 x^0=x。<br>由于上述 2n+1 个整数中，丢失的数字出现了一次，其余的数字都出现了两次，因此对上述 2n+1 个整数进行按位异或运算，结果即为丢失的数字。<br>4. 数学<br>丢失的数字 = 0</del>n的和 - nums数组的和</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        一次遍历</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        遍历0~n，如果数字不在nums中，就将它返回</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums) + <span class="number">1</span>):</span><br><span class="line">			<span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> nums:</span><br><span class="line">				<span class="keyword">return</span> i</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        将数组排序之后，即可根据数组中每个下标处的元素是否和下标相等，得到丢失的数字。</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        注：如果长度为n的数组（下标为0~n-1）元素与下标都相等，则丢失元素为n</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		nums.sort()</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">			<span class="keyword">if</span> i != num:</span><br><span class="line">				<span class="keyword">return</span> i</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">len</span>(nums)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber2</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">	    位运算</span></span><br><span class="line"><span class="string">	    &quot;&quot;&quot;</span></span><br><span class="line">		xor = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">			xor ^= i ^ num</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> xor ^ <span class="built_in">len</span>(nums)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber3</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		n = <span class="built_in">len</span>(nums)</span><br><span class="line">		</span><br><span class="line">		total = (n*(n+<span class="number">1</span>)) // <span class="number">2</span></span><br><span class="line">		nums_sum = <span class="built_in">sum</span>(nums)</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> total - nums_sum</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	nums = [<span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">	<span class="comment"># missing_number = slt.missingNumber(nums)</span></span><br><span class="line">	<span class="comment"># missing_number = slt.missingNumber1(nums)</span></span><br><span class="line">	<span class="comment"># missing_number = slt.missingNumber2(nums)</span></span><br><span class="line">	missing_number = slt.missingNumber3(nums)</span><br><span class="line">	<span class="built_in">print</span>(missing_number)</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
@@ -15297,6 +15297,96 @@ a = a.reshape((5,1))
       </tags>
   </entry>
   <entry>
+    <title>MyBatis | 分步查询、分步查询延迟加载</title>
+    <url>/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p>
+<pre><code>&lt;settings&gt;
+    &lt;!-- 开启延迟加载 --&gt;
+    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
+    &lt;!-- 是否查询所有数据 --&gt;
+    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;
+&lt;/settings&gt;
+</code></pre>
+<p>2.DeptMapper.java</p>
+<pre><code>public interface DeptMapper &#123;
+    Dept getDeptByDid(String did);
+&#125;
+</code></pre>
+<p>3.DeptMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;
+    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;
+        select did,dname from dept where did=#&#123;did&#125;
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>4.EmpDeptMapper.java</p>
+<pre><code>public interface EmpDeptMapper &#123;
+    List&lt;Emp&gt; getAllEmp();
+    
+    Emp getEmpStep(String eid);//分步查询
+&#125;
+</code></pre>
+<p>5.EmpDeptMapper.xml<br>添加查询语句</p>
+<pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;
+    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
+    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
+    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
+    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
+    &lt;!--
+        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id
+        column:分步查询的条件，注意：此条件必须是从数据库查询过的 
+     --&gt;
+    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;
+&lt;/resultMap&gt;
+
+&lt;!-- Emp getEmpStep(String eid); --&gt;
+&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;
+    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;
+&lt;/select&gt;
+</code></pre>
+<p>6.TestEmpDept.java</p>
+<pre><code>public class TestEmpDept &#123;
+    public static void main(String[] args) throws IOException &#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
+        
+        Emp emp = mapper.getEmpStep(&quot;3&quot;);
+        System.out.println(emp.getEname());
+        System.out.println(emp.getDept());
+    &#125;
+&#125;
+</code></pre>
+<p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p>
+<pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
+王五
+DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
+Dept [did=3, dname=研发部]
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>分步查询、分步查询延迟加载</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>分步查询</tag>
+        <tag>分步查询延迟加载</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于JavaWeb的网上购物商城 | 分页</title>
     <url>/2022/01/15/%E5%88%86%E9%A1%B5-1/</url>
     <content><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><p><strong>实现功能</strong>：<br>当我们点击首页菜单栏的商品类别链接时，显示该分类下一定数量的商品，当该分类的总商品数大于这个数量，就会由几页数据，此时我们再点击页码时浏览器显示对应页的商品。<br><strong>实现分页功能需要的数据：</strong></p>
@@ -15598,96 +15688,6 @@ public int getCount(String cid) throws SQLException &#123;
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | 分步查询、分步查询延迟加载</title>
-    <url>/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
-    <content><![CDATA[<h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p>
-<pre><code>&lt;settings&gt;
-    &lt;!-- 开启延迟加载 --&gt;
-    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
-    &lt;!-- 是否查询所有数据 --&gt;
-    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;
-&lt;/settings&gt;
-</code></pre>
-<p>2.DeptMapper.java</p>
-<pre><code>public interface DeptMapper &#123;
-    Dept getDeptByDid(String did);
-&#125;
-</code></pre>
-<p>3.DeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;
-    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;
-        select did,dname from dept where did=#&#123;did&#125;
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-    
-    Emp getEmpStep(String eid);//分步查询
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml<br>添加查询语句</p>
-<pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;
-    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-    &lt;!--
-        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id
-        column:分步查询的条件，注意：此条件必须是从数据库查询过的 
-     --&gt;
-    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;
-&lt;/resultMap&gt;
-
-&lt;!-- Emp getEmpStep(String eid); --&gt;
-&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;
-    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;
-&lt;/select&gt;
-</code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        Emp emp = mapper.getEmpStep(&quot;3&quot;);
-        System.out.println(emp.getEname());
-        System.out.println(emp.getDept());
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p>
-<pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-王五
-DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-Dept [did=3, dname=研发部]
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>分步查询、分步查询延迟加载</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>分步查询</tag>
-        <tag>分步查询延迟加载</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | 分页</title>
     <url>/2022/01/12/%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h1><h2 id="项目目录"><a href="#项目目录" class="headerlink" title="项目目录"></a>项目目录</h2><p><img src="/2022/01/12/%E5%88%86%E9%A1%B5/1.PNG"></p>
@@ -15882,6 +15882,21 @@ public class PageDao &#123;
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 划分数据集前对数据的shuffle</title>
+    <url>/2021/07/02/%E5%88%92%E5%88%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%89%8D%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84shuffle/</url>
+    <content><![CDATA[<h1 id="划分数据集前对数据的shuffle"><a href="#划分数据集前对数据的shuffle" class="headerlink" title="划分数据集前对数据的shuffle"></a>划分数据集前对数据的shuffle</h1><p>划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！<br>重要的事情说三遍！</p>
+<p>shuffle对模型的accuracy有较大的影响，因此在将数据输入模型之前应该将数据集进行shuffle!</p>
+<p><a href="https://blog.csdn.net/qq_38412868/article/details/85473973">Python如何打乱训练数据集顺序的几种方法</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis | 分页插件PageHelper及PageHelper模拟分页</title>
     <url>/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/</url>
     <content><![CDATA[<h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p>
@@ -16024,21 +16039,6 @@ public class TestPage &#123;
       <tags>
         <tag>Java</tag>
         <tag>创建web项目</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 划分数据集前对数据的shuffle</title>
-    <url>/2021/07/02/%E5%88%92%E5%88%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%89%8D%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84shuffle/</url>
-    <content><![CDATA[<h1 id="划分数据集前对数据的shuffle"><a href="#划分数据集前对数据的shuffle" class="headerlink" title="划分数据集前对数据的shuffle"></a>划分数据集前对数据的shuffle</h1><p>划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！<br>重要的事情说三遍！</p>
-<p>shuffle对模型的accuracy有较大的影响，因此在将数据输入模型之前应该将数据集进行shuffle!</p>
-<p><a href="https://blog.csdn.net/qq_38412868/article/details/85473973">Python如何打乱训练数据集顺序的几种方法</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
