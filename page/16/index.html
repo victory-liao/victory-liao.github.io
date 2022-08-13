@@ -190,141 +190,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/jstl%E6%A0%87%E7%AD%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/11/jstl%E6%A0%87%E7%AD%BE/" class="post-title-link" itemprop="url">JavaWeb项目开发 | jstl标签</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-11 22:33:02 / Modified: 22:42:19" itemprop="dateCreated datePublished" datetime="2022-01-11T22:33:02-08:00">2022-01-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jstl%E6%A0%87%E7%AD%BE/" itemprop="url" rel="index"><span itemprop="name">jstl标签</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="jstl标签"><a href="#jstl标签" class="headerlink" title="jstl标签"></a>jstl标签</h1><ol>
-<li>jstl标签(替换jsp页面中的if、forjava代码)<br><img src="/2022/01/11/jstl%E6%A0%87%E7%AD%BE/1.PNG"></li>
-<li>jstl标签测试</li>
-</ol>
-<pre><code>&lt;%@page import=&quot;java.util.HashMap&quot;%&gt;
-&lt;%@page import=&quot;java.util.ArrayList&quot;%&gt;
-&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;%
-        request.setAttribute(&quot;a&quot;, 1);
-        request.setAttribute(&quot;b&quot;, 4);
-        
-        //在request域中设置复杂数据(ArrayList)
-        ArrayList&lt;String&gt; arr = new ArrayList&lt;String&gt;();
-        arr.add(&quot;zhangsan&quot;);
-        arr.add(&quot;lisi&quot;);
-        arr.add(&quot;wangwu&quot;);
-        request.setAttribute(&quot;list&quot;, arr);
-        
-        //在request域中设置复杂数据(HashMap)
-        HashMap&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
-        map.put(&quot;a&quot;, &quot;A&quot;);
-        map.put(&quot;b&quot;, &quot;B&quot;);
-        map.put(&quot;c&quot;, &quot;C&quot;);
-        request.setAttribute(&quot;map&quot;, map);
-    %&gt;
-    &lt;c:if test=&quot;$&#123;a&gt;b&#125;&quot;&gt;
-        &lt;font color=&quot;red&quot;&gt;a大于b&lt;/font&gt;&lt;br&gt;
-    &lt;/c:if&gt;
-    
-    &lt;c:if test=&quot;$&#123;a&lt;b&#125;&quot;&gt;
-        &lt;font color=&quot;green&quot;&gt;a大于b&lt;/font&gt;&lt;br&gt;
-    &lt;/c:if&gt;
-    
-    &lt;c:forEach begin=&quot;1&quot; end=&quot;10&quot; step=&quot;1&quot; var=&quot;n&quot;&gt;
-        $&#123;n&#125;
-    &lt;/c:forEach&gt;&lt;br&gt;
-    
-    &lt;c:forEach items=&quot;$&#123;list&#125;&quot; var=&quot;s&quot;&gt;
-        $&#123;s&#125;
-    &lt;/c:forEach&gt;&lt;br&gt;
-    
-    &lt;c:forEach items=&quot;$&#123;map&#125;&quot; var=&quot;en&quot;&gt;
-        $&#123;en.key&#125;
-        $&#123;en.value&#125;&lt;br&gt;
-    &lt;/c:forEach&gt;
-&lt;/body&gt;
-&lt;/html&gt;s
-</code></pre>
-<ol start="3">
-<li>效果<br><img src="/2022/01/11/jstl%E6%A0%87%E7%AD%BE/2.PNG"></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1654,6 +1519,95 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/servlet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/servlet/" class="post-title-link" itemprop="url">JavaWeb项目开发 | servlet</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-10 01:00:20" itemprop="dateCreated datePublished" datetime="2022-01-10T01:00:20-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-11 00:06:49" itemprop="dateModified" datetime="2022-01-11T00:06:49-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAservlet%E6%8E%A5%E6%94%B6%E5%B9%B6%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82/" itemprop="url" rel="index"><span itemprop="name">创建servlet接收并处理请求</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><h2 id="创建servlet"><a href="#创建servlet" class="headerlink" title="创建servlet"></a>创建servlet</h2><ol>
+<li>在src下面新建一个包com.oracle(公司域名反写)</li>
+<li>在com.oracle下新建一个servlet(New–&gt;Other–&gt;Web–&gt;Servlet)<br>输入servlet的名称：<br><img src="/2022/01/10/servlet/1.PNG"><br>修改URL mappings:<br><img src="/2022/01/10/servlet/2.PNG"><br>去掉Constructors form superclass的勾选：<br><img src="/2022/01/10/servlet/3.PNG"><br>创建好的servlet:<br><img src="/2022/01/10/servlet/4.PNG"><h2 id="测试Demo1Servlet"><a href="#测试Demo1Servlet" class="headerlink" title="测试Demo1Servlet"></a>测试Demo1Servlet</h2></li>
+<li>创建demo1.html<br><img src="/2022/01/10/servlet/5.PNG"></li>
+<li>在Demo1Servlet.java中编写处理来自demo1.html的请求的Java代码<br><img src="/2022/01/10/servlet/6.PNG"></li>
+<li>在浏览器地址栏输入：localhost:8080/shop/demo1.html<br><img src="/2022/01/10/servlet/7.PNG"></li>
+<li>点击上图中的超链接向服务器发出请求<br>servelet处理来自浏览器的请求，执行在Demo1Servlet.java中编写的Java代码<br><img src="/2022/01/10/servlet/8.PNG"></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1725,7 +1679,7 @@ request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">452</span>
+          <span class="site-state-item-count">451</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
