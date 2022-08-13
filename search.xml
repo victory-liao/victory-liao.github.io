@@ -1581,78 +1581,6 @@ driver.quit()
       </tags>
   </entry>
   <entry>
-    <title>并发 | CountDownLatch</title>
-    <url>/2022/05/30/CountDownLatch/</url>
-    <content><![CDATA[<h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><p>CountDownLatch允许一个或多个线程等待其他线程完成操作。<br>例如：</p>
-<pre><code>CountDownLatch c = new CountDownLatch(2)；
-</code></pre>
-<p>CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.<br>当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前<br>线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的<strong>N个点，可以是N个线程，也可以<br>是1个线程里的N个步骤</strong>。<br><strong>注：CountDownLatch的计数器智能使用一次</strong></p>
-<span id="more"></span>
-<p><strong>示例代码1</strong></p>
-<pre><code>package concurrency.countdownlatch;
-
-import java.util.concurrent.CountDownLatch;
-
-public class CountDownLatchTest1 &#123;
-    static CountDownLatch c = new CountDownLatch(2);
-    
-    public static void main(String[] args) throws InterruptedException &#123;
-        new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                System.out.println(&quot;parser1 finished&quot;);
-                c.countDown();
-            &#125;
-        &#125;).start();
-        
-        new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                System.out.println(&quot;parser2 finished&quot;);
-                c.countDown();
-            &#125;
-        &#125;).start();
-        c.await();
-        System.out.println(&quot;all parsers finished&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p><strong>示例代码2</strong></p>
-<pre><code>package concurrency.countdownlatch;
-
-import java.util.concurrent.CountDownLatch;
-
-public class CountDownLatchTest2 &#123;
-    static CountDownLatch c = new CountDownLatch(2);
-    public static void main(String[] args) throws InterruptedException &#123;
-        new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                System.out.println(&quot;1&quot;);
-                c.countDown();
-                System.out.println(&quot;2&quot;);
-                c.countDown();
-            &#125;
-        &#125;).start();
-        c.await();
-        System.out.println(&quot;3&quot;);
-    &#125; 
-&#125;
-</code></pre>
-<p><a href="https://blog.csdn.net/hbtj_1216/article/details/109655995">CountDownLatch</a></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>并发</category>
-        <category>CountDownLatch</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>并发</tag>
-        <tag>CountDownLatch</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>并发 | CyclicBarrier用于多线程计算数据并合并计算结果</title>
     <url>/2022/06/07/CyclicBarrier%E7%94%A8%E4%BA%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%90%88%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%BB%93%E6%9E%9C/</url>
     <content><![CDATA[<h1 id="CyclicBarrier用于多线程计算数据并合并计算结果"><a href="#CyclicBarrier用于多线程计算数据并合并计算结果" class="headerlink" title="CyclicBarrier用于多线程计算数据并合并计算结果"></a>CyclicBarrier用于多线程计算数据并合并计算结果</h1><p><strong>CyclicBarrier</strong><br>CyclicBarrier让一组线程到达一个屏障（同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，<br>所有被屏障拦截的线程才会继续执行。<br><strong>注：CyclicBarrier的计数器可以使用reset()方法重置</strong></p>
@@ -1790,6 +1718,78 @@ public class BankWaterService implements Runnable&#123;
       <tags>
         <tag>并发</tag>
         <tag>CyclicBarrier</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>并发 | CountDownLatch</title>
+    <url>/2022/05/30/CountDownLatch/</url>
+    <content><![CDATA[<h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><p>CountDownLatch允许一个或多个线程等待其他线程完成操作。<br>例如：</p>
+<pre><code>CountDownLatch c = new CountDownLatch(2)；
+</code></pre>
+<p>CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.<br>当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前<br>线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的<strong>N个点，可以是N个线程，也可以<br>是1个线程里的N个步骤</strong>。<br><strong>注：CountDownLatch的计数器智能使用一次</strong></p>
+<span id="more"></span>
+<p><strong>示例代码1</strong></p>
+<pre><code>package concurrency.countdownlatch;
+
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchTest1 &#123;
+    static CountDownLatch c = new CountDownLatch(2);
+    
+    public static void main(String[] args) throws InterruptedException &#123;
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                System.out.println(&quot;parser1 finished&quot;);
+                c.countDown();
+            &#125;
+        &#125;).start();
+        
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                System.out.println(&quot;parser2 finished&quot;);
+                c.countDown();
+            &#125;
+        &#125;).start();
+        c.await();
+        System.out.println(&quot;all parsers finished&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>示例代码2</strong></p>
+<pre><code>package concurrency.countdownlatch;
+
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchTest2 &#123;
+    static CountDownLatch c = new CountDownLatch(2);
+    public static void main(String[] args) throws InterruptedException &#123;
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run() &#123;
+                System.out.println(&quot;1&quot;);
+                c.countDown();
+                System.out.println(&quot;2&quot;);
+                c.countDown();
+            &#125;
+        &#125;).start();
+        c.await();
+        System.out.println(&quot;3&quot;);
+    &#125; 
+&#125;
+</code></pre>
+<p><a href="https://blog.csdn.net/hbtj_1216/article/details/109655995">CountDownLatch</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>并发</category>
+        <category>CountDownLatch</category>
+      </categories>
+      <tags>
+        <tag>并发</tag>
+        <tag>Java</tag>
+        <tag>CountDownLatch</tag>
       </tags>
   </entry>
   <entry>
@@ -2055,6 +2055,11 @@ layer11: Linear(64, 2)
       </tags>
   </entry>
   <entry>
+    <title>EmotionalTendencyPredictionUsingLSTM</title>
+    <url>/2021/11/29/EmotionalTendencyPredictionUsingLSTM/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>并发 | Exchanger</title>
     <url>/2022/06/07/Exchanger/</url>
     <content><![CDATA[<h1 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h1><p>Exchanger用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程<br>通过exchange方法交换数据，如果第一个线程先执行exchange方法，它会一直等待第二个线程也执行exchange方法，当<br>两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产出来的数据传递给对方。<br><strong>应用场景</strong><br>（1）遗传算法<br>遗传算法里需要选出两个人作为交配对象，这时候会交换两个人的数据，并使用交叉规则得出2个交配结果。<br>（2）校对工作<br>例如，我们需要将纸制银行流水通过人工的方式录入成电子银行流水，为了避免错误，采用AB岗两个人进行录入，录入到<br>Excel后，系统需要加载这两个Excel，并对两个Excel数据进行校对，看看是否录入一致。<br><strong>示例代码：</strong></p>
@@ -2108,11 +2113,6 @@ public class ExchangerTest &#123;
         <tag>并发</tag>
         <tag>Exchanger</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>EmotionalTendencyPredictionUsingLSTM</title>
-    <url>/2021/11/29/EmotionalTendencyPredictionUsingLSTM/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>spring | FactoryBean</title>
@@ -2237,19 +2237,6 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
-    <title>GPU | GPU利用率低？</title>
-    <url>/2021/10/09/GPU%E5%88%A9%E7%94%A8%E7%8E%87%E4%BD%8E%EF%BC%9F/</url>
-    <content><![CDATA[<h1 id="GPU利用率低？"><a href="#GPU利用率低？" class="headerlink" title="GPU利用率低？"></a>GPU利用率低？</h1><p><a href="https://blog.csdn.net/qq_32998593/article/details/92849585">GPU利用率低？</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>GPU</category>
-      </categories>
-      <tags>
-        <tag>GPU</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTP | HTTP请求方法</title>
     <url>/2020/11/09/HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h1 id="HTTP请求方法"><a href="#HTTP请求方法" class="headerlink" title="HTTP请求方法"></a>HTTP请求方法</h1><h2 id="常见的几种请求方式"><a href="#常见的几种请求方式" class="headerlink" title="常见的几种请求方式"></a>常见的几种请求方式</h2><table>
@@ -2290,6 +2277,19 @@ with urllib.request.urlopen(req) as response:
       </categories>
       <tags>
         <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GPU | GPU利用率低？</title>
+    <url>/2021/10/09/GPU%E5%88%A9%E7%94%A8%E7%8E%87%E4%BD%8E%EF%BC%9F/</url>
+    <content><![CDATA[<h1 id="GPU利用率低？"><a href="#GPU利用率低？" class="headerlink" title="GPU利用率低？"></a>GPU利用率低？</h1><p><a href="https://blog.csdn.net/qq_32998593/article/details/92849585">GPU利用率低？</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>GPU</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
       </tags>
   </entry>
   <entry>
@@ -2371,6 +2371,20 @@ public class HashMapTraversalMethodsTest &#123;
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | I/O密集型和计算密集型</title>
+    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
+<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>参考文献 | Identifying Users and Activities with Cognitive Signal Processing from a Wearable Headband</title>
     <url>/2021/11/13/IdentifyingUsersAndActivitiesWithCognitiveSignalProcessingFromAWearableHeadband/</url>
     <content><![CDATA[<h1 id="Identifying-Users-and-Activities-with-Cognitive-Signal-Processing-from-a-Wearable-Headband"><a href="#Identifying-Users-and-Activities-with-Cognitive-Signal-Processing-from-a-Wearable-Headband" class="headerlink" title="Identifying Users and Activities with Cognitive Signal Processing from a Wearable Headband"></a>Identifying Users and Activities with Cognitive Signal Processing from a Wearable Headband</h1><h2 id="Predictions"><a href="#Predictions" class="headerlink" title="Predictions"></a>Predictions</h2><p>1.Predicting a person<br>2.Predicting an activity<br>3.Predicting a person as well as the activity</p>
@@ -2387,20 +2401,6 @@ public class HashMapTraversalMethodsTest &#123;
       <tags>
         <tag>脑电分类</tag>
         <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | I/O密集型和计算密集型</title>
-    <url>/2020/11/02/IO%E5%AF%86%E9%9B%86%E5%9E%8B%E5%92%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="I-O密集型和计算密集型"><a href="#I-O密集型和计算密集型" class="headerlink" title="I/O密集型和计算密集型"></a>I/O密集型和计算密集型</h1><p><strong>I/O密集型</strong>—&gt;需要网络功能，大量的时间都在等待网络数据的到来—&gt;通常使用多线程/协程</p>
-<p><strong>计算密集型</strong>—&gt;需要占用大量的cpu资源—&gt;通常使用多进程</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -2572,21 +2572,6 @@ Found 1 deadlock.
       </tags>
   </entry>
   <entry>
-    <title>框架 | Java中的6大框架</title>
-    <url>/2022/01/26/Java%E4%B8%AD%E7%9A%846%E5%A4%A7%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<h1 id="Java中的6大框架"><a href="#Java中的6大框架" class="headerlink" title="Java中的6大框架"></a>Java中的6大框架</h1><p><strong>6大框架</strong><br>1)structs1<br>2)structs2<br>3)hibernate<br>4)spring<br>5)springMVC<br>6)mybatis<br><strong>SSM</strong><br><strong>SSM=spring+springMVC+mybatis</strong><br><strong>框架分类</strong><br>MVC框架：struts1(封装了servlet),struts2(封装了filter),springMVC<br>持久层框架：hibernate,mybatis<br>整合型框架，设计型框架：spring</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>Java中的6大框架</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>框架</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>并发 | Java中的12个原子操作类</title>
     <url>/2022/06/07/Java%E4%B8%AD%E7%9A%8413%E4%B8%AA%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="Java中的13个原子操作类"><a href="#Java中的13个原子操作类" class="headerlink" title="Java中的13个原子操作类"></a>Java中的13个原子操作类</h1><p>在java.util.concurrent.atomic包中包含了12个原子类，属于四种类型的原子更新方式，分别是：<br>（1）原子更新基本类型<br>    AtomicInteger:原子更新整型；<br>    AtomicBoolean:原子更新布尔类型；<br>    AtomicLong:源自更新长整型。<br>（2）原子更新数组<br>    AtomicIntegerArray:原子更新整型数组里的元素；<br>    AtomicLongArray:原子更新长整型数组里的元素；<br>    AtomicReferenceArray:原子更新引用类型数组里的元素<br>（3）原子更新引用<br>    AtomicReference:原子更新引用类型；<br>    AtomicReferenceFieldUpdater:原子更新引用类型里的字段；<br>    AtomicMarkableReference:原子更新带有标记位的引用类型（可以原子更新一个布尔类型的标记位和引用类型）。<br>（4）原子更新属性（字段）<br>    AtomicIntegerFieldUpdater:原子更新整型的字段的更新器；<br>    AtomicLongFieldUpdater:原子更新长整型的字段的更新器；<br>    AtomicStampedReference:原子更新带有版本号的引用类型，能够解决使用CAS进行原子更新时可能出现的ABA问题。<br>以下给出每个类型的原子更新的一个示例代码：</p>
@@ -2731,6 +2716,21 @@ public class AtomicIntegerFieldUpdaterTest &#123;
       <tags>
         <tag>并发</tag>
         <tag>原子类</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>框架 | Java中的6大框架</title>
+    <url>/2022/01/26/Java%E4%B8%AD%E7%9A%846%E5%A4%A7%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<h1 id="Java中的6大框架"><a href="#Java中的6大框架" class="headerlink" title="Java中的6大框架"></a>Java中的6大框架</h1><p><strong>6大框架</strong><br>1)structs1<br>2)structs2<br>3)hibernate<br>4)spring<br>5)springMVC<br>6)mybatis<br><strong>SSM</strong><br><strong>SSM=spring+springMVC+mybatis</strong><br><strong>框架分类</strong><br>MVC框架：struts1(封装了servlet),struts2(封装了filter),springMVC<br>持久层框架：hibernate,mybatis<br>整合型框架，设计型框架：spring</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>Java中的6大框架</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>框架</tag>
       </tags>
   </entry>
   <entry>
@@ -3267,6 +3267,22 @@ public class CodeVerifyServlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>RNN | LSTM输入输出格式</title>
+    <url>/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="LSTM模型结构的可视化"><a href="#LSTM模型结构的可视化" class="headerlink" title="LSTM模型结构的可视化"></a>LSTM模型结构的可视化</h1><p><a href="https://zhuanlan.zhihu.com/p/139617364?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">非常到位的LSTM解读！</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>RNN</category>
+        <category>LSTM</category>
+      </categories>
+      <tags>
+        <tag>LSTM</tag>
+        <tag>RNN</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux | vim | vim常用命令及三种命令模式</title>
     <url>/2020/10/08/Linux-vim/</url>
     <content><![CDATA[<h1>vim常用命令</h1> 
@@ -3304,22 +3320,6 @@ numyy:复制 光标所在行开始向下的num行<br><br>
       <tags>
         <tag>linux</tag>
         <tag>vim</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RNN | LSTM输入输出格式</title>
-    <url>/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="LSTM模型结构的可视化"><a href="#LSTM模型结构的可视化" class="headerlink" title="LSTM模型结构的可视化"></a>LSTM模型结构的可视化</h1><p><a href="https://zhuanlan.zhihu.com/p/139617364?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">非常到位的LSTM解读！</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>RNN</category>
-        <category>LSTM</category>
-      </categories>
-      <tags>
-        <tag>LSTM</tag>
-        <tag>RNN</tag>
       </tags>
   </entry>
   <entry>
@@ -3439,6 +3439,124 @@ reduce(jiecheng, [i for i in range(1, n+1)])
       <tags>
         <tag>脑电分类</tag>
         <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis | 三种查询方式</title>
+    <url>/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.MapKey;
+
+import com.atguigu.bean.Emp;
+
+public interface EmpSelectMapper &#123;
+    //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid);
+    
+    //获取所有的员工数量
+    Integer getCount();
+    
+    //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid);
+    
+    //以map集合获取所有员工信息
+    
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap();
+&#125;
+</code></pre>
+<p>3.EmpSelectMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;
+    
+    
+    &lt;!-- //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- //获取所有的员工数量
+    Integer getCount(); --&gt;
+    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;
+        select count(eid) from emp
+    &lt;/select&gt;
+    
+    &lt;!-- //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- //以map集合获取所有员工信息
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;
+    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;
+    select eid,ename,age,sex from emp
+    &lt;/select&gt;
+    
+&lt;/mapper&gt;
+</code></pre>
+<p>4.TestSelect.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpSelectMapper;
+
+public class TestSelect &#123;
+    @Test
+    public void testSelect() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);
+        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean
+//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);
+//        System.out.println(emp);
+        
+        //获取员工总记录数
+//        Integer i = mapper.getCount();
+//        System.out.println(i);
+        
+        //以map获取单个emp
+//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);
+//        System.out.println(map);
+        
+        //以map获取所有emp
+        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();
+        System.out.println(map);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>MyBatis三种查询方式</category>
+      </categories>
+      <tags>
+        <tag>Mybatis</tag>
       </tags>
   </entry>
   <entry>
@@ -3619,124 +3737,6 @@ public class TestCRUD &#123;
       <tags>
         <tag>Mybatis</tag>
         <tag>CRUD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MyBatis | 三种查询方式</title>
-    <url>/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.Map;
-
-import org.apache.ibatis.annotations.MapKey;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpSelectMapper &#123;
-    //根据eid查询一个员工信息
-    Emp getEmpByEid(String eid);
-    
-    //获取所有的员工数量
-    Integer getCount();
-    
-    //以map集合获取一个员工信息
-    Map&lt;String, Object&gt; getEmpMapByEid(String eid);
-    
-    //以map集合获取所有员工信息
-    
-    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
-    Map&lt;String, Object&gt; getAllEmpMap();
-&#125;
-</code></pre>
-<p>3.EmpSelectMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;
-    
-    
-    &lt;!-- //根据eid查询一个员工信息
-    Emp getEmpByEid(String eid); --&gt;
-    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
-    &lt;/select&gt;
-    
-    &lt;!-- //获取所有的员工数量
-    Integer getCount(); --&gt;
-    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;
-        select count(eid) from emp
-    &lt;/select&gt;
-    
-    &lt;!-- //以map集合获取一个员工信息
-    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;
-    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;
-        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
-    &lt;/select&gt;
-    
-    &lt;!-- //以map集合获取所有员工信息
-    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
-    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;
-    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;
-    select eid,ename,age,sex from emp
-    &lt;/select&gt;
-    
-&lt;/mapper&gt;
-</code></pre>
-<p>4.TestSelect.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpSelectMapper;
-
-public class TestSelect &#123;
-    @Test
-    public void testSelect() throws IOException&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);
-        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean
-//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);
-//        System.out.println(emp);
-        
-        //获取员工总记录数
-//        Integer i = mapper.getCount();
-//        System.out.println(i);
-        
-        //以map获取单个emp
-//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);
-//        System.out.println(map);
-        
-        //以map获取所有emp
-        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();
-        System.out.println(map);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>MyBatis三种查询方式</category>
-      </categories>
-      <tags>
-        <tag>Mybatis</tag>
       </tags>
   </entry>
   <entry>
@@ -5043,19 +5043,6 @@ public class RESTController &#123;
       </tags>
   </entry>
   <entry>
-    <title>Redis | 面试题目</title>
-    <url>/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/</url>
-    <content><![CDATA[<h1 id="Redis面试题目"><a href="#Redis面试题目" class="headerlink" title="Redis面试题目"></a>Redis面试题目</h1><p><a href="https://mp.weixin.qq.com/s/3ln9VAB_heYTI7yvxnp2bw">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>面试题目</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Redis | 集群搭建</title>
     <url>/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p>
@@ -5124,6 +5111,19 @@ cluster-node-timeout 15000
       <tags>
         <tag>Redis</tag>
         <tag>集群</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis | 面试题目</title>
+    <url>/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/</url>
+    <content><![CDATA[<h1 id="Redis面试题目"><a href="#Redis面试题目" class="headerlink" title="Redis面试题目"></a>Redis面试题目</h1><p><a href="https://mp.weixin.qq.com/s/3ln9VAB_heYTI7yvxnp2bw">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>面试题目</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
       </tags>
   </entry>
   <entry>
@@ -6578,6 +6578,54 @@ public class ParamController &#123;
       </tags>
   </entry>
   <entry>
+    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
+    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
+<pre><code>/**
+ * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
+ * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
+ */
+//往作用域中放值方式1
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public ModelAndView param()&#123;
+//        ModelAndView mav = new ModelAndView();
+//        //javaWEB： request.setAttribute(xxx) 
+//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
+//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
+//        return mav;
+//    &#125;
+    
+    //往作用域中放值方式2
+//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+//    public String param(Map&lt;String, Object&gt; map)&#123;
+//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
+//        return &quot;success&quot;;//返回视图名称
+//    &#125;
+
+//往作用域中放值方式3
+@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
+public String param(Model model)&#123;
+    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
+    return &quot;success&quot;;//返回视图名称
+&#125;
+</code></pre>
+<p>并在param.jsp页面获取request作用域中的值</p>
+<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
+    $&#123;username&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>处理请求过程中往作用域中放值的三种方式</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
+        <tag>ModelAndView</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java | ThreadLocal</title>
     <url>/2022/04/23/ThreadLocal/</url>
     <content><![CDATA[<h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p>
@@ -6628,54 +6676,6 @@ public class ThreadLocalTest implements Runnable&#123;
       <tags>
         <tag>Java</tag>
         <tag>ThreadLocal</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SpringMVC | 处理请求过程中往作用域中放值的三种方式</title>
-    <url>/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%BE%80%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E6%94%BE%E5%80%BC%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="处理响应数据-ModelAndView"><a href="#处理响应数据-ModelAndView" class="headerlink" title="处理响应数据 ModelAndView"></a>处理响应数据 ModelAndView</h1><p>在<a href="https://victory-liao.github.io/2022/03/09/SpringMVC%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">处理请求数据</a><br>项目的ParamController.java的类中加入以下代码：</p>
-<pre><code>/**
- * SpringMVC处理请求过程中，往作用域中放值有以下三种方式
- * 总结：根据ModelAndView源码调试，不管使用以下那种方式，最终都会把model数据和view数据封装到一个ModelAndView中
- */
-//往作用域中放值方式1
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public ModelAndView param()&#123;
-//        ModelAndView mav = new ModelAndView();
-//        //javaWEB： request.setAttribute(xxx) 
-//        mav.addObject(&quot;username&quot;, &quot;root&quot;);//往request作用域中放值
-//        mav.setViewName(&quot;success&quot;);//设置视图名称，实现页面跳转
-//        return mav;
-//    &#125;
-    
-    //往作用域中放值方式2
-//    @RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-//    public String param(Map&lt;String, Object&gt; map)&#123;
-//        map.put(&quot;username&quot;, &quot;admin&quot;);//向作用域中放值
-//        return &quot;success&quot;;//返回视图名称
-//    &#125;
-
-//往作用域中放值方式3
-@RequestMapping(value=&quot;/param&quot;, method=RequestMethod.POST)
-public String param(Model model)&#123;
-    model.addAttribute(&quot;usernaem&quot;, &quot;zhangsan&quot;);//向作用域中放值
-    return &quot;success&quot;;//返回视图名称
-&#125;
-</code></pre>
-<p>并在param.jsp页面获取request作用域中的值</p>
-<pre><code>&lt;!-- $&#123;requestScope.username &#125; --&gt;
-    $&#123;username&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>处理请求过程中往作用域中放值的三种方式</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
-        <tag>ModelAndView</tag>
       </tags>
   </entry>
   <entry>
@@ -6882,6 +6882,87 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Web服务器</title>
+    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
+import socket
+import re
+
+from multiprocessing import Process
+
+# 设置静态文件根目录
+HTML_ROOT_DIR = &quot;./html&quot;
+
+
+def handle_client(client_socket):
+    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
+    # 获取客户端请求数据
+    request_data = client_socket.recv(1024)
+    print(&quot;request data:&quot;,request_data)
+    request_lines = request_data.splitlines()
+    for line in request_lines:
+        print(line)
+
+    # 解析请求报文
+    # &#39;GET / HTTP/1.1&#39;
+    request_start_line = request_lines[0]
+    #提取用户请求的文件名
+    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
+
+    if &quot;/&quot; == file_name:
+        file_name = &quot;/index.html&quot;
+    # 打开文件，读取内容
+    try:
+        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
+    except IOError:
+        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = &quot;the file is not found&quot;
+    else:
+        file_data = file.read()
+        file.close()
+
+        # 构造响应数据
+        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = file_data.decode(&quot;utf-8&quot;)
+
+    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
+    print(&quot;response:&quot;,response)
+
+    # 向客户端返回响应数据
+    client_socket.send(bytes(response,&quot;utf-8&quot;))
+
+    #关闭客户端链接
+    client_socket.close()
+
+def main():
+    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    #SOL_SOCKET:设置选项级别为SOCKET
+    #SO_REUSEADDR:1
+    server_socket.bind((&quot;&quot;,7788))
+    server_socket.listen(128)
+
+    while True:
+        client_socket,client_address= server_socket.accept()
+        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
+        handle_client_process = Process(target=handle_client,args=(client_socket,))
+        handle_client_process.start()
+        client_socket.close()
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
+<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
+]]></content>
+      <tags>
+        <tag>Web服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>算法基础 | 递归与分治</title>
     <url>/2020/10/16/algorithms-2/</url>
     <content><![CDATA[<h1 id="递归与分治策略"><a href="#递归与分治策略" class="headerlink" title="递归与分治策略"></a>递归与分治策略</h1><p><b style="color:red">分治与递归经常同时应用在算法设计中</b></p>
@@ -6972,87 +7053,6 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Web服务器</title>
-    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
-<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
-import socket
-import re
-
-from multiprocessing import Process
-
-# 设置静态文件根目录
-HTML_ROOT_DIR = &quot;./html&quot;
-
-
-def handle_client(client_socket):
-    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
-    # 获取客户端请求数据
-    request_data = client_socket.recv(1024)
-    print(&quot;request data:&quot;,request_data)
-    request_lines = request_data.splitlines()
-    for line in request_lines:
-        print(line)
-
-    # 解析请求报文
-    # &#39;GET / HTTP/1.1&#39;
-    request_start_line = request_lines[0]
-    #提取用户请求的文件名
-    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
-
-    if &quot;/&quot; == file_name:
-        file_name = &quot;/index.html&quot;
-    # 打开文件，读取内容
-    try:
-        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
-    except IOError:
-        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
-        response_headers = &quot;Server: My server\r\n&quot;
-        response_body = &quot;the file is not found&quot;
-    else:
-        file_data = file.read()
-        file.close()
-
-        # 构造响应数据
-        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
-        response_headers = &quot;Server: My server\r\n&quot;
-        response_body = file_data.decode(&quot;utf-8&quot;)
-
-    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
-    print(&quot;response:&quot;,response)
-
-    # 向客户端返回响应数据
-    client_socket.send(bytes(response,&quot;utf-8&quot;))
-
-    #关闭客户端链接
-    client_socket.close()
-
-def main():
-    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-    #SOL_SOCKET:设置选项级别为SOCKET
-    #SO_REUSEADDR:1
-    server_socket.bind((&quot;&quot;,7788))
-    server_socket.listen(128)
-
-    while True:
-        client_socket,client_address= server_socket.accept()
-        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
-        handle_client_process = Process(target=handle_client,args=(client_socket,))
-        handle_client_process.start()
-        client_socket.close()
-
-if __name__ == &quot;__main__&quot;:
-    main()
-</code></pre>
-<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
-<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
-]]></content>
-      <tags>
-        <tag>Web服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -8815,6 +8815,18 @@ print(percentage)
       </tags>
   </entry>
   <entry>
+    <title>python | python 翻转列表</title>
+    <url>/2021/05/20/python-%E7%BF%BB%E8%BD%AC%E5%88%97%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="python-翻转列表"><a href="#python-翻转列表" class="headerlink" title="python 翻转列表"></a>python 翻转列表</h1><p>list1 = [1, 2, 3]<br>print(list1[::-1])  # [3, 2, 1]</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | python中如何实现函数重载的效果</title>
     <url>/2021/08/02/python%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E6%95%88%E6%9E%9C/</url>
     <content><![CDATA[<h1 id="python中如何实现函数重载的效果"><a href="#python中如何实现函数重载的效果" class="headerlink" title="python中如何实现函数重载的效果"></a>python中如何实现函数重载的效果</h1><h2 id="什么是函数重载？"><a href="#什么是函数重载？" class="headerlink" title="什么是函数重载？"></a>什么是函数重载？</h2><p>函数重载，即可以定义多个同名函数，但是参数列表不同，这样在调用时可以传递不同的实参。</p>
@@ -8829,18 +8841,6 @@ coffee2 = make_coffee()  # 没有提供参数，使用默认值
 print(coffee1)
 print(coffee2)
 </code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | python 翻转列表</title>
-    <url>/2021/05/20/python-%E7%BF%BB%E8%BD%AC%E5%88%97%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="python-翻转列表"><a href="#python-翻转列表" class="headerlink" title="python 翻转列表"></a>python 翻转列表</h1><p>list1 = [1, 2, 3]<br>print(list1[::-1])  # [3, 2, 1]</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -9306,58 +9306,6 @@ for ID in data.keys():
       </tags>
   </entry>
   <entry>
-    <title>python | 去除字符串首尾空格</title>
-    <url>/2021/11/13/python%E5%8E%BB%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A6%96%E5%B0%BE%E7%A9%BA%E6%A0%BC/</url>
-    <content><![CDATA[<h1 id="去除字符串首尾空格"><a href="#去除字符串首尾空格" class="headerlink" title="去除字符串首尾空格"></a>去除字符串首尾空格</h1><p>程序使用两种方法去除字符串首尾的空格。</p>
-<span id="more"></span>
-<h2 id="1-strip-rstrip-lstrip"><a href="#1-strip-rstrip-lstrip" class="headerlink" title="1.strip() rstrip() lstrip()"></a>1.strip() rstrip() lstrip()</h2><pre><code>a = &#39;  welcome to my world  &#39;
-print(len(a))
-print(len(a.strip()))  # 去掉首尾字符串
-print(len(a.lstrip()))  # 去掉首部空格
-print(len(a.rstrip()))  # 去掉尾部空格
-print(len(a.lstrip().rstrip()))  # 先去掉首部空格再去掉尾部空格
-</code></pre>
-<h1 id="2-递归实现"><a href="#2-递归实现" class="headerlink" title="2.递归实现"></a>2.递归实现</h1><pre><code>def trim(s):
-    flag = 0
-    if s[:1] == &#39; &#39;:
-        s = s[1:]
-        flag = 1
-    if s[-1:] == &#39; &#39;:
-        s = s[:-1]
-        flag = 1
-    if flag == 1:
-        return trim(s)
-    else:
-        return s
-print(len(&#39;  Hello World  &#39;))  # 15
-print(len(trim(&#39;  Hello World  &#39;)))  # 11
-</code></pre>
-<h1 id="3-while循环实现"><a href="#3-while循环实现" class="headerlink" title="3.while循环实现"></a>3.while循环实现</h1><pre><code>def trim(s):
-    while True:
-        flag = 0
-        if s[:1] == &#39; &#39;:
-            s = s[1:]
-            flag = 1
-        if s[-1:] == &#39; &#39;:
-            s = s[:-1]
-            flag = 1
-        if flag == 0:
-            break
-    return s
-print(len(&#39;  Hello World  &#39;))  # 15
-print(len(trim(&#39;  Hello World  &#39;)))  # 11
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>strip</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PyQt5 | python制作图形用户界面让操作可视化</title>
     <url>/2021/10/29/python%E5%88%B6%E4%BD%9C%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E8%AE%A9%E6%93%8D%E4%BD%9C%E5%8F%AF%E8%A7%86%E5%8C%96/</url>
     <content><![CDATA[<h1 id="python制作图形用户界面让操作可视化"><a href="#python制作图形用户界面让操作可视化" class="headerlink" title="python制作图形用户界面让操作可视化"></a>python制作图形用户界面让操作可视化</h1><p>代码：</p>
@@ -9531,6 +9479,58 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>python | 去除字符串首尾空格</title>
+    <url>/2021/11/13/python%E5%8E%BB%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A6%96%E5%B0%BE%E7%A9%BA%E6%A0%BC/</url>
+    <content><![CDATA[<h1 id="去除字符串首尾空格"><a href="#去除字符串首尾空格" class="headerlink" title="去除字符串首尾空格"></a>去除字符串首尾空格</h1><p>程序使用两种方法去除字符串首尾的空格。</p>
+<span id="more"></span>
+<h2 id="1-strip-rstrip-lstrip"><a href="#1-strip-rstrip-lstrip" class="headerlink" title="1.strip() rstrip() lstrip()"></a>1.strip() rstrip() lstrip()</h2><pre><code>a = &#39;  welcome to my world  &#39;
+print(len(a))
+print(len(a.strip()))  # 去掉首尾字符串
+print(len(a.lstrip()))  # 去掉首部空格
+print(len(a.rstrip()))  # 去掉尾部空格
+print(len(a.lstrip().rstrip()))  # 先去掉首部空格再去掉尾部空格
+</code></pre>
+<h1 id="2-递归实现"><a href="#2-递归实现" class="headerlink" title="2.递归实现"></a>2.递归实现</h1><pre><code>def trim(s):
+    flag = 0
+    if s[:1] == &#39; &#39;:
+        s = s[1:]
+        flag = 1
+    if s[-1:] == &#39; &#39;:
+        s = s[:-1]
+        flag = 1
+    if flag == 1:
+        return trim(s)
+    else:
+        return s
+print(len(&#39;  Hello World  &#39;))  # 15
+print(len(trim(&#39;  Hello World  &#39;)))  # 11
+</code></pre>
+<h1 id="3-while循环实现"><a href="#3-while循环实现" class="headerlink" title="3.while循环实现"></a>3.while循环实现</h1><pre><code>def trim(s):
+    while True:
+        flag = 0
+        if s[:1] == &#39; &#39;:
+            s = s[1:]
+            flag = 1
+        if s[-1:] == &#39; &#39;:
+            s = s[:-1]
+            flag = 1
+        if flag == 0:
+            break
+    return s
+print(len(&#39;  Hello World  &#39;))  # 15
+print(len(trim(&#39;  Hello World  &#39;)))  # 11
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>strip</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | python可变参数</title>
     <url>/2021/08/02/python%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/</url>
     <content><![CDATA[<h1 id="python可变参数"><a href="#python可变参数" class="headerlink" title="python可变参数"></a>python可变参数</h1><p>python中的函数可以定义<strong>接受不确定数量的参数</strong>，这种参数被称为<strong>可变参数</strong>。</p>
@@ -9568,6 +9568,23 @@ show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
       </tags>
   </entry>
   <entry>
+    <title>python | 垃圾回收机制</title>
+    <url>/2021/11/14/python%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</url>
+    <content><![CDATA[<h1 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h1><h2 id="Pyhton垃圾回收机制"><a href="#Pyhton垃圾回收机制" class="headerlink" title="Pyhton垃圾回收机制"></a>Pyhton垃圾回收机制</h2><p>1.引用计数<br><strong>引用计数法的原理是：</strong> 每个对象维护一个ob_ref字段，用来记录该对象当前被引用的次数，每当新的引用指向该对象时，它的引用计数ob_ref加1，每当该对象的引用失效时计数ob_ref减1，一旦对象的引用计数为0，该对象立即被回收，对象占用的内存空间将被释放。<br><strong>缺点：</strong> 无法解决循环引用<br>2.标记清除<br>Python采用了“标记-清除”(Mark and Sweep)算法，解决容器对象可能产生的循环引用问题。<br><strong>标记阶段</strong> 遍历所有的对象，如果是可达的（reachable），也就是还有对象引用它，那么就标记该对象为可达；<br><strong>清除阶段</strong> 再次遍历对象，如果发现某个对象没有标记为可达，则就将其回收。<br><strong>优点：</strong> 解决了循环引用问题<br><strong>缺点：</strong> 标记清除算法在执行很多次数后，程序的堆空间会产生一些小的内存碎片。<br>3.分代回收(假设新生代、中生代和老生代的threshold分别为700、10、10.)<br>· 每新增 701 个需要 GC 的对象，触发一次新生代 GC<br>· 每执行 11 次新生代 GC ，触发一次中生代 GC<br>· 每执行 11 次中生代 GC ，触发一次老生代 GC (老生代 GC 还受其他策略影响，频率更低)<br>· 执行某个生代 GC 前，年轻生代对象链表也移入该代，一起 GC<br>· 一个对象创建后，随着时间推移将被逐步移入老生代，回收频率逐渐降低</p>
+<p><a href="https://mp.weixin.qq.com/s/y_pqtoB-FcTxwBOHpi8hAg">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+        <category>gc</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>垃圾回收机制</tag>
+        <tag>gc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>json | python处理json数据</title>
     <url>/2022/08/13/python%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="python处理json数据"><a href="#python处理json数据" class="headerlink" title="python处理json数据"></a>python处理json数据</h1><p>找出以下json数据中children键对应列表为空的data键的id值。<br>例如以下示例children键对应的列表为空时，返回data键的id值：</p>
@@ -9589,23 +9606,6 @@ show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
       <tags>
         <tag>python</tag>
         <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | 垃圾回收机制</title>
-    <url>/2021/11/14/python%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</url>
-    <content><![CDATA[<h1 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h1><h2 id="Pyhton垃圾回收机制"><a href="#Pyhton垃圾回收机制" class="headerlink" title="Pyhton垃圾回收机制"></a>Pyhton垃圾回收机制</h2><p>1.引用计数<br><strong>引用计数法的原理是：</strong> 每个对象维护一个ob_ref字段，用来记录该对象当前被引用的次数，每当新的引用指向该对象时，它的引用计数ob_ref加1，每当该对象的引用失效时计数ob_ref减1，一旦对象的引用计数为0，该对象立即被回收，对象占用的内存空间将被释放。<br><strong>缺点：</strong> 无法解决循环引用<br>2.标记清除<br>Python采用了“标记-清除”(Mark and Sweep)算法，解决容器对象可能产生的循环引用问题。<br><strong>标记阶段</strong> 遍历所有的对象，如果是可达的（reachable），也就是还有对象引用它，那么就标记该对象为可达；<br><strong>清除阶段</strong> 再次遍历对象，如果发现某个对象没有标记为可达，则就将其回收。<br><strong>优点：</strong> 解决了循环引用问题<br><strong>缺点：</strong> 标记清除算法在执行很多次数后，程序的堆空间会产生一些小的内存碎片。<br>3.分代回收(假设新生代、中生代和老生代的threshold分别为700、10、10.)<br>· 每新增 701 个需要 GC 的对象，触发一次新生代 GC<br>· 每执行 11 次新生代 GC ，触发一次中生代 GC<br>· 每执行 11 次中生代 GC ，触发一次老生代 GC (老生代 GC 还受其他策略影响，频率更低)<br>· 执行某个生代 GC 前，年轻生代对象链表也移入该代，一起 GC<br>· 一个对象创建后，随着时间推移将被逐步移入老生代，回收频率逐渐降低</p>
-<p><a href="https://mp.weixin.qq.com/s/y_pqtoB-FcTxwBOHpi8hAg">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-        <category>gc</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>垃圾回收机制</tag>
-        <tag>gc</tag>
       </tags>
   </entry>
   <entry>
@@ -11482,6 +11482,19 @@ tcpClientSocket.close()
       </tags>
   </entry>
   <entry>
+    <title>python | tensorflow安装遇到问题</title>
+    <url>/2021/05/13/tensorflow%E5%AE%89%E8%A3%85%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题"><a href="#Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题" class="headerlink" title="Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题"></a>Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题</h1><p><a href="https://blog.csdn.net/u012270544/article/details/96424907">点击这里查看问题解决方法</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>tensorflow</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | ubuntu下虚拟环境的安装与配置</title>
     <url>/2021/01/28/ubuntu%E4%B8%8B%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="ubuntu下虚拟环境的安装与配置"><a href="#ubuntu下虚拟环境的安装与配置" class="headerlink" title="ubuntu下虚拟环境的安装与配置"></a>ubuntu下虚拟环境的安装与配置</h1><h2 id="为什么要搭建虚拟环境"><a href="#为什么要搭建虚拟环境" class="headerlink" title="为什么要搭建虚拟环境?"></a>为什么要搭建虚拟环境?</h2><pre><code>如果在一台电脑上, 有不同项目, 需要用到同一个包的不同版本, 新版本会覆盖以前的版本, 其它的项目就可能无法正常运行了.。
@@ -11691,8 +11704,8 @@ public class Counter &#123;
         <category>并发</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>volatile</tag>
         <tag>synchronized</tag>
         <tag>原子操作</tag>
@@ -11711,8 +11724,8 @@ public class Counter &#123;
         <category>volatile写读的内存语义和锁的释放获取的内存语义</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>volatile</tag>
         <tag>锁</tag>
       </tags>
@@ -12318,19 +12331,6 @@ plt.savefig(&#39;order_byDept.png&#39;)
       </tags>
   </entry>
   <entry>
-    <title>python | tensorflow安装遇到问题</title>
-    <url>/2021/05/13/tensorflow%E5%AE%89%E8%A3%85%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题"><a href="#Python中解决ModuleNotFoundError-No-module-named-‘tensorflow-api’问题" class="headerlink" title="Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题"></a>Python中解决ModuleNotFoundError: No module named ‘tensorflow._api’问题</h1><p><a href="https://blog.csdn.net/u012270544/article/details/96424907">点击这里查看问题解决方法</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>tensorflow</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 15.三数之和</title>
     <url>/2022/06/27/%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
     <content><![CDATA[<h1 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15.三数之和"></a>15.三数之和</h1><p><strong>题目描述：</strong><br>给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。<br>注意：答案中不可以包含重复的三元组。<br><a href="https://leetcode.cn/problems/3sum">三数之和</a><br><strong>示例 1：</strong></p>
@@ -12463,8 +12463,8 @@ public class DeadLockDemo &#123;
         <category>上下文切换</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>死锁</tag>
       </tags>
   </entry>
@@ -19996,8 +19996,8 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
         <category>基于线程池技术的简单Web服务器</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>基于线程池技术的简单Web服务器</tag>
       </tags>
   </entry>
@@ -28527,8 +28527,8 @@ public class WaitNotify &#123;
         <category>等待/通知机制</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>等待/通知机制</tag>
       </tags>
   </entry>
@@ -28746,8 +28746,8 @@ public class ConnectionPoolTest &#123;
         <category>等待超时模式构造简单的数据库连接池</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -29145,8 +29145,8 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
         <category>线程池</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>线程池</tag>
       </tags>
   </entry>
@@ -30792,8 +30792,8 @@ public class ReadWriteLockCache &#123;
         <category>读写锁+HashMap实现线程安全的HashMap</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>并发</tag>
+        <tag>Java</tag>
         <tag>锁</tag>
       </tags>
   </entry>
@@ -31451,6 +31451,20 @@ print(f3())
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 防止模型过拟合的6种必备方法</title>
+    <url>/2021/07/03/%E9%98%B2%E6%AD%A2%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88%E7%9A%846%E7%A7%8D%E5%BF%85%E5%A4%87%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="防止模型过拟合的6种必备方法"><a href="#防止模型过拟合的6种必备方法" class="headerlink" title="防止模型过拟合的6种必备方法"></a>防止模型过拟合的6种必备方法</h1><p>在训练机器学习模型时常常会遇到模型过拟合的情况，即模型在训练集上的表现良好，但是在验证集或者<br>测试集上表现相对较差；<br><b>常见的防止过拟合的方法：</b><br>1.使用K重交叉验证方法或者留一验证方法<br>2.数据增强<br>3.正则化<br>4.早停<br>5.Dropout<br>6.移除特征<br><a href="https://mp.weixin.qq.com/s/RP9iFbyw-aNMKx-UAOe-aA">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>过拟合</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java | 静态代理</title>
     <url>/2022/03/10/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h1 id="静态代理案例"><a href="#静态代理案例" class="headerlink" title="静态代理案例"></a>静态代理案例</h1><p>通过静态代理来帮助发短信(短信发送类和代理类实现相同的接口)<br><strong>SmsService.java(接口)</strong></p>
@@ -31513,20 +31527,6 @@ public class Main &#123;
       <tags>
         <tag>Java</tag>
         <tag>静态代理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 防止模型过拟合的6种必备方法</title>
-    <url>/2021/07/03/%E9%98%B2%E6%AD%A2%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88%E7%9A%846%E7%A7%8D%E5%BF%85%E5%A4%87%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="防止模型过拟合的6种必备方法"><a href="#防止模型过拟合的6种必备方法" class="headerlink" title="防止模型过拟合的6种必备方法"></a>防止模型过拟合的6种必备方法</h1><p>在训练机器学习模型时常常会遇到模型过拟合的情况，即模型在训练集上的表现良好，但是在验证集或者<br>测试集上表现相对较差；<br><b>常见的防止过拟合的方法：</b><br>1.使用K重交叉验证方法或者留一验证方法<br>2.数据增强<br>3.正则化<br>4.早停<br>5.Dropout<br>6.移除特征<br><a href="https://mp.weixin.qq.com/s/RP9iFbyw-aNMKx-UAOe-aA">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>过拟合</tag>
       </tags>
   </entry>
   <entry>
