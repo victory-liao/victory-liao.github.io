@@ -1,39 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>伪迹移除 | 1D-ResCNN model to remove artifact</title>
-    <url>/2020/10/10/1D-ResCNN-model-to-remove-artifact/</url>
-    <content><![CDATA[<h1 id="A-novel-end-to-end-1D-ResCNN-model-to-remove-artifact-from-EEG-signals"><a href="#A-novel-end-to-end-1D-ResCNN-model-to-remove-artifact-from-EEG-signals" class="headerlink" title="A novel end-to-end 1D-ResCNN model to remove artifact from EEG signals"></a>A novel end-to-end 1D-ResCNN model to remove artifact from EEG signals</h1><div>
-<b>two stages of end-to-end manner:</b>
-<ul>
-<li>training stage:an objective function is often adopted to optimize the model parameters.</li>
-<li>test stage:the trained 1D-ResCNN model is used as a filter to automatically remove noise from the contaminated EEG signal.</li>
-</ul>
-</div>
-<span id="more"></span>
-
-<div style="background-color:yellowgreen;">
-<b backgroundclor="green">1D-ResCNN model‘s advantages:</b>
-<ul>
-<li>achieves smaller RMSE and better signal-to-noise ratio(SNR).</li>
-<li>better noise suppression ability.</li>
-<li>the nonlinear characteristics of EEG after denosing are significantly maintained(preserved).</li>
-<li>the EEG denosing performance under unknown noise is further improved.</li>  
-</ul>
-</div>
-
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>1D-ResCNN</tag>
-        <tag>伪迹移除</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>脑电分类 | 1D卷积和LSTM脑电信号识别</title>
     <url>/2021/07/03/1D%E5%8D%B7%E7%A7%AF%E5%92%8CLSTM%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E8%AF%86%E5%88%AB/</url>
     <content><![CDATA[<h1 id="1D卷积和LSTM脑电信号识别"><a href="#1D卷积和LSTM脑电信号识别" class="headerlink" title="1D卷积和LSTM脑电信号识别"></a>1D卷积和LSTM脑电信号识别</h1><p>这是一个非常重要的文章！！！ This is a very important article!!!</p>
@@ -64,6 +31,39 @@
         <tag>脑电分类</tag>
         <tag>LSTM</tag>
         <tag>CNN+LSTM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | 1D-ResCNN model to remove artifact</title>
+    <url>/2020/10/10/1D-ResCNN-model-to-remove-artifact/</url>
+    <content><![CDATA[<h1 id="A-novel-end-to-end-1D-ResCNN-model-to-remove-artifact-from-EEG-signals"><a href="#A-novel-end-to-end-1D-ResCNN-model-to-remove-artifact-from-EEG-signals" class="headerlink" title="A novel end-to-end 1D-ResCNN model to remove artifact from EEG signals"></a>A novel end-to-end 1D-ResCNN model to remove artifact from EEG signals</h1><div>
+<b>two stages of end-to-end manner:</b>
+<ul>
+<li>training stage:an objective function is often adopted to optimize the model parameters.</li>
+<li>test stage:the trained 1D-ResCNN model is used as a filter to automatically remove noise from the contaminated EEG signal.</li>
+</ul>
+</div>
+<span id="more"></span>
+
+<div style="background-color:yellowgreen;">
+<b backgroundclor="green">1D-ResCNN model‘s advantages:</b>
+<ul>
+<li>achieves smaller RMSE and better signal-to-noise ratio(SNR).</li>
+<li>better noise suppression ability.</li>
+<li>the nonlinear characteristics of EEG after denosing are significantly maintained(preserved).</li>
+<li>the EEG denosing performance under unknown noise is further improved.</li>  
+</ul>
+</div>
+
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>1D-ResCNN</tag>
+        <tag>伪迹移除</tag>
       </tags>
   </entry>
   <entry>
@@ -6882,87 +6882,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>Web服务器</title>
-    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
-<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
-import socket
-import re
-
-from multiprocessing import Process
-
-# 设置静态文件根目录
-HTML_ROOT_DIR = &quot;./html&quot;
-
-
-def handle_client(client_socket):
-    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
-    # 获取客户端请求数据
-    request_data = client_socket.recv(1024)
-    print(&quot;request data:&quot;,request_data)
-    request_lines = request_data.splitlines()
-    for line in request_lines:
-        print(line)
-
-    # 解析请求报文
-    # &#39;GET / HTTP/1.1&#39;
-    request_start_line = request_lines[0]
-    #提取用户请求的文件名
-    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
-
-    if &quot;/&quot; == file_name:
-        file_name = &quot;/index.html&quot;
-    # 打开文件，读取内容
-    try:
-        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
-    except IOError:
-        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
-        response_headers = &quot;Server: My server\r\n&quot;
-        response_body = &quot;the file is not found&quot;
-    else:
-        file_data = file.read()
-        file.close()
-
-        # 构造响应数据
-        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
-        response_headers = &quot;Server: My server\r\n&quot;
-        response_body = file_data.decode(&quot;utf-8&quot;)
-
-    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
-    print(&quot;response:&quot;,response)
-
-    # 向客户端返回响应数据
-    client_socket.send(bytes(response,&quot;utf-8&quot;))
-
-    #关闭客户端链接
-    client_socket.close()
-
-def main():
-    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-    #SOL_SOCKET:设置选项级别为SOCKET
-    #SO_REUSEADDR:1
-    server_socket.bind((&quot;&quot;,7788))
-    server_socket.listen(128)
-
-    while True:
-        client_socket,client_address= server_socket.accept()
-        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
-        handle_client_process = Process(target=handle_client,args=(client_socket,))
-        handle_client_process.start()
-        client_socket.close()
-
-if __name__ == &quot;__main__&quot;:
-    main()
-</code></pre>
-<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
-<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
-]]></content>
-      <tags>
-        <tag>Web服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>算法基础 | 递归与分治</title>
     <url>/2020/10/16/algorithms-2/</url>
     <content><![CDATA[<h1 id="递归与分治策略"><a href="#递归与分治策略" class="headerlink" title="递归与分治策略"></a>递归与分治策略</h1><p><b style="color:red">分治与递归经常同时应用在算法设计中</b></p>
@@ -7053,6 +6972,87 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web服务器</title>
+    <url>/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h1><p><strong>Web服务器是可以向发出请求的浏览器提供文档的程序。</strong></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h2><pre><code># coding:utf-8
+import socket
+import re
+
+from multiprocessing import Process
+
+# 设置静态文件根目录
+HTML_ROOT_DIR = &quot;./html&quot;
+
+
+def handle_client(client_socket):
+    &quot;&quot;&quot;处理客户端请求&quot;&quot;&quot;
+    # 获取客户端请求数据
+    request_data = client_socket.recv(1024)
+    print(&quot;request data:&quot;,request_data)
+    request_lines = request_data.splitlines()
+    for line in request_lines:
+        print(line)
+
+    # 解析请求报文
+    # &#39;GET / HTTP/1.1&#39;
+    request_start_line = request_lines[0]
+    #提取用户请求的文件名
+    file_name = re.match(r&quot;\w+ +(/[^ ]*) &quot;,request_start_line.decode(&quot;utf-8&quot;)).group(1)
+
+    if &quot;/&quot; == file_name:
+        file_name = &quot;/index.html&quot;
+    # 打开文件，读取内容
+    try:
+        file = open(HTML_ROOT_DIR + file_name,&quot;rb&quot;)
+    except IOError:
+        response_start_line = &quot;HTTP/1.1 404 Not Found\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = &quot;the file is not found&quot;
+    else:
+        file_data = file.read()
+        file.close()
+
+        # 构造响应数据
+        response_start_line = &quot;HTTP/1.1 200 OK\r\n&quot;
+        response_headers = &quot;Server: My server\r\n&quot;
+        response_body = file_data.decode(&quot;utf-8&quot;)
+
+    response = response_start_line + response_headers + &quot;\r\n&quot; + response_body
+    print(&quot;response:&quot;,response)
+
+    # 向客户端返回响应数据
+    client_socket.send(bytes(response,&quot;utf-8&quot;))
+
+    #关闭客户端链接
+    client_socket.close()
+
+def main():
+    server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    #SOL_SOCKET:设置选项级别为SOCKET
+    #SO_REUSEADDR:1
+    server_socket.bind((&quot;&quot;,7788))
+    server_socket.listen(128)
+
+    while True:
+        client_socket,client_address= server_socket.accept()
+        print(&quot;[%s,%s]用户连接上了&quot;%(client_address))
+        handle_client_process = Process(target=handle_client,args=(client_socket,))
+        handle_client_process.start()
+        client_socket.close()
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h2 id="访问Web服务器"><a href="#访问Web服务器" class="headerlink" title="访问Web服务器"></a>访问Web服务器</h2><p>在浏览器地址栏输入 127.0.0.1:7788或127.0.0.1:7788/index.html</p>
+<h2 id="项目文件结构"><a href="#项目文件结构" class="headerlink" title="项目文件结构"></a>项目文件结构</h2><p><img src="/2020/11/09/Web%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.JPG" alt="文件结构"></p>
+]]></content>
+      <tags>
+        <tag>Web服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -7918,9 +7918,10 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
-    <title>hexo | hexo博客上传PDF、PPT、EXCEL等资源</title>
-    <url>/2021/10/18/hexo%E5%8D%9A%E5%AE%A2%E4%B8%8A%E4%BC%A0PdfPptExcel%E7%AD%89%E8%B5%84%E6%BA%90/</url>
-    <content><![CDATA[<h1 id="hexo博客上传PDF、PPT、EXCEL等资源"><a href="#hexo博客上传PDF、PPT、EXCEL等资源" class="headerlink" title="hexo博客上传PDF、PPT、EXCEL等资源"></a>hexo博客上传PDF、PPT、EXCEL等资源</h1><p><a href="https://benpaodewoniu.github.io/2020/04/28/hexo27/">hexo博客上传PDF、PPT、EXCEL等资源</a></p>
+    <title>hexo | hexo博客换电脑了怎么办</title>
+    <url>/2021/08/30/hexo%E5%8D%9A%E5%AE%A2%E6%8D%A2%E7%94%B5%E8%84%91%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E/</url>
+    <content><![CDATA[<h1 id="hexo博客换电脑了怎么办"><a href="#hexo博客换电脑了怎么办" class="headerlink" title="hexo博客换电脑了怎么办"></a>hexo博客换电脑了怎么办</h1><p>我们搭建的hexo博客在更换电脑之后，如果重新搭建博客比较费时费力，可以按照以下资料快速在新的电脑上使用hexo博客发布内容。</p>
+<p><a href="https://www.cnblogs.com/study-everyday/p/8902136.html">参考资料</a></p>
 ]]></content>
       <categories>
         <category>hexo</category>
@@ -7930,10 +7931,9 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
-    <title>hexo | hexo博客换电脑了怎么办</title>
-    <url>/2021/08/30/hexo%E5%8D%9A%E5%AE%A2%E6%8D%A2%E7%94%B5%E8%84%91%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E/</url>
-    <content><![CDATA[<h1 id="hexo博客换电脑了怎么办"><a href="#hexo博客换电脑了怎么办" class="headerlink" title="hexo博客换电脑了怎么办"></a>hexo博客换电脑了怎么办</h1><p>我们搭建的hexo博客在更换电脑之后，如果重新搭建博客比较费时费力，可以按照以下资料快速在新的电脑上使用hexo博客发布内容。</p>
-<p><a href="https://www.cnblogs.com/study-everyday/p/8902136.html">参考资料</a></p>
+    <title>hexo | hexo博客上传PDF、PPT、EXCEL等资源</title>
+    <url>/2021/10/18/hexo%E5%8D%9A%E5%AE%A2%E4%B8%8A%E4%BC%A0PdfPptExcel%E7%AD%89%E8%B5%84%E6%BA%90/</url>
+    <content><![CDATA[<h1 id="hexo博客上传PDF、PPT、EXCEL等资源"><a href="#hexo博客上传PDF、PPT、EXCEL等资源" class="headerlink" title="hexo博客上传PDF、PPT、EXCEL等资源"></a>hexo博客上传PDF、PPT、EXCEL等资源</h1><p><a href="https://benpaodewoniu.github.io/2020/04/28/hexo27/">hexo博客上传PDF、PPT、EXCEL等资源</a></p>
 ]]></content>
       <categories>
         <category>hexo</category>
@@ -8638,18 +8638,6 @@ print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.p
       </tags>
   </entry>
   <entry>
-    <title>pycharm同步代码到远程服务器</title>
-    <url>/2021/04/18/pycharm%E5%90%8C%E6%AD%A5%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="pycharm同步代码到远程服务器"><a href="#pycharm同步代码到远程服务器" class="headerlink" title="pycharm同步代码到远程服务器"></a>pycharm同步代码到远程服务器</h1><p>1.在pycharm菜单栏点Tools–&gt;Deployment–&gt;Configuration<br>如果显示Please add a web server to configure,点+增加一个要配置的web服务器，传输协议选择SFTP，并输入新服务器的名称。<br>2.在connection选项中选择或输入对应信息<br>Type:SFTP<br>Host:服务器ip地址 Port:22(默认为22)<br>Username:<br>Authentication:Password<br>Password:<br>3.点Test Connection测试是否成功连接服务器<br>4.在Mappings选项中选择 Deployment path(将项目/文件部署到服务器的哪个路径下)<br>5.Tools–&gt;start SSH session<br>6.Tools–&gt;Deployment–&gt;upload to 刚刚输入的新服务器名称</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | property和property装饰器</title>
     <url>/2022/03/25/property%E5%92%8Cproperty%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
     <content><![CDATA[<h1 id="property和property装饰器"><a href="#property和property装饰器" class="headerlink" title="property和property装饰器"></a>property和property装饰器</h1><pre><code>class Student:
@@ -8688,6 +8676,18 @@ print(s.name)
         <tag>python</tag>
         <tag>property</tag>
         <tag>property装饰器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pycharm同步代码到远程服务器</title>
+    <url>/2021/04/18/pycharm%E5%90%8C%E6%AD%A5%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="pycharm同步代码到远程服务器"><a href="#pycharm同步代码到远程服务器" class="headerlink" title="pycharm同步代码到远程服务器"></a>pycharm同步代码到远程服务器</h1><p>1.在pycharm菜单栏点Tools–&gt;Deployment–&gt;Configuration<br>如果显示Please add a web server to configure,点+增加一个要配置的web服务器，传输协议选择SFTP，并输入新服务器的名称。<br>2.在connection选项中选择或输入对应信息<br>Type:SFTP<br>Host:服务器ip地址 Port:22(默认为22)<br>Username:<br>Authentication:Password<br>Password:<br>3.点Test Connection测试是否成功连接服务器<br>4.在Mappings选项中选择 Deployment path(将项目/文件部署到服务器的哪个路径下)<br>5.Tools–&gt;start SSH session<br>6.Tools–&gt;Deployment–&gt;upload to 刚刚输入的新服务器名称</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -11459,6 +11459,21 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | tcp与udp的稳定性</title>
+    <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>TCP</tag>
+        <tag>UDP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网络编程 | tcp的客户端/服务器端代码编写</title>
     <url>/2020/10/22/tcp%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99/</url>
     <content><![CDATA[<h1 id="tcp的客户端-服务器端代码编写"><a href="#tcp的客户端-服务器端代码编写" class="headerlink" title="tcp的客户端/服务器端代码编写"></a>tcp的客户端/服务器端代码编写</h1><h2 id="tcp服务器端代码编写"><a href="#tcp服务器端代码编写" class="headerlink" title="tcp服务器端代码编写"></a>tcp服务器端代码编写</h2><pre><code>#coding=utf-8
@@ -11524,21 +11539,6 @@ tcpClientSocket.close()
         <tag>网络编程</tag>
         <tag>tcp客户端</tag>
         <tag>tcp服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | tcp与udp的稳定性</title>
-    <url>/2020/10/26/tcp%E4%B8%8Eudp%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
-    <content><![CDATA[<h1 id="tcp稳定而udp不稳定的原因"><a href="#tcp稳定而udp不稳定的原因" class="headerlink" title="tcp稳定而udp不稳定的原因"></a>tcp稳定而udp不稳定的原因</h1><p><b style="color:red">在tcp中，如果有一方收到了对方的数据，一定会发送ack确认包给发送方，而在udp中，没有这个过程，因此导致了tcp稳定，而udp不稳定。</b></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>TCP</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -12208,6 +12208,72 @@ public class TestEmpDept &#123;
       </tags>
   </entry>
   <entry>
+    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
+    <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
+    <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>一维卷积</tag>
+        <tag>二维卷积</tag>
+        <tag>三维卷积</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
+    <url>/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</url>
+    <content><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
+<pre><code>import os
+import pdfplumber
+from openpyxl import Workbook
+
+path = &#39;PDF&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+key_words = &quot;主要会计数据&quot;
+
+for file in files:
+    with pdfplumber.open(file) as p:
+        wb = Workbook()  # 新建excel工作簿
+        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
+
+        # 获取关键词所在页及下一页的页码
+        pages_wanted = []
+        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
+            if key_words in page.extract_text():
+                pages_wanted.append(index)
+                pages_wanted.append(index + 1)
+                break
+
+        # 提取指定页码里的表格
+        for i in pages_wanted:
+            page = p.pages[i]
+            tables = page.extract_tables()  # 读取表格
+            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
+                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
+                for table in tables:  # 遍历所有列表
+                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
+                        ws.append(row)  # 写入excel表
+        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
+</code></pre>
+<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pdfplumber</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>pdfplumber</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pandas | 一键更新Excel中的图表</title>
     <url>/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p>
@@ -12346,23 +12412,6 @@ plt.savefig(&#39;order_byDept.png&#39;)
       </tags>
   </entry>
   <entry>
-    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
-    <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
-    <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>一维卷积</tag>
-        <tag>二维卷积</tag>
-        <tag>三维卷积</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 15.三数之和</title>
     <url>/2022/06/27/%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/</url>
     <content><![CDATA[<h1 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15.三数之和"></a>15.三数之和</h1><p><strong>题目描述：</strong><br>给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。<br>注意：答案中不可以包含重复的三元组。<br><a href="https://leetcode.cn/problems/3sum">三数之和</a><br><strong>示例 1：</strong></p>
@@ -12436,55 +12485,6 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>算法</tag>
         <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
-    <url>/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</url>
-    <content><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
-<pre><code>import os
-import pdfplumber
-from openpyxl import Workbook
-
-path = &#39;PDF&#39;  # 文件所在文件夹
-files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
-key_words = &quot;主要会计数据&quot;
-
-for file in files:
-    with pdfplumber.open(file) as p:
-        wb = Workbook()  # 新建excel工作簿
-        wb.remove(wb.worksheets[0])  # 删除工作簿自带的工作表
-
-        # 获取关键词所在页及下一页的页码
-        pages_wanted = []
-        for index, page in enumerate(p.pages):  # 从0开始给所有页编号
-            if key_words in page.extract_text():
-                pages_wanted.append(index)
-                pages_wanted.append(index + 1)
-                break
-
-        # 提取指定页码里的表格
-        for i in pages_wanted:
-            page = p.pages[i]
-            tables = page.extract_tables()  # 读取表格
-            if tables:  # 判断是否存在表格，若不存在，则不执行下面的语句
-                ws = wb.create_sheet(f&quot;Sheet&#123;i + 1&#125;&quot;)  # 新建工作表，表名的编号与表在PDF中的页码一致
-                for table in tables:  # 遍历所有列表
-                    for row in table:  # 遍历列表中的所有子列表，里面保存着行数据
-                        ws.append(row)  # 写入excel表
-        wb.save(&quot;Excel\\&#123;&#125;.xlsx&quot;.format(file.split(&quot;\\&quot;)[1].split(&quot;.&quot;)[0]))
-</code></pre>
-<p>PDF:<br><a href="东旭蓝天：2019年年度报告.PDF">东旭蓝天：2019年年度报告.PDF</a><br><a href="华特气体：2019年年度报告（修订版）.PDF">华特气体：2019年年度报告（修订版）.PDF</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pdfplumber</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>pdfplumber</tag>
       </tags>
   </entry>
   <entry>
@@ -16905,21 +16905,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>算法刷题 | 刷题笔记</title>
-    <url>/2021/06/24/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="刷题笔记"><a href="#刷题笔记" class="headerlink" title="刷题笔记"></a>刷题笔记</h1><p><a href="https://github.com/CyC2018/CS-Notes">刷题笔记1</a></p>
-<p><a href="https://github.com/Jack-Cherish/LeetCode">刷题笔记2</a></p>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>刷题笔记</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>刷题</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习 | 前向传播和反向传播中使用的cache</title>
     <url>/2021/06/30/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84cache/</url>
     <content><![CDATA[<h1 id="前向传播和反向传播中使用的cache"><a href="#前向传播和反向传播中使用的cache" class="headerlink" title="前向传播和反向传播中使用的cache"></a>前向传播和反向传播中使用的cache</h1><p>the “cache” records values from the forward propagation units and sends it to the backward<br>propagation units because it is needed to compute the chain rule derivatives.(“cache”记录<br>来自正向传播单元的值并将其发送到反向传播单元，因为需要链式计算导数。)</p>
@@ -16932,6 +16917,21 @@ if __name__ == &quot;__main__&quot;:
         <tag>深度学习</tag>
         <tag>前向传播</tag>
         <tag>反向传播</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法刷题 | 刷题笔记</title>
+    <url>/2021/06/24/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="刷题笔记"><a href="#刷题笔记" class="headerlink" title="刷题笔记"></a>刷题笔记</h1><p><a href="https://github.com/CyC2018/CS-Notes">刷题笔记1</a></p>
+<p><a href="https://github.com/Jack-Cherish/LeetCode">刷题笔记2</a></p>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>刷题笔记</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>刷题</tag>
       </tags>
   </entry>
   <entry>
@@ -22219,6 +22219,59 @@ wb.save(&quot;./data/data_chinese.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 情绪识别想法与实践的起点</title>
+    <url>/2021/07/02/%E6%83%85%E7%BB%AA%E8%AF%86%E5%88%AB%E6%83%B3%E6%B3%95%E4%B8%8E%E5%AE%9E%E8%B7%B5%E7%9A%84%E8%B5%B7%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="情绪识别想法与实践的起点"><a href="#情绪识别想法与实践的起点" class="headerlink" title="情绪识别想法与实践的起点"></a>情绪识别想法与实践的起点</h1><p>步入研一以来，about我的研究方向，一开始聚焦在脑电伪迹去除，大约看了10篇左右论文，后来在与给老师的汇报和交流中，关于研究方向<br>的keywords变成了：深度学习、脑电、分类、音乐、情绪识别，偶然我遇到了下面这篇论文，题目的每一个字都与我的research密切对应，<br>因此一场深度学习情绪分类的战役由此拉开。。。</p>
+<p><b>Paper title:</b> Spatiotemporal Emotion Recognition using Deep CNN Based on EEG during Music Listening<br><a href="https://www.researchgate.net/publication/336736347_Spatiotemporal_Emotion_Recognition_using_Deep_CNN_Based_on_EEG_during_Music_Listening">论文地址</a></p>
+<p>这篇论文的作者有几篇关于脑电情绪分类的研究文章，详细信息查看researchgate!<br><a href="https://www.researchgate.net/profile/Panayu-Keelawat">researcher researchgate site</a></p>
+<h2 id="论文简要介绍"><a href="#论文简要介绍" class="headerlink" title="论文简要介绍"></a>论文简要介绍</h2><p><b>Considerations:</b><br>1.explore the model’s capabilities in varied window sizes and electrode orders<br>2.model’s complexity:(3conv ~ 6conv)</p>
+<p><b>Results:</b><br>temporal information in distinct window sizes significantly affects recognition performance</p>
+<p><b>Used Megthod:CNN</b><br>without mannually extracting features</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电分类</category>
+        <category>网络</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>脑电分类</tag>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
+        <tag>EEG</tag>
+        <tag>情绪识别</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CNN | 感受野</title>
+    <url>/2021/11/11/%E6%84%9F%E5%8F%97%E9%87%8E/</url>
+    <content><![CDATA[<h1 id="感受野"><a href="#感受野" class="headerlink" title="感受野"></a>感受野</h1><p><a href="https://www.cnblogs.com/shine-lee/p/12069176.html">Click Here!</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>感受野</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习 | 感知机</title>
+    <url>/2021/06/24/%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
+    <content><![CDATA[<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><p><a href="https://mp.weixin.qq.com/s/OKUCFdBLuwkJMxRz-gvthQ">点这里查看更多关于感知机的知识！！！</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>感知机</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于JavaWeb的网上购物商城 | 我的订单</title>
     <url>/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/</url>
     <content><![CDATA[<h1 id="我的订单"><a href="#我的订单" class="headerlink" title="我的订单"></a>我的订单</h1><p><strong>实现功能：</strong><br>当用户点击”我的订单时“展示用户提交过的所有订单信息、购买商品信息等。<br><img src="/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/1.PNG"></p>
@@ -22698,20 +22751,6 @@ for file in files:
       </tags>
   </entry>
   <entry>
-    <title>CNN | 感受野</title>
-    <url>/2021/11/11/%E6%84%9F%E5%8F%97%E9%87%8E/</url>
-    <content><![CDATA[<h1 id="感受野"><a href="#感受野" class="headerlink" title="感受野"></a>感受野</h1><p><a href="https://www.cnblogs.com/shine-lee/p/12069176.html">Click Here!</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>感受野</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>os | 批量新建文件夹</title>
     <url>/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
     <content><![CDATA[<h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p>
@@ -22950,31 +22989,6 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 情绪识别想法与实践的起点</title>
-    <url>/2021/07/02/%E6%83%85%E7%BB%AA%E8%AF%86%E5%88%AB%E6%83%B3%E6%B3%95%E4%B8%8E%E5%AE%9E%E8%B7%B5%E7%9A%84%E8%B5%B7%E7%82%B9/</url>
-    <content><![CDATA[<h1 id="情绪识别想法与实践的起点"><a href="#情绪识别想法与实践的起点" class="headerlink" title="情绪识别想法与实践的起点"></a>情绪识别想法与实践的起点</h1><p>步入研一以来，about我的研究方向，一开始聚焦在脑电伪迹去除，大约看了10篇左右论文，后来在与给老师的汇报和交流中，关于研究方向<br>的keywords变成了：深度学习、脑电、分类、音乐、情绪识别，偶然我遇到了下面这篇论文，题目的每一个字都与我的research密切对应，<br>因此一场深度学习情绪分类的战役由此拉开。。。</p>
-<p><b>Paper title:</b> Spatiotemporal Emotion Recognition using Deep CNN Based on EEG during Music Listening<br><a href="https://www.researchgate.net/publication/336736347_Spatiotemporal_Emotion_Recognition_using_Deep_CNN_Based_on_EEG_during_Music_Listening">论文地址</a></p>
-<p>这篇论文的作者有几篇关于脑电情绪分类的研究文章，详细信息查看researchgate!<br><a href="https://www.researchgate.net/profile/Panayu-Keelawat">researcher researchgate site</a></p>
-<h2 id="论文简要介绍"><a href="#论文简要介绍" class="headerlink" title="论文简要介绍"></a>论文简要介绍</h2><p><b>Considerations:</b><br>1.explore the model’s capabilities in varied window sizes and electrode orders<br>2.model’s complexity:(3conv ~ 6conv)</p>
-<p><b>Results:</b><br>temporal information in distinct window sizes significantly affects recognition performance</p>
-<p><b>Used Megthod:CNN</b><br>without mannually extracting features</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电分类</category>
-        <category>网络</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>脑电分类</tag>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
-        <tag>EEG</tag>
-        <tag>情绪识别</tag>
       </tags>
   </entry>
   <entry>
@@ -23319,20 +23333,6 @@ public class SecondInterceptor implements HandlerInterceptor&#123;
         <tag>SpringMVC</tag>
         <tag>拦截器</tag>
         <tag>HandlerInterceptor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 感知机</title>
-    <url>/2021/06/24/%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
-    <content><![CDATA[<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><p><a href="https://mp.weixin.qq.com/s/OKUCFdBLuwkJMxRz-gvthQ">点这里查看更多关于感知机的知识！！！</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>感知机</tag>
       </tags>
   </entry>
   <entry>
@@ -28541,8 +28541,7 @@ if __name__ == &quot;__main__&quot;:
   <entry>
     <title>leetcode | 414.第三大的数</title>
     <url>/2022/08/13/%E7%AC%AC%E4%B8%89%E5%A4%A7%E7%9A%84%E6%95%B0/</url>
-    <content><![CDATA[<p>414.第三大的数</p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非空数组，返回此数组中 第三大的数 。如果不存在，则返回数组中最大的数。</p>
+    <content><![CDATA[<h1 id="414-第三大的数"><a href="#414-第三大的数" class="headerlink" title="414.第三大的数"></a>414.第三大的数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非空数组，返回此数组中 第三大的数 。如果不存在，则返回数组中最大的数。</p>
 <ul>
 <li><p>示例 1：<br>输入：[3, 2, 1]<br>输出：1<br>解释：第三大的数是 1 。</p>
 </li>
@@ -30514,6 +30513,20 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 计算图</title>
+    <url>/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h1><p>一个计算流程图，就是正向或者说从左到右的计算来计算成本函数𝐽，你可能<br>需要优化的函数，然后反向从右到左计算导数。<br><img src="/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/1.png"><br><b>参考吴恩达深度学习视频：</b><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver">https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>计算图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringMVC | 设置springMVC配置文件的位置以及名称并控制servlet的加载时间</title>
     <url>/2022/03/12/%E8%AE%BE%E7%BD%AEspringMVC%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E5%90%8D%E7%A7%B0%E5%B9%B6%E6%8E%A7%E5%88%B6servlet%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%97%B6%E9%97%B4/</url>
     <content><![CDATA[<h1 id="设置springMVC配置文件的位置以及名称并控制servlet的加载时间"><a href="#设置springMVC配置文件的位置以及名称并控制servlet的加载时间" class="headerlink" title="设置springMVC配置文件的位置以及名称并控制servlet的加载时间"></a>设置springMVC配置文件的位置以及名称并控制servlet的加载时间</h1><p>设置springMVC配置文件的位置以及名称并控制servlet的加载时间只需要在web.xml文件中做以下配置即可：</p>
@@ -30560,20 +30573,6 @@ with urllib.request.urlopen(req) as response:
       <tags>
         <tag>Java</tag>
         <tag>SpringMVC</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 计算图</title>
-    <url>/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/</url>
-    <content><![CDATA[<h1 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h1><p>一个计算流程图，就是正向或者说从左到右的计算来计算成本函数𝐽，你可能<br>需要优化的函数，然后反向从右到左计算导数。<br><img src="/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/1.png"><br><b>参考吴恩达深度学习视频：</b><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver">https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>计算图</tag>
       </tags>
   </entry>
   <entry>
