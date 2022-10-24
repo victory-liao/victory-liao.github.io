@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-08-21T04:39:36.144Z</updated>
+  <updated>2022-10-24T13:44:25.675Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode | 695.岛屿的最大面积</title>
+    <link href="http://example.com/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/"/>
+    <id>http://example.com/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/</id>
+    <published>2022-10-24T13:35:06.000Z</published>
+    <updated>2022-10-24T13:44:25.675Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="695-岛屿的最大面积"><a href="#695-岛屿的最大面积" class="headerlink" title="695.岛屿的最大面积"></a>695.岛屿的最大面积</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个大小为 m x n 的二进制矩阵 grid 。</p><p>岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。</p><p>岛屿的面积是岛上值为 1 的单元格的数目。</p><p>计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。</p><p>示例 1：<br>输入：grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]<br>输出：6<br>解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。</p><p>示例 2：<br>输入：grid = [[0,0,0,0,0,0,0,0]]<br>输出：0</p><p><a href="https://leetcode.cn/problems/max-area-of-island">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li>深度优先搜索（DFS）<br>利用深度优先搜索（DFS）对每个岛屿进行遍历，找出最大值<br>（1）从每个陆地出发，遍历该陆地所在的岛屿<br>（2）在遍历某一岛屿的时候：<br>1）从隶属于该岛屿的某一块陆地出发，向四个方向递归地DFS<br>2）每次递归对下标进行判断，以区域的边界作为递归边界<br>3）为保证每块陆地只访问一次，将已访问过的陆地置0<br>4）递归地返回整块岛屿的面积<br>（3）找出所有岛屿的最大值，即为答案<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">island_dfs</span>(<span class="params">self, grid, i, j</span>):</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(grid) &gt; i &gt;= <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(grid[<span class="number">0</span>]) &gt; j &gt;= <span class="number">0</span>:</span><br><span class="line"><span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">grid[i][j] = <span class="number">0</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span> + self.island_dfs(grid, i - <span class="number">1</span>, j) + self.island_dfs(grid, i + <span class="number">1</span>, j) + \</span><br><span class="line">       self.island_dfs(grid, i, j - <span class="number">1</span>) + self.island_dfs(grid, i, j + <span class="number">1</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_area_of_island</span>(<span class="params">self, grid</span>):</span></span><br><span class="line">ans = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)):</span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid[<span class="number">0</span>])):</span><br><span class="line">ans = <span class="built_in">max</span>(ans, self.island_dfs(grid, i, j))</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">s = Solution()</span><br><span class="line">grid = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br><span class="line">max_area = s.max_area_of_island(grid)</span><br><span class="line"><span class="built_in">print</span>(max_area)</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;695-岛屿的最大面积&quot;&gt;&lt;a href=&quot;#695-岛屿的最大面积&quot; class=&quot;headerlink&quot; title=&quot;695.岛屿的最大面积&quot;&gt;&lt;/a&gt;695.岛屿的最大面积&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;</summary>
+      
+    
+    
+    
+    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
+    
+    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
+    
+    <category term="DFS" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/DFS/"/>
+    
+    <category term="695.岛屿的最大面积" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/DFS/695-%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/"/>
+    
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
+    
+    <category term="DFS" scheme="http://example.com/tags/DFS/"/>
+    
+    <category term="深度优先搜索" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/"/>
+    
+  </entry>
   
   <entry>
     <title>Java | 字符串常量池</title>
@@ -672,45 +708,6 @@
     
     
     <category term="秋招面经" scheme="http://example.com/tags/%E7%A7%8B%E6%8B%9B%E9%9D%A2%E7%BB%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 27.移除元素</title>
-    <link href="http://example.com/2022/07/19/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/"/>
-    <id>http://example.com/2022/07/19/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</id>
-    <published>2022-07-19T09:40:06.000Z</published>
-    <updated>2022-07-19T10:04:47.888Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="27-移除元素"><a href="#27-移除元素" class="headerlink" title="27.移除元素"></a>27.移除元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。<br>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。<br>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p><p>示例 1：<br>输入：nums = [3,2,2,3], val = 3<br>输出：2, nums = [2,2]<br>解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。</p><p><a href="https://leetcode.cn/problems/remove-element">题目链接</a></p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol><li><p>双指针<br>设置两个指针，左指针left，右指针right，左指针left指向待插入不等于val的值，right指针遍历寻找不等于val的值，如果找到，就将right指针指向的值复制到left指针指向的位置，<br>然后left指针后移到下一个待插入位置，right指针继续后移寻找下一个不等于val的值，依次类推。</p></li><li><p>双指针优化<br>如果左指针 left 指向的元素等于 val，此时将右指针 right 指向的元素复制到左指针 left 的位置，然后右指针 right 左移一位。如果赋值过来的元素恰好也等于 val，可以继续把右指针 right 指向的元素的值赋值过来（左指针 left 指向的等于 val 的元素的位置继续被覆盖），直到左指针指向的元素的值不等于 val 为止。<br>当左指针 left 和右指针 right 重合的时候，左右指针遍历完数组中所有的元素。<br>这样的方法两个指针在最坏的情况下合起来只遍历了数组一次。与方法一不同的是，方法二避免了需要保留的元素的重复赋值操作。</p><span id="more"></span><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p><pre><code> def removeElement(self, nums, val):     &quot;&quot;&quot;     双指针     :type nums: List[int]     :type val: int     :rtype: int     &quot;&quot;&quot;     left = 0     right = 0     while right &lt; len(nums):         if nums[right] != val:             nums[left] = nums[right]             left += 1         right += 1     return left  def removeElement1(self, nums, val):     &quot;&quot;&quot;双指针优化&quot;&quot;&quot;     left = 0     right = len(nums)     while left &lt; right:         if nums[left] == val:             nums[left] = nums[right - 1]             right -= 1         else:             left += 1          return left</code></pre><p> if <strong>name</strong> == “<strong>main</strong>“:</p><pre><code> slt = Solution() result = slt.removeElement([3, 2, 2, 3], 3) print(result)</code></pre></li></ol>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;27-移除元素&quot;&gt;&lt;a href=&quot;#27-移除元素&quot; class=&quot;headerlink&quot; title=&quot;27.移除元素&quot;&gt;&lt;/a&gt;27.移除元素&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h2&gt;&lt;p&gt;给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。&lt;br&gt;不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。&lt;br&gt;元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。&lt;/p&gt;
-&lt;p&gt;示例 1：&lt;br&gt;输入：nums = [3,2,2,3], val = 3&lt;br&gt;输出：2, nums = [2,2]&lt;br&gt;解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/remove-element&quot;&gt;题目链接&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;思路&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;双指针&lt;br&gt;设置两个指针，左指针left，右指针right，左指针left指向待插入不等于val的值，right指针遍历寻找不等于val的值，如果找到，就将right指针指向的值复制到left指针指向的位置，&lt;br&gt;然后left指针后移到下一个待插入位置，right指针继续后移寻找下一个不等于val的值，依次类推。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;双指针优化&lt;br&gt;如果左指针 left 指向的元素等于 val，此时将右指针 right 指向的元素复制到左指针 left 的位置，然后右指针 right 左移一位。如果赋值过来的元素恰好也等于 val，可以继续把右指针 right 指向的元素的值赋值过来（左指针 left 指向的等于 val 的元素的位置继续被覆盖），直到左指针指向的元素的值不等于 val 为止。&lt;br&gt;当左指针 left 和右指针 right 重合的时候，左右指针遍历完数组中所有的元素。&lt;br&gt;这样的方法两个指针在最坏的情况下合起来只遍历了数组一次。与方法一不同的是，方法二避免了需要保留的元素的重复赋值操作。&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
-    
-    <category term="27.移除元素" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/"/>
-    
-    
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-    <category term="数组" scheme="http://example.com/tags/%E6%95%B0%E7%BB%84/"/>
-    
-    <category term="双指针" scheme="http://example.com/tags/%E5%8F%8C%E6%8C%87%E9%92%88/"/>
     
   </entry>
   
