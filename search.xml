@@ -1150,20 +1150,43 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
-    <title>CNN | BatchNormalization</title>
-    <url>/2021/11/15/BatchNormalization/</url>
-    <content><![CDATA[<h1 id="BatchNormalization"><a href="#BatchNormalization" class="headerlink" title="BatchNormalization"></a>BatchNormalization</h1><p>由于深度神经网络涉及到很多层的叠加，而每一层的参数更新会导致上层的输入数据分布发生变化，<br>通过层层叠加，高层的输入分布变化会非常剧烈，这就使得高层需要不断去重新适应底层的参数更新。<br>为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。<br>也就是随是着网络加深，参数分布不断往激活函数两端移动(梯度变小)，导致反向传播出现梯度消失，收敛困难。<br>原理：可在每层的激活函数前，加入BN，将参数重新拉回0-1正态分布，加速收敛。</p>
+    <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
+    <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
+    <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
+<span id="more"></span>
+<p><strong style="color:red">Empirical mode decomposition(EMD)</strong> technique is used to implement the <strong style="color:red">time domain filter</strong>.</p>
+<p><strong style="color:red">Fractional Gaussian noise(fGn)</strong> is used here as the <strong style="color:red">reference signal</strong> to detect the distinguish feature of EOG signal to be used to separate from EEG.</p>
+<p>EMD is applied to the raw EEG and fGn separately to produce a finite number band limited signals named <strong style="color:red">intrinsic mode functions(IMFs)</strong>.</p>
+<p>The energies of individual IMFs of fGn and that of raw EEG are compared to derive the energy based threshold for the suppression of EOG effects. </p>
+<p>The separation results using EMD based approach is also compared with wavelet thresholding technique. </p>
+<p><strong style="color:red">The experimental results show that the data adaptive filtering technique performs better than the wavelet based approach.</strong></p>
+<div style="background-color:yellowgreen;">
+<b backgroundclor="green">proposed method's advantages</b>
+<ul>
+<li>efficiently separates the EOG artifact <b>without changing the amplitude and other necessary properties of the EEG signals</b></li>
+<li><b>full data adaptive nature</b></li>
+</ul>
+</div>
+
+<p><strong style="color:yellow"><i>Note:</i></strong></p>
+<ul>
+<li>Frequency analysis or filtering —–&gt; deal with single channel signal</li>
+<li>Frequency regression analysis   —–&gt; suppress the eye-movement artifact</li>
+<li>Time-invariant band-pass filtering or Fourier transform(FT) —–&gt; extract the target frequency component(specific frequency range)</li>
+<li>classical time-frequency analyzers(FFT based filtering or short-time Fourier transform(STFT)) —–&gt; non-stationary signal<br>Note:will bring the spectral distrotion</li>
+<li>PCA:extracts and sort out the principal components according to the influence on the overall data space.<br>Note:It requires some priori knowledge to identify the PC as the artifact</li>
+<li>ICA:<br>key word:decompose<br>problem of using ICA:extracted components do not confirm the original scale and sequences.</li>
+<li>main limitation of the filtering method:introduce some spectral distortion </li>
+<li>EMD:<br>key benefit of using EMD: automatic decomposition and fully data adaptive<br>UEMD:<br>BEMD:suppress EOG artifacts<br>MEMD:multi-variate data analysis</li>
+</ul>
 ]]></content>
       <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-        <category>Batch Normalization</category>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
       </categories>
       <tags>
-        <tag>Batch Normalization</tag>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
+        <tag>伪迹移除</tag>
       </tags>
   </entry>
   <entry>
@@ -1267,88 +1290,6 @@ driver.quit()
       </tags>
   </entry>
   <entry>
-    <title>伪迹移除 | Automatic artifacts removal</title>
-    <url>/2020/10/10/Automatic-removal-using-ICA-and-the-dipole-model/</url>
-    <content><![CDATA[<h1 id="Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model"><a href="#Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model" class="headerlink" title="Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model"></a>Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>In this study,we proposed and evaluated the use of <strong style="color:red"> Independent Component Analysis(ICA) combining the EEG dipole model</strong> to <strong style="color:red"> automatically remove</strong> eye movement artifacts from the EEG <strong style="color:red">without needing EOG as a reference</strong>.</p>
-<span id="more"></span>
-
-<p>We <strong>separated</strong> the EEG data into independent components using the ICA method,and <strong>determined</strong> the source localization of these independent components with a single dipole model.</p>
-<p>The EEG signal was <strong>reconstructed</strong> by antomatically excluding those components localized within a preset eye model.</p>
-<p>The <strong>experimental results</strong> indicate that the dipole model is very efficient at automatically<br>substracting the eye movement artifacts,while retaining the EEG slow waves and making their<br>interpretation easier.</p>
-<h2 id="Methods-Comparison"><a href="#Methods-Comparison" class="headerlink" title="Methods Comparison"></a>Methods Comparison</h2><h3 id="other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG"><a href="#other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG" class="headerlink" title="other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)"></a>other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)</h3><ul>
-<li>used a simple <strong>filtering concept</strong>,simply <strong>ignoring very low frequencies</strong>(below 1.5 or 2 Hz)</li>
-<li>would not perform well in the context of a large amount of <strong>frontal slow waves</strong> (EOG recordingwould be contaminated by this slow wave activity)</li>
-</ul>
-<div style="background-color:yellowgreen;">
-<b backgroundclor="green">ICA's advantages:</b>
-<ul>
-<li>The ICA algorithm is computationally efficient.</li>
-<li>better noise suppression ability.</li>
-<li>ICA can simultaneously separate the EEG and artifacts into independent components without relying on the availability of reference artifacts.</li>
-<li>avoids the problem of mutual contamination between EEG and EOG channels that could not be solved with filters,regression and PCA.</li>  
-<li>The corrected EEG can easily be derived by a combination of the components without artifacts.</li>
-</ul>
-</div>
-
-<h3 id="A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms"><a href="#A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms" class="headerlink" title="A crucial step for ocular artifact correction using ICA algorithms:"></a>A crucial step for ocular artifact correction using ICA algorithms:</h3><p>to correctly identify the artifact components among the decomposed indepent components.</p>
-<p>Manually identifying:</p>
-<ul>
-<li>subjective </li>
-<li>inconvenient </li>
-<li>time consuming</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>ICA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
-    <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
-    <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
-<span id="more"></span>
-<p><strong style="color:red">Empirical mode decomposition(EMD)</strong> technique is used to implement the <strong style="color:red">time domain filter</strong>.</p>
-<p><strong style="color:red">Fractional Gaussian noise(fGn)</strong> is used here as the <strong style="color:red">reference signal</strong> to detect the distinguish feature of EOG signal to be used to separate from EEG.</p>
-<p>EMD is applied to the raw EEG and fGn separately to produce a finite number band limited signals named <strong style="color:red">intrinsic mode functions(IMFs)</strong>.</p>
-<p>The energies of individual IMFs of fGn and that of raw EEG are compared to derive the energy based threshold for the suppression of EOG effects. </p>
-<p>The separation results using EMD based approach is also compared with wavelet thresholding technique. </p>
-<p><strong style="color:red">The experimental results show that the data adaptive filtering technique performs better than the wavelet based approach.</strong></p>
-<div style="background-color:yellowgreen;">
-<b backgroundclor="green">proposed method's advantages</b>
-<ul>
-<li>efficiently separates the EOG artifact <b>without changing the amplitude and other necessary properties of the EEG signals</b></li>
-<li><b>full data adaptive nature</b></li>
-</ul>
-</div>
-
-<p><strong style="color:yellow"><i>Note:</i></strong></p>
-<ul>
-<li>Frequency analysis or filtering —–&gt; deal with single channel signal</li>
-<li>Frequency regression analysis   —–&gt; suppress the eye-movement artifact</li>
-<li>Time-invariant band-pass filtering or Fourier transform(FT) —–&gt; extract the target frequency component(specific frequency range)</li>
-<li>classical time-frequency analyzers(FFT based filtering or short-time Fourier transform(STFT)) —–&gt; non-stationary signal<br>Note:will bring the spectral distrotion</li>
-<li>PCA:extracts and sort out the principal components according to the influence on the overall data space.<br>Note:It requires some priori knowledge to identify the PC as the artifact</li>
-<li>ICA:<br>key word:decompose<br>problem of using ICA:extracted components do not confirm the original scale and sequences.</li>
-<li>main limitation of the filtering method:introduce some spectral distortion </li>
-<li>EMD:<br>key benefit of using EMD: automatic decomposition and fully data adaptive<br>UEMD:<br>BEMD:suppress EOG artifacts<br>MEMD:multi-variate data analysis</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>伪迹移除 | Artifacts reduction algorithms&#39;s two main ways</title>
     <url>/2020/10/11/Artifacts-reduction-algorithms-two-main-ways/</url>
     <content><![CDATA[<h1 id="Artifacts-reduction-algorithms’s-two-main-ways"><a href="#Artifacts-reduction-algorithms’s-two-main-ways" class="headerlink" title="Artifacts reduction algorithms’s two main ways"></a>Artifacts reduction algorithms’s two main ways</h1><div style>
@@ -1396,8 +1337,67 @@ driver.quit()
       </categories>
       <tags>
         <tag>伪迹移除</tag>
-        <tag>ICA</tag>
         <tag>EMD</tag>
+        <tag>ICA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>伪迹移除 | Automatic artifacts removal</title>
+    <url>/2020/10/10/Automatic-removal-using-ICA-and-the-dipole-model/</url>
+    <content><![CDATA[<h1 id="Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model"><a href="#Automatic-removal-of-eye-movement-artifacts-from-the-EEG-using-ICA-and-the-dipole-model" class="headerlink" title="Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model"></a>Automatic removal of eye movement artifacts from the EEG using ICA and the dipole model</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>In this study,we proposed and evaluated the use of <strong style="color:red"> Independent Component Analysis(ICA) combining the EEG dipole model</strong> to <strong style="color:red"> automatically remove</strong> eye movement artifacts from the EEG <strong style="color:red">without needing EOG as a reference</strong>.</p>
+<span id="more"></span>
+
+<p>We <strong>separated</strong> the EEG data into independent components using the ICA method,and <strong>determined</strong> the source localization of these independent components with a single dipole model.</p>
+<p>The EEG signal was <strong>reconstructed</strong> by antomatically excluding those components localized within a preset eye model.</p>
+<p>The <strong>experimental results</strong> indicate that the dipole model is very efficient at automatically<br>substracting the eye movement artifacts,while retaining the EEG slow waves and making their<br>interpretation easier.</p>
+<h2 id="Methods-Comparison"><a href="#Methods-Comparison" class="headerlink" title="Methods Comparison"></a>Methods Comparison</h2><h3 id="other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG"><a href="#other-methods’s-disadvantages-filter、recording-of-horizontal-and-vertical-EOG" class="headerlink" title="other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)"></a>other methods’s disadvantages:(filter、recording of horizontal and vertical EOG)</h3><ul>
+<li>used a simple <strong>filtering concept</strong>,simply <strong>ignoring very low frequencies</strong>(below 1.5 or 2 Hz)</li>
+<li>would not perform well in the context of a large amount of <strong>frontal slow waves</strong> (EOG recordingwould be contaminated by this slow wave activity)</li>
+</ul>
+<div style="background-color:yellowgreen;">
+<b backgroundclor="green">ICA's advantages:</b>
+<ul>
+<li>The ICA algorithm is computationally efficient.</li>
+<li>better noise suppression ability.</li>
+<li>ICA can simultaneously separate the EEG and artifacts into independent components without relying on the availability of reference artifacts.</li>
+<li>avoids the problem of mutual contamination between EEG and EOG channels that could not be solved with filters,regression and PCA.</li>  
+<li>The corrected EEG can easily be derived by a combination of the components without artifacts.</li>
+</ul>
+</div>
+
+<h3 id="A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms"><a href="#A-crucial-step-for-ocular-artifact-correction-using-ICA-algorithms" class="headerlink" title="A crucial step for ocular artifact correction using ICA algorithms:"></a>A crucial step for ocular artifact correction using ICA algorithms:</h3><p>to correctly identify the artifact components among the decomposed indepent components.</p>
+<p>Manually identifying:</p>
+<ul>
+<li>subjective </li>
+<li>inconvenient </li>
+<li>time consuming</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+        <tag>ICA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CNN | BatchNormalization</title>
+    <url>/2021/11/15/BatchNormalization/</url>
+    <content><![CDATA[<h1 id="BatchNormalization"><a href="#BatchNormalization" class="headerlink" title="BatchNormalization"></a>BatchNormalization</h1><p>由于深度神经网络涉及到很多层的叠加，而每一层的参数更新会导致上层的输入数据分布发生变化，<br>通过层层叠加，高层的输入分布变化会非常剧烈，这就使得高层需要不断去重新适应底层的参数更新。<br>为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。<br>也就是随是着网络加深，参数分布不断往激活函数两端移动(梯度变小)，导致反向传播出现梯度消失，收敛困难。<br>原理：可在每层的激活函数前，加入BN，将参数重新拉回0-1正态分布，加速收敛。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+        <category>Batch Normalization</category>
+      </categories>
+      <tags>
+        <tag>Batch Normalization</tag>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
       </tags>
   </entry>
   <entry>
@@ -1907,37 +1907,6 @@ def show(request, id1, id2):
       </tags>
   </entry>
   <entry>
-    <title>Django | Django模型查询</title>
-    <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
-<pre><code>print([e.attr for e in Entry.objects.all()])
-print([e.attr for e in Entry.objects.all()])
-</code></pre>
-<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
-<pre><code>querylist=ExampleModel.objects.all()
-print([e.attr for e in querylist])
-print([e.attr for e in querylist])
-</code></pre>
-<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
-<pre><code>query=ExampleModel.objects.all()
-for ... in query[0:10]
-for ... in query[11:20]
-</code></pre>
-<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
-<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
-<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
-<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker | Docker的安装及常用命令</title>
     <url>/2022/11/24/Docker/</url>
     <content><![CDATA[<h1 id="Docker的安装及常用命令"><a href="#Docker的安装及常用命令" class="headerlink" title="Docker的安装及常用命令"></a>Docker的安装及常用命令</h1><ul>
@@ -1999,6 +1968,37 @@ layer11: Linear(64, 2)
       </categories>
       <tags>
         <tag>Dogs VS Cats</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django | Django模型查询</title>
+    <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
+    <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
+<pre><code>print([e.attr for e in Entry.objects.all()])
+print([e.attr for e in Entry.objects.all()])
+</code></pre>
+<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
+<pre><code>querylist=ExampleModel.objects.all()
+print([e.attr for e in querylist])
+print([e.attr for e in querylist])
+</code></pre>
+<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
+<pre><code>query=ExampleModel.objects.all()
+for ... in query[0:10]
+for ... in query[11:20]
+</code></pre>
+<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
+<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
+<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
+<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -2863,186 +2863,6 @@ Is monkey1 equal to monkey3:false
       </tags>
   </entry>
   <entry>
-    <title>spring | JdbcTemplate增删改查</title>
-    <url>/2022/03/07/JdbcTemplate/</url>
-    <content><![CDATA[<h1 id="JdbcTemplate增删改查"><a href="#JdbcTemplate增删改查" class="headerlink" title="JdbcTemplate增删改查"></a>JdbcTemplate增删改查</h1><p>1.项目目录<br><img src="/2022/03/07/JdbcTemplate/1.PNG"><br>2.Emp.java</p>
-<pre><code>package com.atguigu.jdbctemplate;
-
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    private Integer age;
-    private String sex;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>3.ssm表<br><img src="/2022/03/07/JdbcTemplate/2.PNG"><br>4.db.properties</p>
-<pre><code>jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/ssm
-jdbc.username=root
-jdbc.password=root
-</code></pre>
-<p>5.jdbc.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
-    
-    &lt;!-- 引入属性文件 --&gt;
-    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 引入属性文件 --&gt;
-    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
-    
-    &lt;!-- 创建数据源 --&gt;
-    &lt;bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 通过数据源配置JdbcTemplate --&gt;
-    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-&lt;/beans&gt;
-</code></pre>
-<p>6.TestJdbcTemplate.java</p>
-<pre><code>package com.atguigu.jdbctemplate;
-
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
-public class TestJdbcTemplate &#123;
-    ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;jdbc.xml&quot;);
-    JdbcTemplate jdbcTemplate = ac.getBean(&quot;jdbcTemplate&quot;, JdbcTemplate.class);
-    
-    @Test
-    public void test() &#123;
-        //单个增删改
-        //System.out.println(jdbcTemplate);//org.springframework.jdbc.core.JdbcTemplate@6483f5ae
-        //jdbcTemplate.update(&quot;insert into emp values(1,&#39;zhangsan&#39;,23,&#39;男&#39;)&quot;);
-        
-        //增加记录
-        //String sql = &quot;insert into emp values(2, ?, ?, ?)&quot;;
-        //jdbcTemplate.update(sql, &quot;lisi&quot;, 25, &quot;男&quot;);
-        
-        //删除记录
-        //String sql = &quot;delete from emp where eid=?&quot;;
-        //jdbcTemplate.update(sql,2);
-        
-        //修改记录
-        //String sql = &quot;update emp set ename=? where eid=?&quot;; 
-        //jdbcTemplate.update(sql, &quot;lisi&quot;, 1);
-        
-        //不能使用
-        //String sql = &quot;delete from emp where eid in (?)&quot;;
-        //String eids = &quot;3, 4, 5&quot;;
-        //jdbcTemplate.update(sql,eids);
-        
-        //可以使用
-        //String eids = &quot;3,4,5&quot;;
-        //String sql = &quot;delete from emp where eid in (&quot;+eids+&quot;)&quot;;
-        //jdbcTemplate.update(sql);
-        
-        //String sql = &quot;select * from emp where ename like &#39;%?%&#39;&quot;;//不能使用
-        //String sql = &quot;select * from emp where ename like concat(&#39;%&#39;,?,&#39;%&#39;)&quot;;//可以使用
-    &#125;
-    
-    @Test
-    public void testBatchUpdate()&#123;
-        //批量增删改
-//        String sql = &quot;insert into emp values(?,?,?,?)&quot;;
-//        List&lt;Object[]&gt; list = new ArrayList&lt;&gt;();
-//        list.add(new Object[]&#123;3,&quot;a1&quot;,1,&quot;男&quot;&#125;);
-//        list.add(new Object[]&#123;4,&quot;a2&quot;,2,&quot;男&quot;&#125;);
-//        list.add(new Object[]&#123;5,&quot;a3&quot;,3,&quot;男&quot;&#125;);
-//        jdbcTemplate.batchUpdate(sql, list);
-    &#125;
-    
-    @Test
-    public void testQueryForObject()&#123;
-        //jdbcTemplate.queryForObject(sql, requiredType);//用来获取单个的值
-        //jdbcTemplate.queryForObject(sql, rowMapper);//用来获取单条数据
-        
-//        String sql= &quot;select eid,ename,age,sex from emp where eid=?&quot;;
-//        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);//将列名（字段名或字段名的别名）与属性名进行映射
-//        Emp emp = jdbcTemplate.queryForObject(sql, new Object[]&#123;3&#125;, rowMapper);
-//        System.out.println(emp);
-        
-        String sql = &quot;select count(*) from emp&quot;;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
-        System.out.println(count);
-    &#125;
-    
-    @Test
-    public void testQuery()&#123;
-        String sql = &quot;select eid,ename,age,sex from emp&quot;;
-        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);
-        List&lt;Emp&gt; list = jdbcTemplate.query(sql, rowMapper);
-        for(Emp emp:list)&#123;
-            System.out.println(emp);
-        &#125;
-    &#125;
-
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>JdbcTemplate</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
-        <tag>JdbcTemplate</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Redis | Jedis实现手机号验证码</title>
     <url>/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/</url>
     <content><![CDATA[<h1 id="Jedis实现手机号验证码"><a href="#Jedis实现手机号验证码" class="headerlink" title="Jedis实现手机号验证码"></a>Jedis实现手机号验证码</h1><p><img src="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG"><br><strong>要求</strong><br>1.输入手机号，点击发送后随机生成6位数字码，2分钟有效<br>2.输入验证码，点击验证，返回成功或失败<br>3.每个手机号每天只能输入3次</p>
@@ -3234,6 +3054,186 @@ public class CodeVerifyServlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>spring | JdbcTemplate增删改查</title>
+    <url>/2022/03/07/JdbcTemplate/</url>
+    <content><![CDATA[<h1 id="JdbcTemplate增删改查"><a href="#JdbcTemplate增删改查" class="headerlink" title="JdbcTemplate增删改查"></a>JdbcTemplate增删改查</h1><p>1.项目目录<br><img src="/2022/03/07/JdbcTemplate/1.PNG"><br>2.Emp.java</p>
+<pre><code>package com.atguigu.jdbctemplate;
+
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    private Integer age;
+    private String sex;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;]&quot;;
+    &#125;
+    
+&#125;
+</code></pre>
+<p>3.ssm表<br><img src="/2022/03/07/JdbcTemplate/2.PNG"><br>4.db.properties</p>
+<pre><code>jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/ssm
+jdbc.username=root
+jdbc.password=root
+</code></pre>
+<p>5.jdbc.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
+    
+    &lt;!-- 创建数据源 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 通过数据源配置JdbcTemplate --&gt;
+    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+&lt;/beans&gt;
+</code></pre>
+<p>6.TestJdbcTemplate.java</p>
+<pre><code>package com.atguigu.jdbctemplate;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
+public class TestJdbcTemplate &#123;
+    ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;jdbc.xml&quot;);
+    JdbcTemplate jdbcTemplate = ac.getBean(&quot;jdbcTemplate&quot;, JdbcTemplate.class);
+    
+    @Test
+    public void test() &#123;
+        //单个增删改
+        //System.out.println(jdbcTemplate);//org.springframework.jdbc.core.JdbcTemplate@6483f5ae
+        //jdbcTemplate.update(&quot;insert into emp values(1,&#39;zhangsan&#39;,23,&#39;男&#39;)&quot;);
+        
+        //增加记录
+        //String sql = &quot;insert into emp values(2, ?, ?, ?)&quot;;
+        //jdbcTemplate.update(sql, &quot;lisi&quot;, 25, &quot;男&quot;);
+        
+        //删除记录
+        //String sql = &quot;delete from emp where eid=?&quot;;
+        //jdbcTemplate.update(sql,2);
+        
+        //修改记录
+        //String sql = &quot;update emp set ename=? where eid=?&quot;; 
+        //jdbcTemplate.update(sql, &quot;lisi&quot;, 1);
+        
+        //不能使用
+        //String sql = &quot;delete from emp where eid in (?)&quot;;
+        //String eids = &quot;3, 4, 5&quot;;
+        //jdbcTemplate.update(sql,eids);
+        
+        //可以使用
+        //String eids = &quot;3,4,5&quot;;
+        //String sql = &quot;delete from emp where eid in (&quot;+eids+&quot;)&quot;;
+        //jdbcTemplate.update(sql);
+        
+        //String sql = &quot;select * from emp where ename like &#39;%?%&#39;&quot;;//不能使用
+        //String sql = &quot;select * from emp where ename like concat(&#39;%&#39;,?,&#39;%&#39;)&quot;;//可以使用
+    &#125;
+    
+    @Test
+    public void testBatchUpdate()&#123;
+        //批量增删改
+//        String sql = &quot;insert into emp values(?,?,?,?)&quot;;
+//        List&lt;Object[]&gt; list = new ArrayList&lt;&gt;();
+//        list.add(new Object[]&#123;3,&quot;a1&quot;,1,&quot;男&quot;&#125;);
+//        list.add(new Object[]&#123;4,&quot;a2&quot;,2,&quot;男&quot;&#125;);
+//        list.add(new Object[]&#123;5,&quot;a3&quot;,3,&quot;男&quot;&#125;);
+//        jdbcTemplate.batchUpdate(sql, list);
+    &#125;
+    
+    @Test
+    public void testQueryForObject()&#123;
+        //jdbcTemplate.queryForObject(sql, requiredType);//用来获取单个的值
+        //jdbcTemplate.queryForObject(sql, rowMapper);//用来获取单条数据
+        
+//        String sql= &quot;select eid,ename,age,sex from emp where eid=?&quot;;
+//        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);//将列名（字段名或字段名的别名）与属性名进行映射
+//        Emp emp = jdbcTemplate.queryForObject(sql, new Object[]&#123;3&#125;, rowMapper);
+//        System.out.println(emp);
+        
+        String sql = &quot;select count(*) from emp&quot;;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+        System.out.println(count);
+    &#125;
+    
+    @Test
+    public void testQuery()&#123;
+        String sql = &quot;select eid,ename,age,sex from emp&quot;;
+        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);
+        List&lt;Emp&gt; list = jdbcTemplate.query(sql, rowMapper);
+        for(Emp emp:list)&#123;
+            System.out.println(emp);
+        &#125;
+    &#125;
+
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>JdbcTemplate</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+        <tag>JdbcTemplate</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习 | K近邻算法(KNN)</title>
     <url>/2021/02/21/K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95-KNN/</url>
     <content><![CDATA[<h1 id="K近邻算法-KNN"><a href="#K近邻算法-KNN" class="headerlink" title="K近邻算法(KNN)"></a>K近邻算法(KNN)</h1><h2 id="KNN算法原理"><a href="#KNN算法原理" class="headerlink" title="KNN算法原理"></a>KNN算法原理</h2><p>k近邻法(k-nearest neighbor, k-NN)一种基本分类与回归方法。它的工作原理是：存在一个样本数据集合，也称作为训练样本集，并且样本集中每个数据都存在标签，即我们知道样本集中每一个数据与所属分类的对应关系。输入没有标签的新数据后，将新的数据的每个特征与样本集中数据对应的特征进行比较，然后算法提取样本最相似数据(最近邻)的分类标签。一般来说，我们只选择样本数据集中前k个最相似的数据，这就是k-近邻算法中k的出处，通常k是不大于20的整数。最后，选择k个最相似数据中出现次数最多的分类，作为新数据的分类。</p>
@@ -3358,30 +3358,6 @@ numyy:复制 光标所在行开始向下的num行<br><br>
       </tags>
   </entry>
   <entry>
-    <title>可视化 | Logistic回归可视化主要代码</title>
-    <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
-
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.scatter(xcord1,ycord1,s=20,c=&#39;red&#39;,marker=&#39;s&#39;,alpha=0.5)
-ax.plot(x,y)
-plt.title()
-plt.xlabel()
-plt.ylabel()
-plt.show()
-</code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>可视化(Visualization)</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | MapReduce</title>
     <url>/2021/11/07/MapReduce/</url>
     <content><![CDATA[<h1 id="map-and-reduce"><a href="#map-and-reduce" class="headerlink" title="map and reduce"></a>map and reduce</h1><p>1.map()<br>map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。</p>
@@ -3420,6 +3396,30 @@ reduce(jiecheng, [i for i in range(1, n+1)])
         <tag>python</tag>
         <tag>map</tag>
         <tag>reduce</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>可视化 | Logistic回归可视化主要代码</title>
+    <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
+    <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(xcord1,ycord1,s=20,c=&#39;red&#39;,marker=&#39;s&#39;,alpha=0.5)
+ax.plot(x,y)
+plt.title()
+plt.xlabel()
+plt.ylabel()
+plt.show()
+</code></pre>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>可视化(Visualization)</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
       </tags>
   </entry>
   <entry>
@@ -4189,22 +4189,6 @@ public class TestParam &#123;
       </tags>
   </entry>
   <entry>
-    <title>MySQL | 内连接和外连接的区别</title>
-    <url>/2022/01/19/MySQL%E5%86%85%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="内连接和外连接的区别"><a href="#内连接和外连接的区别" class="headerlink" title="内连接和外连接的区别"></a>内连接和外连接的区别</h1><p><strong>区别：</strong><br>内连接（inner join）：取出两张表中匹配到的数据，匹配不到的不保留<br>外连接（outer join）：取出连接表中匹配到的数据，匹配不到的也会保留，其值为NULL</p>
-<p><a href="https://blog.csdn.net/johnhan9/article/details/88686288">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-        <category>内连接和外连接的区别</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>内连接</tag>
-        <tag>外连接</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL | MySQL常见的表操作语句</title>
     <url>/2021/10/14/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A1%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/</url>
     <content><![CDATA[<h1 id="MySQL常见的表操作语句"><a href="#MySQL常见的表操作语句" class="headerlink" title="MySQL常见的表操作语句"></a>MySQL常见的表操作语句</h1><p>1.表的创建</p>
@@ -4239,6 +4223,22 @@ insert into table_name() values(),(),()
       </categories>
       <tags>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL | 内连接和外连接的区别</title>
+    <url>/2022/01/19/MySQL%E5%86%85%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="内连接和外连接的区别"><a href="#内连接和外连接的区别" class="headerlink" title="内连接和外连接的区别"></a>内连接和外连接的区别</h1><p><strong>区别：</strong><br>内连接（inner join）：取出两张表中匹配到的数据，匹配不到的不保留<br>外连接（outer join）：取出连接表中匹配到的数据，匹配不到的也会保留，其值为NULL</p>
+<p><a href="https://blog.csdn.net/johnhan9/article/details/88686288">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+        <category>内连接和外连接的区别</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>内连接</tag>
+        <tag>外连接</tag>
       </tags>
   </entry>
   <entry>
@@ -4361,6 +4361,100 @@ print(TestPrivacy.__name) # Output: AttributeError: type object &#39;TestPrivacy
       </categories>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python-docx | Python检查word文件中的特殊标记词是否与文件名中的一致</title>
+    <url>/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/</url>
+    <content><![CDATA[<h1 id="Python检查word文件中的特殊标记词是否与文件名中的一致"><a href="#Python检查word文件中的特殊标记词是否与文件名中的一致" class="headerlink" title="Python检查word文件中的特殊标记词是否与文件名中的一致"></a>Python检查word文件中的特殊标记词是否与文件名中的一致</h1><p>公司的部分文件分为“内部”和“外部”。正常情况下，这个标识在文件名及文件首页左上角都有标注。然鹅，有时候操作一下，忘记改了，或者忘记标注了。就需要回头去一个一个地整理，非常麻烦。这种重复的，繁杂的操作，尽快冲Python来，人类还是应该多做做其它更有意思的事。</p>
+<p>代码：</p>
+<pre><code>import os
+from win32com import client as wc  # 导入模块
+import docx
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+# 将文件夹内的所有doc转存为docx文件
+path = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径
+files = []
+for file in os.listdir(path):
+    if file.endswith(&quot;.doc&quot;):  # 排除文件夹内的其他干扰文件，只获取&quot;.doc&quot;后缀的word文件
+        files.append(path+file)
+
+word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
+for file in files:
+    doc = word.Document(file)  # 打开word文件
+    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
+    doc.Close()  # 关闭原来word文件
+word.Quit()
+
+for file in files:  # 删除doc文件
+    os.remove(file)
+
+# 获取所有docx文件路径
+docx_files = []
+for file in os.listdir(path):  # 排除文件夹内的其它干扰文件，只获取&quot;.doc&quot;后缀的word文件
+    if file.endswith(&quot;.docx&quot;):
+        docx_files.append(path+file)
+
+counter = 0  # 计数器，用于记录有多少文件没被处理
+
+for file in docx_files:
+    file_head = file.split(&#39;.&#39;)[0].rstrip()  # 文件名头，类似这样的“C:\\Users\\文件\\测试”
+    file_tail = file.split(&#39;\\&#39;)[-1]  # 文件名尾，类似这样“测试.docx”
+    mark_words = [&quot;公开&quot;, &quot;内部&quot;]
+    mark_fileName = file_head[-3:-1]  # 文件名中倒数第2,3个文字
+
+    doc = docx.Document(file)
+    mark_doc = doc.paragraphs[0].text  # 文件中首段文字
+    # 比对标记词
+    if mark_doc in mark_words:  # 判断文件中有无标记
+        if mark_fileName in mark_words:  # 判断文件名中有无标记
+            if mark_doc == mark_fileName:  # 如果二者标记相同
+                counter += 1
+                pass
+            else:  # 二者标记不同
+                os.rename(file, file.replace(mark_fileName, mark_doc))  # 重命名文件
+                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_doc&#125;】&quot;)
+        else:
+            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_doc&#125;）.docx&quot;)  # 文件名中无标记，则加标记
+            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_doc&#125;】&quot;)
+    else:
+        # 文中无标记，则在首段前插入一段，写入标记
+        p = doc.paragraphs[0]
+        pNew = p.insert_paragraph_before()
+        run = pNew.add_run(mark_words[0])  # 写为“公开”
+        # 字体设置
+        run.font.size = Pt(16)
+        run.font.name = &quot;黑体&quot;
+        r = run._element.rPr.rFonts
+        r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)
+
+        doc.save(file)
+        print(f&quot;【&#123;file_tail&#125;】内容增加标识为【&#123;mark_words[0]&#125;】&quot;)
+
+        if mark_fileName in mark_words:  # 查看文件名中是否有标记
+            if mark_fileName == mark_words[0]:  # 标记是否为“公开”
+                pass
+            else:  # 标记不是“公开”则替换
+                os.rename(file, file.replace(mark_fileName, mark_words[0]))  # 重命名文件
+                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_words[0]&#125;】&quot;)
+        else:
+            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_words[0]&#125;）.docx&quot;)  # 文件名中无标记，则加标记
+            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_words[0]&#125;】&quot;)
+
+print(f&quot;完成！共检查&#123;len(docx_files)&#125;个文件,处理了 &#123;len(docx_files) - counter&#125; 个文件。&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>python-docx</category>
+      </categories>
+      <tags>
+        <tag>os</tag>
+        <tag>win32com</tag>
+        <tag>python-docx</tag>
       </tags>
   </entry>
   <entry>
@@ -4488,100 +4582,6 @@ wb.save(f&quot;领料明细汇总表&#123;Get_current_time()&#125;.xlsx&quot;)
       <tags>
         <tag>openpyxl</tag>
         <tag>xlrd</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python-docx | Python检查word文件中的特殊标记词是否与文件名中的一致</title>
-    <url>/2021/10/29/Python%E6%A3%80%E6%9F%A5word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E6%A0%87%E8%AE%B0%E8%AF%8D%E6%98%AF%E5%90%A6%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4/</url>
-    <content><![CDATA[<h1 id="Python检查word文件中的特殊标记词是否与文件名中的一致"><a href="#Python检查word文件中的特殊标记词是否与文件名中的一致" class="headerlink" title="Python检查word文件中的特殊标记词是否与文件名中的一致"></a>Python检查word文件中的特殊标记词是否与文件名中的一致</h1><p>公司的部分文件分为“内部”和“外部”。正常情况下，这个标识在文件名及文件首页左上角都有标注。然鹅，有时候操作一下，忘记改了，或者忘记标注了。就需要回头去一个一个地整理，非常麻烦。这种重复的，繁杂的操作，尽快冲Python来，人类还是应该多做做其它更有意思的事。</p>
-<p>代码：</p>
-<pre><code>import os
-from win32com import client as wc  # 导入模块
-import docx
-from docx.shared import Pt  # 用于设定字体大小（磅值）
-from docx.oxml.ns import qn  # 用于应用中文字体
-
-# 将文件夹内的所有doc转存为docx文件
-path = os.getcwd() + &quot;\\文件\\&quot;  # 文件夹绝对路径
-files = []
-for file in os.listdir(path):
-    if file.endswith(&quot;.doc&quot;):  # 排除文件夹内的其他干扰文件，只获取&quot;.doc&quot;后缀的word文件
-        files.append(path+file)
-
-word = wc.Dispatch(&quot;Word.Application&quot;)  # 打开word应用程序
-for file in files:
-    doc = word.Document(file)  # 打开word文件
-    doc.SaveAs(&quot;&#123;&#125;x&quot;.format(file), 12)  # 另存为后缀为&quot;.docx&quot;的文件，其中参数12指docx文件
-    doc.Close()  # 关闭原来word文件
-word.Quit()
-
-for file in files:  # 删除doc文件
-    os.remove(file)
-
-# 获取所有docx文件路径
-docx_files = []
-for file in os.listdir(path):  # 排除文件夹内的其它干扰文件，只获取&quot;.doc&quot;后缀的word文件
-    if file.endswith(&quot;.docx&quot;):
-        docx_files.append(path+file)
-
-counter = 0  # 计数器，用于记录有多少文件没被处理
-
-for file in docx_files:
-    file_head = file.split(&#39;.&#39;)[0].rstrip()  # 文件名头，类似这样的“C:\\Users\\文件\\测试”
-    file_tail = file.split(&#39;\\&#39;)[-1]  # 文件名尾，类似这样“测试.docx”
-    mark_words = [&quot;公开&quot;, &quot;内部&quot;]
-    mark_fileName = file_head[-3:-1]  # 文件名中倒数第2,3个文字
-
-    doc = docx.Document(file)
-    mark_doc = doc.paragraphs[0].text  # 文件中首段文字
-    # 比对标记词
-    if mark_doc in mark_words:  # 判断文件中有无标记
-        if mark_fileName in mark_words:  # 判断文件名中有无标记
-            if mark_doc == mark_fileName:  # 如果二者标记相同
-                counter += 1
-                pass
-            else:  # 二者标记不同
-                os.rename(file, file.replace(mark_fileName, mark_doc))  # 重命名文件
-                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_doc&#125;】&quot;)
-        else:
-            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_doc&#125;）.docx&quot;)  # 文件名中无标记，则加标记
-            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_doc&#125;】&quot;)
-    else:
-        # 文中无标记，则在首段前插入一段，写入标记
-        p = doc.paragraphs[0]
-        pNew = p.insert_paragraph_before()
-        run = pNew.add_run(mark_words[0])  # 写为“公开”
-        # 字体设置
-        run.font.size = Pt(16)
-        run.font.name = &quot;黑体&quot;
-        r = run._element.rPr.rFonts
-        r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)
-
-        doc.save(file)
-        print(f&quot;【&#123;file_tail&#125;】内容增加标识为【&#123;mark_words[0]&#125;】&quot;)
-
-        if mark_fileName in mark_words:  # 查看文件名中是否有标记
-            if mark_fileName == mark_words[0]:  # 标记是否为“公开”
-                pass
-            else:  # 标记不是“公开”则替换
-                os.rename(file, file.replace(mark_fileName, mark_words[0]))  # 重命名文件
-                print(f&quot;【&#123;file_tail&#125;】文件名重命名标识为【&#123;mark_words[0]&#125;】&quot;)
-        else:
-            os.rename(file, f&quot;&#123;file_head&#125;（&#123;mark_words[0]&#125;）.docx&quot;)  # 文件名中无标记，则加标记
-            print(f&quot;【&#123;file_tail&#125;】文件名增加标识为【&#123;mark_words[0]&#125;】&quot;)
-
-print(f&quot;完成！共检查&#123;len(docx_files)&#125;个文件,处理了 &#123;len(docx_files) - counter&#125; 个文件。&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>python-docx</category>
-      </categories>
-      <tags>
-        <tag>os</tag>
-        <tag>win32com</tag>
-        <tag>python-docx</tag>
       </tags>
   </entry>
   <entry>
@@ -6208,33 +6208,6 @@ public class SemaphoreTest &#123;
       </tags>
   </entry>
   <entry>
-    <title>SpringBoot | SpringBoot集成MyBatis</title>
-    <url>/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/</url>
-    <content><![CDATA[<h1 id="SpringBoot集成MyBatis"><a href="#SpringBoot集成MyBatis" class="headerlink" title="SpringBoot集成MyBatis"></a>SpringBoot集成MyBatis</h1><ul>
-<li>项目目录<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/1.png"></li>
-<li>导入MyBatis所需要的依赖<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--mybatis-springboot--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--lombok--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li>数据库和表<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/2.png"></li>
-<li>配置数据库连接信息(application.yaml)、配置mybatis<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="comment">#?serverTimezone=UTC解决时区的报错</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 整合mybatis</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.example.pojo</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure></li>
-<li>创建实体类User.java（需要用到lombok）<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>创建Mapper接口UserMapper.java<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">User <span class="title">queryUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>创建映射文件UserMapper.xml<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--resultType=&quot;User&quot;和parameterType=&quot;User&quot;只有配置了type-aliases-package后才能起作用--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;addUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        insert into user (id, name, pwd) values (#&#123;id&#125;, #&#123;name&#125;, #&#123;pwd&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;updateUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        update user set name=#&#123;name&#125;,pwd=#&#123;pwd&#125; where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">        delete from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li>编写UserController.java进行测试<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.websocket.server.PathParam;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserList&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>&#123;</span><br><span class="line">        List&lt;User&gt; userList = userMapper.queryUserList();</span><br><span class="line">        <span class="keyword">return</span> userList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserById/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">queryUserById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span></span>&#123;</span><br><span class="line">        User user = userMapper.queryUserById(id);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @GetMapping(&quot;/addUser&quot;)  //http://localhost:8080/addUser?id=4&amp;name=wangmazi&amp;pwd=91011</span></span><br><span class="line"><span class="comment">//    public String addUser(@PathParam(&quot;id&quot;)Integer id, @PathParam(&quot;name&quot;)String name, @PathParam(&quot;pwd&quot;)String pwd)&#123;</span></span><br><span class="line"><span class="comment">//        userMapper.addUser(new User(id, name, pwd));</span></span><br><span class="line"><span class="comment">//        return &quot;ok&quot;;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/addUser/&#123;id&#125;/&#123;name&#125;/&#123;pwd&#125;&quot;)</span>  <span class="comment">//http://localhost:8080/addUser/4/wangmazi/123</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id, <span class="meta">@PathVariable(&quot;name&quot;)</span> String name, <span class="meta">@PathVariable(&quot;pwd&quot;)</span> String pwd)</span></span>&#123;</span><br><span class="line">        userMapper.addUser(<span class="keyword">new</span> User(id, name, pwd));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/updateUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">updateuser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        userMapper.updateUser(<span class="keyword">new</span> User(<span class="number">5</span>, <span class="string">&quot;liuba&quot;</span>, <span class="string">&quot;325&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/deleteUser/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id)</span></span>&#123;</span><br><span class="line">        userMapper.deleteUser(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringBoot</category>
-        <category>SpringBoot集成MyBatis</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>SpringBoot</tag>
-        <tag>SpringBoot集成MyBatis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SpringBoot集成Druid</title>
     <url>/2022/08/17/SpringBoot%E9%9B%86%E6%88%90Druid/</url>
     <content><![CDATA[<h1 id="SpringBoot集成Druid"><a href="#SpringBoot集成Druid" class="headerlink" title="SpringBoot集成Druid"></a>SpringBoot集成Druid</h1><p>Java程序很大一部分要操作数据库，为了提高性能操作数据库的时候，又不得不使用数据库连接池。<br>Druid 是阿里巴巴开源平台上一个数据库连接池实现，结合了 C3P0、DBCP 等 DB 池的优点，同时加入了日志监控。<br>Druid 可以很好的监控 DB 池连接和 SQL 的执行情况，天生就是针对监控而生的 DB 连接池。<br>Druid已经在阿里巴巴部署了超过600个应用，经过一年多生产环境大规模部署的严苛考验。<br>Spring Boot 2.0 以上默认使用 Hikari 数据源，可以说 Hikari 与 Driud 都是当前 Java Web 上最优秀的数据源，我们来重点介绍 Spring Boot 如何集成 Druid 数据源，如何实现数据库监控。</p>
@@ -6263,6 +6236,152 @@ public class SemaphoreTest &#123;
         <tag>SpringBoot集成Druid</tag>
         <tag>Druid</tag>
         <tag>监控</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringBoot | SpringBoot集成MyBatis</title>
+    <url>/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/</url>
+    <content><![CDATA[<h1 id="SpringBoot集成MyBatis"><a href="#SpringBoot集成MyBatis" class="headerlink" title="SpringBoot集成MyBatis"></a>SpringBoot集成MyBatis</h1><ul>
+<li>项目目录<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/1.png"></li>
+<li>导入MyBatis所需要的依赖<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--mybatis-springboot--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--lombok--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>数据库和表<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/2.png"></li>
+<li>配置数据库连接信息(application.yaml)、配置mybatis<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="comment">#?serverTimezone=UTC解决时区的报错</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 整合mybatis</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.example.pojo</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure></li>
+<li>创建实体类User.java（需要用到lombok）<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建Mapper接口UserMapper.java<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">User <span class="title">queryUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建映射文件UserMapper.xml<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--resultType=&quot;User&quot;和parameterType=&quot;User&quot;只有配置了type-aliases-package后才能起作用--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;addUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        insert into user (id, name, pwd) values (#&#123;id&#125;, #&#123;name&#125;, #&#123;pwd&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;updateUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        update user set name=#&#123;name&#125;,pwd=#&#123;pwd&#125; where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">        delete from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>编写UserController.java进行测试<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.websocket.server.PathParam;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserList&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>&#123;</span><br><span class="line">        List&lt;User&gt; userList = userMapper.queryUserList();</span><br><span class="line">        <span class="keyword">return</span> userList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserById/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">queryUserById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span></span>&#123;</span><br><span class="line">        User user = userMapper.queryUserById(id);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @GetMapping(&quot;/addUser&quot;)  //http://localhost:8080/addUser?id=4&amp;name=wangmazi&amp;pwd=91011</span></span><br><span class="line"><span class="comment">//    public String addUser(@PathParam(&quot;id&quot;)Integer id, @PathParam(&quot;name&quot;)String name, @PathParam(&quot;pwd&quot;)String pwd)&#123;</span></span><br><span class="line"><span class="comment">//        userMapper.addUser(new User(id, name, pwd));</span></span><br><span class="line"><span class="comment">//        return &quot;ok&quot;;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/addUser/&#123;id&#125;/&#123;name&#125;/&#123;pwd&#125;&quot;)</span>  <span class="comment">//http://localhost:8080/addUser/4/wangmazi/123</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id, <span class="meta">@PathVariable(&quot;name&quot;)</span> String name, <span class="meta">@PathVariable(&quot;pwd&quot;)</span> String pwd)</span></span>&#123;</span><br><span class="line">        userMapper.addUser(<span class="keyword">new</span> User(id, name, pwd));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/updateUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">updateuser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        userMapper.updateUser(<span class="keyword">new</span> User(<span class="number">5</span>, <span class="string">&quot;liuba&quot;</span>, <span class="string">&quot;325&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/deleteUser/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id)</span></span>&#123;</span><br><span class="line">        userMapper.deleteUser(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringBoot</category>
+        <category>SpringBoot集成MyBatis</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>SpringBoot</tag>
+        <tag>SpringBoot集成MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringMVC | SpringMVC之HelloWorld</title>
+    <url>/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/</url>
+    <content><![CDATA[<h1 id="SpringMVC之HelloWorld"><a href="#SpringMVC之HelloWorld" class="headerlink" title="SpringMVC之HelloWorld"></a>SpringMVC之HelloWorld</h1><h2 id="springMVC的搭建过程："><a href="#springMVC的搭建过程：" class="headerlink" title="springMVC的搭建过程："></a>springMVC的搭建过程：</h2><p>1.导入jar</p>
+<p>2.在web.xml配置springMVC的核心（前端）控制器DispatcherServlet<br>作用：加载springMVC的配置文件，在下方的配置方式下，DispatcherServlet<br>自动加载配置文件，此时的配置文件有默认的位置和名称<br>    默认位置：WEB-INF下，默认名称：<servlet-name>-servlet.xml,<br>    例如以下配置方式的文件名：springMVC-servlet.xml<br>    当加载了配置文件，springMVC就会根据扫描组件找到控制层</servlet-name></p>
+<pre><code>&lt;servlet&gt;
+&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+&lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre>
+<p>3.创建一个POJO,在此类上加上@Controller注解，springMVC就会将此类作为控制层加载，让其处理请求响应<br>4.在控制层中，需要在方法上设置@RequestMapping(value=”hello”),<br>springMVC就是通过此注解将请求路径与控制层中的方法进行匹配，此时请求路径为localhost:8080/projectName/xxx<br>5.处理请求的方法会返回一个字符串，即视图名称，最终会通过配置文件中配置的视图解析器实现页面跳转<br>方式：prefix + 视图名称 + suffix，此为最终跳转的页面路径</p>
+<span id="more"></span>
+<h2 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h2><p>1.项目目录<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/1.PNG"><br>2.web.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
+  &lt;display-name&gt;SpringMVC01&lt;/display-name&gt;
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+  
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  
+&lt;/web-app&gt;
+</code></pre>
+<p>3.springMVC-servlet.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 扫描组件，将加上@Controller注解的类作为springMVC的控制层 --&gt;
+    &lt;context:component-scan base-package=&quot;com.atguigu.test&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;!-- 
+        配置视图解析器
+        作用：将prefix + 视图名称 + suffix 确定最终要跳转的页面
+        /WEB-INF/view/success.jsp
+     --&gt;
+    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+
+&lt;/beans&gt;
+</code></pre>
+<p>4.index.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;hello&quot;&gt;测试springMVC&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>5.success.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;success&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>6.TestController.java</p>
+<pre><code>package com.atguigu.test;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class TestController &#123;
+    /**
+     * 假设：localhost:8080/SpringMVC01/hello
+     */
+    
+    @RequestMapping(&quot;hello&quot;)
+    public String hello()&#123;
+        System.out.println(&quot;SUCCESS&quot;);
+        return &quot;success&quot;;//视图名称
+    &#125;
+&#125;
+</code></pre>
+<p>7.运行结果<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/2.PNG"></p>
+<p><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/3.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>SpringMVC之HelloWorld</category>
+      </categories>
+      <tags>
+        <tag>SpringMVC</tag>
       </tags>
   </entry>
   <entry>
@@ -6519,125 +6638,6 @@ public class ParamController &#123;
         <tag>CookieValue注解</tag>
         <tag>使用POJO获取客户端数据</tag>
         <tag>获取servletAPI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SpringMVC | SpringMVC之HelloWorld</title>
-    <url>/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/</url>
-    <content><![CDATA[<h1 id="SpringMVC之HelloWorld"><a href="#SpringMVC之HelloWorld" class="headerlink" title="SpringMVC之HelloWorld"></a>SpringMVC之HelloWorld</h1><h2 id="springMVC的搭建过程："><a href="#springMVC的搭建过程：" class="headerlink" title="springMVC的搭建过程："></a>springMVC的搭建过程：</h2><p>1.导入jar</p>
-<p>2.在web.xml配置springMVC的核心（前端）控制器DispatcherServlet<br>作用：加载springMVC的配置文件，在下方的配置方式下，DispatcherServlet<br>自动加载配置文件，此时的配置文件有默认的位置和名称<br>    默认位置：WEB-INF下，默认名称：<servlet-name>-servlet.xml,<br>    例如以下配置方式的文件名：springMVC-servlet.xml<br>    当加载了配置文件，springMVC就会根据扫描组件找到控制层</servlet-name></p>
-<pre><code>&lt;servlet&gt;
-&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-&lt;/servlet&gt;
-&lt;servlet-mapping&gt;
-&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-&lt;url-pattern&gt;/&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-</code></pre>
-<p>3.创建一个POJO,在此类上加上@Controller注解，springMVC就会将此类作为控制层加载，让其处理请求响应<br>4.在控制层中，需要在方法上设置@RequestMapping(value=”hello”),<br>springMVC就是通过此注解将请求路径与控制层中的方法进行匹配，此时请求路径为localhost:8080/projectName/xxx<br>5.处理请求的方法会返回一个字符串，即视图名称，最终会通过配置文件中配置的视图解析器实现页面跳转<br>方式：prefix + 视图名称 + suffix，此为最终跳转的页面路径</p>
-<span id="more"></span>
-<h2 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h2><p>1.项目目录<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/1.PNG"><br>2.web.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; id=&quot;WebApp_ID&quot; version=&quot;2.5&quot;&gt;
-  &lt;display-name&gt;SpringMVC01&lt;/display-name&gt;
-  &lt;welcome-file-list&gt;
-    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
-  &lt;/welcome-file-list&gt;
-  
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  
-&lt;/web-app&gt;
-</code></pre>
-<p>3.springMVC-servlet.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
-    
-    &lt;!-- 扫描组件，将加上@Controller注解的类作为springMVC的控制层 --&gt;
-    &lt;context:component-scan base-package=&quot;com.atguigu.test&quot;&gt;&lt;/context:component-scan&gt;
-    
-    &lt;!-- 
-        配置视图解析器
-        作用：将prefix + 视图名称 + suffix 确定最终要跳转的页面
-        /WEB-INF/view/success.jsp
-     --&gt;
-    &lt;bean id=&quot;viewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
-        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-
-&lt;/beans&gt;
-</code></pre>
-<p>4.index.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;a href=&quot;hello&quot;&gt;测试springMVC&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>5.success.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;success&lt;/h1&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>6.TestController.java</p>
-<pre><code>package com.atguigu.test;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-@Controller
-public class TestController &#123;
-    /**
-     * 假设：localhost:8080/SpringMVC01/hello
-     */
-    
-    @RequestMapping(&quot;hello&quot;)
-    public String hello()&#123;
-        System.out.println(&quot;SUCCESS&quot;);
-        return &quot;success&quot;;//视图名称
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果<br><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/2.PNG"></p>
-<p><img src="/2022/03/08/SpringMVC%E4%B9%8BHelloWorld/3.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>SpringMVC之HelloWorld</category>
-      </categories>
-      <tags>
-        <tag>SpringMVC</tag>
       </tags>
   </entry>
   <entry>
@@ -7681,18 +7681,6 @@ Five:销毁
       </tags>
   </entry>
   <entry>
-    <title>cookie | cookie</title>
-    <url>/2021/07/29/cookie/</url>
-    <content><![CDATA[<p>在基于HTTP的请求当中，客户端发送请求到服务器端，服务器端响应请求返回一些信息（包含cookie）。<br>1.cookie是什么？<br>cookie:存储在浏览器当中的文本信息，存储格式：键值对，一旦你访问某个网站，存储了这个键值对，后面再次请求这个服务器时，cookie会自动加到请求报文的头里面发送到服务器。<br><img src="/2021/07/29/cookie/cookie1.png"><br>2.cookie是怎么来的？<br>我们在服务器端设置（set_cookie()）的，通过response返回到浏览器，浏览器将cookie存储下来<br><strong>注：cookie是区别于域名的，跨域名不能共享cookie信息</strong><br>3.一种常见的场景<br>假设我们在淘宝网站浏览了运动鞋商品，在我们浏览其他网站时会看到与我们之前浏览的运动鞋类似的商品推荐，<br>“cookie是区别于域名的”，这句话似乎错了？？<br>答：此时的现象并不是其他网站读取了淘宝网站的cookie，而是在其他网站内嵌了淘宝网站，即此时的运动鞋商品<br>推荐的信息是从淘宝网站本身读取到的，原理如下图所示：<br><img src="/2021/07/29/cookie/cookie.png"></p>
-]]></content>
-      <categories>
-        <category>cookie</category>
-      </categories>
-      <tags>
-        <tag>cookie</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Django | django中两种模板目录设置</title>
     <url>/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="django中两种模板目录设置"><a href="#django中两种模板目录设置" class="headerlink" title="django中两种模板目录设置"></a>django中两种模板目录设置</h1><p>在进行django项目开发中，我们需要创建一个用于存放模板的文件夹，模板文件夹通常放在以下两个位置之一。<br>第一种的项目目录为蓝色框所框选的目录，第二种的项目目录为红色框所框选的目录。<br><img src="/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/content.png"></p>
@@ -7706,6 +7694,18 @@ Five:销毁
       </categories>
       <tags>
         <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>cookie | cookie</title>
+    <url>/2021/07/29/cookie/</url>
+    <content><![CDATA[<p>在基于HTTP的请求当中，客户端发送请求到服务器端，服务器端响应请求返回一些信息（包含cookie）。<br>1.cookie是什么？<br>cookie:存储在浏览器当中的文本信息，存储格式：键值对，一旦你访问某个网站，存储了这个键值对，后面再次请求这个服务器时，cookie会自动加到请求报文的头里面发送到服务器。<br><img src="/2021/07/29/cookie/cookie1.png"><br>2.cookie是怎么来的？<br>我们在服务器端设置（set_cookie()）的，通过response返回到浏览器，浏览器将cookie存储下来<br><strong>注：cookie是区别于域名的，跨域名不能共享cookie信息</strong><br>3.一种常见的场景<br>假设我们在淘宝网站浏览了运动鞋商品，在我们浏览其他网站时会看到与我们之前浏览的运动鞋类似的商品推荐，<br>“cookie是区别于域名的”，这句话似乎错了？？<br>答：此时的现象并不是其他网站读取了淘宝网站的cookie，而是在其他网站内嵌了淘宝网站，即此时的运动鞋商品<br>推荐的信息是从淘宝网站本身读取到的，原理如下图所示：<br><img src="/2021/07/29/cookie/cookie.png"></p>
+]]></content>
+      <categories>
+        <category>cookie</category>
+      </categories>
+      <tags>
+        <tag>cookie</tag>
       </tags>
   </entry>
   <entry>
@@ -8104,7 +8104,7 @@ public class Demo1Servlet extends HttpServlet &#123;
 <li>git init</li>
 <li>git status</li>
 <li>git config –global user.name “username”</li>
-<li>git config –global user.email “<a href="mailto:&#120;&#120;&#120;&#64;&#120;&#x78;&#46;&#x63;&#111;&#109;">&#120;&#120;&#120;&#64;&#120;&#x78;&#46;&#x63;&#111;&#109;</a>“</li>
+<li>git config –global user.email “<a href="mailto:&#x78;&#x78;&#x78;&#64;&#120;&#x78;&#x2e;&#x63;&#x6f;&#x6d;">&#x78;&#x78;&#x78;&#64;&#120;&#x78;&#x2e;&#x63;&#x6f;&#x6d;</a>“</li>
 <li>git add [filename]</li>
 <li>git checkout – [filename]</li>
 <li>git commit -m “comment”</li>
@@ -8981,6 +8981,18 @@ while True:
       </tags>
   </entry>
   <entry>
+    <title>python | python str 对象</title>
+    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | python @property</title>
     <url>/2021/05/20/python-property/</url>
     <content><![CDATA[<h1 id="python-property"><a href="#python-property" class="headerlink" title="python property"></a>python property</h1><pre><code>class Test(object):
@@ -9006,18 +9018,6 @@ t = Test()
 t.num = 50
 print(t.num)
 </code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | python str 对象</title>
-    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -9400,8 +9400,8 @@ for number in range(1, 21):  # 不同的试卷数量，此处为20套
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>openpyxl</tag>
         <tag>python-docx</tag>
+        <tag>openpyxl</tag>
         <tag>random</tag>
       </tags>
   </entry>
@@ -9830,6 +9830,23 @@ show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
       </tags>
   </entry>
   <entry>
+    <title>python | 垃圾回收机制</title>
+    <url>/2021/11/14/python%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</url>
+    <content><![CDATA[<h1 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h1><h2 id="Pyhton垃圾回收机制"><a href="#Pyhton垃圾回收机制" class="headerlink" title="Pyhton垃圾回收机制"></a>Pyhton垃圾回收机制</h2><p>1.引用计数<br><strong>引用计数法的原理是：</strong> 每个对象维护一个ob_ref字段，用来记录该对象当前被引用的次数，每当新的引用指向该对象时，它的引用计数ob_ref加1，每当该对象的引用失效时计数ob_ref减1，一旦对象的引用计数为0，该对象立即被回收，对象占用的内存空间将被释放。<br><strong>缺点：</strong> 无法解决循环引用<br>2.标记清除<br>Python采用了“标记-清除”(Mark and Sweep)算法，解决容器对象可能产生的循环引用问题。<br><strong>标记阶段</strong> 遍历所有的对象，如果是可达的（reachable），也就是还有对象引用它，那么就标记该对象为可达；<br><strong>清除阶段</strong> 再次遍历对象，如果发现某个对象没有标记为可达，则就将其回收。<br><strong>优点：</strong> 解决了循环引用问题<br><strong>缺点：</strong> 标记清除算法在执行很多次数后，程序的堆空间会产生一些小的内存碎片。<br>3.分代回收(假设新生代、中生代和老生代的threshold分别为700、10、10.)<br>· 每新增 701 个需要 GC 的对象，触发一次新生代 GC<br>· 每执行 11 次新生代 GC ，触发一次中生代 GC<br>· 每执行 11 次中生代 GC ，触发一次老生代 GC (老生代 GC 还受其他策略影响，频率更低)<br>· 执行某个生代 GC 前，年轻生代对象链表也移入该代，一起 GC<br>· 一个对象创建后，随着时间推移将被逐步移入老生代，回收频率逐渐降低</p>
+<p><a href="https://mp.weixin.qq.com/s/y_pqtoB-FcTxwBOHpi8hAg">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>基础</category>
+        <category>gc</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>垃圾回收机制</tag>
+        <tag>gc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>json | python处理json数据</title>
     <url>/2022/08/13/python%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="python处理json数据"><a href="#python处理json数据" class="headerlink" title="python处理json数据"></a>python处理json数据</h1><p>找出以下json数据中children键对应列表为空的data键的id值。<br>例如以下示例children键对应的列表为空时，返回data键的id值：</p>
@@ -9851,23 +9868,6 @@ show_info(student_name=&#39;Tony&#39;, student_no=&#39;1000&#39;)
       <tags>
         <tag>python</tag>
         <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python | 垃圾回收机制</title>
-    <url>/2021/11/14/python%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</url>
-    <content><![CDATA[<h1 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h1><h2 id="Pyhton垃圾回收机制"><a href="#Pyhton垃圾回收机制" class="headerlink" title="Pyhton垃圾回收机制"></a>Pyhton垃圾回收机制</h2><p>1.引用计数<br><strong>引用计数法的原理是：</strong> 每个对象维护一个ob_ref字段，用来记录该对象当前被引用的次数，每当新的引用指向该对象时，它的引用计数ob_ref加1，每当该对象的引用失效时计数ob_ref减1，一旦对象的引用计数为0，该对象立即被回收，对象占用的内存空间将被释放。<br><strong>缺点：</strong> 无法解决循环引用<br>2.标记清除<br>Python采用了“标记-清除”(Mark and Sweep)算法，解决容器对象可能产生的循环引用问题。<br><strong>标记阶段</strong> 遍历所有的对象，如果是可达的（reachable），也就是还有对象引用它，那么就标记该对象为可达；<br><strong>清除阶段</strong> 再次遍历对象，如果发现某个对象没有标记为可达，则就将其回收。<br><strong>优点：</strong> 解决了循环引用问题<br><strong>缺点：</strong> 标记清除算法在执行很多次数后，程序的堆空间会产生一些小的内存碎片。<br>3.分代回收(假设新生代、中生代和老生代的threshold分别为700、10、10.)<br>· 每新增 701 个需要 GC 的对象，触发一次新生代 GC<br>· 每执行 11 次新生代 GC ，触发一次中生代 GC<br>· 每执行 11 次中生代 GC ，触发一次老生代 GC (老生代 GC 还受其他策略影响，频率更低)<br>· 执行某个生代 GC 前，年轻生代对象链表也移入该代，一起 GC<br>· 一个对象创建后，随着时间推移将被逐步移入老生代，回收频率逐渐降低</p>
-<p><a href="https://mp.weixin.qq.com/s/y_pqtoB-FcTxwBOHpi8hAg">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-        <category>gc</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>垃圾回收机制</tag>
-        <tag>gc</tag>
       </tags>
   </entry>
   <entry>
@@ -10140,6 +10140,20 @@ with open(&#39;json.txt&#39;) as f:
       </tags>
   </entry>
   <entry>
+    <title>文档 | python文档</title>
+    <url>/2021/10/27/python%E6%96%87%E6%A1%A3/</url>
+    <content><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>python文档</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>os | python批量重命名文件</title>
     <url>/2021/10/27/python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h1 id="python批量重命名文件"><a href="#python批量重命名文件" class="headerlink" title="python批量重命名文件"></a>python批量重命名文件</h1><p>程序将’文件’文件夹下的所有文件重命名。</p>
@@ -10170,20 +10184,6 @@ for file in files:
       <tags>
         <tag>python</tag>
         <tag>os</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>文档 | python文档</title>
-    <url>/2021/10/27/python%E6%96%87%E6%A1%A3/</url>
-    <content><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>文档</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>python文档</tag>
       </tags>
   </entry>
   <entry>
@@ -10390,29 +10390,6 @@ input()
       </tags>
   </entry>
   <entry>
-    <title>pyinstaller | python程序打包</title>
-    <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
-<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
-</code></pre>
-<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
-pyinstaller -F program.py ---&gt; 打包成单个可执行文件
-</code></pre>
-<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
-<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pyinstaller</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pyinstaller</tag>
-        <tag>程序打包</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>jieba | python词频分析</title>
     <url>/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h1 id="python词频分析"><a href="#python词频分析" class="headerlink" title="python词频分析"></a>python词频分析</h1><p>程序分析了”主要业务”文件夹的所有文件中的文本信息的词频(分别存储在”词频”文件夹中)</p>
@@ -10524,6 +10501,29 @@ for picture in pictures:
         <tag>requests</tag>
         <tag>time</tag>
         <tag>baidu-aip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pyinstaller | python程序打包</title>
+    <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
+    <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
+</code></pre>
+<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
+pyinstaller -F program.py ---&gt; 打包成单个可执行文件
+</code></pre>
+<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
+<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pyinstaller</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pyinstaller</tag>
+        <tag>程序打包</tag>
       </tags>
   </entry>
   <entry>
@@ -12470,6 +12470,23 @@ public class TestEmpDept &#123;
       </tags>
   </entry>
   <entry>
+    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
+    <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
+    <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>一维卷积</tag>
+        <tag>二维卷积</tag>
+        <tag>三维卷积</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pdfplumber | 一键提取PDF中的表格到Excel</title>
     <url>/2021/10/28/%E4%B8%80%E9%94%AE%E6%8F%90%E5%8F%96PDF%E4%B8%AD%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%88%B0Excel/</url>
     <content><![CDATA[<h1 id="一键提取PDF中的表格到Excel"><a href="#一键提取PDF中的表格到Excel" class="headerlink" title="一键提取PDF中的表格到Excel"></a>一键提取PDF中的表格到Excel</h1><p>实现代码：</p>
@@ -12516,23 +12533,6 @@ for file in files:
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pdfplumber</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</title>
-    <url>/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/</url>
-    <content><![CDATA[<h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>一维卷积</tag>
-        <tag>二维卷积</tag>
-        <tag>三维卷积</tag>
       </tags>
   </entry>
   <entry>
@@ -13859,24 +13859,6 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
-    <title>Redis | 事务</title>
-    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
-    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
-<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
-<span id="more"></span>
-<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
-<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>事务</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-        <tag>事务</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | 事务</title>
     <url>/2022/01/26/%E4%BA%8B%E5%8A%A1/</url>
     <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
@@ -13940,6 +13922,24 @@ public class Test1 &#123;
         <tag>Java</tag>
         <tag>事务</tag>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis | 事务</title>
+    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
+    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
+<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
+<span id="more"></span>
+<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
+<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>事务</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
@@ -14390,68 +14390,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>xlrd | 从Excel表中批量复制粘贴数据到新表</title>
-    <url>/2021/11/05/%E4%BB%8EExcel%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E6%95%B0%E6%8D%AE%E5%88%B0%E6%96%B0%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="从Excel表中批量复制粘贴数据到新表"><a href="#从Excel表中批量复制粘贴数据到新表" class="headerlink" title="从Excel表中批量复制粘贴数据到新表"></a>从Excel表中批量复制粘贴数据到新表</h1><p>程序实现从Excel表中批量复制粘贴部分数据到新表。</p>
-<span id="more"></span>
-<p>代码：</p>
-<pre><code># 读取xls文件中的数据
-import xlrd
-
-file = &quot;原表.xls&quot;
-wb = xlrd.open_workbook(file)  # 读取工作簿
-ws = wb.sheets()[0]  # 选第一个工作表
-data = []
-
-for row in range(7, ws.nrows):
-    name = ws.cell(row, 1).value.strip()  # 科室名称
-    total1 = ws.cell(row, 2).value  # 总计
-    total2 = ws.cell(row, 3).value  # 计
-    avg = ws.cell(row, 20).value  # 平均每日人次
-
-    info_list = [name, total1, total2, avg]
-
-    if info_list[0] != &quot;&quot;:  # 去除空数据
-        data.append(info_list)
-
-from openpyxl import load_workbook
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-
-file = &quot;统计表模板.xlsx&quot;
-wb = load_workbook(file)
-ws = wb.active
-
-# 写入数据
-for i in data:
-    ws.append(i)
-
-# 设置字号，对齐，缩小字体填充，加边框
-# Font(bold=True)可加粗字体
-for row_number in range(3, ws.max_row + 1):
-    ws.row_dimensions[row_number].height = 25  # 设置行高
-    for col_number in range(1, 5):
-        c = ws.cell(row=row_number, column=col_number)
-        c.font = Font(size=11, bold=True)
-        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-        c.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
-
-wb.save(&quot;统计表.xlsx&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>xlrd</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>xlrd</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</title>
     <url>/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/</url>
     <content><![CDATA[<h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
@@ -14554,6 +14492,68 @@ wb.save(&quot;物料表_1.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>xlrd | 从Excel表中批量复制粘贴数据到新表</title>
+    <url>/2021/11/05/%E4%BB%8EExcel%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E6%95%B0%E6%8D%AE%E5%88%B0%E6%96%B0%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="从Excel表中批量复制粘贴数据到新表"><a href="#从Excel表中批量复制粘贴数据到新表" class="headerlink" title="从Excel表中批量复制粘贴数据到新表"></a>从Excel表中批量复制粘贴数据到新表</h1><p>程序实现从Excel表中批量复制粘贴部分数据到新表。</p>
+<span id="more"></span>
+<p>代码：</p>
+<pre><code># 读取xls文件中的数据
+import xlrd
+
+file = &quot;原表.xls&quot;
+wb = xlrd.open_workbook(file)  # 读取工作簿
+ws = wb.sheets()[0]  # 选第一个工作表
+data = []
+
+for row in range(7, ws.nrows):
+    name = ws.cell(row, 1).value.strip()  # 科室名称
+    total1 = ws.cell(row, 2).value  # 总计
+    total2 = ws.cell(row, 3).value  # 计
+    avg = ws.cell(row, 20).value  # 平均每日人次
+
+    info_list = [name, total1, total2, avg]
+
+    if info_list[0] != &quot;&quot;:  # 去除空数据
+        data.append(info_list)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+
+file = &quot;统计表模板.xlsx&quot;
+wb = load_workbook(file)
+ws = wb.active
+
+# 写入数据
+for i in data:
+    ws.append(i)
+
+# 设置字号，对齐，缩小字体填充，加边框
+# Font(bold=True)可加粗字体
+for row_number in range(3, ws.max_row + 1):
+    ws.row_dimensions[row_number].height = 25  # 设置行高
+    for col_number in range(1, 5):
+        c = ws.cell(row=row_number, column=col_number)
+        c.font = Font(size=11, bold=True)
+        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+        c.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
+
+wb.save(&quot;统计表.xlsx&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>xlrd</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>xlrd</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
     <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
@@ -14624,8 +14624,8 @@ print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>openpyxl</tag>
         <tag>os</tag>
+        <tag>openpyxl</tag>
       </tags>
   </entry>
   <entry>
@@ -16468,45 +16468,6 @@ public class TestPage &#123;
       </tags>
   </entry>
   <entry>
-    <title>Django | 创建模型对象的两种方式</title>
-    <url>/2021/07/26/%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="创建模型对象的两种方式"><a href="#创建模型对象的两种方式" class="headerlink" title="创建模型对象的两种方式"></a>创建模型对象的两种方式</h1><p>使用关键字构造模型对象非常麻烦，一下介绍两种创建对象的方式。</p>
-<span id="more"></span>
-
-<p><strong>方式一：在模型类中增加一个类方法—不推荐使用</strong></p>
-<pre><code>class ExampleModel(models.Model):
-    ...
-    @classmethod
-    def create(cls, attr1, attr2, ...):
-        e = ExampleModel()
-        e.attr1 = attr1
-        e.attr2 = attr2
-        ...
-        return e
-</code></pre>
-<p><strong>方式二：在自定义管理器中添加一个方法—推荐使用</strong></p>
-<pre><code>class ExampleModelManager(models.Manager):
-    def create(self, attr1, attr2, ...):
-        e = ExampleModel()  # 使用在方式一中定义的模型类ExampleModel
-        e.attr1 = attr1
-        e.attr2 = attr2
-        ...
-        return e
-        
-</code></pre>
-<p>**Note:**管理器是模型类的属性，用于将对象与数据表映射</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java | 创建线程池的7种方式</title>
     <url>/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="创建线程池的7种方式"><a href="#创建线程池的7种方式" class="headerlink" title="创建线程池的7种方式"></a>创建线程池的7种方式</h1><pre><code>import java.util.Date;
@@ -16651,6 +16612,45 @@ public class ThreadPoolCreationTest &#123;
       <tags>
         <tag>Java</tag>
         <tag>线程池</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django | 创建模型对象的两种方式</title>
+    <url>/2021/07/26/%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="创建模型对象的两种方式"><a href="#创建模型对象的两种方式" class="headerlink" title="创建模型对象的两种方式"></a>创建模型对象的两种方式</h1><p>使用关键字构造模型对象非常麻烦，一下介绍两种创建对象的方式。</p>
+<span id="more"></span>
+
+<p><strong>方式一：在模型类中增加一个类方法—不推荐使用</strong></p>
+<pre><code>class ExampleModel(models.Model):
+    ...
+    @classmethod
+    def create(cls, attr1, attr2, ...):
+        e = ExampleModel()
+        e.attr1 = attr1
+        e.attr2 = attr2
+        ...
+        return e
+</code></pre>
+<p><strong>方式二：在自定义管理器中添加一个方法—推荐使用</strong></p>
+<pre><code>class ExampleModelManager(models.Manager):
+    def create(self, attr1, attr2, ...):
+        e = ExampleModel()  # 使用在方式一中定义的模型类ExampleModel
+        e.attr1 = attr1
+        e.attr2 = attr2
+        ...
+        return e
+        
+</code></pre>
+<p>**Note:**管理器是模型类的属性，用于将对象与数据表映射</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -19134,8 +19134,8 @@ doc.save(&quot;6S稽查问题.docx&quot;)
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>openpyxl</tag>
         <tag>python-docx</tag>
+        <tag>openpyxl</tag>
       </tags>
   </entry>
   <entry>
@@ -19239,8 +19239,8 @@ doc.save(&quot;收货记录3.docx&quot;)
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>openpyxl</tag>
         <tag>python-docx</tag>
+        <tag>openpyxl</tag>
       </tags>
   </entry>
   <entry>
@@ -19558,36 +19558,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>python | 在python代码中使用c语言编写的函数</title>
-    <url>/2020/10/16/%E5%9C%A8python%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E7%BC%96%E5%86%99%E7%9A%84%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="在python代码中使用c语言编写的函数-以输出Hello-World为例"><a href="#在python代码中使用c语言编写的函数-以输出Hello-World为例" class="headerlink" title="在python代码中使用c语言编写的函数-以输出Hello World为例"></a>在python代码中使用c语言编写的函数-以输出Hello World为例</h1><p><b style="color:red">linux环境下！！！</b></p>
-<h2 id="Step-1-编写c语言代码-sayHello-c"><a href="#Step-1-编写c语言代码-sayHello-c" class="headerlink" title="Step 1:编写c语言代码-sayHello.c"></a>Step 1:编写c语言代码-sayHello.c</h2><pre><code>include&lt;stdio.h&gt;
-void sayHello()
-&#123;
-    printf(&quot;Hello World!&quot;);
-&#125;
-</code></pre>
-<h2 id="Step-2-把c语言文件编译成一个动态库"><a href="#Step-2-把c语言文件编译成一个动态库" class="headerlink" title="Step 2:把c语言文件编译成一个动态库"></a>Step 2:把c语言文件编译成一个动态库</h2><pre><code>gcc sayHello.c -shared -o lib-sayHello.so
-</code></pre>
-<h2 id="Step-3-编写python代码-main-py"><a href="#Step-3-编写python代码-main-py" class="headerlink" title="Step 3:编写python代码-main.py"></a>Step 3:编写python代码-main.py</h2><pre><code>from ctypes import *
-
-#加载动态库
-lib = cdll.LoadLibrary(&quot;./lib-sayHello.so&quot;)
-#调用sayHello函数
-lib.sayHello()
-</code></pre>
-<h2 id="Step-4-运行python代码"><a href="#Step-4-运行python代码" class="headerlink" title="Step 4:运行python代码"></a>Step 4:运行python代码</h2><pre><code>python3 main.py
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>c</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>openpyxl | 在Excel中按条件筛选数据并存入新的表</title>
     <url>/2021/10/25/%E5%9C%A8Excel%E4%B8%AD%E6%8C%89%E6%9D%A1%E4%BB%B6%E7%AD%9B%E9%80%89%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E7%9A%84%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="在Excel中按条件筛选数据并存入新的表"><a href="#在Excel中按条件筛选数据并存入新的表" class="headerlink" title="在Excel中按条件筛选数据并存入新的表"></a>在Excel中按条件筛选数据并存入新的表</h1><p>实现代码：</p>
@@ -19668,6 +19638,36 @@ wb.save(&quot;每月(大于1K).xlsx&quot;)
       <tags>
         <tag>python</tag>
         <tag>openpyxl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 在python代码中使用c语言编写的函数</title>
+    <url>/2020/10/16/%E5%9C%A8python%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E7%BC%96%E5%86%99%E7%9A%84%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="在python代码中使用c语言编写的函数-以输出Hello-World为例"><a href="#在python代码中使用c语言编写的函数-以输出Hello-World为例" class="headerlink" title="在python代码中使用c语言编写的函数-以输出Hello World为例"></a>在python代码中使用c语言编写的函数-以输出Hello World为例</h1><p><b style="color:red">linux环境下！！！</b></p>
+<h2 id="Step-1-编写c语言代码-sayHello-c"><a href="#Step-1-编写c语言代码-sayHello-c" class="headerlink" title="Step 1:编写c语言代码-sayHello.c"></a>Step 1:编写c语言代码-sayHello.c</h2><pre><code>include&lt;stdio.h&gt;
+void sayHello()
+&#123;
+    printf(&quot;Hello World!&quot;);
+&#125;
+</code></pre>
+<h2 id="Step-2-把c语言文件编译成一个动态库"><a href="#Step-2-把c语言文件编译成一个动态库" class="headerlink" title="Step 2:把c语言文件编译成一个动态库"></a>Step 2:把c语言文件编译成一个动态库</h2><pre><code>gcc sayHello.c -shared -o lib-sayHello.so
+</code></pre>
+<h2 id="Step-3-编写python代码-main-py"><a href="#Step-3-编写python代码-main-py" class="headerlink" title="Step 3:编写python代码-main.py"></a>Step 3:编写python代码-main.py</h2><pre><code>from ctypes import *
+
+#加载动态库
+lib = cdll.LoadLibrary(&quot;./lib-sayHello.so&quot;)
+#调用sayHello函数
+lib.sayHello()
+</code></pre>
+<h2 id="Step-4-运行python代码"><a href="#Step-4-运行python代码" class="headerlink" title="Step 4:运行python代码"></a>Step 4:运行python代码</h2><pre><code>python3 main.py
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>c</tag>
       </tags>
   </entry>
   <entry>
@@ -20075,120 +20075,6 @@ com.atguigu.ioc.userMod.dao.UserDaoImpl@1a8a8f7c
       </tags>
   </entry>
   <entry>
-    <title>SpringMVC | 处理json</title>
-    <url>/2022/03/15/%E5%A4%84%E7%90%86json/</url>
-    <content><![CDATA[<h1 id="处理json"><a href="#处理json" class="headerlink" title="处理json"></a>处理json</h1><p>1.项目目录<br><img src="/2022/03/15/%E5%A4%84%E7%90%86json/1.PNG"><br><strong>注意：</strong><br>1.按照上图创建项目、导入图中所示的jar包并按照<a href="https://victory-liao.github.io/2022/03/13/REST-CRUD/">REST-CRUD</a>中的<br>web.xml、springMVC配置配置文件；<br>2.src下的dao、bean包中的代码参照REST CRUD；</p>
-<span id="more"></span>
-<p>3.index.jsp</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;Insert title here&lt;/title&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot; /&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.servletContext.contextPath&#125;/js/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-    $(function()&#123;
-        $(&quot;#btn&quot;).click(function()&#123;
-            $.ajax(&#123;
-                url:&quot;testJson&quot;,
-                type:&quot;POST&quot;,
-                dataType:&quot;json&quot;,//dataType=&quot;text&quot; 原样显示
-                success:function(msg)&#123;
-                    //alert(msg);
-                    /*
-                    [&#123;&quot;id&quot;:1001,&quot;lastName&quot;:&quot;E-AA&quot;,&quot;email&quot;:&quot;aa@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:101,&quot;departmentName&quot;:&quot;D-AA&quot;&#125;&#125;,
-                     &#123;&quot;id&quot;:1002,&quot;lastName&quot;:&quot;E-BB&quot;,&quot;email&quot;:&quot;bb@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:102,&quot;departmentName&quot;:&quot;D-BB&quot;&#125;&#125;,
-                     &#123;&quot;id&quot;:1003,&quot;lastName&quot;:&quot;E-CC&quot;,&quot;email&quot;:&quot;cc@163.com&quot;,&quot;gender&quot;:0,&quot;department&quot;:&#123;&quot;id&quot;:103,&quot;departmentName&quot;:&quot;D-CC&quot;&#125;&#125;,
-                     &#123;&quot;id&quot;:1004,&quot;lastName&quot;:&quot;E-DD&quot;,&quot;email&quot;:&quot;dd@163.com&quot;,&quot;gender&quot;:0,&quot;department&quot;:&#123;&quot;id&quot;:104,&quot;departmentName&quot;:&quot;D-DD&quot;&#125;&#125;,
-                     &#123;&quot;id&quot;:1005,&quot;lastName&quot;:&quot;E-EE&quot;,&quot;email&quot;:&quot;ee@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:105,&quot;departmentName&quot;:&quot;D-EE&quot;&#125;&#125;]
-                    */
-                    /* for(var i in msg) &#123;
-                        var emp = msg[i]
-                        alert(&quot;id=&quot;+emp.id+&quot;,lastName=&quot;+emp.lastName+&quot;,departmentName=&quot;+emp.department.departmentName);
-                    &#125; */
-                    
-                    //第一种实现方式
-                    /* var tb = &quot;&lt;table&gt;&quot;
-                    tb += &quot;&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;th&gt;email&lt;/th&gt;&lt;th&gt;gender&lt;/th&gt;&lt;th&gt;departmentName&lt;/th&gt;&lt;/tr&gt;&quot;
-                    for(var i in msg) &#123;
-                        var emp = msg[i]
-                        tb += &quot;&lt;tr&gt;&lt;td&gt;&quot;+emp.id+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.lastName+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.email+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.gender+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.department.departmentName+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;
-                    &#125; 
-                    tb += &quot;&lt;/table&gt;&quot;
-                    $(&quot;body&quot;).append(tb); */
-                    
-                    //第二种实现方式
-                    $(&quot;body&quot;).append(&quot;&lt;table&gt;&lt;/table&gt;&quot;);
-                    $(&quot;table&quot;).append(&quot;&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;th&gt;email&lt;/th&gt;&lt;th&gt;gender&lt;/th&gt;&lt;th&gt;departmentName&lt;/th&gt;&lt;/tr&gt;&quot;)
-                    for(var i in msg)&#123;
-                        var emp = msg[i]
-                        $(&quot;table&quot;).append(&quot;&lt;tr&gt;&lt;td&gt;&quot;+emp.id+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.lastName+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.email+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.gender+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.department.departmentName+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;);
-                    &#125;
-                &#125;
-            &#125;);
-        &#125;)
-    &#125;);
-&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;input id=&quot;btn&quot; type=&quot;button&quot; value=&quot;测试ajax&quot; /&gt;
-    
-    &lt;a href=&quot;testJson&quot;&gt;测试json&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>2.TestJsonController.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.atguigu.bean.Employee;
-import com.atguigu.dao.EmployeeDao;
-
-@Controller
-public class TestJsonController &#123;
-    
-    @Autowired
-    private EmployeeDao dao;
-    
-    /**
-     * springMVC处理json的四个条件
-     * 1、导入jackson的jar包
-     * 2、在springMVC的配置文件中开启MVC驱动，&lt;mvc:annotation-driven /&gt;
-     * 3、在处理ajax请求的方法上加上注解@ResponseBody
-     * 4、将要转为为json且响应到客户端的数据，直接作为该方法的返回值返回
-     * @ResponseBody
-     */
-    @RequestMapping(&quot;testJson&quot;)
-    @ResponseBody
-    public Collection&lt;Employee&gt; testJson()&#123;
-        Collection&lt;Employee&gt; emps = dao.getAll();
-        return emps;
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>处理json</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>SpringMVC</tag>
-        <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>并发 | 基于线程池技术的简单Web服务器</title>
     <url>/2022/05/30/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E7%AE%80%E5%8D%95Web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<h1 id="基于线程池技术的简单Web服务器"><a href="#基于线程池技术的简单Web服务器" class="headerlink" title="基于线程池技术的简单Web服务器"></a>基于线程池技术的简单Web服务器</h1><p>基于线程池技术的简单Web服务器，这个Web服务器用来处理HTTP请求(目前智能处理简单的文本和JPG图片内容)。这个服务器使用<br>main线程不断地接受可换段Socket的连接，将连接以及请求提交给线程池处理，这样使得Web服务器能够同时处理多个客户端请求。</p>
@@ -20486,6 +20372,120 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
         <tag>Java</tag>
         <tag>并发</tag>
         <tag>基于线程池技术的简单Web服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringMVC | 处理json</title>
+    <url>/2022/03/15/%E5%A4%84%E7%90%86json/</url>
+    <content><![CDATA[<h1 id="处理json"><a href="#处理json" class="headerlink" title="处理json"></a>处理json</h1><p>1.项目目录<br><img src="/2022/03/15/%E5%A4%84%E7%90%86json/1.PNG"><br><strong>注意：</strong><br>1.按照上图创建项目、导入图中所示的jar包并按照<a href="https://victory-liao.github.io/2022/03/13/REST-CRUD/">REST-CRUD</a>中的<br>web.xml、springMVC配置配置文件；<br>2.src下的dao、bean包中的代码参照REST CRUD；</p>
+<span id="more"></span>
+<p>3.index.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot; /&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;$&#123;pageContext.servletContext.contextPath&#125;/js/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(function()&#123;
+        $(&quot;#btn&quot;).click(function()&#123;
+            $.ajax(&#123;
+                url:&quot;testJson&quot;,
+                type:&quot;POST&quot;,
+                dataType:&quot;json&quot;,//dataType=&quot;text&quot; 原样显示
+                success:function(msg)&#123;
+                    //alert(msg);
+                    /*
+                    [&#123;&quot;id&quot;:1001,&quot;lastName&quot;:&quot;E-AA&quot;,&quot;email&quot;:&quot;aa@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:101,&quot;departmentName&quot;:&quot;D-AA&quot;&#125;&#125;,
+                     &#123;&quot;id&quot;:1002,&quot;lastName&quot;:&quot;E-BB&quot;,&quot;email&quot;:&quot;bb@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:102,&quot;departmentName&quot;:&quot;D-BB&quot;&#125;&#125;,
+                     &#123;&quot;id&quot;:1003,&quot;lastName&quot;:&quot;E-CC&quot;,&quot;email&quot;:&quot;cc@163.com&quot;,&quot;gender&quot;:0,&quot;department&quot;:&#123;&quot;id&quot;:103,&quot;departmentName&quot;:&quot;D-CC&quot;&#125;&#125;,
+                     &#123;&quot;id&quot;:1004,&quot;lastName&quot;:&quot;E-DD&quot;,&quot;email&quot;:&quot;dd@163.com&quot;,&quot;gender&quot;:0,&quot;department&quot;:&#123;&quot;id&quot;:104,&quot;departmentName&quot;:&quot;D-DD&quot;&#125;&#125;,
+                     &#123;&quot;id&quot;:1005,&quot;lastName&quot;:&quot;E-EE&quot;,&quot;email&quot;:&quot;ee@163.com&quot;,&quot;gender&quot;:1,&quot;department&quot;:&#123;&quot;id&quot;:105,&quot;departmentName&quot;:&quot;D-EE&quot;&#125;&#125;]
+                    */
+                    /* for(var i in msg) &#123;
+                        var emp = msg[i]
+                        alert(&quot;id=&quot;+emp.id+&quot;,lastName=&quot;+emp.lastName+&quot;,departmentName=&quot;+emp.department.departmentName);
+                    &#125; */
+                    
+                    //第一种实现方式
+                    /* var tb = &quot;&lt;table&gt;&quot;
+                    tb += &quot;&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;th&gt;email&lt;/th&gt;&lt;th&gt;gender&lt;/th&gt;&lt;th&gt;departmentName&lt;/th&gt;&lt;/tr&gt;&quot;
+                    for(var i in msg) &#123;
+                        var emp = msg[i]
+                        tb += &quot;&lt;tr&gt;&lt;td&gt;&quot;+emp.id+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.lastName+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.email+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.gender+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.department.departmentName+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;
+                    &#125; 
+                    tb += &quot;&lt;/table&gt;&quot;
+                    $(&quot;body&quot;).append(tb); */
+                    
+                    //第二种实现方式
+                    $(&quot;body&quot;).append(&quot;&lt;table&gt;&lt;/table&gt;&quot;);
+                    $(&quot;table&quot;).append(&quot;&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;th&gt;email&lt;/th&gt;&lt;th&gt;gender&lt;/th&gt;&lt;th&gt;departmentName&lt;/th&gt;&lt;/tr&gt;&quot;)
+                    for(var i in msg)&#123;
+                        var emp = msg[i]
+                        $(&quot;table&quot;).append(&quot;&lt;tr&gt;&lt;td&gt;&quot;+emp.id+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.lastName+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.email+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.gender+&quot;&lt;/td&gt;&lt;td&gt;&quot;+emp.department.departmentName+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;);
+                    &#125;
+                &#125;
+            &#125;);
+        &#125;)
+    &#125;);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;input id=&quot;btn&quot; type=&quot;button&quot; value=&quot;测试ajax&quot; /&gt;
+    
+    &lt;a href=&quot;testJson&quot;&gt;测试json&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.TestJsonController.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.atguigu.bean.Employee;
+import com.atguigu.dao.EmployeeDao;
+
+@Controller
+public class TestJsonController &#123;
+    
+    @Autowired
+    private EmployeeDao dao;
+    
+    /**
+     * springMVC处理json的四个条件
+     * 1、导入jackson的jar包
+     * 2、在springMVC的配置文件中开启MVC驱动，&lt;mvc:annotation-driven /&gt;
+     * 3、在处理ajax请求的方法上加上注解@ResponseBody
+     * 4、将要转为为json且响应到客户端的数据，直接作为该方法的返回值返回
+     * @ResponseBody
+     */
+    @RequestMapping(&quot;testJson&quot;)
+    @ResponseBody
+    public Collection&lt;Employee&gt; testJson()&#123;
+        Collection&lt;Employee&gt; emps = dao.getAll();
+        return emps;
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>处理json</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>SpringMVC</tag>
+        <tag>json</tag>
       </tags>
   </entry>
   <entry>
@@ -30049,6 +30049,17 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>期刊 | 脑电期刊</title>
+    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
+    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>脑电期刊</category>
+        <category>Biomedical Signal Processing and Control</category>
+      </categories>
+  </entry>
+  <entry>
     <title>EEG | 脑电数据集下载网站</title>
     <url>/2021/04/17/%E8%84%91%E7%94%B5%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99/</url>
     <content><![CDATA[<h1 id="脑电数据集下载网站"><a href="#脑电数据集下载网站" class="headerlink" title="脑电数据集下载网站"></a>脑电数据集下载网站</h1><p><a href="www.physionet.org">网站1</a></p>
@@ -30062,17 +30073,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>EEG</tag>
         <tag>数据集</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>期刊 | 脑电期刊</title>
-    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
-    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>脑电期刊</category>
-        <category>Biomedical Signal Processing and Control</category>
-      </categories>
   </entry>
   <entry>
     <title>selenium | pyhon+selenium测试WebTours网站登录注册功能</title>
@@ -32198,23 +32198,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>ICA | 鸡尾酒宴会问题</title>
-    <url>/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
-<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>ICA</tag>
-        <tag>鸡尾酒宴会问题</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | 高阶函数</title>
     <url>/2021/11/07/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h1><p>高阶函数：一个函数可以接收另一个函数作为参数，这种函数就称为高阶函数</p>
@@ -32253,6 +32236,23 @@ print(func_xy(1,2,SS))
       <tags>
         <tag>python</tag>
         <tag>高阶函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ICA | 鸡尾酒宴会问题</title>
+    <url>/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="鸡尾酒宴会问题"><a href="#鸡尾酒宴会问题" class="headerlink" title="鸡尾酒宴会问题"></a>鸡尾酒宴会问题</h1><p>鸡尾酒宴会问题是独立成分分析(Indepen Compon Analysis)的经典问题。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>假设在party中有n个人，他们可以同时说话，我们也在房间中一些角落里共放置了n个声音接收器（Microphone）用来记录声音。宴会过后，我们从n个麦克风中得到了一组数据<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/1.png"><br>，i表示采样的时间顺序，也就是说共得到了m组采样，每一组采样都是n维的。我们的目标是单单从这m组采样数据中分辨出每个人说话的信号。</p>
+<p>将第二个问题细化一下，有n个信号源<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/2.png"><br>,每一维都是一个人的声音信号，每个人发出的声音信号独立。A是一个未知的混合矩阵（mixing matrix），用来组合叠加信号s，那么<br>X = AS<br>X的意义在上文解释过，这里的x不是一个向量，是一个矩阵。其中每个列向量是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/3.png"><br>表示成图就是<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/4.jpg"><br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/5.png"><br>x(i)的每个分量都由s(i)的分量线性表示。A和s都是未知的，x是已知的，我们要想办法根据x来推出s。这个过程也称作为盲信号分离。<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/8.png"><br>将W表示成<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/9.png"><br>其中<img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/10.png">,起始就是将wi携程行向量形式。那么得到：<br><img src="/2021/02/21/%E9%B8%A1%E5%B0%BE%E9%85%92%E5%AE%B4%E4%BC%9A%E9%97%AE%E9%A2%98/11.png"></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>ICA</tag>
+        <tag>鸡尾酒宴会问题</tag>
       </tags>
   </entry>
   <entry>
