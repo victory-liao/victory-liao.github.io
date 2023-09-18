@@ -190,6 +190,164 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/28/%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9word%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F/" class="post-title-link" itemprop="url">python-docx | 批量修改word文件中的段落格式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-10-28 18:09:27 / Modified: 18:16:04" itemprop="dateCreated datePublished" datetime="2021-10-28T18:09:27-08:00">2021-10-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/python-docx/" itemprop="url" rel="index"><span itemprop="name">python-docx</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="批量修改word文件中的段落格式"><a href="#批量修改word文件中的段落格式" class="headerlink" title="批量修改word文件中的段落格式"></a>批量修改word文件中的段落格式</h1><p>实现代码：</p>
+<pre><code>import os
+import docx
+# 定义字体格式
+from docx.shared import Pt  # 用于设定字体大小（磅值）
+from docx.oxml.ns import qn  # 用于应用中文字体
+
+
+def F_title(run):
+    # 标题文字
+    run.font.size = Pt(22)  # 文字大小磅值
+    run.bold = True  # 加粗
+    run.font.name = &quot;方正小标宋_GBK&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;方正小标宋_GBK&quot;)  # 字体
+
+
+def F_name_dept(run):
+    # 姓名，部门，日期
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;楷体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
+
+
+def F_main(run):
+    # 正文的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;仿宋&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;仿宋&quot;)  # 字体
+
+
+def F_title1(run):
+    # 标题一的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = False  # 加粗
+    run.font.name = &quot;黑体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;黑体&quot;)  # 字体
+
+
+def F_title2(run):
+    # 标题二的格式
+    run.font.size = Pt(17)  # 文字大小磅值
+    run.bold = True  # 加粗
+    run.font.name = &quot;楷体&quot;  # 字体
+    r = run._element.rPr.rFonts
+    r.set(qn(&quot;w:eastAsia&quot;), &quot;楷体&quot;)  # 字体
+
+
+# 获取待处理的文件的路径
+path = &#39;待处理文件&#39;  # 文件所在文件夹
+files = [path + &quot;\\&quot; + i for i in os.listdir(path)]  # 获取文件夹下的文件名,并拼接完整路径
+# print(files)
+# 逐个提取文件，设置字体格式
+for file in files:
+    doc = docx.Document(file)
+    for run in doc.paragraphs[0].runs:  # 总标题字体格式
+        F_title(run)
+
+    for para in doc.paragraphs[1:3]:  # 部门、姓名及日期字体格式
+        for run in para.runs:
+            F_name_dept(run)
+
+    title1 = [&quot;一、&quot;, &quot;二、&quot;, &quot;三、&quot;, &quot;四、&quot;]  # 标题一的唯一特征字符串
+    title2 = [&quot;1、&quot;, &quot;2、&quot;, &quot;3、&quot;, &quot;4、&quot;]  # 标题二的唯一特征字符串
+    for para in doc.paragraphs[3:]:
+        if any(i in para.text for i in title1):  # 若该段落是标题一，则应用标题一的字体格式
+            for run in para.runs:
+                F_title1(run)
+        elif any(j in para.text for j in title2):  # 若该段落是标题二，则应用标题二的字体格式
+            for run in para.runs:
+                F_title2(run)
+        else:
+            for run in para.runs:  # 其余都应用正文的字体格式
+                F_main(run)
+    doc.save(&#39;已处理文件\\&#123;&#125;&#39;.format(file.split(&quot;\\&quot;)[1]))
+    
+</code></pre>
+<p>已处理文件：<br><a href="报告-何十.docx">报告-何十.docx</a><br><a href="报告-刘七.docx">报告-刘七.docx</a><br><a href="报告-张三.docx">报告-张三.docx</a><br><a href="报告-朱八.docx">报告-朱八</a><br><a href="报告-李四.docx">报告-李四.docx</a><br><a href="报告-猪八戒.docx">报告-猪八戒.docx</a><br><a href="报告-王五.docx">报告-王五.docx</a><br><a href="报告-秦九.docx">报告-秦九.docx</a><br><a href="报告-赵六.docx">报告-赵六.docx</a><br><a href="报告-黄二.docx">报告-黄二.docx</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/28/python%E6%9B%BF%E6%8D%A2word%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -987,82 +1145,6 @@ if __name__ == &quot;__main__&quot;:
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/26/%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF/" class="post-title-link" itemprop="url">CNN | 卷积神经网络(一维卷积、二维卷积、三维卷积)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-26 18:10:04 / Modified: 19:30:46" itemprop="dateCreated datePublished" datetime="2021-10-26T18:10:04-08:00">2021-10-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/CNN/" itemprop="url" rel="index"><span itemprop="name">CNN</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="卷积神经网络-一维卷积、二维卷积、三维卷积"><a href="#卷积神经网络-一维卷积、二维卷积、三维卷积" class="headerlink" title="卷积神经网络(一维卷积、二维卷积、三维卷积)"></a>卷积神经网络(一维卷积、二维卷积、三维卷积)</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/szxspark/p/8445406.html">一维卷积、二维卷积、三维卷积</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44378513/article/details/112307989?spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link">1D CNN+2D CNN+3D CNN</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1134,20 +1216,20 @@ if __name__ == &quot;__main__&quot;:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">464</span>
+          <span class="site-state-item-count">465</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">363</span>
+        <span class="site-state-item-count">365</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">349</span>
+        <span class="site-state-item-count">350</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

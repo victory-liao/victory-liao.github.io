@@ -190,6 +190,120 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/23/ThreadLocal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/23/ThreadLocal/" class="post-title-link" itemprop="url">Java | ThreadLocal</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-23 20:07:49 / Modified: 20:10:42" itemprop="dateCreated datePublished" datetime="2022-04-23T20:07:49-08:00">2022-04-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/ThreadLocal/" itemprop="url" rel="index"><span itemprop="name">ThreadLocal</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ThreadLocal示例"><a href="#ThreadLocal示例" class="headerlink" title="ThreadLocal示例"></a>ThreadLocal示例</h1><p>ThreadLocal:<br>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的。如果想实现每一个线程都有自己的专属本地变量该如何解决呢？ JDK 中提供的ThreadLocal类正是为了解决这样的问题。<br>ThreadLocal类主要解决的就是让每个线程绑定自己的值，可以将ThreadLocal类形象的比喻成存放数据的盒子，盒子中可以存储每个线程的私有数据。<br>如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将修改其值，从而避免了线程安全问题。</p>
+<p><strong>代码：</strong></p>
+<pre><code>import java.text.SimpleDateFormat;
+import java.util.Random;
+
+public class ThreadLocalTest implements Runnable&#123;
+
+    //private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = ThreadLocal.withInitial(()-&gt;new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;));
+    private static final ThreadLocal&lt;SimpleDateFormat&gt; formatter = new ThreadLocal&lt;SimpleDateFormat&gt;()&#123;
+        @Override
+        protected SimpleDateFormat initialValue()&#123;
+            return new SimpleDateFormat(&quot;yyyyMMdd HHmm&quot;);
+        &#125;
+    &#125;;
+    
+    @Override
+    public void run() &#123;
+        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; default formatter=&quot;+formatter.get().toPattern());
+        try &#123;
+            Thread.sleep(new Random().nextInt(1000));
+        &#125; catch (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+        formatter.set(new SimpleDateFormat());
+        System.out.println(&quot;Thread Name=&quot;+Thread.currentThread().getName()+&quot; current formatter=&quot;+formatter.get().toPattern());
+        
+    &#125;
+    
+    public static void main(String[] args) throws InterruptedException&#123;
+        ThreadLocalTest obj = new ThreadLocalTest();
+        for(int i=0;i&lt;10;i++)&#123;
+            Thread t = new Thread(obj, &quot;&quot;+i);
+            Thread.sleep(new Random().nextInt(1000));
+            t.start();
+        &#125;
+    &#125;
+    
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/23/%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1500,94 +1614,6 @@ public void testMBG() throws Exception &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/14/mybatis%E7%BC%93%E5%AD%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">MyBatis | 缓存</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-14 03:39:49 / Modified: 03:51:36" itemprop="dateCreated datePublished" datetime="2022-04-14T03:39:49-08:00">2022-04-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E7%BC%93%E5%AD%98/" itemprop="url" rel="index"><span itemprop="name">缓存</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><p>mybatis中的一级缓存默认开启，是SqlSession级别的，即同一个SqlSession对于一个SQL语句执行之后就会存储在缓存中，<br>下次执行相同的sql，直接从缓存中取。<br><strong>一级缓存失效的几种情况：</strong><br>（1）不同的SqlSession对应不同的一级缓存<br>（2）同一个SqlSession但是查询条件不同<br>（3）同一个SqlSession两次查询期间执行了任何一次增删改操作，会自动将缓存清空<br>（4）同一个SqlSession两次查询期间手动清空了缓存</p>
-<h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h2><p>mybatis的二级缓存默认不开启，需要设置：<br>1）全局配置文件中开启二级缓存<setting name="cacheEnabled" value="true"><br>2）需要使用二级缓存的映射文件处使用cache配置缓存<cache><br>3）POJO需要实现Serializable接口<br>注意：二级缓存在 SqlSession 关闭或提交之后才会生效<br>1)全局setting的cacheEnable：<br>配置二级缓存的开关，一级缓存一直是打开的。<br>2)select标签的useCache属性：<br>配置这个select是否使用二级缓存。一级缓存一直是使用的<br>3)sql标签的flushCache属性：<br>增删改默认flushCache=true。sql执行以后，会同时清空一级和二级缓存。<br>查询默认 flushCache=false。<br>4)sqlSession.clearCache()：只是用来清除一级缓存。</cache></setting></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1659,20 +1685,20 @@ public void testMBG() throws Exception &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">464</span>
+          <span class="site-state-item-count">465</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">363</span>
+        <span class="site-state-item-count">365</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">349</span>
+        <span class="site-state-item-count">350</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
