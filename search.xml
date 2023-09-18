@@ -34,39 +34,6 @@
       </tags>
   </entry>
   <entry>
-    <title>脑电分类 | 1D卷积和LSTM脑电信号识别</title>
-    <url>/2021/07/03/1D%E5%8D%B7%E7%A7%AF%E5%92%8CLSTM%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E8%AF%86%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="1D卷积和LSTM脑电信号识别"><a href="#1D卷积和LSTM脑电信号识别" class="headerlink" title="1D卷积和LSTM脑电信号识别"></a>1D卷积和LSTM脑电信号识别</h1><p>这是一个非常重要的文章！！！ This is a very important article!!!</p>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>框架</th>
-<th>准确率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CNN+LSTM</td>
-<td>TensorFlow</td>
-<td>70%</td>
-</tr>
-</tbody></table>
-<p><a href="https://blog.csdn.net/zyb228/article/details/109193128">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>脑电分类</category>
-        <category>网络</category>
-        <category>CNN+LSTM</category>
-      </categories>
-      <tags>
-        <tag>脑电分类</tag>
-        <tag>LSTM</tag>
-        <tag>CNN+LSTM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>设计模式 | 23种设计模式总结</title>
     <url>/2021/03/11/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h1 id="23种设计模式总结-未完成"><a href="#23种设计模式总结-未完成" class="headerlink" title="23种设计模式总结(未完成)"></a>23种设计模式总结(未完成)</h1><p>以下内容对23中设计模式进行简单介绍：</p>
@@ -103,6 +70,39 @@
       </categories>
       <tags>
         <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>脑电分类 | 1D卷积和LSTM脑电信号识别</title>
+    <url>/2021/07/03/1D%E5%8D%B7%E7%A7%AF%E5%92%8CLSTM%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E8%AF%86%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="1D卷积和LSTM脑电信号识别"><a href="#1D卷积和LSTM脑电信号识别" class="headerlink" title="1D卷积和LSTM脑电信号识别"></a>1D卷积和LSTM脑电信号识别</h1><p>这是一个非常重要的文章！！！ This is a very important article!!!</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>框架</th>
+<th>准确率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CNN+LSTM</td>
+<td>TensorFlow</td>
+<td>70%</td>
+</tr>
+</tbody></table>
+<p><a href="https://blog.csdn.net/zyb228/article/details/109193128">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>脑电分类</category>
+        <category>网络</category>
+        <category>CNN+LSTM</category>
+      </categories>
+      <tags>
+        <tag>脑电分类</tag>
+        <tag>LSTM</tag>
+        <tag>CNN+LSTM</tag>
       </tags>
   </entry>
   <entry>
@@ -1907,6 +1907,37 @@ def show(request, id1, id2):
       </tags>
   </entry>
   <entry>
+    <title>Django | Django模型查询</title>
+    <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
+    <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
+<pre><code>print([e.attr for e in Entry.objects.all()])
+print([e.attr for e in Entry.objects.all()])
+</code></pre>
+<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
+<pre><code>querylist=ExampleModel.objects.all()
+print([e.attr for e in querylist])
+print([e.attr for e in querylist])
+</code></pre>
+<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
+<pre><code>query=ExampleModel.objects.all()
+for ... in query[0:10]
+for ... in query[11:20]
+</code></pre>
+<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
+<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
+<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
+<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | Docker的安装及常用命令</title>
     <url>/2022/11/24/Docker/</url>
     <content><![CDATA[<h1 id="Docker的安装及常用命令"><a href="#Docker的安装及常用命令" class="headerlink" title="Docker的安装及常用命令"></a>Docker的安装及常用命令</h1><ul>
@@ -1968,37 +1999,6 @@ layer11: Linear(64, 2)
       </categories>
       <tags>
         <tag>Dogs VS Cats</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | Django模型查询</title>
-    <url>/2021/07/26/Django%E6%A8%A1%E5%9E%8B%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<h1 id="Django模型查询"><a href="#Django模型查询" class="headerlink" title="Django模型查询"></a>Django模型查询</h1><h2 id="查询集的两个特性："><a href="#查询集的两个特性：" class="headerlink" title="查询集的两个特性："></a>查询集的两个特性：</h2><p>1.<strong>惰性执行</strong><br>创建查询集不会带来任何数据库的访问，直到调用数据时，才会访问数据库<br>2.<strong>缓存</strong><br>case1:构成了两个查询集，无法重用缓存，每次查询都会与数据库进行一次交互</p>
-<pre><code>print([e.attr for e in Entry.objects.all()])
-print([e.attr for e in Entry.objects.all()])
-</code></pre>
-<p>case2:两次循环使用同一个查询集，第二次使用缓存中的数据</p>
-<pre><code>querylist=ExampleModel.objects.all()
-print([e.attr for e in querylist])
-print([e.attr for e in querylist])
-</code></pre>
-<p>case3:何时查询集不会被缓存<br>对整个查询集的子集进行求值时不会缓存</p>
-<pre><code>query=ExampleModel.objects.all()
-for ... in query[0:10]
-for ... in query[11:20]
-</code></pre>
-<h2 id="字段查询"><a href="#字段查询" class="headerlink" title="字段查询"></a>字段查询</h2><p>实现where子名，作为方法filter()、exclude()、get()的参数<br>语法：属性名称__比较运算符=值<br>举例：查询模型类中属性attr1包含1的对象<br>query_list = ExampleModel.objects.filter(attr1__contains=’1’)  </p>
-<p><strong>比较运算符：</strong><br>exact、contains、startswith、endswith、isnull、isnotnull、gt、gte、lt、lte、year、<br>month、day、week_day、hour、minute、second<br>注：跨关联查询（语法：模型类名__属性名__比较运算符）</p>
-<p><strong>聚合函数：</strong><br>aggregate(Avg()/Count/Max/Min/Sum)</p>
-<h2 id="F对象和Q对象"><a href="#F对象和Q对象" class="headerlink" title="F对象和Q对象"></a>F对象和Q对象</h2><p>1.通过构造F对象来比较模型中的两个列<br>举例：query_list = ExampleModel.objects.filter(attr1=F(‘attr2’))<br>2.通过构造Q对象来实现or查询<br>举例：query_list = ExampleModel.objects.filter(Q(pk__lt=6) | Q(attr__gt=1))</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -2863,6 +2863,186 @@ Is monkey1 equal to monkey3:false
       </tags>
   </entry>
   <entry>
+    <title>spring | JdbcTemplate增删改查</title>
+    <url>/2022/03/07/JdbcTemplate/</url>
+    <content><![CDATA[<h1 id="JdbcTemplate增删改查"><a href="#JdbcTemplate增删改查" class="headerlink" title="JdbcTemplate增删改查"></a>JdbcTemplate增删改查</h1><p>1.项目目录<br><img src="/2022/03/07/JdbcTemplate/1.PNG"><br>2.Emp.java</p>
+<pre><code>package com.atguigu.jdbctemplate;
+
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    private Integer age;
+    private String sex;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;]&quot;;
+    &#125;
+    
+&#125;
+</code></pre>
+<p>3.ssm表<br><img src="/2022/03/07/JdbcTemplate/2.PNG"><br>4.db.properties</p>
+<pre><code>jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/ssm
+jdbc.username=root
+jdbc.password=root
+</code></pre>
+<p>5.jdbc.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 引入属性文件 --&gt;
+    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
+    
+    &lt;!-- 创建数据源 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
+        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+    &lt;!-- 通过数据源配置JdbcTemplate --&gt;
+    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    
+&lt;/beans&gt;
+</code></pre>
+<p>6.TestJdbcTemplate.java</p>
+<pre><code>package com.atguigu.jdbctemplate;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
+public class TestJdbcTemplate &#123;
+    ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;jdbc.xml&quot;);
+    JdbcTemplate jdbcTemplate = ac.getBean(&quot;jdbcTemplate&quot;, JdbcTemplate.class);
+    
+    @Test
+    public void test() &#123;
+        //单个增删改
+        //System.out.println(jdbcTemplate);//org.springframework.jdbc.core.JdbcTemplate@6483f5ae
+        //jdbcTemplate.update(&quot;insert into emp values(1,&#39;zhangsan&#39;,23,&#39;男&#39;)&quot;);
+        
+        //增加记录
+        //String sql = &quot;insert into emp values(2, ?, ?, ?)&quot;;
+        //jdbcTemplate.update(sql, &quot;lisi&quot;, 25, &quot;男&quot;);
+        
+        //删除记录
+        //String sql = &quot;delete from emp where eid=?&quot;;
+        //jdbcTemplate.update(sql,2);
+        
+        //修改记录
+        //String sql = &quot;update emp set ename=? where eid=?&quot;; 
+        //jdbcTemplate.update(sql, &quot;lisi&quot;, 1);
+        
+        //不能使用
+        //String sql = &quot;delete from emp where eid in (?)&quot;;
+        //String eids = &quot;3, 4, 5&quot;;
+        //jdbcTemplate.update(sql,eids);
+        
+        //可以使用
+        //String eids = &quot;3,4,5&quot;;
+        //String sql = &quot;delete from emp where eid in (&quot;+eids+&quot;)&quot;;
+        //jdbcTemplate.update(sql);
+        
+        //String sql = &quot;select * from emp where ename like &#39;%?%&#39;&quot;;//不能使用
+        //String sql = &quot;select * from emp where ename like concat(&#39;%&#39;,?,&#39;%&#39;)&quot;;//可以使用
+    &#125;
+    
+    @Test
+    public void testBatchUpdate()&#123;
+        //批量增删改
+//        String sql = &quot;insert into emp values(?,?,?,?)&quot;;
+//        List&lt;Object[]&gt; list = new ArrayList&lt;&gt;();
+//        list.add(new Object[]&#123;3,&quot;a1&quot;,1,&quot;男&quot;&#125;);
+//        list.add(new Object[]&#123;4,&quot;a2&quot;,2,&quot;男&quot;&#125;);
+//        list.add(new Object[]&#123;5,&quot;a3&quot;,3,&quot;男&quot;&#125;);
+//        jdbcTemplate.batchUpdate(sql, list);
+    &#125;
+    
+    @Test
+    public void testQueryForObject()&#123;
+        //jdbcTemplate.queryForObject(sql, requiredType);//用来获取单个的值
+        //jdbcTemplate.queryForObject(sql, rowMapper);//用来获取单条数据
+        
+//        String sql= &quot;select eid,ename,age,sex from emp where eid=?&quot;;
+//        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);//将列名（字段名或字段名的别名）与属性名进行映射
+//        Emp emp = jdbcTemplate.queryForObject(sql, new Object[]&#123;3&#125;, rowMapper);
+//        System.out.println(emp);
+        
+        String sql = &quot;select count(*) from emp&quot;;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+        System.out.println(count);
+    &#125;
+    
+    @Test
+    public void testQuery()&#123;
+        String sql = &quot;select eid,ename,age,sex from emp&quot;;
+        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);
+        List&lt;Emp&gt; list = jdbcTemplate.query(sql, rowMapper);
+        for(Emp emp:list)&#123;
+            System.out.println(emp);
+        &#125;
+    &#125;
+
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>JdbcTemplate</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+        <tag>JdbcTemplate</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis | Jedis实现手机号验证码</title>
     <url>/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/</url>
     <content><![CDATA[<h1 id="Jedis实现手机号验证码"><a href="#Jedis实现手机号验证码" class="headerlink" title="Jedis实现手机号验证码"></a>Jedis实现手机号验证码</h1><p><img src="/2022/05/06/Jedis%E5%AE%9E%E7%8E%B0%E6%89%8B%E6%9C%BA%E5%8F%B7%E9%AA%8C%E8%AF%81%E7%A0%81/1.PNG"><br><strong>要求</strong><br>1.输入手机号，点击发送后随机生成6位数字码，2分钟有效<br>2.输入验证码，点击验证，返回成功或失败<br>3.每个手机号每天只能输入3次</p>
@@ -3054,186 +3234,6 @@ public class CodeVerifyServlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
-    <title>spring | JdbcTemplate增删改查</title>
-    <url>/2022/03/07/JdbcTemplate/</url>
-    <content><![CDATA[<h1 id="JdbcTemplate增删改查"><a href="#JdbcTemplate增删改查" class="headerlink" title="JdbcTemplate增删改查"></a>JdbcTemplate增删改查</h1><p>1.项目目录<br><img src="/2022/03/07/JdbcTemplate/1.PNG"><br>2.Emp.java</p>
-<pre><code>package com.atguigu.jdbctemplate;
-
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    private Integer age;
-    private String sex;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>3.ssm表<br><img src="/2022/03/07/JdbcTemplate/2.PNG"><br>4.db.properties</p>
-<pre><code>jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/ssm
-jdbc.username=root
-jdbc.password=root
-</code></pre>
-<p>5.jdbc.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
-    
-    &lt;!-- 引入属性文件 --&gt;
-    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 引入属性文件 --&gt;
-    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
-    
-    &lt;!-- 创建数据源 --&gt;
-    &lt;bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 通过数据源配置JdbcTemplate --&gt;
-    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-&lt;/beans&gt;
-</code></pre>
-<p>6.TestJdbcTemplate.java</p>
-<pre><code>package com.atguigu.jdbctemplate;
-
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
-public class TestJdbcTemplate &#123;
-    ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;jdbc.xml&quot;);
-    JdbcTemplate jdbcTemplate = ac.getBean(&quot;jdbcTemplate&quot;, JdbcTemplate.class);
-    
-    @Test
-    public void test() &#123;
-        //单个增删改
-        //System.out.println(jdbcTemplate);//org.springframework.jdbc.core.JdbcTemplate@6483f5ae
-        //jdbcTemplate.update(&quot;insert into emp values(1,&#39;zhangsan&#39;,23,&#39;男&#39;)&quot;);
-        
-        //增加记录
-        //String sql = &quot;insert into emp values(2, ?, ?, ?)&quot;;
-        //jdbcTemplate.update(sql, &quot;lisi&quot;, 25, &quot;男&quot;);
-        
-        //删除记录
-        //String sql = &quot;delete from emp where eid=?&quot;;
-        //jdbcTemplate.update(sql,2);
-        
-        //修改记录
-        //String sql = &quot;update emp set ename=? where eid=?&quot;; 
-        //jdbcTemplate.update(sql, &quot;lisi&quot;, 1);
-        
-        //不能使用
-        //String sql = &quot;delete from emp where eid in (?)&quot;;
-        //String eids = &quot;3, 4, 5&quot;;
-        //jdbcTemplate.update(sql,eids);
-        
-        //可以使用
-        //String eids = &quot;3,4,5&quot;;
-        //String sql = &quot;delete from emp where eid in (&quot;+eids+&quot;)&quot;;
-        //jdbcTemplate.update(sql);
-        
-        //String sql = &quot;select * from emp where ename like &#39;%?%&#39;&quot;;//不能使用
-        //String sql = &quot;select * from emp where ename like concat(&#39;%&#39;,?,&#39;%&#39;)&quot;;//可以使用
-    &#125;
-    
-    @Test
-    public void testBatchUpdate()&#123;
-        //批量增删改
-//        String sql = &quot;insert into emp values(?,?,?,?)&quot;;
-//        List&lt;Object[]&gt; list = new ArrayList&lt;&gt;();
-//        list.add(new Object[]&#123;3,&quot;a1&quot;,1,&quot;男&quot;&#125;);
-//        list.add(new Object[]&#123;4,&quot;a2&quot;,2,&quot;男&quot;&#125;);
-//        list.add(new Object[]&#123;5,&quot;a3&quot;,3,&quot;男&quot;&#125;);
-//        jdbcTemplate.batchUpdate(sql, list);
-    &#125;
-    
-    @Test
-    public void testQueryForObject()&#123;
-        //jdbcTemplate.queryForObject(sql, requiredType);//用来获取单个的值
-        //jdbcTemplate.queryForObject(sql, rowMapper);//用来获取单条数据
-        
-//        String sql= &quot;select eid,ename,age,sex from emp where eid=?&quot;;
-//        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);//将列名（字段名或字段名的别名）与属性名进行映射
-//        Emp emp = jdbcTemplate.queryForObject(sql, new Object[]&#123;3&#125;, rowMapper);
-//        System.out.println(emp);
-        
-        String sql = &quot;select count(*) from emp&quot;;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
-        System.out.println(count);
-    &#125;
-    
-    @Test
-    public void testQuery()&#123;
-        String sql = &quot;select eid,ename,age,sex from emp&quot;;
-        RowMapper&lt;Emp&gt; rowMapper = new BeanPropertyRowMapper&lt;&gt;(Emp.class);
-        List&lt;Emp&gt; list = jdbcTemplate.query(sql, rowMapper);
-        for(Emp emp:list)&#123;
-            System.out.println(emp);
-        &#125;
-    &#125;
-
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>JdbcTemplate</category>
-      </categories>
-      <tags>
-        <tag>spring</tag>
-        <tag>JdbcTemplate</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机器学习 | K近邻算法(KNN)</title>
     <url>/2021/02/21/K%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95-KNN/</url>
     <content><![CDATA[<h1 id="K近邻算法-KNN"><a href="#K近邻算法-KNN" class="headerlink" title="K近邻算法(KNN)"></a>K近邻算法(KNN)</h1><h2 id="KNN算法原理"><a href="#KNN算法原理" class="headerlink" title="KNN算法原理"></a>KNN算法原理</h2><p>k近邻法(k-nearest neighbor, k-NN)一种基本分类与回归方法。它的工作原理是：存在一个样本数据集合，也称作为训练样本集，并且样本集中每个数据都存在标签，即我们知道样本集中每一个数据与所属分类的对应关系。输入没有标签的新数据后，将新的数据的每个特征与样本集中数据对应的特征进行比较，然后算法提取样本最相似数据(最近邻)的分类标签。一般来说，我们只选择样本数据集中前k个最相似的数据，这就是k-近邻算法中k的出处，通常k是不大于20的整数。最后，选择k个最相似数据中出现次数最多的分类，作为新数据的分类。</p>
@@ -3358,6 +3358,30 @@ numyy:复制 光标所在行开始向下的num行<br><br>
       </tags>
   </entry>
   <entry>
+    <title>可视化 | Logistic回归可视化主要代码</title>
+    <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
+    <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(xcord1,ycord1,s=20,c=&#39;red&#39;,marker=&#39;s&#39;,alpha=0.5)
+ax.plot(x,y)
+plt.title()
+plt.xlabel()
+plt.ylabel()
+plt.show()
+</code></pre>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+        <category>可视化(Visualization)</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | MapReduce</title>
     <url>/2021/11/07/MapReduce/</url>
     <content><![CDATA[<h1 id="map-and-reduce"><a href="#map-and-reduce" class="headerlink" title="map and reduce"></a>map and reduce</h1><p>1.map()<br>map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。</p>
@@ -3396,30 +3420,6 @@ reduce(jiecheng, [i for i in range(1, n+1)])
         <tag>python</tag>
         <tag>map</tag>
         <tag>reduce</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可视化 | Logistic回归可视化主要代码</title>
-    <url>/2021/03/11/Logistic%E5%9B%9E%E5%BD%92%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="Logistic回归可视化主要代码"><a href="#Logistic回归可视化主要代码" class="headerlink" title="Logistic回归可视化主要代码"></a>Logistic回归可视化主要代码</h1><pre><code>import matplotlib.pyplot as plt
-
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.scatter(xcord1,ycord1,s=20,c=&#39;red&#39;,marker=&#39;s&#39;,alpha=0.5)
-ax.plot(x,y)
-plt.title()
-plt.xlabel()
-plt.ylabel()
-plt.show()
-</code></pre>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-        <category>可视化(Visualization)</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>逻辑回归</tag>
       </tags>
   </entry>
   <entry>
@@ -4189,6 +4189,22 @@ public class TestParam &#123;
       </tags>
   </entry>
   <entry>
+    <title>MySQL | 内连接和外连接的区别</title>
+    <url>/2022/01/19/MySQL%E5%86%85%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="内连接和外连接的区别"><a href="#内连接和外连接的区别" class="headerlink" title="内连接和外连接的区别"></a>内连接和外连接的区别</h1><p><strong>区别：</strong><br>内连接（inner join）：取出两张表中匹配到的数据，匹配不到的不保留<br>外连接（outer join）：取出连接表中匹配到的数据，匹配不到的也会保留，其值为NULL</p>
+<p><a href="https://blog.csdn.net/johnhan9/article/details/88686288">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+        <category>内连接和外连接的区别</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>内连接</tag>
+        <tag>外连接</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL | MySQL常见的表操作语句</title>
     <url>/2021/10/14/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A1%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/</url>
     <content><![CDATA[<h1 id="MySQL常见的表操作语句"><a href="#MySQL常见的表操作语句" class="headerlink" title="MySQL常见的表操作语句"></a>MySQL常见的表操作语句</h1><p>1.表的创建</p>
@@ -4223,22 +4239,6 @@ insert into table_name() values(),(),()
       </categories>
       <tags>
         <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL | 内连接和外连接的区别</title>
-    <url>/2022/01/19/MySQL%E5%86%85%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%A4%96%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="内连接和外连接的区别"><a href="#内连接和外连接的区别" class="headerlink" title="内连接和外连接的区别"></a>内连接和外连接的区别</h1><p><strong>区别：</strong><br>内连接（inner join）：取出两张表中匹配到的数据，匹配不到的不保留<br>外连接（outer join）：取出连接表中匹配到的数据，匹配不到的也会保留，其值为NULL</p>
-<p><a href="https://blog.csdn.net/johnhan9/article/details/88686288">参考资料</a></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-        <category>内连接和外连接的区别</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>内连接</tag>
-        <tag>外连接</tag>
       </tags>
   </entry>
   <entry>
@@ -6007,6 +6007,23 @@ public interface DeptMapper &#123;
       </tags>
   </entry>
   <entry>
+    <title>SSM | SSM项目搭建</title>
+    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
+<span id="more"></span>
+<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>SSM项目搭建</category>
+      </categories>
+      <tags>
+        <tag>SSM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSM | 批量删除</title>
     <url>/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/</url>
     <content><![CDATA[<h1 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h1><p>1.list.jsp</p>
@@ -6142,23 +6159,6 @@ public class EmpController &#123;
         <tag>Java</tag>
         <tag>SSM</tag>
         <tag>批量删除</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SSM | SSM项目搭建</title>
-    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
-<span id="more"></span>
-<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>SSM项目搭建</category>
-      </categories>
-      <tags>
-        <tag>SSM</tag>
       </tags>
   </entry>
   <entry>
@@ -7681,6 +7681,18 @@ Five:销毁
       </tags>
   </entry>
   <entry>
+    <title>cookie | cookie</title>
+    <url>/2021/07/29/cookie/</url>
+    <content><![CDATA[<p>在基于HTTP的请求当中，客户端发送请求到服务器端，服务器端响应请求返回一些信息（包含cookie）。<br>1.cookie是什么？<br>cookie:存储在浏览器当中的文本信息，存储格式：键值对，一旦你访问某个网站，存储了这个键值对，后面再次请求这个服务器时，cookie会自动加到请求报文的头里面发送到服务器。<br><img src="/2021/07/29/cookie/cookie1.png"><br>2.cookie是怎么来的？<br>我们在服务器端设置（set_cookie()）的，通过response返回到浏览器，浏览器将cookie存储下来<br><strong>注：cookie是区别于域名的，跨域名不能共享cookie信息</strong><br>3.一种常见的场景<br>假设我们在淘宝网站浏览了运动鞋商品，在我们浏览其他网站时会看到与我们之前浏览的运动鞋类似的商品推荐，<br>“cookie是区别于域名的”，这句话似乎错了？？<br>答：此时的现象并不是其他网站读取了淘宝网站的cookie，而是在其他网站内嵌了淘宝网站，即此时的运动鞋商品<br>推荐的信息是从淘宝网站本身读取到的，原理如下图所示：<br><img src="/2021/07/29/cookie/cookie.png"></p>
+]]></content>
+      <categories>
+        <category>cookie</category>
+      </categories>
+      <tags>
+        <tag>cookie</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Django | django中两种模板目录设置</title>
     <url>/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="django中两种模板目录设置"><a href="#django中两种模板目录设置" class="headerlink" title="django中两种模板目录设置"></a>django中两种模板目录设置</h1><p>在进行django项目开发中，我们需要创建一个用于存放模板的文件夹，模板文件夹通常放在以下两个位置之一。<br>第一种的项目目录为蓝色框所框选的目录，第二种的项目目录为红色框所框选的目录。<br><img src="/2021/07/30/django%E4%B8%AD%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E8%AE%BE%E7%BD%AE/content.png"></p>
@@ -7694,18 +7706,6 @@ Five:销毁
       </categories>
       <tags>
         <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>cookie | cookie</title>
-    <url>/2021/07/29/cookie/</url>
-    <content><![CDATA[<p>在基于HTTP的请求当中，客户端发送请求到服务器端，服务器端响应请求返回一些信息（包含cookie）。<br>1.cookie是什么？<br>cookie:存储在浏览器当中的文本信息，存储格式：键值对，一旦你访问某个网站，存储了这个键值对，后面再次请求这个服务器时，cookie会自动加到请求报文的头里面发送到服务器。<br><img src="/2021/07/29/cookie/cookie1.png"><br>2.cookie是怎么来的？<br>我们在服务器端设置（set_cookie()）的，通过response返回到浏览器，浏览器将cookie存储下来<br><strong>注：cookie是区别于域名的，跨域名不能共享cookie信息</strong><br>3.一种常见的场景<br>假设我们在淘宝网站浏览了运动鞋商品，在我们浏览其他网站时会看到与我们之前浏览的运动鞋类似的商品推荐，<br>“cookie是区别于域名的”，这句话似乎错了？？<br>答：此时的现象并不是其他网站读取了淘宝网站的cookie，而是在其他网站内嵌了淘宝网站，即此时的运动鞋商品<br>推荐的信息是从淘宝网站本身读取到的，原理如下图所示：<br><img src="/2021/07/29/cookie/cookie.png"></p>
-]]></content>
-      <categories>
-        <category>cookie</category>
-      </categories>
-      <tags>
-        <tag>cookie</tag>
       </tags>
   </entry>
   <entry>
@@ -8104,7 +8104,7 @@ public class Demo1Servlet extends HttpServlet &#123;
 <li>git init</li>
 <li>git status</li>
 <li>git config –global user.name “username”</li>
-<li>git config –global user.email “<a href="mailto:&#x78;&#x78;&#x78;&#64;&#120;&#x78;&#x2e;&#x63;&#x6f;&#x6d;">&#x78;&#x78;&#x78;&#64;&#120;&#x78;&#x2e;&#x63;&#x6f;&#x6d;</a>“</li>
+<li>git config –global user.email “<a href="mailto:&#120;&#x78;&#120;&#64;&#120;&#x78;&#46;&#x63;&#111;&#109;">&#120;&#x78;&#120;&#64;&#120;&#x78;&#46;&#x63;&#111;&#109;</a>“</li>
 <li>git add [filename]</li>
 <li>git checkout – [filename]</li>
 <li>git commit -m “comment”</li>
@@ -8877,29 +8877,6 @@ wb.save(&quot;物料表.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>itertools | product</title>
-    <url>/2021/09/04/product/</url>
-    <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
-<pre><code>print(list(itertools.product(‘a&#39;, repeat=4)))   # 等价于 print(list(itertools.product(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;a&#39;)))
-
-a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
-print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.product(a, a)))
-</code></pre>
-<p><strong>用法2：</strong></p>
-<pre><code>print(list(itertools.product(a, b)))  # 等价于 print(list((x, y) for x in a for y in b))
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>itertools</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>itertools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | property和property装饰器</title>
     <url>/2022/03/25/property%E5%92%8Cproperty%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
     <content><![CDATA[<h1 id="property和property装饰器"><a href="#property和property装饰器" class="headerlink" title="property和property装饰器"></a>property和property装饰器</h1><pre><code>class Student:
@@ -8938,6 +8915,29 @@ print(s.name)
         <tag>python</tag>
         <tag>property</tag>
         <tag>property装饰器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>itertools | product</title>
+    <url>/2021/09/04/product/</url>
+    <content><![CDATA[<h1 id="itertools-product"><a href="#itertools-product" class="headerlink" title="itertools.product()"></a>itertools.product()</h1><p>使用product()前需要导入itertools库<br><strong>用法1：</strong></p>
+<pre><code>print(list(itertools.product(‘a&#39;, repeat=4)))   # 等价于 print(list(itertools.product(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;a&#39;)))
+
+a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+print(list(itertools.product(a, repeat=2)))  # s等价于 print(list(itertools.product(a, a)))
+</code></pre>
+<p><strong>用法2：</strong></p>
+<pre><code>print(list(itertools.product(a, b)))  # 等价于 print(list((x, y) for x in a for y in b))
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>itertools</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>itertools</tag>
       </tags>
   </entry>
   <entry>
@@ -8981,18 +8981,6 @@ while True:
       </tags>
   </entry>
   <entry>
-    <title>python | python str 对象</title>
-    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>python | python @property</title>
     <url>/2021/05/20/python-property/</url>
     <content><![CDATA[<h1 id="python-property"><a href="#python-property" class="headerlink" title="python property"></a>python property</h1><pre><code>class Test(object):
@@ -9018,6 +9006,18 @@ t = Test()
 t.num = 50
 print(t.num)
 </code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | python str 对象</title>
+    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -10140,20 +10140,6 @@ with open(&#39;json.txt&#39;) as f:
       </tags>
   </entry>
   <entry>
-    <title>文档 | python文档</title>
-    <url>/2021/10/27/python%E6%96%87%E6%A1%A3/</url>
-    <content><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>文档</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>python文档</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>os | python批量重命名文件</title>
     <url>/2021/10/27/python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h1 id="python批量重命名文件"><a href="#python批量重命名文件" class="headerlink" title="python批量重命名文件"></a>python批量重命名文件</h1><p>程序将’文件’文件夹下的所有文件重命名。</p>
@@ -10184,6 +10170,20 @@ for file in files:
       <tags>
         <tag>python</tag>
         <tag>os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>文档 | python文档</title>
+    <url>/2021/10/27/python%E6%96%87%E6%A1%A3/</url>
+    <content><![CDATA[<h1 id="python文档"><a href="#python文档" class="headerlink" title="python文档"></a>python文档</h1><p><a href="https://www.bookstack.cn/read/explore-python/SUMMARY.md">这是一个不错的python文档！！！</a><br><a href="https://github.com/ethan-funny/explore-python">github地址</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>python文档</tag>
       </tags>
   </entry>
   <entry>
@@ -10390,6 +10390,29 @@ input()
       </tags>
   </entry>
   <entry>
+    <title>pyinstaller | python程序打包</title>
+    <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
+    <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
+</code></pre>
+<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
+pyinstaller -F program.py ---&gt; 打包成单个可执行文件
+</code></pre>
+<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
+<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pyinstaller</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pyinstaller</tag>
+        <tag>程序打包</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>jieba | python词频分析</title>
     <url>/2021/10/27/python%E8%AF%8D%E9%A2%91%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h1 id="python词频分析"><a href="#python词频分析" class="headerlink" title="python词频分析"></a>python词频分析</h1><p>程序分析了”主要业务”文件夹的所有文件中的文本信息的词频(分别存储在”词频”文件夹中)</p>
@@ -10501,29 +10524,6 @@ for picture in pictures:
         <tag>requests</tag>
         <tag>time</tag>
         <tag>baidu-aip</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pyinstaller | python程序打包</title>
-    <url>/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
-<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
-</code></pre>
-<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
-pyinstaller -F program.py ---&gt; 打包成单个可执行文件
-</code></pre>
-<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
-<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pyinstaller</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pyinstaller</tag>
-        <tag>程序打包</tag>
       </tags>
   </entry>
   <entry>
@@ -13859,6 +13859,24 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>Redis | 事务</title>
+    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
+    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
+<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
+<span id="more"></span>
+<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
+<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+        <category>事务</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | 事务</title>
     <url>/2022/01/26/%E4%BA%8B%E5%8A%A1/</url>
     <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
@@ -13922,24 +13940,6 @@ public class Test1 &#123;
         <tag>Java</tag>
         <tag>事务</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis | 事务</title>
-    <url>/2022/05/07/%E4%BA%8B%E5%8A%A1-2/</url>
-    <content><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
-<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
-<span id="more"></span>
-<h2 id="事务中的错误处理"><a href="#事务中的错误处理" class="headerlink" title="事务中的错误处理"></a>事务中的错误处理</h2><p>1.组队中某个命令出现了报告错误，执行时整个的所有队列会都会被取消。<br>2.如果执行阶段某个命令报出了错误，则只有报错的命令不会被执行，而其他的命令都会执行，不会回滚。</p>
-<h2 id="Redis事务的使用"><a href="#Redis事务的使用" class="headerlink" title="Redis事务的使用"></a>Redis事务的使用</h2><p>1.WATCH key[key….]<br>在执行multi之前，先执行watch key1 [key2],可以监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。<br>2.unwatch<br>取消 WATCH 命令对所有 key 的监视。<br>如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。<br>3.三特性<br>3.1单独的隔离操作<br>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。<br>3.2没有隔离级别的概念<br>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题 <br>3.3不保证原子性<br>Redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚 </p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-        <category>事务</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
@@ -14390,6 +14390,68 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>xlrd | 从Excel表中批量复制粘贴数据到新表</title>
+    <url>/2021/11/05/%E4%BB%8EExcel%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E6%95%B0%E6%8D%AE%E5%88%B0%E6%96%B0%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="从Excel表中批量复制粘贴数据到新表"><a href="#从Excel表中批量复制粘贴数据到新表" class="headerlink" title="从Excel表中批量复制粘贴数据到新表"></a>从Excel表中批量复制粘贴数据到新表</h1><p>程序实现从Excel表中批量复制粘贴部分数据到新表。</p>
+<span id="more"></span>
+<p>代码：</p>
+<pre><code># 读取xls文件中的数据
+import xlrd
+
+file = &quot;原表.xls&quot;
+wb = xlrd.open_workbook(file)  # 读取工作簿
+ws = wb.sheets()[0]  # 选第一个工作表
+data = []
+
+for row in range(7, ws.nrows):
+    name = ws.cell(row, 1).value.strip()  # 科室名称
+    total1 = ws.cell(row, 2).value  # 总计
+    total2 = ws.cell(row, 3).value  # 计
+    avg = ws.cell(row, 20).value  # 平均每日人次
+
+    info_list = [name, total1, total2, avg]
+
+    if info_list[0] != &quot;&quot;:  # 去除空数据
+        data.append(info_list)
+
+from openpyxl import load_workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
+
+thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+
+file = &quot;统计表模板.xlsx&quot;
+wb = load_workbook(file)
+ws = wb.active
+
+# 写入数据
+for i in data:
+    ws.append(i)
+
+# 设置字号，对齐，缩小字体填充，加边框
+# Font(bold=True)可加粗字体
+for row_number in range(3, ws.max_row + 1):
+    ws.row_dimensions[row_number].height = 25  # 设置行高
+    for col_number in range(1, 5):
+        c = ws.cell(row=row_number, column=col_number)
+        c.font = Font(size=11, bold=True)
+        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+        c.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
+
+wb.save(&quot;统计表.xlsx&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>xlrd</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>openpyxl</tag>
+        <tag>xlrd</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</title>
     <url>/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/</url>
     <content><![CDATA[<h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
@@ -14489,68 +14551,6 @@ wb.save(&quot;物料表_1.xlsx&quot;)
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pandas</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>xlrd | 从Excel表中批量复制粘贴数据到新表</title>
-    <url>/2021/11/05/%E4%BB%8EExcel%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E6%95%B0%E6%8D%AE%E5%88%B0%E6%96%B0%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="从Excel表中批量复制粘贴数据到新表"><a href="#从Excel表中批量复制粘贴数据到新表" class="headerlink" title="从Excel表中批量复制粘贴数据到新表"></a>从Excel表中批量复制粘贴数据到新表</h1><p>程序实现从Excel表中批量复制粘贴部分数据到新表。</p>
-<span id="more"></span>
-<p>代码：</p>
-<pre><code># 读取xls文件中的数据
-import xlrd
-
-file = &quot;原表.xls&quot;
-wb = xlrd.open_workbook(file)  # 读取工作簿
-ws = wb.sheets()[0]  # 选第一个工作表
-data = []
-
-for row in range(7, ws.nrows):
-    name = ws.cell(row, 1).value.strip()  # 科室名称
-    total1 = ws.cell(row, 2).value  # 总计
-    total2 = ws.cell(row, 3).value  # 计
-    avg = ws.cell(row, 20).value  # 平均每日人次
-
-    info_list = [name, total1, total2, avg]
-
-    if info_list[0] != &quot;&quot;:  # 去除空数据
-        data.append(info_list)
-
-from openpyxl import load_workbook
-from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment  # 设置单元格格式
-
-thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
-
-file = &quot;统计表模板.xlsx&quot;
-wb = load_workbook(file)
-ws = wb.active
-
-# 写入数据
-for i in data:
-    ws.append(i)
-
-# 设置字号，对齐，缩小字体填充，加边框
-# Font(bold=True)可加粗字体
-for row_number in range(3, ws.max_row + 1):
-    ws.row_dimensions[row_number].height = 25  # 设置行高
-    for col_number in range(1, 5):
-        c = ws.cell(row=row_number, column=col_number)
-        c.font = Font(size=11, bold=True)
-        c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
-        c.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
-
-wb.save(&quot;统计表.xlsx&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>xlrd</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>openpyxl</tag>
-        <tag>xlrd</tag>
       </tags>
   </entry>
   <entry>
@@ -16468,6 +16468,45 @@ public class TestPage &#123;
       </tags>
   </entry>
   <entry>
+    <title>Django | 创建模型对象的两种方式</title>
+    <url>/2021/07/26/%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="创建模型对象的两种方式"><a href="#创建模型对象的两种方式" class="headerlink" title="创建模型对象的两种方式"></a>创建模型对象的两种方式</h1><p>使用关键字构造模型对象非常麻烦，一下介绍两种创建对象的方式。</p>
+<span id="more"></span>
+
+<p><strong>方式一：在模型类中增加一个类方法—不推荐使用</strong></p>
+<pre><code>class ExampleModel(models.Model):
+    ...
+    @classmethod
+    def create(cls, attr1, attr2, ...):
+        e = ExampleModel()
+        e.attr1 = attr1
+        e.attr2 = attr2
+        ...
+        return e
+</code></pre>
+<p><strong>方式二：在自定义管理器中添加一个方法—推荐使用</strong></p>
+<pre><code>class ExampleModelManager(models.Manager):
+    def create(self, attr1, attr2, ...):
+        e = ExampleModel()  # 使用在方式一中定义的模型类ExampleModel
+        e.attr1 = attr1
+        e.attr2 = attr2
+        ...
+        return e
+        
+</code></pre>
+<p>**Note:**管理器是模型类的属性，用于将对象与数据表映射</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java | 创建线程池的7种方式</title>
     <url>/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="创建线程池的7种方式"><a href="#创建线程池的7种方式" class="headerlink" title="创建线程池的7种方式"></a>创建线程池的7种方式</h1><pre><code>import java.util.Date;
@@ -16612,45 +16651,6 @@ public class ThreadPoolCreationTest &#123;
       <tags>
         <tag>Java</tag>
         <tag>线程池</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | 创建模型对象的两种方式</title>
-    <url>/2021/07/26/%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="创建模型对象的两种方式"><a href="#创建模型对象的两种方式" class="headerlink" title="创建模型对象的两种方式"></a>创建模型对象的两种方式</h1><p>使用关键字构造模型对象非常麻烦，一下介绍两种创建对象的方式。</p>
-<span id="more"></span>
-
-<p><strong>方式一：在模型类中增加一个类方法—不推荐使用</strong></p>
-<pre><code>class ExampleModel(models.Model):
-    ...
-    @classmethod
-    def create(cls, attr1, attr2, ...):
-        e = ExampleModel()
-        e.attr1 = attr1
-        e.attr2 = attr2
-        ...
-        return e
-</code></pre>
-<p><strong>方式二：在自定义管理器中添加一个方法—推荐使用</strong></p>
-<pre><code>class ExampleModelManager(models.Manager):
-    def create(self, attr1, attr2, ...):
-        e = ExampleModel()  # 使用在方式一中定义的模型类ExampleModel
-        e.attr1 = attr1
-        e.attr2 = attr2
-        ...
-        return e
-        
-</code></pre>
-<p>**Note:**管理器是模型类的属性，用于将对象与数据表映射</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -17884,40 +17884,6 @@ print(re.search(pattern, string))
       </tags>
   </entry>
   <entry>
-    <title>网络编程 | 单任务服务器的缺点</title>
-    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
-    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
-<span id="more"></span>
-
-<pre><code>import socket 
-
-serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-serverSocket.bind((&#39;&#39;,8080))
-serverSocket.listen(5)
-
-while True:
-    #如果没有客户端到来，程序将阻塞等待
-    clientSocket,clientAddr = serverSocket.accept()
-    
-    while True:
-        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
-        recvData = newSocket.recv(1024)
-        if data:
-            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
-        else:
-            break
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>设计模式 | 单例模式</title>
     <url>/2022/03/21/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><p>单例模式(Singleton)，保证一个类有一个实例，并提供一个访问它的全局访问点。</p>
@@ -18041,6 +18007,40 @@ if __name__ == &#39;__main__&#39;:
         <tag>CNN</tag>
         <tag>卷积</tag>
         <tag>卷积核</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程 | 单任务服务器的缺点</title>
+    <url>/2020/10/30/%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="单任务服务器的缺点"><a href="#单任务服务器的缺点" class="headerlink" title="单任务服务器的缺点"></a>单任务服务器的缺点</h1><p><b style="color:red">为一个顾客服务的时候，不能为其他顾客服务</b><br><strong>注意点</strong>：accept()、recv()</p>
+<span id="more"></span>
+
+<pre><code>import socket 
+
+serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverSocket.bind((&#39;&#39;,8080))
+serverSocket.listen(5)
+
+while True:
+    #如果没有客户端到来，程序将阻塞等待
+    clientSocket,clientAddr = serverSocket.accept()
+    
+    while True:
+        #有一个客户端到来，将一直等待客户端发数据,若客户端一直不发数据，程序将一直卡在这里,从而造成程序不能处理新的客户端的请求
+        recvData = newSocket.recv(1024)
+        if data:
+            print(&quot;%s:%s&quot;%(str(clientAddr),recvData))
+        else:
+            break
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -30049,17 +30049,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>期刊 | 脑电期刊</title>
-    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
-    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>脑电期刊</category>
-        <category>Biomedical Signal Processing and Control</category>
-      </categories>
-  </entry>
-  <entry>
     <title>EEG | 脑电数据集下载网站</title>
     <url>/2021/04/17/%E8%84%91%E7%94%B5%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99/</url>
     <content><![CDATA[<h1 id="脑电数据集下载网站"><a href="#脑电数据集下载网站" class="headerlink" title="脑电数据集下载网站"></a>脑电数据集下载网站</h1><p><a href="www.physionet.org">网站1</a></p>
@@ -30073,6 +30062,17 @@ if __name__ == &quot;__main__&quot;:
         <tag>EEG</tag>
         <tag>数据集</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>期刊 | 脑电期刊</title>
+    <url>/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/</url>
+    <content><![CDATA[<h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>脑电期刊</category>
+        <category>Biomedical Signal Processing and Control</category>
+      </categories>
   </entry>
   <entry>
     <title>selenium | pyhon+selenium测试WebTours网站登录注册功能</title>
@@ -30867,6 +30867,20 @@ student_info(&#39;Molly&#39;,18, &#39;语文书&#39;,&#39;数学书&#39;,height=
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 计算图</title>
+    <url>/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h1><p>一个计算流程图，就是正向或者说从左到右的计算来计算成本函数𝐽，你可能<br>需要优化的函数，然后反向从右到左计算导数。<br><img src="/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/1.png"><br><b>参考吴恩达深度学习视频：</b><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver">https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>计算图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>urllib.request | 解码json数据</title>
     <url>/2021/08/05/%E8%A7%A3%E7%A0%81json%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="使用json提供的loads-str-函数进行JSON数据的解码"><a href="#使用json提供的loads-str-函数进行JSON数据的解码" class="headerlink" title="使用json提供的loads(str)函数进行JSON数据的解码"></a>使用json提供的loads(str)函数进行JSON数据的解码</h1><p><strong>函数说明：</strong><br>    str - JSON字符串<br>    返回值 - python数据<br><strong>示例代码：</strong></p>
@@ -30901,20 +30915,6 @@ with urllib.request.urlopen(req) as response:
         <tag>python</tag>
         <tag>urllib</tag>
         <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 计算图</title>
-    <url>/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/</url>
-    <content><![CDATA[<h1 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h1><p>一个计算流程图，就是正向或者说从左到右的计算来计算成本函数𝐽，你可能<br>需要优化的函数，然后反向从右到左计算导数。<br><img src="/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/1.png"><br><b>参考吴恩达深度学习视频：</b><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver">https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>计算图</tag>
       </tags>
   </entry>
   <entry>
