@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="C++字符串分割字符串分割是编程中经常遇到的一个问题，采用C++语言实现字符串分割与其他语言有所不同，下面将采用C++语言实现字符串分割并对用到的字符串操作函数进行详细的描述。  字符串分割Java实现 Java通过调用String.split(String delimiter)方法可直接完成对字符串的分割。 1234567public static void  main(String[] arg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ | 字符串分割">
+<meta property="og:url" content="http://example.com/2023/10/12/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/index.html">
+<meta property="og:site_name" content="Victory&#39;s Blog">
+<meta property="og:description" content="C++字符串分割字符串分割是编程中经常遇到的一个问题，采用C++语言实现字符串分割与其他语言有所不同，下面将采用C++语言实现字符串分割并对用到的字符串操作函数进行详细的描述。  字符串分割Java实现 Java通过调用String.split(String delimiter)方法可直接完成对字符串的分割。 1234567public static void  main(String[] arg">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-12T15:28:38.000Z">
+<meta property="article:modified_time" content="2023-10-12T15:29:58.215Z">
+<meta property="article:author" content="victory-liao">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="字符串分割">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/10/12/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ | 字符串分割 | Victory's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Victory's Blog" type="application/atom+xml">
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+    <div class="headband"></div>
+	<a target="_blank" rel="noopener" href="https://github.com/victory-liao/" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Victory's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">人生得意须尽欢，莫使金樽空对月</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+    
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ | 字符串分割
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-12 07:28:38 / Modified: 07:29:58" itemprop="dateCreated datePublished" datetime="2023-10-12T07:28:38-08:00">2023-10-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">字符串分割</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="C-字符串分割"><a href="#C-字符串分割" class="headerlink" title="C++字符串分割"></a>C++字符串分割</h1><p>字符串分割是编程中经常遇到的一个问题，采用C++语言实现字符串分割与其他语言有所不同，下面将采用C++语言实现字符串分割并对用到的字符串操作函数进行详细的描述。</p>
+<ul>
+<li><p>字符串分割Java实现</p>
+<p>Java通过调用String.split(String delimiter)方法可直接完成对字符串的分割。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span>  <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    String str = <span class="string">&quot;I am a good programmer!&quot;</span>;</span><br><span class="line">    String[] splited_string = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    <span class="keyword">for</span>(String s : splited_string)&#123;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串分割Python实现</p>
+<p>python实现字符串分割代码更为间接，很多功能使用python实现仅用一行代码，江湖上称之为“一行流”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;I am a good programmer!&quot;</span>.split(<span class="string">&quot; &quot;</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串分割C++实现</p>
+<p>比起Java和python实现，采用C++实现字符串分割的过程则略为繁琐。需要用到c_str()、strcpy()、strtok()等方法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">splitString</span><span class="params">(<span class="keyword">const</span> string &amp;str, <span class="keyword">const</span> string &amp;split, vector&lt;string&gt; &amp;res)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// str:要处理的字符串</span></span><br><span class="line">    <span class="comment">// split:分隔符</span></span><br><span class="line">    <span class="comment">// res:存放分割后的结果</span></span><br><span class="line">    <span class="keyword">char</span> *strc = <span class="keyword">new</span> <span class="keyword">char</span>[str.<span class="built_in">size</span>() + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(strc, str.<span class="built_in">c_str</span>()); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *temp = <span class="built_in">strtok</span>(strc, split.<span class="built_in">c_str</span>());</span><br><span class="line">    <span class="comment">//strtok()的源码为char *__cdecl strtok(char * __restrict__ _Str,const char * __restrict__ _Delim)</span></span><br><span class="line">    <span class="comment">//strtok接收的参数时char*类型，因此进行字符串分割前需要将string类型的字符串转为char*类型</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (temp != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        res.<span class="built_in">push_back</span>(<span class="built_in">string</span>(temp));</span><br><span class="line">        temp = <span class="built_in">strtok</span>(<span class="literal">NULL</span>, split.<span class="built_in">c_str</span>()); <span class="comment">//strtok第一个参数传入NULL，使用之前保存的SAVE_PTR定位下一个待处理的字符的位置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span>[] strc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    vector&lt;string&gt; result;</span><br><span class="line">    <span class="built_in">splitString</span>(<span class="string">&quot;I am a good programmer!&quot;</span>, <span class="string">&quot; &quot;</span>, result);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;分割的子字符串的数量为：&quot;</span> &lt;&lt; result.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;分割后的字符串为：&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; result.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">        std::cout &lt;&lt; result[i] &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串分割所使用方法详解</p>
+<ul>
+<li><p>string.c_str()</p>
+<p>c_str()方法的原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> _CharT* <span class="title">c_str</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<p>该方法返回一个指向常量的指针，指针所指向的内容不能被修改，在字符串分割中主要使用该方法将string类型转为char*类型，与字符串分割函数strtok()方法的接收参数类型保持一致。注意：一定要使用strcpy()函数等来操作方法c_str()返回的指针。</p>
+</li>
+<li><p>string.strcpy()</p>
+<p>strcpy()方法的原型如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char * __cdecl strcpy(char * __restrict__ _Dest,const char * __restrict__ _Source);</span><br></pre></td></tr></table></figure>
+
+<p>该方法将字符串Source复制到Dest。该方法线程不安全，c++提供了线程安全的字符串拷贝方法strcpy_s()。</p>
+</li>
+<li><p>string.strtok()</p>
+<p>strtok()方法的原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *__cdecl <span class="title">strtok</span><span class="params">(<span class="keyword">char</span> * __restrict__ _Str,<span class="keyword">const</span> <span class="keyword">char</span> * __restrict__ _Delim)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>其中，Str表示要进行分割的字符串，Delim为字符串分隔符，该方法将Delim中的字符作为分隔符对字符串Str进行分割。如果Str为空，则函数内部的SAVE_PTR指针在下一次调用中将作为下一个分割字符串的起始位置。其实这就说明在函数strtok()内部使用了一个<strong>静态变量SAVE_PTR指针</strong>，用以<strong>记录分割一次之后_String中下一个字符串的位置</strong>。这种方法导致了一个问题，就是<strong>strtok()函数</strong>是<strong>线程不安全</strong>的（因为其<strong>函数内部使用到了静态存储区</strong>）。</p>
+<p>除此之外，从函数的定义，第一个传入参数<strong>_String</strong>定义为<strong>char*而不是const char*</strong>，就说明<strong>strtok()函数不保证不修改传入数据的内容</strong>。实际上，<strong>第一个参数_String传进来的字符串，是会被strtok()函数所修改的</strong>，因此调用strtok()函数的时候应当注意。</p>
+<p>c++中也提供了线程安全的字符串分割方法strtok_s，其原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *__cdecl <span class="title">strtok_s</span><span class="params">(<span class="keyword">char</span> *_Str,<span class="keyword">const</span> <span class="keyword">char</span> *_Delim,<span class="keyword">char</span> **_Context)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>strtok_s()函数增加了一个参数<strong>_Context</strong>，这个参数就是<strong>相当于strtok()函数中内部定义的静态SAVE_PTR指针</strong>，用来传递对字符串_String的处理进行到了哪里。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jay_zzs/article/details/106883832">参考文章：C/C++——字符串分割（strtok, strtok_s）</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/" rel="tag"># 字符串分割</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/10/cpluspluslambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="C++ | lambda表达式">
+      <i class="fa fa-chevron-left"></i> C++ | lambda表达式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/10/12/OOP%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E9%93%BE%E5%BC%8F%E9%98%9F%E5%88%97/" rel="next" title="C++ | OOP方法实现链式队列">
+      C++ | OOP方法实现链式队列 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2"><span class="nav-number">1.</span> <span class="nav-text">C++字符串分割</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="victory-liao"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">victory-liao</p>
+  <div class="site-description" itemprop="description">昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">471</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">373</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">359</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/victory-liao" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;victory-liao" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="E-Mail → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="WeChat → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="QQ → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">victory-liao</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+</html>
