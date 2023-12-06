@@ -190,119 +190,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/07/Exchanger/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/07/Exchanger/" class="post-title-link" itemprop="url">并发 | Exchanger</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-06-07 06:14:03 / Modified: 06:28:19" itemprop="dateCreated datePublished" datetime="2022-06-07T06:14:03-08:00">2022-06-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B9%B6%E5%8F%91/Exchanger/" itemprop="url" rel="index"><span itemprop="name">Exchanger</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h1><p>Exchanger用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程<br>通过exchange方法交换数据，如果第一个线程先执行exchange方法，它会一直等待第二个线程也执行exchange方法，当<br>两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产出来的数据传递给对方。<br><strong>应用场景</strong><br>（1）遗传算法<br>遗传算法里需要选出两个人作为交配对象，这时候会交换两个人的数据，并使用交叉规则得出2个交配结果。<br>（2）校对工作<br>例如，我们需要将纸制银行流水通过人工的方式录入成电子银行流水，为了避免错误，采用AB岗两个人进行录入，录入到<br>Excel后，系统需要加载这两个Excel，并对两个Excel数据进行校对，看看是否录入一致。<br><strong>示例代码：</strong></p>
-<pre><code>package concurrency.exchanger;
-
-import java.util.concurrent.Exchanger;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ExchangerTest &#123;
-    private static final Exchanger&lt;String&gt; exgr = new Exchanger&lt;String&gt;();
-    
-    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
-    
-    public static void main(String[] args) &#123;
-        threadPool.execute(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                try&#123;
-                    String A = &quot;银行流水A&quot;;//A录入银行流水数据
-                    exgr.exchange(A);
-                &#125;catch(InterruptedException e)&#123;
-                    e.printStackTrace();
-                &#125;
-            &#125;
-            
-        &#125;);
-        
-        threadPool.execute(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                try&#123;
-                    String B = &quot;银行流水B&quot;;//B录入银行流水数据
-                    String A = exgr.exchange(B);
-                    System.out.println(&quot;A和B数据是否一致：&quot;+A.equals(B)+&quot;,A录入的是：&quot;+A+&quot;,B录入的是：&quot;+B);
-                &#125;catch(InterruptedException e)&#123;
-                    e.printStackTrace();
-                &#125;
-            &#125;
-            
-        &#125;);
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/07/Semaphore/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1319,6 +1206,147 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">并发 | 等待/通知机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-28 23:37:56" itemprop="dateCreated datePublished" datetime="2022-05-28T23:37:56-08:00">2022-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-29 22:51:06" itemprop="dateModified" datetime="2022-05-29T22:51:06-08:00">2022-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">等待/通知机制</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p>
+<pre><code>package concurrency;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+public class WaitNotify &#123;
+    static boolean flag = true;
+    static Object lock = new Object();
+    
+    public static void main(String[] args) throws InterruptedException &#123;
+        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);
+        waitThread.start();
+        TimeUnit.SECONDS.sleep(1);
+        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);
+        notifyThread.start();
+    &#125;
+    
+    static class Wait implements Runnable&#123;
+        @Override
+        public void run()&#123;
+            //加锁，用于lock的Monitor
+            synchronized(lock)&#123;
+                //当条件不满足时，继续wait，同时释放了lock的锁
+                while(flag)&#123;
+                    try &#123;
+                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                        lock.wait();
+                    &#125; catch (InterruptedException e) &#123;
+                    &#125;
+                &#125;
+                //条件满足时，完成工作
+                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+            &#125;
+        &#125;
+    &#125;
+    
+    static class Notify implements Runnable&#123;
+        @Override
+        public void run() &#123;
+            synchronized(lock)&#123;
+                //获取lock的锁，然后进行通知，通知时不会释放lock的锁
+                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回
+                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                lock.notifyAll();
+                flag = false;
+                SleepUtils.second(5);
+            &#125;
+            
+            //再次加锁
+            synchronized(lock)&#123;
+                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                SleepUtils.second(5);
+            &#125;
+            
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1390,20 +1418,20 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">472</span>
+          <span class="site-state-item-count">471</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">374</span>
+        <span class="site-state-item-count">372</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">360</span>
+        <span class="site-state-item-count">358</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
