@@ -190,6 +190,214 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Java | 创建线程池的7种方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-24 01:57:42 / Modified: 01:58:52" itemprop="dateCreated datePublished" datetime="2022-04-24T01:57:42-08:00">2022-04-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E7%A7%8D%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">创建线程池的7种方式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="创建线程池的7种方式"><a href="#创建线程池的7种方式" class="headerlink" title="创建线程池的7种方式"></a>创建线程池的7种方式</h1><pre><code>import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class ThreadPoolCreationTest &#123;
+    public static void fixedThreadPool()&#123;
+//        ExecutorService threadPool = Executors.newFixedThreadPool(2);
+//        
+//        Runnable runnable = new Runnable()&#123;
+//            @Override
+//            public void run()&#123;
+//                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());
+//            &#125;
+//        &#125;;
+//        
+//        Future&lt;?&gt; submit = threadPool.submit(runnable);
+////        System.out.println(submit);
+////        System.out.println(submit.isDone());
+//        threadPool.execute(runnable);
+//        threadPool.execute(runnable);
+//        threadPool.execute(runnable);
+        
+        ExecutorService threadPool = Executors.newFixedThreadPool(2);
+        for(int i = 0; i &lt; 4; i++)&#123;
+            threadPool.execute(() -&gt; &#123;
+                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());
+            &#125;);
+        &#125;
+    &#125;
+    
+    public static void cachedThreadPool()&#123;
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+        for(int i=0;i&lt;10;i++)&#123;
+            threadPool.execute(() -&gt; &#123;
+                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());
+            &#125;);
+        &#125;
+    &#125;
+    
+    public static void singleThreadPool()&#123;
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        for(int i = 0; i &lt; 10; i++)&#123;
+            threadPool.execute(() -&gt; &#123;
+                System.out.println(&quot;任务被执行，线程：&quot; + Thread.currentThread().getName());
+            &#125;);
+        &#125;
+    &#125;
+    
+    public static void scheduledThreadPool()&#123;
+        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(5);
+        System.out.println(&quot;添加任务，时间：&quot;+new Date());
+        threadPool.schedule(()-&gt;&#123;
+            System.out.println(&quot;任务被执行，时间：&quot;+new Date());
+            try &#123;
+                TimeUnit.SECONDS.sleep(1);
+            &#125; catch (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;, 1, TimeUnit.SECONDS);
+    &#125;
+    
+    public static void singleThreadScheduledPool()&#123;
+        ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor();
+        System.out.println(&quot;添加任务，时间：&quot;+new Date());
+        threadPool.schedule(()-&gt;&#123;
+            System.out.println(&quot;任务被执行，时间：&quot;+new Date());
+            try &#123;
+                TimeUnit.SECONDS.sleep(1);
+            &#125; catch (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;, 2, TimeUnit.SECONDS);
+    &#125;
+    
+    public static void workStealingPool()&#123;
+        ExecutorService threadPool = Executors.newWorkStealingPool();
+        for(int i = 0; i &lt; 10; i++)&#123;
+            final int index = i;
+            threadPool.execute(() -&gt;&#123;
+                System.out.println(index + &quot;被执行，线程名&quot;+Thread.currentThread().getName());
+            &#125;);
+        &#125;
+        while(!threadPool.isTerminated())&#123;
+            
+        &#125;
+    &#125;
+    
+    //推荐使用
+    //阿里巴巴开发手册：线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
+    public static void myThreadPoolExecutor()&#123;
+        final int CORE_POOL_SIZE = 5;  
+        final int MAX_POOL_SIZE = 10;
+        final int QUEUE_CAPACITY = 100;
+        final Long KEEP_ALIVE_TIME = 1L;
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+                CORE_POOL_SIZE,
+                MAX_POOL_SIZE,
+                KEEP_ALIVE_TIME,
+                TimeUnit.SECONDS,
+                new ArrayBlockingQueue&lt;&gt;(QUEUE_CAPACITY),
+                new ThreadPoolExecutor.CallerRunsPolicy()
+                );
+        for(int i = 0; i &lt; 10; i++)&#123;
+            final int index = i;
+            threadPool.execute(() -&gt; &#123;
+                System.out.println(index+&quot;被执行，线程名：&quot;+Thread.currentThread().getName());
+                try &#123;
+                    Thread.sleep(1000);
+                &#125; catch (InterruptedException e) &#123;
+                    e.printStackTrace();
+                &#125;
+            &#125;);
+        &#125;
+        
+    &#125;
+    
+    
+    public static void main(String[] args) &#123;
+        //fixedThreadPool();
+        //cachedThreadPool();
+        //singleThreadPool();
+        //scheduledThreadPool();
+        //singleThreadScheduledPool();
+        //workStealingPool();
+        myThreadPoolExecutor();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/23/ThreadLocal/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1442,178 +1650,6 @@ public class TestPage &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="post-title-link" itemprop="url">MyBatis | 逆向工程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-16 18:04:43 / Modified: 18:11:11" itemprop="dateCreated datePublished" datetime="2022-04-16T18:04:43-08:00">2022-04-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="逆向工程"><a href="#逆向工程" class="headerlink" title="逆向工程"></a>逆向工程</h1><p>1.项目目录<br><img src="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/1.PNG"><br>2.导入逆向工程的jar包</p>
-<pre><code>mybatis-generator-core-1.3.2.jar
-</code></pre>
-<p>3.编写MBG的配置文件</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE generatorConfiguration
-  PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
-  &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
-
-&lt;generatorConfiguration&gt;
-
-  &lt;context id=&quot;DB2Tables&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
-    &lt;!-- 设置连接数据库的信息 --&gt;
-    &lt;jdbcConnection driverClass=&quot;com.mysql.jdbc.Driver&quot;
-        connectionURL=&quot;jdbc:mysql://localhost:3306/ssm&quot;
-        userId=&quot;root&quot;
-        password=&quot;root&quot;&gt;
-    &lt;/jdbcConnection&gt;
-
-    &lt;javaTypeResolver &gt;
-      &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot; /&gt;
-    &lt;/javaTypeResolver&gt;
-
-    &lt;!-- javabean的生成策略 --&gt;
-    &lt;javaModelGenerator targetPackage=&quot;com.atguigu.bean&quot; targetProject=&quot;.\src&quot;&gt;
-      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
-      &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot; /&gt;
-    &lt;/javaModelGenerator&gt;
-
-
-    &lt;!-- 映射文件的生成策略 --&gt;
-    &lt;sqlMapGenerator targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\conf&quot;&gt;
-      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
-    &lt;/sqlMapGenerator&gt;
-
-    &lt;!-- mapper接口的生成策略 --&gt;
-    &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\src&quot;&gt;
-      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
-    &lt;/javaClientGenerator&gt;
-
-    &lt;!-- 设置要将数据库中的哪张表逆向生成哪一个javabean --&gt;
-    &lt;table tableName=&quot;emp&quot; domainObjectName=&quot;Emp&quot;&gt;&lt;/table&gt;
-    &lt;table tableName=&quot;dept&quot; domainObjectName=&quot;Dept&quot;&gt;&lt;/table&gt;
-
-  &lt;/context&gt;
-&lt;/generatorConfiguration&gt;
-</code></pre>
-<p>4.运行代码生成器生成代码</p>
-<pre><code>@Test
-public void testMBG() throws Exception &#123;
-   List&lt;String&gt; warnings = new ArrayList&lt;String&gt;();
-   boolean overwrite = true;
-   File configFile = new File(&quot;mbg.xml&quot;);
-   ConfigurationParser cp = new ConfigurationParser(warnings);
-   Configuration config = cp.parseConfiguration(configFile);
-   DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-   MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-   myBatisGenerator.generate(null);
-&#125;
-</code></pre>
-<p>5.逆向工程的使用<br>基本查询与带条件查询测试</p>
-<pre><code>@Test
-    public void testCRUD() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-//        Emp emp = mapper.selectByPrimaryKey(2);
-//        System.out.println(emp);
-        
-        EmpExample example = new EmpExample();
-        
-        Criteria c1 = example.createCriteria();
-        c1.andEnameLike(&quot;%a%&quot;);
-        c1.andSexEqualTo(&quot;1&quot;);
-        
-        Criteria c2 = example.createCriteria();
-        c2.andDidEqualTo(2);
-        
-        example.or(c2);
-        
-        List&lt;Emp&gt; list = mapper.selectByExample(example);
-        for (Emp emp : list) &#123;
-            System.out.println(emp);
-        &#125;
-        
-        //查询全部
-//        List&lt;Emp&gt; list1 = mapper.selectByExample(null);
-//        for (Emp emp : list1) &#123;
-//            System.out.println(emp);
-//        &#125;
-    &#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1685,20 +1721,20 @@ public void testMBG() throws Exception &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">475</span>
+          <span class="site-state-item-count">476</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">376</span>
+        <span class="site-state-item-count">377</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">365</span>
+        <span class="site-state-item-count">368</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
