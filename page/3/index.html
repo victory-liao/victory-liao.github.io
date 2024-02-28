@@ -190,6 +190,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="post-title-link" itemprop="url">Java | 字符串常量池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-08-20 18:59:32 / Modified: 20:39:36" itemprop="dateCreated datePublished" datetime="2022-08-20T18:59:32-08:00">2022-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">字符串常量池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h1><p>首先来看下面一段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String a = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String b = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String c = <span class="string">&quot;ab&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String d = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;bc&quot;</span>;</span><br><span class="line">        String e = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String f = <span class="keyword">new</span> String(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(a == b);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == c);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == d);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == e);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == f);<span class="comment">//false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在使用String a = “abc”创建字符串对象时，JVM会使用常量池来管理字符串直接量。在执行该语句时，JVM会先检查常量池中是否已经存有”abc”，<br>若没有则将”abc”存入常量池，否则就复用常量池中已有的”abc”，将其引用赋值给变量a。</li>
+<li>在使用new String(“abc”)创建字符串对象时，JVM会先使用常量池来管理字符串直接量，即将”abc”存入常量池。然后再创建一个新的String对象，<br>这个对象会被保存在堆内存中。并且，堆中对象的数据会指向常量池中的直接量。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/Java%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1094,90 +1175,6 @@ Specifically, @PatchMapping is a composed annotation that acts as a shortcut for
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">python | 文件操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-08-09 19:24:10 / Modified: 19:55:39" itemprop="dateCreated datePublished" datetime="2022-08-09T19:24:10-08:00">2022-08-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">文件操作</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><p>由于我在之前上传的博客文件（markdown文件）中使用了缩进表示代码块，这中方式显示的代码块不够美观，最近发现可以使用<br><img src="/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/1.png"><br>来表示python代码块，以这种方式表示的代码块非常美观。但是我的博客中可能有上百篇需要去修改，因此考虑使用python自动化修改，这个过程需要使用<strong>文件操作</strong>方面的知识，因此又将<strong>python文件操作</strong>相关知识又练习了一遍，然后再抽出时间去修改博客文件代码块的表示方式。</p>
-<p><strong>注意：</strong> 在打开文件时，当mode选择’w+’,’a+’,’ab+’,’wb+’时，虽然官方文档说明这几种模式为可读可写，但是在使用这几种模式读文件时，读出内容为空，原因见以上示例中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1249,20 +1246,20 @@ Specifically, @PatchMapping is a composed annotation that acts as a shortcut for
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">476</span>
+          <span class="site-state-item-count">477</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">377</span>
+        <span class="site-state-item-count">379</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">368</span>
+        <span class="site-state-item-count">374</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
