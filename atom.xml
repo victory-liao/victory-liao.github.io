@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-02-29T11:36:05.332Z</updated>
+  <updated>2024-02-29T11:42:48.245Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pytest | 如何调用pytest</title>
+    <link href="http://example.com/2024/02/29/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/"/>
+    <id>http://example.com/2024/02/29/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/</id>
+    <published>2024-02-29T11:38:53.000Z</published>
+    <updated>2024-02-29T11:42:48.245Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="如何调用pytest"><a href="#如何调用pytest" class="headerlink" title="如何调用pytest"></a>如何调用pytest</h3><p>pytest支持命令行参数选择特定的tests去执行，以下是常见的一些选择方法。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> run tests <span class="keyword">in</span> a module</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行测试文件中的所有符合pytest测试发现规则的测试用例(测试文件中符合test_*()的函数、TestXxx类中的测试用例)</span></span><br><span class="line">pytest test_mod.py</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> run tests <span class="keyword">in</span> a directory</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行testing目录下的所有文件名符合test_*.py或*_test.py的测试文件中的测试用例</span></span><br><span class="line">pytest testing/</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># run tests by keyword expressions</span></span><br><span class="line">pytest -k <span class="string">&quot;MyClass and not method&quot;</span></span><br><span class="line"><span class="comment"># 通过关键词表达式指定pytest运行的测试用例，pytest会在testpaths或者当前目录下找到类名为TestMyClass的类中的方法名不带method的方法去执行。如下示例，运行pytest -k &quot;MyClass and not method&quot;会执行test_a方法而不会运行test_method_add()方法</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编写测试文件test_keyword_exp.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestMyClass</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_a</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="string">&quot;a&quot;</span> == <span class="string">&quot;a&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_method_add</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> add(<span class="number">1</span>, <span class="number">2</span>) == <span class="number">3</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> run tests by collection arguments</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> To run a specific <span class="built_in">test</span> within a module</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的test_func测试用例</span></span><br><span class="line">pytest tests/test_mod.py::test_func</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> To run all tests <span class="keyword">in</span> a class:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的TestClass类中的测试用例</span></span><br><span class="line">pytest tests/test_mod.py::TestClass</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Specifying a specific <span class="built_in">test</span> method:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的TestClass类中的test_method测试用例</span></span><br><span class="line">pytest tests/test_mod.py::TestClass::test_method</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Specifying a specific parametrization of a <span class="built_in">test</span>:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的带参数的test_func测试用例</span></span><br><span class="line">pytest tests/test_mod.py::test_func[x1,y2]</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Run tests by marker expressions</span></span><br><span class="line"><span class="comment"># 运行带有@pytest.mark.slow装饰器的测试</span></span><br><span class="line">pytest -m slow</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下示例中，pytest将运行test_a测试用例，而不会运行test_b测试用例</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestMarkDecoration</span>:</span></span><br><span class="line"><span class="meta">    @pytest.mark.slow</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_a</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="number">1</span> == <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.quick</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_b</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="number">2</span> == <span class="number">2</span></span><br></pre></td></tr></table></figure><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> run tests from packages</span></span><br><span class="line">pytest --pyargs pkg.testing</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这将导入pkg.testing，并使用其文件系统位置从中查找和运行测试</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;如何调用pytest&quot;&gt;&lt;a href=&quot;#如何调用pytest&quot; class=&quot;headerlink&quot; title=&quot;如何调用pytest&quot;&gt;&lt;/a&gt;如何调用pytest&lt;/h3&gt;&lt;p&gt;pytest支持命令行参数选择特定的tests去执行，以下是常见的一些选择方</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="python测试框架" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="pytest" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/"/>
+    
+    <category term="如何调用pytest" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="pytest" scheme="http://example.com/tags/pytest/"/>
+    
+    <category term="测试框架" scheme="http://example.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>pytest | pytest使用规则及示例</title>
@@ -591,7 +625,7 @@
     <published>2022-11-25T03:11:03.000Z</published>
     <updated>2022-11-25T07:32:43.649Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="git常用命令"><a href="#git常用命令" class="headerlink" title="git常用命令"></a>git常用命令</h1><p>再次温习了一遍Git,格外亲切！很好的协同开发工具，给亿个赞！</p><span id="more"></span><ul><li>git常用命令<ul><li>git init</li><li>git status</li><li>git config –global user.name “username”</li><li>git config –global user.email “<a href="mailto:&#x78;&#x78;&#120;&#64;&#x78;&#x78;&#x2e;&#99;&#111;&#109;">&#x78;&#x78;&#120;&#64;&#x78;&#x78;&#x2e;&#99;&#111;&#109;</a>“</li><li>git add [filename]</li><li>git checkout – [filename]</li><li>git commit -m “comment”</li><li>git reset –hard HEAD^</li><li>git reset –hard HEAD~n</li><li>git remote add origin [remote url]</li><li>git pull origin master</li><li>git push origin master</li><li>git clone [remote url]</li><li>git branch [brach name]</li><li>git checkout [branch name]</li><li>git checkout -b [brach name]</li><li>git branch -v</li><li>git merge [branch name]</li><li>git brach -D [branch name]</li><li>git diff</li></ul></li><li>pull request<ul><li>fork项目到自己的github账户</li><li>把自己的github账户的项目clone到本地仓库</li><li>开发项目</li><li>提交到本地库（add、commit）</li><li>推送到自己的github账户的项目上</li><li>登录自己的github，在自己的项目上new pull request</li><li>填写pull request 申请</li><li>管理员合并</li></ul></li><li>部分命令的执行效果<br><img src="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/1.png"></li><li>使用git协作开发的一般流程<br><img src="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/2.png"></li><li>fork项目、开发并提交pull request<br><img src="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/3.png"></li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="git常用命令"><a href="#git常用命令" class="headerlink" title="git常用命令"></a>git常用命令</h1><p>再次温习了一遍Git,格外亲切！很好的协同开发工具，给亿个赞！</p><span id="more"></span><ul><li>git常用命令<ul><li>git init</li><li>git status</li><li>git config –global user.name “username”</li><li>git config –global user.email “<a href="mailto:&#120;&#120;&#x78;&#64;&#120;&#120;&#x2e;&#99;&#x6f;&#x6d;">&#120;&#120;&#x78;&#64;&#120;&#120;&#x2e;&#99;&#x6f;&#x6d;</a>“</li><li>git add [filename]</li><li>git checkout – [filename]</li><li>git commit -m “comment”</li><li>git reset –hard HEAD^</li><li>git reset –hard HEAD~n</li><li>git remote add origin [remote url]</li><li>git pull origin master</li><li>git push origin master</li><li>git clone [remote url]</li><li>git branch [brach name]</li><li>git checkout [branch name]</li><li>git checkout -b [brach name]</li><li>git branch -v</li><li>git merge [branch name]</li><li>git brach -D [branch name]</li><li>git diff</li></ul></li><li>pull request<ul><li>fork项目到自己的github账户</li><li>把自己的github账户的项目clone到本地仓库</li><li>开发项目</li><li>提交到本地库（add、commit）</li><li>推送到自己的github账户的项目上</li><li>登录自己的github，在自己的项目上new pull request</li><li>填写pull request 申请</li><li>管理员合并</li></ul></li><li>部分命令的执行效果<br><img src="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/1.png"></li><li>使用git协作开发的一般流程<br><img src="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/2.png"></li><li>fork项目、开发并提交pull request<br><img src="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/3.png"></li></ul>]]></content>
     
     
     <summary type="html">&lt;h1 id=&quot;git常用命令&quot;&gt;&lt;a href=&quot;#git常用命令&quot; class=&quot;headerlink&quot; title=&quot;git常用命令&quot;&gt;&lt;/a&gt;git常用命令&lt;/h1&gt;&lt;p&gt;再次温习了一遍Git,格外亲切！很好的协同开发工具，给亿个赞！&lt;/p&gt;</summary>
@@ -604,40 +638,6 @@
     
     
     <category term="Git" scheme="http://example.com/tags/Git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>leetcode | 135.分发糖果</title>
-    <link href="http://example.com/2022/10/24/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/"/>
-    <id>http://example.com/2022/10/24/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/</id>
-    <published>2022-10-24T13:55:05.000Z</published>
-    <updated>2022-10-26T02:33:56.733Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="135-分发糖果"><a href="#135-分发糖果" class="headerlink" title="135.分发糖果"></a>135.分发糖果</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>n 个孩子站成一排。给你一个整数数组 ratings 表示每个孩子的评分。</p><p>你需要按照以下要求，给这些孩子分发糖果：<br>1）每个孩子至少分配到 1 个糖果。<br>2）相邻两个孩子评分更高的孩子会获得更多的糖果。</p><p>请你给每个孩子分发糖果，计算并返回需要准备的 最少糖果数目 。</p><p>示例 1：<br>输入：ratings = [1,0,2]<br>输出：5<br>解释：你可以分别给第一个、第二个、第三个孩子分发 2、1、2 颗糖果。</p><p>示例 2：<br>输入：ratings = [1,2,2]<br>输出：4<br>解释：你可以分别给第一个、第二个、第三个孩子分发 1、2、1 颗糖果。<br>     第三个孩子只得到 1 颗糖果，这满足题面中的两个条件。</p><p><a href="https://leetcode.cn/problems/candy">题目链接</a></p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">candy</span>(<span class="params">self, ratings: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        n = <span class="built_in">len</span>(ratings)</span><br><span class="line">        left = [<span class="number">0</span>] * n</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">if</span> i &gt; <span class="number">0</span> <span class="keyword">and</span> ratings[i] &gt; ratings[i - <span class="number">1</span>]:</span><br><span class="line">                left[i] = left[i - <span class="number">1</span>] + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                left[i] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        right = ret = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &lt; n - <span class="number">1</span> <span class="keyword">and</span> ratings[i] &gt; ratings[i + <span class="number">1</span>]:</span><br><span class="line">                right += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                right = <span class="number">1</span></span><br><span class="line">            ret += <span class="built_in">max</span>(left[i], right)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;135-分发糖果&quot;&gt;&lt;a href=&quot;#135-分发糖果&quot; class=&quot;headerlink&quot; title=&quot;135.分发糖果&quot;&gt;&lt;/a&gt;135.分发糖果&lt;/h1&gt;&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; </summary>
-      
-    
-    
-    
-    <category term="算法刷题" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/"/>
-    
-    <category term="leetcode" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/"/>
-    
-    <category term="数组" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/"/>
-    
-    <category term="135.分发糖果" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/135-%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/"/>
-    
-    
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="leetcode" scheme="http://example.com/tags/leetcode/"/>
-    
-    <category term="数组" scheme="http://example.com/tags/%E6%95%B0%E7%BB%84/"/>
     
   </entry>
   
