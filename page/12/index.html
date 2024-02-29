@@ -190,6 +190,189 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">MyBatis | 三种查询方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-04-02 04:55:34 / Modified: 04:59:18" itemprop="dateCreated datePublished" datetime="2022-04-02T04:55:34-08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">MyBatis三种查询方式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MyBatis三种查询方式"><a href="#MyBatis三种查询方式" class="headerlink" title="MyBatis三种查询方式"></a>MyBatis三种查询方式</h1><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E4%B8%89%E7%A7%8D%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F/1.PNG"><br>2.EmpSelectMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.MapKey;
+
+import com.atguigu.bean.Emp;
+
+public interface EmpSelectMapper &#123;
+    //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid);
+    
+    //获取所有的员工数量
+    Integer getCount();
+    
+    //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid);
+    
+    //以map集合获取所有员工信息
+    
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap();
+&#125;
+</code></pre>
+<p>3.EmpSelectMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpSelectMapper&quot;&gt;
+    
+    
+    &lt;!-- //根据eid查询一个员工信息
+    Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- //获取所有的员工数量
+    Integer getCount(); --&gt;
+    &lt;select id=&quot;getCount&quot; resultType=&quot;Integer&quot;&gt;
+        select count(eid) from emp
+    &lt;/select&gt;
+    
+    &lt;!-- //以map集合获取一个员工信息
+    Map&lt;String, Object&gt; getEmpMapByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpMapByEid&quot; resultType=&quot;java.util.HashMap&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- //以map集合获取所有员工信息
+    @MapKey(&quot;eid&quot;)//设置map的建，因为在查询时传出所有的员工信息，可以把员工信息作为值，但是必须设置键
+    Map&lt;String, Object&gt; getAllEmpMap(); --&gt;
+    &lt;select id=&quot;getAllEmpMap&quot; resultType=&quot;Emp&quot;&gt;
+    select eid,ename,age,sex from emp
+    &lt;/select&gt;
+    
+&lt;/mapper&gt;
+</code></pre>
+<p>4.TestSelect.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpSelectMapper;
+
+public class TestSelect &#123;
+    @Test
+    public void testSelect() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpSelectMapper mapper = sqlSession.getMapper(EmpSelectMapper.class);
+        //若查询出的数据有多条，则绝不能将接口中方法的返回值设置为Javabean
+//        Emp emp = mapper.getEmpByEid(&quot;3&quot;);
+//        System.out.println(emp);
+        
+        //获取员工总记录数
+//        Integer i = mapper.getCount();
+//        System.out.println(i);
+        
+        //以map获取单个emp
+//        Map&lt;String, Object&gt; map = mapper.getEmpMapByEid(&quot;6&quot;);
+//        System.out.println(map);
+        
+        //以map获取所有emp
+        Map&lt;String, Object&gt; map = mapper.getAllEmpMap();
+        System.out.println(map);
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1211,185 +1394,6 @@ such references are cleared or themselves become unreachable.
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 简单工厂模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-21 01:57:40 / Modified: 17:51:35" itemprop="dateCreated datePublished" datetime="2022-03-21T01:57:40-08:00">2022-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">简单工厂模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h1><p>工厂：用一个单独的类来完成创造实例的过程。<br><strong>案例</strong><br>类图：<br><img src="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/1.jpg"></p>
-<pre><code>class Operation&#123;
-    private double numberA = 0;
-    private double numberB = 0;
-    public double getNumberA() &#123;
-        return numberA;
-    &#125;
-    public void setNumberA(double numberA) &#123;
-        this.numberA = numberA;
-    &#125;
-    public double getNumberB() &#123;
-        return numberB;
-    &#125;
-    public void setNumberB(double numberB) &#123;
-        this.numberB = numberB;
-    &#125;
-    public double getResult() throws Exception&#123;
-        double result = 0;
-        return result;
-    &#125;
-&#125;
-
-class Add extends Operation&#123;
-    public double getResult()
-    &#123;
-        double result = 0;
-        result = getNumberA() + getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class Sub extends Operation&#123;
-    public double getResult()
-    &#123;
-        double result = 0;
-        result = getNumberA() - getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class Mul extends Operation&#123;
-    public double getResult()
-    &#123;
-        double result = 0;
-        result = getNumberA() * getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class Div extends Operation&#123;
-    public double getResult() throws Exception
-    &#123;
-        double result = 0;
-        if (getNumberB() == 0)&#123;
-            throw new Exception(&quot;除数不能为0&quot;);
-        &#125;
-        result = getNumberA() / getNumberB();
-        return result;
-    &#125;
-&#125;
-
-//工厂：用一个单独的类来做这个创造实例的过程
-class OperationFactory&#123;
-    public static Operation createOperate(String operate)&#123;
-        Operation oper = null;
-        
-        if(operate.equals(&quot;+&quot;))&#123;
-            oper = new Add();
-        &#125;else if(operate.equals(&quot;-&quot;))&#123;
-            oper = new Sub();
-        &#125;else if(operate.equals(&quot;*&quot;))&#123;
-            oper = new Mul();
-        &#125;else if(operate.equals(&quot;/&quot;))&#123;
-            oper = new Div();
-        &#125;
-        return oper;
-    &#125;
-&#125;
-
-public class SimpleFactoryTest &#123;
-    public static void main(String[] args) throws Exception &#123;
-        Operation oper = OperationFactory.createOperate(&quot;+&quot;);
-        oper.setNumberA(1);
-        oper.setNumberB(2);
-        double result = oper.getResult();
-        System.out.println(result);
-    &#125;
-&#125;
-</code></pre>
-<p>在使用简单工厂模式的情况下，如果我们要增加新的功能，比如说现在要增加一个求余操作，<br>我们需要增加一个用于求余运算的类，然后在OperationFactory中增加对于求余运算的逻辑判断，这样的做法违背了<br>开放封闭原则，即在开放拓展的同时也开放了修改。</p>
-<pre><code>class Mod extends Operation&#123;
-    public double getResult()&#123;
-        double result = 0;
-        result = getNumberA() % getNumberB();
-        return result;
-    &#125;
-&#125;
-
-class OperationFactory&#123;
-    public static Operation createOperate(String operate)&#123;
-        ......
-        else if(operate.equals(&quot;%&quot;))&#123;
-            oper = new Div();
-        &#125;
-        ......
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1461,20 +1465,20 @@ class OperationFactory&#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">477</span>
+          <span class="site-state-item-count">478</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">379</span>
+        <span class="site-state-item-count">382</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">374</span>
+        <span class="site-state-item-count">379</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
