@@ -190,6 +190,269 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/31/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/31/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">leetcode | 88.合并两个有序数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-07-31 00:13:54 / Modified: 00:30:40" itemprop="dateCreated datePublished" datetime="2022-07-31T00:13:54-08:00">2022-07-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/88-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">88.合并两个有序数组</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="88-合并两个有序数组"><a href="#88-合并两个有序数组" class="headerlink" title="88.合并两个有序数组"></a>88.合并两个有序数组</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。<br>请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。<br>注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。</p>
+<p>示例 1：<br>输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3<br>输出：[1,2,2,3,5,6]<br>解释：需要合并 [1,2,3] 和 [2,5,6] 。<br>合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-sorted-array">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>归并<br>设置两个指针i,j,从头开始遍历两个数组，哪个指针指向位置的元素较小则加入结果列表中，该指针后移，…，依次类推。<br>如果两个数组长度不一样，循环结束后，需要将长度较长的数组剩余元素加入结果列表。</li>
+<li>双指针<br>由于题目所给数组均有序，因此可以设置两个指针分别指向两个数组第一个元素，判断两个指针指向位置的元素大小，每次将较小的加入结果列表中。<br>如果某一个数组先遍历结束，后续只需要遍历另一个数组的剩余元素并将其加入结果列表中。</li>
+<li>先将数组nums2放进数组nums1的尾部，然后直接对整个数组进行排序</li>
+<li>逆向双指针<br>对双指针法进行改进，从后往前遍历数组，每次将较大元素放入结果列表中。<br>在双指针法中，我们需要创建长度为m+n的新数组保存结果，因为如果直接在nums1上保存，会覆盖nums1的元素。<br>与双指针方法不同的是，该方法可以原地地在nums1上保存结果（从后往前放入元素不会产生覆盖）。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, nums1, m, nums2, n</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		归并</span></span><br><span class="line"><span class="string">        :type nums1: List[int]</span></span><br><span class="line"><span class="string">        :type m: int</span></span><br><span class="line"><span class="string">        :type nums2: List[int]</span></span><br><span class="line"><span class="string">        :type n: int</span></span><br><span class="line"><span class="string">        :rtype: None Do not return anything, modify nums1 in-place instead.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		i = <span class="number">0</span></span><br><span class="line">		j = <span class="number">0</span></span><br><span class="line">		result = []</span><br><span class="line">		<span class="keyword">while</span> i &lt; m <span class="keyword">and</span> j &lt; n:</span><br><span class="line">			<span class="keyword">if</span> nums1[i] &lt; nums2[j]:</span><br><span class="line">				result.append(nums1[i])</span><br><span class="line">				i += <span class="number">1</span></span><br><span class="line">			<span class="keyword">elif</span> nums1[i] &gt;= nums2[j]:</span><br><span class="line">				result.append(nums2[j])</span><br><span class="line">				j += <span class="number">1</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span> m - i != <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(m - (m - i), m):</span><br><span class="line">				result.append(nums1[k])</span><br><span class="line">		<span class="keyword">if</span> n - j != <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">for</span> p <span class="keyword">in</span> <span class="built_in">range</span>(n - (n - j), n):</span><br><span class="line">				result.append(nums2[p])</span><br><span class="line">		</span><br><span class="line">		nums1[:] = result</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">merge1</span>(<span class="params">self, nums1, m, nums2, n</span>):</span></span><br><span class="line">		<span class="comment"># 先将数组nums2放进数组nums1的尾部，然后直接对整个数组进行排序</span></span><br><span class="line">		nums1[m:] = nums2</span><br><span class="line">		quick_sort(nums1, <span class="number">0</span>, <span class="built_in">len</span>(nums1) - <span class="number">1</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">merge2</span>(<span class="params">self, nums1, m, nums2, n</span>):</span></span><br><span class="line">		<span class="built_in">sorted</span> = []</span><br><span class="line">		p1, p2 = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">		<span class="keyword">while</span> p1 &lt; m <span class="keyword">or</span> p2 &lt; n:</span><br><span class="line">			<span class="keyword">if</span> p1 == m:</span><br><span class="line">				<span class="built_in">sorted</span>.append(nums2[p2])</span><br><span class="line">				p2 += <span class="number">1</span></span><br><span class="line">			<span class="keyword">elif</span> p2 == n:</span><br><span class="line">				<span class="built_in">sorted</span>.append(nums1[p1])</span><br><span class="line">				p1 += <span class="number">1</span></span><br><span class="line">			<span class="keyword">elif</span> nums1[p1] &lt; nums2[p2]:</span><br><span class="line">				<span class="built_in">sorted</span>.append(nums1[p1])</span><br><span class="line">				p1 += <span class="number">1</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="built_in">sorted</span>.append(nums2[p2])</span><br><span class="line">				p2 += <span class="number">1</span></span><br><span class="line">		nums1[:] = <span class="built_in">sorted</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">merge3</span>(<span class="params">self, nums1, m, nums2, n</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;逆向双指针&quot;&quot;&quot;</span></span><br><span class="line">		p1, p2 = m - <span class="number">1</span>, n - <span class="number">1</span></span><br><span class="line">		tail = m + n - <span class="number">1</span></span><br><span class="line">		<span class="keyword">while</span> p1 &gt;= <span class="number">0</span> <span class="keyword">or</span> p2 &gt;= <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">if</span> p1 == -<span class="number">1</span>:  <span class="comment"># 如果nums1数组已经遍历完毕，遍历nums2中的剩余元素</span></span><br><span class="line">				nums1[tail] = nums2[p2]</span><br><span class="line">				p2 -= <span class="number">1</span></span><br><span class="line">			<span class="keyword">elif</span> p2 == -<span class="number">1</span>:  <span class="comment"># 如果nums2数组已经遍历完毕，遍历nums1中的剩余元素</span></span><br><span class="line">				nums1[tail] = nums1[p1]</span><br><span class="line">				p1 -= <span class="number">1</span></span><br><span class="line">			<span class="keyword">elif</span> nums1[p1] &gt; nums2[p2]:</span><br><span class="line">				nums1[tail] = nums1[p1]</span><br><span class="line">				p1 -= <span class="number">1</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				nums1[tail] = nums2[p2]</span><br><span class="line">				p2 -= <span class="number">1</span></span><br><span class="line">			</span><br><span class="line">			tail -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quick_sort</span>(<span class="params">arr, low, high</span>):</span></span><br><span class="line">	<span class="string">&quot;&quot;&quot;快速排序&quot;&quot;&quot;</span></span><br><span class="line">	<span class="keyword">if</span> low &lt; high:</span><br><span class="line">		pivot = partition(arr, low, high)</span><br><span class="line">		quick_sort(arr, low, pivot - <span class="number">1</span>)</span><br><span class="line">		quick_sort(arr, pivot + <span class="number">1</span>, high)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">partition</span>(<span class="params">arr, low, high</span>):</span></span><br><span class="line">	pivot_key = arr[low]</span><br><span class="line">	<span class="keyword">while</span> low &lt; high:</span><br><span class="line">		<span class="keyword">while</span> low &lt; high <span class="keyword">and</span> arr[high] &gt;= pivot_key:</span><br><span class="line">			high -= <span class="number">1</span></span><br><span class="line">		arr[low], arr[high] = arr[high], arr[low]</span><br><span class="line">		<span class="keyword">while</span> low &lt; high <span class="keyword">and</span> arr[low] &lt;= pivot_key:</span><br><span class="line">			low += <span class="number">1</span></span><br><span class="line">		arr[low], arr[high] = arr[high], arr[low]</span><br><span class="line">	<span class="keyword">return</span> low</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	nums1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">	nums2 = [<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line">	<span class="comment"># slt.merge(nums1, 3, nums2, 3)</span></span><br><span class="line">	<span class="comment"># slt.merge1(nums1, 3, nums2, 3)</span></span><br><span class="line">	<span class="comment"># slt.merge2(nums1, 3, nums2, 3)</span></span><br><span class="line">	slt.merge3(nums1, <span class="number">3</span>, nums2, <span class="number">3</span>)</span><br><span class="line">	<span class="built_in">print</span>(nums1)</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/30/%E5%8A%A0%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/30/%E5%8A%A0%E4%B8%80/" class="post-title-link" itemprop="url">leetcode | 66.加一</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-07-30 18:28:12 / Modified: 18:31:18" itemprop="dateCreated datePublished" datetime="2022-07-30T18:28:12-08:00">2022-07-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/66-%E5%8A%A0%E4%B8%80/" itemprop="url" rel="index"><span itemprop="name">66.加一</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="66-加一"><a href="#66-加一" class="headerlink" title="66.加一"></a>66.加一</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。<br>最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。<br>你可以假设除了整数 0 之外，这个整数不会以零开头。</p>
+<p>示例 1：<br>输入：digits = [1,2,3]<br>输出：[1,2,4]<br>解释：输入数组表示数字 123。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/plus-one">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>从后往前找第一个不为9的元素，并将该位置后的9置零</li>
+<li>将数组转化为数字加一再将结果转化为整数数组<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">plusOne</span>(<span class="params">self, digits</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		从后往前找第一个不为9的元素，并将该位置后的9置零</span></span><br><span class="line"><span class="string">        :type digits: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		n = <span class="built_in">len</span>(digits)</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">			<span class="keyword">if</span> digits[i] != <span class="number">9</span>:</span><br><span class="line">				digits[i] += <span class="number">1</span></span><br><span class="line">				<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, n):</span><br><span class="line">					digits[j] = <span class="number">0</span></span><br><span class="line">				<span class="keyword">return</span> digits</span><br><span class="line">		<span class="keyword">return</span> [<span class="number">1</span>] + [<span class="number">0</span>] * n</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">plusOne1</span>(<span class="params">self, digits</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;将数组转化为数字加一再将结果转化为整数数组&quot;&quot;&quot;</span></span><br><span class="line">		num = <span class="string">&quot;&quot;</span></span><br><span class="line">		<span class="keyword">for</span> digit <span class="keyword">in</span> digits:</span><br><span class="line">			num += <span class="built_in">str</span>(digit)</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">list</span>([<span class="built_in">int</span>(ch) <span class="keyword">for</span> ch <span class="keyword">in</span> <span class="built_in">str</span>(<span class="built_in">int</span>(num) + <span class="number">1</span>)])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	<span class="comment"># result = slt.plusOne([1, 2, 3])</span></span><br><span class="line">	result = slt.plusOne1([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">	<span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/29/%E6%90%9C%E7%B4%A2%E6%8F%92%E5%85%A5%E4%BD%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/29/%E6%90%9C%E7%B4%A2%E6%8F%92%E5%85%A5%E4%BD%8D%E7%BD%AE/" class="post-title-link" itemprop="url">leetcode | 35.搜索插入位置</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-07-29 01:07:49 / Modified: 01:51:33" itemprop="dateCreated datePublished" datetime="2022-07-29T01:07:49-08:00">2022-07-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/35-%E6%90%9C%E7%B4%A2%E6%8F%92%E5%85%A5%E4%BD%8D%E7%BD%AE/" itemprop="url" rel="index"><span itemprop="name">35.搜索插入位置</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="35-搜索插入位置"><a href="#35-搜索插入位置" class="headerlink" title="35.搜索插入位置"></a>35.搜索插入位置</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。<br>请必须使用时间复杂度为 O(log n) 的算法。</p>
+<p>示例 1:<br>输入: nums = [1,3,5,6], target = 5<br>输出: 2</p>
+<p>示例 2:<br>输入: nums = [1,3,5,6], target = 2<br>输出: 1</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/search-insert-position">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>利用二分查找目标值，如果存在，返回其索引，如果不存在，寻找插入位置。<br>（1）二分查找找到目标值，时间复杂度为O(log n)<br>（2）二分查找没找到目标值，时间复杂度为O(log n) + O(n)<br>因此，该方法会时间复杂度不符合题意。</li>
+<li>根据题意，找到大于等于目标值的位置，该位置即为插入位置/目标值的位置。<br>该方法需要遍历数组，因此时间复杂度为O(n)，不符合题意。</li>
+<li>二分查找变形<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">searchInsert</span>(<span class="params">self, nums, target</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		利用二分查找目标值，如果存在，返回其索引，如果不存在，寻找插入位置。</span></span><br><span class="line"><span class="string">		（1）二分查找找到目标值，时间复杂度为O(log n)</span></span><br><span class="line"><span class="string">		（2）二分查找没找到目标值，时间复杂度为O(log n) + O(n)</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		index = self.binarySearch(nums, <span class="number">0</span>, <span class="built_in">len</span>(nums), target)</span><br><span class="line">		<span class="keyword">if</span> index != -<span class="number">1</span>:</span><br><span class="line">			<span class="keyword">return</span> index</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> self.findBigger(nums, target)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">binarySearch</span>(<span class="params">self, arr, low, high, key</span>):</span></span><br><span class="line">		<span class="keyword">if</span> low &lt;= high:</span><br><span class="line">			mid = (low + high) // <span class="number">2</span></span><br><span class="line">			<span class="keyword">if</span> arr[mid] == key:</span><br><span class="line">				<span class="keyword">return</span> mid</span><br><span class="line">			<span class="keyword">elif</span> arr[mid] &gt; key:</span><br><span class="line">				<span class="keyword">return</span> self.binarySearch(arr, low, mid - <span class="number">1</span>, key)</span><br><span class="line">			<span class="keyword">elif</span> arr[mid] &lt; key:</span><br><span class="line">				<span class="keyword">return</span> self.binarySearch(arr, mid + <span class="number">1</span>, high, key)</span><br><span class="line">		<span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">findBigger</span>(<span class="params">self, arr, num</span>):</span></span><br><span class="line">		<span class="keyword">if</span> num &lt; arr[<span class="number">0</span>]:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">		<span class="keyword">if</span> num &gt; arr[<span class="built_in">len</span>(arr) - <span class="number">1</span>]:</span><br><span class="line">			<span class="keyword">return</span> <span class="built_in">len</span>(arr)</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(arr)):</span><br><span class="line">			<span class="keyword">if</span> arr[i] &lt; num:</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">searchInsert1</span>(<span class="params">self, nums, target</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		找到大于等于目标值的位置，该位置即为插入位置/目标值的位置。</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">if</span> target &lt; nums[<span class="number">0</span>]:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">		<span class="keyword">if</span> target &gt; nums[<span class="built_in">len</span>(nums) - <span class="number">1</span>]:</span><br><span class="line">			<span class="keyword">return</span> <span class="built_in">len</span>(nums)</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">			<span class="keyword">if</span> nums[i] &gt;= target:</span><br><span class="line">				<span class="keyword">return</span> i</span><br><span class="line">			<span class="keyword">elif</span> nums[i] &lt; target:</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">searchInsert2</span>(<span class="params">self, nums, target</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;searchInsert1的简化版&quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">if</span> target &gt; nums[<span class="built_in">len</span>(nums) - <span class="number">1</span>]:</span><br><span class="line">			<span class="keyword">return</span> <span class="built_in">len</span>(nums)</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">			<span class="keyword">if</span> nums[i] &lt; target:</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">searchInsert3</span>(<span class="params">self, nums, target</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        二分查找变形</span></span><br><span class="line"><span class="string">        不断用二分法逼近查找第一个大于等于 target的下标 </span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		l = <span class="number">0</span></span><br><span class="line">		r = <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">		<span class="keyword">while</span> l &lt;= r:</span><br><span class="line">			mid = l + (r - l) // <span class="number">2</span></span><br><span class="line">			<span class="keyword">if</span> nums[mid] &lt; target:</span><br><span class="line">				l = mid + <span class="number">1</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				r = mid - <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> l</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	<span class="comment"># result = slt.searchInsert([1, 3, 5, 6], 7)</span></span><br><span class="line">	<span class="comment"># result = slt.searchInsert1([1, 3, 5, 6], 7)</span></span><br><span class="line">	<span class="comment"># result = slt.searchInsert2([1, 3, 5, 6], 7)</span></span><br><span class="line">	result = slt.searchInsert3([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>], <span class="number">7</span>)</span><br><span class="line">	<span class="built_in">print</span>(result)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/27/execute%E5%92%8Csubmit%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -851,338 +1114,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/18/%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E6%95%B0%E7%BB%84%E4%B8%AD%E6%B6%88%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/18/%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E6%95%B0%E7%BB%84%E4%B8%AD%E6%B6%88%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">leetcode | 448.找到所有数组中消失的数字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-07-18 01:52:00 / Modified: 01:55:34" itemprop="dateCreated datePublished" datetime="2022-07-18T01:52:00-08:00">2022-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/448-%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E6%95%B0%E7%BB%84%E4%B8%AD%E6%B6%88%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/" itemprop="url" rel="index"><span itemprop="name">448.找到所有数组中消失的数字</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="448-找到所有数组中消失的数字"><a href="#448-找到所有数组中消失的数字" class="headerlink" title="448.找到所有数组中消失的数字"></a>448.找到所有数组中消失的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。</p>
-<p>示例 1：<br>输入：nums = [4,3,2,7,8,2,3,1]<br>输出：[5,6]</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>可以通过集合求差集的方式实现<br>set1 = {4,3,2,7,8,2,3,1}<br>set2 = {1,2,3,4,5,6}<br>set2 - set1即为题目所求</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def findDisappearedNumbers(self, nums):
-        &quot;&quot;&quot;
-        :type nums: List[int]
-        :rtype: List[int]
-        &quot;&quot;&quot;
-        # 超出时间限制
-        # result = []
-        # for i in range(1, len(nums)+1):
-        #     if i not in nums:
-        #         result.append(i)
-        # return result
-
-        # 超出时间限制
-        # return [i for i in range(1, len(nums)+1) if i not in nums]
-
-        # 集合求差集
-        set1 = set(nums)
-        set2 = set([i for i in range(1, len(nums) + 1)])
-        return list(set2.difference(set1))
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    nums = [4, 3, 2, 7, 8, 2, 3, 1]
-    result = slt.findDisappearedNumbers(nums)
-    print(result)
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/18/%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/18/%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/" class="post-title-link" itemprop="url">leetcode | 338.比特位计数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-07-18 00:05:16 / Modified: 00:10:55" itemprop="dateCreated datePublished" datetime="2022-07-18T00:05:16-08:00">2022-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" itemprop="url" rel="index"><span itemprop="name">进制转换</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/338-%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">338.比特位计数</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="338-比特位计数"><a href="#338-比特位计数" class="headerlink" title="338.比特位计数"></a>338.比特位计数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个整数 n ，对于 0 &lt;= i &lt;= n 中的每个 i ，计算其二进制表示中 1 的个数 ，返回一个长度为 n + 1 的数组 ans 作为答案。</p>
-<p>示例 1：<br>输入：n = 2<br>输出：[0,1,1]<br>解释：<br>0 –&gt; 0<br>1 –&gt; 1<br>2 –&gt; 10</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/counting-bits">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/counting-bits/solution/python-by-sentiment-wsy3/">我的题解</a></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def countBits(self, n):
-        &quot;&quot;&quot;
-        :type n: int
-        :rtype: List[int]
-        &quot;&quot;&quot;
-        # result = []
-        # for i in range(0, n+1):
-        #     result.append(bin(i).count(&#39;1&#39;))
-        # return result
-
-        return [bin(i).count(&#39;1&#39;) for i in range(0, n+1)]
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/17/%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/17/%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/" class="post-title-link" itemprop="url">leetcode | 461.汉明距离</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-07-17 23:56:55" itemprop="dateCreated datePublished" datetime="2022-07-17T23:56:55-08:00">2022-07-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-18 00:00:37" itemprop="dateModified" datetime="2022-07-18T00:00:37-08:00">2022-07-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" itemprop="url" rel="index"><span itemprop="name">进制转换</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/461-%E6%B1%89%E6%98%8E%E8%B7%9D%E7%A6%BB/" itemprop="url" rel="index"><span itemprop="name">461.汉明距离</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="461-汉明距离"><a href="#461-汉明距离" class="headerlink" title="461.汉明距离"></a>461.汉明距离</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。<br>给你两个整数 x 和 y，计算并返回它们之间的汉明距离。</p>
-<p>示例 1：<br>输入：x = 1, y = 4<br>输出：2<br>解释：<br>1   (0 0 0 1)<br>4   (0 1 0 0)<br>       ↑   ↑<br>上面的箭头指出了对应二进制位不同的位置。</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/hamming-distance">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/hamming-distance/solution/pythonyi-xing-gao-ding-by-sentiment-sfk0/">我的题解</a></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution(object):
-    def hammingDistance(self, x, y):
-        &quot;&quot;&quot;
-        :type x: int
-        :type y: int
-        :rtype: int
-        &quot;&quot;&quot;
-        return bin(x ^ y).count(&#39;1&#39;)
-
-
-if __name__ == &quot;__main__&quot;:
-    # # 十进制转二进制：bin(10)
-    # print(bin(10))
-    # # 十进制转八进制：oct(10)
-    # print(oct(10))
-    # # 十进制转十六进制：hex(10)
-    # print(hex(10))
-    #
-    # # 二进制转十进制：int(&quot;1010&quot;,2)
-    # print(int(&quot;1010&quot;, 2))
-    # # 八进制转十进制：int(&quot;0o12&quot;,8)
-    # print(int(&quot;0o12&quot;, 8))
-    # # 十六进制转十进制：int(&quot;0xa&quot;,16)
-    # print(int(&quot;0xa&quot;, 16))
-    
-    # print(str(bin(1 ^ 4)).count(&#39;1&#39;))
-    # print(str(bin(3 ^ 1)).count(&#39;1&#39;))
-    
-    slt = Solution()
-    result = slt.hammingDistance(1, 4)
-    print(result)
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/48/">48</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/49/">49</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1250,20 +1185,20 @@ if __name__ == &quot;__main__&quot;:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">480</span>
+          <span class="site-state-item-count">483</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">386</span>
+        <span class="site-state-item-count">389</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">383</span>
+        <span class="site-state-item-count">390</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
