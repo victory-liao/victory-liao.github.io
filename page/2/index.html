@@ -190,6 +190,175 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/26/GCC%E6%88%96Clang%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/26/GCC%E6%88%96Clang%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">C++ | GCC或Clang头文件搜索路径</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-26 04:45:07 / Modified: 04:56:19" itemprop="dateCreated datePublished" datetime="2024-02-26T04:45:07-08:00">2024-02-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/" itemprop="url" rel="index"><span itemprop="name">头文件搜索路径</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="GCC-Clang的头文件搜索路径"><a href="#GCC-Clang的头文件搜索路径" class="headerlink" title="GCC/Clang的头文件搜索路径"></a>GCC/Clang的头文件搜索路径</h3><ul>
+<li><p>GCC/Clang编译器在对C++源代码文件进行预处理时，会对C++源代码头部包含的头文件进行搜索，搜索时根据环境变量CPLUS_INCLUDE_PATH中的路径进行搜索，如果搜索不到某头文件会报错。若CPLUS_INCLUDE_PATH中没有包含所使用头文件所在路径，也可以通过-I参数制定使用到的头文件的路径，例如，gcc -I /your/header/file/ test.cpp。</p>
+</li>
+<li><p>添加GCC头文件搜索路径</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/xxx/include</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看C++编译器（GCC）的头文件搜索路径命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gcc -x c++ -v -E -</span><br><span class="line"><span class="meta">#</span><span class="bash"> gcc：表示使用GCC编译器进行编译。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -x c++：表示指定编译的语言为C++。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -v：表示显示详细的编译过程信息。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -E：表示仅执行预处理阶段，不进行编译和链接。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -：表示从标准输入读取源代码。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看C++编译器（Clang）的头文件搜索路径命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">clang -x c++ -v -E -</span><br><span class="line"><span class="meta">#</span><span class="bash"> clang：表示使用GCC编译器进行编译。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -x c++：表示指定编译的语言为C++。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -v：表示显示详细的编译过程信息。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -E：表示仅执行预处理阶段，不进行编译和链接。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -：表示从标准输入读取源代码。</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/22/%E5%B0%86python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90exe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/22/%E5%B0%86python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90exe/" class="post-title-link" itemprop="url">python | 将python程序打包成exe</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-22 05:03:22 / Modified: 05:36:23" itemprop="dateCreated datePublished" datetime="2024-02-22T05:03:22-08:00">2024-02-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pyinstaller/" itemprop="url" rel="index"><span itemprop="name">pyinstaller</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="将python程序打包成exe"><a href="#将python程序打包成exe" class="headerlink" title="将python程序打包成exe"></a>将python程序打包成exe</h3><ol>
+<li><p>编写python程序（例如test.py）</p>
+</li>
+<li><p>安装pyinstaller</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U pyinstaller</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打包python程序</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller test.py</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/24/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -960,244 +1129,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">CMake | CMake安装及使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-09-18 07:13:29" itemprop="dateCreated datePublished" datetime="2023-09-18T07:13:29-08:00">2023-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-10-07 04:50:19" itemprop="dateModified" datetime="2023-10-07T04:50:19-08:00">2023-10-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CMake/" itemprop="url" rel="index"><span itemprop="name">CMake</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CMake/CMake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">CMake安装及使用</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="构建工具CMake"><a href="#构建工具CMake" class="headerlink" title="构建工具CMake"></a>构建工具CMake</h1><ul>
-<li><p>软件构建</p>
-<ul>
-<li>自动完成代码编译、链接、打包的整个过程</li>
-</ul>
-</li>
-<li><p>C和C++程序的构建工具-Cmake</p>
-</li>
-<li><p>Cmake的安装</p>
-</li>
-<li><p>gcc/clang编译工具安装（cmake不自带编译工具）</p>
-</li>
-<li><p>示例代码 main.cpp</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;hello,world&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建CMakeLists.txt文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line">project(Example)</span><br><span class="line"></span><br><span class="line">add_executable(Example main.cpp)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置项目</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -S . -B build</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>构建项目</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build</span><br></pre></td></tr></table></figure>
-
-<p>构建完成后生成Example可执行文件，如下图所示：</p>
-<p><img src="/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/1.png"></p>
-</li>
-<li><p>执行可执行文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- cd ./build/</span><br><span class="line">./Example</span><br><span class="line"><span class="meta">#</span><span class="bash"> 输出hello，world</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">gcc | 编译和链接</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-09-18 06:29:42" itemprop="dateCreated datePublished" datetime="2023-09-18T06:29:42-08:00">2023-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-10-07 04:43:37" itemprop="dateModified" datetime="2023-10-07T04:43:37-08:00">2023-10-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">编译器</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/gcc/" itemprop="url" rel="index"><span itemprop="name">gcc</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/gcc/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/" itemprop="url" rel="index"><span itemprop="name">编译和链接</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h1><ul>
-<li><p>通过一个代码示例理解编译与链接的过程</p>
-<ol>
-<li><p>安装gcc</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编写示例代码</p>
-<p><strong>main.c</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello,world!\n&quot;</span>);     </span><br><span class="line">    <span class="keyword">int</span> result = add(<span class="number">5</span>,<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>math.c</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译示例代码的两个文件main.c和math.c，得到对应的目标文件（Object File）main.o和math.o</p>
-<p>注：目标文件是二进制文件，文件格式是ELF（Executable and Linkable Format）,ELF格式是linux下所有可执行文件的通用格式。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">gcc -c main.c</span><br><span class="line">gcc -c math.c</span><br><span class="line"></span><br><span class="line">file main.o</span><br><span class="line"><span class="meta">#</span><span class="bash">main.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), <span class="comment">#not stripped</span></span></span><br><span class="line"></span><br><span class="line">readelf -h main.o</span><br><span class="line">ELF Header:</span><br><span class="line">  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 </span><br><span class="line">  Class:                             ELF64</span><br><span class="line">  Data:                              2&#x27;s complement, little endian</span><br><span class="line">  Version:                           1 (current)</span><br><span class="line">  OS/ABI:                            UNIX - System V</span><br><span class="line">  ABI Version:                       0</span><br><span class="line">  Type:                              REL (Relocatable file)</span><br><span class="line">  Machine:                           Advanced Micro Devices X86-64</span><br><span class="line">  Version:                           0x1</span><br><span class="line">  Entry point address:               0x0</span><br><span class="line">  Start of program headers:          0 (bytes into file)</span><br><span class="line">  Start of section headers:          672 (bytes into file)</span><br><span class="line">  Flags:                             0x0</span><br><span class="line">  Size of this header:               64 (bytes)</span><br><span class="line">  Size of program headers:           0 (bytes)</span><br><span class="line">  Number of program headers:         0</span><br><span class="line">  Size of section headers:           64 (bytes)</span><br><span class="line">  Number of section headers:         14</span><br><span class="line">  Section header string table index: 13</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">readelf -S main.o</span><br><span class="line"><span class="meta">#</span><span class="bash"> .text 代码区域</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> .data 数据区域</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/1.png"></p>
-<p>objdump -s -d main.o</p>
-<p>-d:将代码段反汇编</p>
-<p>-s:将代码段反汇编的同时，将反汇编代码和源代码交替显示，编译时需要给出-                  g，即需要调试信息。</p>
-<p>右侧汇编指令中有两个call指令，既主函数中对printf和add的调用，从机器码可以看出跳转地址为0，需要在后续根据重定位表更新到printf和add的实际地址。</p>
-<p><img src="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/2.png"></p>
-<p>objdump -r main.o</p>
-<p>查看两个函数调用的信息（地址偏移量、类型和值）</p>
-<p><img src="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/3.png"></p>
-</li>
-<li><p>链接</p>
-<p>链接调用的函数机器码并组装为可执行文件main</p>
-</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.o math.o -o main</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>执行可执行文件main</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./main</span><br><span class="line"><span class="meta">#</span><span class="bash"> 输出hello,world</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过makefile来进行编译链接步骤</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: main</span></span><br><span class="line"></span><br><span class="line"><span class="section">main: main.o math.o</span></span><br><span class="line">        gcc main.o math.o -o main</span><br><span class="line"></span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">        gcc -c main.c</span><br><span class="line"></span><br><span class="line"><span class="section">math.o: math.c</span></span><br><span class="line">        gcc -c math.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        rm main main.o math.o</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make main             </span><br></pre></td></tr></table></figure>
-
-<p>​          </p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1269,20 +1200,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">483</span>
+          <span class="site-state-item-count">485</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">389</span>
+        <span class="site-state-item-count">391</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">390</span>
+        <span class="site-state-item-count">392</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
