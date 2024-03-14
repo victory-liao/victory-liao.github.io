@@ -190,6 +190,324 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/10/cplusplus%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/10/cplusplus%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">C++ | 二级指针</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-10 19:43:43 / Modified: 19:44:51" itemprop="dateCreated datePublished" datetime="2023-10-10T19:43:43-08:00">2023-10-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/" itemprop="url" rel="index"><span itemprop="name">二级指针</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="c-二级指针"><a href="#c-二级指针" class="headerlink" title="c++二级指针"></a>c++二级指针</h1><ul>
+<li><p>普通变量作为形参</p>
+<p>在函数中采用普通变量接收实参传递的变量，对变量的操作是对实参拷贝值的操作，不会改变原有变量的值</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> a)</span></span>&#123;</span><br><span class="line">  a = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：before changed,a=10</span></span><br><span class="line">    <span class="built_in">change_value</span>(a);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：after changed,a=10</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指针变量作为形参</p>
+<p>由上可知，普通变量作为形参时，对变量的操作其实是对拷贝值的操作，不会改变原来变量的值，若要改变原来变量的值，可采用指针变量作为形参。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> *p)</span></span>&#123;</span><br><span class="line">    *p = <span class="number">20</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：before changed,a=10</span></span><br><span class="line">    <span class="built_in">change_value</span>(&amp;a);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：after changed,a=20</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二级指针作为形参</p>
+<p>以上是通过函数修改普通变量的值，若要对指针变量的指向进行修改，则需要使用二级指针来实现。</p>
+<p>首先在函数中，采用指针变量作为形参接收实参传递的指针，示例代码如下，由代码输出结果可知，用指针变量作为形参不能够修改原来指针的指向。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> *p)</span></span>&#123;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">20</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> *p = &amp;a;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,*p=&quot;</span> &lt;&lt; *p &lt;&lt; endl;<span class="comment">//before changed,*p=10</span></span><br><span class="line">    <span class="built_in">change_value</span>(p);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,*p=&quot;</span> &lt;&lt; *p &lt;&lt; endl;<span class="comment">//after changed,*p=10</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下代码是二级指针作为形参的示例代码，由代码输出可知，二级指针作为形参时可以修改原来指针变量的指向。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> **p)</span></span>&#123;</span><br><span class="line">    *p = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">20</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> *p = &amp;a;</span><br><span class="line">    <span class="keyword">int</span> **pp = &amp;p;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,*p&quot;</span> &lt;&lt; *p &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">change_value</span>(pp);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,*p&quot;</span> &lt;&lt; *p &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,**pp&quot;</span> &lt;&lt; **pp &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>此外，二级指针还常与结构体、数组一起使用，二级指针搭配结构体/数组的使用将在后续补充 ！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/09/C-%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/09/C-%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">C++ | 指针与引用的区别</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-09 04:26:43 / Modified: 04:40:06" itemprop="dateCreated datePublished" datetime="2023-10-09T04:26:43-08:00">2023-10-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">指针与引用</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="C-指针与引用"><a href="#C-指针与引用" class="headerlink" title="C++指针与引用"></a>C++指针与引用</h1><p>学习c++时，很容易混淆指针和引用的用法，以及对指针与引用的使用存在些许疑惑，下面通过示例代码说明指针和引用的区别。</p>
+<ul>
+<li>指针与引用的区别？</li>
+</ul>
+<ol>
+<li>定义和性质不同</li>
+</ol>
+<p>指针是一个变量，其存储的是一个地址，该地址指向内存的一个存储单元；举例，张三的身份证看做一个指针，这个指针指向了张三，张三的妈妈夸奖了身份证不等于张三的妈妈夸奖了张三。</p>
+<p>引用是一个变量的别名，跟原来的变量实质上是同一个东西，类似于日常生活中“小名”的意思，例如张三的小名叫毛蛋，张三与毛蛋都指的是张三这个人，张三的妈妈夸奖了张三等于张三的妈妈夸奖了毛蛋。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">996</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;a; <span class="comment">// p是指针, &amp;在此是求地址运算</span></span><br><span class="line"><span class="keyword">int</span> &amp;r = a; <span class="comment">// r是引用, &amp;在此起标识作用</span></span><br></pre></td></tr></table></figure>
+
+<p>上面定义了一个整型变量 a，p 是一个指针变量，p 的值是变量 a 的地址；</p>
+<p>而引用 r，是 a 的一个别名，在内存中 r 和 a 占有同一个存储单元。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/09/C-%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/07/shell%E8%84%9A%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/07/shell%E8%84%9A%E6%9C%AC/" class="post-title-link" itemprop="url">Linux | shell脚本</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-07 04:56:01 / Modified: 05:57:09" itemprop="dateCreated datePublished" datetime="2023-10-07T04:56:01-08:00">2023-10-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/shell%E8%84%9A%E6%9C%AC/" itemprop="url" rel="index"><span itemprop="name">shell脚本</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h1><ul>
+<li><p>shell脚本可将环境变量添加、依赖安装、二进制文件执行等命令包含在一个后缀为.sh的文本文件中，从而便于对应用的<strong>自动化运维</strong>。</p>
+</li>
+<li><p>常见的shell脚本语法</p>
+<ol>
+<li>向窗口输出文本</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;hello world&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>for  loop</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for file in `ls /etc`;do</span><br><span class="line">	echo $file</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>变量定义以及使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 输出变量内容</span></span><br><span class="line">word=&quot;this is a string!&quot;</span><br><span class="line">echo $word</span><br><span class="line">echo &quot;word变量的内容是$&#123;word&#125;。&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 只读变量</span></span><br><span class="line">my_name=&quot;liao sheng li&quot;</span><br><span class="line">readonly my_name</span><br><span class="line">echo $my_name</span><br><span class="line">my_name=&quot;sheng li&quot; # ./test.sh:行20: my_name：只读变量</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除变量</span></span><br><span class="line">username=&quot;zhang san&quot;</span><br><span class="line">echo $username</span><br><span class="line">unset username</span><br><span class="line">echo $suername  # 不会输出内容</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell字符串</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 输出字符串</span></span><br><span class="line">echo &quot;hello&quot; # 双引号方式表示字符串</span><br><span class="line">echo &#x27;hello&#x27; # 单引号方式表示字符串</span><br><span class="line">echo hello # 不使用引号方式</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 拼接字符串</span></span><br><span class="line">echo &quot;hello,&quot;world&quot;!&quot;</span><br><span class="line">echo &#x27;hello,&#x27;world&#x27;!&#x27;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取字符串长度</span></span><br><span class="line">string=&quot;hello&quot;</span><br><span class="line">echo &quot;字符串的长度为：$&#123;#string&#125;&quot;</span><br><span class="line">echo &quot;字符串的长度为：$&#123;#string[0]&#125;&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提取子字符串</span></span><br><span class="line">string1=&quot;the sky is blue!&quot;</span><br><span class="line">echo $&#123;string1:4:3&#125;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查找子字符串</span></span><br><span class="line">string2=&quot;this is a long string!&quot;</span><br><span class="line">echo `expr index &quot;$string2&quot; is`</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<ol start="5">
+<li><p>shell数组</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 定义数组</span></span><br><span class="line">arr1=(1 2 3 4 5 6 7 8 9 10)</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 读取数组</span></span><br><span class="line">echo $&#123;arr1&#125;</span><br><span class="line">elem1=$&#123;arr1[0]&#125; # 输出下表为0时的数组元素</span><br><span class="line">echo $elem1</span><br><span class="line">echo $&#123;arr1[@]&#125; #输出数组所有元素</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取数组的长度</span></span><br><span class="line">echo $&#123;#arr1[@]&#125;  # 输出数组长度</span><br><span class="line">echo $&#123;#arr1[*]&#125; # 输出数组长度</span><br><span class="line">echo $&#123;#arr1[0]&#125; #输出下表为0的数组元素的长度</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关联数组</span></span><br><span class="line">declare -A site1=([&quot;google&quot;]=&quot;www.google.com&quot; [&quot;runoob&quot;]=&quot;www.runoob.com&quot; [&quot;taobao&quot;]=&quot;www.taobao.com&quot;)</span><br><span class="line">echo $&#123;site1[&quot;google&quot;]&#125;</span><br><span class="line">echo $&#123;site1[@]&#125;</span><br><span class="line">declare -A site2</span><br><span class="line">site2[&quot;google&quot;]=&quot;www.google.com&quot;</span><br><span class="line">site2[&quot;runoob&quot;]=&quot;www.runoob.com&quot;</span><br><span class="line">site2[&quot;taobao&quot;]=&quot;www.taobao.com&quot;</span><br><span class="line">echo $&#123;site2[&quot;taobao&quot;]&#125;</span><br><span class="line">echo $&#123;site2[*]&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>shell注释</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 这是一个单行注释</span></span><br><span class="line"></span><br><span class="line">: &lt;&lt;COMMENT</span><br><span class="line">这是</span><br><span class="line">一个</span><br><span class="line">多行注释！</span><br><span class="line">COMMENT</span><br><span class="line"></span><br><span class="line">: &#x27;</span><br><span class="line">这是一个</span><br><span class="line">多行注释</span><br><span class="line">&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell传递参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;此处执行shell脚本的命令为./test.sh 1 2 3&quot;</span><br><span class="line">echo &quot;执行的文件名：$0&quot;</span><br><span class="line">echo &quot;执行的文件名：$1&quot;</span><br><span class="line">echo &quot;执行的文件名：$2&quot;</span><br><span class="line">echo &quot;执行的文件名：$3&quot;</span><br><span class="line">: &#x27;</span><br><span class="line">执行结果：</span><br><span class="line">执行的文件名：./test.sh</span><br><span class="line">执行的文件名：1</span><br><span class="line">执行的文件名：2</span><br><span class="line">执行的文件名：3</span><br><span class="line">&#x27;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 处理参数的集中特殊字符</span></span><br><span class="line">echo $# # 输出传递给脚本的参数个数，执行脚本./test.sh 1 2 3输出3</span><br><span class="line">echo $* # 以单个字符串显示所有传递个脚本的参数就，执行脚本./test.sh 1 2 3输出1 2 3</span><br><span class="line">echo $$ # 输出脚本运行的当前进行ID号</span><br><span class="line">echo $@ # 与$*相同</span><br><span class="line">echo $-</span><br><span class="line">echo $? #显示最后命令的退出状态，0表示没有错误，其他任何值表明有错误</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> $*与<span class="variable">$@</span>的区别</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> $*</span></span><br><span class="line">for i in &quot;$*&quot;; do</span><br><span class="line">	echo $i</span><br><span class="line">done</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="variable">$@</span></span></span><br><span class="line">for i in &quot;$@&quot;; do</span><br><span class="line">	echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell运算符</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 算数运算符</span></span><br><span class="line">a=10</span><br><span class="line">b=20</span><br><span class="line">val=`expr $a + $b`</span><br><span class="line">echo &quot;a + b : $val&quot;</span><br><span class="line">val=`expr $a - $b`</span><br><span class="line">echo &quot;a - b : $val&quot;</span><br><span class="line">val=`expr $a \* $b`</span><br><span class="line">echo &quot;a * b : $val&quot;</span><br><span class="line">val=`expr $b / $a`</span><br><span class="line">echo &quot;b / a : $val&quot;</span><br><span class="line">val=`expr $b % $a`</span><br><span class="line">echo &quot;b % a : $val&quot;</span><br><span class="line">if [ $a == $b ]</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a != $b ]</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 不等于 b&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关系运算符</span></span><br><span class="line">a=10</span><br><span class="line">b=20</span><br><span class="line">if [ $a -eq $b ] # 判断两个数字的值是否相等</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a -eq $b : a 等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a -eq $b: a 不等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -ne $b ] # 判断两个数字的值是否不相等</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a -ne $b: a 不等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a -ne $b : a 等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -gt $b ] # 判断一个数字是否大于另一个数字</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a -gt $b: a 大于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a -gt $b: a 不大于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -lt $b ] # 判断一个数字是否小于另一个数字</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a -lt $b: a 小于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a -lt $b: a 不小于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -ge $b ] # 判断一个数字是否大于小于另一个数字</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a -ge $b: a 大于或等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a -ge $b: a 小于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -le $b ] # 判断一个数字是否小于等于另一个数字</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a -le $b: a 小于或等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a -le $b: a 大于 b&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 布尔运算符</span></span><br><span class="line">a=10</span><br><span class="line">b=20</span><br><span class="line">if [ $a != $b ] # 非</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a != $b : a 不等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a == $b: a 等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -lt 100 -a $b -gt 15 ] # 与</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a 小于 100 且 $b 大于 15 : 返回 true&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a 小于 100 且 $b 大于 15 : 返回 false&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -lt 100 -o $b -gt 100 ] # 或</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a 小于 100 或 $b 大于 100 : 返回 true&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a 小于 100 或 $b 大于 100 : 返回 false&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a -lt 5 -o $b -gt 100 ]</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a 小于 5 或 $b 大于 100 : 返回 true&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a 小于 5 或 $b 大于 100 : 返回 false&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 逻辑运算符</span></span><br><span class="line">a=10</span><br><span class="line">b=20</span><br><span class="line">if [[ $a -lt 100 &amp;&amp; $b -gt 100 ]] # 逻辑与</span><br><span class="line">then</span><br><span class="line">   echo &quot;返回 true&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;返回 false&quot;</span><br><span class="line">fi</span><br><span class="line">if [[ $a -lt 100 || $b -gt 100 ]] # 逻辑或</span><br><span class="line">then</span><br><span class="line">   echo &quot;返回 true&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;返回 false&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 字符串运算符</span></span><br><span class="line">a=&quot;abc&quot;</span><br><span class="line">b=&quot;efg&quot;</span><br><span class="line">if [ $a = $b ] #  判断字符串是否相等</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a = $b : a 等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a = $b: a 不等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a != $b ] #  判断字符串是否不相等</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a != $b : a 不等于 b&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a != $b: a 等于 b&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -z $a ] #  判断字符串长度是否为0</span><br><span class="line">then</span><br><span class="line">   echo &quot;-z $a : 字符串长度为 0&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;-z $a : 字符串长度不为 0&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -n &quot;$a&quot; ] #  判断字符串长度是否不为0</span><br><span class="line">then</span><br><span class="line">   echo &quot;-n $a : 字符串长度不为 0&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;-n $a : 字符串长度为 0&quot;</span><br><span class="line">fi</span><br><span class="line">if [ $a ] #  判断字符串是否为空</span><br><span class="line">then</span><br><span class="line">   echo &quot;$a : 字符串不为空&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;$a : 字符串为空&quot;</span><br><span class="line">fi</span><br><span class="line">echo &quot;&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 文件测试运算符</span></span><br><span class="line">file=&quot;./test.sh&quot;</span><br><span class="line">if [ -r $file ] # 判断文件是否可读</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件可读&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件不可读&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -w $file ] # 判断文件是否可写</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件可写&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件不可写&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -x $file ] # 判断文件是否可执行</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件可执行&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件不可执行&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -f $file ] # 判断文件是普通文件还是特殊文件</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件为普通文件&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件为特殊文件&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -d $file ] # 判断文件是不是一个目录</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件是个目录&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件不是个目录&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -s $file ] # 判断文件是否为空</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件不为空&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件为空&quot;</span><br><span class="line">fi</span><br><span class="line">if [ -e $file ] # 判断文件是否存在</span><br><span class="line">then</span><br><span class="line">   echo &quot;文件存在&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;文件不存在&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell echo命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 显示普通字符串</span></span><br><span class="line">echo &quot;\&quot;显示转义字符\&quot;&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示变量</span></span><br><span class="line">read name # read 命令从标准输入中读取一行并赋值给name变量</span><br><span class="line">echo &quot;$name is one kind of color&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示换行</span></span><br><span class="line">echo -e &quot;hello\n&quot; # -e开启转义</span><br><span class="line">echo &quot;world&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示不换行</span></span><br><span class="line">echo -e &quot;OK! \c&quot; # \c不换行</span><br><span class="line">echo &quot;It is a test&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 原样输出字符串</span></span><br><span class="line">echo &#x27;$name\&quot;&#x27;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示命令执行结果</span></span><br><span class="line">echo `date`</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell printf命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;hello&quot;</span><br><span class="line">printf &quot;hello\n&quot;</span><br><span class="line"></span><br><span class="line">printf &quot;%-10s %-8s %-4s\n&quot; 姓名 性别 体重kg  </span><br><span class="line">printf &quot;%-10s %-8s %-4.2f\n&quot; 郭靖 男 66.1234 </span><br><span class="line">printf &quot;%-10s %-8s %-4.2f\n&quot; 杨过 男 48.6543 </span><br><span class="line">printf &quot;%-10s %-8s %-4.2f\n&quot; 郭芙 女 47.9876</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>test 命令</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span> 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 数值测试</span></span><br><span class="line">num1=100</span><br><span class="line">num2=100</span><br><span class="line">if test $[num1] -eq $[num2] # 代码中的 [] 执行基本的算数运算</span><br><span class="line">then</span><br><span class="line">    echo &#x27;两个数相等！&#x27;</span><br><span class="line">else</span><br><span class="line">    echo &#x27;两个数不相等！&#x27;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 字符串测试</span></span><br><span class="line">num1=&quot;ru1noob&quot;</span><br><span class="line">num2=&quot;runoob&quot;</span><br><span class="line">if test $num1 = $num2</span><br><span class="line">then</span><br><span class="line">    echo &#x27;两个字符串相等!&#x27;</span><br><span class="line">else</span><br><span class="line">    echo &#x27;两个字符串不相等!&#x27;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 文件测试</span></span><br><span class="line">if test -e ./test.sh</span><br><span class="line">then</span><br><span class="line">    echo &#x27;文件已存在!&#x27;</span><br><span class="line">else</span><br><span class="line">    echo &#x27;文件不存在!&#x27;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<ol start="12">
+<li><p>shell 流程控制</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 条件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用[...] 作为判断语句</span></span><br><span class="line">a=10</span><br><span class="line">b=20</span><br><span class="line">if [ $a == $b ]</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 等于 b&quot;</span><br><span class="line">elif [ $a -gt $b ]</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 大于 b&quot;</span><br><span class="line">elif [ $a -lt $b ]</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 小于 b&quot;</span><br><span class="line">else</span><br><span class="line">	echo &quot;没有符合的条件&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用 ((...)) 作为判断语句,大于和小于可以直接使用 &gt; 和 &lt;</span></span><br><span class="line">a=10</span><br><span class="line">b=20</span><br><span class="line">if (( $a == $b ))</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 等于 b&quot;</span><br><span class="line">elif (( $a &gt; $b ))</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 大于 b&quot;</span><br><span class="line">elif (( $a &lt; $b ))</span><br><span class="line">then</span><br><span class="line">	echo &quot;a 小于 b&quot;</span><br><span class="line">else</span><br><span class="line">	echo &quot;没有符合的条件&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 循环</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="keyword">for</span>循环</span></span><br><span class="line">for loop in 1 2 3 4 5</span><br><span class="line">do</span><br><span class="line">    echo &quot;The value is: $loop&quot;</span><br><span class="line">done</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="keyword">while</span>循环</span></span><br><span class="line">int=1</span><br><span class="line">while(( $int&lt;=5 ))</span><br><span class="line">do</span><br><span class="line">    echo $int</span><br><span class="line">    let &quot;int++&quot; # Bash let 命令，它用于执行一个或多个表达式，变量计算中不需要加上 $ 来表示变量</span><br><span class="line">done</span><br><span class="line">: &#x27;</span><br><span class="line">无限循环</span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    command</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    command</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for (( ; ; ))</span><br><span class="line">&#x27;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> until循环</span></span><br><span class="line">a=0</span><br><span class="line">until [ ! $a -lt 10 ]</span><br><span class="line">do</span><br><span class="line">   echo $a</span><br><span class="line">   a=`expr $a + 1`</span><br><span class="line">done</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="keyword">case</span>多选择语句</span></span><br><span class="line">echo &#x27;输入 1 到 4 之间的数字:&#x27;</span><br><span class="line">echo &#x27;你输入的数字为:&#x27;</span><br><span class="line">read aNum</span><br><span class="line">case $aNum in</span><br><span class="line">    1)  echo &#x27;你选择了 1&#x27;</span><br><span class="line">    ;;</span><br><span class="line">    2)  echo &#x27;你选择了 2&#x27;</span><br><span class="line">    ;;</span><br><span class="line">    3)  echo &#x27;你选择了 3&#x27;</span><br><span class="line">    ;;</span><br><span class="line">    4)  echo &#x27;你选择了 4&#x27;</span><br><span class="line">    ;;</span><br><span class="line">    *)  echo &#x27;你没有输入 1 到 4 之间的数字&#x27;</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 跳出循环</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">break</span></span></span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    echo -n &quot;输入 1 到 5 之间的数字:&quot;</span><br><span class="line">    read aNum</span><br><span class="line">    case $aNum in</span><br><span class="line">        1|2|3|4|5) echo &quot;你输入的数字为 $aNum!&quot;</span><br><span class="line">        ;;</span><br><span class="line">        *) echo &quot;你输入的数字不是 1 到 5 之间的! 游戏结束&quot;</span><br><span class="line">            break</span><br><span class="line">        ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">continue</span></span></span><br><span class="line">: &#x27;</span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    echo -n &quot;输入 1 到 5 之间的数字: &quot;</span><br><span class="line">    read aNum</span><br><span class="line">    case $aNum in</span><br><span class="line">        1|2|3|4|5) echo &quot;你输入的数字为 $aNum!&quot;</span><br><span class="line">        ;;</span><br><span class="line">        *) echo &quot;你输入的数字不是 1 到 5 之间的!&quot;</span><br><span class="line">            continue</span><br><span class="line">            echo &quot;游戏结束&quot;</span><br><span class="line">        ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br><span class="line">&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell 函数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 无返回值函数</span></span><br><span class="line">demoFun()&#123;</span><br><span class="line">	echo &quot;这是我的第一个 shell 函数!&quot;</span><br><span class="line">&#125;</span><br><span class="line">echo &quot;-----函数开始执行-----&quot;</span><br><span class="line">demoFun</span><br><span class="line">echo &quot;-----函数执行完毕-----&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 有返回值函数</span></span><br><span class="line">funWithReturn()&#123;</span><br><span class="line">    echo &quot;这个函数会对输入的两个数字进行相加运算...&quot;</span><br><span class="line">    echo &quot;输入第一个数字: &quot;</span><br><span class="line">    read aNum</span><br><span class="line">    echo &quot;输入第二个数字: &quot;</span><br><span class="line">    read anotherNum</span><br><span class="line">    echo &quot;两个数字分别为 $aNum 和 $anotherNum !&quot;</span><br><span class="line">    return $(($aNum+$anotherNum))</span><br><span class="line">&#125;</span><br><span class="line">funWithReturn</span><br><span class="line">echo &quot;输入的两个数字之和为 $? !&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 函数参数</span></span><br><span class="line">funWithParam()&#123;</span><br><span class="line">    echo &quot;第一个参数为 $1 !&quot;</span><br><span class="line">    echo &quot;第二个参数为 $2 !&quot;</span><br><span class="line">    echo &quot;第十个参数为 $10 !&quot;</span><br><span class="line">    echo &quot;第十个参数为 $&#123;10&#125; !&quot;</span><br><span class="line">    echo &quot;第十一个参数为 $&#123;11&#125; !&quot;</span><br><span class="line">    echo &quot;参数总数有 $# 个!&quot;</span><br><span class="line">    echo &quot;作为一个字符串输出所有参数 $* !&quot;</span><br><span class="line">&#125;</span><br><span class="line">funWithParam 1 2 3 4 5 6 7 8 9 34 73</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输入/输出重定向</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;print(&quot;hello&quot;)&#x27; &gt; hello.py</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shell文件包含</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">: &#x27;</span><br><span class="line">shell 脚本中可以包含外部脚本</span><br><span class="line"></span><br><span class="line">语法格式:</span><br><span class="line">. filename   # 注意点号(.)和文件名中间有一空格</span><br><span class="line"></span><br><span class="line">或</span><br><span class="line"></span><br><span class="line">source filename</span><br><span class="line">&#x27;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -548,17 +866,27 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-02-18 03:21:04 / Modified: 03:39:54" itemprop="dateCreated datePublished" datetime="2023-02-18T03:21:04-08:00">2023-02-18</time>
+              <time title="Created: 2023-02-18 03:21:04" itemprop="dateCreated datePublished" datetime="2023-02-18T03:21:04-08:00">2023-02-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-03-14 06:22:49" itemprop="dateModified" datetime="2024-03-14T06:22:49-08:00">2024-03-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/victory-s-thoughts/" itemprop="url" rel="index"><span itemprop="name">victory's thoughts</span></a>
+                  <a href="/categories/%E5%A4%9A%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83%EF%BC%8C%E5%A4%9A%E4%B8%80%E7%82%B9%E5%9D%A6%E7%84%B6%EF%BC%81/" itemprop="url" rel="index"><span itemprop="name">多一点思考，多一点坦然！</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%9A%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83%EF%BC%8C%E5%A4%9A%E4%B8%80%E7%82%B9%E5%9D%A6%E7%84%B6%EF%BC%81/%E6%89%80%E6%9C%89%E7%9A%84%E6%B7%A1%E5%AE%9A%E8%87%AA%E8%8B%A5%EF%BC%8C%E8%83%8C%E5%90%8E%E4%B8%80%E5%AE%9A%E6%98%AF%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">所有的淡定自若，背后一定是孰能生巧</span></a>
                 </span>
             </span>
 
@@ -912,258 +1240,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/" class="post-title-link" itemprop="url">leetcode | 695.岛屿的最大面积</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-10-24 05:35:06 / Modified: 05:49:26" itemprop="dateCreated datePublished" datetime="2022-10-24T05:35:06-08:00">2022-10-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/DFS/" itemprop="url" rel="index"><span itemprop="name">DFS</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/DFS/695-%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/" itemprop="url" rel="index"><span itemprop="name">695.岛屿的最大面积</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="695-岛屿的最大面积"><a href="#695-岛屿的最大面积" class="headerlink" title="695.岛屿的最大面积"></a>695.岛屿的最大面积</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个大小为 m x n 的二进制矩阵 grid 。</p>
-<p>岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。</p>
-<p>岛屿的面积是岛上值为 1 的单元格的数目。</p>
-<p>计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。</p>
-<p>示例 1：<br>输入：grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]<br>输出：6<br>解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。</p>
-<p>示例 2：<br>输入：grid = [[0,0,0,0,0,0,0,0]]<br>输出：0</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/max-area-of-island">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>深度优先搜索（DFS）<br>利用深度优先搜索（DFS）对每个岛屿进行遍历，找出最大值<br>（1）从每个陆地出发，遍历该陆地所在的岛屿<br>（2）在遍历某一岛屿的时候：<br>1）从隶属于该岛屿的某一块陆地出发，向四个方向递归地DFS<br>2）每次递归对下标进行判断，以区域的边界作为递归边界<br>3）为保证每块陆地只访问一次，将已访问过的陆地置0<br>4）递归地返回整块岛屿的面积<br>（3）找出所有岛屿的最大值，即为答案</li>
-</ol>
-<p><strong>邻接矩阵和邻接表表示的图的DFS和BFS</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MGraph</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INFINITY = <span class="number">65535</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span>[] vexs = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span>[][] arc = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX][MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createMGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：\n&quot;</span>);</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		numVertexes = scanner.nextInt();</span><br><span class="line">		numEdges = scanner.nextInt();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			vexs[i] = scanner.nextInt();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">				arc[i][j] = INFINITY;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的下标i,j和权w：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> w = scanner.nextInt();</span><br><span class="line">			arc[i][j] = w;</span><br><span class="line">			arc[j][i] = arc[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		 visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		 System.out.println(vexs[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">			 <span class="keyword">if</span>(arc[i][j] == <span class="number">1</span> &amp;&amp; !visited[j]) &#123;</span><br><span class="line">				 DFS(j);</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;<span class="comment">//对每一个顶点做循环</span></span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;<span class="comment">//若是未访问过就处理</span></span><br><span class="line">				visited[i] = <span class="keyword">true</span>;<span class="comment">//设置当前顶点访问过</span></span><br><span class="line">				System.out.println(<span class="keyword">this</span>.vexs[i]);<span class="comment">//打印顶点，也可以其他操作</span></span><br><span class="line">				queue.addLast(i);<span class="comment">//将此顶点入队列</span></span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="keyword">this</span>.numVertexes; j++) &#123;</span><br><span class="line">						<span class="keyword">if</span>(<span class="keyword">this</span>.arc[i][j] == <span class="number">1</span> &amp;&amp; !<span class="keyword">this</span>.visited[j]) &#123;</span><br><span class="line">							visited[j] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.vexs[j]);</span><br><span class="line">							queue.addLast(j);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EdgeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> adjvex;</span><br><span class="line">	EdgeNode next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VertexNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	EdgeNode firstedge;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphAdjList</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	VertexNode[] adjList= <span class="keyword">new</span> VertexNode[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createALGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：&quot;</span>);</span><br><span class="line">		<span class="keyword">this</span>.numVertexes = scanner.nextInt();</span><br><span class="line">		<span class="keyword">this</span>.numEdges = scanner.nextInt();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			VertexNode node = <span class="keyword">new</span> VertexNode();</span><br><span class="line">			node.data = scanner.nextInt();</span><br><span class="line">			node.firstedge = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i] = node;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="keyword">this</span>.numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的顶点序号：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			EdgeNode e = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e.adjvex = j;</span><br><span class="line">			e.next = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i].firstedge = e;</span><br><span class="line">			</span><br><span class="line">			EdgeNode e2 = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e2.adjvex = i;</span><br><span class="line">			e2.next = <span class="keyword">this</span>.adjList[j].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[j].firstedge = e2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		System.out.println(<span class="keyword">this</span>.adjList[i].data + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">		<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[p.adjvex]) &#123;</span><br><span class="line">				DFS(p.adjvex);</span><br><span class="line">			&#125;</span><br><span class="line">			p = p.next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.visited[i] = <span class="keyword">true</span>;</span><br><span class="line">				System.out.println(<span class="keyword">this</span>.adjList[i].data);<span class="comment">//打印顶点</span></span><br><span class="line">				queue.addLast(i);</span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">					<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">						<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[p.adjvex]) &#123;</span><br><span class="line">							<span class="keyword">this</span>.visited[p.adjvex] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.adjList[p.adjvex].data);</span><br><span class="line">							queue.add(p.adjvex);</span><br><span class="line">						&#125;</span><br><span class="line">						p = p.next;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DFSAndBFS</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//邻接矩阵</span></span><br><span class="line">		MGraph graph = <span class="keyword">new</span> MGraph();</span><br><span class="line">		graph.createMGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;邻接矩阵：\n&quot;</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; graph.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; graph.numVertexes; j++) &#123;</span><br><span class="line">				System.out.print(graph.arc[i][j]+<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println();</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.BFSTraverse();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//邻接表</span></span><br><span class="line">		GraphAdjList GL = <span class="keyword">new</span> GraphAdjList();</span><br><span class="line">		GL.createALGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.BFSTraverse();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">island_dfs</span>(<span class="params">self, grid, i, j</span>):</span></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(grid) &gt; i &gt;= <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(grid[<span class="number">0</span>]) &gt; j &gt;= <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				grid[i][j] = <span class="number">0</span></span><br><span class="line">				<span class="keyword">return</span> <span class="number">1</span> + self.island_dfs(grid, i - <span class="number">1</span>, j) + self.island_dfs(grid, i + <span class="number">1</span>, j) + \</span><br><span class="line">				       self.island_dfs(grid, i, j - <span class="number">1</span>) + self.island_dfs(grid, i, j + <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">max_area_of_island</span>(<span class="params">self, grid</span>):</span></span><br><span class="line">		ans = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)):</span><br><span class="line">			<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid[<span class="number">0</span>])):</span><br><span class="line">				ans = <span class="built_in">max</span>(ans, self.island_dfs(grid, i, j))</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	s = Solution()</span><br><span class="line">	grid = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br><span class="line">	max_area = s.max_area_of_island(grid)</span><br><span class="line">	<span class="built_in">print</span>(max_area)</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="post-title-link" itemprop="url">Java | 字符串常量池</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-08-20 18:59:32 / Modified: 20:39:36" itemprop="dateCreated datePublished" datetime="2022-08-20T18:59:32-08:00">2022-08-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">字符串常量池</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h1><p>首先来看下面一段代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String a = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String b = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String c = <span class="string">&quot;ab&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String d = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;bc&quot;</span>;</span><br><span class="line">        String e = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String f = <span class="keyword">new</span> String(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(a == b);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == c);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == d);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == e);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == f);<span class="comment">//false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在使用String a = “abc”创建字符串对象时，JVM会使用常量池来管理字符串直接量。在执行该语句时，JVM会先检查常量池中是否已经存有”abc”，<br>若没有则将”abc”存入常量池，否则就复用常量池中已有的”abc”，将其引用赋值给变量a。</li>
-<li>在使用new String(“abc”)创建字符串对象时，JVM会先使用常量池来管理字符串直接量，即将”abc”存入常量池。然后再创建一个新的String对象，<br>这个对象会被保存在堆内存中。并且，堆中对象的数据会指向常量池中的直接量。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/Java%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/20/Java%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="post-title-link" itemprop="url">Java | 整数常量池</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-08-20 18:36:21 / Modified: 20:06:00" itemprop="dateCreated datePublished" datetime="2022-08-20T18:36:21-08:00">2022-08-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">整数常量池</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Java整数常量池"><a href="#Java整数常量池" class="headerlink" title="Java整数常量池"></a>Java整数常量池</h1><p>首先来看一段示例代码，我们会发现这样的现象 127 = 127,128 != 128。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer a = <span class="number">127</span>;</span><br><span class="line">        Integer b = <span class="number">127</span>;</span><br><span class="line">        Integer c = <span class="number">128</span>;</span><br><span class="line">        Integer d = <span class="number">128</span>;</span><br><span class="line">        System.out.println(a == b);<span class="comment">//true</span></span><br><span class="line">        System.out.print(c == d);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">        Integer e = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> f = <span class="number">1</span>;</span><br><span class="line">        System.out.println(e == f); <span class="comment">//Integer和int进行比较时，Integer会自动拆箱为int，然后比较两个值是否相等。</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>为什么会出现这样的现象，我们来看以下Integer类的源码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Cache to support the object identity semantics of autoboxing for values between</span></span><br><span class="line"><span class="comment"> * -128 and 127 (inclusive) as required by JLS(Java Language Specification).</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The cache is initialized on first usage.  The size of the cache</span></span><br><span class="line"><span class="comment"> * may be controlled by the &#123;<span class="doctag">@code</span> -XX:AutoBoxCacheMax=&lt;size&gt;&#125; option.</span></span><br><span class="line"><span class="comment"> * During VM initialization, java.lang.Integer.IntegerCache.high property</span></span><br><span class="line"><span class="comment"> * may be set and saved in the private system properties in the</span></span><br><span class="line"><span class="comment"> * sun.misc.VM class.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// high value may be configured by property</span></span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">        String integerCacheHighPropValue =</span><br><span class="line">            sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                <span class="comment">// If the property cannot be parsed into an int, ignore it.</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        high = h;</span><br><span class="line"></span><br><span class="line">        cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> j = low;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">            cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">        <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上这段代码是Integer类的一个内部类IntegerCache，它缓存了-128 ~ 127之间的整数值，缓存的最小值为low表示的值，缓存的最大值为high表示的值。<br>在创建这个范围内的整数对象时，可以在常量池中直接引用，而无需重新创建，因此 a == b 返回true。超出此范围的值，会通过new新的对象，因此 c == d返回false。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1235,20 +1311,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">485</span>
+          <span class="site-state-item-count">488</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">391</span>
+        <span class="site-state-item-count">395</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">392</span>
+        <span class="site-state-item-count">396</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

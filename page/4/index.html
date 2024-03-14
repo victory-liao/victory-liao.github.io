@@ -190,6 +190,258 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/" class="post-title-link" itemprop="url">leetcode | 695.岛屿的最大面积</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-10-24 05:35:06 / Modified: 05:49:26" itemprop="dateCreated datePublished" datetime="2022-10-24T05:35:06-08:00">2022-10-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/DFS/" itemprop="url" rel="index"><span itemprop="name">DFS</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/DFS/695-%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/" itemprop="url" rel="index"><span itemprop="name">695.岛屿的最大面积</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="695-岛屿的最大面积"><a href="#695-岛屿的最大面积" class="headerlink" title="695.岛屿的最大面积"></a>695.岛屿的最大面积</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个大小为 m x n 的二进制矩阵 grid 。</p>
+<p>岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。</p>
+<p>岛屿的面积是岛上值为 1 的单元格的数目。</p>
+<p>计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。</p>
+<p>示例 1：<br>输入：grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]<br>输出：6<br>解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。</p>
+<p>示例 2：<br>输入：grid = [[0,0,0,0,0,0,0,0]]<br>输出：0</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/max-area-of-island">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>深度优先搜索（DFS）<br>利用深度优先搜索（DFS）对每个岛屿进行遍历，找出最大值<br>（1）从每个陆地出发，遍历该陆地所在的岛屿<br>（2）在遍历某一岛屿的时候：<br>1）从隶属于该岛屿的某一块陆地出发，向四个方向递归地DFS<br>2）每次递归对下标进行判断，以区域的边界作为递归边界<br>3）为保证每块陆地只访问一次，将已访问过的陆地置0<br>4）递归地返回整块岛屿的面积<br>（3）找出所有岛屿的最大值，即为答案</li>
+</ol>
+<p><strong>邻接矩阵和邻接表表示的图的DFS和BFS</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MGraph</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INFINITY = <span class="number">65535</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span>[] vexs = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span>[][] arc = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX][MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createMGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：\n&quot;</span>);</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		numVertexes = scanner.nextInt();</span><br><span class="line">		numEdges = scanner.nextInt();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			vexs[i] = scanner.nextInt();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">				arc[i][j] = INFINITY;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的下标i,j和权w：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> w = scanner.nextInt();</span><br><span class="line">			arc[i][j] = w;</span><br><span class="line">			arc[j][i] = arc[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		 visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		 System.out.println(vexs[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">			 <span class="keyword">if</span>(arc[i][j] == <span class="number">1</span> &amp;&amp; !visited[j]) &#123;</span><br><span class="line">				 DFS(j);</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;<span class="comment">//对每一个顶点做循环</span></span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;<span class="comment">//若是未访问过就处理</span></span><br><span class="line">				visited[i] = <span class="keyword">true</span>;<span class="comment">//设置当前顶点访问过</span></span><br><span class="line">				System.out.println(<span class="keyword">this</span>.vexs[i]);<span class="comment">//打印顶点，也可以其他操作</span></span><br><span class="line">				queue.addLast(i);<span class="comment">//将此顶点入队列</span></span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="keyword">this</span>.numVertexes; j++) &#123;</span><br><span class="line">						<span class="keyword">if</span>(<span class="keyword">this</span>.arc[i][j] == <span class="number">1</span> &amp;&amp; !<span class="keyword">this</span>.visited[j]) &#123;</span><br><span class="line">							visited[j] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.vexs[j]);</span><br><span class="line">							queue.addLast(j);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EdgeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> adjvex;</span><br><span class="line">	EdgeNode next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VertexNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	EdgeNode firstedge;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphAdjList</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	VertexNode[] adjList= <span class="keyword">new</span> VertexNode[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createALGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：&quot;</span>);</span><br><span class="line">		<span class="keyword">this</span>.numVertexes = scanner.nextInt();</span><br><span class="line">		<span class="keyword">this</span>.numEdges = scanner.nextInt();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			VertexNode node = <span class="keyword">new</span> VertexNode();</span><br><span class="line">			node.data = scanner.nextInt();</span><br><span class="line">			node.firstedge = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i] = node;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="keyword">this</span>.numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的顶点序号：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			EdgeNode e = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e.adjvex = j;</span><br><span class="line">			e.next = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i].firstedge = e;</span><br><span class="line">			</span><br><span class="line">			EdgeNode e2 = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e2.adjvex = i;</span><br><span class="line">			e2.next = <span class="keyword">this</span>.adjList[j].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[j].firstedge = e2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		System.out.println(<span class="keyword">this</span>.adjList[i].data + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">		<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[p.adjvex]) &#123;</span><br><span class="line">				DFS(p.adjvex);</span><br><span class="line">			&#125;</span><br><span class="line">			p = p.next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.visited[i] = <span class="keyword">true</span>;</span><br><span class="line">				System.out.println(<span class="keyword">this</span>.adjList[i].data);<span class="comment">//打印顶点</span></span><br><span class="line">				queue.addLast(i);</span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">					<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">						<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[p.adjvex]) &#123;</span><br><span class="line">							<span class="keyword">this</span>.visited[p.adjvex] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.adjList[p.adjvex].data);</span><br><span class="line">							queue.add(p.adjvex);</span><br><span class="line">						&#125;</span><br><span class="line">						p = p.next;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DFSAndBFS</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//邻接矩阵</span></span><br><span class="line">		MGraph graph = <span class="keyword">new</span> MGraph();</span><br><span class="line">		graph.createMGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;邻接矩阵：\n&quot;</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; graph.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; graph.numVertexes; j++) &#123;</span><br><span class="line">				System.out.print(graph.arc[i][j]+<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println();</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.BFSTraverse();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//邻接表</span></span><br><span class="line">		GraphAdjList GL = <span class="keyword">new</span> GraphAdjList();</span><br><span class="line">		GL.createALGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.BFSTraverse();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">island_dfs</span>(<span class="params">self, grid, i, j</span>):</span></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(grid) &gt; i &gt;= <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(grid[<span class="number">0</span>]) &gt; j &gt;= <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				grid[i][j] = <span class="number">0</span></span><br><span class="line">				<span class="keyword">return</span> <span class="number">1</span> + self.island_dfs(grid, i - <span class="number">1</span>, j) + self.island_dfs(grid, i + <span class="number">1</span>, j) + \</span><br><span class="line">				       self.island_dfs(grid, i, j - <span class="number">1</span>) + self.island_dfs(grid, i, j + <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">max_area_of_island</span>(<span class="params">self, grid</span>):</span></span><br><span class="line">		ans = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)):</span><br><span class="line">			<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid[<span class="number">0</span>])):</span><br><span class="line">				ans = <span class="built_in">max</span>(ans, self.island_dfs(grid, i, j))</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	s = Solution()</span><br><span class="line">	grid = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br><span class="line">	max_area = s.max_area_of_island(grid)</span><br><span class="line">	<span class="built_in">print</span>(max_area)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="post-title-link" itemprop="url">Java | 字符串常量池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-08-20 18:59:32 / Modified: 20:39:36" itemprop="dateCreated datePublished" datetime="2022-08-20T18:59:32-08:00">2022-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">字符串常量池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h1><p>首先来看下面一段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String a = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String b = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String c = <span class="string">&quot;ab&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String d = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;bc&quot;</span>;</span><br><span class="line">        String e = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String f = <span class="keyword">new</span> String(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(a == b);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == c);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == d);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == e);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == f);<span class="comment">//false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在使用String a = “abc”创建字符串对象时，JVM会使用常量池来管理字符串直接量。在执行该语句时，JVM会先检查常量池中是否已经存有”abc”，<br>若没有则将”abc”存入常量池，否则就复用常量池中已有的”abc”，将其引用赋值给变量a。</li>
+<li>在使用new String(“abc”)创建字符串对象时，JVM会先使用常量池来管理字符串直接量，即将”abc”存入常量池。然后再创建一个新的String对象，<br>这个对象会被保存在堆内存中。并且，堆中对象的数据会指向常量池中的直接量。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/Java%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/20/Java%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="post-title-link" itemprop="url">Java | 整数常量池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-08-20 18:36:21 / Modified: 20:06:00" itemprop="dateCreated datePublished" datetime="2022-08-20T18:36:21-08:00">2022-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">整数常量池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Java整数常量池"><a href="#Java整数常量池" class="headerlink" title="Java整数常量池"></a>Java整数常量池</h1><p>首先来看一段示例代码，我们会发现这样的现象 127 = 127,128 != 128。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer a = <span class="number">127</span>;</span><br><span class="line">        Integer b = <span class="number">127</span>;</span><br><span class="line">        Integer c = <span class="number">128</span>;</span><br><span class="line">        Integer d = <span class="number">128</span>;</span><br><span class="line">        System.out.println(a == b);<span class="comment">//true</span></span><br><span class="line">        System.out.print(c == d);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">        Integer e = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> f = <span class="number">1</span>;</span><br><span class="line">        System.out.println(e == f); <span class="comment">//Integer和int进行比较时，Integer会自动拆箱为int，然后比较两个值是否相等。</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为什么会出现这样的现象，我们来看以下Integer类的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Cache to support the object identity semantics of autoboxing for values between</span></span><br><span class="line"><span class="comment"> * -128 and 127 (inclusive) as required by JLS(Java Language Specification).</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The cache is initialized on first usage.  The size of the cache</span></span><br><span class="line"><span class="comment"> * may be controlled by the &#123;<span class="doctag">@code</span> -XX:AutoBoxCacheMax=&lt;size&gt;&#125; option.</span></span><br><span class="line"><span class="comment"> * During VM initialization, java.lang.Integer.IntegerCache.high property</span></span><br><span class="line"><span class="comment"> * may be set and saved in the private system properties in the</span></span><br><span class="line"><span class="comment"> * sun.misc.VM class.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// high value may be configured by property</span></span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">        String integerCacheHighPropValue =</span><br><span class="line">            sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                <span class="comment">// If the property cannot be parsed into an int, ignore it.</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        high = h;</span><br><span class="line"></span><br><span class="line">        cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> j = low;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">            cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">        <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上这段代码是Integer类的一个内部类IntegerCache，它缓存了-128 ~ 127之间的整数值，缓存的最小值为low表示的值，缓存的最大值为high表示的值。<br>在创建这个范围内的整数对象时，可以在常量池中直接引用，而无需重新创建，因此 a == b 返回true。超出此范围的值，会通过new新的对象，因此 c == d返回false。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/17/SpringBoot%E9%9B%86%E6%88%90Druid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -924,267 +1176,6 @@ Specifically, @PatchMapping is a composed annotation that acts as a shortcut for
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/11/%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/11/%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">leetcode | 268.丢失的数字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-08-11 19:02:18 / Modified: 19:24:48" itemprop="dateCreated datePublished" datetime="2022-08-11T19:02:18-08:00">2022-08-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/268-%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%95%B0%E5%AD%97/" itemprop="url" rel="index"><span itemprop="name">268.丢失的数字</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="268-丢失的数字"><a href="#268-丢失的数字" class="headerlink" title="268.丢失的数字"></a>268.丢失的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。</p>
-<p>示例 1：<br>输入：nums = [3,0,1]<br>输出：2<br>解释：n = 3，因为有 3 个数字，所以所有的数字都在范围 [0,3] 内。2 是丢失的数字，因为它没有出现在 nums 中。</p>
-<p>示例 2：<br>输入：nums = [0,1]<br>输出：2<br>解释：n = 2，因为有 2 个数字，所以所有的数字都在范围 [0,2] 内。2 是丢失的数字，因为它没有出现在 nums 中。</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/missing-number">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>一次遍历<br>遍历0~n的数字，如果不在nums数组中，则将其返回。</li>
-<li>排序<br>将数组排序之后，即可根据数组中每个下标处的元素是否和下标相等，得到丢失的数字。<br>注：如果长度为n的数组（下标为0~n-1）元素与下标都相等，则丢失元素为n</li>
-<li>位运算<br>数组 nums 中有 n 个数，在这 n 个数的后面添加从 0 到 n 的每个整数，则添加了 n+1 个整数，共有 2n+1 个整数。<br>在 2n+1 个整数中，丢失的数字只在后面 n+1 个整数中出现一次，其余的数字在前面 n 个整数中（即数组中）和后面 n+1 个整数中各出现一次，即其余的数字都出现了两次。<br>根据出现的次数的奇偶性，可以使用按位异或运算得到丢失的数字。按位异或运算^满足交换律和结合律，且对任意整数 x 都满足 x^x=0 和 x^0=x。<br>由于上述 2n+1 个整数中，丢失的数字出现了一次，其余的数字都出现了两次，因此对上述 2n+1 个整数进行按位异或运算，结果即为丢失的数字。</li>
-<li>数学<br>丢失的数字 = 0~n的和 - nums数组的和<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        一次遍历</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        遍历0~n，如果数字不在nums中，就将它返回</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums) + <span class="number">1</span>):</span><br><span class="line">			<span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> nums:</span><br><span class="line">				<span class="keyword">return</span> i</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        将数组排序之后，即可根据数组中每个下标处的元素是否和下标相等，得到丢失的数字。</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        注：如果长度为n的数组（下标为0~n-1）元素与下标都相等，则丢失元素为n</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		nums.sort()</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">			<span class="keyword">if</span> i != num:</span><br><span class="line">				<span class="keyword">return</span> i</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">len</span>(nums)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber2</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">	    位运算</span></span><br><span class="line"><span class="string">	    &quot;&quot;&quot;</span></span><br><span class="line">		xor = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">			xor ^= i ^ num</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> xor ^ <span class="built_in">len</span>(nums)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">missingNumber3</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		数学运算</span></span><br><span class="line"><span class="string">		&quot;&quot;&quot;</span></span><br><span class="line">		n = <span class="built_in">len</span>(nums)</span><br><span class="line">		</span><br><span class="line">		total = (n*(n+<span class="number">1</span>)) // <span class="number">2</span></span><br><span class="line">		nums_sum = <span class="built_in">sum</span>(nums)</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> total - nums_sum</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	nums = [<span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">	<span class="comment"># missing_number = slt.missingNumber(nums)</span></span><br><span class="line">	<span class="comment"># missing_number = slt.missingNumber1(nums)</span></span><br><span class="line">	<span class="comment"># missing_number = slt.missingNumber2(nums)</span></span><br><span class="line">	missing_number = slt.missingNumber3(nums)</span><br><span class="line">	<span class="built_in">print</span>(missing_number)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">python | 文件操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-08-09 19:24:10 / Modified: 19:55:39" itemprop="dateCreated datePublished" datetime="2022-08-09T19:24:10-08:00">2022-08-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">文件操作</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><p>由于我在之前上传的博客文件（markdown文件）中使用了缩进表示代码块，这中方式显示的代码块不够美观，最近发现可以使用<br><img src="/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/1.png"><br>来表示python代码块，以这种方式表示的代码块非常美观。但是我的博客中可能有上百篇需要去修改，因此考虑使用python自动化修改，这个过程需要使用<strong>文件操作</strong>方面的知识，因此又将<strong>python文件操作</strong>相关知识又练习了一遍，然后再抽出时间去修改博客文件代码块的表示方式。</p>
-<p><strong>注意：</strong> 在打开文件时，当mode选择’w+’,’a+’,’ab+’,’wb+’时，虽然官方文档说明这几种模式为可读可写，但是在使用这几种模式读文件时，读出内容为空，原因见以上示例中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/09/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/06/%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/06/%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/" class="post-title-link" itemprop="url">leetcode | 228.汇总区间</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-08-06 05:35:31 / Modified: 05:41:58" itemprop="dateCreated datePublished" datetime="2022-08-06T05:35:31-08:00">2022-08-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/228-%E6%B1%87%E6%80%BB%E5%8C%BA%E9%97%B4/" itemprop="url" rel="index"><span itemprop="name">228.汇总区间</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="228-汇总区间"><a href="#228-汇总区间" class="headerlink" title="228.汇总区间"></a>228.汇总区间</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个  无重复元素 的 有序 整数数组 nums 。<br>返回数组中的连续区间范围列表。<br>列表中的每个区间范围 [a,b] 应该按如下格式输出：<br>    “a-&gt;b” ，如果 a != b<br>    “a” ，如果 a == b</p>
-<p>示例 1：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,1,2,4,5,7]</span><br><span class="line">输出：[&quot;0-&gt;2&quot;,&quot;4-&gt;5&quot;,&quot;7&quot;]</span><br><span class="line">解释：区间范围是：</span><br><span class="line">[0,2] --&gt; &quot;0-&gt;2&quot;</span><br><span class="line">[4,5] --&gt; &quot;4-&gt;5&quot;</span><br><span class="line">[7,7] --&gt; &quot;7&quot;</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/summary-ranges">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>一次遍历<br>我们从数组的位置 0 出发，向右遍历。每次遇到相邻元素之间的差值大于 1 时，我们就找到了一个区间。遍历完数组之后，就能得到一系列的区间的列表。<br>在遍历过程中，维护下标 low 和 high 分别记录区间的起点和终点，对于任何区间都有 low≤high。当得到一个区间时，根据 low 和 high 的值生成区间的字符串表示。<br>(1)当 low&lt;high 时，区间的字符串表示为 “low→high”；<br>(2)当 low=high 时，区间的字符串表示为 “low”。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">summaryRanges</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[str]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">not</span> nums:</span><br><span class="line">			<span class="keyword">return</span> []</span><br><span class="line">		result = []</span><br><span class="line">		temp_list = [nums[<span class="number">0</span>]]</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(nums)):</span><br><span class="line">			<span class="keyword">if</span> nums[i] == nums[i - <span class="number">1</span>] + <span class="number">1</span>:</span><br><span class="line">				temp_list.append(nums[i])</span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="keyword">if</span> temp_list[<span class="number">0</span>] == temp_list[-<span class="number">1</span>]:</span><br><span class="line">					result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]))</span><br><span class="line">				<span class="keyword">else</span>:</span><br><span class="line">					result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]) + <span class="string">&quot;-&gt;&quot;</span> + <span class="built_in">str</span>(temp_list[-<span class="number">1</span>]))</span><br><span class="line">				temp_list = <span class="built_in">list</span>()</span><br><span class="line">				temp_list.append(nums[i])</span><br><span class="line">		<span class="keyword">if</span> temp_list:</span><br><span class="line">			<span class="keyword">if</span> temp_list[<span class="number">0</span>] == temp_list[-<span class="number">1</span>]:</span><br><span class="line">				result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]))</span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				result.append(<span class="built_in">str</span>(temp_list[<span class="number">0</span>]) + <span class="string">&quot;-&gt;&quot;</span> + <span class="built_in">str</span>(temp_list[-<span class="number">1</span>]))</span><br><span class="line">		<span class="keyword">return</span> result</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">summaryRanges1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		result = []</span><br><span class="line">		i = <span class="number">0</span></span><br><span class="line">		n = <span class="built_in">len</span>(nums)</span><br><span class="line">		<span class="keyword">while</span> i &lt; n:</span><br><span class="line">			low = i</span><br><span class="line">			i += <span class="number">1</span></span><br><span class="line">			<span class="keyword">while</span> i &lt; n <span class="keyword">and</span> nums[i] == nums[i - <span class="number">1</span>] + <span class="number">1</span>:</span><br><span class="line">				i += <span class="number">1</span></span><br><span class="line">			high = i - <span class="number">1</span></span><br><span class="line">			temp = <span class="built_in">str</span>(nums[low])</span><br><span class="line">			<span class="keyword">if</span> low &lt; high:</span><br><span class="line">				temp += <span class="string">&quot;-&gt;&quot;</span></span><br><span class="line">				temp += <span class="built_in">str</span>(nums[high])</span><br><span class="line">			result.append(temp)</span><br><span class="line">		<span class="keyword">return</span> result</span><br><span class="line">			</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	nums = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line">	<span class="comment"># nums = [0, 2, 3, 4, 6, 8, 9]</span></span><br><span class="line">	<span class="comment"># nums = []</span></span><br><span class="line">	<span class="comment"># result = slt.summaryRanges(nums)</span></span><br><span class="line">	result = slt.summaryRanges1(nums)</span><br><span class="line">	<span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1256,20 +1247,20 @@ Specifically, @PatchMapping is a composed annotation that acts as a shortcut for
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">485</span>
+          <span class="site-state-item-count">488</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">391</span>
+        <span class="site-state-item-count">395</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">392</span>
+        <span class="site-state-item-count">396</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
