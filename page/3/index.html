@@ -190,6 +190,547 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/26/GCC%E6%88%96Clang%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/26/GCC%E6%88%96Clang%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">C++ | GCC或Clang头文件搜索路径</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-26 04:45:07 / 修改时间：04:56:19" itemprop="dateCreated datePublished" datetime="2024-02-26T04:45:07-08:00">2024-02-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/" itemprop="url" rel="index"><span itemprop="name">头文件搜索路径</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="GCC-Clang的头文件搜索路径"><a href="#GCC-Clang的头文件搜索路径" class="headerlink" title="GCC/Clang的头文件搜索路径"></a>GCC/Clang的头文件搜索路径</h3><ul>
+<li><p>GCC/Clang编译器在对C++源代码文件进行预处理时，会对C++源代码头部包含的头文件进行搜索，搜索时根据环境变量CPLUS_INCLUDE_PATH中的路径进行搜索，如果搜索不到某头文件会报错。若CPLUS_INCLUDE_PATH中没有包含所使用头文件所在路径，也可以通过-I参数制定使用到的头文件的路径，例如，gcc -I /your/header/file/ test.cpp。</p>
+</li>
+<li><p>添加GCC头文件搜索路径</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/xxx/include</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看C++编译器（GCC）的头文件搜索路径命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gcc -x c++ -v -E -</span><br><span class="line"><span class="meta">#</span><span class="bash"> gcc：表示使用GCC编译器进行编译。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -x c++：表示指定编译的语言为C++。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -v：表示显示详细的编译过程信息。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -E：表示仅执行预处理阶段，不进行编译和链接。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -：表示从标准输入读取源代码。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看C++编译器（Clang）的头文件搜索路径命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">clang -x c++ -v -E -</span><br><span class="line"><span class="meta">#</span><span class="bash"> clang：表示使用GCC编译器进行编译。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -x c++：表示指定编译的语言为C++。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -v：表示显示详细的编译过程信息。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -E：表示仅执行预处理阶段，不进行编译和链接。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -：表示从标准输入读取源代码。</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/22/%E5%B0%86python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90exe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/22/%E5%B0%86python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90exe/" class="post-title-link" itemprop="url">python | 将python程序打包成exe</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-22 05:03:22 / 修改时间：05:36:23" itemprop="dateCreated datePublished" datetime="2024-02-22T05:03:22-08:00">2024-02-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pyinstaller/" itemprop="url" rel="index"><span itemprop="name">pyinstaller</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="将python程序打包成exe"><a href="#将python程序打包成exe" class="headerlink" title="将python程序打包成exe"></a>将python程序打包成exe</h3><ol>
+<li><p>编写python程序（例如test.py）</p>
+</li>
+<li><p>安装pyinstaller</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U pyinstaller</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打包python程序</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller test.py</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/24/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/24/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">python | python是否支持多线程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-24 04:41:30 / 修改时间：04:44:17" itemprop="dateCreated datePublished" datetime="2024-01-24T04:41:30-08:00">2024-01-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">python是否支持多线程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python是否支持多线程"><a href="#Python是否支持多线程" class="headerlink" title="Python是否支持多线程"></a>Python是否支持多线程</h1><ol>
+<li><p>多线程</p>
+<p><strong>线程在CPU上运行，是操作系统进行调度和执行的基本单位</strong>。</p>
+</li>
+</ol>
+<p>​    首先，要明确进程与线程的关系。一个进程可以包含多个线程，而每个线程都是进程中的一个执行流。可以把进程比作一个工厂，而线程就像是工厂里的工人，它们共同协作完成工作。</p>
+<p>​    其次，线程的创建和运行是在一个进程中进行的。当启动一个线程时（例如，通过调用<code>Thread.start()</code>方法），操作系统会为这个线程分配必要的资源，包括寄存器、栈等，并在CPU上执行该线程的代码。</p>
+<p>​    再者，在<strong>多核CPU</strong>系统中，<strong>不同的线程可以被分配到不同的核心上并行运行</strong>。而在<strong>单核CPU</strong>中，<strong>线程的运行会通过时间片轮转或优先级调度等方式进行切换</strong>，从而实现并发执行。</p>
+<p>​    最后，<strong>线程之间共享所属进程的内存空间</strong>，包括代码段、数据段、堆和栈。这意味着线程可以访问相同的变量和数据结构，但同时需要注意<strong>同步机制</strong>来避免数据竞争和不一致的问题。</p>
+<p>综上所述，线程是在CPU上运行的，它们利用进程中的资源和内存空间，按照操作系统的调度策略执行任务。</p>
+<ol>
+<li>python是否支持多线程？</li>
+</ol>
+<p>Python支持<strong>多线程</strong>，但由于全局解释器锁（GIL）的存在，在任意时刻只能有一个线程执行Python字节码。Python中的多线程是通过<strong>在一个进程中创建多个线程来实现的</strong>，每个线程可以执行不同的任务。然而，由于Python解释器（cpython，由c语言编写的python解释器库）的GIL限制，这些线程并不是真正意义上的并行执行。GIL确保了同一时间只有一个线程能够访问Python的对象和内存空间，这意味着即使在多核处理器上，Python的多线程也无法实现真正的并行计算。</p>
+<p>​    尽管如此，Python的多线程对于<strong>I/O密集型任务</strong>仍然非常有用，因为它们可以在等待I/O操作完成时释放GIL，从而允许其他线程执行。在这种情况下，多线程可以提高程序的效率，因为它们可以减少因等待I/O而浪费的时间。</p>
+<p>​    此外，如果需要执行<strong>CPU密集型任务</strong>，或者希望充分利用多核处理器的能力，可以考虑使用Python的<strong>多进程</strong>模块<code>multiprocessing</code>。多进程可以绕过GIL的限制，因为<strong>每个进程都有自己的Python解释器和内存空间</strong>，从而实现真正的并行执行。</p>
+<p>​    multiprocessing实现多进程并行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_cube</span>(<span class="params">num</span>):</span> </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Cube: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(num * num * num)) </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_square</span>(<span class="params">num</span>):</span> </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Square: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(num * num)) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>: </span><br><span class="line">    <span class="comment"># 创建进程</span></span><br><span class="line">    p1 = multiprocessing.Process(target=print_square, args=(<span class="number">10</span>, )) </span><br><span class="line">    p2 = multiprocessing.Process(target=print_cube, args=(<span class="number">10</span>, )) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 开启进程</span></span><br><span class="line">    p1.start() </span><br><span class="line">    p2.start() </span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 等待p1、p2线程都执行完</span></span><br><span class="line">    p1.join() </span><br><span class="line">    p2.join() </span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Done!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/14/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/14/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/" class="post-title-link" itemprop="url">记录生活 | 回顾过去七年</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-14 05:05:29 / 修改时间：06:16:50" itemprop="dateCreated datePublished" datetime="2024-01-14T05:05:29-08:00">2024-01-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%B0%E5%BD%95%E7%94%9F%E6%B4%BB/" itemprop="url" rel="index"><span itemprop="name">记录生活</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%B0%E5%BD%95%E7%94%9F%E6%B4%BB/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/" itemprop="url" rel="index"><span itemprop="name">回顾过去七年</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          Here's something encrypted, password is required to continue reading.
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/14/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/12/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/" class="post-title-link" itemprop="url">C++ | 字符串分割</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-10-12 07:54:27 / 修改时间：07:56:10" itemprop="dateCreated datePublished" datetime="2023-10-12T07:54:27-08:00">2023-10-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">字符串分割</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="C-字符串分割"><a href="#C-字符串分割" class="headerlink" title="C++字符串分割"></a>C++字符串分割</h1><p>字符串分割是编程中经常遇到的一个问题，采用C++语言实现字符串分割与其他语言有所不同，下面将采用C++语言实现字符串分割并对用到的字符串操作函数进行详细的描述。</p>
+<ul>
+<li><p>字符串分割Java实现</p>
+<p>Java通过调用String.split(String delimiter)方法可直接完成对字符串的分割。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span>  <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    String str = <span class="string">&quot;I am a good programmer!&quot;</span>;</span><br><span class="line">    String[] splited_string = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">    <span class="keyword">for</span>(String s : splited_string)&#123;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串分割Python实现</p>
+<p>python实现字符串分割代码更为间接，很多功能使用python实现仅用一行代码，江湖上称之为“一行流”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;I am a good programmer!&quot;</span>.split(<span class="string">&quot; &quot;</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串分割C++实现</p>
+<p>比起Java和python实现，采用C++实现字符串分割的过程则略为繁琐。需要用到c_str()、strcpy()、strtok()等方法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">splitString</span><span class="params">(<span class="keyword">const</span> string &amp;str, <span class="keyword">const</span> string &amp;split, vector&lt;string&gt; &amp;res)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// str:要处理的字符串</span></span><br><span class="line">    <span class="comment">// split:分隔符</span></span><br><span class="line">    <span class="comment">// res:存放分割后的结果</span></span><br><span class="line">    <span class="keyword">char</span> *strc = <span class="keyword">new</span> <span class="keyword">char</span>[str.<span class="built_in">size</span>() + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(strc, str.<span class="built_in">c_str</span>()); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *temp = <span class="built_in">strtok</span>(strc, split.<span class="built_in">c_str</span>());</span><br><span class="line">    <span class="comment">//strtok()的源码为char *__cdecl strtok(char * __restrict__ _Str,const char * __restrict__ _Delim)</span></span><br><span class="line">    <span class="comment">//strtok接收的参数时char*类型，因此进行字符串分割前需要将string类型的字符串转为char*类型</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (temp != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        res.<span class="built_in">push_back</span>(<span class="built_in">string</span>(temp));</span><br><span class="line">        temp = <span class="built_in">strtok</span>(<span class="literal">NULL</span>, split.<span class="built_in">c_str</span>()); <span class="comment">//strtok第一个参数传入NULL，使用之前保存的SAVE_PTR定位下一个待处理的字符的位置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span>[] strc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    vector&lt;string&gt; result;</span><br><span class="line">    <span class="built_in">splitString</span>(<span class="string">&quot;I am a good programmer!&quot;</span>, <span class="string">&quot; &quot;</span>, result);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;分割的子字符串的数量为：&quot;</span> &lt;&lt; result.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;分割后的字符串为：&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; result.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">        std::cout &lt;&lt; result[i] &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串分割所使用方法详解</p>
+<ul>
+<li><p>string.c_str()</p>
+<p>c_str()方法的原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> _CharT* <span class="title">c_str</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<p>该方法返回一个指向常量的指针，指针所指向的内容不能被修改，在字符串分割中主要使用该方法将string类型转为char*类型，与字符串分割函数strtok()方法的接收参数类型保持一致。注意：一定要使用strcpy()函数等来操作方法c_str()返回的指针。</p>
+</li>
+<li><p>string.strcpy()</p>
+<p>strcpy()方法的原型如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char * __cdecl strcpy(char * __restrict__ _Dest,const char * __restrict__ _Source);</span><br></pre></td></tr></table></figure>
+
+<p>该方法将字符串Source复制到Dest。该方法线程不安全，c++提供了线程安全的字符串拷贝方法strcpy_s()。</p>
+</li>
+<li><p>string.strtok()</p>
+<p>strtok()方法的原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *__cdecl <span class="title">strtok</span><span class="params">(<span class="keyword">char</span> * __restrict__ _Str,<span class="keyword">const</span> <span class="keyword">char</span> * __restrict__ _Delim)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>其中，Str表示要进行分割的字符串，Delim为字符串分隔符，该方法将Delim中的字符作为分隔符对字符串Str进行分割。如果Str为空，则函数内部的SAVE_PTR指针在下一次调用中将作为下一个分割字符串的起始位置。其实这就说明在函数strtok()内部使用了一个<strong>静态变量SAVE_PTR指针</strong>，用以<strong>记录分割一次之后_String中下一个字符串的位置</strong>。这种方法导致了一个问题，就是<strong>strtok()函数</strong>是<strong>线程不安全</strong>的（因为其<strong>函数内部使用到了静态存储区</strong>）。</p>
+<p>除此之外，从函数的定义，第一个传入参数<strong>_String</strong>定义为<strong>char*而不是const char*</strong>，就说明<strong>strtok()函数不保证不修改传入数据的内容</strong>。实际上，<strong>第一个参数_String传进来的字符串，是会被strtok()函数所修改的</strong>，因此调用strtok()函数的时候应当注意。</p>
+<p>c++中也提供了线程安全的字符串分割方法strtok_s，其原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *__cdecl <span class="title">strtok_s</span><span class="params">(<span class="keyword">char</span> *_Str,<span class="keyword">const</span> <span class="keyword">char</span> *_Delim,<span class="keyword">char</span> **_Context)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>strtok_s()函数增加了一个参数<strong>_Context</strong>，这个参数就是<strong>相当于strtok()函数中内部定义的静态SAVE_PTR指针</strong>，用来传递对字符串_String的处理进行到了哪里。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jay_zzs/article/details/106883832">参考文章：C/C++——字符串分割（strtok, strtok_s）</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/OOP%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E9%93%BE%E5%BC%8F%E9%98%9F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Victory's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/12/OOP%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E9%93%BE%E5%BC%8F%E9%98%9F%E5%88%97/" class="post-title-link" itemprop="url">C++ | OOP方法实现链式队列</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-10-12 07:30:22 / 修改时间：07:31:24" itemprop="dateCreated datePublished" datetime="2023-10-12T07:30:22-08:00">2023-10-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/OOP%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E9%93%BE%E5%BC%8F%E9%98%9F%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">OOP方法实现链式队列</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="C-OOP方法实现链式队列"><a href="#C-OOP方法实现链式队列" class="headerlink" title="C++ OOP方法实现链式队列"></a>C++ OOP方法实现链式队列</h1><ul>
+<li><p>队列</p>
+<p>队列（Queue）是一个<strong>先进先出（First In First Out, FIFO）</strong>的数据结构，即先入队的元素先出队。队列有<strong>两种存储形式：顺序存储和链式存储</strong>，采用顺序存储方式的队列称为顺序队列，采用链式存储的队列称为链式队列。顺序队列采用数组存储队列中的元素，由队头指针head和队尾指针tail表示队列的头尾。<strong>链式队列采用链表实现，由头结点和若干个队列元素节点组成，头结点包括队头指针head、队尾指针和队列大小size三个域，head指针指向队头，tail指针指向队尾，队列元素节点由值域val和指针域next组成，val代表队列元素的值，next代表指向下一个队列结点的指针。</strong>其中，较为常用的是链式队列，下面将详细介绍链式队列的属性、方法以及C++代码实现。</p>
+</li>
+<li><p>队列属性和方法介绍</p>
+<p>对队列进行抽象，可将其表示为包括队头指针、队尾指针和队列大小三个属性的数据结构。队列的基本操作包括入队、出队、队列判空、队列销毁、队列元素输出等，其伪代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//队列定义</span></span><br><span class="line">queue：</span><br><span class="line">    head, tail, size<span class="comment">//head:队头指针、tail：队尾指针、size：队列大小</span></span><br><span class="line">    <span class="built_in">enqueue</span>(elem)<span class="comment">//入队</span></span><br><span class="line">    <span class="built_in">dequeue</span>()<span class="comment">//出队</span></span><br><span class="line">    <span class="built_in">is_empty</span>()<span class="comment">//队列判空</span></span><br><span class="line">    <span class="built_in">destory</span>()<span class="comment">//队列销毁</span></span><br><span class="line">    <span class="built_in">traverse</span>()<span class="comment">//队列元素输出</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>链式队列C++实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//队列中的元素结点</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QueueNode</span>&#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">int</span> val;<span class="comment">//值域</span></span><br><span class="line">        QueueNode *next;<span class="comment">//指针域，指向下一个队列元素</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//队列</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queue</span>&#123;</span></span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        <span class="keyword">int</span> size;<span class="comment">//队列大小</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        QueueNode *head;<span class="comment">//队头指针</span></span><br><span class="line">        QueueNode *tail;<span class="comment">//队尾指针</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">Queue</span>();<span class="comment">//构造函数，完成对象初始化工作</span></span><br><span class="line">        ~<span class="built_in">Queue</span>();<span class="comment">//析构函数</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(<span class="keyword">int</span> val)</span></span>;<span class="comment">//入队</span></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">dequeue</span><span class="params">()</span></span>;<span class="comment">//出队</span></span><br><span class="line">        <span class="function"><span class="keyword">bool</span> <span class="title">is_empty</span><span class="params">()</span></span>;<span class="comment">//队列判空</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">destory</span><span class="params">()</span></span>;<span class="comment">//销毁队列</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">traverse</span><span class="params">()</span></span>;<span class="comment">//输出队列中的所有元素</span></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">get_size</span><span class="params">()</span></span>;<span class="comment">//获取队列大小</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取队列大小</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Queue::get_size</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>-&gt;size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造函数</span></span><br><span class="line">Queue::<span class="built_in">Queue</span>()&#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;head = <span class="keyword">this</span>-&gt;tail = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//析构函数</span></span><br><span class="line">Queue::~<span class="built_in">Queue</span>()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//入队</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Queue::enqueue</span><span class="params">(<span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">    QueueNode *node = (QueueNode *)<span class="built_in">malloc</span>(<span class="built_in"><span class="keyword">sizeof</span></span>(QueueNode));</span><br><span class="line"></span><br><span class="line">    node-&gt;val = val;</span><br><span class="line">    node-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;head == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;head = node;</span><br><span class="line">        <span class="keyword">this</span>-&gt;tail = node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;tail-&gt;next = node;</span><br><span class="line">        <span class="keyword">this</span>-&gt;tail = node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>-&gt;size += <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//出队</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Queue::dequeue</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;<span class="built_in">is_empty</span>() == <span class="number">1</span>)&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;队列为空，没有元素可以出队，请先向队列中添加元素！&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> val = <span class="keyword">this</span>-&gt;head-&gt;val;</span><br><span class="line">    <span class="keyword">this</span>-&gt;head = <span class="keyword">this</span>-&gt;head-&gt;next;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>-&gt;size -= <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//队列判空</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Queue::is_empty</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;size == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出所有队列元素</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Queue::traverse</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;<span class="built_in">is_empty</span>() == <span class="number">1</span>)&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;队列为空！&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;队列所有元素如下：&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    QueueNode *p_node = <span class="keyword">this</span>-&gt;head;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(p_node != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; p_node-&gt;val &lt;&lt; endl;</span><br><span class="line">        p_node = p_node-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//销毁队列</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Queue::destory</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;<span class="built_in">is_empty</span>() == <span class="number">1</span>)&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;队列中没有元素！&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> val = <span class="keyword">this</span>-&gt;<span class="built_in">dequeue</span>();</span><br><span class="line">    <span class="keyword">while</span>(val != <span class="number">-1</span>)&#123;</span><br><span class="line">        val = <span class="keyword">this</span>-&gt;<span class="built_in">dequeue</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;queue is destroyed!&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//主函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//队列定义</span></span><br><span class="line">    Queue queue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//操作队列</span></span><br><span class="line">    queue.<span class="built_in">enqueue</span>(<span class="number">1</span>);<span class="comment">//元素入队列</span></span><br><span class="line">    queue.<span class="built_in">enqueue</span>(<span class="number">2</span>);</span><br><span class="line">    queue.<span class="built_in">enqueue</span>(<span class="number">3</span>);</span><br><span class="line">    queue.<span class="built_in">enqueue</span>(<span class="number">4</span>);</span><br><span class="line">    queue.<span class="built_in">enqueue</span>(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">int</span> val = queue.<span class="built_in">dequeue</span>();<span class="comment">//元素出队列</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;出队元素为：&quot;</span> &lt;&lt; val &lt;&lt; endl;</span><br><span class="line">    queue.<span class="built_in">traverse</span>();<span class="comment">//输出所有队列元素</span></span><br><span class="line">    queue.<span class="built_in">destory</span>();<span class="comment">//销毁队列</span></span><br><span class="line">    queue.<span class="built_in">traverse</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;queue.size:&quot;</span> &lt;&lt; queue.<span class="built_in">get_size</span>() &lt;&lt; endl;<span class="comment">//输出队列大小</span></span><br><span class="line">    cout &lt;&lt; queue.<span class="built_in">is_empty</span>() &lt;&lt; endl;<span class="comment">//队列判空</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/LiuBo_01/article/details/80412290">参考资料：队列的基本操作（顺序队列、循环队列、链式队列）</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/10/cpluspluslambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -588,647 +1129,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">CMake | CMake安装及使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-18 07:13:29" itemprop="dateCreated datePublished" datetime="2023-09-18T07:13:29-08:00">2023-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-07 04:50:19" itemprop="dateModified" datetime="2023-10-07T04:50:19-08:00">2023-10-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CMake/" itemprop="url" rel="index"><span itemprop="name">CMake</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CMake/CMake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">CMake安装及使用</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="构建工具CMake"><a href="#构建工具CMake" class="headerlink" title="构建工具CMake"></a>构建工具CMake</h1><ul>
-<li><p>软件构建</p>
-<ul>
-<li>自动完成代码编译、链接、打包的整个过程</li>
-</ul>
-</li>
-<li><p>C和C++程序的构建工具-Cmake</p>
-</li>
-<li><p>Cmake的安装</p>
-</li>
-<li><p>gcc/clang编译工具安装（cmake不自带编译工具）</p>
-</li>
-<li><p>示例代码 main.cpp</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;hello,world&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建CMakeLists.txt文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line">project(Example)</span><br><span class="line"></span><br><span class="line">add_executable(Example main.cpp)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置项目</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -S . -B build</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>构建项目</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build</span><br></pre></td></tr></table></figure>
-
-<p>构建完成后生成Example可执行文件，如下图所示：</p>
-<p><img src="/2023/09/18/cmake%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/1.png"></p>
-</li>
-<li><p>执行可执行文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- cd ./build/</span><br><span class="line">./Example</span><br><span class="line"><span class="meta">#</span><span class="bash"> 输出hello，world</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">gcc | 编译和链接</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-18 06:29:42" itemprop="dateCreated datePublished" datetime="2023-09-18T06:29:42-08:00">2023-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-07 04:43:37" itemprop="dateModified" datetime="2023-10-07T04:43:37-08:00">2023-10-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">编译器</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/gcc/" itemprop="url" rel="index"><span itemprop="name">gcc</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/gcc/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/" itemprop="url" rel="index"><span itemprop="name">编译和链接</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h1><ul>
-<li><p>通过一个代码示例理解编译与链接的过程</p>
-<ol>
-<li><p>安装gcc</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编写示例代码</p>
-<p><strong>main.c</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello,world!\n&quot;</span>);     </span><br><span class="line">    <span class="keyword">int</span> result = add(<span class="number">5</span>,<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>math.c</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译示例代码的两个文件main.c和math.c，得到对应的目标文件（Object File）main.o和math.o</p>
-<p>注：目标文件是二进制文件，文件格式是ELF（Executable and Linkable Format）,ELF格式是linux下所有可执行文件的通用格式。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">gcc -c main.c</span><br><span class="line">gcc -c math.c</span><br><span class="line"></span><br><span class="line">file main.o</span><br><span class="line"><span class="meta">#</span><span class="bash">main.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), <span class="comment">#not stripped</span></span></span><br><span class="line"></span><br><span class="line">readelf -h main.o</span><br><span class="line">ELF Header:</span><br><span class="line">  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 </span><br><span class="line">  Class:                             ELF64</span><br><span class="line">  Data:                              2&#x27;s complement, little endian</span><br><span class="line">  Version:                           1 (current)</span><br><span class="line">  OS/ABI:                            UNIX - System V</span><br><span class="line">  ABI Version:                       0</span><br><span class="line">  Type:                              REL (Relocatable file)</span><br><span class="line">  Machine:                           Advanced Micro Devices X86-64</span><br><span class="line">  Version:                           0x1</span><br><span class="line">  Entry point address:               0x0</span><br><span class="line">  Start of program headers:          0 (bytes into file)</span><br><span class="line">  Start of section headers:          672 (bytes into file)</span><br><span class="line">  Flags:                             0x0</span><br><span class="line">  Size of this header:               64 (bytes)</span><br><span class="line">  Size of program headers:           0 (bytes)</span><br><span class="line">  Number of program headers:         0</span><br><span class="line">  Size of section headers:           64 (bytes)</span><br><span class="line">  Number of section headers:         14</span><br><span class="line">  Section header string table index: 13</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">readelf -S main.o</span><br><span class="line"><span class="meta">#</span><span class="bash"> .text 代码区域</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> .data 数据区域</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/1.png"></p>
-<p>objdump -s -d main.o</p>
-<p>-d:将代码段反汇编</p>
-<p>-s:将代码段反汇编的同时，将反汇编代码和源代码交替显示，编译时需要给出-                  g，即需要调试信息。</p>
-<p>右侧汇编指令中有两个call指令，既主函数中对printf和add的调用，从机器码可以看出跳转地址为0，需要在后续根据重定位表更新到printf和add的实际地址。</p>
-<p><img src="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/2.png"></p>
-<p>objdump -r main.o</p>
-<p>查看两个函数调用的信息（地址偏移量、类型和值）</p>
-<p><img src="/2023/09/18/%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5/3.png"></p>
-</li>
-<li><p>链接</p>
-<p>链接调用的函数机器码并组装为可执行文件main</p>
-</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.o math.o -o main</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>执行可执行文件main</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./main</span><br><span class="line"><span class="meta">#</span><span class="bash"> 输出hello,world</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过makefile来进行编译链接步骤</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: main</span></span><br><span class="line"></span><br><span class="line"><span class="section">main: main.o math.o</span></span><br><span class="line">        gcc main.o math.o -o main</span><br><span class="line"></span><br><span class="line"><span class="section">main.o: main.c</span></span><br><span class="line">        gcc -c main.c</span><br><span class="line"></span><br><span class="line"><span class="section">math.o: math.c</span></span><br><span class="line">        gcc -c math.c</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        rm main main.o math.o</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make main             </span><br></pre></td></tr></table></figure>
-
-<p>​          </p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/15/%E6%88%91%E7%9A%84%E6%83%B3%E6%B3%9520230715/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/15/%E6%88%91%E7%9A%84%E6%83%B3%E6%B3%9520230715/" class="post-title-link" itemprop="url">InnoThought | 我的想法 2023.7.15</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-15 05:04:03" itemprop="dateCreated datePublished" datetime="2023-07-15T05:04:03-08:00">2023-07-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-07 04:40:54" itemprop="dateModified" datetime="2023-10-07T04:40:54-08:00">2023-10-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/InnoThought/" itemprop="url" rel="index"><span itemprop="name">InnoThought</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/InnoThought/%E6%88%91%E7%9A%84%E6%83%B3%E6%B3%95-2023-7-15/" itemprop="url" rel="index"><span itemprop="name">我的想法 2023.7.15</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="我的想法-2023-7-15"><a href="#我的想法-2023-7-15" class="headerlink" title="我的想法 2023.7.15"></a>我的想法 2023.7.15</h1><ul>
-<li><p>Theme: 让技术有用</p>
-</li>
-<li><p>我的想法</p>
-<ul>
-<li><p>增加gitee的使用频率，系统学习某个技术并将学习过程或经验推送到gitee</p>
-</li>
-<li><p>时常维护自己的代码仓库以及个人博客</p>
-</li>
-<li><p>开发小工具/有用的功能，在gitee建立仓库</p>
-</li>
-<li><p>在建仓和维护仓库的同时，深入掌握git技术</p>
-</li>
-<li><p>希望在一年后能够有一个成熟的代码仓库（主题待定）</p>
-</li>
-<li><p>学习人工智能技术，并注意新技术的体验（例如yolo目标检测这样的技术）</p>
-</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/18/%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/18/%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/" class="post-title-link" itemprop="url">淡定自若 孰能生巧</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-18 03:21:04" itemprop="dateCreated datePublished" datetime="2023-02-18T03:21:04-08:00">2023-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-14 06:31:18" itemprop="dateModified" datetime="2024-03-14T06:31:18-08:00">2024-03-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%9A%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">多一点思考</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%9A%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/%E6%89%80%E6%9C%89%E7%9A%84%E6%B7%A1%E5%AE%9A%E8%87%AA%E8%8B%A5%EF%BC%8C%E8%83%8C%E5%90%8E%E4%B8%80%E5%AE%9A%E6%98%AF%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">所有的淡定自若，背后一定是孰能生巧</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>“所有的淡定自若，背后一定是孰能生巧！”</strong></p>
-<p>2023/2/18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/24/Docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/24/Docker/" class="post-title-link" itemprop="url">Docker | Docker的安装及常用命令</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-24 23:40:02" itemprop="dateCreated datePublished" datetime="2022-11-24T23:40:02-08:00">2022-11-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-07 04:39:06" itemprop="dateModified" datetime="2023-10-07T04:39:06-08:00">2023-10-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/Docker%E7%9A%84%E5%AE%89%E8%A3%85%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" itemprop="url" rel="index"><span itemprop="name">Docker的安装及常用命令</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Docker的安装及常用命令"><a href="#Docker的安装及常用命令" class="headerlink" title="Docker的安装及常用命令"></a>Docker的安装及常用命令</h1><ul>
-<li><p>Docker是什么？Docker的作用？</p>
-<ul>
-<li>Docker是一个开源的应用<strong>容器</strong>引擎，基于Go语言开发，可以让开发者打包应用以及依赖包到容器中，然后发布到任何linux机器上，在移植应用时不需要重新搭建环境和导入依赖，具备强大的可移植性。与虚拟机有所区别，<strong>虚拟机虚拟出一套硬件并</strong>在其上搭建环境并部署应用，而docker通过<strong>将应用与依赖打包</strong>，从而达到可移植、快速部署的目的。</li>
-</ul>
-</li>
-<li><p>Docker安装</p>
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/docker/ubuntu-docker-install.html">ubuntu环境下Docker安装教程</a></p>
-</li>
-<li><p>常用镜像（image）操作</p>
-<ul>
-<li><p>查找镜像</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search image_name</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>获取镜像</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull image_name</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>列出镜像列表</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images # 或docker image ls</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除镜像</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi image_name</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>常用容器（container）操作</p>
-<ul>
-<li><p>查看正在运行的容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">docker ps -q#只输出容器id</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name container_name image_name /bin/bash</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>-i:交互式操作</li>
-<li>-t:终端</li>
-<li>-d:docker服务在后台运行，启动后不会进入容器</li>
-</ul>
-</li>
-<li><p>交互方式进入容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it container_id /bin/bash</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将主机内容复制到容器中</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp file_name container_id:/path/directory</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动已停止容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start conatainer_id</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>停止容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop container_id</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重启容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart container_id</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除容器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm container_id</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>导出和导入容器 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker export container_id &gt; xxx.tar # 导出容器</span><br><span class="line"></span><br><span class="line">docker import - image_name:image_tag # 根据镜像导入容器</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>清理所有处于终止状态的容器</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container prune</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Victory's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">Git | Git常用命令</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-11-24 19:11:03 / 修改时间：23:32:43" itemprop="dateCreated datePublished" datetime="2022-11-24T19:11:03-08:00">2022-11-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E4%BD%BF%E7%94%A8Git%E8%BF%9B%E8%A1%8C%E5%8D%8F%E4%BD%9C%E7%9A%84%E4%B8%80%E8%88%AC%E6%B5%81%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Git常用命令及使用Git进行协作的一般流程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="git常用命令"><a href="#git常用命令" class="headerlink" title="git常用命令"></a>git常用命令</h1><p>再次温习了一遍Git,格外亲切！很好的协同开发工具，给亿个赞！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/49/">49</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/50/">50</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1296,20 +1200,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">489</span>
+          <span class="site-state-item-count">495</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">397</span>
+        <span class="site-state-item-count">403</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">397</span>
+        <span class="site-state-item-count">408</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
