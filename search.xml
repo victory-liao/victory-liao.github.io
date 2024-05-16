@@ -67,36 +67,537 @@
       </tags>
   </entry>
   <entry>
-    <title>2024年5月坚持清单</title>
-    <url>/2024/05/16/2024%E5%B9%B45%E6%9C%88%E5%9D%9A%E6%8C%81%E6%B8%85%E5%8D%95/</url>
-    <content><![CDATA[<p>列下后两年的坚持清单，两年后回来更新，希望在后面的2年时间里能够不负时光。</p>
+    <title>python | 68个python内置函数详解</title>
+    <url>/2021/10/16/68%E4%B8%AApython%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="68个python内置函数详解"><a href="#68个python内置函数详解" class="headerlink" title="68个python内置函数详解"></a>68个python内置函数详解</h1><p>内置函数就是Python给你提供的，拿来直接用的函数，比如print.，input等。<br>截止到python版本3.6.2 ，python一共提供了68个内置函数，具体如下👇</p>
+<pre><code>abs()           dict()        help()         min()         setattr()
+all()           dir()         hex()          next()        slice() 
+any()           divmod()      id()           object()      sorted() 
+ascii()         enumerate()   input()        oct()         staticmethod() 
+bin()           eval()        int()          open()        str() 
+bool()          exec()        isinstance()   ord()         sum() 
+bytearray()     ﬁlter()       issubclass()   pow()         super() 
+bytes()         ﬂoat()        iter()         print()       tuple() 
+callable()      format()      len()          property()    type() 
+chr()           frozenset()   list()         range()       vars() 
+classmethod()   getattr()     locals()       repr()        zip() 
+compile()       globals()     map()          reversed()    __import__() 
+complex()       hasattr()     max()          round() 
+delattr()       hash()        memoryview()   set()
+</code></pre>
 <span id="more"></span>
+<p>本文将这68个内置函数综合整理为12大类，正在学习Python基础的读者一定不要错过，建议收藏学习！<br>和数字相关</p>
+<ol>
+<li>数据类型</li>
+</ol>
+<p>bool : 布尔型(True,False)<br>int : 整型(整数)<br>float : 浮点型(小数)<br>complex : 复数</p>
+<ol start="2">
+<li>进制转换</li>
+</ol>
+<p>bin() 将给的参数转换成二进制<br>otc() 将给的参数转换成八进制<br>hex() 将给的参数转换成十六进制</p>
+<pre><code>print(bin(10))  # 二进制:0b1010
+print(hex(10))  # 十六进制:0xa
+print(oct(10))  # 八进制:0o12
+</code></pre>
+<ol start="3">
+<li>数学运算</li>
+</ol>
+<p>abs() 返回绝对值<br>divmode() 返回商和余数<br>round() 四舍五入<br>pow(a, b) 求a的b次幂, 如果有三个参数. 则求完次幂后对第三个数取余<br>sum() 求和<br>min() 求最小值<br>max() 求最大值</p>
+<pre><code>print(abs(-2))  # 绝对值:2
+print(divmod(20,3)) # 求商和余数:(6,2)
+print(round(4.50))   # 五舍六入:4
+print(round(4.51))   #5
+print(pow(10,2,3))  # 如果给了第三个参数. 表示最后取余:1
+print(sum([1,2,3,4,5,6,7,8,9,10]))  # 求和:55
+print(min(5,3,9,12,7,2))  #求最小值:2
+print(max(7,3,15,9,4,13))  #求最大值:15
+</code></pre>
+<p>和数据结构相关</p>
+<ol>
+<li>序列</li>
+</ol>
+<p>（1）列表和元组</p>
+<p>list() 将一个可迭代对象转换成列表<br>tuple() 将一个可迭代对象转换成元组</p>
+<pre><code>print(list((1,2,3,4,5,6)))  #[1, 2, 3, 4, 5, 6]
+print(tuple([1,2,3,4,5,6]))  #(1, 2, 3, 4, 5, 6)
+</code></pre>
+<p>（2）相关内置函数</p>
+<p>reversed() 将一个序列翻转, 返回翻转序列的迭代器<br>slice() 列表的切片</p>
+<pre><code>lst = &quot;你好啊&quot;
+it = reversed(lst)   # 不会改变原列表. 返回一个迭代器, 设计上的一个规则
+print(list(it))  #[&#39;啊&#39;, &#39;好&#39;, &#39;你&#39;]
+lst = [1, 2, 3, 4, 5, 6, 7]
+print(lst[1:3:1])  #[2,3]
+s = slice(1, 3, 1)  #  切片用的
+print(lst[s])  #[2,3]
+</code></pre>
+<p>（3）字符串</p>
+<p>str() 将数据转化成字符串</p>
+<pre><code>print(str(123)+&#39;456&#39;)  #123456
+</code></pre>
+<p>format() 与具体数据相关, 用于计算各种小数, 精算等.</p>
+<pre><code>s = &quot;hello world!&quot;
+print(format(s, &quot;^20&quot;))  #剧中
+print(format(s, &quot;&lt;20&quot;))  #左对齐
+print(format(s, &quot;&gt;20&quot;))  #右对齐
+#     hello world!    
+# hello world!        
+#         hello world!
+print(format(3, &#39;b&#39; ))    # 二进制:11
+print(format(97, &#39;c&#39; ))   # 转换成unicode字符:a
+print(format(11, &#39;d&#39; ))   # ⼗进制:11
+print(format(11, &#39;o&#39; ))   # 八进制:13 
+print(format(11, &#39;x&#39; ))   # 十六进制(⼩写字母):b
+print(format(11, &#39;X&#39; ))   # 十六进制(大写字母):B
+print(format(11, &#39;n&#39; ))   # 和d⼀样:11
+print(format(11))         # 和d⼀样:11
 
-<ul>
-<li><p>未来坚持清单</p>
-<ul>
-<li>坚持阅读2年，一年5本书</li>
-<li>坚持健身2年，每周锻炼3次</li>
-<li>坚持写笔记，每年发博客笔记&gt;300篇</li>
-<li>以2年为周期，每2年掌握一个核心技能</li>
-</ul>
-</li>
-<li><p>留下激励自己的两句话</p>
-<ul>
-<li>流水不争先，争的是滔滔不绝。人生没有奇迹，只有努力的轨迹。如果要说奇迹。那奇迹一定藏在坚持的背后。</li>
-<li>希望我20几岁做的事情，会让我在30岁时，让我更加自信，更加从容，更加有光芒</li>
-</ul>
-</li>
-<li><p>2026.5.16日回来更新这篇笔记。加油我自己，不负时光。</p>
-</li>
-</ul>
+print(format(123456789, &#39;e&#39; ))      # 科学计数法. 默认保留6位小数:1.234568e+08
+print(format(123456789, &#39;0.2e&#39; ))   # 科学计数法. 保留2位小数(小写):1.23e+08
+print(format(123456789, &#39;0.2E&#39; ))   # 科学计数法. 保留2位小数(大写):1.23E+08
+print(format(1.23456789, &#39;f&#39; ))     # 小数点计数法. 保留6位小数:1.234568
+print(format(1.23456789, &#39;0.2f&#39; ))  # 小数点计数法. 保留2位小数:1.23
+print(format(1.23456789, &#39;0.10f&#39;))  # 小数点计数法. 保留10位小数:1.2345678900
+print(format(1.23456789e+3, &#39;F&#39;))   # 小数点计数法. 很大的时候输出INF:1234.567890
+</code></pre>
+<p>bytes() 把字符串转化成bytes类型</p>
+<pre><code>bs = bytes(&quot;今天吃饭了吗&quot;, encoding=&quot;utf-8&quot;)
+print(bs)  #b&#39;\xe4\xbb\x8a\xe5\xa4\xa9\xe5\x90\x83\xe9\xa5\xad\xe4\xba\x86\xe5\x90\x97&#39;
+</code></pre>
+<p>bytearray()    返回一个新字节数组. 这个数字的元素是可变的, 并且每个元素的值得范围是[0,256)</p>
+<pre><code>ret = bytearray(&quot;alex&quot; ,encoding =&#39;utf-8&#39;)
+print(ret[0])  #97
+print(ret)  #bytearray(b&#39;alex&#39;)
+ret[0] = 65  #把65的位置A赋值给ret[0]
+print(str(ret))  #bytearray(b&#39;Alex&#39;)
+</code></pre>
+<p>ord() 输入字符找带字符编码的位置<br>chr() 输入位置数字找出对应的字符<br>ascii() 是ascii码中的返回该值 不是就返回u</p>
+<pre><code>print(ord(&#39;a&#39;))  # 字母a在编码表中的码位:97
+print(ord(&#39;中&#39;))  # &#39;中&#39;字在编码表中的位置:20013
+
+print(chr(65))  # 已知码位,求字符是什么:A
+print(chr(19999))  #丟
+
+for i in range(65536):  #打印出0到65535的字符
+    print(chr(i), end=&quot; &quot;)
+
+print(ascii(&quot;@&quot;))  #&#39;@&#39;
+</code></pre>
+<p>repr() 返回一个对象的string形式</p>
+<pre><code>s = &quot;今天\n吃了%s顿\t饭&quot; % 3
+print(s)#今天# 吃了3顿    饭
+print(repr(s))   # 原样输出,过滤掉转义字符 \n \t \r 不管百分号%
+#&#39;今天\n吃了3顿\t饭&#39;
+</code></pre>
+<ol start="2">
+<li>数据集合</li>
+</ol>
+<p>字典：dict 创建一个字典</p>
+<p>集合：set 创建一个集合</p>
+<p>frozenset() 创建一个冻结的集合，冻结的集合不能进行添加和删除操作。<br>3. 相关内置函数</p>
+<p>len() 返回一个对象中的元素的个数<br>sorted() 对可迭代对象进行排序操作 (lamda)</p>
+<p>语法：sorted(Iterable, key=函数(排序规则), reverse=False)</p>
+<p>Iterable: 可迭代对象<br>key: 排序规则(排序函数), 在sorted内部会将可迭代对象中的每一个元素传递给这个函数的参数. 根据函数运算的结果进行排序<br>reverse: 是否是倒叙. True: 倒叙, False: 正序</p>
+<pre><code>lst = [5,7,6,12,1,13,9,18,5]
+lst.sort()  # sort是list里面的一个方法
+print(lst)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
+
+ll = sorted(lst) # 内置函数. 返回给你一个新列表  新列表是被排序的
+print(ll)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
+
+l2 = sorted(lst,reverse=True)  #倒序
+print(l2)  #[18, 13, 12, 9, 7, 6, 5, 5, 1]
+</code></pre>
+<p>#根据字符串长度给列表排序<br>    lst = [‘one’, ‘two’, ‘three’, ‘four’, ‘five’, ‘six’]<br>    def f(s):<br>        return len(s)<br>    l1 = sorted(lst, key=f, )<br>    print(l1)  #[‘one’, ‘two’, ‘six’, ‘four’, ‘five’, ‘three’]</p>
+<p>enumerate() 获取集合的枚举对象</p>
+<pre><code>lst = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;,&#39;five&#39;]
+for index, el in enumerate(lst,1):    # 把索引和元素一起获取,索引默认从0开始. 可以更改
+    print(index)
+    print(el)
+# 1
+# one
+# 2
+# two
+# 3
+# three
+# 4
+# four
+# 5
+# five
+</code></pre>
+<p>all() 可迭代对象中全部是True, 结果才是True<br>any() 可迭代对象中有一个是True, 结果就是True</p>
+<pre><code>print(all([1,&#39;hello&#39;,True,9]))  #True
+print(any([0,0,0,False,1,&#39;good&#39;]))  #True
+</code></pre>
+<p>zip() 函数用于将可迭代的对象作为参数, 将对象中对应的元素打包成一个元组, 然后返回由这些元组组成的列表. 如果各个迭代器的元素个数不一致, 则返回列表长度与最短的对象相同</p>
+<pre><code>lst1 = [1, 2, 3, 4, 5, 6]
+lst2 = [&#39;醉乡民谣&#39;, &#39;驴得水&#39;, &#39;放牛班的春天&#39;, &#39;美丽人生&#39;, &#39;辩护人&#39;, &#39;被嫌弃的松子的一生&#39;]
+lst3 = [&#39;美国&#39;, &#39;中国&#39;, &#39;法国&#39;, &#39;意大利&#39;, &#39;韩国&#39;, &#39;日本&#39;]
+print(zip(lst1, lst1, lst3))  #&lt;zip object at 0x00000256CA6C7A88&gt;
+for el in zip(lst1, lst2, lst3):
+    print(el)
+# (1, &#39;醉乡民谣&#39;, &#39;美国&#39;)
+# (2, &#39;驴得水&#39;, &#39;中国&#39;)
+# (3, &#39;放牛班的春天&#39;, &#39;法国&#39;)
+# (4, &#39;美丽人生&#39;, &#39;意大利&#39;)
+# (5, &#39;辩护人&#39;, &#39;韩国&#39;)
+# (6, &#39;被嫌弃的松子的一生&#39;, &#39;日本&#39;)
+</code></pre>
+<p>fiter() 过滤 (lamda)</p>
+<p>语法：fiter(function. Iterable)</p>
+<p>function: 用来筛选的函数. 在ﬁlter中会自动的把iterable中的元素传递给function. 然后根据function返回的True或者False来判断是否保留留此项数据 , Iterable: 可迭代对象</p>
+<pre><code>def func(i):    # 判断奇数
+    return i % 2 == 1
+    lst = [1,2,3,4,5,6,7,8,9]
+l1 = filter(func, lst)  #l1是迭代器
+print(l1)  #&lt;filter object at 0x000001CE3CA98AC8&gt;
+print(list(l1))  #[1, 3, 5, 7, 9]
+</code></pre>
+<p>map() 会根据提供的函数对指定序列列做映射(lamda)</p>
+<p>语法 : map(function, iterable)</p>
+<p>可以对可迭代对象中的每一个元素进行映射. 分别去执行 function</p>
+<pre><code>def f(i):    return i
+lst = [1,2,3,4,5,6,7,]
+it = map(f, lst) # 把可迭代对象中的每一个元素传递给前面的函数进行处理. 处理的结果会返回成迭代器print(list(it))  #[1, 2, 3, 4, 5, 6, 7]
+</code></pre>
+<p>和作用域相关</p>
+<p>locals() 返回当前作用域中的名字<br>globals() 返回全局作用域中的名字</p>
+<pre><code>def func():
+    a = 10
+    print(locals())  # 当前作用域中的内容
+    print(globals())  # 全局作用域中的内容
+    print(&quot;今天内容很多&quot;)
+func()
+# &#123;&#39;a&#39;: 10&#125;
+# &#123;&#39;__name__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None, &#39;__loader__&#39;: 
+# &lt;_frozen_importlib_external.SourceFileLoader object at 0x0000026F8D566080&gt;, 
+# &#39;__spec__&#39;: None, &#39;__annotations__&#39;: &#123;&#125;, &#39;__builtins__&#39;: &lt;module &#39;builtins&#39; 
+# (built-in)&gt;, &#39;__file__&#39;: &#39;D:/pycharm/练习/week03/new14.py&#39;, &#39;__cached__&#39;: None,
+#  &#39;func&#39;: &lt;function func at 0x0000026F8D6B97B8&gt;&#125;
+# 今天内容很多
+</code></pre>
+<p>和迭代器生成器相关</p>
+<p>range() 生成数据<br>next() 迭代器向下执行一次, 内部实际使⽤用了__ next__()⽅方法返回迭代器的下一个项目<br>iter() 获取迭代器, 内部实际使用的是__ iter__()⽅方法来获取迭代器</p>
+<pre><code>for i in range(15,-1,-5):
+    print(i)
+# 15
+# 10
+# 5
+# 0
+lst = [1,2,3,4,5]
+it = iter(lst)  #  __iter__()获得迭代器
+print(it.__next__())  #1
+print(next(it)) #2  __next__()  
+print(next(it))  #3
+print(next(it))  #4
+</code></pre>
+<p>字符串类型代码的执行</p>
+<p>eval() 执行字符串类型的代码. 并返回最终结果<br>exec() 执行字符串类型的代码<br>compile() 将字符串类型的代码编码. 代码对象能够通过exec语句来执行或者eval()进行求值</p>
+<pre><code>s1 = input(&quot;请输入a+b:&quot;)  #输入:8+9
+print(eval(s1))  # 17 可以动态的执行代码. 代码必须有返回值
+s2 = &quot;for i in range(5): print(i)&quot;
+a = exec(s2) # exec 执行代码不返回任何内容
+
+# 0
+# 1
+# 2
+# 3
+# 4
+print(a)  #None
+
+# 动态执行代码
+exec(&quot;&quot;&quot;
+def func():
+    print(&quot; 我是周杰伦&quot;)
+&quot;&quot;&quot; )
+func()  #我是周杰伦
+
+code1 = &quot;for i in range(3): print(i)&quot;
+com = compile(code1, &quot;&quot;, mode=&quot;exec&quot;)   # compile并不会执行你的代码.只是编译
+exec(com)   # 执行编译的结果
+# 0
+# 1
+# 2
+
+code2 = &quot;5+6+7&quot;
+com2 = compile(code2, &quot;&quot;, mode=&quot;eval&quot;)
+print(eval(com2))  # 18
+
+code3 = &quot;name = input(&#39;请输入你的名字:&#39;)&quot;  #输入:hello
+com3 = compile(code3, &quot;&quot;, mode=&quot;single&quot;)
+exec(com3)
+print(name)  #hello
+</code></pre>
+<p>输入输出</p>
+<p>print() : 打印输出<br>input() : 获取用户输出的内容</p>
+<pre><code>print(&quot;hello&quot;, &quot;world&quot;, sep=&quot;*&quot;, end=&quot;@&quot;) # sep:打印出的内容用什么连接,end:以什么为结尾
+#hello*world@
+</code></pre>
+<p>内存相关</p>
+<p>hash() : 获取到对象的哈希值(int, str, bool, tuple). hash算法:(1) 目的是唯一性 (2) dict 查找效率非常高, hash表.用空间换的时间 比较耗费内存</p>
+<pre><code>s = &#39;alex&#39;print(hash(s))  #-168324845050430382lst = [1, 2, 3, 4, 5]print(hash(lst))  #报错,列表是不可哈希的  id() :  获取到对象的内存地址s = &#39;alex&#39;print(id(s))  #2278345368944
+</code></pre>
+<p>文件操作相关</p>
+<p>open() : 用于打开一个文件, 创建一个文件句柄</p>
+<pre><code>f = open(&#39;file&#39;,mode=&#39;r&#39;,encoding=&#39;utf-8&#39;)
+f.read()
+f.close()
+</code></pre>
+<p>模块相关</p>
+<p>__ import__() : 用于动态加载类和函数</p>
+<pre><code># 让用户输入一个要导入的模块
+import os
+name = input(&quot;请输入你要导入的模块:&quot;)
+__import__(name)    # 可以动态导入模块
+</code></pre>
+<p>帮 助</p>
+<p>help() : 函数用于查看函数或模块用途的详细说明</p>
+<pre><code>print(help(str))  #查看字符串的用途
+</code></pre>
+<p>调用相关</p>
+<p>callable() : 用于检查一个对象是否是可调用的. 如果返回True, object有可能调用失败, 但如果返回False. 那调用绝对不会成功</p>
+<pre><code>a = 10
+print(callable(a))  #False  变量a不能被调用
+#
+def f():
+    print(&quot;hello&quot;)
+    print(callable(f))   # True 函数是可以被调用的
+</code></pre>
+<p>查看内置属性</p>
+<p>dir() : 查看对象的内置属性, 访问的是对象中的<strong>dir</strong>()方法</p>
+<pre><code>print(dir(tuple))  #查看元组的方法
+</code></pre>
+<p><a href="https://mp.weixin.qq.com/s/RE07ReitUyQDwG2yYcugPQ">68个python内置函数详解!!!</a></p>
 ]]></content>
       <categories>
-        <category>多一点思考</category>
-        <category>2024年5月坚持清单</category>
+        <category>python</category>
+        <category>基础</category>
       </categories>
       <tags>
-        <tag>坚持清单</tag>
+        <tag>python</tag>
+        <tag>内置函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>spring | AOP(切面、通知、切入点、切面优先级)</title>
+    <url>/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/</url>
+    <content><![CDATA[<h1 id="AOP-切面、通知、切入点、切面优先级"><a href="#AOP-切面、通知、切入点、切面优先级" class="headerlink" title="AOP(切面、通知、切入点、切面优先级)"></a>AOP(切面、通知、切入点、切面优先级)</h1><p><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG"></p>
+<span id="more"></span>
+<p>2.MathI.java(接口)</p>
+<pre><code>package com.atguigu.spring.aop;
+
+public interface MathI &#123;
+    int add(int i, int j);
+    int sub(int i, int j);
+    int mul(int i, int j);
+    int div(int i, int j);
+&#125;
+</code></pre>
+<p>3.MathImpl.java（实现类）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class MathImpl implements MathI&#123;
+
+    @Override
+    public int add(int i, int j) &#123;
+        int result = i + j;
+        return result;
+    &#125;
+    
+    @Override
+    public int sub(int i, int j) &#123;
+        int result = i - j;
+        return result;
+    &#125;
+
+    @Override
+    public int mul(int i, int j) &#123;
+        int result = i * j;
+        return result; 
+    &#125;
+
+    @Override
+    public int div(int i, int j) &#123;
+        int result = i / j;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>4.MyLoggerAspect.java（切面–&gt;日志）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import java.util.Arrays;
+import org.aopalliance.intercept.Joinpoint;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Component
+@Aspect//标注当前类为切面
+@Order(1)
+public class MyLoggerAspect &#123;
+    //AspectJ支持的5种类型的通知注解
+    
+    //重用切入点定义
+    @Pointcut(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    public void test()&#123;
+        
+    &#125;
+    /**
+     * @Before：将方法指定为前置通知
+     * 必须设置value,其值为切入点表达式
+     * 前置通知：作用于方法执行之前
+     */
+    //前置通知 
+//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.add(int, int))&quot;)
+//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
+//    @Before(value = &quot;execution(* com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
+//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(int,int))&quot;)
+//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    @Before(value = &quot;test()&quot;)
+    public void beforeMethod(JoinPoint joinPoint)&#123;
+        Object[] args = joinPoint.getArgs();//获取方法的参数
+        String methodName = joinPoint.getSignature().getName();//获取方法名
+        
+        System.out.println(&quot;method:&quot; + methodName + &quot;,arguments:&quot; + Arrays.toString(args));
+    &#125;
+    
+    /**
+     * @After:将方法标注为后置通知
+     * 后置通知：作用于方法的finally语句块，即不管有没有异常都会执行
+     */
+    //后置通知
+    //@After(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    @After(value = &quot;test()&quot;)
+    public void afterMethod()&#123;
+        System.out.println(&quot;后置通知&quot;);
+    &#125;
+    
+    /**
+     * @AfterReturning：将方法标注为返回通知
+     * 返回通知：作用于方法执行之后
+     * 要通过returning设置接收方法返回值的变量名
+     * 要向在方法中使用，必须在方法的形参中设置和变量名相同的参数名的参数
+     */
+    @AfterReturning(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;,returning=&quot;result&quot;)
+    public void afterReturing(JoinPoint joinPoint, Object result)&#123;
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println(&quot;method:&quot; + methodName + &quot;,result:&quot; + result);
+    &#125;
+    
+    /**
+     * @AfterThrowing：将方法标注为异常通知（例外通知）
+     * 异常通知：作用于方法抛出异常时
+     * 可通过throwing设置接受方法返回的异常信息
+     * 在参数列表中可通过具体的异常类型，来对指定的异常信息进行操作
+     */
+    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
+    public void afterThrowing(Exception ex)&#123;
+        System.out.println(&quot;有异常了,messages&quot;+ex);
+    &#125;
+    //处理特定异常
+//    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
+//    public void afterThrowing(NullPointerException ex)&#123;
+//        System.out.println(&quot;有异常了,messages&quot;+ex);
+//    &#125;
+    
+    /**
+     * @Around：
+     */
+    @Around(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    public Object aroundMethod(ProceedingJoinPoint joinPoint)&#123;    
+        Object result = null;
+        try &#123;
+            //前置通知
+            System.out.println(&quot;前置通知&quot;);
+            result = joinPoint.proceed();//执行方法
+            //返回通知
+            System.out.println(&quot;返回通知&quot;);
+            return result;
+        &#125; catch (Throwable e) &#123;
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            //异常通知
+            System.out.println(&quot;异常通知&quot;);
+        &#125;finally&#123;
+            //后置通知
+            System.out.println(&quot;后置通知&quot;);
+        &#125;
+        return -1;
+    &#125;
+&#125;
+</code></pre>
+<p>5.TestHandler.java</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TestHandler &#123;
+    public void test()&#123;
+        System.out.println(&quot;测试切入点表达式&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>6.TestAspect.java（切面–&gt;另一个切面，用来测试切面优先级）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Component
+@Aspect
+@Order(0)//定义切面作用的优先级，值越小优先级越高，默认值为int的最大值 
+public class TestAspect &#123;
+    @Before(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
+    public void before()&#123;
+        System.out.println(&quot;TestAspect====&gt;前置通知&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>7.Test.java（测试类）</p>
+<pre><code>package com.atguigu.spring.aop;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop.xml&quot;);
+        
+        MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);
+        
+        int i = math.div(1, 1);
+        System.out.println(i);
+        
+//        TestHandler bean = ac.getBean(&quot;testHandler&quot;, TestHandler.class);
+//        bean.test();
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>spring</category>
+        <category>AOP(切面、通知、切入点、切面优先级)</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+        <tag>AOP</tag>
       </tags>
   </entry>
   <entry>
@@ -428,318 +929,6 @@ print(c)  # 5
       </tags>
   </entry>
   <entry>
-    <title>python | 68个python内置函数详解</title>
-    <url>/2021/10/16/68%E4%B8%AApython%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="68个python内置函数详解"><a href="#68个python内置函数详解" class="headerlink" title="68个python内置函数详解"></a>68个python内置函数详解</h1><p>内置函数就是Python给你提供的，拿来直接用的函数，比如print.，input等。<br>截止到python版本3.6.2 ，python一共提供了68个内置函数，具体如下👇</p>
-<pre><code>abs()           dict()        help()         min()         setattr()
-all()           dir()         hex()          next()        slice() 
-any()           divmod()      id()           object()      sorted() 
-ascii()         enumerate()   input()        oct()         staticmethod() 
-bin()           eval()        int()          open()        str() 
-bool()          exec()        isinstance()   ord()         sum() 
-bytearray()     ﬁlter()       issubclass()   pow()         super() 
-bytes()         ﬂoat()        iter()         print()       tuple() 
-callable()      format()      len()          property()    type() 
-chr()           frozenset()   list()         range()       vars() 
-classmethod()   getattr()     locals()       repr()        zip() 
-compile()       globals()     map()          reversed()    __import__() 
-complex()       hasattr()     max()          round() 
-delattr()       hash()        memoryview()   set()
-</code></pre>
-<span id="more"></span>
-<p>本文将这68个内置函数综合整理为12大类，正在学习Python基础的读者一定不要错过，建议收藏学习！<br>和数字相关</p>
-<ol>
-<li>数据类型</li>
-</ol>
-<p>bool : 布尔型(True,False)<br>int : 整型(整数)<br>float : 浮点型(小数)<br>complex : 复数</p>
-<ol start="2">
-<li>进制转换</li>
-</ol>
-<p>bin() 将给的参数转换成二进制<br>otc() 将给的参数转换成八进制<br>hex() 将给的参数转换成十六进制</p>
-<pre><code>print(bin(10))  # 二进制:0b1010
-print(hex(10))  # 十六进制:0xa
-print(oct(10))  # 八进制:0o12
-</code></pre>
-<ol start="3">
-<li>数学运算</li>
-</ol>
-<p>abs() 返回绝对值<br>divmode() 返回商和余数<br>round() 四舍五入<br>pow(a, b) 求a的b次幂, 如果有三个参数. 则求完次幂后对第三个数取余<br>sum() 求和<br>min() 求最小值<br>max() 求最大值</p>
-<pre><code>print(abs(-2))  # 绝对值:2
-print(divmod(20,3)) # 求商和余数:(6,2)
-print(round(4.50))   # 五舍六入:4
-print(round(4.51))   #5
-print(pow(10,2,3))  # 如果给了第三个参数. 表示最后取余:1
-print(sum([1,2,3,4,5,6,7,8,9,10]))  # 求和:55
-print(min(5,3,9,12,7,2))  #求最小值:2
-print(max(7,3,15,9,4,13))  #求最大值:15
-</code></pre>
-<p>和数据结构相关</p>
-<ol>
-<li>序列</li>
-</ol>
-<p>（1）列表和元组</p>
-<p>list() 将一个可迭代对象转换成列表<br>tuple() 将一个可迭代对象转换成元组</p>
-<pre><code>print(list((1,2,3,4,5,6)))  #[1, 2, 3, 4, 5, 6]
-print(tuple([1,2,3,4,5,6]))  #(1, 2, 3, 4, 5, 6)
-</code></pre>
-<p>（2）相关内置函数</p>
-<p>reversed() 将一个序列翻转, 返回翻转序列的迭代器<br>slice() 列表的切片</p>
-<pre><code>lst = &quot;你好啊&quot;
-it = reversed(lst)   # 不会改变原列表. 返回一个迭代器, 设计上的一个规则
-print(list(it))  #[&#39;啊&#39;, &#39;好&#39;, &#39;你&#39;]
-lst = [1, 2, 3, 4, 5, 6, 7]
-print(lst[1:3:1])  #[2,3]
-s = slice(1, 3, 1)  #  切片用的
-print(lst[s])  #[2,3]
-</code></pre>
-<p>（3）字符串</p>
-<p>str() 将数据转化成字符串</p>
-<pre><code>print(str(123)+&#39;456&#39;)  #123456
-</code></pre>
-<p>format() 与具体数据相关, 用于计算各种小数, 精算等.</p>
-<pre><code>s = &quot;hello world!&quot;
-print(format(s, &quot;^20&quot;))  #剧中
-print(format(s, &quot;&lt;20&quot;))  #左对齐
-print(format(s, &quot;&gt;20&quot;))  #右对齐
-#     hello world!    
-# hello world!        
-#         hello world!
-print(format(3, &#39;b&#39; ))    # 二进制:11
-print(format(97, &#39;c&#39; ))   # 转换成unicode字符:a
-print(format(11, &#39;d&#39; ))   # ⼗进制:11
-print(format(11, &#39;o&#39; ))   # 八进制:13 
-print(format(11, &#39;x&#39; ))   # 十六进制(⼩写字母):b
-print(format(11, &#39;X&#39; ))   # 十六进制(大写字母):B
-print(format(11, &#39;n&#39; ))   # 和d⼀样:11
-print(format(11))         # 和d⼀样:11
-
-print(format(123456789, &#39;e&#39; ))      # 科学计数法. 默认保留6位小数:1.234568e+08
-print(format(123456789, &#39;0.2e&#39; ))   # 科学计数法. 保留2位小数(小写):1.23e+08
-print(format(123456789, &#39;0.2E&#39; ))   # 科学计数法. 保留2位小数(大写):1.23E+08
-print(format(1.23456789, &#39;f&#39; ))     # 小数点计数法. 保留6位小数:1.234568
-print(format(1.23456789, &#39;0.2f&#39; ))  # 小数点计数法. 保留2位小数:1.23
-print(format(1.23456789, &#39;0.10f&#39;))  # 小数点计数法. 保留10位小数:1.2345678900
-print(format(1.23456789e+3, &#39;F&#39;))   # 小数点计数法. 很大的时候输出INF:1234.567890
-</code></pre>
-<p>bytes() 把字符串转化成bytes类型</p>
-<pre><code>bs = bytes(&quot;今天吃饭了吗&quot;, encoding=&quot;utf-8&quot;)
-print(bs)  #b&#39;\xe4\xbb\x8a\xe5\xa4\xa9\xe5\x90\x83\xe9\xa5\xad\xe4\xba\x86\xe5\x90\x97&#39;
-</code></pre>
-<p>bytearray()    返回一个新字节数组. 这个数字的元素是可变的, 并且每个元素的值得范围是[0,256)</p>
-<pre><code>ret = bytearray(&quot;alex&quot; ,encoding =&#39;utf-8&#39;)
-print(ret[0])  #97
-print(ret)  #bytearray(b&#39;alex&#39;)
-ret[0] = 65  #把65的位置A赋值给ret[0]
-print(str(ret))  #bytearray(b&#39;Alex&#39;)
-</code></pre>
-<p>ord() 输入字符找带字符编码的位置<br>chr() 输入位置数字找出对应的字符<br>ascii() 是ascii码中的返回该值 不是就返回u</p>
-<pre><code>print(ord(&#39;a&#39;))  # 字母a在编码表中的码位:97
-print(ord(&#39;中&#39;))  # &#39;中&#39;字在编码表中的位置:20013
-
-print(chr(65))  # 已知码位,求字符是什么:A
-print(chr(19999))  #丟
-
-for i in range(65536):  #打印出0到65535的字符
-    print(chr(i), end=&quot; &quot;)
-
-print(ascii(&quot;@&quot;))  #&#39;@&#39;
-</code></pre>
-<p>repr() 返回一个对象的string形式</p>
-<pre><code>s = &quot;今天\n吃了%s顿\t饭&quot; % 3
-print(s)#今天# 吃了3顿    饭
-print(repr(s))   # 原样输出,过滤掉转义字符 \n \t \r 不管百分号%
-#&#39;今天\n吃了3顿\t饭&#39;
-</code></pre>
-<ol start="2">
-<li>数据集合</li>
-</ol>
-<p>字典：dict 创建一个字典</p>
-<p>集合：set 创建一个集合</p>
-<p>frozenset() 创建一个冻结的集合，冻结的集合不能进行添加和删除操作。<br>3. 相关内置函数</p>
-<p>len() 返回一个对象中的元素的个数<br>sorted() 对可迭代对象进行排序操作 (lamda)</p>
-<p>语法：sorted(Iterable, key=函数(排序规则), reverse=False)</p>
-<p>Iterable: 可迭代对象<br>key: 排序规则(排序函数), 在sorted内部会将可迭代对象中的每一个元素传递给这个函数的参数. 根据函数运算的结果进行排序<br>reverse: 是否是倒叙. True: 倒叙, False: 正序</p>
-<pre><code>lst = [5,7,6,12,1,13,9,18,5]
-lst.sort()  # sort是list里面的一个方法
-print(lst)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
-
-ll = sorted(lst) # 内置函数. 返回给你一个新列表  新列表是被排序的
-print(ll)  #[1, 5, 5, 6, 7, 9, 12, 13, 18]
-
-l2 = sorted(lst,reverse=True)  #倒序
-print(l2)  #[18, 13, 12, 9, 7, 6, 5, 5, 1]
-</code></pre>
-<p>#根据字符串长度给列表排序<br>    lst = [‘one’, ‘two’, ‘three’, ‘four’, ‘five’, ‘six’]<br>    def f(s):<br>        return len(s)<br>    l1 = sorted(lst, key=f, )<br>    print(l1)  #[‘one’, ‘two’, ‘six’, ‘four’, ‘five’, ‘three’]</p>
-<p>enumerate() 获取集合的枚举对象</p>
-<pre><code>lst = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;,&#39;five&#39;]
-for index, el in enumerate(lst,1):    # 把索引和元素一起获取,索引默认从0开始. 可以更改
-    print(index)
-    print(el)
-# 1
-# one
-# 2
-# two
-# 3
-# three
-# 4
-# four
-# 5
-# five
-</code></pre>
-<p>all() 可迭代对象中全部是True, 结果才是True<br>any() 可迭代对象中有一个是True, 结果就是True</p>
-<pre><code>print(all([1,&#39;hello&#39;,True,9]))  #True
-print(any([0,0,0,False,1,&#39;good&#39;]))  #True
-</code></pre>
-<p>zip() 函数用于将可迭代的对象作为参数, 将对象中对应的元素打包成一个元组, 然后返回由这些元组组成的列表. 如果各个迭代器的元素个数不一致, 则返回列表长度与最短的对象相同</p>
-<pre><code>lst1 = [1, 2, 3, 4, 5, 6]
-lst2 = [&#39;醉乡民谣&#39;, &#39;驴得水&#39;, &#39;放牛班的春天&#39;, &#39;美丽人生&#39;, &#39;辩护人&#39;, &#39;被嫌弃的松子的一生&#39;]
-lst3 = [&#39;美国&#39;, &#39;中国&#39;, &#39;法国&#39;, &#39;意大利&#39;, &#39;韩国&#39;, &#39;日本&#39;]
-print(zip(lst1, lst1, lst3))  #&lt;zip object at 0x00000256CA6C7A88&gt;
-for el in zip(lst1, lst2, lst3):
-    print(el)
-# (1, &#39;醉乡民谣&#39;, &#39;美国&#39;)
-# (2, &#39;驴得水&#39;, &#39;中国&#39;)
-# (3, &#39;放牛班的春天&#39;, &#39;法国&#39;)
-# (4, &#39;美丽人生&#39;, &#39;意大利&#39;)
-# (5, &#39;辩护人&#39;, &#39;韩国&#39;)
-# (6, &#39;被嫌弃的松子的一生&#39;, &#39;日本&#39;)
-</code></pre>
-<p>fiter() 过滤 (lamda)</p>
-<p>语法：fiter(function. Iterable)</p>
-<p>function: 用来筛选的函数. 在ﬁlter中会自动的把iterable中的元素传递给function. 然后根据function返回的True或者False来判断是否保留留此项数据 , Iterable: 可迭代对象</p>
-<pre><code>def func(i):    # 判断奇数
-    return i % 2 == 1
-    lst = [1,2,3,4,5,6,7,8,9]
-l1 = filter(func, lst)  #l1是迭代器
-print(l1)  #&lt;filter object at 0x000001CE3CA98AC8&gt;
-print(list(l1))  #[1, 3, 5, 7, 9]
-</code></pre>
-<p>map() 会根据提供的函数对指定序列列做映射(lamda)</p>
-<p>语法 : map(function, iterable)</p>
-<p>可以对可迭代对象中的每一个元素进行映射. 分别去执行 function</p>
-<pre><code>def f(i):    return i
-lst = [1,2,3,4,5,6,7,]
-it = map(f, lst) # 把可迭代对象中的每一个元素传递给前面的函数进行处理. 处理的结果会返回成迭代器print(list(it))  #[1, 2, 3, 4, 5, 6, 7]
-</code></pre>
-<p>和作用域相关</p>
-<p>locals() 返回当前作用域中的名字<br>globals() 返回全局作用域中的名字</p>
-<pre><code>def func():
-    a = 10
-    print(locals())  # 当前作用域中的内容
-    print(globals())  # 全局作用域中的内容
-    print(&quot;今天内容很多&quot;)
-func()
-# &#123;&#39;a&#39;: 10&#125;
-# &#123;&#39;__name__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None, &#39;__loader__&#39;: 
-# &lt;_frozen_importlib_external.SourceFileLoader object at 0x0000026F8D566080&gt;, 
-# &#39;__spec__&#39;: None, &#39;__annotations__&#39;: &#123;&#125;, &#39;__builtins__&#39;: &lt;module &#39;builtins&#39; 
-# (built-in)&gt;, &#39;__file__&#39;: &#39;D:/pycharm/练习/week03/new14.py&#39;, &#39;__cached__&#39;: None,
-#  &#39;func&#39;: &lt;function func at 0x0000026F8D6B97B8&gt;&#125;
-# 今天内容很多
-</code></pre>
-<p>和迭代器生成器相关</p>
-<p>range() 生成数据<br>next() 迭代器向下执行一次, 内部实际使⽤用了__ next__()⽅方法返回迭代器的下一个项目<br>iter() 获取迭代器, 内部实际使用的是__ iter__()⽅方法来获取迭代器</p>
-<pre><code>for i in range(15,-1,-5):
-    print(i)
-# 15
-# 10
-# 5
-# 0
-lst = [1,2,3,4,5]
-it = iter(lst)  #  __iter__()获得迭代器
-print(it.__next__())  #1
-print(next(it)) #2  __next__()  
-print(next(it))  #3
-print(next(it))  #4
-</code></pre>
-<p>字符串类型代码的执行</p>
-<p>eval() 执行字符串类型的代码. 并返回最终结果<br>exec() 执行字符串类型的代码<br>compile() 将字符串类型的代码编码. 代码对象能够通过exec语句来执行或者eval()进行求值</p>
-<pre><code>s1 = input(&quot;请输入a+b:&quot;)  #输入:8+9
-print(eval(s1))  # 17 可以动态的执行代码. 代码必须有返回值
-s2 = &quot;for i in range(5): print(i)&quot;
-a = exec(s2) # exec 执行代码不返回任何内容
-
-# 0
-# 1
-# 2
-# 3
-# 4
-print(a)  #None
-
-# 动态执行代码
-exec(&quot;&quot;&quot;
-def func():
-    print(&quot; 我是周杰伦&quot;)
-&quot;&quot;&quot; )
-func()  #我是周杰伦
-
-code1 = &quot;for i in range(3): print(i)&quot;
-com = compile(code1, &quot;&quot;, mode=&quot;exec&quot;)   # compile并不会执行你的代码.只是编译
-exec(com)   # 执行编译的结果
-# 0
-# 1
-# 2
-
-code2 = &quot;5+6+7&quot;
-com2 = compile(code2, &quot;&quot;, mode=&quot;eval&quot;)
-print(eval(com2))  # 18
-
-code3 = &quot;name = input(&#39;请输入你的名字:&#39;)&quot;  #输入:hello
-com3 = compile(code3, &quot;&quot;, mode=&quot;single&quot;)
-exec(com3)
-print(name)  #hello
-</code></pre>
-<p>输入输出</p>
-<p>print() : 打印输出<br>input() : 获取用户输出的内容</p>
-<pre><code>print(&quot;hello&quot;, &quot;world&quot;, sep=&quot;*&quot;, end=&quot;@&quot;) # sep:打印出的内容用什么连接,end:以什么为结尾
-#hello*world@
-</code></pre>
-<p>内存相关</p>
-<p>hash() : 获取到对象的哈希值(int, str, bool, tuple). hash算法:(1) 目的是唯一性 (2) dict 查找效率非常高, hash表.用空间换的时间 比较耗费内存</p>
-<pre><code>s = &#39;alex&#39;print(hash(s))  #-168324845050430382lst = [1, 2, 3, 4, 5]print(hash(lst))  #报错,列表是不可哈希的  id() :  获取到对象的内存地址s = &#39;alex&#39;print(id(s))  #2278345368944
-</code></pre>
-<p>文件操作相关</p>
-<p>open() : 用于打开一个文件, 创建一个文件句柄</p>
-<pre><code>f = open(&#39;file&#39;,mode=&#39;r&#39;,encoding=&#39;utf-8&#39;)
-f.read()
-f.close()
-</code></pre>
-<p>模块相关</p>
-<p>__ import__() : 用于动态加载类和函数</p>
-<pre><code># 让用户输入一个要导入的模块
-import os
-name = input(&quot;请输入你要导入的模块:&quot;)
-__import__(name)    # 可以动态导入模块
-</code></pre>
-<p>帮 助</p>
-<p>help() : 函数用于查看函数或模块用途的详细说明</p>
-<pre><code>print(help(str))  #查看字符串的用途
-</code></pre>
-<p>调用相关</p>
-<p>callable() : 用于检查一个对象是否是可调用的. 如果返回True, object有可能调用失败, 但如果返回False. 那调用绝对不会成功</p>
-<pre><code>a = 10
-print(callable(a))  #False  变量a不能被调用
-#
-def f():
-    print(&quot;hello&quot;)
-    print(callable(f))   # True 函数是可以被调用的
-</code></pre>
-<p>查看内置属性</p>
-<p>dir() : 查看对象的内置属性, 访问的是对象中的<strong>dir</strong>()方法</p>
-<pre><code>print(dir(tuple))  #查看元组的方法
-</code></pre>
-<p><a href="https://mp.weixin.qq.com/s/RE07ReitUyQDwG2yYcugPQ">68个python内置函数详解!!!</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>基础</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>内置函数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>秋招面经 | 721开发测试面经</title>
     <url>/2022/07/21/721%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E9%9D%A2%E7%BB%8F/</url>
     <content><![CDATA[<h1 id="7-21开发测试面经"><a href="#7-21开发测试面经" class="headerlink" title="7.21开发测试面经"></a>7.21开发测试面经</h1><ul>
@@ -784,225 +973,36 @@ def f():
       </tags>
   </entry>
   <entry>
-    <title>spring | AOP(切面、通知、切入点、切面优先级)</title>
-    <url>/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/</url>
-    <content><![CDATA[<h1 id="AOP-切面、通知、切入点、切面优先级"><a href="#AOP-切面、通知、切入点、切面优先级" class="headerlink" title="AOP(切面、通知、切入点、切面优先级)"></a>AOP(切面、通知、切入点、切面优先级)</h1><p><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG"></p>
+    <title>2024年5月坚持清单</title>
+    <url>/2024/05/16/2024%E5%B9%B45%E6%9C%88%E5%9D%9A%E6%8C%81%E6%B8%85%E5%8D%95/</url>
+    <content><![CDATA[<p>列下后两年的坚持清单，两年后回来更新，希望在后面的2年时间里能够不负时光。</p>
 <span id="more"></span>
-<p>2.MathI.java(接口)</p>
-<pre><code>package com.atguigu.spring.aop;
 
-public interface MathI &#123;
-    int add(int i, int j);
-    int sub(int i, int j);
-    int mul(int i, int j);
-    int div(int i, int j);
-&#125;
-</code></pre>
-<p>3.MathImpl.java（实现类）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.springframework.stereotype.Component;
-
-@Component
-public class MathImpl implements MathI&#123;
-
-    @Override
-    public int add(int i, int j) &#123;
-        int result = i + j;
-        return result;
-    &#125;
-    
-    @Override
-    public int sub(int i, int j) &#123;
-        int result = i - j;
-        return result;
-    &#125;
-
-    @Override
-    public int mul(int i, int j) &#123;
-        int result = i * j;
-        return result; 
-    &#125;
-
-    @Override
-    public int div(int i, int j) &#123;
-        int result = i / j;
-        return result;
-    &#125;
-&#125;
-</code></pre>
-<p>4.MyLoggerAspect.java（切面–&gt;日志）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import java.util.Arrays;
-import org.aopalliance.intercept.Joinpoint;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Component
-@Aspect//标注当前类为切面
-@Order(1)
-public class MyLoggerAspect &#123;
-    //AspectJ支持的5种类型的通知注解
-    
-    //重用切入点定义
-    @Pointcut(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    public void test()&#123;
-        
-    &#125;
-    /**
-     * @Before：将方法指定为前置通知
-     * 必须设置value,其值为切入点表达式
-     * 前置通知：作用于方法执行之前
-     */
-    //前置通知 
-//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.add(int, int))&quot;)
-//    @Before(value = &quot;execution(public int com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
-//    @Before(value = &quot;execution(* com.atguigu.spring.aop.MathImpl.*(int,int))&quot;)
-//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(int,int))&quot;)
-//    @Before(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    @Before(value = &quot;test()&quot;)
-    public void beforeMethod(JoinPoint joinPoint)&#123;
-        Object[] args = joinPoint.getArgs();//获取方法的参数
-        String methodName = joinPoint.getSignature().getName();//获取方法名
-        
-        System.out.println(&quot;method:&quot; + methodName + &quot;,arguments:&quot; + Arrays.toString(args));
-    &#125;
-    
-    /**
-     * @After:将方法标注为后置通知
-     * 后置通知：作用于方法的finally语句块，即不管有没有异常都会执行
-     */
-    //后置通知
-    //@After(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    @After(value = &quot;test()&quot;)
-    public void afterMethod()&#123;
-        System.out.println(&quot;后置通知&quot;);
-    &#125;
-    
-    /**
-     * @AfterReturning：将方法标注为返回通知
-     * 返回通知：作用于方法执行之后
-     * 要通过returning设置接收方法返回值的变量名
-     * 要向在方法中使用，必须在方法的形参中设置和变量名相同的参数名的参数
-     */
-    @AfterReturning(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;,returning=&quot;result&quot;)
-    public void afterReturing(JoinPoint joinPoint, Object result)&#123;
-        String methodName = joinPoint.getSignature().getName();
-        System.out.println(&quot;method:&quot; + methodName + &quot;,result:&quot; + result);
-    &#125;
-    
-    /**
-     * @AfterThrowing：将方法标注为异常通知（例外通知）
-     * 异常通知：作用于方法抛出异常时
-     * 可通过throwing设置接受方法返回的异常信息
-     * 在参数列表中可通过具体的异常类型，来对指定的异常信息进行操作
-     */
-    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
-    public void afterThrowing(Exception ex)&#123;
-        System.out.println(&quot;有异常了,messages&quot;+ex);
-    &#125;
-    //处理特定异常
-//    @AfterThrowing(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;, throwing=&quot;ex&quot;)
-//    public void afterThrowing(NullPointerException ex)&#123;
-//        System.out.println(&quot;有异常了,messages&quot;+ex);
-//    &#125;
-    
-    /**
-     * @Around：
-     */
-    @Around(value = &quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    public Object aroundMethod(ProceedingJoinPoint joinPoint)&#123;    
-        Object result = null;
-        try &#123;
-            //前置通知
-            System.out.println(&quot;前置通知&quot;);
-            result = joinPoint.proceed();//执行方法
-            //返回通知
-            System.out.println(&quot;返回通知&quot;);
-            return result;
-        &#125; catch (Throwable e) &#123;
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            //异常通知
-            System.out.println(&quot;异常通知&quot;);
-        &#125;finally&#123;
-            //后置通知
-            System.out.println(&quot;后置通知&quot;);
-        &#125;
-        return -1;
-    &#125;
-&#125;
-</code></pre>
-<p>5.TestHandler.java</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.springframework.stereotype.Component;
-
-@Component
-public class TestHandler &#123;
-    public void test()&#123;
-        System.out.println(&quot;测试切入点表达式&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>6.TestAspect.java（切面–&gt;另一个切面，用来测试切面优先级）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Component
-@Aspect
-@Order(0)//定义切面作用的优先级，值越小优先级越高，默认值为int的最大值 
-public class TestAspect &#123;
-    @Before(value=&quot;execution(* com.atguigu.spring.aop.*.*(..))&quot;)
-    public void before()&#123;
-        System.out.println(&quot;TestAspect====&gt;前置通知&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>7.Test.java（测试类）</p>
-<pre><code>package com.atguigu.spring.aop;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args) &#123;
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop.xml&quot;);
-        
-        MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);
-        
-        int i = math.div(1, 1);
-        System.out.println(i);
-        
-//        TestHandler bean = ac.getBean(&quot;testHandler&quot;, TestHandler.class);
-//        bean.test();
-    &#125;
-&#125;
-</code></pre>
+<ul>
+<li><p>未来坚持清单</p>
+<ul>
+<li>坚持阅读2年，一年5本书</li>
+<li>坚持健身2年，每周锻炼3次</li>
+<li>坚持写笔记，每年发博客笔记&gt;300篇</li>
+<li>以2年为周期，每2年掌握一个核心技能</li>
+</ul>
+</li>
+<li><p>留下激励自己的两句话</p>
+<ul>
+<li>流水不争先，争的是滔滔不绝。人生没有奇迹，只有努力的轨迹。如果要说奇迹。那奇迹一定藏在坚持的背后。</li>
+<li>希望我20几岁做的事情，会让我在30岁时，让我更加自信，更加从容，更加有光芒</li>
+</ul>
+</li>
+<li><p>2026.5.16日回来更新这篇笔记。加油我自己，不负时光。</p>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>spring</category>
-        <category>AOP(切面、通知、切入点、切面优先级)</category>
+        <category>多一点思考</category>
+        <category>2024年5月坚持清单</category>
       </categories>
       <tags>
-        <tag>spring</tag>
-        <tag>AOP</tag>
+        <tag>坚持清单</tag>
       </tags>
   </entry>
   <entry>
@@ -1183,6 +1183,46 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
+    <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
+    <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
+<span id="more"></span>
+<p><strong style="color:red">Empirical mode decomposition(EMD)</strong> technique is used to implement the <strong style="color:red">time domain filter</strong>.</p>
+<p><strong style="color:red">Fractional Gaussian noise(fGn)</strong> is used here as the <strong style="color:red">reference signal</strong> to detect the distinguish feature of EOG signal to be used to separate from EEG.</p>
+<p>EMD is applied to the raw EEG and fGn separately to produce a finite number band limited signals named <strong style="color:red">intrinsic mode functions(IMFs)</strong>.</p>
+<p>The energies of individual IMFs of fGn and that of raw EEG are compared to derive the energy based threshold for the suppression of EOG effects. </p>
+<p>The separation results using EMD based approach is also compared with wavelet thresholding technique. </p>
+<p><strong style="color:red">The experimental results show that the data adaptive filtering technique performs better than the wavelet based approach.</strong></p>
+<div style="background-color:yellowgreen;">
+<b backgroundclor="green">proposed method's advantages</b>
+<ul>
+<li>efficiently separates the EOG artifact <b>without changing the amplitude and other necessary properties of the EEG signals</b></li>
+<li><b>full data adaptive nature</b></li>
+</ul>
+</div>
+
+<p><strong style="color:yellow"><i>Note:</i></strong></p>
+<ul>
+<li>Frequency analysis or filtering —–&gt; deal with single channel signal</li>
+<li>Frequency regression analysis   —–&gt; suppress the eye-movement artifact</li>
+<li>Time-invariant band-pass filtering or Fourier transform(FT) —–&gt; extract the target frequency component(specific frequency range)</li>
+<li>classical time-frequency analyzers(FFT based filtering or short-time Fourier transform(STFT)) —–&gt; non-stationary signal<br>Note:will bring the spectral distrotion</li>
+<li>PCA:extracts and sort out the principal components according to the influence on the overall data space.<br>Note:It requires some priori knowledge to identify the PC as the artifact</li>
+<li>ICA:<br>key word:decompose<br>problem of using ICA:extracted components do not confirm the original scale and sequences.</li>
+<li>main limitation of the filtering method:introduce some spectral distortion </li>
+<li>EMD:<br>key benefit of using EMD: automatic decomposition and fully data adaptive<br>UEMD:<br>BEMD:suppress EOG artifacts<br>MEMD:multi-variate data analysis</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>appium | 手机App自动化测试</title>
     <url>/2022/07/15/Appium%E6%89%8B%E6%9C%BAApp%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<h1 id="appium手机App自动化测试"><a href="#appium手机App自动化测试" class="headerlink" title="appium手机App自动化测试"></a>appium手机App自动化测试</h1><h2 id="手机App自动化测试环境搭建"><a href="#手机App自动化测试环境搭建" class="headerlink" title="手机App自动化测试环境搭建"></a>手机App自动化测试环境搭建</h2><ol>
@@ -1283,63 +1323,6 @@ driver.quit()
       </tags>
   </entry>
   <entry>
-    <title>伪迹移除 | Artifact suppression using data adaptive time domain filtering</title>
-    <url>/2020/10/10/Artifact-suppression-using-data-adaptive-time-domain-filtering/</url>
-    <content><![CDATA[<h1 id="Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering"><a href="#Artifact-suppression-from-EEG-signals-using-data-adaptive-time-domain-filtering" class="headerlink" title="Artifact suppression from EEG signals using data adaptive time domain filtering"></a>Artifact suppression from EEG signals using data adaptive time domain filtering</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This paper presents a <strong style="color:red">data adaptive filtering</strong> approach to separate the EOG artifact from the recorded EEG signal.</p>
-<span id="more"></span>
-<p><strong style="color:red">Empirical mode decomposition(EMD)</strong> technique is used to implement the <strong style="color:red">time domain filter</strong>.</p>
-<p><strong style="color:red">Fractional Gaussian noise(fGn)</strong> is used here as the <strong style="color:red">reference signal</strong> to detect the distinguish feature of EOG signal to be used to separate from EEG.</p>
-<p>EMD is applied to the raw EEG and fGn separately to produce a finite number band limited signals named <strong style="color:red">intrinsic mode functions(IMFs)</strong>.</p>
-<p>The energies of individual IMFs of fGn and that of raw EEG are compared to derive the energy based threshold for the suppression of EOG effects. </p>
-<p>The separation results using EMD based approach is also compared with wavelet thresholding technique. </p>
-<p><strong style="color:red">The experimental results show that the data adaptive filtering technique performs better than the wavelet based approach.</strong></p>
-<div style="background-color:yellowgreen;">
-<b backgroundclor="green">proposed method's advantages</b>
-<ul>
-<li>efficiently separates the EOG artifact <b>without changing the amplitude and other necessary properties of the EEG signals</b></li>
-<li><b>full data adaptive nature</b></li>
-</ul>
-</div>
-
-<p><strong style="color:yellow"><i>Note:</i></strong></p>
-<ul>
-<li>Frequency analysis or filtering —–&gt; deal with single channel signal</li>
-<li>Frequency regression analysis   —–&gt; suppress the eye-movement artifact</li>
-<li>Time-invariant band-pass filtering or Fourier transform(FT) —–&gt; extract the target frequency component(specific frequency range)</li>
-<li>classical time-frequency analyzers(FFT based filtering or short-time Fourier transform(STFT)) —–&gt; non-stationary signal<br>Note:will bring the spectral distrotion</li>
-<li>PCA:extracts and sort out the principal components according to the influence on the overall data space.<br>Note:It requires some priori knowledge to identify the PC as the artifact</li>
-<li>ICA:<br>key word:decompose<br>problem of using ICA:extracted components do not confirm the original scale and sequences.</li>
-<li>main limitation of the filtering method:introduce some spectral distortion </li>
-<li>EMD:<br>key benefit of using EMD: automatic decomposition and fully data adaptive<br>UEMD:<br>BEMD:suppress EOG artifacts<br>MEMD:multi-variate data analysis</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CNN | BatchNormalization</title>
-    <url>/2021/11/15/BatchNormalization/</url>
-    <content><![CDATA[<h1 id="BatchNormalization"><a href="#BatchNormalization" class="headerlink" title="BatchNormalization"></a>BatchNormalization</h1><p>由于深度神经网络涉及到很多层的叠加，而每一层的参数更新会导致上层的输入数据分布发生变化，<br>通过层层叠加，高层的输入分布变化会非常剧烈，这就使得高层需要不断去重新适应底层的参数更新。<br>为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。<br>也就是随是着网络加深，参数分布不断往激活函数两端移动(梯度变小)，导致反向传播出现梯度消失，收敛困难。<br>原理：可在每层的激活函数前，加入BN，将参数重新拉回0-1正态分布，加速收敛。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-        <category>CNN</category>
-        <category>Batch Normalization</category>
-      </categories>
-      <tags>
-        <tag>Batch Normalization</tag>
-        <tag>深度学习</tag>
-        <tag>CNN</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>伪迹移除 | Artifacts reduction algorithms&#39;s two main ways</title>
     <url>/2020/10/11/Artifacts-reduction-algorithms-two-main-ways/</url>
     <content><![CDATA[<h1 id="Artifacts-reduction-algorithms’s-two-main-ways"><a href="#Artifacts-reduction-algorithms’s-two-main-ways" class="headerlink" title="Artifacts reduction algorithms’s two main ways"></a>Artifacts reduction algorithms’s two main ways</h1><div style>
@@ -1431,6 +1414,23 @@ driver.quit()
       <tags>
         <tag>伪迹移除</tag>
         <tag>ICA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CNN | BatchNormalization</title>
+    <url>/2021/11/15/BatchNormalization/</url>
+    <content><![CDATA[<h1 id="BatchNormalization"><a href="#BatchNormalization" class="headerlink" title="BatchNormalization"></a>BatchNormalization</h1><p>由于深度神经网络涉及到很多层的叠加，而每一层的参数更新会导致上层的输入数据分布发生变化，<br>通过层层叠加，高层的输入分布变化会非常剧烈，这就使得高层需要不断去重新适应底层的参数更新。<br>为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。<br>也就是随是着网络加深，参数分布不断往激活函数两端移动(梯度变小)，导致反向传播出现梯度消失，收敛困难。<br>原理：可在每层的激活函数前，加入BN，将参数重新拉回0-1正态分布，加速收敛。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+        <category>CNN</category>
+        <category>Batch Normalization</category>
+      </categories>
+      <tags>
+        <tag>Batch Normalization</tag>
+        <tag>深度学习</tag>
+        <tag>CNN</tag>
       </tags>
   </entry>
   <entry>
@@ -2483,28 +2483,6 @@ with urllib.request.urlopen(req) as response:
       </tags>
   </entry>
   <entry>
-    <title>并行计算 | GPU加速原理</title>
-    <url>/2024/03/01/GPU%E5%8A%A0%E9%80%9F%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<h3 id="GPU加速原理"><a href="#GPU加速原理" class="headerlink" title="GPU加速原理"></a>GPU加速原理</h3><p>GPU加速的原理是利用多核处理器进行并行运算来实现程序的加速运行**。与CPU不同，GPU拥有数以千计的核心，专门为同时处理多任务而设计，可以高效地处理并行任务。</p>
-<p>CPU几倍很强的通用性，可以处理不同类型的数据，同时擅长处理逻辑判断导致的大量分支跳转和中断处理，CPU相当于一个博学多闻的博士在完成一项工作。而GPU处理的数据类型高度统一，且GPU有数以千计的核心，可以并行计算任务，相当于1000个小学生在完成一个任务，呈现“人多力量大”的优势。</p>
-<p>实际使用中，GPU需要CPU的配合来完成任务的计算，并行计算部分会运行在GPU上，串行计算部分运行在CPU上，CPU负责总体的程序流程。</p>
-<p><a href="https://blog.csdn.net/qq_41632117/article/details/118737557">参考资料：GPU加速原理，博主写的非常详细！</a></p>
-]]></content>
-      <categories>
-        <category>并行计算</category>
-        <category>GPU</category>
-        <category>GPU加速原理</category>
-      </categories>
-      <tags>
-        <tag>GPU</tag>
-        <tag>CPU</tag>
-        <tag>并行计算</tag>
-        <tag>串行计算</tag>
-        <tag>GPU加速原理</tag>
-        <tag>多核处理器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTP | HTTP代理</title>
     <url>/2024/05/16/HTTP%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<ul>
@@ -2588,6 +2566,28 @@ with urllib.request.urlopen(req) as response:
       </categories>
       <tags>
         <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>并行计算 | GPU加速原理</title>
+    <url>/2024/03/01/GPU%E5%8A%A0%E9%80%9F%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h3 id="GPU加速原理"><a href="#GPU加速原理" class="headerlink" title="GPU加速原理"></a>GPU加速原理</h3><p>GPU加速的原理是利用多核处理器进行并行运算来实现程序的加速运行**。与CPU不同，GPU拥有数以千计的核心，专门为同时处理多任务而设计，可以高效地处理并行任务。</p>
+<p>CPU几倍很强的通用性，可以处理不同类型的数据，同时擅长处理逻辑判断导致的大量分支跳转和中断处理，CPU相当于一个博学多闻的博士在完成一项工作。而GPU处理的数据类型高度统一，且GPU有数以千计的核心，可以并行计算任务，相当于1000个小学生在完成一个任务，呈现“人多力量大”的优势。</p>
+<p>实际使用中，GPU需要CPU的配合来完成任务的计算，并行计算部分会运行在GPU上，串行计算部分运行在CPU上，CPU负责总体的程序流程。</p>
+<p><a href="https://blog.csdn.net/qq_41632117/article/details/118737557">参考资料：GPU加速原理，博主写的非常详细！</a></p>
+]]></content>
+      <categories>
+        <category>并行计算</category>
+        <category>GPU</category>
+        <category>GPU加速原理</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+        <tag>CPU</tag>
+        <tag>并行计算</tag>
+        <tag>串行计算</tag>
+        <tag>GPU加速原理</tag>
+        <tag>多核处理器</tag>
       </tags>
   </entry>
   <entry>
@@ -6347,23 +6347,6 @@ public interface DeptMapper &#123;
       </tags>
   </entry>
   <entry>
-    <title>SSM | SSM项目搭建</title>
-    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
-<span id="more"></span>
-<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SSM</category>
-        <category>SSM项目搭建</category>
-      </categories>
-      <tags>
-        <tag>SSM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SSM | 批量删除</title>
     <url>/2022/04/18/SSM-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4/</url>
     <content><![CDATA[<h1 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h1><p>1.list.jsp</p>
@@ -6499,6 +6482,23 @@ public class EmpController &#123;
         <tag>Java</tag>
         <tag>SSM</tag>
         <tag>批量删除</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSM | SSM项目搭建</title>
+    <url>/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
+<span id="more"></span>
+<p>3.整合springMVC和spring<br>    (1)web.xml<br>        ContextLoaderListener:listener<br>        context-param<br>    (2)spring.xml<br>        扫描组件（排除控制层）<br>4.搭建mybatis<br>    核心配置文件mybatis-config.xml<br>    mapper接口和mapper映射文件<br>5.spring整合mybatis<br>    spring.xml:<br>        properties文件的引入<br>        DataSource数据源的配置：xxxDataSource<br>        事务管理器：DataSourceTransactionManager<br>        开启事务驱动:<a href="tx:annotation-driven">tx:annotation-driven</a><br>        SqlSessionFactoryBean:管理SqlSession<br>        MypperScannerConfigurer:自动生成Mapper接口的代理实现类<br>6.REST CRUD<br>    查询+分页<br>    修改（form）<br><strong>项目目录</strong><br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/2.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SSM</category>
+        <category>SSM项目搭建</category>
+      </categories>
+      <tags>
+        <tag>SSM</tag>
       </tags>
   </entry>
   <entry>
@@ -8183,73 +8183,6 @@ Five:销毁
       </tags>
   </entry>
   <entry>
-    <title>Django | django中模板文件中的链接地址怎么写</title>
-    <url>/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/</url>
-    <content><![CDATA[<h1 id="django中模板文件中的链接地址怎么写"><a href="#django中模板文件中的链接地址怎么写" class="headerlink" title="django中模板文件中的链接地址怎么写?"></a>django中模板文件中的链接地址怎么写?</h1><p>在进行django项目开发中，通常会遇到一个场景：我们在当前页面点击一个链接，跳转到其他的页面，<br>那么在当前页面中的这个标签中的地址我们应该如何去写？</p>
-<span id="more"></span>
-
-<p><img src="/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/1.png"><br>假定我们当前处于 <a href="http://www.xxx.com/doc/a.html">www.xxx.com/doc/a.html</a> ,我们需要跳转到 b.html，那么我们可以这样写标签中的url,<br><a href="/b.html">,在这里url中的第一个斜杠代表的是根目录（www.xxx.com），之后浏览器将会把这个url<br>解析为 www.xxx.com/b.html。</a></p>
-<p>另一种情况：<br>假设我们将标签中的url写为 <a href="b.html"></a>,浏览器将会把此url地址解析为 <a href="http://www.xxx.com/doc/b.html">www.xxx.com/doc/b.html</a> ,<br>前面没有斜杠即从为当前目录。</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | django开发流程</title>
-    <url>/2021/04/15/django%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="django开发流程"><a href="#django开发流程" class="headerlink" title="django开发流程"></a>django开发流程</h1><p>1.安装虚拟环境<br>conda create -n python27 python==2.7<br>2..安装django<br>pip install django==1.8.2<br>3.创建项目<br>django-adming startproject project_name<br>4.创建应用<br>python manage.py startapp app_name<br>5.将app应用加入到installed_apps中<br>6.app_name/models.py中定义模型类<br>6.数据库配置(settings.py-DATABASES)<br>7.生成迁移文件<br>python manage.py makemigrations<br>8.执行迁移<br>python manage.py migrate<br>9.开启服务器<br>python manage.py runserver ip:port<br>10.创建管理员用户<br>python manage.py createsuperuser，按提示输入用户名、邮箱、密码<br>11.向admin注册app_name的模型<br>app_name/admin.py<br>admin.site.register(BookInfo)</p>
-<p>注：<br>python shell—python manage.py shell</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Django | django自定义错误页面</title>
-    <url>/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/</url>
-    <content><![CDATA[<h1 id="django自定义错误页面"><a href="#django自定义错误页面" class="headerlink" title="django自定义错误页面"></a>django自定义错误页面</h1><p>在进行django项目开发时，如果用户请求一个不存在的页面，将会显示以下界面：<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/1.png"><br>我们可以自定义一个错误页面来展示提示信息。</p>
-<p>django版本：1.8.2</p>
-<p><strong>步骤：</strong><br>1.修改settings.py</p>
-<pre><code>DEBUG = False
-ALLOWED_HOSTS = [&#39;*&#39;]
-</code></pre>
-<p>2.在templates文件夹下创建404.html页面</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-找不到了
-&lt;hr/&gt;
-&#123;&#123; request_path &#125;&#125;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3.运行服务器，访问一个不存在的页面，将显示自定义的错误页面<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/2.png"></p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>框架</category>
-        <category>Django</category>
-      </categories>
-      <tags>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaWeb项目开发 | el表达式</title>
     <url>/2022/01/11/el%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="el表达式"><a href="#el表达式" class="headerlink" title="el表达式"></a>el表达式</h1><ol>
@@ -8368,6 +8301,21 @@ ALLOWED_HOSTS = [&#39;*&#39;]
         <tag>线程池</tag>
         <tag>execute()</tag>
         <tag>submit()</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django | django开发流程</title>
+    <url>/2021/04/15/django%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="django开发流程"><a href="#django开发流程" class="headerlink" title="django开发流程"></a>django开发流程</h1><p>1.安装虚拟环境<br>conda create -n python27 python==2.7<br>2..安装django<br>pip install django==1.8.2<br>3.创建项目<br>django-adming startproject project_name<br>4.创建应用<br>python manage.py startapp app_name<br>5.将app应用加入到installed_apps中<br>6.app_name/models.py中定义模型类<br>6.数据库配置(settings.py-DATABASES)<br>7.生成迁移文件<br>python manage.py makemigrations<br>8.执行迁移<br>python manage.py migrate<br>9.开启服务器<br>python manage.py runserver ip:port<br>10.创建管理员用户<br>python manage.py createsuperuser，按提示输入用户名、邮箱、密码<br>11.向admin注册app_name的模型<br>app_name/admin.py<br>admin.site.register(BookInfo)</p>
+<p>注：<br>python shell—python manage.py shell</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -8596,6 +8544,40 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>Django | django自定义错误页面</title>
+    <url>/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/</url>
+    <content><![CDATA[<h1 id="django自定义错误页面"><a href="#django自定义错误页面" class="headerlink" title="django自定义错误页面"></a>django自定义错误页面</h1><p>在进行django项目开发时，如果用户请求一个不存在的页面，将会显示以下界面：<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/1.png"><br>我们可以自定义一个错误页面来展示提示信息。</p>
+<p>django版本：1.8.2</p>
+<p><strong>步骤：</strong><br>1.修改settings.py</p>
+<pre><code>DEBUG = False
+ALLOWED_HOSTS = [&#39;*&#39;]
+</code></pre>
+<p>2.在templates文件夹下创建404.html页面</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+找不到了
+&lt;hr/&gt;
+&#123;&#123; request_path &#125;&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.运行服务器，访问一个不存在的页面，将显示自定义的错误页面<br><img src="/2021/07/28/django%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2/2.png"></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python | generator用于大文件读取</title>
     <url>/2024/05/16/generator%E7%94%A8%E4%BA%8E%E5%A4%A7%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96/</url>
     <content><![CDATA[<p>python生成器最常见的应用是大文件的读取，节省内存空间。</p>
@@ -8631,6 +8613,24 @@ public class Demo1Servlet extends HttpServlet &#123;
       </tags>
   </entry>
   <entry>
+    <title>Django | django中模板文件中的链接地址怎么写</title>
+    <url>/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/</url>
+    <content><![CDATA[<h1 id="django中模板文件中的链接地址怎么写"><a href="#django中模板文件中的链接地址怎么写" class="headerlink" title="django中模板文件中的链接地址怎么写?"></a>django中模板文件中的链接地址怎么写?</h1><p>在进行django项目开发中，通常会遇到一个场景：我们在当前页面点击一个链接，跳转到其他的页面，<br>那么在当前页面中的这个标签中的地址我们应该如何去写？</p>
+<span id="more"></span>
+
+<p><img src="/2021/07/28/django%E4%B8%AD%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%E6%80%8E%E4%B9%88%E5%86%99/1.png"><br>假定我们当前处于 <a href="http://www.xxx.com/doc/a.html">www.xxx.com/doc/a.html</a> ,我们需要跳转到 b.html，那么我们可以这样写标签中的url,<br><a href="/b.html">,在这里url中的第一个斜杠代表的是根目录（www.xxx.com），之后浏览器将会把这个url<br>解析为 www.xxx.com/b.html。</a></p>
+<p>另一种情况：<br>假设我们将标签中的url写为 <a href="b.html"></a>,浏览器将会把此url地址解析为 <a href="http://www.xxx.com/doc/b.html">www.xxx.com/doc/b.html</a> ,<br>前面没有斜杠即从为当前目录。</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>框架</category>
+        <category>Django</category>
+      </categories>
+      <tags>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git | Git常用命令</title>
     <url>/2022/11/24/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<h1 id="git常用命令"><a href="#git常用命令" class="headerlink" title="git常用命令"></a>git常用命令</h1><p>再次温习了一遍Git,格外亲切！很好的协同开发工具，给亿个赞！</p>
@@ -8641,7 +8641,7 @@ public class Demo1Servlet extends HttpServlet &#123;
 <li>git init</li>
 <li>git status</li>
 <li>git config –global user.name “username”</li>
-<li>git config –global user.email “<a href="mailto:&#120;&#120;&#120;&#64;&#x78;&#120;&#46;&#99;&#111;&#x6d;">&#120;&#120;&#120;&#64;&#x78;&#120;&#46;&#99;&#111;&#x6d;</a>“</li>
+<li>git config –global user.email “<a href="mailto:&#120;&#x78;&#120;&#64;&#x78;&#120;&#46;&#99;&#111;&#109;">&#120;&#x78;&#120;&#64;&#x78;&#120;&#46;&#99;&#111;&#109;</a>“</li>
 <li>git add [filename]</li>
 <li>git checkout – [filename]</li>
 <li>git commit -m “comment”</li>
@@ -14807,44 +14807,6 @@ public class Test1 &#123;
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 104.二叉树的最大深度</title>
-    <url>/2022/07/12/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
-    <content><![CDATA[<h1 id="104-二叉树的最大深度"><a href="#104-二叉树的最大深度" class="headerlink" title="104.二叉树的最大深度"></a>104.二叉树的最大深度</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二叉树，找出其最大深度。<br>二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。<br>说明: 叶子节点是指没有子节点的节点。<br>示例：<br>给定二叉树 [3,9,20,null,null,15,7]，</p>
-<p><a href="https://leetcode.cn/problems/maximum-depth-of-binary-tree/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>方法一：深度优先搜索<br>首先可以想到使用深度优先搜索的方法，遍历整棵树，记录最小深度。<br>对于每一个非叶子节点，我们只需要分别计算其左右子树的最大叶子节点深度。这样就将一个大问题转化为了小问题，可以递归地解决该问题。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># class TreeNode(object):  # Definition for a binary tree node.
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution(object):
-    def maxDepth(self, root):
-        &quot;&quot;&quot;
-        :type root: TreeNode
-        :rtype: int
-        &quot;&quot;&quot;
-        def get_depth(root):
-            if not root:
-                return 0
-            left_depth = get_depth(root.left)
-            right_depth = get_depth(root.right)
-            return max(right_depth, left_depth) + 1
-        return get_depth(root)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>树</category>
-        <category>104.二叉树的最大深度</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>二叉树</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 111.二叉树的最小深度</title>
     <url>/2022/01/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/</url>
     <content><![CDATA[<h1 id="111-二叉树的最小深度"><a href="#111-二叉树的最小深度" class="headerlink" title="111.二叉树的最小深度"></a>111.二叉树的最小深度</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二叉树，找出其最小深度。<br>最小深度是从根节点到最近叶子节点的最短路径上的节点数量。<br>说明：叶子节点是指没有子节点的节点。</p>
@@ -14929,6 +14891,44 @@ if __name__ == &quot;__main__&quot;:
         <category>leetcode</category>
         <category>树</category>
         <category>111.二叉树的最小深度</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 104.二叉树的最大深度</title>
+    <url>/2022/07/12/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/</url>
+    <content><![CDATA[<h1 id="104-二叉树的最大深度"><a href="#104-二叉树的最大深度" class="headerlink" title="104.二叉树的最大深度"></a>104.二叉树的最大深度</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二叉树，找出其最大深度。<br>二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。<br>说明: 叶子节点是指没有子节点的节点。<br>示例：<br>给定二叉树 [3,9,20,null,null,15,7]，</p>
+<p><a href="https://leetcode.cn/problems/maximum-depth-of-binary-tree/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>方法一：深度优先搜索<br>首先可以想到使用深度优先搜索的方法，遍历整棵树，记录最小深度。<br>对于每一个非叶子节点，我们只需要分别计算其左右子树的最大叶子节点深度。这样就将一个大问题转化为了小问题，可以递归地解决该问题。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># class TreeNode(object):  # Definition for a binary tree node.
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def maxDepth(self, root):
+        &quot;&quot;&quot;
+        :type root: TreeNode
+        :rtype: int
+        &quot;&quot;&quot;
+        def get_depth(root):
+            if not root:
+                return 0
+            left_depth = get_depth(root.left)
+            right_depth = get_depth(root.right)
+            return max(right_depth, left_depth) + 1
+        return get_depth(root)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>树</category>
+        <category>104.二叉树的最大深度</category>
       </categories>
       <tags>
         <tag>算法</tag>
@@ -16321,6 +16321,22 @@ a = a.reshape((5,1))
       </tags>
   </entry>
   <entry>
+    <title>网络编程 | 几种web服务器的比较</title>
+    <url>/2020/10/31/%E5%87%A0%E7%A7%8Dweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%AF%94%E8%BE%83/</url>
+    <content><![CDATA[<h1 id="几种web服务器的比较"><a href="#几种web服务器的比较" class="headerlink" title="几种web服务器的比较"></a>几种web服务器的比较</h1><h2 id="select版服务器"><a href="#select版服务器" class="headerlink" title="select版服务器"></a>select版服务器</h2><p>优点：跨平台<br>缺点：<br>单个进程能够监视的文件描述符的数量存在最大限制（1024）<br>轮询检测，效率较低</p>
+<h2 id="poll版服务器"><a href="#poll版服务器" class="headerlink" title="poll版服务器"></a>poll版服务器</h2><p>优点：解决了套接字有上限的问题<br>缺点：轮询检测</p>
+<h2 id="epoll版服务器"><a href="#epoll版服务器" class="headerlink" title="epoll版服务器"></a>epoll版服务器</h2><p>优点：<br>没有1024的最大限制<br>事件通知机制，效率较高</p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>网络编程</category>
+      </categories>
+      <tags>
+        <tag>网络编程</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习 | 决策树</title>
     <url>/2021/02/22/%E5%86%B3%E7%AD%96%E6%A0%91/</url>
     <content><![CDATA[<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>决策树(Decision Tree)是一种基本的<b>分类与回归方法</b>。决策树由结点(Node)和有向边(Directed Edge)组成。结点有两种类型：内部结点(Internnal Node)和叶结点(Leaf Node)。内部结点表示一个特征或属性，叶结点表示一个类。决策树还有一个唯一的根结点(Root Node)。</p>
@@ -16358,22 +16374,6 @@ a = a.reshape((5,1))
       <tags>
         <tag>机器学习</tag>
         <tag>决策树</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络编程 | 几种web服务器的比较</title>
-    <url>/2020/10/31/%E5%87%A0%E7%A7%8Dweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%AF%94%E8%BE%83/</url>
-    <content><![CDATA[<h1 id="几种web服务器的比较"><a href="#几种web服务器的比较" class="headerlink" title="几种web服务器的比较"></a>几种web服务器的比较</h1><h2 id="select版服务器"><a href="#select版服务器" class="headerlink" title="select版服务器"></a>select版服务器</h2><p>优点：跨平台<br>缺点：<br>单个进程能够监视的文件描述符的数量存在最大限制（1024）<br>轮询检测，效率较低</p>
-<h2 id="poll版服务器"><a href="#poll版服务器" class="headerlink" title="poll版服务器"></a>poll版服务器</h2><p>优点：解决了套接字有上限的问题<br>缺点：轮询检测</p>
-<h2 id="epoll版服务器"><a href="#epoll版服务器" class="headerlink" title="epoll版服务器"></a>epoll版服务器</h2><p>优点：<br>没有1024的最大限制<br>事件通知机制，效率较高</p>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>网络编程</category>
-      </categories>
-      <tags>
-        <tag>网络编程</tag>
-        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -18816,6 +18816,85 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
+    <title>Java | 反射</title>
+    <url>/2022/04/18/%E5%8F%8D%E5%B0%84/</url>
+    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>基础</category>
+        <category>反射</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>反射</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode | 344.反转字符串</title>
+    <url>/2021/08/29/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<h1 id="344-反转字符串"><a href="#344-反转字符串" class="headerlink" title="344.反转字符串"></a>344.反转字符串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。<br>不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。<br>你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。</p>
+<p>示例 1：<br>输入：[“h”,”e”,”l”,”l”,”o”]<br>输出：[“o”,”l”,”l”,”e”,”h”]</p>
+<p><a href="https://leetcode-cn.com/problems/reverse-string">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li><p>字符串切片 —&gt; reversString()</p>
+</li>
+<li><p>使用list.reverse()方法 —&gt; reversString1()</p>
+</li>
+<li><p>使用reversed()函数 —&gt; reversString2()</p>
+</li>
+<li><p>使用栈 —&gt; reversString3()<br>将s列表看作一个栈，低端作为栈底，高端作为栈顶，依次将栈顶元素出栈即可。</p>
+</li>
+<li><p>for —&gt; reversString4()<br>将列表中的第i个元素与倒数第i个元素交换（0&lt; i &lt; len(s)//2）</p>
+</li>
+<li><p>递归 —&gt; reversString5()</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p>
+<pre><code> def reverseString(self, s):
+     &quot;&quot;&quot;
+     :type s: List[str]
+     :rtype: None Do not return anything, modify s in-place instead.
+     &quot;&quot;&quot;
+     return s[::-1]
+
+ def reverseString1(self, s):
+     s.reverse()
+
+ def reverseString2(self, s):
+     s[:] = list(reversed(s))
+
+ def reverseString3(self, s):
+     result = list()
+
+     while len(s) &gt; 0:
+         result.append(s.pop())
+
+     s[:] = result
+
+ def reverseString4(self, s):
+     for i in range(len(s)//2):
+         s[i], s[len(s) - i - 1] = s[len(s) - i - 1], s[i]
+
+ # def reverseString5(self, s):
+ #     if len(s) &lt; 1:
+ #         return s
+ #     return self.reverseString4(s[1:]) + s[0]
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+        <category>344.反转字符串</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CNN | 卷积神经网络如何处理一维时间序列数据</title>
     <url>/2021/10/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E4%B8%80%E7%BB%B4%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="卷积神经网络如何处理一维时间序列数据"><a href="#卷积神经网络如何处理一维时间序列数据" class="headerlink" title="卷积神经网络如何处理一维时间序列数据?"></a>卷积神经网络如何处理一维时间序列数据?</h1><p><a href="https://zhuanlan.zhihu.com/p/67496559">卷积神经网络如何处理一维时间序列数据?</a></p>
@@ -18903,85 +18982,6 @@ public class MyThread extends Thread&#123;
         <tag>设计模式</tag>
         <tag>单例模式</tag>
         <tag>双重检验锁方式实现单例模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java | 反射</title>
-    <url>/2022/04/18/%E5%8F%8D%E5%B0%84/</url>
-    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>基础</category>
-        <category>反射</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>反射</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 344.反转字符串</title>
-    <url>/2021/08/29/%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
-    <content><![CDATA[<h1 id="344-反转字符串"><a href="#344-反转字符串" class="headerlink" title="344.反转字符串"></a>344.反转字符串</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。<br>不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。<br>你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。</p>
-<p>示例 1：<br>输入：[“h”,”e”,”l”,”l”,”o”]<br>输出：[“o”,”l”,”l”,”e”,”h”]</p>
-<p><a href="https://leetcode-cn.com/problems/reverse-string">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li><p>字符串切片 —&gt; reversString()</p>
-</li>
-<li><p>使用list.reverse()方法 —&gt; reversString1()</p>
-</li>
-<li><p>使用reversed()函数 —&gt; reversString2()</p>
-</li>
-<li><p>使用栈 —&gt; reversString3()<br>将s列表看作一个栈，低端作为栈底，高端作为栈顶，依次将栈顶元素出栈即可。</p>
-</li>
-<li><p>for —&gt; reversString4()<br>将列表中的第i个元素与倒数第i个元素交换（0&lt; i &lt; len(s)//2）</p>
-</li>
-<li><p>递归 —&gt; reversString5()</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class Solution(object):</p>
-<pre><code> def reverseString(self, s):
-     &quot;&quot;&quot;
-     :type s: List[str]
-     :rtype: None Do not return anything, modify s in-place instead.
-     &quot;&quot;&quot;
-     return s[::-1]
-
- def reverseString1(self, s):
-     s.reverse()
-
- def reverseString2(self, s):
-     s[:] = list(reversed(s))
-
- def reverseString3(self, s):
-     result = list()
-
-     while len(s) &gt; 0:
-         result.append(s.pop())
-
-     s[:] = result
-
- def reverseString4(self, s):
-     for i in range(len(s)//2):
-         s[i], s[len(s) - i - 1] = s[len(s) - i - 1], s[i]
-
- # def reverseString5(self, s):
- #     if len(s) &lt; 1:
- #         return s
- #     return self.reverseString4(s[1:]) + s[0]
-</code></pre>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-        <category>344.反转字符串</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -24639,114 +24639,6 @@ public class SecondInterceptor implements HandlerInterceptor&#123;
       </tags>
   </entry>
   <entry>
-    <title>leetcode | 22.括号生成</title>
-    <url>/2021/09/05/%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/</url>
-    <content><![CDATA[<h1 id="22-括号生成"><a href="#22-括号生成" class="headerlink" title="22.括号生成"></a>22.括号生成</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。<br>有效括号组合需满足：左括号必须以正确的顺序闭合。</p>
-<p><a href="https://leetcode-cn.com/problems/generate-parentheses/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>1.暴力法</strong><br>可以生成所有 2^2n 个 ‘(‘ 和 ‘)’ 字符构成的序列，然后我们检查每一个是否有效即可。<br><strong>2.回溯法</strong><br>方法一还有改进的余地：我们可以只在序列仍然保持有效时才添加 ‘(‘ or ‘)’，而不是像 方法一 那样每次添加。我们可以通过跟踪到目前为止放置的左括号和右括号的数目来做到这一点，<br>如果左括号数量不大于 n，我们可以放一个左括号。如果右括号数量小于左括号的数量，我们可以放一个右括号。<br>3.按括号序列的长度递归</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>from functools import lru_cache
-
-class Solution(object):
-    def generateParenthesis(self, n):
-        &quot;&quot;&quot;
-        暴力法
-        :type n: int
-        :rtype: List[str]
-        &quot;&quot;&quot;
-        # 生成所有括号组合，然后判断是否是有效括号
-        def generate(A):
-            if len(A) == 2 * n:
-                # print(A)
-                if valid(A):
-                    ans.append(&quot;&quot;.join(A))
-            else:
-                A.append(&#39;(&#39;)
-                generate(A)
-                A.pop()
-                A.append(&#39;)&#39;)
-                generate(A)
-                A.pop()
-
-        def valid(A):
-            bal = 0  # 表示左括号的数量减去右括号的数量
-            for c in A:
-                if c == &#39;(&#39;:
-                    bal += 1
-                else:
-                    bal -= 1
-
-                if bal &lt; 0:
-                    return False
-
-            return bal == 0
-
-        ans = []
-        generate([])
-        return ans
-
-    def generateParenthesis1(self, n):
-        &quot;&quot;&quot;
-        回溯法
-
-        对暴力解法的改进：
-        只在序列仍然保持有效时才添加 &#39;(&#39; or &#39;)&#39;，而不是像 暴力解法 那样每次添加
-        我们可以通过跟踪到目前为止放置的左括号和右括号的数目来做到这一点
-
-        如果左括号数量不大于 n，我们可以放一个左括号
-        如果右括号数量小于左括号的数量，我们可以放一个右括号
-        &quot;&quot;&quot;
-        def backtrack(S, left, right):
-            if len(S) == 2 * n:
-                ans.append(&#39;&#39;.join(S))
-                return
-            if left &lt; n:
-                S.append(&#39;(&#39;)
-                backtrack(S, left + 1, right)
-                S.pop()
-            if right &lt; left:
-                S.append(&#39;)&#39;)
-                backtrack(S, left, right + 1)
-                S.pop()
-
-        ans = []
-        backtrack([], 0, 0)
-        return ans
-
-
-class Solution1:
-    @lru_cache(None)
-    def generateParenthesis(self, n: int):
-        &quot;&quot;&quot;按括号序列的长度递归&quot;&quot;&quot;
-        if n == 0:
-            return [&#39;&#39;]
-        ans = []
-        for c in range(n):
-            for left in self.generateParenthesis(c):
-                for right in self.generateParenthesis(n-1-c):
-                    ans.append(&#39;(&#123;&#125;)&#123;&#125;&#39;.format(left, right))
-        return ans
-
-
-if __name__ == &#39;__main__&#39;:
-    slt = Solution1()
-    parenthesis_list = slt.generateParenthesis(3)
-    print(parenthesis_list)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-        <category>22.括号生成</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于JavaWeb的网上购物商城 | 提交订单</title>
     <url>/2022/01/15/%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95/</url>
     <content><![CDATA[<h1 id="提交订单"><a href="#提交订单" class="headerlink" title="提交订单"></a>提交订单</h1><p><strong>实现功能：</strong><br>用户在购物车页面点击“提交订单”，向数据库中写入用户信息、购买的商品、数量等。</p>
@@ -25245,6 +25137,114 @@ doc.save(&#39;data\制造业必修课.docx&#39;)
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 22.括号生成</title>
+    <url>/2021/09/05/%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/</url>
+    <content><![CDATA[<h1 id="22-括号生成"><a href="#22-括号生成" class="headerlink" title="22.括号生成"></a>22.括号生成</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。<br>有效括号组合需满足：左括号必须以正确的顺序闭合。</p>
+<p><a href="https://leetcode-cn.com/problems/generate-parentheses/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>1.暴力法</strong><br>可以生成所有 2^2n 个 ‘(‘ 和 ‘)’ 字符构成的序列，然后我们检查每一个是否有效即可。<br><strong>2.回溯法</strong><br>方法一还有改进的余地：我们可以只在序列仍然保持有效时才添加 ‘(‘ or ‘)’，而不是像 方法一 那样每次添加。我们可以通过跟踪到目前为止放置的左括号和右括号的数目来做到这一点，<br>如果左括号数量不大于 n，我们可以放一个左括号。如果右括号数量小于左括号的数量，我们可以放一个右括号。<br>3.按括号序列的长度递归</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>from functools import lru_cache
+
+class Solution(object):
+    def generateParenthesis(self, n):
+        &quot;&quot;&quot;
+        暴力法
+        :type n: int
+        :rtype: List[str]
+        &quot;&quot;&quot;
+        # 生成所有括号组合，然后判断是否是有效括号
+        def generate(A):
+            if len(A) == 2 * n:
+                # print(A)
+                if valid(A):
+                    ans.append(&quot;&quot;.join(A))
+            else:
+                A.append(&#39;(&#39;)
+                generate(A)
+                A.pop()
+                A.append(&#39;)&#39;)
+                generate(A)
+                A.pop()
+
+        def valid(A):
+            bal = 0  # 表示左括号的数量减去右括号的数量
+            for c in A:
+                if c == &#39;(&#39;:
+                    bal += 1
+                else:
+                    bal -= 1
+
+                if bal &lt; 0:
+                    return False
+
+            return bal == 0
+
+        ans = []
+        generate([])
+        return ans
+
+    def generateParenthesis1(self, n):
+        &quot;&quot;&quot;
+        回溯法
+
+        对暴力解法的改进：
+        只在序列仍然保持有效时才添加 &#39;(&#39; or &#39;)&#39;，而不是像 暴力解法 那样每次添加
+        我们可以通过跟踪到目前为止放置的左括号和右括号的数目来做到这一点
+
+        如果左括号数量不大于 n，我们可以放一个左括号
+        如果右括号数量小于左括号的数量，我们可以放一个右括号
+        &quot;&quot;&quot;
+        def backtrack(S, left, right):
+            if len(S) == 2 * n:
+                ans.append(&#39;&#39;.join(S))
+                return
+            if left &lt; n:
+                S.append(&#39;(&#39;)
+                backtrack(S, left + 1, right)
+                S.pop()
+            if right &lt; left:
+                S.append(&#39;)&#39;)
+                backtrack(S, left, right + 1)
+                S.pop()
+
+        ans = []
+        backtrack([], 0, 0)
+        return ans
+
+
+class Solution1:
+    @lru_cache(None)
+    def generateParenthesis(self, n: int):
+        &quot;&quot;&quot;按括号序列的长度递归&quot;&quot;&quot;
+        if n == 0:
+            return [&#39;&#39;]
+        ans = []
+        for c in range(n):
+            for left in self.generateParenthesis(c):
+                for right in self.generateParenthesis(n-1-c):
+                    ans.append(&#39;(&#123;&#125;)&#123;&#125;&#39;.format(left, right))
+        return ans
+
+
+if __name__ == &#39;__main__&#39;:
+    slt = Solution1()
+    parenthesis_list = slt.generateParenthesis(3)
+    print(parenthesis_list)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+        <category>22.括号生成</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 35.搜索插入位置</title>
     <url>/2022/07/29/%E6%90%9C%E7%B4%A2%E6%8F%92%E5%85%A5%E4%BD%8D%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="35-搜索插入位置"><a href="#35-搜索插入位置" class="headerlink" title="35.搜索插入位置"></a>35.搜索插入位置</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。<br>请必须使用时间复杂度为 O(log n) 的算法。</p>
@@ -25725,6 +25725,19 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>最新SCI期刊查询及投稿分析系统</title>
+    <url>/2021/12/16/%E6%9C%80%E6%96%B0SCI%E6%9C%9F%E5%88%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E6%8A%95%E7%A8%BF%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="最新SCI期刊查询及投稿分析系统"><a href="#最新SCI期刊查询及投稿分析系统" class="headerlink" title="最新SCI期刊查询及投稿分析系统"></a>最新SCI期刊查询及投稿分析系统</h1><p><a href="https://www.letpub.com.cn/">最新SCI期刊查询及投稿分析系统</a></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>最新SCI期刊查询及投稿分析系统</category>
+      </categories>
+      <tags>
+        <tag>SCI期刊查询</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 155.最小栈</title>
     <url>/2021/08/27/%E6%9C%80%E5%B0%8F%E6%A0%88/</url>
     <content><![CDATA[<h1 id="155-最小栈"><a href="#155-最小栈" class="headerlink" title="155.最小栈"></a>155.最小栈</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。<br>    push(x) —— 将元素 x 推入栈中。<br>    pop() —— 删除栈顶的元素。<br>    top() —— 获取栈顶元素。<br>    getMin() —— 检索栈中的最小元素。</p>
@@ -25820,19 +25833,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>栈</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>最新SCI期刊查询及投稿分析系统</title>
-    <url>/2021/12/16/%E6%9C%80%E6%96%B0SCI%E6%9C%9F%E5%88%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E6%8A%95%E7%A8%BF%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h1 id="最新SCI期刊查询及投稿分析系统"><a href="#最新SCI期刊查询及投稿分析系统" class="headerlink" title="最新SCI期刊查询及投稿分析系统"></a>最新SCI期刊查询及投稿分析系统</h1><p><a href="https://www.letpub.com.cn/">最新SCI期刊查询及投稿分析系统</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>最新SCI期刊查询及投稿分析系统</category>
-      </categories>
-      <tags>
-        <tag>SCI期刊查询</tag>
       </tags>
   </entry>
   <entry>
@@ -26117,21 +26117,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>本地与服务器互传文件</title>
-    <url>/2021/04/18/%E6%9C%AC%E5%9C%B0%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%92%E4%BC%A0%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="本地与服务器互传文件"><a href="#本地与服务器互传文件" class="headerlink" title="本地与服务器互传文件"></a>本地与服务器互传文件</h1><p>命令安装：yum install lrzsz</p>
-<p>从服务器发送文件到客户端： sz filename</p>
-<p>从客户端上传文件到服务端： rz</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 20.有效的括号</title>
     <url>/2021/08/27/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/</url>
     <content><![CDATA[<h1 id="20-有效的括号"><a href="#20-有效的括号" class="headerlink" title="20.有效的括号"></a>20.有效的括号</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串 s ，判断字符串是否有效。<br>有效字符串需满足：<br>    左括号必须用相同类型的右括号闭合。<br>    左括号必须以正确的顺序闭合。</p>
@@ -26219,6 +26204,21 @@ if __name__ == &quot;__main__&quot;:
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本地与服务器互传文件</title>
+    <url>/2021/04/18/%E6%9C%AC%E5%9C%B0%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%92%E4%BC%A0%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="本地与服务器互传文件"><a href="#本地与服务器互传文件" class="headerlink" title="本地与服务器互传文件"></a>本地与服务器互传文件</h1><p>命令安装：yum install lrzsz</p>
+<p>从服务器发送文件到客户端： sz filename</p>
+<p>从客户端上传文件到服务端： rz</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -29017,99 +29017,6 @@ if __name__ == &#39;__main__&#39;:
       </tags>
   </entry>
   <entry>
-    <title>基于JavaWeb的网上购物商城 | 登录成功后网页头部显示用户名</title>
-    <url>/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/</url>
-    <content><![CDATA[<h1 id="登录成功后网页头部显示用户名"><a href="#登录成功后网页头部显示用户名" class="headerlink" title="登录成功后网页头部显示用户名"></a>登录成功后网页头部显示用户名</h1><p>要实现登录成功后在网页头部显示用户名，只需在登录成功后将当前用户存入session,然后在登录页面使用jstl语法判断用户状态，<br>登录成功则显示用户名。</p>
-<ol>
-<li>在UserServlet.java中添加将当前用户加入session中的代码<br>public void login(HttpServletRequest request, HttpServletResponse response) {<pre><code> ......
- if(user!=null) &#123;
-     HttpSession session = request.getSession();
-     session.setAttribute(&quot;user&quot;, user);//将当前用户(User)加入session
-     
-     request.getRequestDispatcher(&quot;/index.jsp&quot;).forward(request, response);
- &#125;
- ......
-</code></pre>
- }</li>
-<li>修改header.jsp代码<br>使用jstl代码判断当前用户是否为空，若为空，显示登录注册链接，若不为空显示用户名等信息。</li>
-</ol>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot;%&gt;
-&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
-&lt;!DOCTYPE html&gt;
-&lt;!-- 登录 注册 购物车... --&gt;
-&lt;div class=&quot;container-fluid&quot;&gt;
-    &lt;div class=&quot;col-md-4&quot;&gt;
-        &lt;img src=&quot;img/logo2.png&quot; /&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;col-md-5&quot;&gt;
-        &lt;img src=&quot;img/header.png&quot; /&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;
-        &lt;ol class=&quot;list-inline&quot;&gt;
-            &lt;c:if test=&quot;$&#123;empty user&#125;&quot;&gt;
-                &lt;li&gt;&lt;a href=&quot;login.jsp&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;register.jsp&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;
-            &lt;/c:if&gt;
-            &lt;c:if test=&quot;$&#123;not empty user&#125;&quot;&gt;
-                &lt;li&gt;$&#123;user.username&#125;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;cart.jsp&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;order_list.jsp&quot;&gt;我的订单&lt;/a&gt;&lt;/li&gt;
-            &lt;/c:if&gt;
-        &lt;/ol&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;!-- 导航条 --&gt;
-&lt;div class=&quot;container-fluid&quot;&gt;
-    &lt;nav class=&quot;navbar navbar-inverse&quot;&gt;
-        &lt;div class=&quot;container-fluid&quot;&gt;
-            &lt;!-- Brand and toggle get grouped for better mobile display --&gt;
-            &lt;div class=&quot;navbar-header&quot;&gt;
-                &lt;button type=&quot;button&quot; class=&quot;navbar-toggle collapsed&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#bs-example-navbar-collapse-1&quot; aria-expanded=&quot;false&quot;&gt;
-                    &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
-                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                &lt;/button&gt;
-                &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;首页&lt;/a&gt;
-            &lt;/div&gt;
-
-            &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;bs-example-navbar-collapse-1&quot;&gt;
-                &lt;ul class=&quot;nav navbar-nav&quot;&gt;
-                    &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;product_list.htm&quot;&gt;手机数码&lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-                &lt;form class=&quot;navbar-form navbar-right&quot; role=&quot;search&quot;&gt;
-                    &lt;div class=&quot;form-group&quot;&gt;
-                        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search&quot;&gt;
-                    &lt;/div&gt;
-                    &lt;button type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;Submit&lt;/button&gt;
-                &lt;/form&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
-&lt;/div&gt;
-</code></pre>
-<ol start="3">
-<li>效果<br><img src="/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/1.PNG"></li>
-</ol>
-]]></content>
-      <categories>
-        <category>项目经历</category>
-        <category>JavaWeb</category>
-        <category>基于JavaWeb的网上购物商城</category>
-        <category>登录成功后网页头部显示用户名</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>JavaWeb</tag>
-        <tag>基于JavaWeb的网上购物商城</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>wxPython | 盒子布局管理器</title>
     <url>/2021/08/03/%E7%9B%92%E5%AD%90%E5%B8%83%E5%B1%80%E7%AE%A1%E7%90%86%E5%99%A8/</url>
     <content><![CDATA[<h1 id="盒子布局管理器"><a href="#盒子布局管理器" class="headerlink" title="盒子布局管理器"></a>盒子布局管理器</h1><p>wxPython提供了布局管理器类帮助实现界面布局，主要分为两大类：盒子布局管理器（类似于CSS中的弹性布局）和网格布局管理器。</p>
@@ -29214,6 +29121,99 @@ app.MainLoop()  # 进入主事件循环
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于JavaWeb的网上购物商城 | 登录成功后网页头部显示用户名</title>
+    <url>/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/</url>
+    <content><![CDATA[<h1 id="登录成功后网页头部显示用户名"><a href="#登录成功后网页头部显示用户名" class="headerlink" title="登录成功后网页头部显示用户名"></a>登录成功后网页头部显示用户名</h1><p>要实现登录成功后在网页头部显示用户名，只需在登录成功后将当前用户存入session,然后在登录页面使用jstl语法判断用户状态，<br>登录成功则显示用户名。</p>
+<ol>
+<li>在UserServlet.java中添加将当前用户加入session中的代码<br>public void login(HttpServletRequest request, HttpServletResponse response) {<pre><code> ......
+ if(user!=null) &#123;
+     HttpSession session = request.getSession();
+     session.setAttribute(&quot;user&quot;, user);//将当前用户(User)加入session
+     
+     request.getRequestDispatcher(&quot;/index.jsp&quot;).forward(request, response);
+ &#125;
+ ......
+</code></pre>
+ }</li>
+<li>修改header.jsp代码<br>使用jstl代码判断当前用户是否为空，若为空，显示登录注册链接，若不为空显示用户名等信息。</li>
+</ol>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;!-- 登录 注册 购物车... --&gt;
+&lt;div class=&quot;container-fluid&quot;&gt;
+    &lt;div class=&quot;col-md-4&quot;&gt;
+        &lt;img src=&quot;img/logo2.png&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-md-5&quot;&gt;
+        &lt;img src=&quot;img/header.png&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-md-3&quot; style=&quot;padding-top:20px&quot;&gt;
+        &lt;ol class=&quot;list-inline&quot;&gt;
+            &lt;c:if test=&quot;$&#123;empty user&#125;&quot;&gt;
+                &lt;li&gt;&lt;a href=&quot;login.jsp&quot;&gt;登录&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;register.jsp&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;
+            &lt;/c:if&gt;
+            &lt;c:if test=&quot;$&#123;not empty user&#125;&quot;&gt;
+                &lt;li&gt;$&#123;user.username&#125;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;cart.jsp&quot;&gt;购物车&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;order_list.jsp&quot;&gt;我的订单&lt;/a&gt;&lt;/li&gt;
+            &lt;/c:if&gt;
+        &lt;/ol&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 导航条 --&gt;
+&lt;div class=&quot;container-fluid&quot;&gt;
+    &lt;nav class=&quot;navbar navbar-inverse&quot;&gt;
+        &lt;div class=&quot;container-fluid&quot;&gt;
+            &lt;!-- Brand and toggle get grouped for better mobile display --&gt;
+            &lt;div class=&quot;navbar-header&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;navbar-toggle collapsed&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#bs-example-navbar-collapse-1&quot; aria-expanded=&quot;false&quot;&gt;
+                    &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
+                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;首页&lt;/a&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;bs-example-navbar-collapse-1&quot;&gt;
+                &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+                    &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;product_list.htm&quot;&gt;手机数码&lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;电脑办公&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;form class=&quot;navbar-form navbar-right&quot; role=&quot;search&quot;&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;button type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;Submit&lt;/button&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+&lt;/div&gt;
+</code></pre>
+<ol start="3">
+<li>效果<br><img src="/2022/01/13/%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F%E5%90%8E%E7%BD%91%E9%A1%B5%E5%A4%B4%E9%83%A8%E6%98%BE%E7%A4%BA%E7%94%A8%E6%88%B7%E5%90%8D/1.PNG"></li>
+</ol>
+]]></content>
+      <categories>
+        <category>项目经历</category>
+        <category>JavaWeb</category>
+        <category>基于JavaWeb的网上购物商城</category>
+        <category>登录成功后网页头部显示用户名</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>JavaWeb</tag>
+        <tag>基于JavaWeb的网上购物商城</tag>
       </tags>
   </entry>
   <entry>
@@ -32365,6 +32365,66 @@ public class ReadWriteLockCache &#123;
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 383.赎金信</title>
+    <url>/2021/09/01/%E8%B5%8E%E9%87%91%E4%BF%A1/</url>
+    <content><![CDATA[<h1 id="383-赎金信"><a href="#383-赎金信" class="headerlink" title="383.赎金信"></a>383.赎金信</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。<br>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
+<p><a href="https://leetcode-cn.com/problems/ransom-note/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>遍历ransomNote中的每一个元素，并查找这个元素是否在magazine中，如果没有查找到，则返回False，如果查找到了，则将这个元素在magazine中移除，以此类推，直到遍历完ransomNote中的每一个元素。</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -&gt; bool:
+        ransomNote = list(ransomNote)
+        magazine = list(magazine)
+
+        for i in range(len(ransomNote)):
+            if ransomNote[i] in magazine:
+                magazine.remove(ransomNote[i])
+                print(ransomNote)
+            else:
+                return False
+
+        if i == len(ransomNote)-1:
+            return True
+
+
+if __name__ == &#39;__main__&#39;:
+    s = Solution()
+    res = s.canConstruct(&#39;aa&#39;, &#39;aab&#39;)
+    print(res)
+
+    # list1 = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;]
+    # list1.remove(&#39;a&#39;)
+    # print(list1)
+</code></pre>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>字符串</category>
+        <category>383.赎金信</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件架构 | 软件设计策略</title>
+    <url>/2021/03/11/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<h1 id="软件设计策略"><a href="#软件设计策略" class="headerlink" title="软件设计策略"></a>软件设计策略</h1><p>1.面向对象设计</p>
+<p>2.面向功能设计(结构化)</p>
+<p>3.面向主题设计</p>
+<p>4.面向数据结构设计(数据库)</p>
+]]></content>
+      <categories>
+        <category>SA</category>
+      </categories>
+      <tags>
+        <tag>软件架构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于JavaWeb的网上购物商城 | 购物车</title>
     <url>/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/</url>
     <content><![CDATA[<h1 id="购物车"><a href="#购物车" class="headerlink" title="购物车"></a>购物车</h1><p><strong>实现功能：</strong><br>用户在登录状态下可以将商品加入购物车（如下图所示）。<br><img src="/2022/01/15/%E8%B4%AD%E7%89%A9%E8%BD%A6/1.PNG"></p>
@@ -32634,66 +32694,6 @@ public void cart(HttpServletRequest request, HttpServletResponse response) &#123
         <tag>JavaWeb</tag>
         <tag>基于JavaWeb的网上购物商城</tag>
         <tag>购物车</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 383.赎金信</title>
-    <url>/2021/09/01/%E8%B5%8E%E9%87%91%E4%BF%A1/</url>
-    <content><![CDATA[<h1 id="383-赎金信"><a href="#383-赎金信" class="headerlink" title="383.赎金信"></a>383.赎金信</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。<br>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
-<p><a href="https://leetcode-cn.com/problems/ransom-note/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>遍历ransomNote中的每一个元素，并查找这个元素是否在magazine中，如果没有查找到，则返回False，如果查找到了，则将这个元素在magazine中移除，以此类推，直到遍历完ransomNote中的每一个元素。</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>class Solution:
-    def canConstruct(self, ransomNote: str, magazine: str) -&gt; bool:
-        ransomNote = list(ransomNote)
-        magazine = list(magazine)
-
-        for i in range(len(ransomNote)):
-            if ransomNote[i] in magazine:
-                magazine.remove(ransomNote[i])
-                print(ransomNote)
-            else:
-                return False
-
-        if i == len(ransomNote)-1:
-            return True
-
-
-if __name__ == &#39;__main__&#39;:
-    s = Solution()
-    res = s.canConstruct(&#39;aa&#39;, &#39;aab&#39;)
-    print(res)
-
-    # list1 = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;]
-    # list1.remove(&#39;a&#39;)
-    # print(list1)
-</code></pre>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>字符串</category>
-        <category>383.赎金信</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>软件架构 | 软件设计策略</title>
-    <url>/2021/03/11/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%AD%96%E7%95%A5/</url>
-    <content><![CDATA[<h1 id="软件设计策略"><a href="#软件设计策略" class="headerlink" title="软件设计策略"></a>软件设计策略</h1><p>1.面向对象设计</p>
-<p>2.面向功能设计(结构化)</p>
-<p>3.面向主题设计</p>
-<p>4.面向数据结构设计(数据库)</p>
-]]></content>
-      <categories>
-        <category>SA</category>
-      </categories>
-      <tags>
-        <tag>软件架构</tag>
       </tags>
   </entry>
   <entry>
