@@ -74,7 +74,7 @@
   </style>
 </noscript>
 
-<link rel="alternate" href="/atom.xml" title="shengli liao" type="application/atom+xml">
+<!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="shengli liao" type="application/atom+xml">
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
     <div class="headband"></div>
@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/15/SpringSecurity%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,244 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 线程池</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-29 00:44:53 / 修改时间：22:51:22" itemprop="dateCreated datePublished" datetime="2022-05-29T00:44:53-08:00">2022-05-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">线程池</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器时，<br>那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p>
-<pre><code>package concurrency.threadPool;
-
-public interface ThreadPool&lt;Job extends Runnable&gt; &#123;
-    //执行一个Job，这个Job需要实现Runnable
-    void execute(Job job);
-    
-    //关闭线程池
-    void shutdown();
-    
-    //增加工作者线程
-    void addWorkers(int num);
-    
-    //减少工作者线程
-    void remvoeWorkers(int num);
-    
-    //得到正在等待执行的任务数量
-    int getJobSize();
-&#125;
-</code></pre>
-<p><strong>DefaultThreadPool.java</strong></p>
-<pre><code>package concurrency.threadPool;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
-public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool&lt;Job&gt; &#123;
-    //线程池最大数量
-    private static final int MAX_WORKER_NUMBERS = 10;
-    
-    //线程池默认数量
-    private static final int DEFAULT_WORKER_NUMBERS = 5;
-    
-    //线程池最小的数量
-    private static final int MIN_WORKER_NUMBERS = 1;
-    
-    //这是一个工作列表，将会向里面插入工作
-    private final LinkedList&lt;Job&gt; jobs = new LinkedList&lt;Job&gt;();
-    
-    //工作者列表
-    private final List&lt;Worker&gt; workers = Collections.synchronizedList(new ArrayList&lt;Worker&gt;());
-    
-    //工作者线程的数量
-    private int workerNum = DEFAULT_WORKER_NUMBERS;
-    
-    //线程编号的生成
-    private AtomicLong threadNum = new AtomicLong();
-    
-    //工作者，负责消费任务
-    class Worker implements Runnable&#123;
-        //是否工作
-        private volatile boolean running = true;
-        @Override
-        public void run()&#123;
-            while(running)&#123;
-                Job job = null;
-                synchronized(jobs)&#123;
-                    //如果工作者列表是空的，那么就wait
-                    while(jobs.isEmpty())&#123;
-                        try&#123;
-                            jobs.wait();
-                        &#125;catch(InterruptedException ex)&#123;
-                            //感知到外部对WorkerThread的中断操作，返回
-                            Thread.currentThread().interrupt();
-                            return;
-                        &#125;
-                    &#125;
-                    //取出一个Job
-                    job = jobs.removeFirst();
-                &#125;
-                if(job != null)&#123;
-                    try&#123;
-                        job.run();
-                    &#125;catch(Exception ex)&#123;
-                        //忽略Job执行中的Exception
-                    &#125;
-                &#125;
-            &#125;
-        &#125;
-        
-        public void shutdown()&#123;
-            running = false;
-        &#125;
-    &#125;
-    
-    //初始化线程工作者
-    private void initializeWorkers(int num)&#123;
-        for(int i = 0; i &lt; num; i++)&#123;
-            Worker worker = new Worker();
-            workers.add(worker);
-            Thread thread = new Thread(worker, &quot;ThreadPool-Worker-&quot; + threadNum.incrementAndGet());
-            thread.start();
-        &#125;
-    &#125;
-    
-    public DefaultThreadPool()&#123;
-        initializeWorkers(DEFAULT_WORKER_NUMBERS);
-    &#125;
-    
-    public DefaultThreadPool(int num)&#123;
-        workerNum = num &gt; MAX_WORKER_NUMBERS ? MAX_WORKER_NUMBERS : num &lt; MIN_WORKER_NUMBERS ? MIN_WORKER_NUMBERS : num;
-        initializeWorkers(workerNum);
-    &#125;
-    
-    @Override
-    public void execute(Job job) &#123;
-        if(job != null)&#123;
-            //添加一个工作，然后进行通知
-            synchronized(jobs)&#123;
-                jobs.addLast(job);
-                jobs.notify();
-            &#125;
-        &#125;
-    &#125;
-
-    @Override
-    public void shutdown() &#123;
-        for(Worker worker : workers)&#123;
-            worker.shutdown();
-        &#125;
-    &#125;
-
-    @Override
-    public void addWorkers(int num) &#123;
-        synchronized(jobs)&#123;
-            //限制新增的Worker数量不能超过最大值
-            if(num + this.workerNum &gt; MAX_WORKER_NUMBERS)&#123;
-                num = MAX_WORKER_NUMBERS - this.workerNum;
-            &#125;
-            initializeWorkers(num);
-            this.workerNum += num;
-        &#125;
-    &#125;
-
-    @Override
-    public void remvoeWorkers(int num) &#123;
-        synchronized(jobs)&#123;
-            if(num &gt;= this.workerNum)&#123;
-                throw new IllegalArgumentException(&quot;beyond workNum&quot;);
-            &#125;
-            //按照给定的数量停止Worker
-            int count = 0;
-            while(count &lt; num)&#123;
-                Worker worker = workers.get(count);
-                if(workers.remove(worker))&#123;
-                    worker.shutdown();
-                    count++;
-                &#125;
-            &#125;
-            this.workerNum -= count;
-        &#125;
-    &#125;
-
-    @Override
-    public int getJobSize() &#123;
-        return jobs.size();
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">并发 | 等待/通知机制</a>
+            <a href="/2022/08/15/SpringSecurity%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83/" class="post-title-link" itemprop="url">SpringSecurity | 用户认证、授权、注销、权限控制、记住我、首页定制</a>
         </h2>
 
         <div class="post-meta">
@@ -451,14 +214,14 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-05-28 23:37:56" itemprop="dateCreated datePublished" datetime="2022-05-28T23:37:56-08:00">2022-05-28</time>
+              <time title="创建时间：2022-08-15 19:04:49" itemprop="dateCreated datePublished" datetime="2022-08-15T19:04:49-08:00">2022-08-15</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-29 22:51:06" itemprop="dateModified" datetime="2022-05-29T22:51:06-08:00">2022-05-29</time>
+                <time title="修改时间：2022-08-17 18:03:01" itemprop="dateModified" datetime="2022-08-17T18:03:01-08:00">2022-08-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -470,11 +233,15 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">等待/通知机制</span></a>
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringSecurity/" itemprop="url" rel="index"><span itemprop="name">SpringSecurity</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringSecurity/%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E3%80%81%E6%8E%88%E6%9D%83%E3%80%81%E6%B3%A8%E9%94%80%E3%80%81%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E8%AE%B0%E4%BD%8F%E6%88%91%E3%80%81%E9%A6%96%E9%A1%B5%E5%AE%9A%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">用户认证、授权、注销、权限控制、记住我、首页定制</span></a>
                 </span>
             </span>
 
@@ -489,66 +256,57 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p>
-<pre><code>package concurrency;
+          <h1 id="SpringSecurity用户认证、授权、注销、权限控制、记住我、首页定制"><a href="#SpringSecurity用户认证、授权、注销、权限控制、记住我、首页定制" class="headerlink" title="SpringSecurity用户认证、授权、注销、权限控制、记住我、首页定制"></a>SpringSecurity用户认证、授权、注销、权限控制、记住我、首页定制</h1><ul>
+<li><p>实现功能：授权不同的用户角色访问不同的模块，如下图所示：<br><img src="/2022/08/15/SpringSecurity%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83/1.png"></p>
+</li>
+<li><p>描述</p>
+<ul>
+<li>设置三个不同用户角色（victory,root,guest）</li>
+<li>victory可以访问level2和leve3的内容，root可以访问页面的所有内容，guest只可以访问level1的内容，而且没有权限的模块在该用户登录时不显示。</li>
+<li>没有登录时，点击三个模块的内容会跳转到登录页面</li>
+<li>记住我功能</li>
+<li>首页定制（不使用SpringSecurity默认登录页面，使用自己写的登录页面）</li>
+</ul>
+</li>
+<li><p>页面<br><img src="/2022/08/15/SpringSecurity%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83/2.png"></p>
+</li>
+<li><p>依赖导入</p>
+<ul>
+<li>导入thymeleaf依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-spring5<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf.extras<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-extras-java8time<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>导入Web依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>导入security依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>项目目录<br><img src="/2022/08/15/SpringSecurity%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83/3.png"></p>
+</li>
+<li><p>编写RootController映射请求（跳转页面）</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RootController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&#123;&quot;/&quot;, &quot;/index&quot;&#125;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">index</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;index&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;toLogin&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toLogin</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;views/login&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/level1/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">level1</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> <span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;views/level1/&quot;</span>+id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/level2/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">level2</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> <span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;views/level2/&quot;</span>+id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/level3/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">level3</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> <span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;views/level3/&quot;</span>+id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-public class WaitNotify &#123;
-    static boolean flag = true;
-    static Object lock = new Object();
-    
-    public static void main(String[] args) throws InterruptedException &#123;
-        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);
-        waitThread.start();
-        TimeUnit.SECONDS.sleep(1);
-        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);
-        notifyThread.start();
-    &#125;
-    
-    static class Wait implements Runnable&#123;
-        @Override
-        public void run()&#123;
-            //加锁，用于lock的Monitor
-            synchronized(lock)&#123;
-                //当条件不满足时，继续wait，同时释放了lock的锁
-                while(flag)&#123;
-                    try &#123;
-                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                        lock.wait();
-                    &#125; catch (InterruptedException e) &#123;
-                    &#125;
-                &#125;
-                //条件满足时，完成工作
-                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-            &#125;
-        &#125;
-    &#125;
-    
-    static class Notify implements Runnable&#123;
-        @Override
-        public void run() &#123;
-            synchronized(lock)&#123;
-                //获取lock的锁，然后进行通知，通知时不会释放lock的锁
-                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回
-                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                lock.notifyAll();
-                flag = false;
-                SleepUtils.second(5);
-            &#125;
-            
-            //再次加锁
-            synchronized(lock)&#123;
-                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                SleepUtils.second(5);
-            &#125;
-            
-        &#125;
-    &#125;
-&#125;
-</code></pre>
+<ul>
+<li>编写SecurityConfig配置SpringSecurity</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.web.builders.HttpSecurity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EnableWebSecurity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecurityConfig</span> <span class="keyword">extends</span> <span class="title">WebSecurityConfigurerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="comment">//授权</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//首页所有人可以访问，功能页只有对应有权限的人才能访问</span></span><br><span class="line">        <span class="comment">//请求授权的规则</span></span><br><span class="line">        <span class="comment">//链式编程</span></span><br><span class="line">        http.authorizeHttpRequests()</span><br><span class="line">                .antMatchers(<span class="string">&quot;/&quot;</span>).permitAll()</span><br><span class="line">                .antMatchers(<span class="string">&quot;/level1/**&quot;</span>).hasRole(<span class="string">&quot;vip1&quot;</span>)</span><br><span class="line">                .antMatchers(<span class="string">&quot;/level2/**&quot;</span>).hasRole(<span class="string">&quot;vip2&quot;</span>)</span><br><span class="line">                .antMatchers(<span class="string">&quot;/level3/**&quot;</span>).hasRole(<span class="string">&quot;vip3&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//没有权限默认会跳到登录页面</span></span><br><span class="line">        http.formLogin();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//防止网站攻击 get不安全，可以使用post springboot默认开启csrf(注销失败可能的原因)</span></span><br><span class="line">        http.csrf().disable(); <span class="comment">//关闭csrf功能</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//注销，跳到首页</span></span><br><span class="line">        http.logout().logoutSuccessUrl(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//认证</span></span><br><span class="line">    <span class="comment">//密码编码：PasswordEncoder</span></span><br><span class="line">    <span class="comment">//在Spring Security 5.0+新增了很多加密方法</span></span><br><span class="line">    <span class="comment">//报错 500 密码没有加密</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//这些数据正常应该从数据库中读</span></span><br><span class="line">        auth.inMemoryAuthentication().passwordEncoder(<span class="keyword">new</span> BCryptPasswordEncoder())</span><br><span class="line">                .withUser(<span class="string">&quot;victory&quot;</span>).password(<span class="keyword">new</span> BCryptPasswordEncoder().encode(<span class="string">&quot;123&quot;</span>)).roles(<span class="string">&quot;vip2&quot;</span>, <span class="string">&quot;vip3&quot;</span>)</span><br><span class="line">                .and()</span><br><span class="line">                .withUser(<span class="string">&quot;root&quot;</span>).password(<span class="keyword">new</span> BCryptPasswordEncoder().encode(<span class="string">&quot;123&quot;</span>)).roles(<span class="string">&quot;vip1&quot;</span>, <span class="string">&quot;vip2&quot;</span>, <span class="string">&quot;vip3&quot;</span>)</span><br><span class="line">                .and()</span><br><span class="line">                .withUser(<span class="string">&quot;guest&quot;</span>).password(<span class="keyword">new</span> BCryptPasswordEncoder().encode(<span class="string">&quot;123&quot;</span>)).roles(<span class="string">&quot;vip1&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>权限控制（没有权限的模块在该用户登录时不显示）<ul>
+<li>导入依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf.extras<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-extras-springsecurity4<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>在页面中导入命名空间<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span> <span class="attr">xmlns:th</span>=<span class="string">&quot;http://www.thymeleaf.org&quot;</span> <span class="attr">xmlns:sec</span>=<span class="string">&quot;http://www.thymeleaf.org/thymeleaf-extras-springsecurity4&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>在页面中使用thymeleaf-security语法进行权限控制<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span> <span class="attr">xmlns:th</span>=<span class="string">&quot;http://www.thymeleaf.org&quot;</span> <span class="attr">xmlns:sec</span>=<span class="string">&quot;http://www.thymeleaf.org/thymeleaf-extras-springsecurity4&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--semantic-ui--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">&quot;https://cdn.bootcss.com/semantic-ui/2.4.1/semantic.min.css&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/qinjiang/css/qinstyle.css&#125;&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--主容器--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui container&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span> <span class="attr">id</span>=<span class="string">&quot;index-header-nav&quot;</span> <span class="attr">th:fragment</span>=<span class="string">&quot;nav-menu&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui secondary menu&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">&quot;item&quot;</span>  <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/index&#125;&quot;</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!--登录注销--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;right menu&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--如果未登录--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">sec:authorize</span>=<span class="string">&quot;!isAuthenticated()&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">&quot;item&quot;</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/toLogin&#125;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;address card icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> 登录</span><br><span class="line">                <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">&lt;!--如果登录：用户名和注销--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">sec:authorize</span>=<span class="string">&quot;isAuthenticated()&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">&quot;item&quot;</span>&gt;</span></span><br><span class="line">                    用户名：<span class="tag">&lt;<span class="name">span</span> <span class="attr">sec:authentication</span>=<span class="string">&quot;name&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!--角色：&lt;span sec:authentication=&quot;principal.getUsername()&quot;&gt;&lt;/span&gt;--&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">&quot;item&quot;</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/logout&#125;&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;sign-out icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> 注销</span><br><span class="line">                <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Spring Security Study by 秦疆<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui three column stackable grid&quot;</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--根据用户的角色动态的实现--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;column&quot;</span> <span class="attr">sec:authorize</span>=<span class="string">&quot;hasRole(&#x27;vip1&#x27;)&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui raised segment&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h5</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span>Level 1<span class="tag">&lt;/<span class="name">h5</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level1/1&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-1-1<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level1/2&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-1-2<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level1/3&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-1-3<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;column&quot;</span> <span class="attr">sec:authorize</span>=<span class="string">&quot;hasRole(&#x27;vip2&#x27;)&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui raised segment&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h5</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span>Level 2<span class="tag">&lt;/<span class="name">h5</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level2/1&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-2-1<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level2/2&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-2-2<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level2/3&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-2-3<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;column&quot;</span> <span class="attr">sec:authorize</span>=<span class="string">&quot;hasRole(&#x27;vip3&#x27;)&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui raised segment&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h5</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span>Level 3<span class="tag">&lt;/<span class="name">h5</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level3/1&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-3-1<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level3/2&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-3-2<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">&quot;@&#123;/level3/3&#125;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;bullhorn icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Level-3-3<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">&quot;@&#123;/qinjiang/js/jquery-3.1.1.min.js&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">&quot;@&#123;/qinjiang/js/semantic.min.js&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>thymeleaf security整合可能出现的错误<ul>
+<li>thymeleaf security不生效，可以将SpringBoot版本降低到2.0.7.RELEASE</li>
+<li>登录后出现WhiteLabel Error Page，Html文件中关于thymeleaf-security的代码有错误</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>记住我、首页定制<ul>
+<li>首页定制、记住我<br>在configure(HttpSecurity http)方法中添加以下代码即可定制首页<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//formLogin() 默认到登录页面（SpringSecurity自带登录页面）</span><br><span class="line">//usernameParameter(&quot;user&quot;) 与自定义登录页面用户名文本框的name属性对应</span><br><span class="line">//passwordParameter(&quot;pwd&quot;) 与自定义登录页面密码文本框的name属性对应</span><br><span class="line">http.formLogin().loginPage(&quot;/toLogin&quot;).usernameParameter(&quot;user&quot;).passwordParameter(&quot;pwd&quot;).loginProcessingUrl(&quot;/login&quot;);</span><br></pre></td></tr></table></figure>
+在configure(HttpSecurity http)方法中添加以下代码即可实现记住我功能<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//开启记住我功能 cookie,默认保存两周</span></span><br><span class="line">http.rememberMe().rememberMeParameter(<span class="string">&quot;remember&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li>页面<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span> <span class="attr">xmlns:th</span>=<span class="string">&quot;http://www.thymeleaf.org&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--semantic-ui--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">&quot;https://cdn.bootcss.com/semantic-ui/2.4.1/semantic.min.css&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--主容器--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui container&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">&quot;header&quot;</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui placeholder segment&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui column very relaxed stackable grid&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;column&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui form&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">form</span> <span class="attr">th:action</span>=<span class="string">&quot;@&#123;/login&#125;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;field&quot;</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">label</span>&gt;</span>Username<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui left icon input&quot;</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Username&quot;</span> <span class="attr">name</span>=<span class="string">&quot;user&quot;</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;user icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;field&quot;</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">label</span>&gt;</span>Password<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui left icon input&quot;</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;pwd&quot;</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;lock icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;field&quot;</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">name</span>=<span class="string">&quot;remember&quot;</span>&gt;</span>记住我</span><br><span class="line">                            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">class</span>=<span class="string">&quot;ui blue submit button&quot;</span>/&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui label&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">i</span>&gt;</span>注册</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">small</span>&gt;</span>blog.kuangstudy.com<span class="tag">&lt;/<span class="name">small</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Spring Security Study by 秦疆<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">&quot;@&#123;/qinjiang/js/jquery-3.1.1.min.js&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">&quot;@&#123;/qinjiang/js/semantic.min.js&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -568,7 +326,7 @@ public class WaitNotify &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -582,7 +340,152 @@ public class WaitNotify &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 等待超时模式构造简单的数据库连接池</a>
+            <a href="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/" class="post-title-link" itemprop="url">SpringBoot | 常用的请求映射方式注解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-15 06:15:57 / 修改时间：17:14:45" itemprop="dateCreated datePublished" datetime="2022-08-15T06:15:57-08:00">2022-08-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringBoot/%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/" itemprop="url" rel="index"><span itemprop="name">常用的请求映射方式注解</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="SpringBoot常用的请求映射方式注解"><a href="#SpringBoot常用的请求映射方式注解" class="headerlink" title="SpringBoot常用的请求映射方式注解"></a>SpringBoot常用的请求映射方式注解</h1><p>我们在处理web端应用的请求时，通常会使用如下几种方式进行请求映射，我们可以通过查看源码看到它们的真实面目。</p>
+<ul>
+<li>@RequestMapping</li>
+</ul>
+<pre><code>源码对注解的注释：Annotation for mapping web requests onto methods in request-handling classes with flexible method signatures.
+
+翻译：用于将web请求映射到具有灵活方法签名的请求处理类中的方法的注释。
+</code></pre>
+<ul>
+<li>@GetMapping</li>
+</ul>
+<pre><code>源码对注解的注释：Annotation for mapping HTTP GET requests onto specific handler methods.
+Specifically, @GetMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.GET).
+
+翻译：用于将HTTP GET请求映射到特定的请求处理方法的注释。具体来说，@GetMapping是一个组合注解，是@RequestMapping(method = RequestMethod.GET)的缩写。
+</code></pre>
+<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/1.png"></p>
+<ul>
+<li>@PostMapping</li>
+</ul>
+<pre><code>源码对注解的注释：Annotation for mapping HTTP POST requests onto specific handler methods.
+Specifically, @PostMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.POST).
+
+翻译：用于将HTTP POST请求映射到特定的请求处理方法的注释。具体来说，@PostMapping是一个组合注解，是@RequestMapping(method = RequestMethod.POST)的缩写。
+</code></pre>
+<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/2.png"></p>
+<ul>
+<li>@PutMapping</li>
+</ul>
+<pre><code>源码对注解的注释：Annotation for mapping HTTP PUT requests onto specific handler methods.
+Specifically, @PutMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PUT).
+
+翻译：用于将HTTP PUT请求映射到特定的请求处理方法的注释。具体来说，@PutMapping是一个组合注解，是@RequestMapping(method = RequestMethod.PUT)的缩写。
+</code></pre>
+<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/3.png">    </p>
+<ul>
+<li>@DeleteMapping</li>
+</ul>
+<pre><code>源码对注解的注释：Annotation for mapping HTTP DELETE requests onto specific handler methods.
+Specifically, @DeleteMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.DELETE).
+
+翻译：用于将HTTP DELETE请求映射到特定的请求处理方法的注释。具体来说，@DeleteMapping是一个组合注解，是@RequestMapping(method = RequestMethod.DELETE)的缩写。
+</code></pre>
+<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/4.png"></p>
+<ul>
+<li>@PatchMapping</li>
+</ul>
+<pre><code>源码对注解的注释：Annotation for mapping HTTP PATCH requests onto specific handler methods.
+Specifically, @PatchMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PATCH).
+
+翻译：用于将HTTP PATCH请求映射到特定的请求处理方法的注释。具体来说，@PatchMapping是一个组合注解，是@RequestMapping(method = RequestMethod.PATCH)的缩写。
+</code></pre>
+<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/5.png"></p>
+<p>从源码注释和注解接口实现源代码可以得出以下结论：</p>
+<ul>
+<li>可以使用@RequestMapping注解并指定method属性对所有HTTP进行映射。</li>
+<li>@XxxMapping注解是@RequestMapping(method=”XXX”)的缩写<ul>
+<li>@GetMapping是@RequestMapping(method = RequestMethod.GET)的缩写</li>
+<li>@PostMapping是@RequestMapping(method = RequestMethod.POST)的缩写</li>
+<li>@PutMapping是@RequestMapping(method = RequestMethod.PUT)的缩写</li>
+<li>@DeleteMapping是@RequestMapping(method = RequestMethod.DELETE)的缩写</li>
+<li>@PatchMapping是@RequestMapping(method = RequestMethod.PATCH)的缩写</li>
+</ul>
+</li>
+<li>推荐用法：在对特定的请求进行映射时，采用对应的注解。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/13/%E7%AC%AC%E4%B8%89%E5%A4%A7%E7%9A%84%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="shengli liao">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/13/%E7%AC%AC%E4%B8%89%E5%A4%A7%E7%9A%84%E6%95%B0/" class="post-title-link" itemprop="url">leetcode | 414.第三大的数</a>
         </h2>
 
         <div class="post-meta">
@@ -592,14 +495,14 @@ public class WaitNotify &#123;
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-05-28 23:33:57" itemprop="dateCreated datePublished" datetime="2022-05-28T23:33:57-08:00">2022-05-28</time>
+              <time title="创建时间：2022-08-13 06:04:59" itemprop="dateCreated datePublished" datetime="2022-08-13T06:04:59-08:00">2022-08-13</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-29 22:49:15" itemprop="dateModified" datetime="2022-05-29T22:49:15-08:00">2022-05-29</time>
+                <time title="修改时间：2022-08-15 17:17:50" itemprop="dateModified" datetime="2022-08-15T17:17:50-08:00">2022-08-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -607,15 +510,19 @@ public class WaitNotify &#123;
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">等待超时模式构造简单的数据库连接池</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/414-%E7%AC%AC%E4%B8%89%E5%A4%A7%E7%9A%84%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">414.第三大的数</span></a>
                 </span>
             </span>
 
@@ -630,159 +537,109 @@ public class WaitNotify &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p>
-<pre><code>package concurrency.connetionPool;
+          <h1 id="414-第三大的数"><a href="#414-第三大的数" class="headerlink" title="414.第三大的数"></a>414.第三大的数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个非空数组，返回此数组中 第三大的数 。如果不存在，则返回数组中最大的数。</p>
+<ul>
+<li><p>示例 1：<br>输入：[3, 2, 1]<br>输出：1<br>解释：第三大的数是 1 。</p>
+</li>
+<li><p>示例 2：<br>输入：[1, 2]<br>输出：2<br>解释：第三大的数不存在, 所以返回最大的数 2 。</p>
+</li>
+<li><p>示例 3：<br>输入：[2, 2, 3, 1]<br>输出：1<br>解释：注意，要求返回第三大的数，是指在所有不同数字中排第三大的数。<br>此例中存在两个值为 2 的数，它们都排第二。在所有不同数字中排第三大的数为 1 。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/third-maximum-number">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>排序<br>将nums数组排序后，从数组末尾返回第三大的数。</li>
+<li>有序集合<br>遍历数组，同时用一个有序集合来维护数组中前三大的数。具体做法是每遍历一个数，就将其插入有序集合，若有序集合的大小超过 333，就删除集合中的最小元素。这样可以保证有序集合的大小至多为 333，且遍历结束后，若有序集合的大小为 333，其最小值就是数组中第三大的数；若有序集合的大小不足 333，那么就返回有序集合中的最大值。</li>
+<li>一次遍历<br>遍历数组，并用三个变量a、b、c来维护数组中的最大值、次大值和第三大值，在遍历过程中更新这三个值即可。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">thirdMax</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		排序（自己实现快速排序）</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">quick_sort</span>(<span class="params">arr, low, high</span>):</span></span><br><span class="line">			<span class="keyword">if</span> low &lt; high:</span><br><span class="line">				pivot = partition(arr, low, high)</span><br><span class="line">				quick_sort(arr, low, pivot - <span class="number">1</span>)</span><br><span class="line">				quick_sort(arr, pivot + <span class="number">1</span>, high)</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">partition</span>(<span class="params">arr, low, high</span>):</span></span><br><span class="line">			pivot_key = arr[low]</span><br><span class="line">			<span class="keyword">while</span> low &lt; high:</span><br><span class="line">				<span class="keyword">while</span> low &lt; high <span class="keyword">and</span> arr[high] &gt;= pivot_key:</span><br><span class="line">					high -= <span class="number">1</span></span><br><span class="line">				arr[low], arr[high] = arr[high], arr[low]</span><br><span class="line">				<span class="keyword">while</span> low &lt; high <span class="keyword">and</span> arr[low] &lt;= pivot_key:</span><br><span class="line">					low += <span class="number">1</span></span><br><span class="line">				arr[low], arr[high] = arr[high], arr[low]</span><br><span class="line">			<span class="keyword">return</span> low</span><br><span class="line">		</span><br><span class="line">		quick_sort(nums, <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span>)</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		diff = <span class="number">0</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">			<span class="keyword">if</span> nums[i] != nums[i - <span class="number">1</span>]:</span><br><span class="line">				diff += <span class="number">1</span></span><br><span class="line">				<span class="keyword">if</span> diff == <span class="number">2</span>:</span><br><span class="line">					<span class="keyword">return</span> nums[i-<span class="number">1</span>]</span><br><span class="line">					</span><br><span class="line">		<span class="keyword">return</span> nums[-<span class="number">1</span>]</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">thirdMax1</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;排序（直接调用排序方法）&quot;&quot;&quot;</span></span><br><span class="line">		nums.sort(reverse=<span class="literal">True</span>)</span><br><span class="line">		diff = <span class="number">1</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(nums)):</span><br><span class="line">			<span class="keyword">if</span> nums[i] != nums[i-<span class="number">1</span>]:</span><br><span class="line">				diff += <span class="number">1</span></span><br><span class="line">				<span class="keyword">if</span> diff == <span class="number">3</span>:</span><br><span class="line">					<span class="keyword">return</span> nums[i]</span><br><span class="line">		<span class="keyword">return</span> nums[<span class="number">0</span>]</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">thirdMax2</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;有序集合&quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">from</span> sortedcontainers <span class="keyword">import</span> SortedList</span><br><span class="line">		s = SortedList()</span><br><span class="line">		<span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">			<span class="keyword">if</span> num <span class="keyword">not</span> <span class="keyword">in</span> s:</span><br><span class="line">				s.add(num)</span><br><span class="line">				<span class="keyword">if</span> <span class="built_in">len</span>(s) &gt; <span class="number">3</span>:</span><br><span class="line">					s.pop(<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> s[<span class="number">0</span>] <span class="keyword">if</span> <span class="built_in">len</span>(s) == <span class="number">3</span> <span class="keyword">else</span> s[-<span class="number">1</span>]</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">thirdMax3</span>(<span class="params">self, nums</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;一次遍历（用三个变量a,b,c来维护数组中的最大值、次大值和第三大值）&quot;&quot;&quot;</span></span><br><span class="line">		a, b, c = <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>), <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>), <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>)</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">			<span class="keyword">if</span> num &gt; a:</span><br><span class="line">				a, b, c = num, a, b</span><br><span class="line">			<span class="keyword">elif</span> a &gt; num &gt; b:</span><br><span class="line">				b, c = num, b</span><br><span class="line">			<span class="keyword">elif</span> b &gt; num &gt; c:</span><br><span class="line">				c = num</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> a <span class="keyword">if</span> c == <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>) <span class="keyword">else</span> c</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	<span class="comment"># third_max_num = slt.thirdMax([2, 2, 3, 1])</span></span><br><span class="line">	<span class="comment"># third_max_num = slt.thirdMax1([2, 2, 3, 1])</span></span><br><span class="line">	<span class="comment"># third_max_num = slt.thirdMax2([2, 2, 3, 1])</span></span><br><span class="line">	third_max_num = slt.thirdMax3([<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>])</span><br><span class="line">	<span class="built_in">print</span>(third_max_num)</span><br></pre></td></tr></table></figure></li>
+</ol>
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
+      
+    </div>
 
-class ConnectionDriver&#123;
-    static class ConnectionHandler implements InvocationHandler&#123;
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-            if(method.getName().equals(&quot;commit&quot;))&#123;
-                TimeUnit.MILLISECONDS.sleep(100);
-            &#125;
-            return null;
-        &#125;
-    &#125;
     
-    //创建一个Connection的代理，在commit时休眠100毫秒
-    public static final Connection createConnection()&#123;
-        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());
-    &#125;
-&#125;
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-public class ConnectionPool &#123;
-    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();
-    
-    public ConnectionPool(int initialSize)&#123;
-        if(initialSize &gt; 0)&#123;
-            for(int i = 0; i &lt; initialSize; i++)&#123;
-                pool.addLast(ConnectionDriver.createConnection());
-            &#125;
-        &#125;
-    &#125;
-    
-    public void releaseConnection(Connection connection)&#123;
-        if(connection != null)&#123;
-            synchronized(pool)&#123;
-                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接
-                pool.addLast(connection);
-                pool.notifyAll();
-            &#125;
-        &#125;
-    &#125;
-    
-    //在mills内无法获取到连接，将会返回null
-    public Connection fetchConnection(long mills) throws InterruptedException&#123;
-        synchronized(pool)&#123;
-            //完全超时
-            if(mills &lt; 0)&#123;
-                while(pool.isEmpty())&#123;
-                    pool.wait();
-                &#125;
-                return pool.removeFirst();//Removes and returns the first element from this list.
-            &#125;else&#123;
-                long future = System.currentTimeMillis() + mills;
-                long remaining = mills;
-                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;
-                    pool.wait(remaining);
-                    remaining = future - System.currentTimeMillis();
-                &#125;
-                Connection result = null;
-                if(!pool.isEmpty())&#123;
-                    result = pool.removeFirst();
-                &#125;
-                return result;
-            &#125;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p><strong>ConnectionPoolTest.java</strong></p>
-<pre><code>package concurrency.connetionPool;
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/13/python%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/">
 
-import java.sql.Connection;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
 
-public class ConnectionPoolTest &#123;
-    static ConnectionPool pool = new ConnectionPool(10);
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="shengli liao">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/13/python%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">json | python处理json数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-13 04:37:49 / 修改时间：04:55:17" itemprop="dateCreated datePublished" datetime="2022-08-13T04:37:49-08:00">2022-08-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/json/" itemprop="url" rel="index"><span itemprop="name">json</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
     
-    //保证所有ConnectionRunner能够同时开始
-    static CountDownLatch start = new CountDownLatch(1);
     
-    //main线程将会等待所有ConnectionRunner结束后才能继续执行
-    static CountDownLatch end;
     
-    public static void main(String[] args) throws InterruptedException&#123;
-        //线程数量，可以修改线程数量进行观察
-        int threadCount = 50;
-        end = new CountDownLatch(threadCount);
-        int count = 20;
-        AtomicInteger got = new AtomicInteger();
-        AtomicInteger notGot = new AtomicInteger();
-        for(int i = 0; i &lt; threadCount; i++)&#123;
-            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);
-            thread.start();
-        &#125;
-        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
-        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
-        System.out.println(&quot;total invoke: &quot; + (threadCount * count));
-        System.out.println(&quot;got connection: &quot; + got);
-        System.out.println(&quot;not got connection: &quot; + notGot);
-    &#125;
-    static class ConnectionRunner implements Runnable&#123;
-        int count;
-        AtomicInteger got;
-        AtomicInteger notGot;
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python处理json数据"><a href="#python处理json数据" class="headerlink" title="python处理json数据"></a>python处理json数据</h1><p>找出以下json数据中children键对应列表为空的data键的id值。<br>例如以下示例children键对应的列表为空时，返回data键的id值：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: &#123;<span class="attr">&quot;id&quot;</span>: <span class="number">1234</span>&#125;,</span><br><span class="line">    <span class="attr">&quot;children&quot;</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法：<br>分析数据可知，该文本数组为字典类型的嵌套，故可以使用递归的方法解决。<br>首先全部输入文本就是一个大字典，因此递归函数输入为一个大字典，然后判断字典中children键对应的列表是否为空，<br>如果为空则将children键对应的data键的id加入结果列表，如果children键对应的列表（列表中的元素仍为字典）不为空，<br>则遍历列表中的字典，继续使用该递归函数进行处理，依次类推。</li>
+<li>重要的一步<br>在处理json数据中极为重要的一步是将一个字符串表示的字典转换为python中的字典。<br>我们可以使用python中的内置模块json中的loads方法将一个字符串表示的字典转换为json数据，既python中的字典。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">json_data = json.loads(string_dict)</span><br></pre></td></tr></table></figure></li></ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/13/python%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;
-            this.count = count;
-            this.got = got;
-            this.notGot = notGot;
-        &#125;
-        
-        public void run()&#123;
-            try&#123;
-                start.await();
-            &#125;catch(Exception ex)&#123;
-                
-            &#125;
-            while(count &gt; 0)&#123;
-                try&#123;
-                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null
-                    //分别统计连接获取的数量got和未获取到的数量notGot
-                    Connection connection = pool.fetchConnection(1000);
-                    if(connection != null)&#123;
-                        try&#123;
-                            connection.createStatement();
-                            connection.commit();
-                        &#125;finally&#123;
-                            pool.releaseConnection(connection);
-                            got.incrementAndGet();
-                        &#125;
-                    &#125;else&#123;
-                        notGot.incrementAndGet();
-                    &#125;
-                &#125;catch(Exception ex)&#123;
-                    
-                &#125;finally&#123;
-                    count--;
-                &#125;
-                
-            &#125;
-            end.countDown();
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-
       
     </div>
 
@@ -801,7 +658,7 @@ public class ConnectionPoolTest &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/11/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -815,7 +672,7 @@ public class ConnectionPoolTest &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">并发 | volatile写读的内存语义和锁的释放获取的内存语义</a>
+            <a href="/2022/08/11/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" class="post-title-link" itemprop="url">leetcode | 349.两个数组的交集</a>
         </h2>
 
         <div class="post-meta">
@@ -826,7 +683,7 @@ public class ConnectionPoolTest &#123;
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-23 06:02:50 / 修改时间：17:02:03" itemprop="dateCreated datePublished" datetime="2022-05-23T06:02:50-08:00">2022-05-23</time>
+              <time title="创建时间：2022-08-11 19:57:01 / 修改时间：20:03:52" itemprop="dateCreated datePublished" datetime="2022-08-11T19:57:01-08:00">2022-08-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -834,15 +691,19 @@ public class ConnectionPoolTest &#123;
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/" itemprop="url" rel="index"><span itemprop="name">volatile写读的内存语义和锁的释放获取的内存语义</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/349-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" itemprop="url" rel="index"><span itemprop="name">349.两个数组的交集</span></a>
                 </span>
             </span>
 
@@ -857,626 +718,14 @@ public class ConnectionPoolTest &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="volatile写读的内存语义和锁的释放获取的内存语义"><a href="#volatile写读的内存语义和锁的释放获取的内存语义" class="headerlink" title="volatile写读的内存语义和锁的释放获取的内存语义"></a>volatile写读的内存语义和锁的释放获取的内存语义</h1><h2 id="volatile写、读的内存语义"><a href="#volatile写、读的内存语义" class="headerlink" title="volatile写、读的内存语义"></a>volatile写、读的内存语义</h2><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量值刷新到主存。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/1.PNG"><br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/2.PNG"></p>
-<h2 id="volatile内存语义的实现"><a href="#volatile内存语义的实现" class="headerlink" title="volatile内存语义的实现"></a>volatile内存语义的实现</h2><p>编译器生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。<br>JMM基于保守策略的JMM内存屏障插入策略如下：<br>（1）在每个volatile写操作的前面插入一个StoreStore屏障。<br>（2）在每个volatile写操作的后面插入一个StoreLoad屏障。<br>（3）在每个volatile读操作的后面插入一个LoadLoad屏障。<br>（4）在每个volatile读操作的后面插入一个LoadStore屏障。</p>
-<h2 id="锁的释放、获取的内存语义"><a href="#锁的释放、获取的内存语义" class="headerlink" title="锁的释放、获取的内存语义"></a>锁的释放、获取的内存语义</h2><p>当线程释放锁时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存中。<br>当线程获取锁时，JMM会把该线程对应的本地内存置为无效。从而使得被监视器保护的临界区代码必须从主内存中读取共享变量。<br>注：锁释放与volatile写有相同的内存语义；锁获取与volatile读具有相同的内存语义。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">并发 | volatile、synchronized和原子操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-22 19:03:39 / 修改时间：19:57:47" itemprop="dateCreated datePublished" datetime="2022-05-22T19:03:39-08:00">2022-05-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="volatile、synchronized和原子操作"><a href="#volatile、synchronized和原子操作" class="headerlink" title="volatile、synchronized和原子操作"></a>volatile、synchronized和原子操作</h1><h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>volatile是轻量级的synchronized，它在多处理器并发中保证了<strong>共享变量的“可见性”</strong>。可见性是指当一个线程修改一个共享变量时<br>，另外一个线程能读到这个修改的值（Java内存模型确保所有线程看到这个变量的值是一致的）。</p>
-<h3 id="volatile的两条实现原则"><a href="#volatile的两条实现原则" class="headerlink" title="volatile的两条实现原则"></a>volatile的两条实现原则</h3><p>（1）Lock前缀指令会引起处理器缓存回写到内存。<br>（2）一个处理器的缓存回写到内存会导致其他处理器的缓存无效。</p>
-<h3 id="volatile的使用优化"><a href="#volatile的使用优化" class="headerlink" title="volatile的使用优化"></a>volatile的使用优化</h3><p>使用追加到64字节的方式来填满高速缓冲区的缓存行，避免头节点和尾节点加载到同一个缓存行，使头、尾节点在修改时不会互相锁定。</p>
-<h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>JVM基于进入和推出Monitor对象来实现方法同步和代码块同步，但两者实现细节不一样。<br>代码块同步使用monitorenter和monitorexit指令实现的。monitorenter指令在编译后插入到同步代码块的开始位置，而monitorexit是<br>插入到方法结束处和异常处，JVM要博爱正每个monitorenter必须有对应的monitorexit与之配对。任何对象都有一个monitor与之关联，<br>当且一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象monitor的所有权，即尝试获得对象的锁。</p>
-<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>java如何实现原子操作？<br>通过循环CAS的方式实现原子操作。JVM中CAS操作使用处理器提供的CMPXCHG指令实现。自旋CAS实现的基本思路就是循环及进行CAS操作指导成功为止。</p>
-<h3 id="使用CAS实现线程安全计数器"><a href="#使用CAS实现线程安全计数器" class="headerlink" title="使用CAS实现线程安全计数器"></a>使用CAS实现线程安全计数器</h3><pre><code>package concurrency;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-public class Counter &#123;
-    private AtomicInteger atomicI = new AtomicInteger(0);
-    private int i = 0;
-    
-    public static void main(String[] args) &#123;
-        final Counter cas = new Counter();
-        List&lt;Thread&gt; ts = new ArrayList&lt;Thread&gt;(600);
-        long start = System.currentTimeMillis();
-        for(int j = 0; j &lt; 100; j++)&#123;
-            Thread t = new Thread(new Runnable()&#123;
-                @Override
-                public void run()&#123;
-                    for(int i = 0; i &lt; 10000; i++)&#123;
-                        cas.count();
-                        cas.safeCount();
-                    &#125;
-                &#125;
-            &#125;);
-            ts.add(t);
-        &#125;
-        for(Thread t : ts)&#123;
-            t.start();
-        &#125;
-        //等待所有线程执行完成
-        for(Thread t : ts)&#123;
-            try &#123;
-                t.join();
-            &#125; catch (InterruptedException e) &#123;
-                e.printStackTrace();
-            &#125;
-        &#125;
-        System.out.println(cas.i);
-        System.out.println(cas.atomicI.get());
-        System.out.println(System.currentTimeMillis() - start);
-    &#125;
-    
-    //使用CAS实现线程安全计数器
-    private void safeCount()&#123;
-        for(;;)&#123;
-            int i = atomicI.get();
-            boolean suc = atomicI.compareAndSet(i, ++i);
-            if(suc)&#123;
-                break;
-            &#125;
-        &#125;
-    &#125;
-    
-    //非线程安全计数器
-    private void count()&#123;
-        i++;
-    &#125;
-&#125;
-</code></pre>
-<h2 id="CAS实现原子操作的三大问题"><a href="#CAS实现原子操作的三大问题" class="headerlink" title="CAS实现原子操作的三大问题"></a>CAS实现原子操作的三大问题</h2><p>（1）ABA问题。可以使用版本号解决。JDK Atomic AtomicStampedReference可以解决ABA问题。<br>（2）循环时间长开销大。自旋CAS如果长时间不成功，会给CPU带来非常大的执行开销。<br>（3）只能保证一个共享变量的原子操作。对多个共享变量操作可以使用锁/将多个共享变量合并成一个共享变量来操作（两个共享变量i=2,j=a,合并以下ij=2a,然后采用CAS来操作）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" class="post-title-link" itemprop="url">并发 | 上下文切换和死锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-22 18:37:08 / 修改时间：18:59:57" itemprop="dateCreated datePublished" datetime="2022-05-22T18:37:08-08:00">2022-05-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" itemprop="url" rel="index"><span itemprop="name">上下文切换</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="上下文切换和死锁"><a href="#上下文切换和死锁" class="headerlink" title="上下文切换和死锁"></a>上下文切换和死锁</h1><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，再切换前会保存上一个任务的<br>状态，以便切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。频繁的上下文<br>切换会影响多线程的执行速度。</p>
-<h2 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h2><p>（1）无锁并发编程。多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁（如采用分段锁，不同的线程处理不同段的数据）<br>（2）CAS算法。<br>（3）使用最小线程。避免创建不需要的线程（任务很少，创建了很多线程，造成大量线程阻塞等待）</p>
-<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的条件"><a href="#死锁产生的条件" class="headerlink" title="死锁产生的条件"></a>死锁产生的条件</h3><p>（1）互斥。一个资源同一时刻只能被一个线程拥有。<br>（2）请求和保持。线程在请求新的资源时，不释放已经拥有的资源。<br>（3）不剥夺条件。进程所获得的资源在未使用完之前，不被其他的线程强行剥夺。<br>（4）循环等待。竞争资源的各个线程形成一个线程等待环路。</p>
-<h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><p>破坏产生死锁的条件：<br>（2）在进程开始执行时就申请他所需的全部资源<br>（3）一个进程不能获得所需要的全部资源时便处于等待状态，等待期间他占有的资源将被隐式的释放重新加入到系统的资源列表中<br>，可以被其他的进程使用，而等待的进程只有重新获得自己原有的资源以及新申请的资源才可以重新启动、执行。<br>（4）资源有序分配（银行家算法）</p>
-<h3 id="死锁Demo"><a href="#死锁Demo" class="headerlink" title="死锁Demo"></a>死锁Demo</h3><pre><code>package concurrency;
-
-public class DeadLockDemo &#123;
-    private static String A = &quot;A&quot;;
-    private static String B = &quot;B&quot;;
-    
-    public static void main(String[] args) &#123;
-        new DeadLockDemo().deadLock();
-    &#125;
-    
-    private void deadLock()&#123;
-        Thread t1 = new Thread(new Runnable()&#123;
-            @Override
-            public void run()&#123;
-                synchronized(A)&#123;
-                    try &#123;
-                        Thread.currentThread().sleep(2000);
-                    &#125; catch (InterruptedException e) &#123;
-                        e.printStackTrace();
-                    &#125;
-                    synchronized(B)&#123;
-                        System.out.println(&quot;1&quot;);
-                    &#125;
-                &#125;
-            &#125;
-        &#125;);
-        
-        Thread t2 = new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                synchronized(B)&#123;
-                    synchronized(A)&#123;
-                        System.out.println(&quot;2&quot;);
-                    &#125;
-                &#125;
-            &#125;
-        &#125;);
-        
-        t1.start();
-        t2.start();
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" class="post-title-link" itemprop="url">Redis | 面试题目</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-22 01:32:20 / 修改时间：01:33:41" itemprop="dateCreated datePublished" datetime="2022-05-22T01:32:20-08:00">2022-05-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">面试题目</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis面试题目"><a href="#Redis面试题目" class="headerlink" title="Redis面试题目"></a>Redis面试题目</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/3ln9VAB_heYTI7yvxnp2bw">参考资料</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/21/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/21/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Redis | 缓存和数据库的一致性问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-21 20:15:47 / 修改时间：20:19:41" itemprop="dateCreated datePublished" datetime="2022-05-21T20:15:47-08:00">2022-05-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">缓存和数据库的一致性问题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="缓存和数据库的一致性问题"><a href="#缓存和数据库的一致性问题" class="headerlink" title="缓存和数据库的一致性问题"></a>缓存和数据库的一致性问题</h1><p>1、想要提高应用的性能，可以引入「缓存」来解决<br>2、引入缓存后，需要考虑缓存和数据库一致性问题，可选的方案有：「更新数据库 + 更新缓存」、「更新数据库 + 删除缓存」<br>3、更新数据库 + 更新缓存方案，在「并发」场景下无法保证缓存和数据一致性，且存在「缓存资源浪费」和「机器性能浪费」的情况发生<br>4、在更新数据库 + 删除缓存的方案中，「先删除缓存，再更新数据库」在「并发」场景下依旧有数据不一致问题，解决方案是「延迟双删」，但这个延迟时间很难评估，所以推荐用「先更新数据库，再删除缓存」的方案<br>5、在「先更新数据库，再删除缓存」方案下，为了保证两步都成功执行，需配合「消息队列」或「订阅变更日志」的方案来做，本质是通过「重试」的方式保证数据一致性<br>6、在「先更新数据库，再删除缓存」方案下，「读写分离 + 主从库延迟」也会导致缓存和数据库不一致，缓解此问题的方案是「延迟双删」，凭借经验发送「延迟消息」到队列中，延迟删除缓存，同时也要控制主从库延迟，尽可能降低不一致发生的概率<br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIyOTYxNDI5OA==&mid=2247487312&idx=1&sn=fa19566f5729d6598155b5c676eee62d&chksm=e8beb8e5dfc931f3e35655da9da0b61c79f2843101c130cf38996446975014f958a6481aacf1&scene=178&cur_album_id=1699766580538032128#rd">参考资料</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">Redis | 集群搭建</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-20 20:19:56 / 修改时间：20:50:47" itemprop="dateCreated datePublished" datetime="2022-05-20T20:19:56-08:00">2022-05-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">集群搭建</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6379.pid&quot;
-port 6379
-dbfilename &quot;dump6379.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6379.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(2)redis6380.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6380.pid&quot;
-port 6380
-dbfilename &quot;dump6380.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6380.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(3)redis6381.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6381.pid&quot;
-port 6381
-dbfilename &quot;dump6381.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6381.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(4)redis6389.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6389.pid&quot;
-port 6389
-dbfilename &quot;dump6389.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6389.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(5)redis6390.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6390.pid&quot;
-port 6390
-dbfilename &quot;dump6390.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6390.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(6)redis6391.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6391.pid&quot;
-port 6391
-dbfilename &quot;dump6391.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6391.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>5.启动所有redis实例，nodes-xxxx.conf文件都生成正常。<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/1.PNG"><br>6.将六个实例组合到一个集群当中</p>
-<pre><code>redis-cli --cluster create 192.168.1.108:6379 192.168.1.108:6380 192.168.1.108:6381 192.168.1.108:6389 192.168.1.108:6390 192.168.1.108:6391 --cluster-replicas 1
-</code></pre>
-<p>7.启动客户端并查看集群<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/2.PNG"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/15/Redis%E5%85%B3%E9%97%AD%E6%9C%8D%E5%8A%A1%E6%8A%A5%E9%94%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="shengli liao">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/15/Redis%E5%85%B3%E9%97%AD%E6%9C%8D%E5%8A%A1%E6%8A%A5%E9%94%99/" class="post-title-link" itemprop="url">Redis | 关闭服务报错</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-15 22:20:38 / 修改时间：22:28:15" itemprop="dateCreated datePublished" datetime="2022-05-15T22:20:38-08:00">2022-05-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E5%85%B3%E9%97%AD%E6%9C%8D%E5%8A%A1%E6%8A%A5%E9%94%99/" itemprop="url" rel="index"><span itemprop="name">关闭服务报错</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis关闭服务报错"><a href="#Redis关闭服务报错" class="headerlink" title="Redis关闭服务报错"></a>Redis关闭服务报错</h1><p>在linux中执行redis-cli shutdown命令来关闭redis服务时报错：</p>
-<pre><code>(error) ERR Errors trying to SHUTDOWN. Check logs.
-</code></pre>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>1)执行vim命令打开redis.conf文件</p>
-<pre><code>vim redis.conf
-</code></pre>
-<p>2)在配置文件中找到logfile “”，并修改为 logfile “/opt/myRedis/redis_log.log”<br>3)修改日志文件redis_log.log的文件权限</p>
-<pre><code>sudo chmod 777 /opt/myRedis/redis_log.log
-</code></pre>
-<p>4)强制关闭redis服务</p>
-<pre><code>kill -9 当前redis服务的进程号
-</code></pre>
-<p>5)重启redis服务(案例将redis的配置文件做了备份，放在/opt/myRedis/目录下)</p>
-<pre><code>redis-server redis.conf
-</code></pre>
+          <h1 id="349-两个数组的交集"><a href="#349-两个数组的交集" class="headerlink" title="349.两个数组的交集"></a>349.两个数组的交集</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定两个数组 nums1 和 nums2 ，返回 它们的交集 。输出结果中的每个元素一定是 唯一 的。我们可以 不考虑输出结果的顺序 。</p>
+<p>示例 1：<br>输入：nums1 = [1,2,2,1], nums2 = [2,2]<br>输出：[2]</p>
+<p>示例 2：<br>输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]<br>输出：[9,4]<br>解释：[4,9] 也是可通过的</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/intersection-of-two-arrays">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>集合求交集</li>
+<li>排序+双指针<br>对nums1、nums2进行排序，设置两个指针index1、index2分别指向两个数组的头部，并按以下步骤进行：<br>（1）如果元素相等则加入结果列表<br>（2）如果index1指向的元素小于index2指向的元素，则index1指针后移，否则index2指针后移<br>不断执行以上两个步骤，最后结果列表中的元素即为两个数字的交集。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">集合操作</span></span><br><span class="line"><span class="string">1.求交集</span></span><br><span class="line"><span class="string">set1.intersection(set2)</span></span><br><span class="line"><span class="string">2.求差集</span></span><br><span class="line"><span class="string">set1.difference(set2)</span></span><br><span class="line"><span class="string">3.求并集</span></span><br><span class="line"><span class="string">set1.union(set2)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">intersection</span>(<span class="params">self, nums1, nums2</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		集合求交集</span></span><br><span class="line"><span class="string">        :type nums1: List[int]</span></span><br><span class="line"><span class="string">        :type nums2: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">list</span>(<span class="built_in">set</span>(nums1).intersection(<span class="built_in">set</span>(nums2)))</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">intersection1</span>(<span class="params">self, nums1, nums2</span>):</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;排序+双指针&quot;&quot;&quot;</span></span><br><span class="line">		nums1.sort()</span><br><span class="line">		nums2.sort()</span><br><span class="line">		</span><br><span class="line">		index1 = <span class="number">0</span></span><br><span class="line">		index2 = <span class="number">0</span></span><br><span class="line">		intersection = <span class="built_in">list</span>()</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span> index1 &lt; <span class="built_in">len</span>(nums1) <span class="keyword">and</span> index2 &lt; <span class="built_in">len</span>(nums2):</span><br><span class="line">			<span class="keyword">if</span> nums1[index1] == nums2[index2]:</span><br><span class="line">				<span class="keyword">if</span> <span class="keyword">not</span> intersection <span class="keyword">or</span> nums1[index1] != intersection[-<span class="number">1</span>]:</span><br><span class="line">					intersection.append(nums1[index1])</span><br><span class="line">				</span><br><span class="line">				index1 += <span class="number">1</span></span><br><span class="line">				index2 += <span class="number">1</span></span><br><span class="line">			<span class="keyword">elif</span> nums1[index1] &lt; nums2[index2]:</span><br><span class="line">				index1 += <span class="number">1</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				index2 += <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> intersection</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	slt = Solution()</span><br><span class="line">	nums1 = [<span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">	nums2 = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">	<span class="comment"># inter = slt.intersection(nums1, nums2)</span></span><br><span class="line">	inter = slt.intersection(nums1, nums2)</span><br><span class="line">	<span class="built_in">print</span>(inter)</span><br></pre></td></tr></table></figure></li>
+</ol>
 
       
     </div>
@@ -1495,7 +744,7 @@ cluster-node-timeout 15000
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/51/">51</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/101/">101</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1680,7 +929,16 @@ cluster-node-timeout 15000
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<!-- hexo injector body_end start --><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
 <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
 <script type="text/javascript" src="/js/fireworks.js"></script>
