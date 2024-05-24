@@ -190,6 +190,403 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">SSM | 修改</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-18 17:07:54 / 修改时间：17:13:39" itemprop="dateCreated datePublished" datetime="2022-04-18T17:07:54-08:00">2022-04-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/" itemprop="url" rel="index"><span itemprop="name">SSM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/%E4%BF%AE%E6%94%B9/" itemprop="url" rel="index"><span itemprop="name">修改</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;展示员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;th&gt;EID&lt;/th&gt;
+            &lt;th&gt;ENAME&lt;/th&gt;
+            &lt;th&gt;AGE&lt;/th&gt;
+            &lt;th&gt;SEX&lt;/th&gt;
+            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
+            &lt;th&gt;OPTIONS&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
+                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+        &lt;tr&gt;
+            &lt;td colspan=&quot;10&quot;&gt;
+                $&#123;page&#125;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.update.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;修改员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
+        &lt;form:hidden path=&quot;eid&quot;/&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;ENAME&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;ename&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;AGE&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;age&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;sex&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;DEPARTMENT&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td colspan=&quot;2&quot;&gt;
+                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.EmpController.java</p>
+<pre><code>@Controller
+public class EmpController &#123;
+
+    @Autowired
+    private EmpService service;
+    
+    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
+    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
+        //要修改的员工信息
+        Emp emp = service.getEmpByEid(eid);
+        
+        //所有的部门信息
+        List&lt;Dept&gt; deptList = service.getAllDept();
+        
+        //获取存储性别的map集合
+        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
+        sex.put(&quot;0&quot;, &quot;女&quot;);
+        sex.put(&quot;1&quot;, &quot;男&quot;);
+        
+        map.put(&quot;emp&quot;, emp);
+        map.put(&quot;deptList&quot;, deptList);
+        map.put(&quot;sex&quot;, sex);
+        
+        return &quot;update&quot;;
+    &#125;
+    
+    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
+    public String updateEmp(Emp emp)&#123;
+        service.updateEmp(emp);
+        return &quot;redirect:/emps/1&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.EmpService.java</p>
+<pre><code>public interface EmpService &#123;
+    ......
+    
+    List&lt;Dept&gt; getAllDept();
+&#125;
+</code></pre>
+<p>5.EmpServiceImpl.java</p>
+<pre><code>@Service
+public class EmpServiceImpl implements EmpService&#123;
+    @Autowired
+    private EmpMapper empMapper;
+    
+    @Autowired
+    private DeptMapper deptMapper;
+    
+    ......
+    
+    @Override
+    public List&lt;Dept&gt; getAllDept() &#123;
+        // TODO Auto-generated method stub
+        return deptMapper.getAllDept();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/%E5%8F%8D%E5%B0%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/18/%E5%8F%8D%E5%B0%84/" class="post-title-link" itemprop="url">Java | 反射</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-18 16:07:36 / 修改时间：16:13:00" itemprop="dateCreated datePublished" datetime="2022-04-18T16:07:36-08:00">2022-04-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%8F%8D%E5%B0%84/" itemprop="url" rel="index"><span itemprop="name">反射</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>1.反射<br><strong>运行时分析类</strong>并调用类中的属性和方法<br>2.反射的应用场景<br>（1）spring、springboot等<strong>框架</strong>的实现<br>（2）动态代理<br>（3）注解<br>3.反射的优缺点<br>3.1优点<br>（1）灵活<br>（2）不安全（比如无视泛型参数的安全检查）<br>3.2缺点<br>性能稍差<br>4.获取Class对象的四种方式<br>（1）类.class<br>（2）Class.forName(类的全限定名)<br>（3）Instance.getClass()<br>（4）xxxClassLoader.loadClass()</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">SSM | SSM项目搭建</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-18 00:51:25 / 修改时间：00:57:23" itemprop="dateCreated datePublished" datetime="2022-04-18T00:51:25-08:00">2022-04-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/" itemprop="url" rel="index"><span itemprop="name">SSM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">SSM项目搭建</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="SSM整合步骤："><a href="#SSM整合步骤：" class="headerlink" title="SSM整合步骤："></a>SSM整合步骤：</h2><p>1.导入jar包<br>    spring:<br>    springMVC:<br>    mybatis:<br>    第三方支持:log4j,pageHelper,AspectJ,jackson,jstl<br><img src="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/1.PNG"><br>2.搭建springMVC<br>    (1)web.xml<br>        CharacterEncodingFilter:filter<br>        HiddenHttpMethodFilter:filter<br>        DispatcherServlet:servlet<br>    (2)springMVC.xml<br>        扫描控制层组件：<a href="context:component-scan">context:component-scan</a><br>        视图解析器:InternalResourceViewResolver<br>        Default Servlet:<a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>        MVC驱动:&lt;mvc:annotation-driven /&gt;<br>        可选：MultipartResolver,拦截器</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/18/SSM%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/SSM-%E5%88%97%E8%A1%A8%E5%8F%8A%E5%88%86%E9%A1%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -468,677 +865,10 @@ public class TestPage &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="post-title-link" itemprop="url">MyBatis | 逆向工程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-16 18:04:43 / 修改时间：18:11:11" itemprop="dateCreated datePublished" datetime="2022-04-16T18:04:43-08:00">2022-04-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="逆向工程"><a href="#逆向工程" class="headerlink" title="逆向工程"></a>逆向工程</h1><p>1.项目目录<br><img src="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/1.PNG"><br>2.导入逆向工程的jar包</p>
-<pre><code>mybatis-generator-core-1.3.2.jar
-</code></pre>
-<p>3.编写MBG的配置文件</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE generatorConfiguration
-  PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
-  &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
-
-&lt;generatorConfiguration&gt;
-
-  &lt;context id=&quot;DB2Tables&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
-    &lt;!-- 设置连接数据库的信息 --&gt;
-    &lt;jdbcConnection driverClass=&quot;com.mysql.jdbc.Driver&quot;
-        connectionURL=&quot;jdbc:mysql://localhost:3306/ssm&quot;
-        userId=&quot;root&quot;
-        password=&quot;root&quot;&gt;
-    &lt;/jdbcConnection&gt;
-
-    &lt;javaTypeResolver &gt;
-      &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot; /&gt;
-    &lt;/javaTypeResolver&gt;
-
-    &lt;!-- javabean的生成策略 --&gt;
-    &lt;javaModelGenerator targetPackage=&quot;com.atguigu.bean&quot; targetProject=&quot;.\src&quot;&gt;
-      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
-      &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot; /&gt;
-    &lt;/javaModelGenerator&gt;
-
-
-    &lt;!-- 映射文件的生成策略 --&gt;
-    &lt;sqlMapGenerator targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\conf&quot;&gt;
-      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
-    &lt;/sqlMapGenerator&gt;
-
-    &lt;!-- mapper接口的生成策略 --&gt;
-    &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\src&quot;&gt;
-      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
-    &lt;/javaClientGenerator&gt;
-
-    &lt;!-- 设置要将数据库中的哪张表逆向生成哪一个javabean --&gt;
-    &lt;table tableName=&quot;emp&quot; domainObjectName=&quot;Emp&quot;&gt;&lt;/table&gt;
-    &lt;table tableName=&quot;dept&quot; domainObjectName=&quot;Dept&quot;&gt;&lt;/table&gt;
-
-  &lt;/context&gt;
-&lt;/generatorConfiguration&gt;
-</code></pre>
-<p>4.运行代码生成器生成代码</p>
-<pre><code>@Test
-public void testMBG() throws Exception &#123;
-   List&lt;String&gt; warnings = new ArrayList&lt;String&gt;();
-   boolean overwrite = true;
-   File configFile = new File(&quot;mbg.xml&quot;);
-   ConfigurationParser cp = new ConfigurationParser(warnings);
-   Configuration config = cp.parseConfiguration(configFile);
-   DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-   MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-   myBatisGenerator.generate(null);
-&#125;
-</code></pre>
-<p>5.逆向工程的使用<br>基本查询与带条件查询测试</p>
-<pre><code>@Test
-    public void testCRUD() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-//        Emp emp = mapper.selectByPrimaryKey(2);
-//        System.out.println(emp);
-        
-        EmpExample example = new EmpExample();
-        
-        Criteria c1 = example.createCriteria();
-        c1.andEnameLike(&quot;%a%&quot;);
-        c1.andSexEqualTo(&quot;1&quot;);
-        
-        Criteria c2 = example.createCriteria();
-        c2.andDidEqualTo(2);
-        
-        example.or(c2);
-        
-        List&lt;Emp&gt; list = mapper.selectByExample(example);
-        for (Emp emp : list) &#123;
-            System.out.println(emp);
-        &#125;
-        
-        //查询全部
-//        List&lt;Emp&gt; list1 = mapper.selectByExample(null);
-//        for (Emp emp : list1) &#123;
-//            System.out.println(emp);
-//        &#125;
-    &#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/14/mybatis%E7%BC%93%E5%AD%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">MyBatis | 缓存</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-14 03:39:49 / 修改时间：03:51:36" itemprop="dateCreated datePublished" datetime="2022-04-14T03:39:49-08:00">2022-04-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E7%BC%93%E5%AD%98/" itemprop="url" rel="index"><span itemprop="name">缓存</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><p>mybatis中的一级缓存默认开启，是SqlSession级别的，即同一个SqlSession对于一个SQL语句执行之后就会存储在缓存中，<br>下次执行相同的sql，直接从缓存中取。<br><strong>一级缓存失效的几种情况：</strong><br>（1）不同的SqlSession对应不同的一级缓存<br>（2）同一个SqlSession但是查询条件不同<br>（3）同一个SqlSession两次查询期间执行了任何一次增删改操作，会自动将缓存清空<br>（4）同一个SqlSession两次查询期间手动清空了缓存</p>
-<h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h2><p>mybatis的二级缓存默认不开启，需要设置：<br>1）全局配置文件中开启二级缓存<setting name="cacheEnabled" value="true"><br>2）需要使用二级缓存的映射文件处使用cache配置缓存<cache><br>3）POJO需要实现Serializable接口<br>注意：二级缓存在 SqlSession 关闭或提交之后才会生效<br>1)全局setting的cacheEnable：<br>配置二级缓存的开关，一级缓存一直是打开的。<br>2)select标签的useCache属性：<br>配置这个select是否使用二级缓存。一级缓存一直是使用的<br>3)sql标签的flushCache属性：<br>增删改默认flushCache=true。sql执行以后，会同时清空一级和二级缓存。<br>查询默认 flushCache=false。<br>4)sqlSession.clearCache()：只是用来清除一级缓存。</cache></setting></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/09/%E5%8A%A8%E6%80%81SQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/09/%E5%8A%A8%E6%80%81SQL/" class="post-title-link" itemprop="url">MyBatis | 动态SQL</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-09 01:33:11 / 修改时间：01:37:21" itemprop="dateCreated datePublished" datetime="2022-04-09T01:33:11-08:00">2022-04-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%8A%A8%E6%80%81SQL/" itemprop="url" rel="index"><span itemprop="name">动态SQL</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>1.项目目录<br><img src="/2022/04/09/%E5%8A%A8%E6%80%81SQL/1.PNG"><br>2.EmpMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpMapper &#123;
-    //根据eid,ename,age,sex多条件查询员工信息
-    List&lt;Emp&gt; getEmpListByMoreTJ(Emp emp);
-    
-    //根据eid,ename,age,sex其中一个查询员工信息
-    List&lt;Emp&gt; getEmpListByChoose(Emp emp);
-    
-    //添加员工信息，将0|1--&gt;女|男
-    void insertEmp(Emp emp);
-    
-    //根据eid所组成的字符串进行批量删除
-    void deleteMoreEmp(String eids);
-    
-    //通过list集合实现批量删除
-    //void deleteMoreByList(List&lt;Integer&gt; eids);
-    void deleteMoreByList(@Param(&quot;eids&quot;)List&lt;Integer&gt; eids);
-    
-    //批量添加
-    void insertMoreByArray(Emp[] emps);
-    
-    //批量修改
-    void updateMoreByArray(@Param(&quot;emps&quot;)Emp[] emps);
-&#125;
-</code></pre>
-<p>3.EmpMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpMapper&quot;&gt;
-    &lt;!--
-         &lt;sql id=&quot;&quot;&gt;&lt;/sql&gt;:设置一段SQL片段，即公共SQL，可以被当前映射文件中所有的SQL语句所访问
-     --&gt;
-    &lt;sql id=&quot;empColumns&quot;&gt;
-        select eid,ename,age,sex,did from emp
-    &lt;/sql&gt;
-
-    &lt;!-- List&lt;Emp&gt; getEmpListByMoreTJ(); --&gt;
-    &lt;!--
-        多条件查询：若页面中没有设置此条件，SQL语句中一定不能有该条件
-     --&gt;
-    &lt;!--
-        &lt;if test=&quot;&quot;&gt;&lt;/if&gt;:通过test表达式拼接SQL 
-        &lt;where&gt;:添加where关键字并去掉多余的and
-        &lt;trim prefix=&quot;&quot; suffix=&quot;&quot; prefixOverrides=&quot;&quot; suffixOverrides=&quot;&quot;&gt;:截取并拼接
-        prefix:在操作的SQL语句前加入某些内容
-        suffix:在操作的SQL语句后加入某些内容
-        prefixOverrides:把操作的SQL语句前的某些内容去掉
-        suffixOverrides:把操作的SQL语句后的某些内容去掉
-     --&gt;
-    &lt;select id=&quot;getEmpListByMoreTJ&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex,did from emp
-        where 1 = 1
-        &lt;if test=&quot;eid != null&quot;&gt;
-            and eid=#&#123;eid&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-            and ename=#&#123;ename&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;age != null&quot;&gt;
-            and age=#&#123;age&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-            and sex=#&#123;sex&#125;
-        &lt;/if&gt; --&gt;
-        
-        
-        &lt;!-- select eid,ename,age,sex,did from emp
-        &lt;where&gt;
-            &lt;if test=&quot;eid != null&quot;&gt;
-                and eid=#&#123;eid&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                and ename=#&#123;ename&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;age != null&quot;&gt;
-                and age=#&#123;age&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-                and sex=#&#123;sex&#125;
-            &lt;/if&gt;
-        &lt;/where&gt; --&gt;
-        
-        &lt;!-- select eid,ename,age,sex,did from emp --&gt;
-        &lt;include refid=&quot;empColumns&quot;&gt;&lt;/include&gt;
-        &lt;trim prefix=&quot;where&quot; suffixOverrides=&quot;and|or&quot;&gt;
-            &lt;if test=&quot;eid != null&quot;&gt;
-                eid=#&#123;eid&#125; and
-            &lt;/if&gt;
-            &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                ename=#&#123;ename&#125; and
-            &lt;/if&gt;
-            &lt;if test=&quot;age != null&quot;&gt;
-                age=#&#123;age&#125; or
-            &lt;/if&gt;
-            &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-                sex=#&#123;sex&#125;
-            &lt;/if&gt;
-        &lt;/trim&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- List&lt;Emp&gt; getEmpListByChoose(Emp emp); --&gt;
-    &lt;!--
-        &lt;choose&gt;选择某一个when或otherwise执行
-            &lt;when test=&quot;&quot;&gt;&lt;/when&gt;：通过test表达式拼接SQL
-            .
-            .
-            .
-            &lt;otherwise&gt;&lt;/otherwise&gt;:当when都不符合条件，就会选择otherwise拼接SQL语句
-        &lt;/choose&gt; 
-     --&gt;
-    &lt;select id=&quot;getEmpListByChoose&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp
-        where 
-        &lt;choose&gt;
-            &lt;when test=&quot;eid != null&quot;&gt;
-                eid = #&#123;eid&#125;
-            &lt;/when&gt;
-            &lt;when test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                ename = #&#123;ename&#125;
-            &lt;/when&gt;
-            &lt;when test=&quot;age != null&quot;&gt;
-                age = #&#123;age&#125;
-            &lt;/when&gt;
-            &lt;otherwise&gt;
-                sex = #&#123;sex&#125;
-            &lt;/otherwise&gt;
-        &lt;/choose&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- void insertEmp(Emp emp); --&gt;
-    &lt;insert id=&quot;insertEmp&quot;&gt;
-        insert into emp(eid,ename,age,sex) values(
-            null,
-            #&#123;ename&#125;,
-            #&#123;age&#125;,
-            &lt;choose&gt;
-                &lt;when test=&quot;sex == 0&quot;&gt;&#39;女&#39;&lt;/when&gt;
-                &lt;when test=&quot;sex == 1&quot;&gt;&#39;男&#39;&lt;/when&gt;
-                &lt;otherwise&gt;&#39;不详&#39;&lt;/otherwise&gt;
-            &lt;/choose&gt;
-        )
-    &lt;/insert&gt;
-    
-    &lt;!-- void deleteMoreEmp(String eids); --&gt;
-    &lt;delete id=&quot;deleteMoreEmp&quot;&gt;
-        delete from emp where eid in ($&#123;value&#125;)
-    &lt;/delete&gt;
-    
-    &lt;!-- void deleteMoreByList(List&lt;Integer&gt; eids); --&gt;
-    &lt;!--
-        &lt;foreach collection=&quot;eids&quot; item=&quot;&quot; close=&quot;&quot; open=&quot;&quot; separator=&quot;&quot; index=&quot;&quot;&gt;&lt;/foreach&gt;
-        对一个数组或集合进行遍历
-        collection:指定要遍历的集合或数组
-        item:设置别名
-        close:设置循环体的结束内容
-        open:设置循环体的开始内容
-        separator:设置每一次循环之间的分隔符
-        index:若遍历的是list集合，index代表下标；若遍历的是map结合，index代表键
-     --&gt;
-     &lt;!--
-        delete from emp where eid in ();
-        delete from emp where eid = 1 or eid = 2 or eid = 3 
-      --&gt;
-    &lt;delete id=&quot;deleteMoreByList&quot;&gt;
-        &lt;!-- delete from emp where eid in 
-        &lt;foreach collection=&quot;list&quot; item=&quot;eid&quot; separator=&quot;,&quot; open=&quot;(&quot; close=&quot;)&quot;&gt;
-            #&#123;eid&#125;
-        &lt;/foreach&gt; --&gt;
-        
-        delete from emp where
-        &lt;!-- &lt;foreach collection=&quot;list&quot; item=&quot;eid&quot; separator=&quot;or&quot;&gt;
-            eid = #&#123;eid&#125;
-        &lt;/foreach&gt; --&gt;
-        &lt;foreach collection=&quot;eids&quot; item=&quot;eid&quot; separator=&quot;or&quot;&gt;
-            eid = #&#123;eid&#125;
-        &lt;/foreach&gt;
-    &lt;/delete&gt;
-    
-    &lt;!--
-        delete:
-            delete from emp where eid in ();
-            delete from emp where eid = 1 or eid = 2 or eid = 3 
-        select:
-            select * from emp where eid in ();
-            select * from emp where eid = 1 or eid = 2 or eid = 3 
-        update:
-            把每条数据修改成相同内容
-            update emp set ... where eid in ();
-            update emp set ... where eid = 1 or eid = 2 or eid = 3 
-            把每条数据修改成对应内容,注意必须在链接地址（url）后添加?allowMultiQueries=true
-            update emp set ... where eid=1;
-            update emp set ... where eid=2;
-            update emp set ... where eid=3;
-        insert:
-            insert into emp values(),(),()
-     --&gt;
-     
-     &lt;!-- void insertMoreByArray(Emp[] emps); --&gt;
-     &lt;insert id=&quot;insertMoreByArray&quot;&gt;
-        insert into emp values
-        &lt;foreach collection=&quot;array&quot; item=&quot;emp&quot; separator=&quot;,&quot;&gt;
-            (null,#&#123;emp.ename&#125;,#&#123;emp.age&#125;,#&#123;emp.sex&#125;,1)
-        &lt;/foreach&gt;
-     &lt;/insert&gt;
-     
-     &lt;!-- void updateMoreByArray(@Param(&quot;emps&quot;)Emp[] emps); --&gt;
-     &lt;update id=&quot;updateMoreByArray&quot;&gt;
-        &lt;foreach collection=&quot;emps&quot; item=&quot;emp&quot;&gt;
-            update emp set ename=#&#123;emp.ename&#125;, age=#&#123;emp.age&#125;, sex=#&#123;emp.sex&#125; where eid = #&#123;emp.eid&#125;;
-        &lt;/foreach&gt;
-     &lt;/update&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.TestDynamicSQl.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpMapper;
-
-public class TestDynamicSQL &#123;
-    @Test
-    public void TestMore() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-        //批量删除
-//        List&lt;Integer&gt; eids = new ArrayList&lt;&gt;();
-//        eids.add(10);
-//        eids.add(16);
-//        eids.add(17);
-//        mapper.deleteMoreByList(eids);//只能删除id为1的员工
-        
-        //批量添加
-        //Emp[] emps = new Emp[3];
-        //Emp[] emps = new Emp[]&#123;&#125;;
-        //Emp[] emps = &#123;&#125;;
-//        Emp emp1 = new Emp(null, &quot;a&quot;,23,&quot;男&quot;);
-//        Emp emp2 = new Emp(null, &quot;aa&quot;,23,&quot;男&quot;);
-//        Emp emp3 = new Emp(null, &quot;aaa&quot;,23,&quot;男&quot;);
-//        Emp[] emps = &#123;emp1, emp2, emp3&#125;;
-//        mapper.insertMoreByArray(emps);
-        
-        //批量修改(需要在jdbc.url后加?allowMultiQueries=true)
-        //jdbc.url=jdbc:mysql://localhost:3306/ssm?allowMultiQueries=true
-        Emp emp1 = new Emp(20, &quot;a1&quot;,233,&quot;女&quot;);
-        Emp emp2 = new Emp(21, &quot;aa1&quot;,233,&quot;女&quot;);
-        Emp emp3 = new Emp(22, &quot;aaa1&quot;,233,&quot;女&quot;);
-        Emp[] emps = &#123;emp1, emp2, emp3&#125;;
-        mapper.updateMoreByArray(emps);
-    &#125;
-    
-    @Test
-    public void TestChoose() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-        //测试1
-        //Emp emp = new Emp();
-//        emp.setEid(1);
-//        emp.setEname(&quot;张三&quot;);
-//        emp.setAge(12);
-        //emp.setSex(&quot;1&quot;);
-//        List&lt;Emp&gt; list = mapper.getEmpListByChoose(emp);
-//        for (Emp e : list) &#123;
-//            System.out.println(e);
-//        &#125;
-        
-        //测试2
-//        Emp emp = new Emp();
-//        emp.setEname(&quot;张三&quot;);
-//        emp.setAge(12);    
-//        emp.setSex(&quot;1&quot;);
-//        mapper.insertEmp(emp);
-        
-        Emp emp = new Emp();
-        emp.setEname(&quot;张三三&quot;);
-        emp.setAge(12);    
-        emp.setSex(&quot;123&quot;);
-        mapper.insertEmp(emp);
-    &#125;
-    
-    @Test
-    public void TestIf() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        Emp emp = new Emp();
-        //emp.setEid(1);
-        emp.setEname(&quot;张三&quot;);
-        emp.setAge(12);
-        //emp.setSex(&quot;1&quot;);
-        List&lt;Emp&gt; list = mapper.getEmpListByMoreTJ(emp);
-        for (Emp e : list) &#123;
-            System.out.println(e);
-        &#125;
-    &#125;
-    
-    public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        return sqlSessionFactory;
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/101/">101</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/102/">102</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1206,20 +936,20 @@ public class TestDynamicSQL &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">503</span>
+          <span class="site-state-item-count">506</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">413</span>
+        <span class="site-state-item-count">416</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">416</span>
+        <span class="site-state-item-count">422</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

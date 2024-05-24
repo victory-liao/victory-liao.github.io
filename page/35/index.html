@@ -190,6 +190,471 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/06/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/" class="post-title-link" itemprop="url">spring | 以XML方式配置切面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-06 04:15:43 / 修改时间：04:20:37" itemprop="dateCreated datePublished" datetime="2022-03-06T04:15:43-08:00">2022-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/" itemprop="url" rel="index"><span itemprop="name">以XML方式配置切面</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="以XML方式配置切面"><a href="#以XML方式配置切面" class="headerlink" title="以XML方式配置切面"></a>以XML方式配置切面</h1><p>1.项目目录<br><img src="/2022/03/06/%E4%BB%A5XML%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE%E5%88%87%E9%9D%A2/1.PNG"></p>
+<p>2.MathI.java(接口)</p>
+<pre><code>package com.atguigu.spring.aopxml;
+
+public interface MathI &#123;
+    int add(int i, int j);
+    int sub(int i, int j);
+    int mul(int i, int j);
+    int div(int i, int j);
+&#125;
+</code></pre>
+<p>3.MathImpl.java(实现类)</p>
+<pre><code>package com.atguigu.spring.aopxml;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class MathImpl implements MathI&#123;
+
+    @Override
+    public int add(int i, int j) &#123;
+        int result = i + j;
+        return result;
+    &#125;
+    
+    @Override
+    public int sub(int i, int j) &#123;
+        int result = i - j;
+        return result;
+    &#125;
+
+    @Override
+    public int mul(int i, int j) &#123;
+        int result = i * j;
+        return result; 
+    &#125;
+
+    @Override
+    public int div(int i, int j) &#123;
+        int result = i / j;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>4.MyLogger.java(切面)</p>
+<pre><code>package com.atguigu.spring.aopxml;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyLogger &#123;
+    public void before()&#123;
+        System.out.println(&quot;前置通知&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>5.aop-xml.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd&quot;&gt;
+
+    &lt;context:component-scan base-package=&quot;com.atguigu.spring.aopxml&quot;&gt;&lt;/context:component-scan&gt;
+    
+    &lt;!-- 以XML方式配置切面  --&gt;
+    &lt;aop:config&gt;
+        &lt;!-- 切面 --&gt;
+        &lt;aop:aspect ref=&quot;myLogger&quot;&gt;
+            &lt;!-- 前置通知 通知通过切入点表达式作用于连接点--&gt;
+            &lt;!-- &lt;aop:before method=&quot;before&quot; pointcut=&quot;execution(* com.atguigu.spring.aopxml.*.*(..))&quot;/&gt; --&gt;
+            
+            &lt;aop:pointcut expression=&quot;execution(* com.atguigu.spring.aopxml.*.*(..))&quot; id=&quot;cut&quot;/&gt;
+            &lt;aop:before method=&quot;before&quot; pointcut-ref=&quot;cut&quot;/&gt;
+        &lt;/aop:aspect&gt;
+    &lt;/aop:config&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>6.Test.java(测试类)</p>
+<pre><code>package com.atguigu.spring.aopxml;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test &#123;
+
+    public static void main(String[] args) &#123;
+        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;aop-xml.xml&quot;);
+        MathI math = ac.getBean(&quot;mathImpl&quot;, MathI.class);
+        int add = math.add(2, 2);
+        System.out.println(add);
+    &#125;
+
+&#125;
+</code></pre>
+<p>7.运行结果</p>
+<pre><code>前置通知
+4
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/" class="post-title-link" itemprop="url">spring | AOP(切面、通知、切入点、切面优先级)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-06 03:49:13 / 修改时间：03:58:36" itemprop="dateCreated datePublished" datetime="2022-03-06T03:49:13-08:00">2022-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/AOP-%E5%88%87%E9%9D%A2%E3%80%81%E9%80%9A%E7%9F%A5%E3%80%81%E5%88%87%E5%85%A5%E7%82%B9%E3%80%81%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/" itemprop="url" rel="index"><span itemprop="name">AOP(切面、通知、切入点、切面优先级)</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="AOP-切面、通知、切入点、切面优先级"><a href="#AOP-切面、通知、切入点、切面优先级" class="headerlink" title="AOP(切面、通知、切入点、切面优先级)"></a>AOP(切面、通知、切入点、切面优先级)</h1><p><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/1.PNG"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/06/AOP%E9%80%9A%E7%9F%A5%E5%88%87%E9%9D%A2%E5%88%87%E5%85%A5%E7%82%B9%E5%88%87%E9%9D%A2%E4%BC%98%E5%85%88%E7%BA%A7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/" class="post-title-link" itemprop="url">spring | 动态代理之数学计算器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-06 00:08:16 / 修改时间：00:15:51" itemprop="dateCreated datePublished" datetime="2022-03-06T00:08:16-08:00">2022-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">动态代理之数学计算器</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="动态代理-数学计算器"><a href="#动态代理-数学计算器" class="headerlink" title="动态代理-数学计算器"></a>动态代理-数学计算器</h1><p>项目目录<br><img src="/2022/03/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%99%A8/1.PNG"></p>
+<p>1.要求<br>1）计算器能够执行加减乘除运算<br>2）日志：在程序执行期间追踪正在发生的活动<br>3）验证：希望计算器只能处理正数的运算</p>
+<p>2.常规实现</p>
+<pre><code>**MathI.java**
+package com.atguigu.proxy;
+
+public interface MathI &#123;
+    int add(int i, int j);
+    int sub(int i, int j);
+    int mul(int i, int j);
+    int div(int i, int j);
+&#125;
+</code></pre>
+<p><strong>MathImpl.java</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+public class MathImpl implements MathI&#123;
+
+    @Override
+    public int add(int i, int j) &#123;
+        System.out.println(&quot;method:add,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:add,results:&quot; + (i + j));
+        return i + j;
+    &#125;
+    
+    @Override
+    public int sub(int i, int j) &#123;
+        System.out.println(&quot;method:sub,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:sub,results:&quot; + (i - j));
+        return i - j;
+    &#125;
+
+    @Override
+    public int mul(int i, int j) &#123;
+        System.out.println(&quot;method:mul,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:mul,results:&quot; + (i * j));
+        return i * j;
+    &#125;
+
+    @Override
+    public int div(int i, int j) &#123;
+        System.out.println(&quot;method:div,arguments:&quot; + i + &quot;,&quot; + j);
+        System.out.println(&quot;method:div,results:&quot; + (i / j));
+        return i / j;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>常规实现方法存在的问题</strong><br>①代码混乱：越来越多的非业务需求(日志和验证等)加入后，原有的业务方法急剧膨胀。每个方法在处理核心逻辑的同时还必须兼顾其他多个关注点。<br>②代码分散: 以日志需求为例，只是为了满足这个单一需求，就不得不在多个模块（方法）里多次重复相同的日志代码。如果日志需求发生变化，必须修改所有模块。</p>
+<p>3.动态代理<br><strong>MathI.java（与2中的代码相同）</strong></p>
+<p><strong>MathImpl.java(2中的代码中去掉日志信息)</strong></p>
+<p><strong>MyLogger.java(日志类)</strong></p>
+<p><strong>ProxyUtil.java(代理类)</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+
+public class ProxyUtil&#123;
+    //代理模式：1、静态代理（代理对象真实存在，是自己写好的） 2、动态代理（动态生成代理对象，不需要自己写）
+    private MathImpl mathImpl;//目标对象 目标对象类必须实现接口
+    
+    public ProxyUtil(MathImpl mathImpl) &#123;
+        super();
+        this.mathImpl = mathImpl;
+    &#125;
+
+    public Object getProxy()&#123;
+        //获取当前类的类加载器用来加载代理对象所属类
+        ClassLoader loader = this.getClass().getClassLoader();//动态生成代理对象就需要动态代理类，代理类的执行需要类加载器
+        //获取目标对象实现的所有接口的Class，代理类会和目标对象实现相同的接口，最终通过代理对象实现功能
+        Class[] interfaces = mathImpl.getClass().getInterfaces();
+        
+        return Proxy.newProxyInstance(loader, interfaces, new InvocationHandler()&#123;
+
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+                //代理对象实现功能的方式
+                try&#123;
+                    MyLogger.before(method.getName(), Arrays.toString(args));
+                    Object result = method.invoke(mathImpl, args);//动态代理对象实现功能（调用目标对象的方法）
+                    MyLogger.after(method.getName(), result);
+                    return result;
+                &#125;catch (Exception e)&#123;
+                    MyLogger.throwing();
+                    e.printStackTrace();
+                &#125;finally&#123;
+                    System.out.println(&quot;哪都有我&quot;);
+                &#125;
+                return null;
+                
+            &#125;
+        &#125;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Test.java(测试类)</strong></p>
+<pre><code>package com.atguigu.proxy;
+
+public class Test &#123;
+
+    public static void main(String[] args) &#123;
+//        MathI math = new MathImpl();
+//        int result = math.add(1, 1);
+//        System.out.println(result);
+        ProxyUtil proxy = new ProxyUtil(new MathImpl());
+        
+        MathI math = (MathI)proxy.getProxy();
+        
+        int i = math.add(1, 1);
+        System.out.println(i);
+        
+        int j = math.div(4, 0);
+        System.out.println(j);
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -666,627 +1131,10 @@ public class Test &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/06/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/06/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" class="post-title-link" itemprop="url">spring | 自动装配</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-06 00:00:49 / 修改时间：00:16:07" itemprop="dateCreated datePublished" datetime="2022-03-06T00:00:49-08:00">2022-03-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%EF%BC%88%E8%87%AA%E5%8A%A8%E4%B8%BA%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC%EF%BC%89/" itemprop="url" rel="index"><span itemprop="name">自动装配（自动为属性赋值）</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="自动装配（自动为属性赋值）"><a href="#自动装配（自动为属性赋值）" class="headerlink" title="自动装配（自动为属性赋值）"></a>自动装配（自动为属性赋值）</h1><p>1.项目目录<br><img src="/2022/03/06/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/1.PNG"></p>
-<p>2.Emp.java</p>
-<pre><code>package com.atguigu.ioc.auto;
-
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    //private Car car;//类型可以写该类以及该类的父类
-    private CarExtends car;
-    //private Dept dept;//类型可以写该类以及该类的父类
-    private DeptI dept;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public CarExtends getCar() &#123;
-        return car;
-    &#125;
-    public void setCar(CarExtends car) &#123;
-        this.car = car;
-    &#125;
-    public DeptI getDept() &#123;
-        return dept;
-    &#125;
-    public void setDept(DeptI dept) &#123;
-        this.dept = dept;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, car=&quot; + car + &quot;, dept=&quot; + dept + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>3.CarExtends.java(Car的父类)</p>
-<pre><code>package com.atguigu.ioc.auto;
-
-public class CarExtends &#123;
-
-&#125;
-</code></pre>
-<p>4.Car.java</p>
-<pre><code>package com.atguigu.ioc.auto;
-
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    //private Car car;//类型可以写该类以及该类的父类
-    private CarExtends car;
-    //private Dept dept;//类型可以写该类以及该类的父类
-    private DeptI dept;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public CarExtends getCar() &#123;
-        return car;
-    &#125;
-    public void setCar(CarExtends car) &#123;
-        this.car = car;
-    &#125;
-    public DeptI getDept() &#123;
-        return dept;
-    &#125;
-    public void setDept(DeptI dept) &#123;
-        this.dept = dept;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, car=&quot; + car + &quot;, dept=&quot; + dept + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>5.DeptI.java（接口）</p>
-<pre><code>package com.atguigu.ioc.auto;
-
-public interface DeptI &#123;
-
-&#125;
-</code></pre>
-<p>6.Dept.java（DeptI接口的实现类）</p>
-<pre><code>package com.atguigu.ioc.auto;
-
-public class Dept implements DeptI&#123;
-    private Integer did;
-    private String dname;
-    public Integer getDid() &#123;
-        return did;
-    &#125;
-    public void setDid(Integer did) &#123;
-        this.did = did;
-    &#125;
-    public String getDname() &#123;
-        return dname;
-    &#125;
-    public void setDname(String dname) &#123;
-        this.dname = dname;
-    &#125;
-&#125;
-</code></pre>
-<p>7.auto.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;!--
-        autowire:根据某种策略自动未非字面量属性赋值
-        autowire=&quot;byName|byType&quot;
-        byName:通过属性名和spring容器中bean的id进行比较，若一致则可直接赋值
-        byType:通过spring容器中bean的类型，为兼容性（子类对象为父类赋值，实现类为接口赋值）的属性赋值 
-                在使用byType的过程中，要求spring容器中只能有一个能为属性赋值的bean
-        
-        选用建议：当设置autowire属性，会最作用于该bean中所有的非字面量属性，因此谁都不用
-     --&gt;
-    
-    &lt;bean id=&quot;emp&quot; class=&quot;com.atguigu.ioc.auto.Emp&quot; autowire=&quot;byName&quot;&gt;&lt;!-- byName/byType --&gt;
-        &lt;property name=&quot;eid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;ename&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-        &lt;!-- &lt;property name=&quot;car&quot; ref=&quot;car&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;dept&quot; ref=&quot;dept&quot;&gt;&lt;/property&gt; --&gt;
-    &lt;/bean&gt;
-    
-    &lt;bean id=&quot;car&quot; class=&quot;com.atguigu.ioc.auto.Car&quot;&gt;
-        &lt;property name=&quot;cid&quot; value=&quot;666666&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;cname&quot; value=&quot;霸道&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;bean id=&quot;dept&quot; class=&quot;com.atguigu.ioc.auto.Dept&quot;&gt;
-        &lt;property name=&quot;did&quot; value=&quot;1111&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;dname&quot; value=&quot;开发部&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>8.Test.java</p>
-<pre><code>package com.atguigu.ioc.auto;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-
-    public static void main(String[] args) &#123;
-        // TODO Auto-generated method stub
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;auto.xml&quot;);
-        
-        Emp bean = ac.getBean(&quot;emp&quot;, Emp.class);
-        
-        System.out.println(bean);
-    &#125;
-&#125;
-</code></pre>
-<p>9.运行结果</p>
-<pre><code>Emp [eid=1001, ename=张三, car=com.atguigu.ioc.auto.Car@31ef45e3, dept=com.atguigu.ioc.auto.Dept@598067a5]
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">spring | 引用外部属性文件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-05 23:58:42" itemprop="dateCreated datePublished" datetime="2022-03-05T23:58:42-08:00">2022-03-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:14" itemprop="dateModified" datetime="2022-03-06T00:15:14-08:00">2022-03-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">引用外部属性文件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="引用外部属性文件"><a href="#引用外部属性文件" class="headerlink" title="引用外部属性文件"></a>引用外部属性文件</h1><p>1.项目目录<br><img src="/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/1.PNG"></p>
-<p>2.导入druid-1.1.9.jar、mysql-connector-java-5.1.7-bin.jar</p>
-<p>3.db.properties</p>
-<pre><code># k = v
-jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/test
-jdbc.username=root
-jdbc.password=123456
-</code></pre>
-<p>4.datasource.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;&gt;
-    
-    &lt;!-- 直接配置 --&gt;
-    &lt;!-- &lt;bean id=&quot;datasource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/test&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;username&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;password&quot; value=&quot;123456&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt; --&gt;
-    
-    &lt;!-- 加载资源文件（引用外部资源文件） --&gt;
-    &lt;!-- &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    &lt;bean id=&quot;datasource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt; --&gt;
-    
-    &lt;!-- 使用context标签加载资源文件（引用外部属性文件） --&gt;
-    &lt;context:property-placeholder location=&quot;db.properties&quot;/&gt;
-    &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-        &lt;property name=&quot;location&quot; value=&quot;db.properties&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    &lt;bean id=&quot;datasource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt; 
-&lt;/beans&gt;
-</code></pre>
-<p>5.Test.java</p>
-<pre><code>package com.atguigu.ioc.datasource;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import com.alibaba.druid.pool.DruidDataSource;
-
-public class Test &#123;
-
-    public static void main(String[] args) throws Exception &#123;
-        // TODO Auto-generated method stub
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;datasource.xml&quot;);
-        
-        DruidDataSource bean = ac.getBean(&quot;datasource&quot;, DruidDataSource.class);
-        
-        System.out.println(bean);
-        
-        //System.out.println(bean.getConnection());
-    &#125;
-
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="post-title-link" itemprop="url">spring | bean的生命周期</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-05 23:55:51" itemprop="dateCreated datePublished" datetime="2022-03-05T23:55:51-08:00">2022-03-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:14" itemprop="dateModified" datetime="2022-03-06T00:15:14-08:00">2022-03-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E3%80%81bean%E7%9A%84%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">bean的生命周期、bean的后置处理器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="bean的生命周期、bean的后置处理器"><a href="#bean的生命周期、bean的后置处理器" class="headerlink" title="bean的生命周期、bean的后置处理器"></a>bean的生命周期、bean的后置处理器</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/1.PNG"></p>
-<p>2.bean的生命周期（******）<br>① 通过构造器或工厂方法创建bean实例<br>② 为bean的属性设置值和对其他bean的引用<br>③ 调用bean的初始化方法<br>④  bean可以使用了<br>⑤ 当容器关闭时，调用bean的销毁方法</p>
-<p>3.Person.java</p>
-<pre><code>package com.atguigu.ioc.life;
-
-public class Person &#123;
-    private Integer id;
-    private String sex;
-    private String name;
-    
-    public Integer getId() &#123;
-        return id;
-    &#125;
-    
-    public void setId(Integer id) &#123;
-        System.out.println(&quot;Two:依赖注入&quot;);
-        this.id = id;
-    &#125;
-    
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    public String getName() &#123;
-        return name;
-    &#125;
-    
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    
-    public Person() &#123;
-        System.out.println(&quot;One:创建对象&quot;);
-    &#125;
-    
-    public void init()&#123;
-        System.out.println(&quot;Three:初始化&quot;);
-    &#125;
-    
-    
-
-    @Override
-    public String toString() &#123;
-        return &quot;Four: Person [id=&quot; + id + &quot;, sex=&quot; + sex + &quot;, name=&quot; + name + &quot;]&quot;;
-    &#125;
-
-    public void destroy()&#123;
-        System.out.println(&quot;Five:销毁&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>4.AfterHandler.java(后置处理器)</p>
-<pre><code>package com.atguigu.ioc.life;
-
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-
-public class AfterHandler implements BeanPostProcessor&#123;
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException &#123;
-        // TODO Auto-generated method stub
-        return bean;
-    &#125;
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException &#123;
-        Person person = (Person)bean;
-        if(person.getSex().equals(&quot;男&quot;))&#123;
-            person.setName(&quot;张无忌&quot;);
-        &#125;else&#123;
-            person.setName(&quot;赵敏&quot;);
-        &#125;
-        return person;
-    &#125;
- 
-&#125;
-</code></pre>
-<p>5.life.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;!-- 测试bean的生命周期 --&gt;
-    &lt;bean id=&quot;person&quot; class=&quot;com.atguigu.ioc.life.Person&quot; init-method=&quot;init&quot; destroy-method=&quot;destroy&quot;&gt;
-        &lt;property name=&quot;id&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 测试后置处理器 --&gt;
-    &lt;bean class=&quot;com.atguigu.ioc.life.AfterHandler&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>6.Test.java</p>
-<pre><code>package com.atguigu.ioc.life;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args) &#123;
-        // TODO Auto-generated method stub
-        ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(&quot;life.xml&quot;);
-        
-        Person person = ac.getBean(&quot;person&quot;, Person.class);
-        System.out.println(person);
-        
-        ac.close();
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果</p>
-<pre><code>One:创建对象
-Two:依赖注入
-Three:初始化
-Four: Person [id=1001, sex=男, name=张无忌]
-二月 15, 2022 4:34:28 下午 org.springframework.context.support.ClassPathXmlApplicationContext doClose
-信息: Closing org.springframework.context.support.ClassPathXmlApplicationContext@2dda6444: startup date [Tue Feb 15 16:34:27 CST 2022]; root of context hierarchy
-Five:销毁
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/34/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&hellip;</span><a class="page-number" href="/page/101/">101</a><a class="extend next" rel="next" href="/page/36/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/34/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&hellip;</span><a class="page-number" href="/page/102/">102</a><a class="extend next" rel="next" href="/page/36/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1354,20 +1202,20 @@ Five:销毁
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">503</span>
+          <span class="site-state-item-count">506</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">413</span>
+        <span class="site-state-item-count">416</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">416</span>
+        <span class="site-state-item-count">422</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-05-23T13:28:44.904Z</updated>
+  <updated>2024-05-24T13:28:44.026Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,134 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Django | django自定义后台表单</title>
+    <link href="http://example.com/2024/05/24/django%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8E%E5%8F%B0%E8%A1%A8%E5%8D%95/"/>
+    <id>http://example.com/2024/05/24/django%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8E%E5%8F%B0%E8%A1%A8%E5%8D%95/</id>
+    <published>2024-05-24T13:25:18.000Z</published>
+    <updated>2024-05-24T13:28:44.026Z</updated>
+    
+    <content type="html"><![CDATA[<p>django自定义后台表单的显示方式。</p><span id="more"></span><p>以问题投票为例说明后台表单的自定义：</p><p>1.准备所需的模型类</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> django.utils <span class="keyword">import</span> timezone</span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Create your models here.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Question</span>(<span class="params">models.Model</span>):</span></span><br><span class="line">    question_text = models.CharField(max_length=<span class="number">200</span>)</span><br><span class="line">    pub_date = models.DateTimeField(<span class="string">&quot;date published&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.question_text</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定制布尔值字段的显式方式</span></span><br><span class="line"><span class="meta">    @admin.display(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="meta">        boolean=<span class="literal">True</span>,</span></span></span><br><span class="line"><span class="params"><span class="meta">        ordering=<span class="string">&quot;pub_date&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="meta">        description=<span class="string">&quot;Published recently?&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="meta">    </span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">was_published_recently</span>(<span class="params">self</span>):</span></span><br><span class="line">        now = timezone.now()</span><br><span class="line">        <span class="keyword">return</span> now - datetime.timedelta(days=<span class="number">1</span>) &lt;= self.pub_date &lt;= now</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Choice</span>(<span class="params">models.Model</span>):</span></span><br><span class="line">    question = models.ForeignKey(Question, on_delete=models.CASCADE)</span><br><span class="line">    choice_text = models.CharField(max_length=<span class="number">200</span>)</span><br><span class="line">    votes = models.IntegerField(default=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.choice_text</span><br></pre></td></tr></table></figure><p>2.自定义后台表单的显式方式</p><p>django后台访问：<code>ip:port/admin</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin  <span class="comment"># 导入django内置模型管理类</span></span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Question, Choice  <span class="comment"># 导入自定义模型类</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChoiceInline</span>(<span class="params">admin.TabularInline</span>):</span></span><br><span class="line">    <span class="comment"># admin.TabularInline: 单行显示关联对象</span></span><br><span class="line">    <span class="comment"># admin.StackedInline: 多行显示关联对象</span></span><br><span class="line">    model = Choice</span><br><span class="line">    extra = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义后台Question表单</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuestionAdmin</span>(<span class="params">admin.ModelAdmin</span>):</span></span><br><span class="line">    <span class="comment"># 定义属性显式顺序</span></span><br><span class="line">    <span class="comment"># fields = [&quot;pub_date&quot;, &quot;question_text&quot;]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将模型类的属性划分成不同的信息区域，适用于模型类有多个属性且存在同类型属性</span></span><br><span class="line">    fieldsets = [</span><br><span class="line">        (<span class="literal">None</span>, &#123;<span class="string">&quot;fields&quot;</span>: [<span class="string">&quot;question_text&quot;</span>]&#125;),</span><br><span class="line">        (<span class="string">&quot;Date information&quot;</span>, &#123;<span class="string">&quot;fields&quot;</span>: [<span class="string">&quot;pub_date&quot;</span>]&#125;),</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 修改列表页中列表项的显式信息</span></span><br><span class="line">    list_display = [<span class="string">&quot;question_text&quot;</span>, <span class="string">&quot;pub_date&quot;</span>, <span class="string">&quot;was_published_recently&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 增加过滤器</span></span><br><span class="line">    list_filter = [<span class="string">&quot;pub_date&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 增加搜索框</span></span><br><span class="line">    search_fields = [<span class="string">&quot;question_text&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 分页，一页展示5个列表项</span></span><br><span class="line">    list_per_page = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 添加关联的对象</span></span><br><span class="line">    inlines = [ChoiceInline]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义后台Choice表单</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChoiceAdmin</span>(<span class="params">admin.ModelAdmin</span>):</span></span><br><span class="line">    fieldsets = [</span><br><span class="line">        (<span class="string">&quot;Question Information&quot;</span>, &#123;<span class="string">&quot;fields&quot;</span>: [<span class="string">&quot;question&quot;</span>]&#125;),</span><br><span class="line">        (<span class="string">&quot;Seletions Information&quot;</span>, &#123;<span class="string">&quot;fields&quot;</span>: [<span class="string">&quot;choice_text&quot;</span>]&#125;),</span><br><span class="line">        (<span class="string">&quot;Voting Information&quot;</span>, &#123;<span class="string">&quot;fields&quot;</span>: [<span class="string">&quot;votes&quot;</span>]&#125;),</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 增加搜索框</span></span><br><span class="line">    search_fields = [<span class="string">&quot;choice_text&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 增加过滤器</span></span><br><span class="line">    list_filter = [<span class="string">&quot;votes&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 列表项展示内容</span></span><br><span class="line">    list_display = [<span class="string">&quot;choice_text&quot;</span>, <span class="string">&quot;votes&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 分页，一页展示5个列表项</span></span><br><span class="line">    list_per_page = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 字段（选项投票数）可编辑</span></span><br><span class="line">    list_editable = [<span class="string">&quot;votes&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将模型类注册到后台中进行管理</span></span><br><span class="line">admin.site.register(Question, QuestionAdmin)</span><br><span class="line">admin.site.register(Choice, ChoiceAdmin)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;django自定义后台表单的显示方式。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="Django" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/"/>
+    
+    <category term="django自定义后台表单" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/django%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8E%E5%8F%B0%E8%A1%A8%E5%8D%95/"/>
+    
+    
+    <category term="Django" scheme="http://example.com/tags/Django/"/>
+    
+    <category term="后台表单" scheme="http://example.com/tags/%E5%90%8E%E5%8F%B0%E8%A1%A8%E5%8D%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Django | django模板继承和模板引入</title>
+    <link href="http://example.com/2024/05/24/django%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF%E5%92%8C%E6%A8%A1%E6%9D%BF%E5%BC%95%E5%85%A5/"/>
+    <id>http://example.com/2024/05/24/django%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF%E5%92%8C%E6%A8%A1%E6%9D%BF%E5%BC%95%E5%85%A5/</id>
+    <published>2024-05-24T13:25:05.000Z</published>
+    <updated>2024-05-24T13:29:40.496Z</updated>
+    
+    <content type="html"><![CDATA[<p>Django提供html网页的继承和引入机制，减少重复代码。</p><span id="more"></span><p>模板继承：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &quot;parent.html&quot; %&#125;</span><br></pre></td></tr></table></figure><p>模板引入：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% include &#x27;header.html&#x27; %&#125;</span><br></pre></td></tr></table></figure><p>参考文章：<a href="https://blog.csdn.net/likunkun__/article/details/88080559">Django的html继承(extends)和引入(include)用法_django使用includehtml继承另一个html的数据-CSDN博客</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Django提供html网页的继承和引入机制，减少重复代码。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="Django" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/"/>
+    
+    <category term="django模板继承和模板引入" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/django%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF%E5%92%8C%E6%A8%A1%E6%9D%BF%E5%BC%95%E5%85%A5/"/>
+    
+    
+    <category term="Django" scheme="http://example.com/tags/Django/"/>
+    
+    <category term="模板继承" scheme="http://example.com/tags/%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF/"/>
+    
+    <category term="模板引入" scheme="http://example.com/tags/%E6%A8%A1%E6%9D%BF%E5%BC%95%E5%85%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Django | django模板</title>
+    <link href="http://example.com/2024/05/24/django%E6%A8%A1%E6%9D%BF/"/>
+    <id>http://example.com/2024/05/24/django%E6%A8%A1%E6%9D%BF/</id>
+    <published>2024-05-24T13:24:43.000Z</published>
+    <updated>2024-05-24T13:27:18.965Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用django模板语言（DTL）动态生成页面内容。</p><span id="more"></span><p>模板包含<code>变量</code>和<code>标签</code>，变量在模板被执行时被替换为值，标签控制模板的逻辑。</p><p>模板中表示变量：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; variable &#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--变量举例--&gt;</span></span><br><span class="line">&#123;&#123;student.name&#125;&#125;</span><br></pre></td></tr></table></figure><p>模板中表示标签：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--两种形式的标签--&gt;</span></span><br><span class="line">&#123;% tag %&#125; <span class="comment">&lt;!--单标签--&gt;</span></span><br><span class="line">&#123;% tag %&#125;...tag contents...&#123;% endtag %&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--常见标签--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--for--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for athlete in athlete_list %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; athlete.name &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--is、elif和else--&gt;</span></span><br><span class="line">&#123;% if athlete_list %&#125;</span><br><span class="line">    Number of athletes: &#123;&#123; athlete_list|length &#125;&#125;</span><br><span class="line">&#123;% elif athlete_in_locker_room_list %&#125;</span><br><span class="line">    Athletes should be out of the locker room soon!</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    No athletes.</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure><p>模板中的过滤器：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; variable|filter &#125;&#125;</span><br><span class="line">&#123;&#123; variable|filter1|filter2&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--过滤器距离--&gt;</span></span><br><span class="line">&#123;&#123; name|lower &#125;&#125;<span class="comment">&lt;!--这将显示 lower 过滤器过滤后的 &#123;&#123; name &#125;&#125; 变量的值，该过滤器将文本转换为小写。使用管道（|）来应用过滤器。--&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;使用django模板语言（DTL）动态生成页面内容。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="Django" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/"/>
+    
+    <category term="django模板" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/django%E6%A8%A1%E6%9D%BF/"/>
+    
+    
+    <category term="Django" scheme="http://example.com/tags/Django/"/>
+    
+    <category term="DTL" scheme="http://example.com/tags/DTL/"/>
+    
+    <category term="模板" scheme="http://example.com/tags/%E6%A8%A1%E6%9D%BF/"/>
+    
+    <category term="变量" scheme="http://example.com/tags/%E5%8F%98%E9%87%8F/"/>
+    
+    <category term="标签" scheme="http://example.com/tags/%E6%A0%87%E7%AD%BE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Django | django模板搜索路径</title>
+    <link href="http://example.com/2024/05/24/django%E6%9F%A5%E6%89%BE%E6%A8%A1%E6%9D%BF/"/>
+    <id>http://example.com/2024/05/24/django%E6%9F%A5%E6%89%BE%E6%A8%A1%E6%9D%BF/</id>
+    <published>2024-05-24T13:24:30.000Z</published>
+    <updated>2024-05-24T13:31:10.878Z</updated>
+    
+    <content type="html"><![CDATA[<p>django搜索模板的路径分析。</p><span id="more"></span><p>django模板搜索路径的配置在[project_name]/[project_name]/settings.py中，如下所示：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;BACKEND&quot;: &quot;django.template.backends.django.DjangoTemplates&quot;,</span><br><span class="line">        &quot;DIRS&quot;: [BASE_DIR / &quot;templates&quot;],</span><br><span class="line">        &quot;APP_DIRS&quot;: True,</span><br><span class="line">        &quot;OPTIONS&quot;: &#123;</span><br><span class="line">            &quot;context_processors&quot;: [</span><br><span class="line">                &quot;django.template.context_processors.debug&quot;,</span><br><span class="line">                &quot;django.template.context_processors.request&quot;,</span><br><span class="line">                &quot;django.contrib.auth.context_processors.auth&quot;,</span><br><span class="line">                &quot;django.contrib.messages.context_processors.messages&quot;,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure><p>一个重要的点：<code>TEMPLATES</code>中 <code>DIRS</code>默认是空的，Django 是怎么找到默认的后台模板的？答：因为 <code>APP_DIRS</code>被置为 <code>True</code>，Django 会自动在每个应用包内递归查找 <code>templates/</code> 子目录。</p><p>自定义模板目录：若想让django搜索到自定义的模板目录，可将自定义目录添加在<code>DIRS</code>中。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;django搜索模板的路径分析。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="框架" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/"/>
+    
+    <category term="Django" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/"/>
+    
+    <category term="django查找模板" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/django%E6%9F%A5%E6%89%BE%E6%A8%A1%E6%9D%BF/"/>
+    
+    
+    <category term="Django" scheme="http://example.com/tags/Django/"/>
+    
+    <category term="DTL" scheme="http://example.com/tags/DTL/"/>
+    
+    <category term="模板" scheme="http://example.com/tags/%E6%A8%A1%E6%9D%BF/"/>
+    
+    <category term="模板搜索路径" scheme="http://example.com/tags/%E6%A8%A1%E6%9D%BF%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84/"/>
+    
+  </entry>
   
   <entry>
     <title>Django | django模板中引入JS报错：$ is not defined</title>
@@ -104,37 +232,6 @@
     <category term="Django" scheme="http://example.com/tags/Django/"/>
     
     <category term="通用视图" scheme="http://example.com/tags/%E9%80%9A%E7%94%A8%E8%A7%86%E5%9B%BE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Django | django模板</title>
-    <link href="http://example.com/2024/05/23/django%E6%A8%A1%E6%9D%BF/"/>
-    <id>http://example.com/2024/05/23/django%E6%A8%A1%E6%9D%BF/</id>
-    <published>2024-05-23T13:19:41.000Z</published>
-    <updated>2024-05-23T13:32:58.474Z</updated>
-    
-    <content type="html"><![CDATA[<p>使用django模板语言（DTL）动态生成页面内容。</p><span id="more"></span>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;使用django模板语言（DTL）动态生成页面内容。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="框架" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="Django" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/"/>
-    
-    <category term="django模板" scheme="http://example.com/categories/python/%E6%A1%86%E6%9E%B6/Django/django%E6%A8%A1%E6%9D%BF/"/>
-    
-    
-    <category term="Django" scheme="http://example.com/tags/Django/"/>
-    
-    <category term="DTL" scheme="http://example.com/tags/DTL/"/>
-    
-    <category term="模板" scheme="http://example.com/tags/%E6%A8%A1%E6%9D%BF/"/>
     
   </entry>
   
@@ -497,107 +594,6 @@
     
     
     <category term="CUDA" scheme="http://example.com/tags/CUDA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CUDA | 数据划分形式</title>
-    <link href="http://example.com/2024/03/14/%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86%E5%BD%A2%E5%BC%8F/"/>
-    <id>http://example.com/2024/03/14/%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86%E5%BD%A2%E5%BC%8F/</id>
-    <published>2024-03-14T13:55:25.000Z</published>
-    <updated>2024-03-14T13:57:37.667Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="数据划分形式"><a href="#数据划分形式" class="headerlink" title="数据划分形式"></a>数据划分形式</h3><p>块划分和周期划分是数据分配给线程的两种不同策略，它们在一些方面存在差异。以下是具体分析：</p><ul><li><strong>块划分</strong>：在块划分中，<strong>一组连续的数据被分到一个块内</strong>。<strong>每个数据块通常具有相同的大小</strong>，并以任意次序被安排给一个线程进行处理。线程在同一时间只处理一个数据块，这种方式简化了同步和调度的问题，因为每个线程独立工作在自己的数据块上。</li><li><strong>周期划分</strong>：周期划分将更少的数据分到一个块内。在这种策略下，每个线程负责处理多个数据块，且这些<strong>数据块之间通常是不连续的</strong>。相邻的线程会处理相邻的数据块，当一个线程需要选择一个新的数据块时，它必须跳过与当前线程数一样多的数据块。这种划分方式可以提高缓存的利用率，并可能减少内存访问延迟。</li></ul><p>总的来说，<strong>块划分适合每个线程处理大块连续数据的任务</strong>，而<strong>周期划分更适合于需要细粒度并行和数据局部性</strong>优化的场景。实际选择哪种划分方式取决于具体的应用场景和目标架构的特点。 </p><p>以下是块划分和周期划分的代码示例：</p><p>块划分：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义数据大小和线程数</span></span><br><span class="line">data_size = <span class="number">20</span></span><br><span class="line">num_threads = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算每个线程处理的数据量</span></span><br><span class="line">chunk_size = data_size // num_threads</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据分成块，并分配给线程</span></span><br><span class="line">data = np.random.rand(data_size)</span><br><span class="line">chunks = [data[i*chunk_size:(i+<span class="number">1</span>)*chunk_size] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_threads)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在每个线程中处理数据块</span></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> chunks:</span><br><span class="line">    <span class="comment"># 在这里进行数据处理</span></span><br><span class="line">    <span class="built_in">print</span>(chunk)</span><br></pre></td></tr></table></figure><p>周期划分：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义数据大小和线程数</span></span><br><span class="line">data_size = <span class="number">20</span></span><br><span class="line">num_threads = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算每个线程处理的数据量</span></span><br><span class="line">chunk_size = data_size // num_threads</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据分成块，并分配给线程</span></span><br><span class="line">data = np.random.rand(data_size)</span><br><span class="line">chunks = [data[i::num_threads] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_threads)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在每个线程中处理数据块</span></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> chunks:</span><br><span class="line">    <span class="comment"># 在这里进行数据处理</span></span><br><span class="line">    <span class="built_in">print</span>(chunk)</span><br></pre></td></tr></table></figure><p>以上代码示例展示了如何将数据划分为块，并将这些块分配给不同的线程进行处理。在块划分中，每个线程处理一个连续的数据块；而在周期划分中，每个线程处理多个不连续的数据块。 </p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h3 id=&quot;数据划分形式&quot;&gt;&lt;a href=&quot;#数据划分形式&quot; class=&quot;headerlink&quot; title=&quot;数据划分形式&quot;&gt;&lt;/a&gt;数据划分形式&lt;/h3&gt;&lt;p&gt;块划分和周期划分是数据分配给线程的两种不同策略，它们在一些方面存在差异。以下是具体分析：&lt;/p&gt;
-&lt;ul&gt;
-</summary>
-      
-    
-    
-    
-    <category term="并行计算" scheme="http://example.com/categories/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/"/>
-    
-    <category term="CUDA" scheme="http://example.com/categories/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/CUDA/"/>
-    
-    <category term="数据划分形式" scheme="http://example.com/categories/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/CUDA/%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86%E5%BD%A2%E5%BC%8F/"/>
-    
-    
-    <category term="CUDA" scheme="http://example.com/tags/CUDA/"/>
-    
-    <category term="数据划分" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86/"/>
-    
-    <category term="块划分" scheme="http://example.com/tags/%E5%9D%97%E5%88%92%E5%88%86/"/>
-    
-    <category term="周期划分" scheme="http://example.com/tags/%E5%91%A8%E6%9C%9F%E5%88%92%E5%88%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pytest | fixtures执行顺序及清理顺序</title>
-    <link href="http://example.com/2024/03/07/fixtures%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E5%8F%8A%E6%B8%85%E7%90%86%E9%A1%BA%E5%BA%8F/"/>
-    <id>http://example.com/2024/03/07/fixtures%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E5%8F%8A%E6%B8%85%E7%90%86%E9%A1%BA%E5%BA%8F/</id>
-    <published>2024-03-07T13:56:45.000Z</published>
-    <updated>2024-03-07T13:59:46.185Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="pytest-fixtures执行顺序和清理顺序"><a href="#pytest-fixtures执行顺序和清理顺序" class="headerlink" title="pytest fixtures执行顺序和清理顺序"></a>pytest fixtures执行顺序和清理顺序</h3><ol><li>fixtures执行顺序</li></ol><p>pytest一个test请求多个fixture时，fixtures的执行顺序是什么？</p><span id="more"></span><p>以下面的demo为例，在这段代码中test_string_only请求了append_first，order，fisrt_entry三个fixtures，从代码中可以看出append_first fixture依赖于order和first_entry fixtures。</p><p>pytest会对多个fixtures进行<strong>依赖解析</strong>，<strong>如果一个fixture依赖于其他fixture(s)，那么被依赖的fixtures会先于依赖它们的fixture执行</strong>。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># contents of test_append.py</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Arrange</span></span><br><span class="line"><span class="meta">@pytest.fixture</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">first_entry</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;3 - first_entry fixture has been executed.&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;a&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Arrange</span></span><br><span class="line"><span class="meta">@pytest.fixture</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">order</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;2 - order fixture has been executed.&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Act</span></span><br><span class="line"><span class="meta">@pytest.fixture</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">append_first</span>(<span class="params">order, first_entry</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;1 - append_first fixture has been executed.&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> order.append(first_entry)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_string_only</span>(<span class="params">append_first, order, first_entry</span>):</span></span><br><span class="line">    <span class="comment"># Assert</span></span><br><span class="line">    <span class="keyword">assert</span> order == [first_entry]</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>运行以上代码的结果如下：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">============================= test session starts =============================</span><br><span class="line">collecting ... collected 1 item</span><br><span class="line"></span><br><span class="line">test_append.py::test_string_only </span><br><span class="line">2 - order fixture has been executed.</span><br><span class="line">3 - first_entry fixture has been executed.</span><br><span class="line">1 - append_first fixture has been executed.</span><br><span class="line">PASSED                                  [100%]</span><br><span class="line"></span><br><span class="line">============================== 1 passed in 0.04s ==============================</span><br></pre></td></tr></table></figure><p>从运行结果可以看出，order fixture和first_entry fixture先于append_firt fixture执行。</p><p><strong>fixtures之间不存在依赖关系的，按照它们被声明的顺序执行</strong>，以下面的demo为例，假设有两个 fixtures，fixture A 和 fixture B，其中 fixture A 依赖于 fixture B。下面是一个示例来说明它们按照声明顺序执行的情况：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="meta">@pytest.fixture</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fixture_b</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Executing fixture B&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Cleaning up fixture B&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@pytest.fixture</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fixture_a</span>(<span class="params">fixture_b</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Executing fixture A&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Cleaning up fixture A&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_example</span>(<span class="params">fixture_a, fixture_b</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Executing test example&quot;</span>)</span><br><span class="line">    <span class="keyword">assert</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure><p>在这个例子中，<code>fixture_b</code> 和 <code>fixture_a</code> 都使用了 <code>@pytest.fixture</code> 装饰器进行声明。在测试函数 <code>test_example</code> 的参数列表中，<code>fixture_b</code> 在 <code>fixture_a</code> 之前声明。</p><p>当运行这个测试时，pytest 会首先执行 <code>fixture_b</code>，然后执行 <code>fixture_a</code>。这是因为 <code>fixture_a</code> 依赖于 <code>fixture_b</code>，所以需要先执行它。最后，测试函数 <code>test_example</code> 会被执行。</p><p>输出结果如下：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Executing fixture B</span><br><span class="line">Executing fixture A</span><br><span class="line">Executing test example</span><br><span class="line">Cleaning up fixture A</span><br><span class="line">Cleaning up fixture B</span><br></pre></td></tr></table></figure><p>可以看到，fixtures 是按照它们被声明的顺序执行的，首先是 <code>fixture_b</code>，然后是 <code>fixture_a</code>。 </p><ol><li>fixtures清理顺序</li></ol><p>每个fixture在它自己的代码块执行完毕后立即进行清理。有依赖关系的fixtures的清理工作先从清理被依赖fixture开始，例如fixture A依赖于fixture B，那么执行顺序将会是：首先执行fixture B，然后执行fixture A，最后清理工作会先从fixture A开始，然后是fixture B。这种设计确保了每个fixture能及时清理自己使用的资源，避免了潜在的资源冲突或泄露问题。</p>]]></content>
-    
-    
-    <summary type="html">&lt;h3 id=&quot;pytest-fixtures执行顺序和清理顺序&quot;&gt;&lt;a href=&quot;#pytest-fixtures执行顺序和清理顺序&quot; class=&quot;headerlink&quot; title=&quot;pytest fixtures执行顺序和清理顺序&quot;&gt;&lt;/a&gt;pytest fixtures执行顺序和清理顺序&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;fixtures执行顺序&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;pytest一个test请求多个fixture时，fixtures的执行顺序是什么？&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="python测试框架" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="pytest" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/"/>
-    
-    <category term="fixtures执行顺序及清理顺序" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/fixtures%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E5%8F%8A%E6%B8%85%E7%90%86%E9%A1%BA%E5%BA%8F/"/>
-    
-    
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
-    <category term="pytest" scheme="http://example.com/tags/pytest/"/>
-    
-    <category term="fixtures" scheme="http://example.com/tags/fixtures/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pytest | 自定义失败断言解释</title>
-    <link href="http://example.com/2024/03/07/%E6%96%AD%E8%A8%80%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E9%87%8D%E5%86%99/"/>
-    <id>http://example.com/2024/03/07/%E6%96%AD%E8%A8%80%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E9%87%8D%E5%86%99/</id>
-    <published>2024-03-07T13:52:36.000Z</published>
-    <updated>2024-03-07T13:55:32.432Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="自定义失败断言解释"><a href="#自定义失败断言解释" class="headerlink" title="自定义失败断言解释"></a>自定义失败断言解释</h3><p>使用pytest测试代码块（Code Block）或函数（Functions）时，通常使用assert语句对代码块或函数的执行结果与预期结果进行比较，从而判断代码块或函数的正确性。如果在测试过程中某测试用例中的断言失败，即代码块或函数的实际执行结果与预期结果不一致，pytest将会报告错误信息。</p><span id="more"></span><p>在pytest中我们可以通过实现pytest_assertrepr_coompare钩子函数（Hook Function）来自定义失败断言的错误信息。</p><p>pytest_assertrepr_coompare钩子函数的语法如下：</p><p><strong>pytest_assertrepr_compare</strong>(<em>config</em>, <em>op</em>, <em>left</em>, <em>right</em>)[<a href="https://docs.pytest.org/en/8.0.x/_modules/_pytest/hookspec.html#pytest_assertrepr_compare">source]</a></p><p>​    Return explanation for comparisons in failing assert expressions.（返回失败断言表达式的解释信息）</p><p>​    Parameters:</p><p>​        <strong>config</strong> (<a href="https://docs.pytest.org/en/8.0.x/reference/reference.html#pytest.Config"><em>Config</em></a>) – The pytest config object.（pytest配置对象）</p><p>​        <strong>op</strong> (<a href="https://docs.python.org/3/library/stdtypes.html#str"><em>str</em></a>) – The operator, e.g. <code>&quot;==&quot;</code>, <code>&quot;!=&quot;</code>, <code>&quot;not in&quot;</code>.（操作符）</p><p>​        <strong>left</strong> (<a href="https://docs.python.org/3/library/functions.html#object"><em>object</em></a>) – The left operand.（操作数1）</p><p>​        <strong>right</strong> (<a href="https://docs.python.org/3/library/functions.html#object"><em>object</em></a>) – The right operand.（操作数2）</p><p>通过钩子函数自定义错误断言信息的例子：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># content of conftest.py</span></span><br><span class="line"><span class="keyword">from</span> test_foocompare <span class="keyword">import</span> Foo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 钩子函数，自定义断言信息</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pytest_assertrepr_compare</span>(<span class="params">op, left, right</span>):</span></span><br><span class="line">    <span class="comment"># 若Foo对象作相等断言（==）时失败，则输入自定义信息</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(left, Foo) <span class="keyword">and</span> <span class="built_in">isinstance</span>(right, Foo) <span class="keyword">and</span> op == <span class="string">&quot;==&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&quot;Comparing Foo instances:&quot;</span>,</span><br><span class="line">            <span class="string">f&quot;   vals: <span class="subst">&#123;left.val&#125;</span> != <span class="subst">&#123;right.val&#125;</span>&quot;</span>,</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"><span class="comment"># content of test_foocompare.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, val</span>):</span></span><br><span class="line">        self.val = val</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__eq__</span>(<span class="params">self, other</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.val == other.val</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_compare</span>():</span></span><br><span class="line">    f1 = Foo(<span class="number">1</span>)</span><br><span class="line">    f2 = Foo(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">assert</span> f1 == f2</span><br></pre></td></tr></table></figure><p>运行test_foocompare.py模块，控制台会输出一下信息：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">E       assert Comparing Foo instances:</span><br><span class="line">E            vals: 1 != 2</span><br></pre></td></tr></table></figure><p>自定义失败断言信息时通过重写断言表达式实现的，我们可以通过在代码中关闭”断言重写“功能：</p><ul><li><p>关闭特定模块的断言重写：在docstring中增加PYTEST_DONT_REWRITE字符串</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    PYTEST_DONT_REWRITE</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">......</span><br><span class="line">python test code</span><br><span class="line">......</span><br></pre></td></tr></table></figure></li><li><p>关闭所有模块的断言重写：使用–assert=plain</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pytest --assert=plain</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h3 id=&quot;自定义失败断言解释&quot;&gt;&lt;a href=&quot;#自定义失败断言解释&quot; class=&quot;headerlink&quot; title=&quot;自定义失败断言解释&quot;&gt;&lt;/a&gt;自定义失败断言解释&lt;/h3&gt;&lt;p&gt;使用pytest测试代码块（Code Block）或函数（Functions）时，通常使用assert语句对代码块或函数的执行结果与预期结果进行比较，从而判断代码块或函数的正确性。如果在测试过程中某测试用例中的断言失败，即代码块或函数的实际执行结果与预期结果不一致，pytest将会报告错误信息。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="http://example.com/categories/python/"/>
-    
-    <category term="python测试框架" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
-    
-    <category term="pytest" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/"/>
-    
-    <category term="自定义失败断言解释" scheme="http://example.com/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%A4%B1%E8%B4%A5%E6%96%AD%E8%A8%80%E8%A7%A3%E9%87%8A/"/>
-    
-    
-    <category term="pytest" scheme="http://example.com/tags/pytest/"/>
-    
-    <category term="断言" scheme="http://example.com/tags/%E6%96%AD%E8%A8%80/"/>
-    
-    <category term="钩子函数" scheme="http://example.com/tags/%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0/"/>
     
   </entry>
   
