@@ -190,6 +190,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/20/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="post-title-link" itemprop="url">Java | 字符串常量池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-20 18:59:32 / 修改时间：20:39:36" itemprop="dateCreated datePublished" datetime="2022-08-20T18:59:32-08:00">2022-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">字符串常量池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h1><p>首先来看下面一段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String a = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String b = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        String c = <span class="string">&quot;ab&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String d = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;bc&quot;</span>;</span><br><span class="line">        String e = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;</span><br><span class="line">        String f = <span class="keyword">new</span> String(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(a == b);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == c);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == d);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == e);<span class="comment">//true</span></span><br><span class="line">        System.out.println(a == f);<span class="comment">//false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在使用String a = “abc”创建字符串对象时，JVM会使用常量池来管理字符串直接量。在执行该语句时，JVM会先检查常量池中是否已经存有”abc”，<br>若没有则将”abc”存入常量池，否则就复用常量池中已有的”abc”，将其引用赋值给变量a。</li>
+<li>在使用new String(“abc”)创建字符串对象时，JVM会先使用常量池来管理字符串直接量，即将”abc”存入常量池。然后再创建一个新的String对象，<br>这个对象会被保存在堆内存中。并且，堆中对象的数据会指向常量池中的直接量。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/20/Java%E6%95%B4%E6%95%B0%E5%B8%B8%E9%87%8F%E6%B1%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -585,151 +666,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/" class="post-title-link" itemprop="url">SpringBoot | 常用的请求映射方式注解</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-15 06:15:57 / 修改时间：17:14:45" itemprop="dateCreated datePublished" datetime="2022-08-15T06:15:57-08:00">2022-08-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SpringBoot/%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/" itemprop="url" rel="index"><span itemprop="name">常用的请求映射方式注解</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="SpringBoot常用的请求映射方式注解"><a href="#SpringBoot常用的请求映射方式注解" class="headerlink" title="SpringBoot常用的请求映射方式注解"></a>SpringBoot常用的请求映射方式注解</h1><p>我们在处理web端应用的请求时，通常会使用如下几种方式进行请求映射，我们可以通过查看源码看到它们的真实面目。</p>
-<ul>
-<li>@RequestMapping</li>
-</ul>
-<pre><code>源码对注解的注释：Annotation for mapping web requests onto methods in request-handling classes with flexible method signatures.
-
-翻译：用于将web请求映射到具有灵活方法签名的请求处理类中的方法的注释。
-</code></pre>
-<ul>
-<li>@GetMapping</li>
-</ul>
-<pre><code>源码对注解的注释：Annotation for mapping HTTP GET requests onto specific handler methods.
-Specifically, @GetMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.GET).
-
-翻译：用于将HTTP GET请求映射到特定的请求处理方法的注释。具体来说，@GetMapping是一个组合注解，是@RequestMapping(method = RequestMethod.GET)的缩写。
-</code></pre>
-<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/1.png"></p>
-<ul>
-<li>@PostMapping</li>
-</ul>
-<pre><code>源码对注解的注释：Annotation for mapping HTTP POST requests onto specific handler methods.
-Specifically, @PostMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.POST).
-
-翻译：用于将HTTP POST请求映射到特定的请求处理方法的注释。具体来说，@PostMapping是一个组合注解，是@RequestMapping(method = RequestMethod.POST)的缩写。
-</code></pre>
-<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/2.png"></p>
-<ul>
-<li>@PutMapping</li>
-</ul>
-<pre><code>源码对注解的注释：Annotation for mapping HTTP PUT requests onto specific handler methods.
-Specifically, @PutMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PUT).
-
-翻译：用于将HTTP PUT请求映射到特定的请求处理方法的注释。具体来说，@PutMapping是一个组合注解，是@RequestMapping(method = RequestMethod.PUT)的缩写。
-</code></pre>
-<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/3.png">    </p>
-<ul>
-<li>@DeleteMapping</li>
-</ul>
-<pre><code>源码对注解的注释：Annotation for mapping HTTP DELETE requests onto specific handler methods.
-Specifically, @DeleteMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.DELETE).
-
-翻译：用于将HTTP DELETE请求映射到特定的请求处理方法的注释。具体来说，@DeleteMapping是一个组合注解，是@RequestMapping(method = RequestMethod.DELETE)的缩写。
-</code></pre>
-<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/4.png"></p>
-<ul>
-<li>@PatchMapping</li>
-</ul>
-<pre><code>源码对注解的注释：Annotation for mapping HTTP PATCH requests onto specific handler methods.
-Specifically, @PatchMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PATCH).
-
-翻译：用于将HTTP PATCH请求映射到特定的请求处理方法的注释。具体来说，@PatchMapping是一个组合注解，是@RequestMapping(method = RequestMethod.PATCH)的缩写。
-</code></pre>
-<p><img src="/2022/08/15/springboot%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%96%B9%E5%BC%8F%E6%B3%A8%E8%A7%A3/5.png"></p>
-<p>从源码注释和注解接口实现源代码可以得出以下结论：</p>
-<ul>
-<li>可以使用@RequestMapping注解并指定method属性对所有HTTP进行映射。</li>
-<li>@XxxMapping注解是@RequestMapping(method=”XXX”)的缩写<ul>
-<li>@GetMapping是@RequestMapping(method = RequestMethod.GET)的缩写</li>
-<li>@PostMapping是@RequestMapping(method = RequestMethod.POST)的缩写</li>
-<li>@PutMapping是@RequestMapping(method = RequestMethod.PUT)的缩写</li>
-<li>@DeleteMapping是@RequestMapping(method = RequestMethod.DELETE)的缩写</li>
-<li>@PatchMapping是@RequestMapping(method = RequestMethod.PATCH)的缩写</li>
-</ul>
-</li>
-<li>推荐用法：在对特定的请求进行映射时，采用对应的注解。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -801,20 +737,20 @@ Specifically, @PatchMapping is a composed annotation that acts as a shortcut for
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">506</span>
+          <span class="site-state-item-count">507</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">416</span>
+        <span class="site-state-item-count">418</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">422</span>
+        <span class="site-state-item-count">424</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

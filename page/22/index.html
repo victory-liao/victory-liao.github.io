@@ -190,6 +190,147 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">并发 | 等待/通知机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-28 23:37:56" itemprop="dateCreated datePublished" datetime="2022-05-28T23:37:56-08:00">2022-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-29 22:51:06" itemprop="dateModified" datetime="2022-05-29T22:51:06-08:00">2022-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">等待/通知机制</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p>
+<pre><code>package concurrency;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+public class WaitNotify &#123;
+    static boolean flag = true;
+    static Object lock = new Object();
+    
+    public static void main(String[] args) throws InterruptedException &#123;
+        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);
+        waitThread.start();
+        TimeUnit.SECONDS.sleep(1);
+        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);
+        notifyThread.start();
+    &#125;
+    
+    static class Wait implements Runnable&#123;
+        @Override
+        public void run()&#123;
+            //加锁，用于lock的Monitor
+            synchronized(lock)&#123;
+                //当条件不满足时，继续wait，同时释放了lock的锁
+                while(flag)&#123;
+                    try &#123;
+                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                        lock.wait();
+                    &#125; catch (InterruptedException e) &#123;
+                    &#125;
+                &#125;
+                //条件满足时，完成工作
+                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+            &#125;
+        &#125;
+    &#125;
+    
+    static class Notify implements Runnable&#123;
+        @Override
+        public void run() &#123;
+            synchronized(lock)&#123;
+                //获取lock的锁，然后进行通知，通知时不会释放lock的锁
+                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回
+                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                lock.notifyAll();
+                flag = false;
+                SleepUtils.second(5);
+            &#125;
+            
+            //再次加锁
+            synchronized(lock)&#123;
+                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
+                SleepUtils.second(5);
+            &#125;
+            
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -755,78 +896,6 @@ public class DeadLockDemo &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" class="post-title-link" itemprop="url">Redis | 面试题目</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-22 01:32:20 / 修改时间：01:33:41" itemprop="dateCreated datePublished" datetime="2022-05-22T01:32:20-08:00">2022-05-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">面试题目</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis面试题目"><a href="#Redis面试题目" class="headerlink" title="Redis面试题目"></a>Redis面试题目</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/3ln9VAB_heYTI7yvxnp2bw">参考资料</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -898,20 +967,20 @@ public class DeadLockDemo &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">506</span>
+          <span class="site-state-item-count">507</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">416</span>
+        <span class="site-state-item-count">418</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">422</span>
+        <span class="site-state-item-count">424</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

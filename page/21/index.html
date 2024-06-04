@@ -190,6 +190,153 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/06/%E8%AF%BB%E5%86%99%E9%94%81-HashMap%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84HashMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/06/%E8%AF%BB%E5%86%99%E9%94%81-HashMap%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84HashMap/" class="post-title-link" itemprop="url">锁 | 读写锁+HashMap实现线程安全的HashMap</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-06 00:12:53 / 修改时间：00:31:49" itemprop="dateCreated datePublished" datetime="2022-06-06T00:12:53-08:00">2022-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E9%94%81/" itemprop="url" rel="index"><span itemprop="name">锁</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E9%94%81/%E8%AF%BB%E5%86%99%E9%94%81-HashMap%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84HashMap/" itemprop="url" rel="index"><span itemprop="name">读写锁+HashMap实现线程安全的HashMap</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="读写锁-HashMap实现线程安全的HashMap"><a href="#读写锁-HashMap实现线程安全的HashMap" class="headerlink" title="读写锁+HashMap实现线程安全的HashMap"></a>读写锁+HashMap实现线程安全的HashMap</h1><p>ReadWriteLockCache组合一个非线程安全的HashMap作为缓存的实现，同时使用读写锁的读锁和写锁来保证ReadWriteLockCaChe是线程安全的。<br><strong>代码：</strong></p>
+<pre><code>package concurrency.AQS; 
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+public class ReadWriteLockCache &#123;
+    public static void main(String[] args) &#123;
+        ReadWriteLockCache.put(&quot;user1&quot;, &quot;123&quot;);
+        ReadWriteLockCache.put(&quot;user2&quot;, &quot;456&quot;);
+        ReadWriteLockCache.put(&quot;user3&quot;, &quot;789&quot;);
+        for(Entry entry : ReadWriteLockCache.map.entrySet())&#123;
+            System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());
+        &#125;
+        System.out.println(&quot;==========================&quot;);
+        ReadWriteLockCache.put(&quot;user1&quot;, &quot;1233&quot;);
+        for(Entry entry : ReadWriteLockCache.map.entrySet())&#123;
+            System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());
+        &#125;
+        System.out.println(&quot;==========================&quot;);
+        System.out.println(&quot;user1&quot; + ReadWriteLockCache.get(&quot;user1&quot;));
+        System.out.println(&quot;==========================&quot;);
+        ReadWriteLockCache.clear();
+        for(Entry entry : ReadWriteLockCache.map.entrySet())&#123;
+            System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());
+        &#125;
+        
+    &#125;
+    
+    static Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();
+    static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+    static Lock r = rwl.readLock();
+    static Lock w = rwl.writeLock();
+    
+    //获取一个key对应的value
+    public static final Object get(String key)&#123;
+        r.lock();
+        try&#123;
+            return map.get(key);
+        &#125;finally&#123;
+            r.unlock();
+        &#125;
+    &#125;
+    
+    //设置key对应的value，并返回旧的value
+    public static final Object put(String key, Object value)&#123;
+        w.lock();
+        try&#123;
+            return map.put(key, value);
+        &#125;finally&#123;
+            w.unlock();
+        &#125;
+    &#125;
+    
+    //清空所有内容
+    public static final void clear()&#123;
+        w.lock();
+        try&#123;
+            map.clear();
+        &#125;finally&#123;
+            w.unlock();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/31/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -657,147 +804,6 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">并发 | 等待/通知机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-28 23:37:56" itemprop="dateCreated datePublished" datetime="2022-05-28T23:37:56-08:00">2022-05-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-29 22:51:06" itemprop="dateModified" datetime="2022-05-29T22:51:06-08:00">2022-05-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">等待/通知机制</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p>
-<pre><code>package concurrency;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-public class WaitNotify &#123;
-    static boolean flag = true;
-    static Object lock = new Object();
-    
-    public static void main(String[] args) throws InterruptedException &#123;
-        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);
-        waitThread.start();
-        TimeUnit.SECONDS.sleep(1);
-        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);
-        notifyThread.start();
-    &#125;
-    
-    static class Wait implements Runnable&#123;
-        @Override
-        public void run()&#123;
-            //加锁，用于lock的Monitor
-            synchronized(lock)&#123;
-                //当条件不满足时，继续wait，同时释放了lock的锁
-                while(flag)&#123;
-                    try &#123;
-                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                        lock.wait();
-                    &#125; catch (InterruptedException e) &#123;
-                    &#125;
-                &#125;
-                //条件满足时，完成工作
-                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-            &#125;
-        &#125;
-    &#125;
-    
-    static class Notify implements Runnable&#123;
-        @Override
-        public void run() &#123;
-            synchronized(lock)&#123;
-                //获取lock的锁，然后进行通知，通知时不会释放lock的锁
-                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回
-                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                lock.notifyAll();
-                flag = false;
-                SleepUtils.second(5);
-            &#125;
-            
-            //再次加锁
-            synchronized(lock)&#123;
-                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                SleepUtils.second(5);
-            &#125;
-            
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -869,20 +875,20 @@ public class WaitNotify &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">506</span>
+          <span class="site-state-item-count">507</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">416</span>
+        <span class="site-state-item-count">418</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">422</span>
+        <span class="site-state-item-count">424</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
