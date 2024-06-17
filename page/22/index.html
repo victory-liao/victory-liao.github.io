@@ -190,6 +190,243 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 线程池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-29 00:44:53 / 修改时间：22:51:22" itemprop="dateCreated datePublished" datetime="2022-05-29T00:44:53-08:00">2022-05-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">线程池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器时，<br>那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p>
+<pre><code>package concurrency.threadPool;
+
+public interface ThreadPool&lt;Job extends Runnable&gt; &#123;
+    //执行一个Job，这个Job需要实现Runnable
+    void execute(Job job);
+    
+    //关闭线程池
+    void shutdown();
+    
+    //增加工作者线程
+    void addWorkers(int num);
+    
+    //减少工作者线程
+    void remvoeWorkers(int num);
+    
+    //得到正在等待执行的任务数量
+    int getJobSize();
+&#125;
+</code></pre>
+<p><strong>DefaultThreadPool.java</strong></p>
+<pre><code>package concurrency.threadPool;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool&lt;Job&gt; &#123;
+    //线程池最大数量
+    private static final int MAX_WORKER_NUMBERS = 10;
+    
+    //线程池默认数量
+    private static final int DEFAULT_WORKER_NUMBERS = 5;
+    
+    //线程池最小的数量
+    private static final int MIN_WORKER_NUMBERS = 1;
+    
+    //这是一个工作列表，将会向里面插入工作
+    private final LinkedList&lt;Job&gt; jobs = new LinkedList&lt;Job&gt;();
+    
+    //工作者列表
+    private final List&lt;Worker&gt; workers = Collections.synchronizedList(new ArrayList&lt;Worker&gt;());
+    
+    //工作者线程的数量
+    private int workerNum = DEFAULT_WORKER_NUMBERS;
+    
+    //线程编号的生成
+    private AtomicLong threadNum = new AtomicLong();
+    
+    //工作者，负责消费任务
+    class Worker implements Runnable&#123;
+        //是否工作
+        private volatile boolean running = true;
+        @Override
+        public void run()&#123;
+            while(running)&#123;
+                Job job = null;
+                synchronized(jobs)&#123;
+                    //如果工作者列表是空的，那么就wait
+                    while(jobs.isEmpty())&#123;
+                        try&#123;
+                            jobs.wait();
+                        &#125;catch(InterruptedException ex)&#123;
+                            //感知到外部对WorkerThread的中断操作，返回
+                            Thread.currentThread().interrupt();
+                            return;
+                        &#125;
+                    &#125;
+                    //取出一个Job
+                    job = jobs.removeFirst();
+                &#125;
+                if(job != null)&#123;
+                    try&#123;
+                        job.run();
+                    &#125;catch(Exception ex)&#123;
+                        //忽略Job执行中的Exception
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        
+        public void shutdown()&#123;
+            running = false;
+        &#125;
+    &#125;
+    
+    //初始化线程工作者
+    private void initializeWorkers(int num)&#123;
+        for(int i = 0; i &lt; num; i++)&#123;
+            Worker worker = new Worker();
+            workers.add(worker);
+            Thread thread = new Thread(worker, &quot;ThreadPool-Worker-&quot; + threadNum.incrementAndGet());
+            thread.start();
+        &#125;
+    &#125;
+    
+    public DefaultThreadPool()&#123;
+        initializeWorkers(DEFAULT_WORKER_NUMBERS);
+    &#125;
+    
+    public DefaultThreadPool(int num)&#123;
+        workerNum = num &gt; MAX_WORKER_NUMBERS ? MAX_WORKER_NUMBERS : num &lt; MIN_WORKER_NUMBERS ? MIN_WORKER_NUMBERS : num;
+        initializeWorkers(workerNum);
+    &#125;
+    
+    @Override
+    public void execute(Job job) &#123;
+        if(job != null)&#123;
+            //添加一个工作，然后进行通知
+            synchronized(jobs)&#123;
+                jobs.addLast(job);
+                jobs.notify();
+            &#125;
+        &#125;
+    &#125;
+
+    @Override
+    public void shutdown() &#123;
+        for(Worker worker : workers)&#123;
+            worker.shutdown();
+        &#125;
+    &#125;
+
+    @Override
+    public void addWorkers(int num) &#123;
+        synchronized(jobs)&#123;
+            //限制新增的Worker数量不能超过最大值
+            if(num + this.workerNum &gt; MAX_WORKER_NUMBERS)&#123;
+                num = MAX_WORKER_NUMBERS - this.workerNum;
+            &#125;
+            initializeWorkers(num);
+            this.workerNum += num;
+        &#125;
+    &#125;
+
+    @Override
+    public void remvoeWorkers(int num) &#123;
+        synchronized(jobs)&#123;
+            if(num &gt;= this.workerNum)&#123;
+                throw new IllegalArgumentException(&quot;beyond workNum&quot;);
+            &#125;
+            //按照给定的数量停止Worker
+            int count = 0;
+            while(count &lt; num)&#123;
+                Worker worker = workers.get(count);
+                if(workers.remove(worker))&#123;
+                    worker.shutdown();
+                    count++;
+                &#125;
+            &#125;
+            this.workerNum -= count;
+        &#125;
+    &#125;
+
+    @Override
+    public int getJobSize() &#123;
+        return jobs.size();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -774,128 +1011,6 @@ public class Counter &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" class="post-title-link" itemprop="url">并发 | 上下文切换和死锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-22 18:37:08 / 修改时间：18:59:57" itemprop="dateCreated datePublished" datetime="2022-05-22T18:37:08-08:00">2022-05-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" itemprop="url" rel="index"><span itemprop="name">上下文切换</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="上下文切换和死锁"><a href="#上下文切换和死锁" class="headerlink" title="上下文切换和死锁"></a>上下文切换和死锁</h1><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，再切换前会保存上一个任务的<br>状态，以便切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。频繁的上下文<br>切换会影响多线程的执行速度。</p>
-<h2 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h2><p>（1）无锁并发编程。多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁（如采用分段锁，不同的线程处理不同段的数据）<br>（2）CAS算法。<br>（3）使用最小线程。避免创建不需要的线程（任务很少，创建了很多线程，造成大量线程阻塞等待）</p>
-<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的条件"><a href="#死锁产生的条件" class="headerlink" title="死锁产生的条件"></a>死锁产生的条件</h3><p>（1）互斥。一个资源同一时刻只能被一个线程拥有。<br>（2）请求和保持。线程在请求新的资源时，不释放已经拥有的资源。<br>（3）不剥夺条件。进程所获得的资源在未使用完之前，不被其他的线程强行剥夺。<br>（4）循环等待。竞争资源的各个线程形成一个线程等待环路。</p>
-<h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><p>破坏产生死锁的条件：<br>（2）在进程开始执行时就申请他所需的全部资源<br>（3）一个进程不能获得所需要的全部资源时便处于等待状态，等待期间他占有的资源将被隐式的释放重新加入到系统的资源列表中<br>，可以被其他的进程使用，而等待的进程只有重新获得自己原有的资源以及新申请的资源才可以重新启动、执行。<br>（4）资源有序分配（银行家算法）</p>
-<h3 id="死锁Demo"><a href="#死锁Demo" class="headerlink" title="死锁Demo"></a>死锁Demo</h3><pre><code>package concurrency;
-
-public class DeadLockDemo &#123;
-    private static String A = &quot;A&quot;;
-    private static String B = &quot;B&quot;;
-    
-    public static void main(String[] args) &#123;
-        new DeadLockDemo().deadLock();
-    &#125;
-    
-    private void deadLock()&#123;
-        Thread t1 = new Thread(new Runnable()&#123;
-            @Override
-            public void run()&#123;
-                synchronized(A)&#123;
-                    try &#123;
-                        Thread.currentThread().sleep(2000);
-                    &#125; catch (InterruptedException e) &#123;
-                        e.printStackTrace();
-                    &#125;
-                    synchronized(B)&#123;
-                        System.out.println(&quot;1&quot;);
-                    &#125;
-                &#125;
-            &#125;
-        &#125;);
-        
-        Thread t2 = new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                synchronized(B)&#123;
-                    synchronized(A)&#123;
-                        System.out.println(&quot;2&quot;);
-                    &#125;
-                &#125;
-            &#125;
-        &#125;);
-        
-        t1.start();
-        t2.start();
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -967,20 +1082,20 @@ public class DeadLockDemo &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">507</span>
+          <span class="site-state-item-count">508</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">418</span>
+        <span class="site-state-item-count">420</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">424</span>
+        <span class="site-state-item-count">428</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
