@@ -190,6 +190,393 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/26/%E4%BA%8B%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/26/%E4%BA%8B%E5%8A%A1/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 事务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-26 03:46:22 / 修改时间：04:09:44" itemprop="dateCreated datePublished" datetime="2022-01-26T03:46:22-08:00">2022-01-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">事务</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>当我们一次需要执行多条sql语句时就要考虑控制事务以避免出现一些错误。<br>例如：当我们从一个账户给另一个账户转账时，假设第一个账户的余额已经扣除，此时电脑断电了，<br>第二个账户的余额也没有增加；为了避免此类事情的发生，我们可以对事物进行控制，要么增扣除和增加都成功，<br>要么扣除、增加都失败。<br><strong>创建表user</strong></p>
+<pre><code>CREATE TABLE user(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+NAME VARCHAR(20),
+balance DOUBLE
+);
+</code></pre>
+<p><strong>创建测试类Test1.java</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.QueryRunner;
+
+import com.oracle.utils.DataSourceUtils;
+
+public class Test1 &#123;
+
+    public static void main(String[] args)&#123;
+        try &#123;
+            //开启事务
+            DataSourceUtils.startTransaction();
+            //创建QueryRunner对象
+            QueryRunner qr = new QueryRunner();
+            //编写sql语句
+            String sql1 = &quot;update user set balance=balance-500 where id=1&quot;;
+            String sql2 = &quot;update user set balance=balance+500 where id=2&quot;;
+            //执行sql
+            qr.update(DataSourceUtils.getConnection(), sql1);
+            
+            //失败
+            int c=100/0;
+            
+            qr.update(DataSourceUtils.getConnection(), sql2);
+            //事务提交
+            DataSourceUtils.commitAndRelease();
+            //关闭事务
+            DataSourceUtils.closeConnection();
+        &#125; catch (Exception e) &#123;
+            //失败则回滚
+            try &#123;
+                DataSourceUtils.rollback();
+            &#125; catch (Exception e1) &#123;
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/26/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">JavaWeb项目开发 | QueryRunner和数据库增删改查操作</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-26 03:10:13 / 修改时间：04:02:34" itemprop="dateCreated datePublished" datetime="2022-01-26T03:10:13-08:00">2022-01-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/QueryRunner%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">QueryRunner和数据库增删改查操作</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="QueryRunner和数据库增删改查操"><a href="#QueryRunner和数据库增删改查操" class="headerlink" title="QueryRunner和数据库增删改查操"></a>QueryRunner和数据库增删改查操</h1><p>基于<a target="_blank" rel="noopener" href="https://victory-liao.github.io/2022/01/25/jdbc/">JavaWeb项目开发 | jdbc</a>中的配置编写以下代码实现数据库的增删改查（CRUD）。<br><strong>在test1数据库中建表dept</strong></p>
+<pre><code>create table dept(
+int id primary key auto_increment not null,
+varchar(20) name
+)
+</code></pre>
+<p><strong>Dept.java（JavaBean）</strong></p>
+<pre><code>package com.oracle.bean;
+
+public class Dept &#123;
+    private int id;
+    private String name;
+    public Dept() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    public Dept(int id, String name) &#123;
+        super();
+        this.id = id;
+        this.name = name;
+    &#125;
+    public int getId() &#123;
+        return id;
+    &#125;
+    public void setId(int id) &#123;
+        this.id = id;
+    &#125;
+    public String getName() &#123;
+        return name;
+    &#125;
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+    
+    
+&#125;
+</code></pre>
+<p><strong>新建一个Test类实现数据库增删改查操作</strong></p>
+<pre><code>package com.oracle.test;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import com.oracle.bean.Dept;
+import com.oracle.utils.DataSourceUtils;
+
+public class Test &#123;
+    
+    public static void main(String[] args) throws SQLException &#123;
+        //创建QueryRunner对象
+        QueryRunner qr = new QueryRunner(DataSourceUtils.getDataSource());
+        
+        //增加数据
+        //String sql = &quot;insert into dept(name) values(?)&quot;;
+        //qr.update(sql, &quot;需求部&quot;);
+        
+        //修改数据
+        //String sql = &quot;update dept set name=? where id=?&quot;;
+        //qr.update(sql, &quot;需求组&quot;, 4);
+        
+        //删除数据
+        //String sql = &quot;delete from dept where id=?&quot;;
+        //qr.update(sql, 4);
+        
+        //查询数据
+        //（1）查询结果为一行
+        //String sql = &quot;select * from dept where id=?&quot;;
+        //Dept d = qr.query(sql, new BeanHandler&lt;&gt;(Dept.class), 1);
+        //System.out.println(d.getId());
+        //System.out.println(d.getName());
+        
+        //（2）查询结果为多行
+//        String sql = &quot;select * from dept&quot;;
+//        List&lt;Dept&gt; list = qr.query(sql, new BeanListHandler&lt;&gt;(Dept.class));
+//        for(Dept d:list) &#123;
+//            System.out.println(d.getId());
+//            System.out.println(d.getName());
+//        &#125;
+        
+        //（2）查询结果为聚合函数
+        String sql = &quot;select count(*) from dept&quot;;
+        
+        int i = ((Long) qr.query(sql, new ScalarHandler())).intValue();
+        
+        System.out.println(i);
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/25/jdbc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/25/jdbc/" class="post-title-link" itemprop="url">JavaWeb项目开发 | jdbc</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-25 20:17:47" itemprop="dateCreated datePublished" datetime="2022-01-25T20:17:47-08:00">2022-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-26 04:08:56" itemprop="dateModified" datetime="2022-01-26T04:08:56-08:00">2022-01-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/jdbc%E5%B0%81%E8%A3%85%E7%B1%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">jdbc封装类和数据库连接池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="jdbc"><a href="#jdbc" class="headerlink" title="jdbc"></a>jdbc</h1><p>在使用Java语言进行开发时，我们可以使用jdbc操作数据库；实际开发中我们通常直接导入数据库连接池（c3p0-0.9.1.2.jar）、<br>数据库驱动（mysql-connector-java-5.0.4-bin.jar）和简化jdbc操作的类库（commons-dbutils-1.4.jar）；并在c3p0-config.xml中配置数据库。<br><img src="/2022/01/25/jdbc/1.PNG"><br><strong>数据库配置（c3p0-config.xml）</strong><br>配置数据库的用户名、密码、驱动以及要连接的数据库<br>（本例连接用户名为root、密码为root、数据库驱动为mysql数据库驱动、连接的数据库为本地的test1数据库）</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;c3p0-config&gt;
+    &lt;default-config&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql://127.0.0.1:3306/test1&lt;/property&gt;
+    &lt;/default-config&gt; 
+&lt;/c3p0-config&gt; 
+</code></pre>
+<p>注：以上三个jar包可在网上通过名称搜索自行下载。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/20/SQL%E8%AF%AD%E5%8F%A5%E5%AE%9E%E4%BE%8B%E5%A4%A7%E5%85%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -349,351 +736,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/" class="post-title-link" itemprop="url">基于JavaWeb的网上购物商城 | 我的订单</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-17 22:52:42" itemprop="dateCreated datePublished" datetime="2022-01-17T22:52:42-08:00">2022-01-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-18 02:14:10" itemprop="dateModified" datetime="2022-01-18T02:14:10-08:00">2022-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/" itemprop="url" rel="index"><span itemprop="name">基于JavaWeb的网上购物商城</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/" itemprop="url" rel="index"><span itemprop="name">我的订单</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="我的订单"><a href="#我的订单" class="headerlink" title="我的订单"></a>我的订单</h1><p><strong>实现功能：</strong><br>当用户点击”我的订单时“展示用户提交过的所有订单信息、购买商品信息等。<br><img src="/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/1.PNG"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/17/%E6%88%91%E7%9A%84%E8%AE%A2%E5%8D%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/17/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/17/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95/" class="post-title-link" itemprop="url">基于JavaWeb的网上购物商城 | 确认订单</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-17 22:40:57 / 修改时间：23:26:21" itemprop="dateCreated datePublished" datetime="2022-01-17T22:40:57-08:00">2022-01-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/" itemprop="url" rel="index"><span itemprop="name">基于JavaWeb的网上购物商城</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/JavaWeb/%E5%9F%BA%E4%BA%8EJavaWeb%E7%9A%84%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%89%A9%E5%95%86%E5%9F%8E/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95/" itemprop="url" rel="index"><span itemprop="name">确认订单</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="确认订单"><a href="#确认订单" class="headerlink" title="确认订单"></a>确认订单</h1><p><strong>实现功能：</strong><br>用户在购物车页面点击“确认订单”，在数据库将之前提交的订单的状态改为已支付，并向数据库写入收货人、收获地址、电话等信息;<br>确认订单后跳转到我的订单页面。<br><img src="/2022/01/17/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95/1.PNG"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/17/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/" class="post-title-link" itemprop="url">leetcode | 111.二叉树的最小深度</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-16 20:40:28" itemprop="dateCreated datePublished" datetime="2022-01-16T20:40:28-08:00">2022-01-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-12 02:08:34" itemprop="dateModified" datetime="2022-07-12T02:08:34-08:00">2022-07-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/" itemprop="url" rel="index"><span itemprop="name">树</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%91/111-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/" itemprop="url" rel="index"><span itemprop="name">111.二叉树的最小深度</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="111-二叉树的最小深度"><a href="#111-二叉树的最小深度" class="headerlink" title="111.二叉树的最小深度"></a>111.二叉树的最小深度</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二叉树，找出其最小深度。<br>最小深度是从根节点到最近叶子节点的最短路径上的节点数量。<br>说明：叶子节点是指没有子节点的节点。</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>方法一：深度优先搜索<br>首先可以想到使用深度优先搜索的方法，遍历整棵树，记录最小深度。<br>对于每一个非叶子节点，我们只需要分别计算其左右子树的最小叶子节点深度。这样就将一个大问题转化为了小问题，可以递归地解决该问题。<br>方法二：广度优先搜索<br>使用广度优先搜索的方法，遍历整棵树。<br>当我们找到一个叶子节点时，直接返回这个叶子节点的深度。广度优先搜索的性质保证了最先搜索到的叶子节点的深度一定最小。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code># Definition for a binary tree node.
-import collections
-
-
-class TreeNode(object):
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-
-class Solution(object):
-    def minDepth(self, root):
-        &quot;&quot;&quot;
-        深度优先搜索
-        :type root: TreeNode
-        :rtype: int
-        &quot;&quot;&quot;
-        def get_depth(root):
-            if root is None:
-                return 0
-            left_depth = get_depth(root.right)
-            right_depth = get_depth(root.left)
-            return min(right_depth, left_depth) + 1
-
-        return get_depth(root)
-
-    def minDepth1(self, root):
-        &quot;&quot;&quot;深度优先搜索&quot;&quot;&quot;
-        if not root:
-            return 0
-
-        if not root.left and not root.right:
-            return 1
-
-        min_depth = 10 ** 9
-        if root.left:
-            min_depth = min(self.minDepth1(root.left), min_depth)
-        if root.right:
-            min_depth = min(self.minDepth1(root.right), min_depth)
-        return min_depth + 1
-
-    def minDepth2(self, root):
-        &quot;&quot;&quot;深度优先搜索&quot;&quot;&quot;
-        if not root:
-            return 0
-
-        que = collections.deque([(root, 1)])
-        while que:
-            node, depth = que.popleft()
-            if not node.left and not node.right:
-                return depth
-            if node.left:
-                que.append((node.left, depth + 1))
-            if node.right:
-                que.append((node.right, depth + 1))
-
-        return 0
-
-    def create_binary_tree(self, nodes_list):
-        node1 = TreeNode(nodes_list[1])
-        node3 = TreeNode(nodes_list[3])
-        node4 = TreeNode(nodes_list[4])
-        node2 = TreeNode(nodes_list[2], node3, node4)
-        root = TreeNode(nodes_list[0], node1, node2)
-        return root
-
-
-if __name__ == &quot;__main__&quot;:
-    slt = Solution()
-    root = slt.create_binary_tree([3, 9, 20, 15, 7])
-    print(slt.minDepth(root))
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/38/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><span class="page-number current">39</span><a class="page-number" href="/page/40/">40</a><span class="space">&hellip;</span><a class="page-number" href="/page/102/">102</a><a class="extend next" rel="next" href="/page/40/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/38/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><span class="page-number current">39</span><a class="page-number" href="/page/40/">40</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/40/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -761,20 +807,20 @@ if __name__ == &quot;__main__&quot;:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">508</span>
+          <span class="site-state-item-count">511</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">431</span>
+        <span class="site-state-item-count">439</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">428</span>
+        <span class="site-state-item-count">434</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

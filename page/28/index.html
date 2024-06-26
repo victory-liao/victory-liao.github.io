@@ -190,6 +190,457 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/" class="post-title-link" itemprop="url">MyBatis | 分页插件PageHelper及PageHelper模拟分页</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-17 00:14:54 / 修改时间：00:21:21" itemprop="dateCreated datePublished" datetime="2022-04-17T00:14:54-08:00">2022-04-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/" itemprop="url" rel="index"><span itemprop="name">分页插件PageHelper及PageHelper模拟分页</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分页插件PageHelper及PageHelper模拟分页"><a href="#分页插件PageHelper及PageHelper模拟分页" class="headerlink" title="分页插件PageHelper及PageHelper模拟分页"></a>分页插件PageHelper及PageHelper模拟分页</h1><p>1.导入相关包<br>1)pagehelper-x.x.x.jar<br>2)jsqlparser-0.9.5.jar<br>2)在MyBatis全局配置文件mybatis-config.xml中配置分页插件<br><plugins><br>    <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin><br></plugins><br>3)使用PageHelper提供的方法进行分页<br>4)可以使用更强大的PageInfo封装返回结果</p>
+<h2 id="模拟分页"><a href="#模拟分页" class="headerlink" title="模拟分页"></a>模拟分页</h2><p><strong>PageUtil.java</strong></p>
+<pre><code>package com.atguigu.test;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
+import com.atguigu.bean.Emp;
+import com.github.pagehelper.PageInfo;
+
+/**
+ * 首页 上一页 1 2 3 4 5 下一页 末页
+ */
+public class PageUtil &#123;
+    public static String getPageInfo(PageInfo&lt;Emp&gt; pageInfo, HttpServletRequest request)&#123;
+        //String path = request.getContextPath() + &quot;/&quot;;
+        String path = &quot;/SSM/&quot;;
+        
+        StringBuilder builder = new StringBuilder();
+        
+        //拼接首页
+        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/1&#39;&gt;首页&lt;/a&gt;&quot;);
+        builder.append(&quot;&amp;nbsp;&quot;);
+        
+        //拼接上一页
+        if(pageInfo.isHasPreviousPage())&#123;
+            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPrePage()+&quot;&#39;&gt;上一页 &lt;/a&gt;&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;else&#123;
+            builder.append(&quot;上一页&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;
+        
+        //拼接页码
+        int[] nums = pageInfo.getNavigatepageNums();
+        for(int i : nums)&#123;
+            if(i == pageInfo.getPageNum())&#123;
+                builder.append(&quot;&lt;a style=&#39;color:red;&#39; href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);
+                builder.append(&quot;&amp;nbsp;&quot;);
+            &#125;else&#123;
+                builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+i+&quot;&#39;&gt;&quot;+i+&quot;&lt;/a&gt;&quot;);
+                builder.append(&quot;&amp;nbsp;&quot;);
+            &#125;
+        &#125;
+        
+        //拼接下一页
+        if(pageInfo.isHasNextPage())&#123;
+            builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getNextPage()+&quot;&#39;&gt;下一页&lt;/a&gt;&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;else&#123;
+            builder.append(&quot;下一页&quot;);
+            builder.append(&quot;&amp;nbsp;&quot;);
+        &#125;
+        
+        //拼接尾页
+        builder.append(&quot;&lt;a href=&#39;&quot;+path+&quot;emps/&quot;+pageInfo.getPages()+&quot;&#39;&gt;尾页&lt;/a&gt;&quot;);
+        builder.append(&quot;&amp;nbsp;&quot;);
+        
+        return builder.toString();
+    &#125;
+&#125;
+</code></pre>
+<p><strong>TestPage.java</strong></p>
+<pre><code>package com.atguigu.test;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+public class TestPage &#123;
+    @Test
+    public void testPage() throws Exception&#123;
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
+        PageHelper.startPage(2, 2);
+        List&lt;Emp&gt; list = mapper.getAllEmp();
+        
+        PageInfo&lt;Emp&gt; pageInfo = new PageInfo&lt;&gt;(list, 5);
+//        System.out.println(pageInfo);
+//        System.out.println(Arrays.toString(pageInfo.getNavigatepageNums()));
+        
+        System.out.println(PageUtil.getPageInfo(pageInfo, null));
+        
+        
+        for (Emp emp : list) &#123;
+            System.out.println(emp);
+        &#125;
+    &#125;
+    
+    public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        return sqlSessionFactory;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>返回结果</strong><br>字符串：</p>
+<pre><code>&lt;a href=&#39;/SSM/emps/1&#39;&gt;首页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;上一页 &lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/1&#39;&gt;1&lt;/a&gt;&amp;nbsp;&lt;a style=&#39;color:red;&#39; href=&#39;/SSM/emps/2&#39;&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/4&#39;&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/5&#39;&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/3&#39;&gt;下一页&lt;/a&gt;&amp;nbsp;&lt;a href=&#39;/SSM/emps/6&#39;&gt;尾页&lt;/a&gt;&amp;nbsp;
+</code></pre>
+<p>浏览器显示：<br><img src="/2022/04/17/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6PageHelper%E5%8F%8APageHelper%E6%A8%A1%E6%8B%9F%E5%88%86%E9%A1%B5/1.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="post-title-link" itemprop="url">MyBatis | 逆向工程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-16 18:04:43 / 修改时间：18:11:11" itemprop="dateCreated datePublished" datetime="2022-04-16T18:04:43-08:00">2022-04-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">逆向工程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="逆向工程"><a href="#逆向工程" class="headerlink" title="逆向工程"></a>逆向工程</h1><p>1.项目目录<br><img src="/2022/04/16/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/1.PNG"><br>2.导入逆向工程的jar包</p>
+<pre><code>mybatis-generator-core-1.3.2.jar
+</code></pre>
+<p>3.编写MBG的配置文件</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE generatorConfiguration
+  PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
+  &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
+
+&lt;generatorConfiguration&gt;
+
+  &lt;context id=&quot;DB2Tables&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
+    &lt;!-- 设置连接数据库的信息 --&gt;
+    &lt;jdbcConnection driverClass=&quot;com.mysql.jdbc.Driver&quot;
+        connectionURL=&quot;jdbc:mysql://localhost:3306/ssm&quot;
+        userId=&quot;root&quot;
+        password=&quot;root&quot;&gt;
+    &lt;/jdbcConnection&gt;
+
+    &lt;javaTypeResolver &gt;
+      &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot; /&gt;
+    &lt;/javaTypeResolver&gt;
+
+    &lt;!-- javabean的生成策略 --&gt;
+    &lt;javaModelGenerator targetPackage=&quot;com.atguigu.bean&quot; targetProject=&quot;.\src&quot;&gt;
+      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
+      &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot; /&gt;
+    &lt;/javaModelGenerator&gt;
+
+
+    &lt;!-- 映射文件的生成策略 --&gt;
+    &lt;sqlMapGenerator targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\conf&quot;&gt;
+      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
+    &lt;/sqlMapGenerator&gt;
+
+    &lt;!-- mapper接口的生成策略 --&gt;
+    &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.atguigu.mapper&quot;  targetProject=&quot;.\src&quot;&gt;
+      &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot; /&gt;
+    &lt;/javaClientGenerator&gt;
+
+    &lt;!-- 设置要将数据库中的哪张表逆向生成哪一个javabean --&gt;
+    &lt;table tableName=&quot;emp&quot; domainObjectName=&quot;Emp&quot;&gt;&lt;/table&gt;
+    &lt;table tableName=&quot;dept&quot; domainObjectName=&quot;Dept&quot;&gt;&lt;/table&gt;
+
+  &lt;/context&gt;
+&lt;/generatorConfiguration&gt;
+</code></pre>
+<p>4.运行代码生成器生成代码</p>
+<pre><code>@Test
+public void testMBG() throws Exception &#123;
+   List&lt;String&gt; warnings = new ArrayList&lt;String&gt;();
+   boolean overwrite = true;
+   File configFile = new File(&quot;mbg.xml&quot;);
+   ConfigurationParser cp = new ConfigurationParser(warnings);
+   Configuration config = cp.parseConfiguration(configFile);
+   DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+   MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+   myBatisGenerator.generate(null);
+&#125;
+</code></pre>
+<p>5.逆向工程的使用<br>基本查询与带条件查询测试</p>
+<pre><code>@Test
+    public void testCRUD() throws Exception&#123;
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
+        
+//        Emp emp = mapper.selectByPrimaryKey(2);
+//        System.out.println(emp);
+        
+        EmpExample example = new EmpExample();
+        
+        Criteria c1 = example.createCriteria();
+        c1.andEnameLike(&quot;%a%&quot;);
+        c1.andSexEqualTo(&quot;1&quot;);
+        
+        Criteria c2 = example.createCriteria();
+        c2.andDidEqualTo(2);
+        
+        example.or(c2);
+        
+        List&lt;Emp&gt; list = mapper.selectByExample(example);
+        for (Emp emp : list) &#123;
+            System.out.println(emp);
+        &#125;
+        
+        //查询全部
+//        List&lt;Emp&gt; list1 = mapper.selectByExample(null);
+//        for (Emp emp : list1) &#123;
+//            System.out.println(emp);
+//        &#125;
+    &#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/14/mybatis%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">MyBatis | 缓存</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-14 03:39:49 / 修改时间：03:51:36" itemprop="dateCreated datePublished" datetime="2022-04-14T03:39:49-08:00">2022-04-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E7%BC%93%E5%AD%98/" itemprop="url" rel="index"><span itemprop="name">缓存</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><h2 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h2><p>mybatis中的一级缓存默认开启，是SqlSession级别的，即同一个SqlSession对于一个SQL语句执行之后就会存储在缓存中，<br>下次执行相同的sql，直接从缓存中取。<br><strong>一级缓存失效的几种情况：</strong><br>（1）不同的SqlSession对应不同的一级缓存<br>（2）同一个SqlSession但是查询条件不同<br>（3）同一个SqlSession两次查询期间执行了任何一次增删改操作，会自动将缓存清空<br>（4）同一个SqlSession两次查询期间手动清空了缓存</p>
+<h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h2><p>mybatis的二级缓存默认不开启，需要设置：<br>1）全局配置文件中开启二级缓存<setting name="cacheEnabled" value="true"><br>2）需要使用二级缓存的映射文件处使用cache配置缓存<cache><br>3）POJO需要实现Serializable接口<br>注意：二级缓存在 SqlSession 关闭或提交之后才会生效<br>1)全局setting的cacheEnable：<br>配置二级缓存的开关，一级缓存一直是打开的。<br>2)select标签的useCache属性：<br>配置这个select是否使用二级缓存。一级缓存一直是使用的<br>3)sql标签的flushCache属性：<br>增删改默认flushCache=true。sql执行以后，会同时清空一级和二级缓存。<br>查询默认 flushCache=false。<br>4)sqlSession.clearCache()：只是用来清除一级缓存。</cache></setting></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/14/mybatis%E7%BC%93%E5%AD%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/09/%E5%8A%A8%E6%80%81SQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -789,501 +1240,10 @@ public class TestEmpDept &#123;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">MyBatis | 分步查询、分步查询延迟加载</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-05 17:53:04 / 修改时间：18:32:32" itemprop="dateCreated datePublished" datetime="2022-04-05T17:53:04-08:00">2022-04-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">分步查询、分步查询延迟加载</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p>
-<pre><code>&lt;settings&gt;
-    &lt;!-- 开启延迟加载 --&gt;
-    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
-    &lt;!-- 是否查询所有数据 --&gt;
-    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;
-&lt;/settings&gt;
-</code></pre>
-<p>2.DeptMapper.java</p>
-<pre><code>public interface DeptMapper &#123;
-    Dept getDeptByDid(String did);
-&#125;
-</code></pre>
-<p>3.DeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;
-    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;
-        select did,dname from dept where did=#&#123;did&#125;
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-    
-    Emp getEmpStep(String eid);//分步查询
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml<br>添加查询语句</p>
-<pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;
-    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-    &lt;!--
-        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id
-        column:分步查询的条件，注意：此条件必须是从数据库查询过的 
-     --&gt;
-    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;
-&lt;/resultMap&gt;
-
-&lt;!-- Emp getEmpStep(String eid); --&gt;
-&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;
-    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;
-&lt;/select&gt;
-</code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        Emp emp = mapper.getEmpStep(&quot;3&quot;);
-        System.out.println(emp.getEname());
-        System.out.println(emp.getDept());
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p>
-<pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-王五
-DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-Dept [did=3, dname=研发部]
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">python | 统计字符串中各个字符出现的次数并返回出现次数最多的字符</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-05 16:50:00 / 修改时间：17:04:22" itemprop="dateCreated datePublished" datetime="2022-04-05T16:50:00-08:00">2022-04-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E6%89%BE%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/" itemprop="url" rel="index"><span itemprop="name">找出字符串中出现次数最多的字符</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="找出字符串中出现次数最多的字符"><a href="#找出字符串中出现次数最多的字符" class="headerlink" title="找出字符串中出现次数最多的字符"></a>找出字符串中出现次数最多的字符</h1><pre><code>string = &quot;abcdaab&quot;
-word_frequency = dict()
-for ch in string:
-    if ch not in word_frequency.keys():
-        word_frequency[ch] = 1
-    else:
-        word_frequency[ch] += 1
-print(word_frequency)
-print(max(word_frequency, key=word_frequency.get))
-</code></pre>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42444693/article/details/104203479?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&utm_relevant_index=1">参考资料</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/" class="post-title-link" itemprop="url">MyBatis | 多对一查询自定义映射</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-03 01:38:59 / 修改时间：01:44:07" itemprop="dateCreated datePublished" datetime="2022-04-03T01:38:59-08:00">2022-04-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/" itemprop="url" rel="index"><span itemprop="name">多对一查询自定义映射</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="多对一查询自定义映射"><a href="#多对一查询自定义映射" class="headerlink" title="多对一查询自定义映射"></a>多对一查询自定义映射</h1><p>1.项目目录<br><img src="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/1.PNG"><br>2.Emp.java</p>
-<pre><code>package com.atguigu.bean;
-
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    private Integer age;
-    private String sex;
-    private Dept dept;
-    
-    
-    public Dept getDept() &#123;
-        return dept;
-    &#125;
-    public void setDept(Dept dept) &#123;
-        this.dept = dept;
-    &#125;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, dept=&quot; + dept + &quot;]&quot;;
-    &#125;
-    public Emp(Integer eid, String ename, Integer age, String sex) &#123;
-        super();
-        this.eid = eid;
-        this.ename = ename;
-        this.age = age;
-        this.sex = sex;
-    &#125;
-    public Emp() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-&#125;
-</code></pre>
-<p>3.Dept.java</p>
-<pre><code>package com.atguigu.bean;
-
-public class Dept &#123;
-    private Integer did;
-    private String dname;
-    public Integer getDid() &#123;
-        return did;
-    &#125;
-    public void setDid(Integer did) &#123;
-        this.did = did;
-    &#125;
-    public String getDname() &#123;
-        return dname;
-    &#125;
-    public void setDname(String dname) &#123;
-        this.dname = dname;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpDeptMapper&quot;&gt;
-    
-    &lt;!-- &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
-        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
-        
-            查询结果：
-            [Emp [eid=1, ename=张三, age=12, sex=男, dept=null], 
-            不能够查询出员工所对应的部门，需要进行自定义映射
-        
-    &lt;/select&gt; --&gt;
-    
-    &lt;!-- 自定义映射-第一种方式 --&gt;
-    &lt;!-- &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
-        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-        &lt;result column=&quot;did&quot; property=&quot;dept.did&quot;/&gt;
-        &lt;result column=&quot;dname&quot; property=&quot;dept.dname&quot;/&gt;
-    &lt;/resultMap&gt; --&gt;
-    &lt;!--
-        &lt;resultMap&gt;:自定义映射，处理复杂的表关系
-        &lt;id/&gt;:设置主键的映射关系，column设置字段名，property设置属性名
-        &lt;result/&gt;:设置非主键的映射关系， column设置字段名，property设置属性名
-     --&gt;
-     
-     &lt;!-- 自定义映射-第二种方式 --&gt;
-     &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
-        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-        &lt;association property=&quot;dept&quot; javaType=&quot;Dept&quot;&gt;
-            &lt;id column=&quot;did&quot; property=&quot;did&quot;/&gt;
-            &lt;result column=&quot;dname&quot; property=&quot;dname&quot;/&gt;
-        &lt;/association&gt;
-     &lt;/resultMap&gt;
-    
-    &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;
-    &lt;select id=&quot;getAllEmp&quot; resultMap=&quot;empMap&quot;&gt;
-        &lt;!-- select * from emp e, dept d where e.did = d.did --&gt;
-        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpDeptMapper;
-
-public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        List&lt;Emp&gt; empList = mapper.getAllEmp();
-        System.out.println(empList);
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/27/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/page/29/">29</a><span class="space">&hellip;</span><a class="page-number" href="/page/102/">102</a><a class="extend next" rel="next" href="/page/29/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/27/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/page/29/">29</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/29/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1351,20 +1311,20 @@ public class TestEmpDept &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">508</span>
+          <span class="site-state-item-count">511</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">431</span>
+        <span class="site-state-item-count">439</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">428</span>
+        <span class="site-state-item-count">434</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
