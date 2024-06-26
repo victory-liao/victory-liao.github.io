@@ -6618,6 +6618,33 @@ public class SemaphoreTest &#123;
       </tags>
   </entry>
   <entry>
+    <title>SpringBoot | SpringBoot集成MyBatis</title>
+    <url>/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/</url>
+    <content><![CDATA[<h1 id="SpringBoot集成MyBatis"><a href="#SpringBoot集成MyBatis" class="headerlink" title="SpringBoot集成MyBatis"></a>SpringBoot集成MyBatis</h1><ul>
+<li>项目目录<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/1.png"></li>
+<li>导入MyBatis所需要的依赖<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--mybatis-springboot--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--lombok--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>数据库和表<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/2.png"></li>
+<li>配置数据库连接信息(application.yaml)、配置mybatis<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="comment">#?serverTimezone=UTC解决时区的报错</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 整合mybatis</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.example.pojo</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure></li>
+<li>创建实体类User.java（需要用到lombok）<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建Mapper接口UserMapper.java<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">User <span class="title">queryUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建映射文件UserMapper.xml<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--resultType=&quot;User&quot;和parameterType=&quot;User&quot;只有配置了type-aliases-package后才能起作用--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;addUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        insert into user (id, name, pwd) values (#&#123;id&#125;, #&#123;name&#125;, #&#123;pwd&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;updateUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        update user set name=#&#123;name&#125;,pwd=#&#123;pwd&#125; where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">        delete from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>编写UserController.java进行测试<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.websocket.server.PathParam;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserList&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>&#123;</span><br><span class="line">        List&lt;User&gt; userList = userMapper.queryUserList();</span><br><span class="line">        <span class="keyword">return</span> userList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserById/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">queryUserById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span></span>&#123;</span><br><span class="line">        User user = userMapper.queryUserById(id);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @GetMapping(&quot;/addUser&quot;)  //http://localhost:8080/addUser?id=4&amp;name=wangmazi&amp;pwd=91011</span></span><br><span class="line"><span class="comment">//    public String addUser(@PathParam(&quot;id&quot;)Integer id, @PathParam(&quot;name&quot;)String name, @PathParam(&quot;pwd&quot;)String pwd)&#123;</span></span><br><span class="line"><span class="comment">//        userMapper.addUser(new User(id, name, pwd));</span></span><br><span class="line"><span class="comment">//        return &quot;ok&quot;;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/addUser/&#123;id&#125;/&#123;name&#125;/&#123;pwd&#125;&quot;)</span>  <span class="comment">//http://localhost:8080/addUser/4/wangmazi/123</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id, <span class="meta">@PathVariable(&quot;name&quot;)</span> String name, <span class="meta">@PathVariable(&quot;pwd&quot;)</span> String pwd)</span></span>&#123;</span><br><span class="line">        userMapper.addUser(<span class="keyword">new</span> User(id, name, pwd));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/updateUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">updateuser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        userMapper.updateUser(<span class="keyword">new</span> User(<span class="number">5</span>, <span class="string">&quot;liuba&quot;</span>, <span class="string">&quot;325&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/deleteUser/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id)</span></span>&#123;</span><br><span class="line">        userMapper.deleteUser(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringBoot</category>
+        <category>SpringBoot集成MyBatis</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>SpringBoot</tag>
+        <tag>SpringBoot集成MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringBoot集成Druid</title>
     <url>/2022/08/17/SpringBoot%E9%9B%86%E6%88%90Druid/</url>
     <content><![CDATA[<h1 id="SpringBoot集成Druid"><a href="#SpringBoot集成Druid" class="headerlink" title="SpringBoot集成Druid"></a>SpringBoot集成Druid</h1><p>Java程序很大一部分要操作数据库，为了提高性能操作数据库的时候，又不得不使用数据库连接池。<br>Druid 是阿里巴巴开源平台上一个数据库连接池实现，结合了 C3P0、DBCP 等 DB 池的优点，同时加入了日志监控。<br>Druid 可以很好的监控 DB 池连接和 SQL 的执行情况，天生就是针对监控而生的 DB 连接池。<br>Druid已经在阿里巴巴部署了超过600个应用，经过一年多生产环境大规模部署的严苛考验。<br>Spring Boot 2.0 以上默认使用 Hikari 数据源，可以说 Hikari 与 Driud 都是当前 Java Web 上最优秀的数据源，我们来重点介绍 Spring Boot 如何集成 Druid 数据源，如何实现数据库监控。</p>
@@ -6646,33 +6673,6 @@ public class SemaphoreTest &#123;
         <tag>SpringBoot集成Druid</tag>
         <tag>Druid</tag>
         <tag>监控</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SpringBoot | SpringBoot集成MyBatis</title>
-    <url>/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/</url>
-    <content><![CDATA[<h1 id="SpringBoot集成MyBatis"><a href="#SpringBoot集成MyBatis" class="headerlink" title="SpringBoot集成MyBatis"></a>SpringBoot集成MyBatis</h1><ul>
-<li>项目目录<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/1.png"></li>
-<li>导入MyBatis所需要的依赖<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--mybatis-springboot--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--lombok--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li>数据库和表<br><img src="/2022/08/17/SpringBoot%E9%9B%86%E6%88%90MyBatis/2.png"></li>
-<li>配置数据库连接信息(application.yaml)、配置mybatis<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="comment">#?serverTimezone=UTC解决时区的报错</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 整合mybatis</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.example.pojo</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure></li>
-<li>创建实体类User.java（需要用到lombok）<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>创建Mapper接口UserMapper.java<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">User <span class="title">queryUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>创建映射文件UserMapper.xml<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--resultType=&quot;User&quot;和parameterType=&quot;User&quot;只有配置了type-aliases-package后才能起作用--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryUserById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        select * from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;addUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        insert into user (id, name, pwd) values (#&#123;id&#125;, #&#123;name&#125;, #&#123;pwd&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;updateUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">        update user set name=#&#123;name&#125;,pwd=#&#123;pwd&#125; where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">&quot;deleteUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">        delete from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li>编写UserController.java进行测试<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.example.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.websocket.server.PathParam;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserList&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>&#123;</span><br><span class="line">        List&lt;User&gt; userList = userMapper.queryUserList();</span><br><span class="line">        <span class="keyword">return</span> userList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/queryUserById/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">queryUserById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span></span>&#123;</span><br><span class="line">        User user = userMapper.queryUserById(id);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @GetMapping(&quot;/addUser&quot;)  //http://localhost:8080/addUser?id=4&amp;name=wangmazi&amp;pwd=91011</span></span><br><span class="line"><span class="comment">//    public String addUser(@PathParam(&quot;id&quot;)Integer id, @PathParam(&quot;name&quot;)String name, @PathParam(&quot;pwd&quot;)String pwd)&#123;</span></span><br><span class="line"><span class="comment">//        userMapper.addUser(new User(id, name, pwd));</span></span><br><span class="line"><span class="comment">//        return &quot;ok&quot;;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/addUser/&#123;id&#125;/&#123;name&#125;/&#123;pwd&#125;&quot;)</span>  <span class="comment">//http://localhost:8080/addUser/4/wangmazi/123</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id, <span class="meta">@PathVariable(&quot;name&quot;)</span> String name, <span class="meta">@PathVariable(&quot;pwd&quot;)</span> String pwd)</span></span>&#123;</span><br><span class="line">        userMapper.addUser(<span class="keyword">new</span> User(id, name, pwd));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/updateUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">updateuser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        userMapper.updateUser(<span class="keyword">new</span> User(<span class="number">5</span>, <span class="string">&quot;liuba&quot;</span>, <span class="string">&quot;325&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/deleteUser/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id)</span></span>&#123;</span><br><span class="line">        userMapper.deleteUser(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringBoot</category>
-        <category>SpringBoot集成MyBatis</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>SpringBoot</tag>
-        <tag>SpringBoot集成MyBatis</tag>
       </tags>
   </entry>
   <entry>
@@ -8966,7 +8966,7 @@ public class Demo1Servlet extends HttpServlet &#123;
 <li>git init</li>
 <li>git status</li>
 <li>git config –global user.name “username”</li>
-<li>git config –global user.email “<a href="mailto:&#120;&#x78;&#x78;&#x40;&#x78;&#120;&#x2e;&#x63;&#x6f;&#109;">&#120;&#x78;&#x78;&#x40;&#x78;&#120;&#x2e;&#x63;&#x6f;&#109;</a>“</li>
+<li>git config –global user.email “<a href="mailto:&#120;&#x78;&#120;&#64;&#x78;&#120;&#46;&#99;&#111;&#x6d;">&#120;&#x78;&#120;&#64;&#x78;&#120;&#46;&#99;&#111;&#x6d;</a>“</li>
 <li>git add [filename]</li>
 <li>git checkout – [filename]</li>
 <li>git commit -m “comment”</li>
@@ -9721,18 +9721,6 @@ wb.save(&quot;物料表.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>python | pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法</title>
-    <url>/2021/01/28/pip%E5%AE%89%E8%A3%85%E5%87%BA%E7%8E%B0Cannot-fetch-index-base-URL-http-pypi-python-org-simple-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法"><a href="#pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法" class="headerlink" title="pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法"></a>pip安装出现Cannot fetch index base URL <a href="http://pypi.python.org/simple/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">http://pypi.python.org/simple/解决方法</a></h1><p>1.sudo vi .pip/pip.conf<br>2.添加以下内容<br>[global]<br>index-url=<a href="http://pypi.doubanio.com/simple/">http://pypi.doubanio.com/simple/</a></p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>postman | postman接口测试工具安装及使用</title>
     <url>/2024/05/22/postman%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<ul>
@@ -9752,6 +9740,18 @@ wb.save(&quot;物料表.xlsx&quot;)
       <tags>
         <tag>postman</tag>
         <tag>接口测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法</title>
+    <url>/2021/01/28/pip%E5%AE%89%E8%A3%85%E5%87%BA%E7%8E%B0Cannot-fetch-index-base-URL-http-pypi-python-org-simple-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法"><a href="#pip安装出现Cannot-fetch-index-base-URL-http-pypi-python-org-simple-解决方法" class="headerlink" title="pip安装出现Cannot fetch index base URL http://pypi.python.org/simple/解决方法"></a>pip安装出现Cannot fetch index base URL <a href="http://pypi.python.org/simple/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">http://pypi.python.org/simple/解决方法</a></h1><p>1.sudo vi .pip/pip.conf<br>2.添加以下内容<br>[global]<br>index-url=<a href="http://pypi.doubanio.com/simple/">http://pypi.doubanio.com/simple/</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -9955,9 +9955,11 @@ print(t.num)
       </tags>
   </entry>
   <entry>
-    <title>python | python str 对象</title>
-    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
+    <title>python | python zip()函数</title>
+    <url>/2021/05/20/python-zip-%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="python-zip-函数"><a href="#python-zip-函数" class="headerlink" title="python zip()函数"></a>python zip()函数</h1><p>example:<br>1.zip() 压缩(zip)<br>case 1:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(list1)]) # ([1, 2, 3],), ([4, 5, 6],), ([7, 8, 9],)</p>
+<p>case 2:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>list2 = [[7, 8, 9], [4, 5, 6], [1, 2, 3]]<br>print([row for row in zip(list1, list2)])  # [([1, 2, 3], [7, 8, 9]), ([4, 5, 6], [4, 5, 6]), ([7, 8, 9], [1, 2, 3])]</p>
+<p>2.zip(*) 解压(unzip)<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(*list1)])  # [(1, 4, 7), (2, 5, 8), (3, 6, 9)]</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -9967,11 +9969,9 @@ print(t.num)
       </tags>
   </entry>
   <entry>
-    <title>python | python zip()函数</title>
-    <url>/2021/05/20/python-zip-%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="python-zip-函数"><a href="#python-zip-函数" class="headerlink" title="python zip()函数"></a>python zip()函数</h1><p>example:<br>1.zip() 压缩(zip)<br>case 1:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(list1)]) # ([1, 2, 3],), ([4, 5, 6],), ([7, 8, 9],)</p>
-<p>case 2:<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>list2 = [[7, 8, 9], [4, 5, 6], [1, 2, 3]]<br>print([row for row in zip(list1, list2)])  # [([1, 2, 3], [7, 8, 9]), ([4, 5, 6], [4, 5, 6]), ([7, 8, 9], [1, 2, 3])]</p>
-<p>2.zip(*) 解压(unzip)<br>list1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]<br>print([row for row in zip(*list1)])  # [(1, 4, 7), (2, 5, 8), (3, 6, 9)]</p>
+    <title>python | python str 对象</title>
+    <url>/2021/05/15/python-str-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h1 id="python中的str对象"><a href="#python中的str对象" class="headerlink" title="python中的str对象"></a>python中的str对象</h1><p>python中的str对象是不可变对象，因此不存在修改字符串这一说法。<br>即：在s = ‘test’后写 s = ‘test1’</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -15614,81 +15614,6 @@ wb.save(&quot;统计表.xlsx&quot;)
       </tags>
   </entry>
   <entry>
-    <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
-    <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
-    <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
-<pre><code>import os
-
-work_path = os.getcwd() + &quot;\\资料&quot;  # 获取当前工作路径，指定“资料”文件夹
-# 获取路径下所有.xlsx文件，并存入列表
-pathss = []  # 存储文件夹内所有文件的路径（包括子目录内的文件）
-for root, dirs, files in os.walk(work_path):
-    path = [os.path.join(root, name) for name in files]  # 将目录和文件名连接起来，才是完整文件路径
-    for i in range(len(path)):  # 遍历所有文件的地址
-        if path[i].endswith(&quot;.xlsx&quot;):  # 只提取后缀为xlsx的文件
-            pathss.append(path[i])
-
-# 定义函数，获取Excel表格中的ID数据
-from openpyxl import load_workbook  # 用于读取Excel中的信息
-
-
-def Get_system_ID(file):
-    wb = load_workbook(file)
-    ws = wb.active
-
-    ID_list = []
-    for row in range(2, ws.max_row + 1):
-        ID = ws[&quot;A&quot; + str(row)].value  # ID信息在A列
-        if ID != None:  # 过滤空值
-            ID_list.append(ID)
-    return ID_list
-
-
-# 获取数据，存入总列表
-total_list = []
-for file in pathss:
-    info = Get_system_ID(file)
-    total_list += info
-
-# 写入数据到新的excel表，并设置格式
-from openpyxl import Workbook
-from openpyxl.styles import Font, colors, Alignment  # 字体，颜色，对齐
-from openpyxl.styles import PatternFill  # 单元格填充
-
-wb = Workbook()  # 新建Excel工作簿
-ws = wb.active  # 使用活动工作表
-ws.column_dimensions[&#39;A&#39;].width = 18.5  # 设定A列宽度
-ws.cell(row=1, column=1, value=&quot;ID&quot;)  # 写入字段名
-color_fill = PatternFill(fill_type=&#39;solid&#39;, fgColor=&quot;B3CFA1&quot;)  # 设置底色
-ws.cell(row=1, column=1).fill = color_fill  # 填充底色
-
-# 批量从列表中提取数据并写入
-for row in range(1, len(total_list) + 1):
-    ws.cell(row=row + 1, column=1, value=total_list[row - 1])
-
-# 设置字号及对齐
-font_set = Font(name=&#39;Arial&#39;, size=9)
-for i in range(1, ws.max_row + 1):
-    ws.cell(row=i, column=1).font = font_set
-    ws.cell(row=i, column=1).alignment = Alignment(horizontal=&#39;left&#39;, vertical=&#39;center&#39;, shrink_to_fit=True)
-
-wb.save(os.getcwd() + &quot;\\ID.xlsx&quot;)
-
-print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len(total_list)&#125; 个ID。&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>openpyxl</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>os</tag>
-        <tag>openpyxl</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pandas | 从原Excel表中抽出数据存入同一文件的新的Sheet</title>
     <url>/2021/10/29/%E4%BB%8E%E5%8E%9FExcel%E8%A1%A8%E4%B8%AD%E6%8A%BD%E5%87%BA%E6%95%B0%E6%8D%AE%E5%AD%98%E5%85%A5%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B0%E7%9A%84Sheet/</url>
     <content><![CDATA[<h1 id="从原Excel表中抽出数据存入同一文件的新的Sheet"><a href="#从原Excel表中抽出数据存入同一文件的新的Sheet" class="headerlink" title="从原Excel表中抽出数据存入同一文件的新的Sheet"></a>从原Excel表中抽出数据存入同一文件的新的Sheet</h1><p>实现代码：</p>
@@ -15788,6 +15713,81 @@ wb.save(&quot;物料表_1.xlsx&quot;)
         <tag>python</tag>
         <tag>openpyxl</tag>
         <tag>pandas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>openpyxl | 从多路径多Excel表中获取数据并存入新表</title>
+    <url>/2021/10/29/%E4%BB%8E%E5%A4%9A%E8%B7%AF%E5%BE%84%E5%A4%9AExcel%E8%A1%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AD%98%E5%85%A5%E6%96%B0%E8%A1%A8/</url>
+    <content><![CDATA[<h1 id="从多路径多Excel表中获取数据并存入新表"><a href="#从多路径多Excel表中获取数据并存入新表" class="headerlink" title="从多路径多Excel表中获取数据并存入新表"></a>从多路径多Excel表中获取数据并存入新表</h1><p>实现代码：</p>
+<pre><code>import os
+
+work_path = os.getcwd() + &quot;\\资料&quot;  # 获取当前工作路径，指定“资料”文件夹
+# 获取路径下所有.xlsx文件，并存入列表
+pathss = []  # 存储文件夹内所有文件的路径（包括子目录内的文件）
+for root, dirs, files in os.walk(work_path):
+    path = [os.path.join(root, name) for name in files]  # 将目录和文件名连接起来，才是完整文件路径
+    for i in range(len(path)):  # 遍历所有文件的地址
+        if path[i].endswith(&quot;.xlsx&quot;):  # 只提取后缀为xlsx的文件
+            pathss.append(path[i])
+
+# 定义函数，获取Excel表格中的ID数据
+from openpyxl import load_workbook  # 用于读取Excel中的信息
+
+
+def Get_system_ID(file):
+    wb = load_workbook(file)
+    ws = wb.active
+
+    ID_list = []
+    for row in range(2, ws.max_row + 1):
+        ID = ws[&quot;A&quot; + str(row)].value  # ID信息在A列
+        if ID != None:  # 过滤空值
+            ID_list.append(ID)
+    return ID_list
+
+
+# 获取数据，存入总列表
+total_list = []
+for file in pathss:
+    info = Get_system_ID(file)
+    total_list += info
+
+# 写入数据到新的excel表，并设置格式
+from openpyxl import Workbook
+from openpyxl.styles import Font, colors, Alignment  # 字体，颜色，对齐
+from openpyxl.styles import PatternFill  # 单元格填充
+
+wb = Workbook()  # 新建Excel工作簿
+ws = wb.active  # 使用活动工作表
+ws.column_dimensions[&#39;A&#39;].width = 18.5  # 设定A列宽度
+ws.cell(row=1, column=1, value=&quot;ID&quot;)  # 写入字段名
+color_fill = PatternFill(fill_type=&#39;solid&#39;, fgColor=&quot;B3CFA1&quot;)  # 设置底色
+ws.cell(row=1, column=1).fill = color_fill  # 填充底色
+
+# 批量从列表中提取数据并写入
+for row in range(1, len(total_list) + 1):
+    ws.cell(row=row + 1, column=1, value=total_list[row - 1])
+
+# 设置字号及对齐
+font_set = Font(name=&#39;Arial&#39;, size=9)
+for i in range(1, ws.max_row + 1):
+    ws.cell(row=i, column=1).font = font_set
+    ws.cell(row=i, column=1).alignment = Alignment(horizontal=&#39;left&#39;, vertical=&#39;center&#39;, shrink_to_fit=True)
+
+wb.save(os.getcwd() + &quot;\\ID.xlsx&quot;)
+
+print(f&quot;\n共获取到 &#123;len(pathss)&#125; 个 Excel表，共 &#123;len(total_list)&#125; 个ID。&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>openpyxl</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>os</tag>
+        <tag>openpyxl</tag>
       </tags>
   </entry>
   <entry>
@@ -16669,6 +16669,15 @@ wb.save(&quot;资料单（每日）-更改后.xlsx&quot;)
       </tags>
   </entry>
   <entry>
+    <title>免费看视频</title>
+    <url>/2021/06/19/%E5%85%8D%E8%B4%B9%E7%9C%8B%E8%A7%86%E9%A2%91/</url>
+    <content><![CDATA[<h1 id="免费看视频"><a href="#免费看视频" class="headerlink" title="免费看视频"></a>免费看视频</h1><p><b>在视频链接前加wn.run/</b></p>
+]]></content>
+      <tags>
+        <tag>免费看视频</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python | 偏函数</title>
     <url>/2021/11/07/%E5%81%8F%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h1 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h1><p><strong>作用：</strong> 通过设定参数的默认值，降低函数调用的难度<br>函数在执行时，要带上所有必要的参数进行调用。但是，有时参数可以在函数被调用之前提前获知。这种情况下，一个函数有一个或多个参数预先就能用上，以便函数能用更少的参数进行调用。<br>偏函数是将所要承载的函数作为partial()函数的第一个参数，原函数的各个参数依次作为partial()函数后续的参数，除非使用关键字参数。</p>
@@ -16712,15 +16721,6 @@ add_100(10)
       <tags>
         <tag>python</tag>
         <tag>偏函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>免费看视频</title>
-    <url>/2021/06/19/%E5%85%8D%E8%B4%B9%E7%9C%8B%E8%A7%86%E9%A2%91/</url>
-    <content><![CDATA[<h1 id="免费看视频"><a href="#免费看视频" class="headerlink" title="免费看视频"></a>免费看视频</h1><p><b>在视频链接前加wn.run/</b></p>
-]]></content>
-      <tags>
-        <tag>免费看视频</tag>
       </tags>
   </entry>
   <entry>
@@ -16882,96 +16882,6 @@ a = a.reshape((5,1))
         <tag>算法</tag>
         <tag>leetcode</tag>
         <tag>数组</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MyBatis | 分步查询、分步查询延迟加载</title>
-    <url>/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
-    <content><![CDATA[<h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p>
-<pre><code>&lt;settings&gt;
-    &lt;!-- 开启延迟加载 --&gt;
-    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
-    &lt;!-- 是否查询所有数据 --&gt;
-    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;
-&lt;/settings&gt;
-</code></pre>
-<p>2.DeptMapper.java</p>
-<pre><code>public interface DeptMapper &#123;
-    Dept getDeptByDid(String did);
-&#125;
-</code></pre>
-<p>3.DeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;
-    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;
-        select did,dname from dept where did=#&#123;did&#125;
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-    
-    Emp getEmpStep(String eid);//分步查询
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml<br>添加查询语句</p>
-<pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;
-    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-    &lt;!--
-        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id
-        column:分步查询的条件，注意：此条件必须是从数据库查询过的 
-     --&gt;
-    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;
-&lt;/resultMap&gt;
-
-&lt;!-- Emp getEmpStep(String eid); --&gt;
-&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;
-    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;
-&lt;/select&gt;
-</code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        Emp emp = mapper.getEmpStep(&quot;3&quot;);
-        System.out.println(emp.getEname());
-        System.out.println(emp.getDept());
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p>
-<pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-王五
-DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-Dept [did=3, dname=研发部]
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>分步查询、分步查询延迟加载</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>分步查询</tag>
-        <tag>分步查询延迟加载</tag>
       </tags>
   </entry>
   <entry>
@@ -17273,6 +17183,96 @@ public int getCount(String cid) throws SQLException &#123;
         <tag>分页</tag>
         <tag>JavaWeb</tag>
         <tag>基于JavaWeb的网上购物商城</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis | 分步查询、分步查询延迟加载</title>
+    <url>/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p>
+<pre><code>&lt;settings&gt;
+    &lt;!-- 开启延迟加载 --&gt;
+    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
+    &lt;!-- 是否查询所有数据 --&gt;
+    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;
+&lt;/settings&gt;
+</code></pre>
+<p>2.DeptMapper.java</p>
+<pre><code>public interface DeptMapper &#123;
+    Dept getDeptByDid(String did);
+&#125;
+</code></pre>
+<p>3.DeptMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;
+    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;
+        select did,dname from dept where did=#&#123;did&#125;
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>4.EmpDeptMapper.java</p>
+<pre><code>public interface EmpDeptMapper &#123;
+    List&lt;Emp&gt; getAllEmp();
+    
+    Emp getEmpStep(String eid);//分步查询
+&#125;
+</code></pre>
+<p>5.EmpDeptMapper.xml<br>添加查询语句</p>
+<pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;
+    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
+    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
+    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
+    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
+    &lt;!--
+        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id
+        column:分步查询的条件，注意：此条件必须是从数据库查询过的 
+     --&gt;
+    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;
+&lt;/resultMap&gt;
+
+&lt;!-- Emp getEmpStep(String eid); --&gt;
+&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;
+    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;
+&lt;/select&gt;
+</code></pre>
+<p>6.TestEmpDept.java</p>
+<pre><code>public class TestEmpDept &#123;
+    public static void main(String[] args) throws IOException &#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
+        
+        Emp emp = mapper.getEmpStep(&quot;3&quot;);
+        System.out.println(emp.getEname());
+        System.out.println(emp.getDept());
+    &#125;
+&#125;
+</code></pre>
+<p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p>
+<pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
+王五
+DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) 
+DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
+Dept [did=3, dname=研发部]
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>分步查询、分步查询延迟加载</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>分步查询</tag>
+        <tag>分步查询延迟加载</tag>
       </tags>
   </entry>
   <entry>
@@ -17598,6 +17598,21 @@ public class TestPage &#123;
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 划分数据集前对数据的shuffle</title>
+    <url>/2021/07/02/%E5%88%92%E5%88%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%89%8D%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84shuffle/</url>
+    <content><![CDATA[<h1 id="划分数据集前对数据的shuffle"><a href="#划分数据集前对数据的shuffle" class="headerlink" title="划分数据集前对数据的shuffle"></a>划分数据集前对数据的shuffle</h1><p>划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！<br>重要的事情说三遍！</p>
+<p>shuffle对模型的accuracy有较大的影响，因此在将数据输入模型之前应该将数据集进行shuffle!</p>
+<p><a href="https://blog.csdn.net/qq_38412868/article/details/85473973">Python如何打乱训练数据集顺序的几种方法</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaWeb项目开发 | 创建web项目并添加到服务器中</title>
     <url>/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/</url>
     <content><![CDATA[<h1 id="创建web项目并添加到服务器中"><a href="#创建web项目并添加到服务器中" class="headerlink" title="创建web项目并添加到服务器中"></a>创建web项目并添加到服务器中</h1><h2 id="1-创建web项目"><a href="#1-创建web项目" class="headerlink" title="1.创建web项目"></a>1.创建web项目</h2><p>New –&gt; Web –&gt; dynamic web project,然后按照下图操作。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/1.PNG"><br>注意：Target runtime需选择与服务器对应的版本，dynamic web module version选择2.5.</p>
@@ -17612,21 +17627,6 @@ public class TestPage &#123;
       <tags>
         <tag>Java</tag>
         <tag>创建web项目</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 划分数据集前对数据的shuffle</title>
-    <url>/2021/07/02/%E5%88%92%E5%88%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%89%8D%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84shuffle/</url>
-    <content><![CDATA[<h1 id="划分数据集前对数据的shuffle"><a href="#划分数据集前对数据的shuffle" class="headerlink" title="划分数据集前对数据的shuffle"></a>划分数据集前对数据的shuffle</h1><p>划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！划分数据集前对数据集和标签的shuffle很重要！！！<br>重要的事情说三遍！</p>
-<p>shuffle对模型的accuracy有较大的影响，因此在将数据输入模型之前应该将数据集进行shuffle!</p>
-<p><a href="https://blog.csdn.net/qq_38412868/article/details/85473973">Python如何打乱训练数据集顺序的几种方法</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -18121,6 +18121,123 @@ class Solution(object):
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 19.删除链表中的倒数第N个节点</title>
+    <url>/2022/07/09/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="19-删除链表中的倒数第N个节点"><a href="#19-删除链表中的倒数第N个节点" class="headerlink" title="19. 删除链表中的倒数第N个节点"></a>19. 删除链表中的倒数第N个节点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。</p>
+<p><a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li><p>计算链表长度<br>删除链表的倒数第 n 个结点操作就等价于删除正数第L-n+1个节点，L为链表的长度</p>
+</li>
+<li><p>栈<br>遍历链表的同时将所有节点依次入栈，根据栈 先进后出 的原则，弹出栈的第n个节点就是需要删除的节点，并且弹出<br>第n个节点后的栈顶节点为待删除节点的前驱节点。</p>
+<span id="more"></span>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class ListNode(object):</p>
+<pre><code> def __init__(self, val=0, next=None):
+     self.val = val
+     self.next = next
+</code></pre>
+<p> class Solution(object):</p>
+<pre><code> def removeNthFromEnd(self, linkedList, n):
+     &quot;&quot;&quot;
+     计算链表长度
+     :type head: ListNode
+     :type n: int
+     :rtype: ListNode
+     &quot;&quot;&quot;
+     dummy = ListNode(0, linkedList)
+     length = self.lenOfLinkedList(dummy)
+     print(length)
+     cur = dummy
+     for i in range(1, length - n):
+         cur = cur.next
+     cur.next = cur.next.next
+     return dummy.next
+ 
+ def removeNthFromEnd2(self, head, n):
+     &quot;&quot;&quot;栈&quot;&quot;&quot;
+     stack = list()
+     cur = head
+     while cur:
+         stack.append(cur)
+         cur = cur.next
+     for i in range(n):
+         stack.pop()
+         
+     prev = stack[-1]
+     prev.next = prev.next.next
+     return head
+ 
+ def removeNthFromEnd3(self, head, n):
+     &quot;&quot;&quot;双指针&quot;&quot;&quot;
+     dummy = ListNode(0, head)
+     first = head
+     second = dummy
+     for i in range(n):
+         first = first.next
+     
+     while first:
+         first = first.next
+         second = second.next
+     
+     second.next = second.next.next
+     return dummy.next
+ 
+ def lenOfLinkedList(self, head):
+     if not head:
+         return 0
+     p = head
+     count = 0
+     while p is not None:
+         count += 1
+         p = p.next
+     return count
+ 
+ def createLinkedList(self, list):
+     head = r = ListNode(list[0])
+     for num in list[1:]:
+         node = ListNode(num)
+         r.next = node
+         r = node
+     
+     return head
+ 
+ def traverseLinkedList(self, head):
+     if not head:
+         return
+     p = head
+     while p is not None:
+         print(p.val, end=&quot; &quot;)
+         p = p.next
+     print(&quot;&quot;)
+</code></pre>
+<p> if <strong>name</strong> == “<strong>main</strong>“:</p>
+<pre><code> slt = Solution()
+ linkedList = slt.createLinkedList([1, 2, 3, 4, 5])
+ print(&quot;linked list:&quot;, end=&quot;&quot;)
+ slt.traverseLinkedList(linkedList)
+ length = slt.lenOfLinkedList(linkedList)
+ print(&quot;length of linked list:&quot;, length)
+ # newLinkedList = slt.removeNthFromEnd(linkedList, 2)
+ # newLinkedList = slt.removeNthFromEnd2(linkedList, 2)
+ newLinkedList = slt.removeNthFromEnd3(linkedList, 2)
+ print(&quot;linked list after deleting the reversed n-th node:&quot;, end=&quot;&quot;)
+ slt.traverseLinkedList(newLinkedList)
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>链表</category>
+        <category>19.删除链表中的倒数第N个节点</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 203.删除链表元素</title>
     <url>/2021/08/27/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/</url>
     <content><![CDATA[<h1 id="203-删除链表元素"><a href="#203-删除链表元素" class="headerlink" title="203.删除链表元素"></a>203.删除链表元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val == val 的节点，并返回 新的头节点 。</p>
@@ -18239,123 +18356,6 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 19.删除链表中的倒数第N个节点</title>
-    <url>/2022/07/09/%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/</url>
-    <content><![CDATA[<h1 id="19-删除链表中的倒数第N个节点"><a href="#19-删除链表中的倒数第N个节点" class="headerlink" title="19. 删除链表中的倒数第N个节点"></a>19. 删除链表中的倒数第N个节点</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。</p>
-<p><a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li><p>计算链表长度<br>删除链表的倒数第 n 个结点操作就等价于删除正数第L-n+1个节点，L为链表的长度</p>
-</li>
-<li><p>栈<br>遍历链表的同时将所有节点依次入栈，根据栈 先进后出 的原则，弹出栈的第n个节点就是需要删除的节点，并且弹出<br>第n个节点后的栈顶节点为待删除节点的前驱节点。</p>
-<span id="more"></span>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p> class ListNode(object):</p>
-<pre><code> def __init__(self, val=0, next=None):
-     self.val = val
-     self.next = next
-</code></pre>
-<p> class Solution(object):</p>
-<pre><code> def removeNthFromEnd(self, linkedList, n):
-     &quot;&quot;&quot;
-     计算链表长度
-     :type head: ListNode
-     :type n: int
-     :rtype: ListNode
-     &quot;&quot;&quot;
-     dummy = ListNode(0, linkedList)
-     length = self.lenOfLinkedList(dummy)
-     print(length)
-     cur = dummy
-     for i in range(1, length - n):
-         cur = cur.next
-     cur.next = cur.next.next
-     return dummy.next
- 
- def removeNthFromEnd2(self, head, n):
-     &quot;&quot;&quot;栈&quot;&quot;&quot;
-     stack = list()
-     cur = head
-     while cur:
-         stack.append(cur)
-         cur = cur.next
-     for i in range(n):
-         stack.pop()
-         
-     prev = stack[-1]
-     prev.next = prev.next.next
-     return head
- 
- def removeNthFromEnd3(self, head, n):
-     &quot;&quot;&quot;双指针&quot;&quot;&quot;
-     dummy = ListNode(0, head)
-     first = head
-     second = dummy
-     for i in range(n):
-         first = first.next
-     
-     while first:
-         first = first.next
-         second = second.next
-     
-     second.next = second.next.next
-     return dummy.next
- 
- def lenOfLinkedList(self, head):
-     if not head:
-         return 0
-     p = head
-     count = 0
-     while p is not None:
-         count += 1
-         p = p.next
-     return count
- 
- def createLinkedList(self, list):
-     head = r = ListNode(list[0])
-     for num in list[1:]:
-         node = ListNode(num)
-         r.next = node
-         r = node
-     
-     return head
- 
- def traverseLinkedList(self, head):
-     if not head:
-         return
-     p = head
-     while p is not None:
-         print(p.val, end=&quot; &quot;)
-         p = p.next
-     print(&quot;&quot;)
-</code></pre>
-<p> if <strong>name</strong> == “<strong>main</strong>“:</p>
-<pre><code> slt = Solution()
- linkedList = slt.createLinkedList([1, 2, 3, 4, 5])
- print(&quot;linked list:&quot;, end=&quot;&quot;)
- slt.traverseLinkedList(linkedList)
- length = slt.lenOfLinkedList(linkedList)
- print(&quot;length of linked list:&quot;, length)
- # newLinkedList = slt.removeNthFromEnd(linkedList, 2)
- # newLinkedList = slt.removeNthFromEnd2(linkedList, 2)
- newLinkedList = slt.removeNthFromEnd3(linkedList, 2)
- print(&quot;linked list after deleting the reversed n-th node:&quot;, end=&quot;&quot;)
- slt.traverseLinkedList(newLinkedList)
-</code></pre>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>链表</category>
-        <category>19.删除链表中的倒数第N个节点</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>链表</tag>
       </tags>
   </entry>
   <entry>
@@ -21869,194 +21869,6 @@ plt.show()  # show the figure
       </tags>
   </entry>
   <entry>
-    <title>MyBatis | 多对一查询自定义映射</title>
-    <url>/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/</url>
-    <content><![CDATA[<h1 id="多对一查询自定义映射"><a href="#多对一查询自定义映射" class="headerlink" title="多对一查询自定义映射"></a>多对一查询自定义映射</h1><p>1.项目目录<br><img src="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/1.PNG"><br>2.Emp.java</p>
-<pre><code>package com.atguigu.bean;
-
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    private Integer age;
-    private String sex;
-    private Dept dept;
-    
-    
-    public Dept getDept() &#123;
-        return dept;
-    &#125;
-    public void setDept(Dept dept) &#123;
-        this.dept = dept;
-    &#125;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, dept=&quot; + dept + &quot;]&quot;;
-    &#125;
-    public Emp(Integer eid, String ename, Integer age, String sex) &#123;
-        super();
-        this.eid = eid;
-        this.ename = ename;
-        this.age = age;
-        this.sex = sex;
-    &#125;
-    public Emp() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-&#125;
-</code></pre>
-<p>3.Dept.java</p>
-<pre><code>package com.atguigu.bean;
-
-public class Dept &#123;
-    private Integer did;
-    private String dname;
-    public Integer getDid() &#123;
-        return did;
-    &#125;
-    public void setDid(Integer did) &#123;
-        this.did = did;
-    &#125;
-    public String getDname() &#123;
-        return dname;
-    &#125;
-    public void setDname(String dname) &#123;
-        this.dname = dname;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;]&quot;;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpDeptMapper&quot;&gt;
-    
-    &lt;!-- &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
-        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
-        
-            查询结果：
-            [Emp [eid=1, ename=张三, age=12, sex=男, dept=null], 
-            不能够查询出员工所对应的部门，需要进行自定义映射
-        
-    &lt;/select&gt; --&gt;
-    
-    &lt;!-- 自定义映射-第一种方式 --&gt;
-    &lt;!-- &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
-        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-        &lt;result column=&quot;did&quot; property=&quot;dept.did&quot;/&gt;
-        &lt;result column=&quot;dname&quot; property=&quot;dept.dname&quot;/&gt;
-    &lt;/resultMap&gt; --&gt;
-    &lt;!--
-        &lt;resultMap&gt;:自定义映射，处理复杂的表关系
-        &lt;id/&gt;:设置主键的映射关系，column设置字段名，property设置属性名
-        &lt;result/&gt;:设置非主键的映射关系， column设置字段名，property设置属性名
-     --&gt;
-     
-     &lt;!-- 自定义映射-第二种方式 --&gt;
-     &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
-        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-        &lt;association property=&quot;dept&quot; javaType=&quot;Dept&quot;&gt;
-            &lt;id column=&quot;did&quot; property=&quot;did&quot;/&gt;
-            &lt;result column=&quot;dname&quot; property=&quot;dname&quot;/&gt;
-        &lt;/association&gt;
-     &lt;/resultMap&gt;
-    
-    &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;
-    &lt;select id=&quot;getAllEmp&quot; resultMap=&quot;empMap&quot;&gt;
-        &lt;!-- select * from emp e, dept d where e.did = d.did --&gt;
-        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpDeptMapper;
-
-public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        List&lt;Emp&gt; empList = mapper.getAllEmp();
-        System.out.println(empList);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>MyBatis</category>
-        <category>多对一查询自定义映射</category>
-      </categories>
-      <tags>
-        <tag>MyBatis</tag>
-        <tag>自定义映射</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode | 169.多数元素</title>
     <url>/2022/06/19/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/</url>
     <content><![CDATA[<h1 id="169-多数元素"><a href="#169-多数元素" class="headerlink" title="169.多数元素"></a>169.多数元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊n/2⌋ 的元素。<br>你可以假设数组是非空的，并且给定的数组总是存在多数元素。<br><a href="https://leetcode.cn/problems/majority-element">题目链接</a></p>
@@ -22354,6 +22166,24 @@ if __name__ == &quot;__main__&quot;:
       </categories>
   </entry>
   <entry>
+    <title>如何计算深度学习代码实践中的trainsteps</title>
+    <url>/2021/08/02/%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84trainsteps/</url>
+    <content><![CDATA[<h1 id="如何计算深度学习代码实践中的trainsteps"><a href="#如何计算深度学习代码实践中的trainsteps" class="headerlink" title="如何计算深度学习代码实践中的trainsteps?"></a>如何计算深度学习代码实践中的trainsteps?</h1><p>深度学习中已经有epoch参数了，为什么还要再定义steps参数？</p>
+<p>epoch:全体训练数据过几遍</p>
+<p>steps:模型会计算几次loss,即模型参数会更新几次梯度</p>
+<p>当我们训练模型时，epoch变成了一个间接的关注对象，我们关系模型能更新多少次，这些才知道循环多少次，计算多少次loss。其实最主要的一点是训练步数与模型的参数会有相关关系，比如如果要采用自适应学习率，那每步都是有一个不同的学习率的。</p>
+<p>train steps通常按以下公式进行计算：<br>train steps = len(data) // batch_size</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>train steps</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pytest | 如何调用pytest</title>
     <url>/2024/02/29/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/</url>
     <content><![CDATA[<h3 id="如何调用pytest"><a href="#如何调用pytest" class="headerlink" title="如何调用pytest"></a>如何调用pytest</h3><p>pytest支持命令行参数选择特定的tests去执行，以下是常见的一些选择方法。</p>
@@ -22378,24 +22208,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>python</tag>
         <tag>pytest</tag>
         <tag>测试框架</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何计算深度学习代码实践中的trainsteps</title>
-    <url>/2021/08/02/%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84trainsteps/</url>
-    <content><![CDATA[<h1 id="如何计算深度学习代码实践中的trainsteps"><a href="#如何计算深度学习代码实践中的trainsteps" class="headerlink" title="如何计算深度学习代码实践中的trainsteps?"></a>如何计算深度学习代码实践中的trainsteps?</h1><p>深度学习中已经有epoch参数了，为什么还要再定义steps参数？</p>
-<p>epoch:全体训练数据过几遍</p>
-<p>steps:模型会计算几次loss,即模型参数会更新几次梯度</p>
-<p>当我们训练模型时，epoch变成了一个间接的关注对象，我们关系模型能更新多少次，这些才知道循环多少次，计算多少次loss。其实最主要的一点是训练步数与模型的参数会有相关关系，比如如果要采用自适应学习率，那每步都是有一个不同的学习率的。</p>
-<p>train steps通常按以下公式进行计算：<br>train steps = len(data) // batch_size</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>train steps</tag>
       </tags>
   </entry>
   <entry>
@@ -22708,18 +22520,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>Chicken Soup | 淡定自若 孰能生巧</title>
-    <url>/2023/02/18/%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/</url>
-    <content><![CDATA[<p><strong>“所有的淡定自若，背后一定是孰能生巧！”</strong></p>
-<p>2023/2/18</p>
-]]></content>
-      <categories>
-        <category>V Life</category>
-        <category>Chicken Soup</category>
-        <category>所有的淡定自若，背后一定是孰能生巧</category>
-      </categories>
-  </entry>
-  <entry>
     <title>leetcode | 551.学生出勤记录1</title>
     <url>/2021/09/02/%E5%AD%A6%E7%94%9F%E5%87%BA%E5%8B%A4%E8%AE%B0%E5%BD%951/</url>
     <content><![CDATA[<h1 id="551-学生出勤记录1"><a href="#551-学生出勤记录1" class="headerlink" title="551.学生出勤记录1"></a>551.学生出勤记录1</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个字符串 s 表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：<br>    ‘A’：Absent，缺勤<br>    ‘L’：Late，迟到<br>    ‘P’：Present，到场<br>如果学生能够 同时 满足下面两个条件，则可以获得出勤奖励：<br>    按 总出勤 计，学生缺勤（’A’）严格 少于两天。<br>    学生 不会 存在 连续 3 天或 连续 3 天以上的迟到（’L’）记录。<br>如果学生可以获得出勤奖励，返回 true ；否则，返回 false 。</p>
@@ -22790,6 +22590,18 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Chicken Soup | 淡定自若 孰能生巧</title>
+    <url>/2023/02/18/%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/</url>
+    <content><![CDATA[<p><strong>“所有的淡定自若，背后一定是孰能生巧！”</strong></p>
+<p>2023/2/18</p>
+]]></content>
+      <categories>
+        <category>V Life</category>
+        <category>Chicken Soup</category>
+        <category>所有的淡定自若，背后一定是孰能生巧</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Django | 安装mysql_python失败</title>
     <url>/2021/07/25/%E5%AE%89%E8%A3%85mysql-python%E5%A4%B1%E8%B4%A5/</url>
     <content><![CDATA[<h1 id="安装mysql-python失败"><a href="#安装mysql-python失败" class="headerlink" title="安装mysql_python失败"></a>安装mysql_python失败</h1><p><a href="https://blog.csdn.net/qq_37431752/article/details/87965695">解决办法！！！</a></p>
@@ -22805,80 +22617,191 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>多线程 | 实现线程体的两种方式</title>
-    <url>/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
-<pre><code># coding=utf-8
+    <title>MyBatis | 多对一查询自定义映射</title>
+    <url>/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/</url>
+    <content><![CDATA[<h1 id="多对一查询自定义映射"><a href="#多对一查询自定义映射" class="headerlink" title="多对一查询自定义映射"></a>多对一查询自定义映射</h1><p>1.项目目录<br><img src="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/1.PNG"><br>2.Emp.java</p>
+<pre><code>package com.atguigu.bean;
 
-import threading
-import time
-
-
-# 线程体函数
-def thread_body():
-    # 当前线程对象
-    t = threading.current_thread()
-    for n in range(5):
-        # 当前线程名
-        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
-        # 线程休眠
-        time.sleep(2)
-    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
-
-
-# 主线程
-# 创建线程对象t1
-t1 = threading.Thread(target=thread_body)
-# 创建线程对象t2
-t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
-# 启动线程t1
-t1.start()
-# 启动线程t2
-t2.start()
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    private Integer age;
+    private String sex;
+    private Dept dept;
+    
+    
+    public Dept getDept() &#123;
+        return dept;
+    &#125;
+    public void setDept(Dept dept) &#123;
+        this.dept = dept;
+    &#125;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, dept=&quot; + dept + &quot;]&quot;;
+    &#125;
+    public Emp(Integer eid, String ename, Integer age, String sex) &#123;
+        super();
+        this.eid = eid;
+        this.ename = ename;
+        this.age = age;
+        this.sex = sex;
+    &#125;
+    public Emp() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+&#125;
 </code></pre>
-<p>2.自定义线程类实现线程体<br>代码实例：</p>
-<pre><code># coding=utf-8
+<p>3.Dept.java</p>
+<pre><code>package com.atguigu.bean;
 
-import time
-import threading
+public class Dept &#123;
+    private Integer did;
+    private String dname;
+    public Integer getDid() &#123;
+        return did;
+    &#125;
+    public void setDid(Integer did) &#123;
+        this.did = did;
+    &#125;
+    public String getDname() &#123;
+        return dname;
+    &#125;
+    public void setDname(String dname) &#123;
+        this.dname = dname;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;]&quot;;
+    &#125;
+    
+&#125;
+</code></pre>
+<p>4.EmpDeptMapper.java</p>
+<pre><code>package com.atguigu.mapper;
 
+import java.util.List;
 
-class SmallThread(threading.Thread):
-    def __init__(self, name=None):
-        super().__init__(name=name)
+import com.atguigu.bean.Emp;
 
-    # 线程体函数
-    def run(self):
-        # 当前线程对象
-        t = threading.current_thread()
-        for n in range(5):
-            # 当前线程名
-            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
-            # 线程休眠
-            time.sleep(2)
-        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
+public interface EmpDeptMapper &#123;
+    List&lt;Emp&gt; getAllEmp();
+&#125;
+</code></pre>
+<p>5.EmpDeptMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpDeptMapper&quot;&gt;
+    
+    &lt;!-- &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
+        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
+        
+            查询结果：
+            [Emp [eid=1, ename=张三, age=12, sex=男, dept=null], 
+            不能够查询出员工所对应的部门，需要进行自定义映射
+        
+    &lt;/select&gt; --&gt;
+    
+    &lt;!-- 自定义映射-第一种方式 --&gt;
+    &lt;!-- &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
+        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
+        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
+        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
+        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
+        &lt;result column=&quot;did&quot; property=&quot;dept.did&quot;/&gt;
+        &lt;result column=&quot;dname&quot; property=&quot;dept.dname&quot;/&gt;
+    &lt;/resultMap&gt; --&gt;
+    &lt;!--
+        &lt;resultMap&gt;:自定义映射，处理复杂的表关系
+        &lt;id/&gt;:设置主键的映射关系，column设置字段名，property设置属性名
+        &lt;result/&gt;:设置非主键的映射关系， column设置字段名，property设置属性名
+     --&gt;
+     
+     &lt;!-- 自定义映射-第二种方式 --&gt;
+     &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
+        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
+        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
+        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
+        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
+        &lt;association property=&quot;dept&quot; javaType=&quot;Dept&quot;&gt;
+            &lt;id column=&quot;did&quot; property=&quot;did&quot;/&gt;
+            &lt;result column=&quot;dname&quot; property=&quot;dname&quot;/&gt;
+        &lt;/association&gt;
+     &lt;/resultMap&gt;
+    
+    &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;
+    &lt;select id=&quot;getAllEmp&quot; resultMap=&quot;empMap&quot;&gt;
+        &lt;!-- select * from emp e, dept d where e.did = d.did --&gt;
+        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>6.TestEmpDept.java</p>
+<pre><code>package com.atguigu.test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
-# 主线程
-# 创建线程对象t1
-t1 = SmallThread()  # 通过自定义线程类，创建线程对象
-# 创建线程对象t2
-t2 = SmallThread(name=&#39;MyThread&#39;)
-# 启动线程t1
-t1.start()
-# 启动线程t2
-t2.start()
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpDeptMapper;
+
+public class TestEmpDept &#123;
+    public static void main(String[] args) throws IOException &#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
+        
+        List&lt;Emp&gt; empList = mapper.getAllEmp();
+        System.out.println(empList);
+    &#125;
+&#125;
 </code></pre>
 ]]></content>
       <categories>
-        <category>python</category>
-        <category>内置模块</category>
-        <category>threading</category>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+        <category>多对一查询自定义映射</category>
       </categories>
       <tags>
-        <tag>python</tag>
-        <tag>多线程</tag>
-        <tag>threading</tag>
+        <tag>MyBatis</tag>
+        <tag>自定义映射</tag>
       </tags>
   </entry>
   <entry>
@@ -23004,6 +22927,83 @@ t2.start()
       </tags>
   </entry>
   <entry>
+    <title>多线程 | 实现线程体的两种方式</title>
+    <url>/2021/08/05/%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="实现线程体的两种方式"><a href="#实现线程体的两种方式" class="headerlink" title="实现线程体的两种方式"></a>实现线程体的两种方式</h1><p>实现线程体主要有以下两种方式：<br>1.自定义函数实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import threading
+import time
+
+
+# 线程体函数
+def thread_body():
+    # 当前线程对象
+    t = threading.current_thread()
+    for n in range(5):
+        # 当前线程名
+        print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+        # 线程休眠
+        time.sleep(2)
+    print(&#39;线程&#123;0&#125;执行完成！&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = threading.Thread(target=thread_body)
+# 创建线程对象t2
+t2 = threading.Thread(target=thread_body, name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+<p>2.自定义线程类实现线程体<br>代码实例：</p>
+<pre><code># coding=utf-8
+
+import time
+import threading
+
+
+class SmallThread(threading.Thread):
+    def __init__(self, name=None):
+        super().__init__(name=name)
+
+    # 线程体函数
+    def run(self):
+        # 当前线程对象
+        t = threading.current_thread()
+        for n in range(5):
+            # 当前线程名
+            print(&#39;第&#123;0&#125;次执行线程&#123;1&#125;&#39;.format(n, t.name))
+            # 线程休眠
+            time.sleep(2)
+        print(&#39;线程&#123;0&#125;执行完成&#39;.format(t.name))
+
+
+# 主线程
+# 创建线程对象t1
+t1 = SmallThread()  # 通过自定义线程类，创建线程对象
+# 创建线程对象t2
+t2 = SmallThread(name=&#39;MyThread&#39;)
+# 启动线程t1
+t1.start()
+# 启动线程t2
+t2.start()
+</code></pre>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>内置模块</category>
+        <category>threading</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>多线程</tag>
+        <tag>threading</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>sviewgui | 对数据文件中的数据进行可视化</title>
     <url>/2021/10/19/%E5%AF%B9%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96/</url>
     <content><![CDATA[<h1 id="使用sviewgui对csv文件或Pandas的DataFrame的数据可视化"><a href="#使用sviewgui对csv文件或Pandas的DataFrame的数据可视化" class="headerlink" title="使用sviewgui对csv文件或Pandas的DataFrame的数据可视化"></a>使用sviewgui对csv文件或Pandas的DataFrame的数据可视化</h1><p><a href="https://mp.weixin.qq.com/s/6ftmwDzlyuCgN5YsX81pKQ">参考资料</a></p>
@@ -23015,6 +23015,31 @@ t2.start()
       </categories>
       <tags>
         <tag>sviewgui</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python | 将python程序打包成exe</title>
+    <url>/2024/02/22/%E5%B0%86python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90exe/</url>
+    <content><![CDATA[<h3 id="将python程序打包成exe"><a href="#将python程序打包成exe" class="headerlink" title="将python程序打包成exe"></a>将python程序打包成exe</h3><ol>
+<li><p>编写python程序（例如test.py）</p>
+</li>
+<li><p>安装pyinstaller</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -U pyinstaller</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打包python程序</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyinstaller test.py</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>第三方库</category>
+        <category>pyinstaller</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>打包</tag>
       </tags>
   </entry>
   <entry>
@@ -23099,31 +23124,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>python | 将python程序打包成exe</title>
-    <url>/2024/02/22/%E5%B0%86python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90exe/</url>
-    <content><![CDATA[<h3 id="将python程序打包成exe"><a href="#将python程序打包成exe" class="headerlink" title="将python程序打包成exe"></a>将python程序打包成exe</h3><ol>
-<li><p>编写python程序（例如test.py）</p>
-</li>
-<li><p>安装pyinstaller</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -U pyinstaller</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>打包python程序</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyinstaller test.py</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>第三方库</category>
-        <category>pyinstaller</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>打包</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>伪迹移除 | 小波变换</title>
     <url>/2021/02/23/%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/</url>
     <content><![CDATA[<h1 id="小波变换-Wavelet-Transform-WT"><a href="#小波变换-Wavelet-Transform-WT" class="headerlink" title="小波变换(Wavelet Transform,WT)"></a>小波变换(Wavelet Transform,WT)</h1><p>小波变化是一个时间尺度的表示方法，它把信号分解成时间和尺度的基函数(母小波基函数的扩展/变体)</p>
@@ -23139,35 +23139,6 @@ if __name__ == &quot;__main__&quot;:
         <tag>伪迹移除</tag>
         <tag>EEG</tag>
         <tag>小波变换</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode | 695.岛屿的最大面积</title>
-    <url>/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/</url>
-    <content><![CDATA[<h1 id="695-岛屿的最大面积"><a href="#695-岛屿的最大面积" class="headerlink" title="695.岛屿的最大面积"></a>695.岛屿的最大面积</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个大小为 m x n 的二进制矩阵 grid 。</p>
-<p>岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。</p>
-<p>岛屿的面积是岛上值为 1 的单元格的数目。</p>
-<p>计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。</p>
-<p>示例 1：<br>输入：grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]<br>输出：6<br>解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。</p>
-<p>示例 2：<br>输入：grid = [[0,0,0,0,0,0,0,0]]<br>输出：0</p>
-<p><a href="https://leetcode.cn/problems/max-area-of-island">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>深度优先搜索（DFS）<br>利用深度优先搜索（DFS）对每个岛屿进行遍历，找出最大值<br>（1）从每个陆地出发，遍历该陆地所在的岛屿<br>（2）在遍历某一岛屿的时候：<br>1）从隶属于该岛屿的某一块陆地出发，向四个方向递归地DFS<br>2）每次递归对下标进行判断，以区域的边界作为递归边界<br>3）为保证每块陆地只访问一次，将已访问过的陆地置0<br>4）递归地返回整块岛屿的面积<br>（3）找出所有岛屿的最大值，即为答案</li>
-</ol>
-<p><strong>邻接矩阵和邻接表表示的图的DFS和BFS</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MGraph</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INFINITY = <span class="number">65535</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span>[] vexs = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span>[][] arc = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX][MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createMGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：\n&quot;</span>);</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		numVertexes = scanner.nextInt();</span><br><span class="line">		numEdges = scanner.nextInt();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			vexs[i] = scanner.nextInt();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">				arc[i][j] = INFINITY;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的下标i,j和权w：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> w = scanner.nextInt();</span><br><span class="line">			arc[i][j] = w;</span><br><span class="line">			arc[j][i] = arc[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		 visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		 System.out.println(vexs[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">			 <span class="keyword">if</span>(arc[i][j] == <span class="number">1</span> &amp;&amp; !visited[j]) &#123;</span><br><span class="line">				 DFS(j);</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;<span class="comment">//对每一个顶点做循环</span></span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;<span class="comment">//若是未访问过就处理</span></span><br><span class="line">				visited[i] = <span class="keyword">true</span>;<span class="comment">//设置当前顶点访问过</span></span><br><span class="line">				System.out.println(<span class="keyword">this</span>.vexs[i]);<span class="comment">//打印顶点，也可以其他操作</span></span><br><span class="line">				queue.addLast(i);<span class="comment">//将此顶点入队列</span></span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="keyword">this</span>.numVertexes; j++) &#123;</span><br><span class="line">						<span class="keyword">if</span>(<span class="keyword">this</span>.arc[i][j] == <span class="number">1</span> &amp;&amp; !<span class="keyword">this</span>.visited[j]) &#123;</span><br><span class="line">							visited[j] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.vexs[j]);</span><br><span class="line">							queue.addLast(j);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EdgeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> adjvex;</span><br><span class="line">	EdgeNode next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VertexNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	EdgeNode firstedge;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphAdjList</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	VertexNode[] adjList= <span class="keyword">new</span> VertexNode[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createALGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：&quot;</span>);</span><br><span class="line">		<span class="keyword">this</span>.numVertexes = scanner.nextInt();</span><br><span class="line">		<span class="keyword">this</span>.numEdges = scanner.nextInt();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			VertexNode node = <span class="keyword">new</span> VertexNode();</span><br><span class="line">			node.data = scanner.nextInt();</span><br><span class="line">			node.firstedge = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i] = node;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="keyword">this</span>.numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的顶点序号：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			EdgeNode e = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e.adjvex = j;</span><br><span class="line">			e.next = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i].firstedge = e;</span><br><span class="line">			</span><br><span class="line">			EdgeNode e2 = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e2.adjvex = i;</span><br><span class="line">			e2.next = <span class="keyword">this</span>.adjList[j].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[j].firstedge = e2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		System.out.println(<span class="keyword">this</span>.adjList[i].data + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">		<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[p.adjvex]) &#123;</span><br><span class="line">				DFS(p.adjvex);</span><br><span class="line">			&#125;</span><br><span class="line">			p = p.next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.visited[i] = <span class="keyword">true</span>;</span><br><span class="line">				System.out.println(<span class="keyword">this</span>.adjList[i].data);<span class="comment">//打印顶点</span></span><br><span class="line">				queue.addLast(i);</span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">					<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">						<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[p.adjvex]) &#123;</span><br><span class="line">							<span class="keyword">this</span>.visited[p.adjvex] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.adjList[p.adjvex].data);</span><br><span class="line">							queue.add(p.adjvex);</span><br><span class="line">						&#125;</span><br><span class="line">						p = p.next;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DFSAndBFS</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//邻接矩阵</span></span><br><span class="line">		MGraph graph = <span class="keyword">new</span> MGraph();</span><br><span class="line">		graph.createMGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;邻接矩阵：\n&quot;</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; graph.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; graph.numVertexes; j++) &#123;</span><br><span class="line">				System.out.print(graph.arc[i][j]+<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println();</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.BFSTraverse();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//邻接表</span></span><br><span class="line">		GraphAdjList GL = <span class="keyword">new</span> GraphAdjList();</span><br><span class="line">		GL.createALGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.BFSTraverse();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">island_dfs</span>(<span class="params">self, grid, i, j</span>):</span></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(grid) &gt; i &gt;= <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(grid[<span class="number">0</span>]) &gt; j &gt;= <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				grid[i][j] = <span class="number">0</span></span><br><span class="line">				<span class="keyword">return</span> <span class="number">1</span> + self.island_dfs(grid, i - <span class="number">1</span>, j) + self.island_dfs(grid, i + <span class="number">1</span>, j) + \</span><br><span class="line">				       self.island_dfs(grid, i, j - <span class="number">1</span>) + self.island_dfs(grid, i, j + <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">max_area_of_island</span>(<span class="params">self, grid</span>):</span></span><br><span class="line">		ans = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)):</span><br><span class="line">			<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid[<span class="number">0</span>])):</span><br><span class="line">				ans = <span class="built_in">max</span>(ans, self.island_dfs(grid, i, j))</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	s = Solution()</span><br><span class="line">	grid = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br><span class="line">	max_area = s.max_area_of_island(grid)</span><br><span class="line">	<span class="built_in">print</span>(max_area)</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>算法刷题</category>
-        <category>leetcode</category>
-        <category>DFS</category>
-        <category>695.岛屿的最大面积</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>leetcode</tag>
-        <tag>DFS</tag>
-        <tag>深度优先搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -23523,6 +23494,35 @@ public class Test &#123;
       </tags>
   </entry>
   <entry>
+    <title>leetcode | 695.岛屿的最大面积</title>
+    <url>/2022/10/24/%E5%B2%9B%E5%B1%BF%E7%9A%84%E6%9C%80%E5%A4%A7%E9%9D%A2%E7%A7%AF/</url>
+    <content><![CDATA[<h1 id="695-岛屿的最大面积"><a href="#695-岛屿的最大面积" class="headerlink" title="695.岛屿的最大面积"></a>695.岛屿的最大面积</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个大小为 m x n 的二进制矩阵 grid 。</p>
+<p>岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在 水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。</p>
+<p>岛屿的面积是岛上值为 1 的单元格的数目。</p>
+<p>计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。</p>
+<p>示例 1：<br>输入：grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]<br>输出：6<br>解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。</p>
+<p>示例 2：<br>输入：grid = [[0,0,0,0,0,0,0,0]]<br>输出：0</p>
+<p><a href="https://leetcode.cn/problems/max-area-of-island">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>深度优先搜索（DFS）<br>利用深度优先搜索（DFS）对每个岛屿进行遍历，找出最大值<br>（1）从每个陆地出发，遍历该陆地所在的岛屿<br>（2）在遍历某一岛屿的时候：<br>1）从隶属于该岛屿的某一块陆地出发，向四个方向递归地DFS<br>2）每次递归对下标进行判断，以区域的边界作为递归边界<br>3）为保证每块陆地只访问一次，将已访问过的陆地置0<br>4）递归地返回整块岛屿的面积<br>（3）找出所有岛屿的最大值，即为答案</li>
+</ol>
+<p><strong>邻接矩阵和邻接表表示的图的DFS和BFS</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MGraph</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INFINITY = <span class="number">65535</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span>[] vexs = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span>[][] arc = <span class="keyword">new</span> <span class="keyword">int</span>[MAXVEX][MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createMGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：\n&quot;</span>);</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		numVertexes = scanner.nextInt();</span><br><span class="line">		numEdges = scanner.nextInt();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			vexs[i] = scanner.nextInt();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">				arc[i][j] = INFINITY;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的下标i,j和权w：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> w = scanner.nextInt();</span><br><span class="line">			arc[i][j] = w;</span><br><span class="line">			arc[j][i] = arc[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		 visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		 System.out.println(vexs[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; numVertexes; j++) &#123;</span><br><span class="line">			 <span class="keyword">if</span>(arc[i][j] == <span class="number">1</span> &amp;&amp; !visited[j]) &#123;</span><br><span class="line">				 DFS(j);</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;<span class="comment">//对每一个顶点做循环</span></span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;<span class="comment">//若是未访问过就处理</span></span><br><span class="line">				visited[i] = <span class="keyword">true</span>;<span class="comment">//设置当前顶点访问过</span></span><br><span class="line">				System.out.println(<span class="keyword">this</span>.vexs[i]);<span class="comment">//打印顶点，也可以其他操作</span></span><br><span class="line">				queue.addLast(i);<span class="comment">//将此顶点入队列</span></span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="keyword">this</span>.numVertexes; j++) &#123;</span><br><span class="line">						<span class="keyword">if</span>(<span class="keyword">this</span>.arc[i][j] == <span class="number">1</span> &amp;&amp; !<span class="keyword">this</span>.visited[j]) &#123;</span><br><span class="line">							visited[j] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.vexs[j]);</span><br><span class="line">							queue.addLast(j);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EdgeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> adjvex;</span><br><span class="line">	EdgeNode next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VertexNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	EdgeNode firstedge;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphAdjList</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXVEX = <span class="number">100</span>;</span><br><span class="line">	VertexNode[] adjList= <span class="keyword">new</span> VertexNode[MAXVEX];</span><br><span class="line">	<span class="keyword">int</span> numVertexes;</span><br><span class="line">	<span class="keyword">int</span> numEdges;</span><br><span class="line">	<span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[MAXVEX];</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createALGraph</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		System.out.println(<span class="string">&quot;输入顶点数和边数：&quot;</span>);</span><br><span class="line">		<span class="keyword">this</span>.numVertexes = scanner.nextInt();</span><br><span class="line">		<span class="keyword">this</span>.numEdges = scanner.nextInt();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			VertexNode node = <span class="keyword">new</span> VertexNode();</span><br><span class="line">			node.data = scanner.nextInt();</span><br><span class="line">			node.firstedge = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i] = node;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="keyword">this</span>.numEdges; k++) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;输入边（vi,vj）上的顶点序号：\n&quot;</span>);</span><br><span class="line">			<span class="keyword">int</span> i = scanner.nextInt();</span><br><span class="line">			<span class="keyword">int</span> j = scanner.nextInt();</span><br><span class="line">			EdgeNode e = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e.adjvex = j;</span><br><span class="line">			e.next = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[i].firstedge = e;</span><br><span class="line">			</span><br><span class="line">			EdgeNode e2 = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">			e2.adjvex = i;</span><br><span class="line">			e2.next = <span class="keyword">this</span>.adjList[j].firstedge;</span><br><span class="line">			<span class="keyword">this</span>.adjList[j].firstedge = e2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">		visited[i] = <span class="keyword">true</span>;</span><br><span class="line">		System.out.println(<span class="keyword">this</span>.adjList[i].data + <span class="string">&quot; &quot;</span>);</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">		<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[p.adjvex]) &#123;</span><br><span class="line">				DFS(p.adjvex);</span><br><span class="line">			&#125;</span><br><span class="line">			p = p.next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.DFS(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BFSTraverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		LinkedList&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">		EdgeNode p = <span class="keyword">new</span> EdgeNode();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">this</span>.visited[i] = <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[i]) &#123;</span><br><span class="line">				<span class="keyword">this</span>.visited[i] = <span class="keyword">true</span>;</span><br><span class="line">				System.out.println(<span class="keyword">this</span>.adjList[i].data);<span class="comment">//打印顶点</span></span><br><span class="line">				queue.addLast(i);</span><br><span class="line">				<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">					queue.pop();</span><br><span class="line">					p = <span class="keyword">this</span>.adjList[i].firstedge;</span><br><span class="line">					<span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">						<span class="keyword">if</span>(!<span class="keyword">this</span>.visited[p.adjvex]) &#123;</span><br><span class="line">							<span class="keyword">this</span>.visited[p.adjvex] = <span class="keyword">true</span>;</span><br><span class="line">							System.out.println(<span class="keyword">this</span>.adjList[p.adjvex].data);</span><br><span class="line">							queue.add(p.adjvex);</span><br><span class="line">						&#125;</span><br><span class="line">						p = p.next;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DFSAndBFS</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//邻接矩阵</span></span><br><span class="line">		MGraph graph = <span class="keyword">new</span> MGraph();</span><br><span class="line">		graph.createMGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;邻接矩阵：\n&quot;</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; graph.numVertexes; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; graph.numVertexes; j++) &#123;</span><br><span class="line">				System.out.print(graph.arc[i][j]+<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println();</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接矩阵）：\n&quot;</span>);</span><br><span class="line">		graph.BFSTraverse();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//邻接表</span></span><br><span class="line">		GraphAdjList GL = <span class="keyword">new</span> GraphAdjList();</span><br><span class="line">		GL.createALGraph();</span><br><span class="line">		System.out.println(<span class="string">&quot;深度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.DFSTraverse();</span><br><span class="line">		System.out.println(<span class="string">&quot;广度优先搜索遍历图（邻接表）：\n&quot;</span>);</span><br><span class="line">		GL.BFSTraverse();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">island_dfs</span>(<span class="params">self, grid, i, j</span>):</span></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(grid) &gt; i &gt;= <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(grid[<span class="number">0</span>]) &gt; j &gt;= <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">if</span> grid[i][j] == <span class="number">0</span>:</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				grid[i][j] = <span class="number">0</span></span><br><span class="line">				<span class="keyword">return</span> <span class="number">1</span> + self.island_dfs(grid, i - <span class="number">1</span>, j) + self.island_dfs(grid, i + <span class="number">1</span>, j) + \</span><br><span class="line">				       self.island_dfs(grid, i, j - <span class="number">1</span>) + self.island_dfs(grid, i, j + <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">max_area_of_island</span>(<span class="params">self, grid</span>):</span></span><br><span class="line">		ans = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)):</span><br><span class="line">			<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid[<span class="number">0</span>])):</span><br><span class="line">				ans = <span class="built_in">max</span>(ans, self.island_dfs(grid, i, j))</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	s = Solution()</span><br><span class="line">	grid = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">	        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br><span class="line">	max_area = s.max_area_of_island(grid)</span><br><span class="line">	<span class="built_in">print</span>(max_area)</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法刷题</category>
+        <category>leetcode</category>
+        <category>DFS</category>
+        <category>695.岛屿的最大面积</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+        <tag>DFS</tag>
+        <tag>深度优先搜索</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设计模式 | 工厂方法模式</title>
     <url>/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h1><p><strong>why 工厂方法模式？</strong><br>简单工厂模式违背了开放封闭原则（开放了拓展，也开放了修改），如果需要增加功能就需要在工厂类中修改逻辑判断，于是工厂方法模式应运而生。</p>
@@ -23732,59 +23732,6 @@ app.MainLoop()  # 进入主事件循环
       </categories>
   </entry>
   <entry>
-    <title>SpringMVC | 异常处理</title>
-    <url>/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>1.在SpringMVC配置文件（springMVC.xml）中做以下配置：</p>
-<pre><code>&lt;!-- 异常处理 --&gt;
-&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;
-    &lt;property name=&quot;exceptionMappings&quot;&gt;
-        &lt;props&gt;
-            &lt;prop key=&quot;java.lang.NullPointerException&quot;&gt;error&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-<span id="more"></span>
-<p>2.index.jsp</p>
-<pre><code>&lt;a href=&quot;testException&quot;&gt;测试异常&lt;/a&gt;
-</code></pre>
-<p>3.TestExceptionController.java</p>
-<pre><code>package com.atguigu.controller;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-@Controller
-public class TestExceptionController &#123;
-    @RequestMapping(value=&quot;/testException&quot;, method=RequestMethod.GET)
-    public String testException()&#123;
-        String s = null;
-        System.err.println(s.substring(0, 5));
-        return &quot;success&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>4.error.jsp</p>
-<pre><code>&lt;a href=&quot;&quot;&gt;操作异常，请稍后重试&lt;/a&gt;
-
-$&#123;exception&#125;
-</code></pre>
-<p>5.运行结果<br><img src="/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/1.PNG"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>框架</category>
-        <category>SpringMVC</category>
-        <category>异常处理</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>SpringMVC</tag>
-        <tag>异常处理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring | 引用外部属性文件</title>
     <url>/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h1 id="引用外部属性文件"><a href="#引用外部属性文件" class="headerlink" title="引用外部属性文件"></a>引用外部属性文件</h1><p>1.项目目录<br><img src="/2022/03/05/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6/1.PNG"></p>
@@ -23867,6 +23814,59 @@ public class Test &#123;
       </categories>
       <tags>
         <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringMVC | 异常处理</title>
+    <url>/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>1.在SpringMVC配置文件（springMVC.xml）中做以下配置：</p>
+<pre><code>&lt;!-- 异常处理 --&gt;
+&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;
+    &lt;property name=&quot;exceptionMappings&quot;&gt;
+        &lt;props&gt;
+            &lt;prop key=&quot;java.lang.NullPointerException&quot;&gt;error&lt;/prop&gt;
+        &lt;/props&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<span id="more"></span>
+<p>2.index.jsp</p>
+<pre><code>&lt;a href=&quot;testException&quot;&gt;测试异常&lt;/a&gt;
+</code></pre>
+<p>3.TestExceptionController.java</p>
+<pre><code>package com.atguigu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class TestExceptionController &#123;
+    @RequestMapping(value=&quot;/testException&quot;, method=RequestMethod.GET)
+    public String testException()&#123;
+        String s = null;
+        System.err.println(s.substring(0, 5));
+        return &quot;success&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.error.jsp</p>
+<pre><code>&lt;a href=&quot;&quot;&gt;操作异常，请稍后重试&lt;/a&gt;
+
+$&#123;exception&#125;
+</code></pre>
+<p>5.运行结果<br><img src="/2022/03/17/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/1.PNG"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>SpringMVC</category>
+        <category>异常处理</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>SpringMVC</tag>
+        <tag>异常处理</tag>
       </tags>
   </entry>
   <entry>
@@ -30873,50 +30873,6 @@ controlthread.start()
   </entry>
   <entry>
     <title>并发 | 线程池</title>
-    <url>/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/</url>
-    <content><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><strong>线程池的实现原理</strong><br><img src="/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/1.jpg"><br><strong>线程池的使用</strong><br>（1）线程池的创建</p>
-<pre><code>new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,unit,workQueue, handler)
-
-Parameters:
-    corePoolSize: the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set
-    maximumPoolSize: the maximum number of threads to allow in the pool
-    keepAliveTime: when the number of threads is greater than the core, this is the maximum time that excess idle threads will wait for new tasks before terminating.
-    unit the time: unit for the keepAliveTime argument
-    workQueue：the queue to use for holding tasks before they are executed. This queue will hold only the Runnable tasks submitted by the execute method.
-    threadFactory: set thread factory
-    handler: the handler to use when execution is blocked because the thread bounds and queue capacities are reached
-    
-workQueue:
-    ArrayBlockingQueue：基于数组结构的有界阻塞队列
-    LinkedBlockingQueue：基于链表结果的阻塞队列
-    SynchronousQueue：不存储元素的阻塞队列
-    PriorityBlockingQueue:具有优先级的无限阻塞队列
-
-handler:
-    AbortPolicy:直接抛出RejectedExecutionException异常
-    CallerRunsPolicy:使用调用者所在线程来执行任务
-    DiscardOldestPolicy：丢弃掉在队列中存在时间最久的任务
-    DiscardPolicy:默认丢弃任务，不进行任何通知
-</code></pre>
-<p><a href="https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/">创建线程池的7种方式</a><br><a href="https://blog.csdn.net/qq_45404693/article/details/121020639">Executor框架</a></p>
-<span id="more"></span>
-<p>（2）向线程池提交任务<br>    execute():用于提交不需要返回值的任务。<br>    submit():用于提交需要返回值的任务。<br>（3）关闭线程池<br>    shutdown()<br>    shutdownNow()<br><strong>线程池的配置</strong><br>（1）<br>CPU密集型任务：配置 CPU数量+1 个线程的线程池；<br>IO密集型任务：配置 2*CPU数量 个线程的线程池；<br>混合型任务：两个事务执行时间相差不大，如果可以拆分，将其分解成一个CPU密集型任务和一个IO密集型任务，如果两个任务的执行时间相差太大，则没有必要拆分。<br>（2）优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理，让优先级高的任务先执行。<br>（3）执行时间不同的任务可以交给不同规模的线程池来处理，或者可以使用优先级队列，让执行时间段的任务先执行。<br>（4）依赖数据库连接池的任务，因为线程提交SQL后选哟等待数据库返回结果，等待的时间越长，则CPU空闲时间越长，应该设置较大的线程数。<br>（5）建议使用有界队列。</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-        <category>线程池</category>
-      </categories>
-      <tags>
-        <tag>并发</tag>
-        <tag>线程池</tag>
-        <tag>Executor</tag>
-        <tag>Executors</tag>
-        <tag>ThreadPoolExecutor</tag>
-        <tag>ScheduledThreadPoolExecutor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>并发 | 线程池</title>
     <url>/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</url>
     <content><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器时，<br>那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p>
 <pre><code>package concurrency.threadPool;
@@ -31093,6 +31049,50 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
       </tags>
   </entry>
   <entry>
+    <title>并发 | 线程池</title>
+    <url>/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/</url>
+    <content><![CDATA[<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><strong>线程池的实现原理</strong><br><img src="/2022/06/07/%E7%BA%BF%E7%A8%8B%E6%B1%A0-1/1.jpg"><br><strong>线程池的使用</strong><br>（1）线程池的创建</p>
+<pre><code>new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,unit,workQueue, handler)
+
+Parameters:
+    corePoolSize: the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set
+    maximumPoolSize: the maximum number of threads to allow in the pool
+    keepAliveTime: when the number of threads is greater than the core, this is the maximum time that excess idle threads will wait for new tasks before terminating.
+    unit the time: unit for the keepAliveTime argument
+    workQueue：the queue to use for holding tasks before they are executed. This queue will hold only the Runnable tasks submitted by the execute method.
+    threadFactory: set thread factory
+    handler: the handler to use when execution is blocked because the thread bounds and queue capacities are reached
+    
+workQueue:
+    ArrayBlockingQueue：基于数组结构的有界阻塞队列
+    LinkedBlockingQueue：基于链表结果的阻塞队列
+    SynchronousQueue：不存储元素的阻塞队列
+    PriorityBlockingQueue:具有优先级的无限阻塞队列
+
+handler:
+    AbortPolicy:直接抛出RejectedExecutionException异常
+    CallerRunsPolicy:使用调用者所在线程来执行任务
+    DiscardOldestPolicy：丢弃掉在队列中存在时间最久的任务
+    DiscardPolicy:默认丢弃任务，不进行任何通知
+</code></pre>
+<p><a href="https://victory-liao.github.io/2022/04/24/%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%847%E4%B8%AD%E6%96%B9%E5%BC%8F/">创建线程池的7种方式</a><br><a href="https://blog.csdn.net/qq_45404693/article/details/121020639">Executor框架</a></p>
+<span id="more"></span>
+<p>（2）向线程池提交任务<br>    execute():用于提交不需要返回值的任务。<br>    submit():用于提交需要返回值的任务。<br>（3）关闭线程池<br>    shutdown()<br>    shutdownNow()<br><strong>线程池的配置</strong><br>（1）<br>CPU密集型任务：配置 CPU数量+1 个线程的线程池；<br>IO密集型任务：配置 2*CPU数量 个线程的线程池；<br>混合型任务：两个事务执行时间相差不大，如果可以拆分，将其分解成一个CPU密集型任务和一个IO密集型任务，如果两个任务的执行时间相差太大，则没有必要拆分。<br>（2）优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理，让优先级高的任务先执行。<br>（3）执行时间不同的任务可以交给不同规模的线程池来处理，或者可以使用优先级队列，让执行时间段的任务先执行。<br>（4）依赖数据库连接池的任务，因为线程提交SQL后选哟等待数据库返回结果，等待的时间越长，则CPU空闲时间越长，应该设置较大的线程数。<br>（5）建议使用有界队列。</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+        <category>线程池</category>
+      </categories>
+      <tags>
+        <tag>并发</tag>
+        <tag>线程池</tag>
+        <tag>Executor</tag>
+        <tag>Executors</tag>
+        <tag>ThreadPoolExecutor</tag>
+        <tag>ScheduledThreadPoolExecutor</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>伪迹移除 | 经验模态分解</title>
     <url>/2021/02/23/%E7%BB%8F%E9%AA%8C%E6%A8%A1%E6%80%81%E5%88%86%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="EMD"><a href="#EMD" class="headerlink" title="EMD"></a>EMD</h1><p>EMD is an <b>empirical and data-driven method</b> developed to perform on <b>non-stationary</b>,<b>non-linear</b>, <b>stochastic</b> processes(it is ideally suitable for EEG signal analysis and processing)</p>
@@ -31123,17 +31123,6 @@ public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool
       </categories>
       <tags>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>绝对路径和相对路径</title>
-    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
-    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
-<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
-]]></content>
-      <tags>
-        <tag>绝对路径</tag>
-        <tag>相对路径</tag>
       </tags>
   </entry>
   <entry>
@@ -31171,6 +31160,17 @@ plt.show()
       </categories>
       <tags>
         <tag>matplotlib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>绝对路径和相对路径</title>
+    <url>/2020/11/29/%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84/</url>
+    <content><![CDATA[<h1 id="绝对路径和相对路径"><a href="#绝对路径和相对路径" class="headerlink" title="绝对路径和相对路径"></a>绝对路径和相对路径</h1><p><strong>绝对路径</strong>：相对于磁盘的位置定位文件的地址<br><strong>相对路径</strong>：相对于引用文件本身定位被引用文件的地址</p>
+<p>Note:<br>./ 当前文件所在目录下<br>../ 当前文件所在目录的上一级目录</p>
+]]></content>
+      <tags>
+        <tag>绝对路径</tag>
+        <tag>相对路径</tag>
       </tags>
   </entry>
   <entry>
@@ -31304,20 +31304,6 @@ print(max(word_frequency, key=word_frequency.get))
       </tags>
   </entry>
   <entry>
-    <title>深度学习 | 网络、模型、算法的区别</title>
-    <url>/2021/11/09/%E7%BD%91%E7%BB%9Cand%E6%A8%A1%E5%9E%8Band%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h1 id="网络、模型、算法的区别"><a href="#网络、模型、算法的区别" class="headerlink" title="网络、模型、算法的区别"></a>网络、模型、算法的区别</h1><p>网络: 一种简单的网络结构，不包含任何权重参数。</p>
-<p>模型： 设计一个网络后，在某些数据集上进行训练，得到一个包含权重参数的数据，称为模型。</p>
-<p>算法： 在模型的基础上通过一些代码具体实现某些相关目的，这些代码以及模型文件等等资源被称为某算法。</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络编程 | 网络中常见的协议以及术语</title>
     <url>/2020/10/22/%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8A%E6%9C%AF%E8%AF%AD/</url>
     <content><![CDATA[<h1 id="几种常见tcp、ip协议以及常见术语"><a href="#几种常见tcp、ip协议以及常见术语" class="headerlink" title="几种常见tcp、ip协议以及常见术语"></a>几种常见tcp、ip协议以及常见术语</h1><p>ICMP(internet 控制报文协议)—&gt;使用ping命令时</p>
@@ -31422,6 +31408,20 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 网络、模型、算法的区别</title>
+    <url>/2021/11/09/%E7%BD%91%E7%BB%9Cand%E6%A8%A1%E5%9E%8Band%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="网络、模型、算法的区别"><a href="#网络、模型、算法的区别" class="headerlink" title="网络、模型、算法的区别"></a>网络、模型、算法的区别</h1><p>网络: 一种简单的网络结构，不包含任何权重参数。</p>
+<p>模型： 设计一个网络后，在某些数据集上进行训练，得到一个包含权重参数的数据，称为模型。</p>
+<p>算法： 在模型的基础上通过一些代码具体实现某些相关目的，这些代码以及模型文件等等资源被称为某算法。</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode | 226.翻转二叉树</title>
     <url>/2022/07/16/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
     <content><![CDATA[<h1 id="226-翻转二叉树"><a href="#226-翻转二叉树" class="headerlink" title="226.翻转二叉树"></a>226.翻转二叉树</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。</p>
@@ -31514,22 +31514,6 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
-    <title>脑电伪迹降噪方法整理</title>
-    <url>/2021/11/15/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</url>
-    <content><![CDATA[<h1 id="脑电伪迹降噪方法整理"><a href="#脑电伪迹降噪方法整理" class="headerlink" title="脑电伪迹降噪方法整理"></a>脑电伪迹降噪方法整理</h1><p><a href="https://mp.weixin.qq.com/s/gRIP-fuYsZv2p92qptOmew">脑电伪迹降噪方法整理</a></p>
-]]></content>
-      <categories>
-        <category>Research and Paper</category>
-        <category>EEG</category>
-        <category>伪迹移除</category>
-        <category>脑电伪迹降噪方法整理</category>
-      </categories>
-      <tags>
-        <tag>伪迹移除</tag>
-        <tag>EEG</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>EEG | 脑电信号采用深度学习方法存在的问题</title>
     <url>/2020/11/10/%E8%84%91%E7%94%B5%E4%BF%A1%E5%8F%B7%E9%87%87%E7%94%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="脑电信号采用深度学习方法存在的问题"><a href="#脑电信号采用深度学习方法存在的问题" class="headerlink" title="脑电信号采用深度学习方法存在的问题"></a>脑电信号采用深度学习方法存在的问题</h1><p>深度学习是一种构造多层神经网络的机器学习方法，具有发现数据中隐藏的分布式特征表示的能力。</p>
@@ -31542,6 +31526,22 @@ if __name__ == &quot;__main__&quot;:
       </categories>
       <tags>
         <tag>深度学习</tag>
+        <tag>EEG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>脑电伪迹降噪方法整理</title>
+    <url>/2021/11/15/%E8%84%91%E7%94%B5%E4%BC%AA%E8%BF%B9%E9%99%8D%E5%99%AA%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h1 id="脑电伪迹降噪方法整理"><a href="#脑电伪迹降噪方法整理" class="headerlink" title="脑电伪迹降噪方法整理"></a>脑电伪迹降噪方法整理</h1><p><a href="https://mp.weixin.qq.com/s/gRIP-fuYsZv2p92qptOmew">脑电伪迹降噪方法整理</a></p>
+]]></content>
+      <categories>
+        <category>Research and Paper</category>
+        <category>EEG</category>
+        <category>伪迹移除</category>
+        <category>脑电伪迹降噪方法整理</category>
+      </categories>
+      <tags>
+        <tag>伪迹移除</tag>
         <tag>EEG</tag>
       </tags>
   </entry>
@@ -32364,6 +32364,20 @@ student_info(&#39;Molly&#39;,18, &#39;语文书&#39;,&#39;数学书&#39;,height=
       </tags>
   </entry>
   <entry>
+    <title>深度学习 | 计算图</title>
+    <url>/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h1><p>一个计算流程图，就是正向或者说从左到右的计算来计算成本函数𝐽，你可能<br>需要优化的函数，然后反向从右到左计算导数。<br><img src="/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/1.png"><br><b>参考吴恩达深度学习视频：</b><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver">https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver</a></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>深度学习基础</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>计算图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>urllib.request | 解码json数据</title>
     <url>/2021/08/05/%E8%A7%A3%E7%A0%81json%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<h1 id="使用json提供的loads-str-函数进行JSON数据的解码"><a href="#使用json提供的loads-str-函数进行JSON数据的解码" class="headerlink" title="使用json提供的loads(str)函数进行JSON数据的解码"></a>使用json提供的loads(str)函数进行JSON数据的解码</h1><p><strong>函数说明：</strong><br>    str - JSON字符串<br>    返回值 - python数据<br><strong>示例代码：</strong></p>
@@ -32398,20 +32412,6 @@ with urllib.request.urlopen(req) as response:
         <tag>python</tag>
         <tag>urllib</tag>
         <tag>json</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习 | 计算图</title>
-    <url>/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/</url>
-    <content><![CDATA[<h1 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h1><p>一个计算流程图，就是正向或者说从左到右的计算来计算成本函数𝐽，你可能<br>需要优化的函数，然后反向从右到左计算导数。<br><img src="/2021/06/19/%E8%AE%A1%E7%AE%97%E5%9B%BE/1.png"><br><b>参考吴恩达深度学习视频：</b><a href="https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver">https://www.bilibili.com/video/BV1FT4y1E74V?p=15&amp;spm_id_from=pageDriver</a></p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-        <category>深度学习基础</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>计算图</tag>
       </tags>
   </entry>
   <entry>
