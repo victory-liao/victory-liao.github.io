@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-07-04T16:06:47.115Z</updated>
+  <updated>2024-07-06T04:48:26.337Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计算机网络 | 网关是如何实现通信的</title>
+    <link href="http://example.com/2024/07/05/%E7%BD%91%E5%85%B3%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E9%80%9A%E4%BF%A1%E7%9A%84/"/>
+    <id>http://example.com/2024/07/05/%E7%BD%91%E5%85%B3%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E9%80%9A%E4%BF%A1%E7%9A%84/</id>
+    <published>2024-07-06T04:45:42.000Z</published>
+    <updated>2024-07-06T04:48:26.337Z</updated>
+    
+    <content type="html"><![CDATA[<p>在网络的使用过程中，“网关”是一个非常常见的术语，那么网关到底是什么？网关起到什么作用？</p><span id="more"></span><ol><li><p>什么是网关？</p><p>网关（Gateway）是指<code>连接两个或多个网络的设备</code>，它可以是<code>硬件设备</code>，也可以是<code>软件</code>，使用不同的协议进行通信，将来自一个网络的<code>数据格式</code>转换为另一个网络的数据格式。</p></li></ol><p>​    网关可以作为<code>网络的入口</code>，<code>将来自互联网的网络通信转化为局域网内部的通信</code>。</p><ol><li><p>常用的网关</p><ul><li>路由器（Router）</li><li><a href="https://blog.csdn.net/m0_73995538/article/details/131131682">防火墙（FIrewall）</a></li><li>代理服务器（Proxy Server）</li></ul></li><li><p>网关的作用</p><ul><li><p><strong>协议翻译</strong></p><p>网关能够在不同的网络协议之间进行翻译，实现在不同网络之间的通信，使得不同的网络之间可以顺畅地进行数据传输。 </p></li><li><p><strong>路由转发</strong></p><p>网关能够根据路由表的信息对传输的数据包进行路由选择，以保证数据包能够在网络中流动，从而实现网络各个节点之间的互联互通。 </p></li><li><p><strong>安全控制</strong></p><p>网关可以对网络中的数据包进行<code>过滤</code>、<code>代理</code>和<code>加密</code>，增强网络的安全性，保护网络中的重要数据不受到非法访问、攻击或破坏。 </p></li><li><p><strong>流量控制</strong></p><p>网关可以<code>限制网络数据传输的速率</code>，避免网络拥塞或流量过载，提高网络传输的效 。 </p></li><li><p><strong>功能扩展</strong></p><p>网关可以通过软件或硬件的升级来扩展其功能，例如访问控制、负载均衡、防火墙、 VPN等功能，提高网络的可用性和可靠性。</p></li></ul></li><li><p>网关是如何通信的？</p><p>假设你家中的网络如下： 192.168.1.2是一台计算机，使用内部IP地址，希望访问互联网上的<a href="http://www.baidu.com./">www.baidu.com。</a> 家庭路由器（192.168.1.1）是家庭网络的网关，与互联网相连。 当计算机192.168.1.2发出向 <a href="http://www.baidu.com的请求时，通信的过程如下：">www.baidu.com的请求时，通信的过程如下：</a> </p><ul><li>计算机192.168.1.2向家庭路由器 （192.168.1.1）发送数据包，数据包包含源地址 （192.168.1.2 和目标地址 （<a href="http://www.baidu.com),但是家庭路由器无法直接路由到www.baidu.com./">www.baidu.com），但是家庭路由器无法直接路由到www.baidu.com。</a> </li><li>家庭路由器收到数据包后会检查包头信息，并判断数据包是否有效。如果有效，家庭路由器会根据路由表判断应该将数据包发送到哪个网关去寻找 <a href="http://www.baidu.com./">www.baidu.com。</a></li><li>家庭路由器将数据包发送到互联网服务提供商 （ISP）的网关（例如203.208.48.96）。 </li><li>ISP的网关将数据包再次检查，并根据路由表将数据包转发到下一跳，直到能够到达 <a href="http://www.baidu.com所在的服务器./">www.baidu.com所在的服务器。</a> </li><li>数据包到达<a href="http://www.baidu.com所在的服务器后,服务器返回网页数据包,通过isp的网关、/">www.baidu.com所在的服务器后，服务器返回网页数据包，通过ISP的网关、</a> 家庭路由器和计算机192.168.1.2之间的相同路径，返回给发起请求的计算机。 </li><li>返回的数据包也是经过类似的过程返回给计算机192.168.1.2的。 在这个过程中，网关的主要作用是实现<code>地址转换</code>和<code>路由选择</code>，<code>将内部的IP地址转换成公网IP地址</code>，<code>将数据包转发到适当的目标地址</code>。但是请注意，在实际的通信过程中，数据包的传输可能因为路由选择、网络拥塞等多种原因而产生延迟、丢包等问题。</li></ul></li><li><p>常见家庭网络</p><p>![home network](./网关是如何实现通信的/home network.png)</p></li></ol><p>网关连接了外部网络（internet）与内部网络（家庭LAN）。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;在网络的使用过程中，“网关”是一个非常常见的术语，那么网关到底是什么？网关起到什么作用？&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="计算机基础" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="计算机网络" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="网关是如何实现通信的" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E5%85%B3%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E9%80%9A%E4%BF%A1%E7%9A%84/"/>
+    
+    
+    <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="网关" scheme="http://example.com/tags/%E7%BD%91%E5%85%B3/"/>
+    
+    <category term="通信" scheme="http://example.com/tags/%E9%80%9A%E4%BF%A1/"/>
+    
+    <category term="gateway" scheme="http://example.com/tags/gateway/"/>
+    
+    <category term="流量控制" scheme="http://example.com/tags/%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/"/>
+    
+    <category term="安全控制" scheme="http://example.com/tags/%E5%AE%89%E5%85%A8%E6%8E%A7%E5%88%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>计算机网络 | 虚拟机的不同网络模式</title>
@@ -567,31 +602,6 @@
     
     
     <category term="Git" scheme="http://example.com/tags/Git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Some Ideas | 2024年5月坚持清单</title>
-    <link href="http://example.com/2024/05/16/2024%E5%B9%B45%E6%9C%88%E5%9D%9A%E6%8C%81%E6%B8%85%E5%8D%95/"/>
-    <id>http://example.com/2024/05/16/2024%E5%B9%B45%E6%9C%88%E5%9D%9A%E6%8C%81%E6%B8%85%E5%8D%95/</id>
-    <published>2024-05-16T12:46:11.000Z</published>
-    <updated>2024-06-26T12:28:23.198Z</updated>
-    
-    <content type="html"><![CDATA[<p>列下后两年的坚持清单，两年后回来更新，希望在后面的2年时间里能够不负时光。</p><span id="more"></span><ul><li><p>未来坚持清单</p><ul><li>坚持阅读2年，一年5本书</li><li>坚持健身2年，每周锻炼3次</li><li>坚持写笔记，每年发博客笔记&gt;300篇</li><li>以2年为周期，每2年掌握一个核心技能</li></ul></li><li><p>留下激励自己的两句话</p><ul><li>流水不争先，争的是滔滔不绝。人生没有奇迹，只有努力的轨迹。如果要说奇迹。那奇迹一定藏在坚持的背后。</li><li>希望我20几岁做的事情，会让我在30岁时，让我更加自信，更加从容，更加有光芒</li></ul></li><li><p>2026.5.16日回来更新这篇笔记。加油我自己，不负时光。</p></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;列下后两年的坚持清单，两年后回来更新，希望在后面的2年时间里能够不负时光。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="V Life" scheme="http://example.com/categories/V-Life/"/>
-    
-    <category term="Some Ideas" scheme="http://example.com/categories/V-Life/Some-Ideas/"/>
-    
-    <category term="2024年5月坚持清单" scheme="http://example.com/categories/V-Life/Some-Ideas/2024%E5%B9%B45%E6%9C%88%E5%9D%9A%E6%8C%81%E6%B8%85%E5%8D%95/"/>
-    
-    
-    <category term="坚持清单" scheme="http://example.com/tags/%E5%9D%9A%E6%8C%81%E6%B8%85%E5%8D%95/"/>
     
   </entry>
   
