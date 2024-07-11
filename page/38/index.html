@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E6%9C%80%E5%B0%8F%E6%A0%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="post-title-link" itemprop="url">spring | bean的生命周期</a>
+            <a href="/2021/08/27/%E6%9C%80%E5%B0%8F%E6%A0%88/" class="post-title-link" itemprop="url">leetcode | 155.最小栈</a>
         </h2>
 
         <div class="post-meta">
@@ -214,14 +214,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-05 23:55:51" itemprop="dateCreated datePublished" datetime="2022-03-05T23:55:51-08:00">2022-03-05</time>
+              <time title="创建时间：2021-08-27 10:04:42" itemprop="dateCreated datePublished" datetime="2021-08-27T10:04:42-08:00">2021-08-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:14" itemprop="dateModified" datetime="2022-03-06T00:15:14-08:00">2022-03-06</time>
+                <time title="修改时间：2022-07-16 19:43:22" itemprop="dateModified" datetime="2022-07-16T19:43:22-08:00">2022-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -229,19 +229,19 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">栈</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E3%80%81bean%E7%9A%84%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">bean的生命周期、bean的后置处理器</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/155-%E6%9C%80%E5%B0%8F%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">155.最小栈</span></a>
                 </span>
             </span>
 
@@ -256,132 +256,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="bean的生命周期、bean的后置处理器"><a href="#bean的生命周期、bean的后置处理器" class="headerlink" title="bean的生命周期、bean的后置处理器"></a>bean的生命周期、bean的后置处理器</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/1.PNG"></p>
-<p>2.bean的生命周期（******）<br>① 通过构造器或工厂方法创建bean实例<br>② 为bean的属性设置值和对其他bean的引用<br>③ 调用bean的初始化方法<br>④  bean可以使用了<br>⑤ 当容器关闭时，调用bean的销毁方法</p>
-<p>3.Person.java</p>
-<pre><code>package com.atguigu.ioc.life;
-
-public class Person &#123;
-    private Integer id;
-    private String sex;
-    private String name;
-    
-    public Integer getId() &#123;
-        return id;
-    &#125;
-    
-    public void setId(Integer id) &#123;
-        System.out.println(&quot;Two:依赖注入&quot;);
-        this.id = id;
-    &#125;
-    
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    public String getName() &#123;
-        return name;
-    &#125;
-    
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    
-    public Person() &#123;
-        System.out.println(&quot;One:创建对象&quot;);
-    &#125;
-    
-    public void init()&#123;
-        System.out.println(&quot;Three:初始化&quot;);
-    &#125;
-    
-    
-
-    @Override
-    public String toString() &#123;
-        return &quot;Four: Person [id=&quot; + id + &quot;, sex=&quot; + sex + &quot;, name=&quot; + name + &quot;]&quot;;
-    &#125;
-
-    public void destroy()&#123;
-        System.out.println(&quot;Five:销毁&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>4.AfterHandler.java(后置处理器)</p>
-<pre><code>package com.atguigu.ioc.life;
-
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-
-public class AfterHandler implements BeanPostProcessor&#123;
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException &#123;
-        // TODO Auto-generated method stub
-        return bean;
-    &#125;
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException &#123;
-        Person person = (Person)bean;
-        if(person.getSex().equals(&quot;男&quot;))&#123;
-            person.setName(&quot;张无忌&quot;);
-        &#125;else&#123;
-            person.setName(&quot;赵敏&quot;);
-        &#125;
-        return person;
-    &#125;
- 
-&#125;
-</code></pre>
-<p>5.life.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;!-- 测试bean的生命周期 --&gt;
-    &lt;bean id=&quot;person&quot; class=&quot;com.atguigu.ioc.life.Person&quot; init-method=&quot;init&quot; destroy-method=&quot;destroy&quot;&gt;
-        &lt;property name=&quot;id&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 测试后置处理器 --&gt;
-    &lt;bean class=&quot;com.atguigu.ioc.life.AfterHandler&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>6.Test.java</p>
-<pre><code>package com.atguigu.ioc.life;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args) &#123;
-        // TODO Auto-generated method stub
-        ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(&quot;life.xml&quot;);
+          <h1 id="155-最小栈"><a href="#155-最小栈" class="headerlink" title="155.最小栈"></a>155.最小栈</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。<br>    push(x) —— 将元素 x 推入栈中。<br>    pop() —— 删除栈顶的元素。<br>    top() —— 获取栈顶元素。<br>    getMin() —— 检索栈中的最小元素。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/min-stack/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>栈的性质：先进后出</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E6%9C%80%E5%B0%8F%E6%A0%88/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        Person person = ac.getBean(&quot;person&quot;, Person.class);
-        System.out.println(person);
-        
-        ac.close();
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果</p>
-<pre><code>One:创建对象
-Two:依赖注入
-Three:初始化
-Four: Person [id=1001, sex=男, name=张无忌]
-二月 15, 2022 4:34:28 下午 org.springframework.context.support.ClassPathXmlApplicationContext doClose
-信息: Closing org.springframework.context.support.ClassPathXmlApplicationContext@2dda6444: startup date [Tue Feb 15 16:34:27 CST 2022]; root of context hierarchy
-Five:销毁
-</code></pre>
-
       
     </div>
 
@@ -400,7 +285,7 @@ Five:销毁
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -414,7 +299,7 @@ Five:销毁
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/" class="post-title-link" itemprop="url">spring | bean的作用域</a>
+            <a href="/2021/08/27/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/" class="post-title-link" itemprop="url">leetcode | 150.逆波兰表达式求值</a>
         </h2>
 
         <div class="post-meta">
@@ -424,14 +309,14 @@ Five:销毁
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-05 23:53:10" itemprop="dateCreated datePublished" datetime="2022-03-05T23:53:10-08:00">2022-03-05</time>
+              <time title="创建时间：2021-08-27 10:04:26" itemprop="dateCreated datePublished" datetime="2021-08-27T10:04:26-08:00">2021-08-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:25" itemprop="dateModified" datetime="2022-03-06T00:15:25-08:00">2022-03-06</time>
+                <time title="修改时间：2022-07-16 19:42:50" itemprop="dateModified" datetime="2022-07-16T19:42:50-08:00">2022-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -439,19 +324,19 @@ Five:销毁
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">栈</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/" itemprop="url" rel="index"><span itemprop="name">bean的作用域</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/150-%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/" itemprop="url" rel="index"><span itemprop="name">150.逆波兰表达式求值</span></a>
                 </span>
             </span>
 
@@ -466,70 +351,18 @@ Five:销毁
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="bean的作用域"><a href="#bean的作用域" class="headerlink" title="bean的作用域"></a>bean的作用域</h1><p>1.项目目录<br><img src="/2022/03/05/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/1.PNG"></p>
-<p>2.Student.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-public class Student &#123;
-    private Integer sid;
-    private String sname;
-    public Student() &#123;
-        System.out.println(&quot;Student 无参构造方法&quot;);
-    &#125;
-    public Integer getSid() &#123;
-        return sid;
-    &#125;
-    public void setSid(Integer sid) &#123;
-        this.sid = sid;
-    &#125;
-    public String getSname() &#123;
-        return sname;
-    &#125;
-    public void setSname(String sname) &#123;
-        this.sname = sname;
-    &#125;
-//    @Override
-//    public String toString() &#123;
-//        return &quot;Student [sid=&quot; + sid + &quot;, sname=&quot; + sname + &quot;]&quot;;
-//    &#125;
-&#125;
-</code></pre>
-<p>3.scope.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;bean id=&quot;student&quot; class=&quot;com.atguigu.ioc.scope.Student&quot; scope=&quot;singleton&quot;&gt;
-        &lt;property name=&quot;sid&quot; value=&quot;1001&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sname&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<p>4.Test.java</p>
-<pre><code>package com.atguigu.ioc.scope;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-    public static void main(String[] args)&#123;
-        /**
-         * 若spring中有单例模式（singleton）的bean，在初始化容器时就会创建此对象
-         * 而多例即原型(prototype)的bean，会在使用时创建
-         */
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;scope.xml&quot;);
+          <h1 id="150-逆波兰表达式求值"><a href="#150-逆波兰表达式求值" class="headerlink" title="150.逆波兰表达式求值"></a>150.逆波兰表达式求值</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>根据 逆波兰表示法，求表达式的值。<br>有效的算符包括 +、-、*、/ 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。<br>说明：<br>    整数除法只保留整数部分。<br>    给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。</p>
+<p>示例 1：<br>输入：tokens = [“2”,”1”,”+”,”3”,”*”]<br>输出：9<br>解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.栈<br>遍历逆波兰表达式中的每一个字符，遇到数字则将数字入栈，遇到运算符则将栈顶的两个操作数出栈作此运算符对应的运算，再将运算结果入栈，…，以此类推，直到遍历完整个表达式，栈中剩余的元素就是表达式的结果。<br>2.数组模拟栈<br>对于一个有效的逆波兰表达式，其长度 n 一定是奇数，且操作数的个数一定比运算符的个数多 1 个，即包含 (n+1)/2 个操作数和 (n-1)/2 个运算符。考虑遇到操作数和运算符时，栈内元素个数分别会如何变化：<br>    如果遇到操作数，则将操作数入栈，因此栈内元素增加 1 个；<br>    如果遇到运算符，则将两个操作数出栈，然后将一个新操作数入栈，因此栈内元素先减少 2 个再增加 1 个，结果是栈内元素减少 1 个。<br>由此可以得到操作数和运算符与栈内元素个数变化的关系：遇到操作数时，栈内元素增加 1 个；遇到运算符时，栈内元素减少 1 个。<br>最坏情况下，(n+1)/2 个操作数都在表达式的前面，(n-1)/2 个运算符都在表达式的后面，此时栈内元素最多为 (n+1)/2 个。在其余情况下，栈内元素总是少于 (n+1)/2 个。因此，在任何情况下，栈内元素最多可能有 (n+1)/2 个，将数组的长度定义为 (n+1)/2 即可。<br>具体实现方面，创建数组 stack 模拟栈，数组下标 0 的位置对应栈底，定义 index 表示栈顶元素的下标位置，初始时栈为空，index=−1。当遇到操作数和运算符时，进行如下操作：<br>    如果遇到操作数，则将 index 的值加 111，然后将操作数赋给 stack[index]；<br>    如果遇到运算符，则将 index 的值减 111，此时 stack[index] 和 stack[index+1] 的元素分别是左操作数和右操作数，使用运算符对两个操作数进行运算，将运算得到的新操作数赋给 stack[index]。<br>整个逆波兰表达式遍历完毕之后，栈内只有一个元素，因此 index=0，此时 stack[index] 即为逆波兰表达式的值。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-//        Student student1 = ac.getBean(&quot;student&quot;,Student.class);
-//        Student student2 = ac.getBean(&quot;student&quot;,Student.class);
-//        
-//        System.out.println(student1);
-//        System.out.println(student2);
-    &#125;
-&#125;
-</code></pre>
-
       
     </div>
 
@@ -548,7 +381,7 @@ public class Test &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/FactoryBean/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -562,7 +395,7 @@ public class Test &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/05/FactoryBean/" class="post-title-link" itemprop="url">spring | FactoryBean</a>
+            <a href="/2021/08/27/%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">leetcode | 141.环形链表</a>
         </h2>
 
         <div class="post-meta">
@@ -572,14 +405,14 @@ public class Test &#123;
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-05 23:49:32" itemprop="dateCreated datePublished" datetime="2022-03-05T23:49:32-08:00">2022-03-05</time>
+              <time title="创建时间：2021-08-27 10:04:00" itemprop="dateCreated datePublished" datetime="2021-08-27T10:04:00-08:00">2021-08-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:29" itemprop="dateModified" datetime="2022-03-06T00:15:29-08:00">2022-03-06</time>
+                <time title="修改时间：2022-07-16 19:33:02" itemprop="dateModified" datetime="2022-07-16T19:33:02-08:00">2022-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -587,19 +420,19 @@ public class Test &#123;
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">链表</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/FactoryBean/" itemprop="url" rel="index"><span itemprop="name">FactoryBean</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/141-%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">141.环形链表</span></a>
                 </span>
             </span>
 
@@ -614,85 +447,17 @@ public class Test &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h1><p>Spring中有两种类型的bean，一种是普通bean，另一种是工厂bean，即FactoryBean。工厂bean跟普通bean不同，其返回的对象不是指定类的一个实例，其返回的是该工厂bean的getObject方法所返回的对象。<br><strong>示例：</strong><br>1.项目目录<br><img src="/2022/03/05/FactoryBean/1.PNG"></p>
-<p>2.Car.java</p>
-<pre><code>package com.atguigu.spring.factorybean;
-
-public class Car &#123;
-    private String brand;
-    private Double price;
-    public String getBrand() &#123;
-        return brand;
-    &#125;
-    public void setBrand(String brand) &#123;
-        this.brand = brand;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Car [brand=&quot; + brand + &quot;, price=&quot; + price + &quot;]&quot;;
-    &#125;
-    public Double getPrice() &#123;
-        return price;
-    &#125;
-    public void setPrice(Double price) &#123;
-        this.price = price;
-    &#125;
-    
-&#125;
-</code></pre>
-<p>3.MyFactory.java</p>
-<pre><code>package com.atguigu.spring.factorybean;
-
-import org.springframework.beans.factory.FactoryBean;
-
-public class MyFactory implements FactoryBean&lt;Car&gt;&#123;
-    @Override
-    public Car getObject() throws Exception &#123;
-        Car car = new Car();
-        car.setBrand(&quot;奥迪&quot;);
-        car.setPrice(200000.0);
-        return car;
-    &#125;
-
-    @Override
-    public Class&lt;?&gt; getObjectType() &#123;
-        return Car.class;
-    &#125;
-
-    @Override
-    public boolean isSingleton() &#123;
-        return false;
-    &#125;
-&#125;
-</code></pre>
-<p>4.factory-bean.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-    
-    &lt;!-- 工厂bean --&gt;
-    &lt;bean id=&quot;factory&quot; class=&quot;com.atguigu.spring.factorybean.MyFactory&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>5.Test.java</p>
-<pre><code>package com.atguigu.spring.factorybean;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-
-    public static void main(String[] args) &#123;
-        // TODO Auto-generated method stub
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;factory-bean.xml&quot;);
-        Object bean = ac.getBean(&quot;factory&quot;);
-        System.out.println(bean);
-    &#125;
-&#125;
-</code></pre>
-<p>6.运行结果<br>Car [brand=奥迪, price=200000.0]</p>
-
+          <h1 id="141-环形链表"><a href="#141-环形链表" class="headerlink" title="141.环形链表"></a>141.环形链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个链表，判断链表中是否有环。<br>如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。<br>如果链表中存在环，则返回 true 。 否则，返回 false 。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/linked-list-cycle/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.哈希表<br>最容易想到的方法是遍历所有节点，每次遍历到一个节点时，判断该节点此前是否被访问过。<br>具体地，我们可以使用哈希表来存储所有已经访问过的节点。每次我们到达一个节点，如果该节点已经存在于哈希表中，则说明该链表是环形链表，否则就将该节点加入哈希表中。重复这一过程，直到我们遍历完整个链表即可。<br>2.快慢指针<br>定义两个指针，一快一慢。慢指针每次只移动一步，而快指针每次移动两步。初始时，慢指针在位置 head，而快指针在位置 head.next。这样一来，如果在移动的过程中，快指针反过来追上慢指针，就说明该链表为环形链表。否则快指针将到达链表尾部，该链表不为环形链表。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -711,7 +476,7 @@ public class Test &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -725,7 +490,7 @@ public class Test &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/05/%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC/" class="post-title-link" itemprop="url">spring | 属性赋值</a>
+            <a href="/2021/08/27/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">leetcode | 83.删除有序链表中的重复元素</a>
         </h2>
 
         <div class="post-meta">
@@ -735,14 +500,14 @@ public class Test &#123;
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-05 23:45:07" itemprop="dateCreated datePublished" datetime="2022-03-05T23:45:07-08:00">2022-03-05</time>
+              <time title="创建时间：2021-08-27 10:03:52" itemprop="dateCreated datePublished" datetime="2021-08-27T10:03:52-08:00">2021-08-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:37" itemprop="dateModified" datetime="2022-03-06T00:15:37-08:00">2022-03-06</time>
+                <time title="修改时间：2022-07-16 19:33:24" itemprop="dateModified" datetime="2022-07-16T19:33:24-08:00">2022-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -750,23 +515,19 @@ public class Test &#123;
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">链表</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" itemprop="url" rel="index"><span itemprop="name">依赖注入</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC/" itemprop="url" rel="index"><span itemprop="name">属性赋值</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/83-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/" itemprop="url" rel="index"><span itemprop="name">83.删除有序链表中的重复元素</span></a>
                 </span>
             </span>
 
@@ -781,344 +542,17 @@ public class Test &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="属性赋值-字面量和ref"><a href="#属性赋值-字面量和ref" class="headerlink" title="属性赋值-字面量和ref"></a>属性赋值-字面量和ref</h1><p>spring管理对象时，可以使用<property></property>标签给对象的属性赋值。<br>1.字面量<br><property name="name" vlaue="张三"></property><br><property name="age" vlaue="23"></property><br>…..<br>2.外部已声明的bean引用其他的bean(使用ref属性)<br>3.内部bean<br>4.集合属性赋值（list/array/set）<br>示例：<br>1.项目目录<br><img src="/2022/03/05/%E5%B1%9E%E6%80%A7%E8%B5%8B%E5%80%BC/2.PNG"><br>2.Student.java</p>
-<pre><code>package com.atguigu.spring.di;
-
-public class Student &#123;
-    private Integer id;
-    private String name;
-    private Integer age;
-    private String sex;
-    private Double score;
-    private Teacher teacher;
-    
-    
-    public Teacher getTeacher() &#123;
-        return teacher;
-    &#125;
-
-    public void setTeacher(Teacher teacher) &#123;
-        this.teacher = teacher;
-    &#125;
-
-    public Double getScore() &#123;
-        return score;
-    &#125;
-    
-    public void setScore(Double score) &#123;
-        this.score = score;
-    &#125;
-    
-    public Integer getId() &#123;
-        return id;
-    &#125;
-    
-    public void setId(Integer id) &#123;
-        this.id = id;
-    &#125;
-    
-    public String getName() &#123;
-        return name;
-    &#125;
-    
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    @Override
-    public String toString() &#123;
-        return &quot;Student [id=&quot; + id + &quot;, name=&quot; + name + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, score=&quot; + score
-                + &quot;, teacher=&quot; + teacher + &quot;]&quot;;
-    &#125;
-
-    public Student() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    
-    public Student(Integer id, String name, Integer age, String sex) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-    &#125;
-    
-    public Student(Integer id, String name, Double score, String sex)&#123;
-        this.id = id;
-        this.name = name;
-        this.score = score;
-        this.sex = sex;
-    &#125;
-&#125;
-</code></pre>
-<p>3.Teacher.java</p>
-<pre><code>package com.atguigu.spring.di;
-
-import java.util.List;
-import java.util.Map;
-
-public class Teacher &#123;
-    private Integer tid;
-    
-    private String tname;
-    
-    private List&lt;String&gt; cls;
-    
-    private List&lt;Student&gt; students;
-    
-    private Map&lt;String, String&gt; bossMap;
-    
-    public Map&lt;String, String&gt; getBossMap() &#123;
-        return bossMap;
-    &#125;
-    public void setBossMap(Map&lt;String, String&gt; bossMap) &#123;
-        this.bossMap = bossMap;
-    &#125;
-    public List&lt;Student&gt; getStudents() &#123;
-        return students;
-    &#125;
-    public void setStudents(List&lt;Student&gt; students) &#123;
-        this.students = students;
-    &#125;
-    public List&lt;String&gt; getCls() &#123;
-        return cls;
-    &#125;
-    public void setCls(List&lt;String&gt; cls) &#123;
-        this.cls = cls;
-    &#125;
-    public Integer getTid() &#123;
-        return tid;
-    &#125;
-    public void setTid(Integer tid) &#123;
-        this.tid = tid;
-    &#125;
-    public String getTname() &#123;
-        return tname;
-    &#125;
-    public void setTname(String tname) &#123;
-        this.tname = tname;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Teacher [tid=&quot; + tid + &quot;, tname=&quot; + tname + &quot;, cls=&quot; + cls + &quot;, students=&quot; + students + &quot;, bossMap=&quot;
-                + bossMap + &quot;]&quot;;
-    &#125;
-    
-    
-&#125;
-</code></pre>
-<p>5.beans-di.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xmlns:util=&quot;http://www.springframework.org/schema/util&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd&quot;&gt;
-
-    &lt;bean id=&quot;s1&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过set方法注入 --&gt;
-        &lt;property name=&quot;id&quot; value=&quot;10010&quot;&gt;&lt;/property&gt;
-        &lt;!-- 
-            &lt;property name=&quot;id&quot;&gt;
-                &lt;value&gt;10010&lt;/value&gt;
-            &lt;/property&gt;
-         --&gt;
-         
-        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;age&quot; value=&quot;23&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
+          <h1 id="83-删除有序链表中的重复元素"><a href="#83-删除有序链表中的重复元素" class="headerlink" title="83.删除有序链表中的重复元素"></a>83.删除有序链表中的重复元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除所有重复的元素，使每个元素 只出现一次 。<br>返回同样按升序排列的结果链表。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>一次遍历法<br>由于链表是按照升序排序的链表，所有重复的元素是相邻的，我们只需遍历一次链表，并判断当前节点与当前节点的后一节点所对应元素是否相等，<br>如果相等则将后者删除，如果不相等，工作指针继续后移，…，以此类推，当遍历完整个链表之后，我们返回链表的头节点即可。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-    &lt;bean id=&quot;s2&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过构造方法注入 --&gt;
-        &lt;constructor-arg value=&quot;10086&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;李四&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;24&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
-    &lt;/bean&gt;
-    
-    &lt;bean id=&quot;s3&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过构造方法注入 --&gt;
-        &lt;constructor-arg value=&quot;10022&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;王五&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;90&quot; index=&quot;2&quot; type=&quot;java.lang.Double&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- Namespaces勾选p（beans标签会增加内容xmlns:p=&quot;http://www.springframework.org/schema/p&quot;） --&gt;
-    &lt;bean id=&quot;s4&quot; class=&quot;com.atguigu.spring.di.Student&quot; p:id=&quot;10033&quot; p:name=&quot;赵六&quot; p:age=&quot;26&quot; p:sex=&quot;男&quot; p:teacher-ref=&quot;teacher&quot;&gt;&lt;/bean&gt;
-    
-    &lt;!-- 给bean的级联属性赋值 --&gt;
-    &lt;bean id=&quot;s5&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;property name=&quot;id&quot; value=&quot;10055&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;name&quot; value=&quot;张三三&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;age&quot; value=&quot;23&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;teacher&quot; ref=&quot;teacher&quot;&gt;&lt;/property&gt;
-        
-        &lt;!-- 级联测试 给bean的级联属性赋值--&gt;
-        &lt;property name=&quot;teacher.tname&quot; value=&quot;小红&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-        
-    &lt;!-- 外部已声明的bean、引用其他的bean --&gt;
-    &lt;bean id=&quot;teacher&quot; class=&quot;com.atguigu.spring.di.Teacher&quot;&gt;
-        &lt;property name=&quot;tid&quot; value=&quot;10000&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;tname&quot; value=&quot;小明&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
-    
-    &lt;!-- 内部bean --&gt;
-    &lt;bean id=&quot;s6&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;property name=&quot;id&quot; value=&quot;10066&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;name&quot; value=&quot;崔八&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;age&quot; value=&quot;18&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;teacher&quot;&gt;
-            &lt;bean id=&quot;tt&quot; class=&quot;com.atguigu.spring.di.Teacher&quot;&gt;
-                &lt;property name=&quot;tid&quot; value=&quot;2222&quot;&gt;&lt;/property&gt;
-                &lt;property name=&quot;tname&quot; value=&quot;admin&quot;&gt;&lt;/property&gt;
-            &lt;/bean&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-    &lt;!-- 定义在某个bean内部的bean，只能在当前bean中使用 --&gt;
-    &lt;!-- 
-        &lt;bean id=&quot;s7&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-            &lt;property name=&quot;id&quot; value=&quot;10066&quot;&gt;&lt;/property&gt;
-            &lt;property name=&quot;name&quot; value=&quot;崔八&quot;&gt;&lt;/property&gt;
-            &lt;property name=&quot;age&quot; value=&quot;18&quot;&gt;&lt;/property&gt;
-            &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-            &lt;property name=&quot;teacher&quot; ref=&quot;tt&quot;&gt;
-            &lt;/property&gt;
-        &lt;/bean&gt;
-     --&gt;
-     
-     &lt;!-- list属性赋值1 --&gt;
-     &lt;bean id=&quot;t1&quot; class=&quot;com.atguigu.spring.di.Teacher&quot;&gt;
-        &lt;property name=&quot;tid&quot; value=&quot;0000&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;tname&quot; value=&quot;佟老师&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;cls&quot;&gt;
-            &lt;list&gt;
-                &lt;value&gt;A&lt;/value&gt;
-                &lt;value&gt;B&lt;/value&gt;
-                &lt;value&gt;C&lt;/value&gt;
-            &lt;/list&gt;
-        &lt;/property&gt;
-     &lt;/bean&gt;
-     
-     &lt;!-- list属性赋值2 --&gt;
-     &lt;bean id=&quot;t2&quot; class=&quot;com.atguigu.spring.di.Teacher&quot;&gt;
-        &lt;property name=&quot;tid&quot; value=&quot;10002&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;tname&quot; value=&quot;婷姐&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;students&quot;&gt;
-            &lt;list&gt;
-                &lt;ref bean=&quot;s1&quot;/&gt;
-                &lt;ref bean=&quot;s2&quot;/&gt;
-                &lt;ref bean=&quot;s3&quot;/&gt;
-            &lt;/list&gt;
-        &lt;/property&gt;
-     &lt;/bean&gt;
-     
-     &lt;!-- array属性赋值 --&gt;
-     &lt;!-- set属性赋值 --&gt;
-     
-     &lt;!-- map属性赋值 --&gt;
-     &lt;bean id=&quot;t3&quot; class=&quot;com.atguigu.spring.di.Teacher&quot;&gt;
-        &lt;property name=&quot;tid&quot; value=&quot;10003&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;tname&quot; value=&quot;admin&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;bossMap&quot;&gt;
-            &lt;map&gt;
-                &lt;entry&gt;
-                    &lt;key&gt;
-                        &lt;value&gt;10001&lt;/value&gt;
-                    &lt;/key&gt;
-                    &lt;value&gt;佟老师&lt;/value&gt;
-                &lt;/entry&gt;
-                
-                &lt;entry&gt;
-                    &lt;key&gt;
-                        &lt;value&gt;10002&lt;/value&gt;
-                    &lt;/key&gt;
-                    &lt;value&gt;陈老师&lt;/value&gt;
-                &lt;/entry&gt;
-            &lt;/map&gt;
-        &lt;/property&gt;
-     &lt;/bean&gt;
-     
-     &lt;bean id=&quot;t4&quot; class=&quot;com.atguigu.spring.di.Teacher&quot;&gt;
-        &lt;property name=&quot;tid&quot; value=&quot;10004&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;tname&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;students&quot; ref=&quot;students&quot;&gt;&lt;/property&gt;
-     &lt;/bean&gt;
-    
-    &lt;util:list id=&quot;students&quot;&gt;
-        &lt;ref bean=&quot;s4&quot;/&gt;
-        &lt;ref bean=&quot;s5&quot;/&gt;
-        &lt;ref bean=&quot;s6&quot;/&gt;
-    &lt;/util:list&gt;
-    
-    &lt;util:map id=&quot;map&quot;&gt;
-        &lt;entry&gt;
-            &lt;key&gt;
-                &lt;value&gt;1&lt;/value&gt;
-            &lt;/key&gt;
-            &lt;value&gt;张三&lt;/value&gt;
-        &lt;/entry&gt;
-    &lt;/util:map&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>6.Test.java</p>
-<pre><code>package com.atguigu.spring.di;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test &#123;
-
-    public static void main(String[] args) &#123;
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;beans-di.xml&quot;);
-        
-        Student s1 = ac.getBean(&quot;s1&quot;, Student.class);
-        Student s2 = ac.getBean(&quot;s2&quot;, Student.class);
-        Student s3 = ac.getBean(&quot;s3&quot;, Student.class);
-        Student s4 = ac.getBean(&quot;s4&quot;, Student.class);
-        Student s5 = ac.getBean(&quot;s5&quot;, Student.class);
-        Student s6 = ac.getBean(&quot;s6&quot;, Student.class);
-        Teacher t1 = ac.getBean(&quot;t1&quot;, Teacher.class);
-        Teacher t2 = ac.getBean(&quot;t2&quot;, Teacher.class);
-        Teacher t3 = ac.getBean(&quot;t3&quot;, Teacher.class);
-        Teacher t4 = ac.getBean(&quot;t4&quot;, Teacher.class);
-        
-        System.out.println(s1);
-        System.out.println(s2);
-        System.out.println(s3);
-        System.out.println(s4);
-        System.out.println(s5);
-        System.out.println(s6);
-        System.out.println(t1);
-        System.out.println(t2);
-        System.out.println(t3);
-        System.out.println(t4);
-    &#125;
-&#125;
-</code></pre>
-
       
     </div>
 
@@ -1137,7 +571,7 @@ public class Test &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -1151,7 +585,7 @@ public class Test &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">spring | 注入方式</a>
+            <a href="/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">leetcode | 61.旋转链表</a>
         </h2>
 
         <div class="post-meta">
@@ -1161,14 +595,14 @@ public class Test &#123;
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-05 23:34:44" itemprop="dateCreated datePublished" datetime="2022-03-05T23:34:44-08:00">2022-03-05</time>
+              <time title="创建时间：2021-08-27 10:03:36" itemprop="dateCreated datePublished" datetime="2021-08-27T10:03:36-08:00">2021-08-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 00:15:46" itemprop="dateModified" datetime="2022-03-06T00:15:46-08:00">2022-03-06</time>
+                <time title="修改时间：2022-07-16 19:33:44" itemprop="dateModified" datetime="2022-07-16T19:33:44-08:00">2022-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1176,23 +610,19 @@ public class Test &#123;
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">链表</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" itemprop="url" rel="index"><span itemprop="name">依赖注入</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/spring/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">依赖注入的两种方式</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/61-%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">61.旋转链表</span></a>
                 </span>
             </span>
 
@@ -1207,133 +637,498 @@ public class Test &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="依赖注入的两种方式"><a href="#依赖注入的两种方式" class="headerlink" title="依赖注入的两种方式"></a>依赖注入的两种方式</h1><ol>
-<li>通过bean的setXxx()方法赋值</li>
-<li>通过bean的构造器赋值<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2></li>
-<li>项目目录<br><img src="/2022/03/05/%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F/1.PNG"></li>
-</ol>
-<p>2.创建Student.java</p>
-<pre><code>package com.atguigu.spring.di;
-
-public class Student &#123;
-    private Integer id;
-    private String name;
-    private Integer age;
-    private String sex;
-    private Double score;
-    public Double getScore() &#123;
-        return score;
-    &#125;
-    public void setScore(Double score) &#123;
-        this.score = score;
-    &#125;
-    public Integer getId() &#123;
-        return id;
-    &#125;
-    public void setId(Integer id) &#123;
-        this.id = id;
-    &#125;
-    public String getName() &#123;
-        return name;
-    &#125;
-    public void setName(String name) &#123;
-        this.name = name;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    @Override
-    public String toString() &#123;
-        return &quot;Student [id=&quot; + id + &quot;, name=&quot; + name + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, score=&quot; + score + &quot;]&quot;;
-    &#125;
-    public Student() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-    public Student(Integer id, String name, Integer age, String sex) &#123;
-        super();
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-    &#125;
-    
-    public Student(Integer id, String name, Double score, String sex)&#123;
-        this.id = id;
-        this.name = name;
-        this.score = score;
-        this.sex = sex;
-    &#125;
-&#125;
-</code></pre>
-<p>3.创建beans-di.xml配置文件</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;s1&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过set方法注入 --&gt;
-        &lt;property name=&quot;id&quot; value=&quot;10010&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;name&quot; value=&quot;张三&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;age&quot; value=&quot;23&quot;&gt;&lt;/property&gt;
-        &lt;property name=&quot;sex&quot; value=&quot;男&quot;&gt;&lt;/property&gt;
-    &lt;/bean&gt;
+          <h1 id="61-旋转链表"><a href="#61-旋转链表" class="headerlink" title="61.旋转链表"></a>61.旋转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/rotate-list/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>方法一：</strong> 闭合为环<br>记给定链表的长度为 n，注意到当向右移动的次数 k≥n 时，我们仅需要向右移动 k mod n 次即可。因为每 n 次移动都会让链表变为原状。这样我们可以知道，新链表的最后一个节点为原链表的第 (n−1)−(k mod n) 个节点（从 0 开始计数）。<br>这样，我们可以先将给定的链表连接成环，然后将指定位置断开。<br>具体代码中，我们首先计算出链表的长度 n，并找到该链表的末尾节点，将其与头节点相连。这样就得到了闭合为环的链表。然后我们找到新链表的最后一个节点（即原链表的第 (n−1)−(k mod n) 个节点），将当前闭合为环的链表断开，即可得到我们所需要的结果。<br><strong>方法二：</strong> 将后k个节点移到前n-k个节点之前（n为链表长度）<br><strong>特别地，当链表长度不大于 1，或者 k 为 n 的倍数时，新链表将与原链表相同，我们无需进行任何处理。</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-    &lt;bean id=&quot;s2&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过构造方法注入 --&gt;
-        &lt;constructor-arg value=&quot;10086&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;李四&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;24&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
-    &lt;/bean&gt;
+      
+    </div>
+
     
-    &lt;bean id=&quot;s3&quot; class=&quot;com.atguigu.spring.di.Student&quot;&gt;
-        &lt;!-- 通过构造方法注入 --&gt;
-        &lt;constructor-arg value=&quot;10022&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;王五&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;90&quot; index=&quot;2&quot; type=&quot;java.lang.Double&quot;&gt;&lt;/constructor-arg&gt;
-        &lt;constructor-arg value=&quot;女&quot;&gt;&lt;/constructor-arg&gt;
-    &lt;/bean&gt;
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-    &lt;!-- Namespaces勾选p（beans标签会增加内容xmlns:p=&quot;http://www.springframework.org/schema/p&quot;） --&gt;
-    &lt;bean id=&quot;s4&quot; class=&quot;com.atguigu.spring.di.Student&quot; p:id=&quot;10033&quot; p:name=&quot;赵六&quot; p:age=&quot;26&quot; p:sex=&quot;男&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>4.编写测试类</p>
-<pre><code>package com.atguigu.spring.di;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/">
 
-public class Test &#123;
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
 
-    public static void main(String[] args) &#123;
-        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;beans-di.xml&quot;);
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/27/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">leetcode | 21.合并两个有序链表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-27 10:03:22" itemprop="dateCreated datePublished" datetime="2021-08-27T10:03:22-08:00">2021-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-16 19:34:33" itemprop="dateModified" datetime="2022-07-16T19:34:33-08:00">2022-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">链表</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E9%93%BE%E8%A1%A8/21-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">21.合并两个有序链表</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="21-合并两个有序链表"><a href="#21-合并两个有序链表" class="headerlink" title="21.合并两个有序链表"></a>21.合并两个有序链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-two-sorted-lists/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>方法1：递归<br>如果 l1 或者 l2 一开始就是空链表 ，那么没有任何操作需要合并，所以我们只需要返回非空链表。否则，我们要判断 l1 和 l2 哪一个链表的头节点的值更小，然后递归地决定下一个添加到结果里的节点。如果两个链表有一个为空，递归结束。<br>方法2：迭代<br>当 l1 和 l2 都不是空链表时，判断 l1 和 l2 哪一个链表的头节点的值更小，将较小值的节点添加到结果里，当一个节点被添加到结果里之后，将对应链表中的节点向后移一位。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        Student s1 = ac.getBean(&quot;s1&quot;, Student.class);
-        Student s2 = ac.getBean(&quot;s2&quot;, Student.class);
-        Student s3 = ac.getBean(&quot;s3&quot;, Student.class);
-        Student s4 = ac.getBean(&quot;s4&quot;, Student.class);
-        System.out.println(s1);
-        System.out.println(s2);
-        System.out.println(s3);
-        System.out.println(s4);
-    &#125;
+      
+    </div>
 
-&#125;
-</code></pre>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/27/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/" class="post-title-link" itemprop="url">leetcode | 20.有效的括号</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-27 10:03:10" itemprop="dateCreated datePublished" datetime="2021-08-27T10:03:10-08:00">2021-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-16 19:41:04" itemprop="dateModified" datetime="2022-07-16T19:41:04-08:00">2022-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">栈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%A0%88/20-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/" itemprop="url" rel="index"><span itemprop="name">20.有效的括号</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="20-有效的括号"><a href="#20-有效的括号" class="headerlink" title="20.有效的括号"></a>20.有效的括号</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串 s ，判断字符串是否有效。<br>有效字符串需满足：<br>    左括号必须用相同类型的右括号闭合。<br>    左括号必须以正确的顺序闭合。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-parentheses/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>遍历字符串，遇到右括号将右括号入栈，遇到左括号判断此左括号是否与栈顶括号相同，若相同则将栈顶元素出栈，…，最后在遍历结束后判断栈是否为空，若为空则为有效括号。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/27/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/" class="post-title-link" itemprop="url">leetcode | 14.最长公共前缀</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-27 10:03:01" itemprop="dateCreated datePublished" datetime="2021-08-27T10:03:01-08:00">2021-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-16 20:01:58" itemprop="dateModified" datetime="2022-07-16T20:01:58-08:00">2022-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url" rel="index"><span itemprop="name">字符串</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/14-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/" itemprop="url" rel="index"><span itemprop="name">14.最长公共前缀</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="14-最长公共前缀"><a href="#14-最长公共前缀" class="headerlink" title="14.最长公共前缀"></a>14.最长公共前缀</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>编写一个函数来查找字符串数组中的最长公共前缀。<br>如果不存在公共前缀，返回空字符串 “”。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-common-prefix/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li><p>横向扫描<br>用 LCP(S1…Sn) 表示字符串 S1…Sn​的最长公共前缀。<br>可以得到以下结论：<br>LCP(S1…Sn)=LCP(LCP(LCP(S1,S2),S3),…Sn)<br>基于该结论，可以得到一种查找字符串数组中的最长公共前缀的简单方法。依次遍历字符串数组中的每个字符串，对于每个遍历到的字符串，更新最长公共前缀，当遍历完所有的字符串以后，即可得到字符串数组中的最长公共前缀。<br>如果在尚未遍历完所有的字符串时，最长公共前缀已经是空串，则最长公共前缀一定是空串，因此不需要继续遍历剩下的字符串，直接返回空串即可。</p>
+</li>
+<li><p>纵向扫描<br>纵向扫描时，从前往后遍历所有字符串的每一列，比较相同列上的字符是否相同，如果相同则继续对下一列进行比较，如果不相同则当前列不再属于公共前缀，当前列之前的部分为最长公共前缀。</p></li></ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/27/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/" class="post-title-link" itemprop="url">leetcode | 13.罗马数字转整数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-27 10:02:44" itemprop="dateCreated datePublished" datetime="2021-08-27T10:02:44-08:00">2021-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-16 20:00:50" itemprop="dateModified" datetime="2022-07-16T20:00:50-08:00">2022-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url" rel="index"><span itemprop="name">字符串</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E5%AD%97%E7%AC%A6%E4%B8%B2/13-%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">13.罗马数字转整数</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="13-罗马数字转整数"><a href="#13-罗马数字转整数" class="headerlink" title="13.罗马数字转整数"></a>13.罗马数字转整数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。</p>
+<p>字符          数值<br>I             1<br>V             5<br>X             10<br>L             50<br>C             100<br>D             500<br>M             1000</p>
+<p>例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。<br>通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：<br>    I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。<br>    X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。<br>    C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。<br>给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/roman-to-integer/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>通常情况下，罗马数字中小的数字在大的数字的右边。若输入的字符串满足该情况，那么可以将每个字符视作一个单独的值，累加每个字符对应的数值即可。<br>例如 XXVII 可视作 X+X+V+I+I=10+10+5+1+1=27。<br>若存在小的数字在大的数字的左边的情况，根据规则需要减去小的数字。对于这种情况，我们也可以将每个字符视作一个单独的值，若一个数字右侧的数字比它大，则将该数字的符号取反。<br>例如 XIV 可视作 X−I+V=10−1+5=14。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/27/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/27/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/" class="post-title-link" itemprop="url">leetcode | 11.盛最多水的容器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-27 10:02:31" itemprop="dateCreated datePublished" datetime="2021-08-27T10:02:31-08:00">2021-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-16 19:47:59" itemprop="dateModified" datetime="2022-07-16T19:47:59-08:00">2022-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/11-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">11.盛最多水的容器</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="11-盛最多水的容器"><a href="#11-盛最多水的容器" class="headerlink" title="11.盛最多水的容器"></a>11.盛最多水的容器</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。<br>说明：你不能倾斜容器。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/container-with-most-water/">题目链接</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li><p>双指针法<br>height=[a1,a2,…,an]<br>起始两个指针l、r分别指向n个非负整数的两端，接着计算容器容积area = min(height[l], height[r]) * (r - l),然后移动l、r指针中指针指向元素较小的那个指针（向另一个指针所在的方向移动），再计算area,…,以此类推，然会最大的area</p></li></ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/27/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1351,7 +1146,7 @@ public class Test &#123;
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/37/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><span class="page-number current">38</span><a class="page-number" href="/page/39/">39</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/39/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/37/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><span class="page-number current">38</span><a class="page-number" href="/page/39/">39</a><span class="space">&hellip;</span><a class="page-number" href="/page/52/">52</a><a class="extend next" rel="next" href="/page/39/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1419,20 +1214,20 @@ public class Test &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">513</span>
+          <span class="site-state-item-count">516</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">441</span>
+        <span class="site-state-item-count">466</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">442</span>
+        <span class="site-state-item-count">454</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

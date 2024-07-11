@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/09/%E5%8A%A8%E6%80%81SQL/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/04/09/%E5%8A%A8%E6%80%81SQL/" class="post-title-link" itemprop="url">MyBatis | 动态SQL</a>
+            <a href="/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/" class="post-title-link" itemprop="url">pandas | 一键更新Excel中的图表</a>
         </h2>
 
         <div class="post-meta">
@@ -213,29 +213,31 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-09 01:33:11 / 修改时间：01:37:21" itemprop="dateCreated datePublished" datetime="2022-04-09T01:33:11-08:00">2022-04-09</time>
+              <time title="创建时间：2021-11-01 19:41:37" itemprop="dateCreated datePublished" datetime="2021-11-01T19:41:37-08:00">2021-11-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-04 18:08:35" itemprop="dateModified" datetime="2021-11-04T18:08:35-08:00">2021-11-04</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%8A%A8%E6%80%81SQL/" itemprop="url" rel="index"><span itemprop="name">动态SQL</span></a>
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a>
                 </span>
             </span>
 
@@ -250,335 +252,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h1><p>1.项目目录<br><img src="/2022/04/09/%E5%8A%A8%E6%80%81SQL/1.PNG"><br>2.EmpMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpMapper &#123;
-    //根据eid,ename,age,sex多条件查询员工信息
-    List&lt;Emp&gt; getEmpListByMoreTJ(Emp emp);
-    
-    //根据eid,ename,age,sex其中一个查询员工信息
-    List&lt;Emp&gt; getEmpListByChoose(Emp emp);
-    
-    //添加员工信息，将0|1--&gt;女|男
-    void insertEmp(Emp emp);
-    
-    //根据eid所组成的字符串进行批量删除
-    void deleteMoreEmp(String eids);
-    
-    //通过list集合实现批量删除
-    //void deleteMoreByList(List&lt;Integer&gt; eids);
-    void deleteMoreByList(@Param(&quot;eids&quot;)List&lt;Integer&gt; eids);
-    
-    //批量添加
-    void insertMoreByArray(Emp[] emps);
-    
-    //批量修改
-    void updateMoreByArray(@Param(&quot;emps&quot;)Emp[] emps);
-&#125;
-</code></pre>
-<p>3.EmpMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpMapper&quot;&gt;
-    &lt;!--
-         &lt;sql id=&quot;&quot;&gt;&lt;/sql&gt;:设置一段SQL片段，即公共SQL，可以被当前映射文件中所有的SQL语句所访问
-     --&gt;
-    &lt;sql id=&quot;empColumns&quot;&gt;
-        select eid,ename,age,sex,did from emp
-    &lt;/sql&gt;
-
-    &lt;!-- List&lt;Emp&gt; getEmpListByMoreTJ(); --&gt;
-    &lt;!--
-        多条件查询：若页面中没有设置此条件，SQL语句中一定不能有该条件
-     --&gt;
-    &lt;!--
-        &lt;if test=&quot;&quot;&gt;&lt;/if&gt;:通过test表达式拼接SQL 
-        &lt;where&gt;:添加where关键字并去掉多余的and
-        &lt;trim prefix=&quot;&quot; suffix=&quot;&quot; prefixOverrides=&quot;&quot; suffixOverrides=&quot;&quot;&gt;:截取并拼接
-        prefix:在操作的SQL语句前加入某些内容
-        suffix:在操作的SQL语句后加入某些内容
-        prefixOverrides:把操作的SQL语句前的某些内容去掉
-        suffixOverrides:把操作的SQL语句后的某些内容去掉
-     --&gt;
-    &lt;select id=&quot;getEmpListByMoreTJ&quot; resultType=&quot;Emp&quot;&gt;
-        &lt;!-- select eid,ename,age,sex,did from emp
-        where 1 = 1
-        &lt;if test=&quot;eid != null&quot;&gt;
-            and eid=#&#123;eid&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-            and ename=#&#123;ename&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;age != null&quot;&gt;
-            and age=#&#123;age&#125;
-        &lt;/if&gt;
-        &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-            and sex=#&#123;sex&#125;
-        &lt;/if&gt; --&gt;
+          <h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        
-        &lt;!-- select eid,ename,age,sex,did from emp
-        &lt;where&gt;
-            &lt;if test=&quot;eid != null&quot;&gt;
-                and eid=#&#123;eid&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                and ename=#&#123;ename&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;age != null&quot;&gt;
-                and age=#&#123;age&#125;
-            &lt;/if&gt;
-            &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-                and sex=#&#123;sex&#125;
-            &lt;/if&gt;
-        &lt;/where&gt; --&gt;
-        
-        &lt;!-- select eid,ename,age,sex,did from emp --&gt;
-        &lt;include refid=&quot;empColumns&quot;&gt;&lt;/include&gt;
-        &lt;trim prefix=&quot;where&quot; suffixOverrides=&quot;and|or&quot;&gt;
-            &lt;if test=&quot;eid != null&quot;&gt;
-                eid=#&#123;eid&#125; and
-            &lt;/if&gt;
-            &lt;if test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                ename=#&#123;ename&#125; and
-            &lt;/if&gt;
-            &lt;if test=&quot;age != null&quot;&gt;
-                age=#&#123;age&#125; or
-            &lt;/if&gt;
-            &lt;if test=&quot;sex == &#39;1&#39; or sex == &#39;0&#39;&quot;&gt;
-                sex=#&#123;sex&#125;
-            &lt;/if&gt;
-        &lt;/trim&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- List&lt;Emp&gt; getEmpListByChoose(Emp emp); --&gt;
-    &lt;!--
-        &lt;choose&gt;选择某一个when或otherwise执行
-            &lt;when test=&quot;&quot;&gt;&lt;/when&gt;：通过test表达式拼接SQL
-            .
-            .
-            .
-            &lt;otherwise&gt;&lt;/otherwise&gt;:当when都不符合条件，就会选择otherwise拼接SQL语句
-        &lt;/choose&gt; 
-     --&gt;
-    &lt;select id=&quot;getEmpListByChoose&quot; resultType=&quot;Emp&quot;&gt;
-        select eid,ename,age,sex from emp
-        where 
-        &lt;choose&gt;
-            &lt;when test=&quot;eid != null&quot;&gt;
-                eid = #&#123;eid&#125;
-            &lt;/when&gt;
-            &lt;when test=&quot;ename != null and ename != &#39;&#39;&quot;&gt;
-                ename = #&#123;ename&#125;
-            &lt;/when&gt;
-            &lt;when test=&quot;age != null&quot;&gt;
-                age = #&#123;age&#125;
-            &lt;/when&gt;
-            &lt;otherwise&gt;
-                sex = #&#123;sex&#125;
-            &lt;/otherwise&gt;
-        &lt;/choose&gt;
-    &lt;/select&gt;
-    
-    &lt;!-- void insertEmp(Emp emp); --&gt;
-    &lt;insert id=&quot;insertEmp&quot;&gt;
-        insert into emp(eid,ename,age,sex) values(
-            null,
-            #&#123;ename&#125;,
-            #&#123;age&#125;,
-            &lt;choose&gt;
-                &lt;when test=&quot;sex == 0&quot;&gt;&#39;女&#39;&lt;/when&gt;
-                &lt;when test=&quot;sex == 1&quot;&gt;&#39;男&#39;&lt;/when&gt;
-                &lt;otherwise&gt;&#39;不详&#39;&lt;/otherwise&gt;
-            &lt;/choose&gt;
-        )
-    &lt;/insert&gt;
-    
-    &lt;!-- void deleteMoreEmp(String eids); --&gt;
-    &lt;delete id=&quot;deleteMoreEmp&quot;&gt;
-        delete from emp where eid in ($&#123;value&#125;)
-    &lt;/delete&gt;
-    
-    &lt;!-- void deleteMoreByList(List&lt;Integer&gt; eids); --&gt;
-    &lt;!--
-        &lt;foreach collection=&quot;eids&quot; item=&quot;&quot; close=&quot;&quot; open=&quot;&quot; separator=&quot;&quot; index=&quot;&quot;&gt;&lt;/foreach&gt;
-        对一个数组或集合进行遍历
-        collection:指定要遍历的集合或数组
-        item:设置别名
-        close:设置循环体的结束内容
-        open:设置循环体的开始内容
-        separator:设置每一次循环之间的分隔符
-        index:若遍历的是list集合，index代表下标；若遍历的是map结合，index代表键
-     --&gt;
-     &lt;!--
-        delete from emp where eid in ();
-        delete from emp where eid = 1 or eid = 2 or eid = 3 
-      --&gt;
-    &lt;delete id=&quot;deleteMoreByList&quot;&gt;
-        &lt;!-- delete from emp where eid in 
-        &lt;foreach collection=&quot;list&quot; item=&quot;eid&quot; separator=&quot;,&quot; open=&quot;(&quot; close=&quot;)&quot;&gt;
-            #&#123;eid&#125;
-        &lt;/foreach&gt; --&gt;
-        
-        delete from emp where
-        &lt;!-- &lt;foreach collection=&quot;list&quot; item=&quot;eid&quot; separator=&quot;or&quot;&gt;
-            eid = #&#123;eid&#125;
-        &lt;/foreach&gt; --&gt;
-        &lt;foreach collection=&quot;eids&quot; item=&quot;eid&quot; separator=&quot;or&quot;&gt;
-            eid = #&#123;eid&#125;
-        &lt;/foreach&gt;
-    &lt;/delete&gt;
-    
-    &lt;!--
-        delete:
-            delete from emp where eid in ();
-            delete from emp where eid = 1 or eid = 2 or eid = 3 
-        select:
-            select * from emp where eid in ();
-            select * from emp where eid = 1 or eid = 2 or eid = 3 
-        update:
-            把每条数据修改成相同内容
-            update emp set ... where eid in ();
-            update emp set ... where eid = 1 or eid = 2 or eid = 3 
-            把每条数据修改成对应内容,注意必须在链接地址（url）后添加?allowMultiQueries=true
-            update emp set ... where eid=1;
-            update emp set ... where eid=2;
-            update emp set ... where eid=3;
-        insert:
-            insert into emp values(),(),()
-     --&gt;
-     
-     &lt;!-- void insertMoreByArray(Emp[] emps); --&gt;
-     &lt;insert id=&quot;insertMoreByArray&quot;&gt;
-        insert into emp values
-        &lt;foreach collection=&quot;array&quot; item=&quot;emp&quot; separator=&quot;,&quot;&gt;
-            (null,#&#123;emp.ename&#125;,#&#123;emp.age&#125;,#&#123;emp.sex&#125;,1)
-        &lt;/foreach&gt;
-     &lt;/insert&gt;
-     
-     &lt;!-- void updateMoreByArray(@Param(&quot;emps&quot;)Emp[] emps); --&gt;
-     &lt;update id=&quot;updateMoreByArray&quot;&gt;
-        &lt;foreach collection=&quot;emps&quot; item=&quot;emp&quot;&gt;
-            update emp set ename=#&#123;emp.ename&#125;, age=#&#123;emp.age&#125;, sex=#&#123;emp.sex&#125; where eid = #&#123;emp.eid&#125;;
-        &lt;/foreach&gt;
-     &lt;/update&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.TestDynamicSQl.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpMapper;
-
-public class TestDynamicSQL &#123;
-    @Test
-    public void TestMore() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-        //批量删除
-//        List&lt;Integer&gt; eids = new ArrayList&lt;&gt;();
-//        eids.add(10);
-//        eids.add(16);
-//        eids.add(17);
-//        mapper.deleteMoreByList(eids);//只能删除id为1的员工
-        
-        //批量添加
-        //Emp[] emps = new Emp[3];
-        //Emp[] emps = new Emp[]&#123;&#125;;
-        //Emp[] emps = &#123;&#125;;
-//        Emp emp1 = new Emp(null, &quot;a&quot;,23,&quot;男&quot;);
-//        Emp emp2 = new Emp(null, &quot;aa&quot;,23,&quot;男&quot;);
-//        Emp emp3 = new Emp(null, &quot;aaa&quot;,23,&quot;男&quot;);
-//        Emp[] emps = &#123;emp1, emp2, emp3&#125;;
-//        mapper.insertMoreByArray(emps);
-        
-        //批量修改(需要在jdbc.url后加?allowMultiQueries=true)
-        //jdbc.url=jdbc:mysql://localhost:3306/ssm?allowMultiQueries=true
-        Emp emp1 = new Emp(20, &quot;a1&quot;,233,&quot;女&quot;);
-        Emp emp2 = new Emp(21, &quot;aa1&quot;,233,&quot;女&quot;);
-        Emp emp3 = new Emp(22, &quot;aaa1&quot;,233,&quot;女&quot;);
-        Emp[] emps = &#123;emp1, emp2, emp3&#125;;
-        mapper.updateMoreByArray(emps);
-    &#125;
-    
-    @Test
-    public void TestChoose() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        
-        //测试1
-        //Emp emp = new Emp();
-//        emp.setEid(1);
-//        emp.setEname(&quot;张三&quot;);
-//        emp.setAge(12);
-        //emp.setSex(&quot;1&quot;);
-//        List&lt;Emp&gt; list = mapper.getEmpListByChoose(emp);
-//        for (Emp e : list) &#123;
-//            System.out.println(e);
-//        &#125;
-        
-        //测试2
-//        Emp emp = new Emp();
-//        emp.setEname(&quot;张三&quot;);
-//        emp.setAge(12);    
-//        emp.setSex(&quot;1&quot;);
-//        mapper.insertEmp(emp);
-        
-        Emp emp = new Emp();
-        emp.setEname(&quot;张三三&quot;);
-        emp.setAge(12);    
-        emp.setSex(&quot;123&quot;);
-        mapper.insertEmp(emp);
-    &#125;
-    
-    @Test
-    public void TestIf() throws Exception&#123;
-        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpMapper mapper = sqlSession.getMapper(EmpMapper.class);
-        Emp emp = new Emp();
-        //emp.setEid(1);
-        emp.setEname(&quot;张三&quot;);
-        emp.setAge(12);
-        //emp.setSex(&quot;1&quot;);
-        List&lt;Emp&gt; list = mapper.getEmpListByMoreTJ(emp);
-        for (Emp e : list) &#123;
-            System.out.println(e);
-        &#125;
-    &#125;
-    
-    public SqlSessionFactory getSqlSessionFactory() throws Exception&#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        return sqlSessionFactory;
-    &#125;
-&#125;
-</code></pre>
-
       
     </div>
 
@@ -597,7 +279,7 @@ public class TestDynamicSQL &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E5%B0%8F%E4%BA%8Emaxnum%E7%9A%84%E5%81%B6%E6%95%B0%E6%88%96%E5%A5%87%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -611,7 +293,7 @@ public class TestDynamicSQL &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">MyBatis | 一对多自定义映射、分步查询和延迟加载</a>
+            <a href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E5%B0%8F%E4%BA%8Emaxnum%E7%9A%84%E5%81%B6%E6%95%B0%E6%88%96%E5%A5%87%E6%95%B0/" class="post-title-link" itemprop="url">生成器 | 生成器输出小于maxnum的偶数或奇数</a>
         </h2>
 
         <div class="post-meta">
@@ -620,359 +302,16 @@ public class TestDynamicSQL &#123;
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-06 18:13:19 / 修改时间：18:18:53" itemprop="dateCreated datePublished" datetime="2022-04-06T18:13:19-08:00">2022-04-06</time>
+              <time title="创建时间：2021-11-01 01:51:53" itemprop="dateCreated datePublished" datetime="2021-11-01T01:51:53-08:00">2021-11-01</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-08 18:48:33" itemprop="dateModified" datetime="2021-11-08T18:48:33-08:00">2021-11-08</time>
               </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">一对多自定义映射、分步查询和延迟加载</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="一对多自定义映射、分步查询和延迟加载"><a href="#一对多自定义映射、分步查询和延迟加载" class="headerlink" title="一对多自定义映射、分步查询和延迟加载"></a>一对多自定义映射、分步查询和延迟加载</h1><p>1.项目目录<br><img src="/2022/04/06/%E4%B8%80%E5%AF%B9%E5%A4%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>2.Dept.java<br>在”一”方添加List&lt;多&gt;</p>
-<pre><code>package com.atguigu.bean;
-
-import java.util.List;
-
-public class Dept &#123;
-    private Integer did;
-    private String dname;
-    private List&lt;Emp&gt; emps;
-    
-    public List&lt;Emp&gt; getEmps() &#123;
-        return emps;
-    &#125;
-    public void setEmps(List&lt;Emp&gt; emps) &#123;
-        this.emps = emps;
-    &#125;
-    public Integer getDid() &#123;
-        return did;
-    &#125;
-    public void setDid(Integer did) &#123;
-        this.did = did;
-    &#125;
-    public String getDname() &#123;
-        return dname;
-    &#125;
-    public void setDname(String dname) &#123;
-        this.dname = dname;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;, emps=&quot; + emps + &quot;]&quot;;
-    &#125;
-&#125;
-</code></pre>
-<p>3.EmpDeptMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import com.atguigu.bean.Dept;
-import com.atguigu.bean.Emp;
-
-public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-    
-    Emp getEmpStep(String eid);
-    
-    Dept getDeptEmpsByDid(String did);
-    
-    Dept getOnlyDeptByDid(String did);//测试一对多
-    
-    List&lt;Emp&gt; getEmpListByDid(String did);//测试一对多
-&#125;
-</code></pre>
-<p>4.EmpDeptMapper.xml<br>在映射文件中做以下配置：</p>
-<pre><code>&lt;resultMap type=&quot;Dept&quot; id=&quot;deptMapStep&quot;&gt;
-    &lt;id column=&quot;did&quot; property=&quot;did&quot; /&gt;
-    &lt;result column=&quot;dname&quot; property=&quot;dname&quot; /&gt;
-    &lt;!-- &lt;collection property=&quot;emps&quot; select=&quot;com.atguigu.mapper.EmpDeptMapper.getEmpListByDid&quot; column=&quot;did&quot;&gt;&lt;/collection&gt; --&gt;
-    &lt;!-- 
-        fetchType:
-            lazy 延迟加载
-            eager 不进行延迟加载
-     --&gt;
-    &lt;collection property=&quot;emps&quot; select=&quot;com.atguigu.mapper.EmpDeptMapper.getEmpListByDid&quot; column=&quot;&#123;did=did&#125;&quot; fetchType=&quot;lazy&quot;&gt;&lt;/collection&gt;
-&lt;/resultMap&gt;
-
-&lt;!-- Dept getOnlyDeptByDid(String did); --&gt;
-&lt;select id=&quot;getOnlyDeptByDid&quot; resultMap=&quot;deptMapStep&quot;&gt;
-    select did,dname from dept where did=#&#123;did&#125;
-&lt;/select&gt;
-
-&lt;!-- List&lt;Emp&gt; getEmpListByDid(String did); --&gt;
-&lt;select id=&quot;getEmpListByDid&quot; resultType=&quot;Emp&quot;&gt;
-    select eid,ename,age,sex from emp where did = #&#123;did&#125;
-&lt;/select&gt;
-</code></pre>
-<p>5.TestEmpDept.java</p>
-<pre><code>package com.atguigu.test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import com.atguigu.bean.Dept;
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpDeptMapper;
-
-public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-//        List&lt;Emp&gt; empList = mapper.getAllEmp();
-//        System.out.println(empList);
-        
-//        Emp emp = mapper.getEmpStep(&quot;3&quot;);
-//        System.out.println(emp.getEname());
-//        System.out.println(emp.getDept());
-        
-//        Dept dept = mapper.getDeptEmpsByDid(&quot;2&quot;);
-//        System.out.println(dept);
-        
-        Dept dept = mapper.getOnlyDeptByDid(&quot;3&quot;);
-        //System.out.println(dept);
-        System.out.println(dept.getDname());
-        System.out.println(dept.getEmps());
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">MyBatis | 分步查询、分步查询延迟加载</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-05 17:53:04 / 修改时间：18:32:32" itemprop="dateCreated datePublished" datetime="2022-04-05T17:53:04-08:00">2022-04-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">分步查询、分步查询延迟加载</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="分步查询、分步查询延迟加载"><a href="#分步查询、分步查询延迟加载" class="headerlink" title="分步查询、分步查询延迟加载"></a>分步查询、分步查询延迟加载</h1><p>项目目录<br><img src="/2022/04/05/%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E3%80%81%E5%88%86%E6%AD%A5%E6%9F%A5%E8%AF%A2%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/1.PNG"><br>1.mybatis-config.xml<br>分步查询延迟加载需要在MyBatis核心配置文件中做以下配置：</p>
-<pre><code>&lt;settings&gt;
-    &lt;!-- 开启延迟加载 --&gt;
-    &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;&gt;&lt;/setting&gt;
-    &lt;!-- 是否查询所有数据 --&gt;
-    &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;&gt;&lt;/setting&gt;
-&lt;/settings&gt;
-</code></pre>
-<p>2.DeptMapper.java</p>
-<pre><code>public interface DeptMapper &#123;
-    Dept getDeptByDid(String did);
-&#125;
-</code></pre>
-<p>3.DeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.DeptMapper&quot;&gt;
-    &lt;select id=&quot;getDeptByDid&quot; resultType=&quot;Dept&quot;&gt;
-        select did,dname from dept where did=#&#123;did&#125;
-    &lt;/select&gt;
-&lt;/mapper&gt;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-    
-    Emp getEmpStep(String eid);//分步查询
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml<br>添加查询语句</p>
-<pre><code>&lt;resultMap type=&quot;Emp&quot; id=&quot;empMapStep&quot;&gt;
-    &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-    &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-    &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-    &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-    &lt;!--
-        select:分步查询的SQL的id，即接口全限定名.方法名或者namespace.SQL的id
-        column:分步查询的条件，注意：此条件必须是从数据库查询过的 
-     --&gt;
-    &lt;association property=&quot;dept&quot; select=&quot;com.atguigu.mapper.DeptMapper.getDeptByDid&quot; column=&quot;did&quot;&gt;&lt;/association&gt;
-&lt;/resultMap&gt;
-
-&lt;!-- Emp getEmpStep(String eid); --&gt;
-&lt;select id=&quot;getEmpStep&quot; resultMap=&quot;empMapStep&quot;&gt;
-    select eid,ename,age,sex,did from emp where eid = #&#123;eid&#125;
-&lt;/select&gt;
-</code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        Emp emp = mapper.getEmpStep(&quot;3&quot;);
-        System.out.println(emp.getEname());
-        System.out.println(emp.getDept());
-    &#125;
-&#125;
-</code></pre>
-<p>7.运行结果<br>执行emp.getEname()运行结果为前四行<br>再执行emp.getDept()运行结果为八行</p>
-<pre><code>DEBUG 04-06 09:48:10,087 ==&gt;  Preparing: select eid,ename,age,sex,did from emp where eid = ?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,102 ==&gt; Parameters: 3(String)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,147 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-王五
-DEBUG 04-06 09:48:10,147 ==&gt;  Preparing: select did,dname from dept where did=?   (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,148 ==&gt; Parameters: 3(Integer)  (BaseJdbcLogger.java:145) 
-DEBUG 04-06 09:48:10,149 &lt;==      Total: 1  (BaseJdbcLogger.java:145) 
-Dept [did=3, dname=研发部]
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">python | 统计字符串中各个字符出现的次数并返回出现次数最多的字符</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-05 16:50:00 / 修改时间：17:04:22" itemprop="dateCreated datePublished" datetime="2022-04-05T16:50:00-08:00">2022-04-05</time>
-            </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -987,7 +326,7 @@ Dept [did=3, dname=研发部]
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E6%89%BE%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/" itemprop="url" rel="index"><span itemprop="name">找出字符串中出现次数最多的字符</span></a>
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">生成器</span></a>
                 </span>
             </span>
 
@@ -1002,17 +341,31 @@ Dept [did=3, dname=研发部]
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="找出字符串中出现次数最多的字符"><a href="#找出字符串中出现次数最多的字符" class="headerlink" title="找出字符串中出现次数最多的字符"></a>找出字符串中出现次数最多的字符</h1><pre><code>string = &quot;abcdaab&quot;
-word_frequency = dict()
-for ch in string:
-    if ch not in word_frequency.keys():
-        word_frequency[ch] = 1
-    else:
-        word_frequency[ch] += 1
-print(word_frequency)
-print(max(word_frequency, key=word_frequency.get))
+          <h1 id="生成器输出小于max-num的偶数或奇数"><a href="#生成器输出小于max-num的偶数或奇数" class="headerlink" title="生成器输出小于max_num的偶数或奇数"></a>生成器输出小于max_num的偶数或奇数</h1><p>代码：</p>
+<pre><code># 1.输出小于max_num的偶数或奇数
+def odd(max_num):
+    
+    i = 1
+    while i &lt; max_num:
+        if i % 2 == 0:  # if % 2 == 1可生成奇数
+            yield i
+        i += 1
+
+g = odd(10)
+for n in g:
+    print(n)
+
+# 2.输出任意个偶数或奇数
+def odd():
+i = 2
+while i:
+    if i % 2 == 0:  # if % 2 == 1可生成奇数
+        yield i
+    i += 1
+g = odd()
+for i in range(100):
+    print(next(g))
 </code></pre>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42444693/article/details/104203479?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&utm_relevant_index=1">参考资料</a></p>
 
       
     </div>
@@ -1032,7 +385,7 @@ print(max(word_frequency, key=word_frequency.get))
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BAfibonacci%E6%95%B0%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -1046,7 +399,7 @@ print(max(word_frequency, key=word_frequency.get))
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/" class="post-title-link" itemprop="url">MyBatis | 多对一查询自定义映射</a>
+            <a href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BAfibonacci%E6%95%B0%E5%88%97/" class="post-title-link" itemprop="url">生成器 | 生成器输出fibonacci数列</a>
         </h2>
 
         <div class="post-meta">
@@ -1055,29 +408,31 @@ print(max(word_frequency, key=word_frequency.get))
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-03 01:38:59 / 修改时间：01:44:07" itemprop="dateCreated datePublished" datetime="2022-04-03T01:38:59-08:00">2022-04-03</time>
+              <time title="创建时间：2021-11-01 01:47:51" itemprop="dateCreated datePublished" datetime="2021-11-01T01:47:51-08:00">2021-11-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-08 18:48:28" itemprop="dateModified" datetime="2021-11-08T18:48:28-08:00">2021-11-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/" itemprop="url" rel="index"><span itemprop="name">多对一查询自定义映射</span></a>
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">生成器</span></a>
                 </span>
             </span>
 
@@ -1092,178 +447,964 @@ print(max(word_frequency, key=word_frequency.get))
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="多对一查询自定义映射"><a href="#多对一查询自定义映射" class="headerlink" title="多对一查询自定义映射"></a>多对一查询自定义映射</h1><p>1.项目目录<br><img src="/2022/04/03/%E5%A4%9A%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84/1.PNG"><br>2.Emp.java</p>
-<pre><code>package com.atguigu.bean;
+          <h1 id="生成器输出小于max-num的fibonacci数列"><a href="#生成器输出小于max-num的fibonacci数列" class="headerlink" title="生成器输出小于max_num的fibonacci数列"></a>生成器输出小于max_num的fibonacci数列</h1><p>代码：</p>
+<pre><code>def feb(max_num):
+    n_1 = 1
+    n_2 = 1
+    n = 0
+    while n &lt; max_num:
+        if n == 0 or n == 1:
+            yield 1
+            n += 1
+        else:
+            yield n_1 + n_2
+            new_n_2 = n_1
+            n_1 = n_1 + n_2
+            n_2 = new_n_2
+            n += 1
 
-public class Emp &#123;
-    private Integer eid;
-    private String ename;
-    private Integer age;
-    private String sex;
-    private Dept dept;
-    
-    
-    public Dept getDept() &#123;
-        return dept;
-    &#125;
-    public void setDept(Dept dept) &#123;
-        this.dept = dept;
-    &#125;
-    public Integer getEid() &#123;
-        return eid;
-    &#125;
-    public void setEid(Integer eid) &#123;
-        this.eid = eid;
-    &#125;
-    public String getEname() &#123;
-        return ename;
-    &#125;
-    public void setEname(String ename) &#123;
-        this.ename = ename;
-    &#125;
-    public Integer getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(Integer age) &#123;
-        this.age = age;
-    &#125;
-    public String getSex() &#123;
-        return sex;
-    &#125;
-    public void setSex(String sex) &#123;
-        this.sex = sex;
-    &#125;
-    
-    @Override
-    public String toString() &#123;
-        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;, dept=&quot; + dept + &quot;]&quot;;
-    &#125;
-    public Emp(Integer eid, String ename, Integer age, String sex) &#123;
-        super();
-        this.eid = eid;
-        this.ename = ename;
-        this.age = age;
-        this.sex = sex;
-    &#125;
-    public Emp() &#123;
-        super();
-        // TODO Auto-generated constructor stub
-    &#125;
-&#125;
+g = feb(5)
+for n in g:
+    print(n)
 </code></pre>
-<p>3.Dept.java</p>
-<pre><code>package com.atguigu.bean;
 
-public class Dept &#123;
-    private Integer did;
-    private String dname;
-    public Integer getDid() &#123;
-        return did;
-    &#125;
-    public void setDid(Integer did) &#123;
-        this.did = did;
-    &#125;
-    public String getDname() &#123;
-        return dname;
-    &#125;
-    public void setDname(String dname) &#123;
-        this.dname = dname;
-    &#125;
-    @Override
-    public String toString() &#123;
-        return &quot;Dept [did=&quot; + did + &quot;, dname=&quot; + dname + &quot;]&quot;;
-    &#125;
+      
+    </div>
+
     
-&#125;
-</code></pre>
-<p>4.EmpDeptMapper.java</p>
-<pre><code>package com.atguigu.mapper;
-
-import java.util.List;
-
-import com.atguigu.bean.Emp;
-
-public interface EmpDeptMapper &#123;
-    List&lt;Emp&gt; getAllEmp();
-&#125;
-</code></pre>
-<p>5.EmpDeptMapper.xml</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
- PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
- &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
- 
-&lt;mapper namespace=&quot;com.atguigu.mapper.EmpDeptMapper&quot;&gt;
     
-    &lt;!-- &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
-        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/" class="post-title-link" itemprop="url">生成器 | 生成器输出质数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-01 01:07:02" itemprop="dateCreated datePublished" datetime="2021-11-01T01:07:02-08:00">2021-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-08 18:48:21" itemprop="dateModified" datetime="2021-11-08T18:48:21-08:00">2021-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">生成器</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="生成器输出小于max-num的质数"><a href="#生成器输出小于max-num的质数" class="headerlink" title="生成器输出小于max_num的质数"></a>生成器输出小于max_num的质数</h1><p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。<br>而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前<br>面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-            查询结果：
-            [Emp [eid=1, ename=张三, age=12, sex=男, dept=null], 
-            不能够查询出员工所对应的部门，需要进行自定义映射
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/" class="post-title-link" itemprop="url">requests | Python爬取博客的所有文章并存为带目录的word文档</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-31 06:07:12 / 修改时间：06:09:22" itemprop="dateCreated datePublished" datetime="2021-10-31T06:07:12-08:00">2021-10-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/" itemprop="url" rel="index"><span itemprop="name">requests</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python爬取博客的所有文章并存为带目录的word文档"><a href="#Python爬取博客的所有文章并存为带目录的word文档" class="headerlink" title="Python爬取博客的所有文章并存为带目录的word文档"></a>Python爬取博客的所有文章并存为带目录的word文档</h1><p>Python爬取博客的所有文章并存为带目录的word文档,结果非常美丽！从此阅读博客文章轻松多了！！！</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/10/31/Python%E7%88%AC%E5%8F%96%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E5%B9%B6%E5%AD%98%E4%B8%BA%E5%B8%A6%E7%9B%AE%E5%BD%95%E7%9A%84word%E6%96%87%E6%A1%A3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-    &lt;/select&gt; --&gt;
+      
+    </div>
+
     
-    &lt;!-- 自定义映射-第一种方式 --&gt;
-    &lt;!-- &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
-        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-        &lt;result column=&quot;did&quot; property=&quot;dept.did&quot;/&gt;
-        &lt;result column=&quot;dname&quot; property=&quot;dept.dname&quot;/&gt;
-    &lt;/resultMap&gt; --&gt;
-    &lt;!--
-        &lt;resultMap&gt;:自定义映射，处理复杂的表关系
-        &lt;id/&gt;:设置主键的映射关系，column设置字段名，property设置属性名
-        &lt;result/&gt;:设置非主键的映射关系， column设置字段名，property设置属性名
-     --&gt;
-     
-     &lt;!-- 自定义映射-第二种方式 --&gt;
-     &lt;resultMap type=&quot;Emp&quot; id=&quot;empMap&quot;&gt;
-        &lt;id column=&quot;eid&quot; property=&quot;eid&quot;/&gt;
-        &lt;result column=&quot;ename&quot; property=&quot;ename&quot;/&gt;
-        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
-        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
-        &lt;association property=&quot;dept&quot; javaType=&quot;Dept&quot;&gt;
-            &lt;id column=&quot;did&quot; property=&quot;did&quot;/&gt;
-            &lt;result column=&quot;dname&quot; property=&quot;dname&quot;/&gt;
-        &lt;/association&gt;
-     &lt;/resultMap&gt;
     
-    &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;
-    &lt;select id=&quot;getAllEmp&quot; resultMap=&quot;empMap&quot;&gt;
-        &lt;!-- select * from emp e, dept d where e.did = d.did --&gt;
-        select e.eid,e.ename,e.age,e.sex,e.did,d.dname from emp e left join dept d on e.did=d.did
-    &lt;/select&gt;
-&lt;/mapper&gt;
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">win32com | 识别加密word文件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-31 05:32:56" itemprop="dateCreated datePublished" datetime="2021-10-31T05:32:56-08:00">2021-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-01 01:04:03" itemprop="dateModified" datetime="2021-11-01T01:04:03-08:00">2021-11-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/win32com/" itemprop="url" rel="index"><span itemprop="name">win32com</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="识别加密word文件"><a href="#识别加密word文件" class="headerlink" title="识别加密word文件"></a>识别加密word文件</h1><p>Python本身是难以识别word文件的加密状态的，那我们可以考虑利用程序在处理有密码的文档的时候的报错信息来进行处理。word文件有两种密码，一种是“打开密码”，另一种是“修改密码”。对于前者，若不输入正确的密码，是无法打开文件查看内容的；对于后者，即使不知道密码，还是可以用只读模式打开文件，查看内容并另存为新的文件的。<br>因此对于设置了“修改密码”的doc文件，并不影响用如下程序另存为docx文件。只是在另存之前，窗口会弹出如下对话框，我们只需要点击一下“只读”即可，程序就能正常运行下去。<br>如果设置了“打开密码”，程序在运行的时候也会弹出对话框，让输入密码。如果输入正确的密码，程序也是可以运行的；如果不知道密码或输入错误密码，则程序会出现如下的“com_error”错误。如果不知道密码，可以加入try..except..语句，让程序在except语句中将这个文件移动到名字为“有密码文件”的文件夹，以便后续处理。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/10/31/%E8%AF%86%E5%88%AB%E5%8A%A0%E5%AF%86word%E6%96%87%E4%BB%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/30/python%E5%88%86%E5%9D%97%E6%8B%86%E5%88%86txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">python | 分块拆分txt文件中的数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-30 18:50:47 / 修改时间：19:23:28" itemprop="dateCreated datePublished" datetime="2021-10-30T18:50:47-08:00">2021-10-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分块拆分txt文件中的数据"><a href="#分块拆分txt文件中的数据" class="headerlink" title="分块拆分txt文件中的数据"></a>分块拆分txt文件中的数据</h1><p>代码：</p>
+<pre><code># -*- coding:utf-8 -*-
+# 读取txt文件中的数据
+file = open(&quot;数据.txt&quot;)
+lines = file.readlines()
+# print(lines[:5])
+
+data = &#123;&#125;  # 储存分割的数据
+line_list = []  # 中转列表
+last_id = &quot;start&quot;  # 数据分块标识
+for line in lines:
+    row_data = line.split(&quot; &quot;)  # 将一行数据按空格分隔
+    ID = row_data[0]  # 获得ID
+    if last_id == &quot;start&quot;:  # 用于处理数据第一行
+        line_list.append(line)  # 将第一行数据放入中转列表
+    else:  # 不是第一行数据，则按如下执行
+        if ID != last_id:  # 如果出现新的数据块
+            if last_id in data:  # 新的数据块的ID已存在字典data中
+                data[last_id].append(line_list)  # 将中转列表的数据添加到对应的ID中
+            else:  # 新的数据快的ID不在字典data中
+                data[last_id] = [line_list]  # 将上一个数据块加入对应的ID
+            line_list = [line]  # 将中转列表清空，并放入新数据快的第一行数据
+        else:  # 没出现新的数据块
+            line_list.append(line)  # 将数据继续加入中转列表
+    last_id = ID  # 每处理一行，将分块标识last_id更行为最新的ID
+
+# 将最后一个文字块的数据放入字典
+if last_id in data:
+    data[last_id].append(line_list)
+else:
+    data[last_id] = [line_list]
+
+# print(data[&#39;89031&#39;])
+
+# for i in data.keys():
+#     for block in data[i]:
+#         print(block)
+#         print(&quot;- -&quot;*50)
+
+
+# 写入数据函数
+def to_txt(filename, data_list):  # filename为写入文件的名字，data为要写入数据列表
+    file = open(&quot;分块\\&quot; + filename + &#39;.txt&#39;, &#39;a&#39;)
+    for i in range(len(data_list)):
+        file.write(data_list[i])
+    file.close()  # 保存数据并关闭
+
+
+# 批量写入数据
+for ID in data.keys():
+    for i in range(len(data[ID])):
+        to_txt(f&quot;&#123;ID&#125;_&#123;i+1&#125;&quot;, data[ID][i])
+        
 </code></pre>
-<p>6.TestEmpDept.java</p>
-<pre><code>package com.atguigu.test;
+<p><a href="数据.txt">数据.txt</a></p>
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+      
+    </div>
 
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-import com.atguigu.bean.Emp;
-import com.atguigu.mapper.EmpDeptMapper;
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/30/Tkinter%E5%88%B6%E4%BD%9Cpython%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2/">
 
-public class TestEmpDept &#123;
-    public static void main(String[] args) throws IOException &#123;
-        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        EmpDeptMapper mapper = sqlSession.getMapper(EmpDeptMapper.class);
-        
-        List&lt;Emp&gt; empList = mapper.getAllEmp();
-        System.out.println(empList);
-    &#125;
-&#125;
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/30/Tkinter%E5%88%B6%E4%BD%9Cpython%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2/" class="post-title-link" itemprop="url">tkinter | Tkinter制作python程序的图形化界面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-30 18:42:14 / 修改时间：18:45:32" itemprop="dateCreated datePublished" datetime="2021-10-30T18:42:14-08:00">2021-10-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/tkinter/" itemprop="url" rel="index"><span itemprop="name">tkinter</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Tkinter制作python程序的图形化界面"><a href="#Tkinter制作python程序的图形化界面" class="headerlink" title="Tkinter制作python程序的图形化界面"></a>Tkinter制作python程序的图形化界面</h1><p>代码：</p>
+<pre><code>from os import listdir, getcwd
+from xlrd import open_workbook, xldate
+from datetime import datetime
+from time import time, localtime, strftime
+from openpyxl import Workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+from tkinter import Tk, Entry, Button, Listbox, X, Y, END, Scrollbar, RIGHT, BOTTOM, HORIZONTAL
+from tkinter.filedialog import askdirectory
+
+
+class MainGUI():
+    def __init__(self):
+        myWindow = Tk()
+        myWindow.title(&quot;领料记录汇总&quot;)
+        # 设置窗口大小
+        myWindow.geometry(&#39;590x400&#39;)
+        myWindow.iconbitmap(getcwd() + &quot;\\PO.ico&quot;)
+        # 增加文本框
+        self.input_entry = Entry(myWindow, highlightcolor=&#39;red&#39;, highlightthickness=1)
+        self.input_entry.place(x=10, y=10, width=480, height=30)
+        self.btn_in = Button(myWindow, text=&#39;输入文件目录&#39;, command=self.select_dir1, width=10, height=1)
+        self.btn_in.place(x=500, y=10)
+
+        self.output_entry = Entry(myWindow, highlightcolor=&#39;blue&#39;, highlightthickness=1)
+        self.output_entry.place(x=10, y=50, width=480, height=30)
+        self.btn_out = Button(myWindow, text=&#39;输出文件目录&#39;, command=self.select_dir2, width=10, height=1)
+        self.btn_out.place(x=500, y=50)
+
+        self.btn_run = Button(myWindow, text=&#39;执行汇总&#39;, width=10, height=1, command=self.Summary_data)
+        self.btn_run.place(x=500, y=90)
+        # 增加列表框
+        self.result_show = Listbox(myWindow, bg=&#39;DarkSeaGreen&#39;)  # yscrollcommand = scroll_bar,
+        self.result_show.place(x=10, y=130, width=570, height=260)
+        self.sbY = Scrollbar(self.result_show, command=self.result_show.yview)  # 在列表框中增加Y轴滚动条
+        self.sbY.pack(side=RIGHT, fill=Y)
+        self.result_show.config(yscrollcommand=self.sbY.set)
+        self.sbX = Scrollbar(self.result_show, command=self.result_show.xview, orient=HORIZONTAL)  # 在列表框中增加X轴滚动条
+        self.sbX.pack(side=BOTTOM, fill=X)
+        self.result_show.config(xscrollcommand=self.sbX.set)
+
+        myWindow.mainloop()
+
+    def select_dir1(self):
+        self.input_entry.delete(0, END)
+        self.input_entry.insert(0, askdirectory(initialdir=&quot;D:\\&quot;))
+
+    def select_dir2(self):
+        self.output_entry.delete(0, END)
+        self.output_entry.insert(0, askdirectory(initialdir=&quot;D:\\&quot;))
+
+    # 读取xls文件中的数据
+    def Get_data(self, file):
+        wb = open_workbook(file)  # 读取工作簿
+        ws = wb.sheets()[0]  # 选第一个工作表
+        data = &#123;&#125;
+        for row in range(7, ws.nrows - 2):
+            dept = ws.cell(2, 16).value  # 部门
+            dept_id = ws.cell(3, 16).value  # 部门编号
+            dt = ws.cell(row, 0).value  # 时间
+            if type(dt) is float:
+                date_time = xldate.xldate_as_datetime(dt, 0)
+            else:
+                date_time = datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)
+            business = ws.cell(row, 2).value  # 业务类型
+            model = ws.cell(row, 3).value  # 品种
+            qty = ws.cell(row, 4).value  # 数量
+            unit_price = ws.cell(row, 6).value  # 单价
+            price = ws.cell(row, 8).value  # 总价
+            reward = ws.cell(row, 9).value  # 额外值
+            discount = ws.cell(row, 11).value  # 调整
+            balance = ws.cell(row, 13).value  # 剩余
+            location = str(ws.cell(row, 15).value).strip()  # 库位
+            operator = ws.cell(row, 17).value  # 操作员
+            date = date_time.date()  # 日期
+            time = date_time.time()  # 时间
+            info_list = [dept, dept_id, date_time, business, model, qty, unit_price, price, reward, discount,
+                         balance, location, operator, date, time]
+            data.setdefault(date, [])  # 以日期为键
+            if info_list[3] != &quot;备注&quot;:  # 不要业务类型为“备注”的数据
+                data[date].append(info_list)
+        # 增加当日领取次数
+        for key in data.keys():
+            for i in data[key]:
+                i.append(len(data[key]))
+
+        return data
+
+    def Get_file_path(self, path):
+        files = []
+        for file in listdir(path):
+            if file.endswith(&quot;.xls&quot;):  # 排除文件夹内的其它干扰文件
+                files.append(path + &quot;\\&quot; + file)
+        return files
+
+    def Get_current_time(self):
+        time_stamp = time()  # 当前时间的时间戳
+        local_time = localtime(time_stamp)  #
+        str_time = strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)
+        return str_time
+
+    def Summary_data(self):
+        thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+        title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,
+                 &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]
+
+        wb = Workbook()
+        ws = wb.active
+
+        ws.merge_cells(&quot;A1:P1&quot;)
+        ws.cell(1, 1).value = &quot;领料明细汇总表&quot;
+        ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)
+        ws.row_dimensions[1].height = 22.2
+        ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
+        ws.append(title)
+
+        # 插入数据
+        files = self.Get_file_path(self.input_entry.get())  # get()获取文本编辑框中的输入文件目录，并获取目录下的xls文件
+        for file in files:
+            data = self.Get_data(file)
+            for key in data.keys():
+                for i in data[key]:
+                    ws.append(i)
+            f = f&quot;&#123;file&#125; 的内容已加入总表.&quot;  # 创建一个显示项
+            self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框中
+
+        # 设置字号，对齐，缩小字体填充，加边框
+        # Font(bold=True)可加粗字体
+        for row_number in range(2, ws.max_row + 1):
+            for col_number in range(1, 17):
+                c = ws.cell(row=row_number, column=col_number)
+                c.font = Font(size=9)
+                c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+                c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+
+        col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)
+        col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]
+        for i in range(len(col_name)):
+            ws.column_dimensions[col_name[i]].width = col_width[i]
+
+        ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)
+        ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)
+
+        wb.save(f&quot;&#123;self.output_entry.get()&#125;\\领料明细汇总表&#123;self.Get_current_time()&#125;.xlsx&quot;)
+        f = &quot;-&quot; * 100  # 创建分割线
+        self.result_show.insert(&quot;end&quot;, f)  # 将分割线添加到列表框
+        f = f&quot;领料明细汇总表&#123;self.Get_current_time()&#125;.xlsx 已生成，请去输出文件夹查看.&quot;  # 创建一个显示项
+        self.result_show.insert(&quot;end&quot;, f)  # 将结果添加到列表框
+        f = &quot; &quot; * 100
+        self.result_show.insert(&quot;end&quot;, f)  # 将以上空格添加到列表框
+
+
+if __name__ == &quot;__main__&quot;:
+    MainGUI()
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/python%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85/" class="post-title-link" itemprop="url">pyinstaller | python程序打包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-29 23:42:35" itemprop="dateCreated datePublished" datetime="2021-10-29T23:42:35-08:00">2021-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-30 00:53:44" itemprop="dateModified" datetime="2021-10-30T00:53:44-08:00">2021-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pyinstaller/" itemprop="url" rel="index"><span itemprop="name">pyinstaller</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python程序打包"><a href="#python程序打包" class="headerlink" title="python程序打包"></a>python程序打包</h1><p>通常情况我们在pycharm中写的python程序只能在安装了python的电脑上运行，那么如何移植到其他电脑上也能运行呢？<br>我们可以将py文件打包成可执行程序(exe文件).</p>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h3 id="1-pyinstaller库安装"><a href="#1-pyinstaller库安装" class="headerlink" title="1. pyinstaller库安装"></a>1. pyinstaller库安装</h3><pre><code>pip install pyinstaller -i https://pypi.doubanio.com/simple/
+</code></pre>
+<h3 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h3><pre><code>pyinstaller -D program.py ---&gt; 打包成一个文件夹（默认操作）
+pyinstaller -F program.py ---&gt; 打包成单个可执行文件
+</code></pre>
+<p>程序运行后，会在目录生成一个文件：<br>1.program.spec(打包规则)<br>三个文件夹：<br>1.__pycache __(Python版本信息)<br>2.build(存储日志文件)<br>3.dist(储存可执行文件即相关的文件夹)<br><strong>注：打包完成后，除了dist文件夹，其它都可以删除，没什么用。</strong></p>
+<h3 id="3-将打包好的文件制作成一个安装文件"><a href="#3-将打包好的文件制作成一个安装文件" class="headerlink" title="3.将打包好的文件制作成一个安装文件"></a>3.将打包好的文件制作成一个安装文件</h3><p>使用NSIS文件夹压缩器来制作安装文件。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/python%E5%88%B6%E4%BD%9C%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E8%AE%A9%E6%93%8D%E4%BD%9C%E5%8F%AF%E8%A7%86%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/29/python%E5%88%B6%E4%BD%9C%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E8%AE%A9%E6%93%8D%E4%BD%9C%E5%8F%AF%E8%A7%86%E5%8C%96/" class="post-title-link" itemprop="url">PyQt5 | python制作图形用户界面让操作可视化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-29 18:33:58 / 修改时间：18:36:38" itemprop="dateCreated datePublished" datetime="2021-10-29T18:33:58-08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/PyQt5/" itemprop="url" rel="index"><span itemprop="name">PyQt5</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python制作图形用户界面让操作可视化"><a href="#python制作图形用户界面让操作可视化" class="headerlink" title="python制作图形用户界面让操作可视化"></a>python制作图形用户界面让操作可视化</h1><p>代码：</p>
+<pre><code>import sys
+import os
+from PyQt5 import QtWidgets
+from PyQt5.QtGui import QIcon
+import xlrd
+import datetime
+import time
+from openpyxl import Workbook
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+
+
+class MainGUI(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle(&quot;领料明细汇总&quot;)
+        self.resize(800, 400)
+        self.main_widget = QtWidgets.QWidget()
+        self.main_widget_layout = QtWidgets.QGridLayout()
+        self.main_widget.setLayout(self.main_widget_layout)
+
+        self.input = QtWidgets.QLineEdit()
+        self.input_btn = QtWidgets.QPushButton(&quot;选择输入文件夹&quot;)
+        self.output = QtWidgets.QLineEdit()
+        self.output_btn = QtWidgets.QPushButton(&quot;选择输出文件夹&quot;)
+        self.show_result = QtWidgets.QListWidget()
+        self.run = QtWidgets.QPushButton(&quot;执行汇总&quot;)
+
+        self.main_widget_layout.addWidget(self.input, 0, 0, 1, 2)
+        self.main_widget_layout.addWidget(self.input_btn, 0, 2, 1, 1)
+        self.main_widget_layout.addWidget(self.output, 1, 0, 1, 2)
+        self.main_widget_layout.addWidget(self.output_btn, 1, 2, 1, 1)
+        self.main_widget_layout.addWidget(self.run, 2, 2, 1, 1)
+        self.main_widget_layout.addWidget(self.show_result, 3, 0, 3, 3)
+
+        self.setCentralWidget(self.main_widget)
+
+        self.input_btn.clicked.connect(self.Choice_dir_input)  # 将&quot;选择输入文件夹&quot;按钮绑定Choice_dir_input函数
+        self.output_btn.clicked.connect(self.Choice_dir_output)  # 将&quot;选择输出文件夹&quot;按钮绑定Choice_dir_output函数
+        self.run.clicked.connect(self.Summary_data)  # “执行汇总”按钮绑定Summary_data函数
+
+    def Choice_dir_input(self):
+        # 选择目录操作
+        dir_path = QtWidgets.QFileDialog.getExistingDirectory(self, &quot;请选择文件夹路径&quot;, &quot;D:\\&quot;)
+        # 将选择的目录显示在文本编辑框中
+        self.input.setText(dir_path)
+
+    def Choice_dir_output(self):
+        dir_path = QtWidgets.QFileDialog.getExistingDirectory(self, &quot;请选择文件夹路径&quot;, &quot;D:\\&quot;)
+        self.output.setText(dir_path)
+
+    def Get_data(self, file):
+        &#39;&#39;&#39;获取单个Excel文件中的资料&#39;&#39;&#39;
+        wb = xlrd.open_workbook(file)
+        ws = wb.sheets()[0]
+        data = &#123;&#125;
+        for row in range(7, ws.nrows - 2):
+            card_id = ws.cell(2, 16).value
+            car = ws.cell(3, 16).value
+            dt = ws.cell(row, 0).value
+            if type(dt) is float:
+                date_time = xlrd.xldate.xldate_as_datetime(dt, 0)
+            else:
+                date_time = datetime.datetime.strptime(dt, &#39;%Y-%m-%d %H:%M:%S&#39;)
+            business = ws.cell(row, 2).value
+            model = ws.cell(row, 3).value
+            qty = ws.cell(row, 4).value
+            unit_price = ws.cell(row, 6).value
+            price = ws.cell(row, 8).value
+            reward = ws.cell(row, 9).value
+            discount = ws.cell(row, 11).value
+            balance = ws.cell(row, 13).value
+            location = str(ws.cell(row, 15).value).strip()
+            operator = ws.cell(row, 17).value
+            date = date_time.date()
+            time = date_time.time()
+            info_list = [card_id, car, date_time, business, model, qty, unit_price, price, reward, discount,
+                         balance, location, operator, date, time]
+            data.setdefault(date, [])
+            if info_list[3] != &quot;备注&quot;:
+                data[date].append(info_list)
+        # 增加当日加油次数
+        for key in data.keys():
+            for i in data[key]:
+                i.append(len(data[key]))
+        return data
+
+    def Get_file_path(self, path):
+        files = []
+        for file in os.listdir(path):
+            if file.endswith(&quot;.xls&quot;):  # 排除文件夹内的其它干扰文件
+                files.append(path + &quot;\\&quot; + file)
+        return files
+
+    def Get_current_time(self):
+        time_stamp = time.time()  # 当前时间的时间戳
+        local_time = time.localtime(time_stamp)  #
+        str_time = time.strftime(&#39;%Y-%m-%d %H.%M.%S&#39;, local_time)
+        return str_time
+
+    def Summary_data(self, files):
+        thin = Side(border_style=&quot;thin&quot;, color=&quot;000000&quot;)  # 定义边框粗细及颜色
+        title = [&#39;部门&#39;, &#39;部门编号&#39;, &#39;时间&#39;, &#39;业务类型&#39;, &#39;品种&#39;, &#39;数量&#39;, &#39;单价&#39;, &#39;金额&#39;, &#39;额外值&#39;,
+                 &#39;调整&#39;, &#39;剩余&#39;, &#39;库位&#39;, &#39;操作员&#39;, &#39;领取日期&#39;, &#39;领取时间&#39;, &#39;领取次数&#39;]
+
+        wb = Workbook()
+        ws = wb.active
+        ws.merge_cells(&quot;A1:P1&quot;)
+        ws.cell(1, 1).value = &quot;领料明细汇总表&quot;
+        ws.cell(1, 1).font = Font(name=u&#39;黑体&#39;, bold=True, size=18)
+        ws.row_dimensions[1].height = 22.2
+        ws.cell(1, 1).alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;)
+        ws.append(title)
+
+        # 插入数据
+        files = self.Get_file_path(self.input.text())  # 获取文本编辑框中的输入文件目录，并获取目录下的xls文件
+        for file in files:
+            data = self.Get_data(file)
+            for key in data.keys():
+                for i in data[key]:
+                    ws.append(i)
+            f = QtWidgets.QListWidgetItem(f&quot;&#123;file&#125; 的内容已加入总表.&quot;)  # 创建一个显示项
+            self.show_result.addItem(f)  # 将结果添加到部件中
+
+        # 设置字号，对齐，缩小字体填充，加边框
+        # Font(bold=True)可加粗字体
+        for row_number in range(2, ws.max_row + 1):
+            for col_number in range(1, 17):
+                c = ws.cell(row=row_number, column=col_number)
+                c.font = Font(size=9)
+                c.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+                c.alignment = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+
+        col_name = list(&quot;ABCDEFGHIJKLMNOP&quot;)
+        col_width = [8, 8, 16, 8, 16, 8, 8, 9.8, 8, 8, 8, 11, 8.3, 9, 8, 8]
+        for i in range(len(col_name)):
+            ws.column_dimensions[col_name[i]].width = col_width[i]
+
+        ws.column_dimensions.group(&#39;I&#39;, &#39;K&#39;, hidden=True)
+        ws.column_dimensions.group(&#39;N&#39;, &#39;O&#39;, hidden=True)
+
+        wb.save(f&quot;&#123;self.output.text()&#125;\\领料明细汇总表&#123;self.Get_current_time()&#125;.xlsx&quot;)
+        f = QtWidgets.QListWidgetItem(f&quot;\n领料明细汇总表&#123;self.Get_current_time()&#125;.xlsx 已生成，请去输出文件夹查看.&quot;)  # 创建一个显示项
+        self.show_result.addItem(f)  # 将结果添加到部件中
+
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    app.setWindowIcon(QIcon(&quot;PO.ico&quot;))  # 设置界面左上角图标
+    gui = MainGUI()
+    gui.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+    
 </code></pre>
 
       
@@ -1283,7 +1424,7 @@ public class TestEmpDept &#123;
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/28/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><span class="page-number current">29</span><a class="page-number" href="/page/30/">30</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/30/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/28/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><span class="page-number current">29</span><a class="page-number" href="/page/30/">30</a><span class="space">&hellip;</span><a class="page-number" href="/page/52/">52</a><a class="extend next" rel="next" href="/page/30/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1351,20 +1492,20 @@ public class TestEmpDept &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">513</span>
+          <span class="site-state-item-count">516</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">441</span>
+        <span class="site-state-item-count">466</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">442</span>
+        <span class="site-state-item-count">454</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

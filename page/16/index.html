@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/21/721%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E9%9D%A2%E7%BB%8F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,7 +204,251 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/07/21/721%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E9%9D%A2%E7%BB%8F/" class="post-title-link" itemprop="url">秋招面经 | 721开发测试面经</a>
+            <a href="/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" class="post-title-link" itemprop="url">MyBatis | 增删改查</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-02 04:43:59 / 修改时间：04:53:47" itemprop="dateCreated datePublished" datetime="2022-04-02T04:43:59-08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/CRUD/" itemprop="url" rel="index"><span itemprop="name">CRUD</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MyBatis-CRUD"><a href="#MyBatis-CRUD" class="headerlink" title="MyBatis CRUD"></a>MyBatis CRUD</h1><p>按照<a target="_blank" rel="noopener" href="https://victory-liao.github.io/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">MyBatis搭建过程</a>进行项目搭建，<br>并在mybatis-config.xml中将按如下方式引入映射文件：</p>
+<pre><code>&lt;!-- 引入映射文件 --&gt;
+&lt;mappers&gt;
+    &lt;!-- &lt;mapper resource=&quot;EmpMapper.xml&quot; /&gt;
+    &lt;mapper resource=&quot;DeptMapper.xml&quot;&gt;&lt;/mapper&gt; --&gt;
+    
+    &lt;!-- 此种写法要求mapper接口和mapper映射文件在同一个包下 --&gt;
+    &lt;package name=&quot;com.atguigu.mapper&quot;/&gt;
+    
+&lt;/mappers&gt;
+</code></pre>
+<h2 id="CRUD-案例"><a href="#CRUD-案例" class="headerlink" title="CRUD 案例"></a>CRUD 案例</h2><p>1.项目目录<br><img src="/2022/04/02/MyBatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/1.PNG"><br>2.Emp.java</p>
+<pre><code>package com.atguigu.bean;
+
+public class Emp &#123;
+    private Integer eid;
+    private String ename;
+    private Integer age;
+    private String sex;
+    public Integer getEid() &#123;
+        return eid;
+    &#125;
+    public void setEid(Integer eid) &#123;
+        this.eid = eid;
+    &#125;
+    public String getEname() &#123;
+        return ename;
+    &#125;
+    public void setEname(String ename) &#123;
+        this.ename = ename;
+    &#125;
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+    public String getSex() &#123;
+        return sex;
+    &#125;
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+    @Override
+    public String toString() &#123;
+        return &quot;Emp [eid=&quot; + eid + &quot;, ename=&quot; + ename + &quot;, age=&quot; + age + &quot;, sex=&quot; + sex + &quot;]&quot;;
+    &#125;
+    public Emp(Integer eid, String ename, Integer age, String sex) &#123;
+        super();
+        this.eid = eid;
+        this.ename = ename;
+        this.age = age;
+        this.sex = sex;
+    &#125;
+    public Emp() &#123;
+        super();
+        // TODO Auto-generated constructor stub
+    &#125;
+    
+    
+    
+&#125;
+</code></pre>
+<p>3.EmpMapper.java</p>
+<pre><code>package com.atguigu.mapper;
+
+import java.util.List;
+
+import com.atguigu.bean.Emp;
+
+public interface EmpMapper &#123;
+    //根据eid查询员工信息
+    Emp getEmpByEid(String eid);
+    
+    //获取所有的员工信息
+    List&lt;Emp&gt; getAllEmp();
+    
+    //添加员工信息
+    void addEmp(Emp emp);
+    
+    //修改员工信息
+    void updateEmp(Emp emp);
+    
+    //删除员工信息
+    Integer deleteEmp(String id);
+&#125;
+</code></pre>
+<p>4.EmpMapper.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+ PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+ &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+ 
+&lt;mapper namespace=&quot;com.atguigu.mapper.EmpMapper&quot;&gt;
+    &lt;!-- Emp getEmpByEid(String eid); --&gt;
+    &lt;select id=&quot;getEmpByEid&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp where eid=#&#123;eid&#125;
+    &lt;/select&gt;
+    
+    &lt;!-- List&lt;Emp&gt; getAllEmp(); --&gt;
+    &lt;select id=&quot;getAllEmp&quot; resultType=&quot;Emp&quot;&gt;
+        select eid,ename,age,sex from emp
+    &lt;/select&gt;
+    
+    &lt;!-- void addEmp(Emp emp); --&gt;
+    &lt;insert id=&quot;addEmp&quot;&gt;
+        insert into emp values(null, #&#123;ename&#125;, #&#123;age&#125;, #&#123;sex&#125;)
+    &lt;/insert&gt;
+    
+    &lt;!-- void updateEmp(Emp emp); --&gt;
+    &lt;update id=&quot;updateEmp&quot; parameterType=&quot;Emp&quot;&gt;
+        update emp set ename=#&#123;ename&#125;,age=#&#123;age&#125;,sex=#&#123;sex&#125; where eid=#&#123;eid&#125;
+    &lt;/update&gt;
+    
+    &lt;!-- void deleteEmp(String id);  --&gt;
+    &lt;delete id=&quot;deleteEmp&quot;&gt;
+        delete from emp where eid=#&#123;eid&#125;
+    &lt;/delete&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>5.TestCRUD.java</p>
+<pre><code>package com.atguigu.test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
+
+import com.atguigu.bean.Emp;
+import com.atguigu.mapper.EmpMapper;
+
+public class TestCRUD &#123;
+    @Test
+    public void testCRUD() throws IOException&#123;
+        InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+//        SqlSession sqlSession = sqlSessionFactory.openSession();//需要手动处理事务
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);//自动处理事务
+        EmpMapper empMapper = sqlSession.getMapper(EmpMapper.class);
+        //测试：根据eid获取员工信息
+//        Emp emp = empMapper.getEmpByEid(&quot;3&quot;);
+//        System.out.println(emp);
+        
+        //测试：获取所有的员工信息
+//        List&lt;Emp&gt; list = empMapper.getAllEmp();
+//        System.out.println(list);
+        
+        //测试：添加员工信息
+//        empMapper.addEmp(new Emp(null,&quot;admin&quot;,23,&quot;女&quot;));
+//        sqlSession.commit();//提交事务
+        
+        //测试：修改员工信息
+        empMapper.updateEmp(new Emp(2, &quot;张二&quot;, 33, &quot;女&quot;));
+        
+        //测试：删除员工信息
+//        Integer rowNum = empMapper.deleteEmp(&quot;5&quot;);
+//        System.out.println(rowNum);//返回值类型为Integer:返回受影响的行数 Boolean:·
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">MyBatis | MyBatis搭建过程</a>
         </h2>
 
         <div class="post-meta">
@@ -214,14 +458,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-07-21 01:39:08" itemprop="dateCreated datePublished" datetime="2022-07-21T01:39:08-08:00">2022-07-21</time>
+              <time title="创建时间：2022-04-01 05:16:26" itemprop="dateCreated datePublished" datetime="2022-04-01T05:16:26-08:00">2022-04-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-23 19:06:14" itemprop="dateModified" datetime="2022-08-23T19:06:14-08:00">2022-08-23</time>
+                <time title="修改时间：2022-04-02 04:45:02" itemprop="dateModified" datetime="2022-04-02T04:45:02-08:00">2022-04-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -229,11 +473,19 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%A7%8B%E6%8B%9B%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">秋招面经</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%A7%8B%E6%8B%9B%E9%9D%A2%E7%BB%8F/%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">开发测试</span></a>
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">MyBatis搭建过程</span></a>
                 </span>
             </span>
 
@@ -248,317 +500,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="7-21开发测试面经"><a href="#7-21开发测试面经" class="headerlink" title="7.21开发测试面经"></a>7.21开发测试面经</h1><ul>
-<li><p>sql语句 </p>
-<p>表结构</p>
-<p>​    表名：student<br>​    字段：id name score</p>
-<p>问题：成绩倒数第二/正数第二的学生名字</p>
-<p>SELECT student.name, student.scores FROM student ORDER BY scores DESC LIMIT 1, 1</p>
-<p>SELECT student.name, student.scores FROM student ORDER BY scores ASC LIMIT 1, 1</p>
-</li>
-<li><p>内外连接</p>
-<p>SELECT student.name, student.scores, class.id FROM student INNER JOIN class ON student.<code>classid</code> = class.id</p>
-<p>SELECT student.name, student.scores, class.id FROM student LEFT JOIN class ON student.<code>classid</code> = class.<code>id</code></p>
-<p>SELECT student.name, student.scores, class.id FROM student RIGHT JOIN class ON student.<code>classid</code> = class.id</p>
-</li>
-<li><p>selenium定位元素</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">driver.find_element_by_xpath()</span><br><span class="line">driver.find_element_by_name()</span><br><span class="line">driver.find_element_by_tag_name()</span><br><span class="line">driver.find_element_by_link_text()</span><br><span class="line">driver.find_element_by_partial_link_text()</span><br><span class="line">driver.find_element_by_class_name()</span><br><span class="line">driver.find_element_by_css_selector()</span><br><span class="line">driver.find_element_by_id()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>tcp三次握手?握手的时候怎么确认对方的身份？<br><img src="/2022/07/21/721%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E9%9D%A2%E7%BB%8F/TCP3%E6%AC%A1%E6%8F%A1%E6%89%8B.png"></p>
-</li>
-<li><p>TCP四次挥手<br><img src="/2022/07/21/721%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E9%9D%A2%E7%BB%8F/TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.png"></p>
-</li>
-<li><p>网络七层模型及各层常见协议<br><img src="https://img-blog.csdnimg.cn/daa7b60ef1584b3faca6810d0b193e00.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA55-c6L6w5omA6Ie0,size_1,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-</li>
-<li><p>算法</p>
-<ul>
-<li><p>两数之和</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">twoSum</span>(<span class="params">self, nums, target</span>):</span></span><br><span class="line"></span><br><span class="line">		hashtable = <span class="built_in">dict</span>()</span><br><span class="line">		<span class="keyword">for</span> i,num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">			<span class="keyword">if</span> target - num <span class="keyword">in</span> hashtable:</span><br><span class="line">				<span class="keyword">return</span> [hashtable[target-num], i]</span><br><span class="line">			hashtable[nums[i]] = i</span><br><span class="line">		<span class="keyword">return</span> []</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实现LRU<br><a target="_blank" rel="noopener" href="https://sparta-admin.nowcoder.com/questions?uuid=5dfded165916435d9defb053c63f1e84">LRU</a></p>
-</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/19/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/19/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">leetcode | 27.移除元素</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-07-19 01:40:06 / 修改时间：02:04:47" itemprop="dateCreated datePublished" datetime="2022-07-19T01:40:06-08:00">2022-07-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" itemprop="url" rel="index"><span itemprop="name">27.移除元素</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="27-移除元素"><a href="#27-移除元素" class="headerlink" title="27.移除元素"></a>27.移除元素</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。<br>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。<br>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
-<p>示例 1：<br>输入：nums = [3,2,2,3], val = 3<br>输出：2, nums = [2,2]<br>解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-element">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li><p>双指针<br>设置两个指针，左指针left，右指针right，左指针left指向待插入不等于val的值，right指针遍历寻找不等于val的值，如果找到，就将right指针指向的值复制到left指针指向的位置，<br>然后left指针后移到下一个待插入位置，right指针继续后移寻找下一个不等于val的值，依次类推。</p>
-</li>
-<li><p>双指针优化<br>如果左指针 left 指向的元素等于 val，此时将右指针 right 指向的元素复制到左指针 left 的位置，然后右指针 right 左移一位。如果赋值过来的元素恰好也等于 val，可以继续把右指针 right 指向的元素的值赋值过来（左指针 left 指向的等于 val 的元素的位置继续被覆盖），直到左指针指向的元素的值不等于 val 为止。<br>当左指针 left 和右指针 right 重合的时候，左右指针遍历完数组中所有的元素。<br>这样的方法两个指针在最坏的情况下合起来只遍历了数组一次。与方法一不同的是，方法二避免了需要保留的元素的重复赋值操作。</p></li></ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/07/19/%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/19/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/19/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/" class="post-title-link" itemprop="url">leetcode | 26.删除有序数组中的重复项</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-07-19 00:41:08 / 修改时间：00:51:11" itemprop="dateCreated datePublished" datetime="2022-07-19T00:41:08-08:00">2022-07-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/26-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/" itemprop="url" rel="index"><span itemprop="name">26.删除有序数组中的重复项</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="26-删除有序数组中的重复项"><a href="#26-删除有序数组中的重复项" class="headerlink" title="26.删除有序数组中的重复项"></a>26.删除有序数组中的重复项</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个 升序排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。<br>由于在某些语言中不能改变数组的长度，所以必须将结果放在数组nums的第一部分。更规范地说，如果在删除重复项之后有 k 个元素，那么 nums 的前 k 个元素应该保存最终结果。<br>将最终结果插入 nums 的前 k 个位置后返回 k 。<br>不要使用额外的空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。</p>
-<p>示例 1：<br>输入：nums = [1,1,2]<br>输出：2, nums = [1,2,_]<br>解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li><p>双指针<br>（1）如果数组为空，返回0<br>（2）如果数组只有一个元素，返回1<br>（3）如果数组中有超过两个元素，第一个元素肯定不会被删除，所以从第二位位置开始删除重复元素，设置两个指针，一个快指针<br>fast，一个慢指针slow，快指针fast用来遍历数组寻找下一个不重复元素，慢指针slow指向存放下一个不重复元素的位置；每当<br>fast指针遍历到一个新的不重复元素（fast指向的元素不等于fast-1位置的元素），就将该元素复制到慢指针slow执行的位置，<br>同时慢指针slow指向下一个位置，快指针fast继续寻找下一个不重复元素，依次类推。</p></li></ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/07/19/%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/18/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/07/18/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/" class="post-title-link" itemprop="url">leetcode | 121.买卖股票的最佳时机</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-07-18 23:11:24 / 修改时间：23:47:43" itemprop="dateCreated datePublished" datetime="2022-07-18T23:11:24-08:00">2022-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/121-%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">121.买卖股票的最佳时机</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="121-买卖股票的最佳时机"><a href="#121-买卖股票的最佳时机" class="headerlink" title="121.买卖股票的最佳时机"></a>121.买卖股票的最佳时机</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。<br>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。<br>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p>
-<p>示例 1：<br>输入：[7,1,5,3,6,4]<br>输出：5<br>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。<br>     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p>
-<p>示例 2：<br>输入：prices = [7,6,4,3,1]<br>输出：0<br>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li><p>暴力法</p>
-</li>
-<li><p>一次遍历<br>遍历一遍数组，计算每次 到当天为止 的最小股票价格和最大利润。</p>
-</li>
-</ol>
-<p><strong>3. 动态规划</strong><br>动态规划一般分为一维、二维、多维（使用状态压缩），对应形式为 dp(i)、dp(i)(j)、二进制dp(i)(j)。<br>（1）动态规划做题步骤<br>    明确 dp(i) 应该表示什么（二维情况：dp(i)(j)）；<br>    根据 dp(i)和 dp(i−1) 的关系得出状态转移方程；<br>    确定初始条件，如 dp(0)。<br>（2）本题思路<br>其实方法一的思路不是凭空想象的，而是由动态规划的思想演变而来。这里介绍一维动态规划思想。<br>dp[i] 表示前 i 天的最大利润，因为我们始终要使利润最大化，则：</p>
-<pre><code>dp[i]=max(dp[i−1],prices[i]−minprice)
+          <h1 id="MyBatis搭建过程"><a href="#MyBatis搭建过程" class="headerlink" title="MyBatis搭建过程"></a>MyBatis搭建过程</h1><p>1.导入MyBatis框架的jar包、Mysql驱动包、log4j的jar包</p>
+<pre><code>myBatis-3.4.1.jar
+mysql-connector-java-5.1.37-bin.jar
+log4j.jar
 </code></pre>
+<p>2.创建MyBatis的核心（全局）配置文件mybatis-config.xml并配置（如何连接数据库）<br>3.创建映射文件XxxMapper.xml并配置（如何操作数据库）<br>4.创建mapper接口，实现两个绑定:<br>4.1接口全限定名要和映射文件的namespace保持一致<br>4.2接口中方法名和SQL语句的id保持一致<br>5.获取MyBatis操作数据库的会话对象SqlSession，通过getMapper()获取接口的动态代理实现类</p>
+<pre><code>InputStream is = Resources.getResourceAsStream(&quot;mybatis-config.xml&quot;);
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+SqlSession sqlSession = sqlSessionFactory.openSession();
+UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+</code></pre>
+<p>6、测试</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/07/18/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/#more" rel="contents">
+              <a class="btn" href="/2022/04/01/MyBatis%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -582,7 +538,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/18/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/27/%E8%BF%AD%E4%BB%A3%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -596,7 +552,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/07/18/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">leetcode | 136.只出现一次的数字</a>
+            <a href="/2022/03/27/%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="post-title-link" itemprop="url">python | 迭代器</a>
         </h2>
 
         <div class="post-meta">
@@ -607,7 +563,206 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-07-18 04:20:37 / 修改时间：04:25:38" itemprop="dateCreated datePublished" datetime="2022-07-18T04:20:37-08:00">2022-07-18</time>
+              <time title="创建时间：2022-03-27 02:02:05 / 修改时间：02:06:05" itemprop="dateCreated datePublished" datetime="2022-03-27T02:02:05-08:00">2022-03-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><pre><code># 创建一个返回数字的迭代器，初始值为 1，逐步递增 1：
+class MyNumbers:
+    def __iter__(self):
+        self.a = 0
+        return self
+
+    def __next__(self):
+        self.a = self.a + 1
+        return self.a
+
+# 奇数迭代器
+class MyOddNumbers:
+    def __iter__(self):
+        self.num = 1
+        return self
+
+    def __next__(self):
+        self.num = self.num + 2
+        return self.num
+
+# 偶数迭代器
+class MyEvenNumbers:
+    def __iter__(self):
+        self.num = 0
+        return self
+
+    def __next__(self):
+        self.num = self.num + 2
+        return self.num
+
+myclass = MyNumbers()
+myiter = iter(myclass)
+print(next(myiter))
+print(next(myiter))
+print(next(myiter))
+print(next(myiter))
+print(next(myiter))
+print(&quot;======================================&quot;)
+my_odd_numbers = MyOddNumbers()
+my_odd_numbers_iter = iter(my_odd_numbers)
+print(next(my_odd_numbers_iter))
+print(next(my_odd_numbers_iter))
+print(next(my_odd_numbers_iter))
+print(next(my_odd_numbers_iter))
+print(&quot;======================================&quot;)
+my_even_numbers = MyEvenNumbers()
+my_even_numbers_iter = iter(my_even_numbers)
+print(next(my_even_numbers_iter))
+print(next(my_even_numbers_iter))
+print(next(my_even_numbers_iter))
+print(next(my_even_numbers_iter))
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/25/property%E5%92%8Cproperty%E8%A3%85%E9%A5%B0%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/25/property%E5%92%8Cproperty%E8%A3%85%E9%A5%B0%E5%99%A8/" class="post-title-link" itemprop="url">python | property和property装饰器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-25 03:35:27 / 修改时间：03:36:33" itemprop="dateCreated datePublished" datetime="2022-03-25T03:35:27-08:00">2022-03-25</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="property和property装饰器"><a href="#property和property装饰器" class="headerlink" title="property和property装饰器"></a>property和property装饰器</h1><pre><code>class Student:
+    def __init__(self, name):
+        self.__name = name
+
+    def get_name(self):
+        return self.__name
+
+    def set_name(self, new_name):
+        self.__name = new_name
+
+    name = property(get_name, set_name)
+
+s = Student(&quot;张三&quot;)
+s.name = &quot;李四&quot;
+print(s.name)
+
+class Student:
+    def __init__(self, name):
+        self.__name = name
+
+    @property
+    def name(self):
+        return self.__name
+    @name.setter
+    def name(self, new_name):
+        self.__name = new_name
+
+s = Student(&quot;张三&quot;)
+s.name = &quot;李四&quot;
+print(s.name)
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/java%E5%BC%95%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/java%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">Java | java引用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-24 20:32:36 / 修改时间：20:33:44" itemprop="dateCreated datePublished" datetime="2022-03-24T20:32:36-08:00">2022-03-24</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -615,19 +770,15 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法刷题</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/" itemprop="url" rel="index"><span itemprop="name">数组</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98/leetcode/%E6%95%B0%E7%BB%84/136-%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/" itemprop="url" rel="index"><span itemprop="name">136.只出现一次的数字</span></a>
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%BC%BA%E8%BD%AF%E5%BC%B1%E8%99%9A%E5%9B%9B%E5%A4%A7%E5%BC%95%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">强软弱虚四大引用</span></a>
                 </span>
             </span>
 
@@ -642,20 +793,589 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="136-只出现一次的数字"><a href="#136-只出现一次的数字" class="headerlink" title="136.只出现一次的数字"></a>136.只出现一次的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。<br>说明：<br>你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？</p>
-<p>示例 1:<br>输入: [2,2,1]<br>输出: 1</p>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/single-number">题目链接</a></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>python版本<br>遍历nums数组中的每一个数num，并使用list.count(num)统计num在nums中出现的次数，如果次数为1，返回num。</li>
-<li>java版本<br>遍历nums数组中的每一个数num，使用HashMap记录每个num出现的次数，然后返回出现次数为1的num。</li></ol>
+          <h1 id="强软弱虚四大引用"><a href="#强软弱虚四大引用" class="headerlink" title="强软弱虚四大引用"></a>强软弱虚四大引用</h1><pre><code>import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class StudentClass&#123;
+    @Override
+    protected void finalize() throws Throwable&#123;
+        System.out.println(&quot;student对象被回收了&quot;);
+    &#125;
+&#125;
+
+public class ReferencesTest &#123;
+    public static void main(String[] args) &#123;
+        
+        /**
+         * 强引用
+         * 只要某个对象有强引用与之关联，这个对象永远不会被回收，即使内存不足，JVM宁愿抛出OOM，也不会去回收。
+         */
+        //StudentClass student = new StudentClass();
+        //student = null;//断开强引用与对象之间的关联
+        //System.gc();
+        
+        
+        /**
+         * 软引用
+         * 内存不足时，JVM会回收软引用关联的对象
+         * 
+         * 比较适合用作缓存，当内存足够，可以正常的拿到缓存，当内存不够，就会先干掉缓存，不至于马上抛出OOM。
+         */
+//        SoftReference&lt;byte[]&gt; softReference = new SoftReference&lt;byte[]&gt;(new byte[1024*1024*10]);
+//        System.out.println(softReference.get());
+//        System.gc();
+//        System.out.println(softReference.get());
+//        byte[] bytes = new byte[1024 * 1024 * 10];
+//        System.out.println(softReference.get());
+        
+        /**
+         * 弱引用
+         * 不管内存是否足够，只要发生GC，都会被回收
+         */
+//        WeakReference&lt;byte[]&gt; weakReference = new WeakReference&lt;byte[]&gt;(new byte[1]);
+//        System.out.println(weakReference.get());
+//        System.gc();
+//        System.out.println(weakReference.get());
+        
+//        [B@15db9742
+//         null
+        
+        /**
+         * 虚引用
+         * 特点一：无法通过虚引用来获取对一个对象的真实引用
+         * 特点二：虚引用必须与ReferenceQueue一起使用，当GC准备回收一个对象，如果发现它还有虚引用，就会在回收之前，把这个虚引用加入到与之关联的ReferenceQueue中。
+         * 
+         * 
+         * Unlike soft and weak references, phantom references are not
+ automatically cleared by the garbage collector as they are enqueued.  An
+object that is reachable via phantom references will remain so until all
+such references are cleared or themselves become unreachable.
+         */
+        ReferenceQueue&lt;Object&gt; referenceQueue = new ReferenceQueue&lt;&gt;();
+        List&lt;byte[]&gt; bytes = new ArrayList&lt;&gt;();
+        PhantomReference&lt;StudentClass&gt; reference = new PhantomReference&lt;StudentClass&gt;(new StudentClass(),referenceQueue);
+        
+        new Thread(() -&gt; &#123;
+            for (int i = 0; i &lt; 100;i++ ) &#123;
+                bytes.add(new byte[1024 * 1024]);
+            &#125;
+        &#125;).start();
+ 
+        new Thread(() -&gt; &#123;
+            while (true) &#123;
+                Reference poll = referenceQueue.poll();
+                if (poll != null) &#123;
+                    System.out.println(&quot;虚引用被回收了：&quot; + poll);
+                &#125;
+            &#125;
+        &#125;).start();
+        Scanner scanner = new Scanner(System.in);
+        scanner.hasNext();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/ConfusionMatrix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/ConfusionMatrix/" class="post-title-link" itemprop="url">绘图 | ConfusionMatrix</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-24 18:41:00 / 修改时间：18:43:56" itemprop="dateCreated datePublished" datetime="2022-03-24T18:41:00-08:00">2022-03-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%BB%98%E5%9B%BE/" itemprop="url" rel="index"><span itemprop="name">绘图</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%BB%98%E5%9B%BE/Confusion-Matrix/" itemprop="url" rel="index"><span itemprop="name">Confusion Matrix</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Confusion-Matrix"><a href="#Confusion-Matrix" class="headerlink" title="Confusion Matrix"></a>Confusion Matrix</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yexionglin/p/11432180.html">混淆矩阵</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/21/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 抽象工厂模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-21 20:20:47 / 修改时间：23:01:45" itemprop="dateCreated datePublished" datetime="2022-03-21T20:20:47-08:00">2022-03-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">抽象工厂模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h1><p>抽象工厂模式(Abstract Factory),提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33732195/article/details/110101808">抽象工厂模式(通俗易懂)</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/07/18/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/#more" rel="contents">
+              <a class="btn" href="/2022/03/21/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
         
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/21/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 单例模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-21 18:10:43 / 修改时间：18:14:41" itemprop="dateCreated datePublished" datetime="2022-03-21T18:10:43-08:00">2022-03-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">单例模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><p>单例模式(Singleton)，保证一个类有一个实例，并提供一个访问它的全局访问点。</p>
+<p>“通常我们可以让一个全局变量使得一个对象被访问，但它不能防止你实例化多个对象。一个最好的办法就是，让类自身保存<br>它的唯一实例。这个类可以保证没有其他实例可以被创建，并且它可以提供一个访问该实例的方法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/21/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 工厂方法模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-21 02:11:59 / 修改时间：17:48:06" itemprop="dateCreated datePublished" datetime="2022-03-21T02:11:59-08:00">2022-03-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">工厂方法模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h1><p><strong>why 工厂方法模式？</strong><br>简单工厂模式违背了开放封闭原则（开放了拓展，也开放了修改），如果需要增加功能就需要在工厂类中修改逻辑判断，于是工厂方法模式应运而生。</p>
+<p>工厂方法模式：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法是一个类的实例化延迟到子类。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/21/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式 | 简单工厂模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-21 01:57:40 / 修改时间：17:51:35" itemprop="dateCreated datePublished" datetime="2022-03-21T01:57:40-08:00">2022-03-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">简单工厂模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h1><p>工厂：用一个单独的类来完成创造实例的过程。<br><strong>案例</strong><br>类图：<br><img src="/2022/03/21/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/1.jpg"></p>
+<pre><code>class Operation&#123;
+    private double numberA = 0;
+    private double numberB = 0;
+    public double getNumberA() &#123;
+        return numberA;
+    &#125;
+    public void setNumberA(double numberA) &#123;
+        this.numberA = numberA;
+    &#125;
+    public double getNumberB() &#123;
+        return numberB;
+    &#125;
+    public void setNumberB(double numberB) &#123;
+        this.numberB = numberB;
+    &#125;
+    public double getResult() throws Exception&#123;
+        double result = 0;
+        return result;
+    &#125;
+&#125;
+
+class Add extends Operation&#123;
+    public double getResult()
+    &#123;
+        double result = 0;
+        result = getNumberA() + getNumberB();
+        return result;
+    &#125;
+&#125;
+
+class Sub extends Operation&#123;
+    public double getResult()
+    &#123;
+        double result = 0;
+        result = getNumberA() - getNumberB();
+        return result;
+    &#125;
+&#125;
+
+class Mul extends Operation&#123;
+    public double getResult()
+    &#123;
+        double result = 0;
+        result = getNumberA() * getNumberB();
+        return result;
+    &#125;
+&#125;
+
+class Div extends Operation&#123;
+    public double getResult() throws Exception
+    &#123;
+        double result = 0;
+        if (getNumberB() == 0)&#123;
+            throw new Exception(&quot;除数不能为0&quot;);
+        &#125;
+        result = getNumberA() / getNumberB();
+        return result;
+    &#125;
+&#125;
+
+//工厂：用一个单独的类来做这个创造实例的过程
+class OperationFactory&#123;
+    public static Operation createOperate(String operate)&#123;
+        Operation oper = null;
+        
+        if(operate.equals(&quot;+&quot;))&#123;
+            oper = new Add();
+        &#125;else if(operate.equals(&quot;-&quot;))&#123;
+            oper = new Sub();
+        &#125;else if(operate.equals(&quot;*&quot;))&#123;
+            oper = new Mul();
+        &#125;else if(operate.equals(&quot;/&quot;))&#123;
+            oper = new Div();
+        &#125;
+        return oper;
+    &#125;
+&#125;
+
+public class SimpleFactoryTest &#123;
+    public static void main(String[] args) throws Exception &#123;
+        Operation oper = OperationFactory.createOperate(&quot;+&quot;);
+        oper.setNumberA(1);
+        oper.setNumberB(2);
+        double result = oper.getResult();
+        System.out.println(result);
+    &#125;
+&#125;
+</code></pre>
+<p>在使用简单工厂模式的情况下，如果我们要增加新的功能，比如说现在要增加一个求余操作，<br>我们需要增加一个用于求余运算的类，然后在OperationFactory中增加对于求余运算的逻辑判断，这样的做法违背了<br>开放封闭原则，即在开放拓展的同时也开放了修改。</p>
+<pre><code>class Mod extends Operation&#123;
+    public double getResult()&#123;
+        double result = 0;
+        result = getNumberA() % getNumberB();
+        return result;
+    &#125;
+&#125;
+
+class OperationFactory&#123;
+    public static Operation createOperate(String operate)&#123;
+        ......
+        else if(operate.equals(&quot;%&quot;))&#123;
+            oper = new Div();
+        &#125;
+        ......
+    &#125;
+&#125;
+</code></pre>
+
       
     </div>
 
@@ -673,7 +1393,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/52/">52</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -741,20 +1461,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">513</span>
+          <span class="site-state-item-count">516</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">441</span>
+        <span class="site-state-item-count">466</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">442</span>
+        <span class="site-state-item-count">454</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

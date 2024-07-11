@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/04/MultimodalEmotionRecognition/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">并发 | volatile、synchronized和原子操作</a>
+            <a href="/2022/01/04/MultimodalEmotionRecognition/" class="post-title-link" itemprop="url">参考文献 | Multimodal Emotion Recognition Method based on Facial expressions and EEG</a>
         </h2>
 
         <div class="post-meta">
@@ -213,21 +213,35 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-05-22 19:03:39 / 修改时间：19:57:47" itemprop="dateCreated datePublished" datetime="2022-05-22T19:03:39-08:00">2022-05-22</time>
+              <time title="创建时间：2022-01-04 21:26:08" itemprop="dateCreated datePublished" datetime="2022-01-04T21:26:08-08:00">2022-01-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-05 05:25:58" itemprop="dateModified" datetime="2022-01-05T05:25:58-08:00">2022-01-05</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                  <a href="/categories/Research-and-Paper/EEG/" itemprop="url" rel="index"><span itemprop="name">EEG</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">脑电分类</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/EEG/%E8%84%91%E7%94%B5%E5%88%86%E7%B1%BB/%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/" itemprop="url" rel="index"><span itemprop="name">参考文献</span></a>
                 </span>
             </span>
 
@@ -242,193 +256,443 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="volatile、synchronized和原子操作"><a href="#volatile、synchronized和原子操作" class="headerlink" title="volatile、synchronized和原子操作"></a>volatile、synchronized和原子操作</h1><h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>volatile是轻量级的synchronized，它在多处理器并发中保证了<strong>共享变量的“可见性”</strong>。可见性是指当一个线程修改一个共享变量时<br>，另外一个线程能读到这个修改的值（Java内存模型确保所有线程看到这个变量的值是一致的）。</p>
-<h3 id="volatile的两条实现原则"><a href="#volatile的两条实现原则" class="headerlink" title="volatile的两条实现原则"></a>volatile的两条实现原则</h3><p>（1）Lock前缀指令会引起处理器缓存回写到内存。<br>（2）一个处理器的缓存回写到内存会导致其他处理器的缓存无效。</p>
-<h3 id="volatile的使用优化"><a href="#volatile的使用优化" class="headerlink" title="volatile的使用优化"></a>volatile的使用优化</h3><p>使用追加到64字节的方式来填满高速缓冲区的缓存行，避免头节点和尾节点加载到同一个缓存行，使头、尾节点在修改时不会互相锁定。</p>
-<h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>JVM基于进入和推出Monitor对象来实现方法同步和代码块同步，但两者实现细节不一样。<br>代码块同步使用monitorenter和monitorexit指令实现的。monitorenter指令在编译后插入到同步代码块的开始位置，而monitorexit是<br>插入到方法结束处和异常处，JVM要博爱正每个monitorenter必须有对应的monitorexit与之配对。任何对象都有一个monitor与之关联，<br>当且一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象monitor的所有权，即尝试获得对象的锁。</p>
-<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>java如何实现原子操作？<br>通过循环CAS的方式实现原子操作。JVM中CAS操作使用处理器提供的CMPXCHG指令实现。自旋CAS实现的基本思路就是循环及进行CAS操作指导成功为止。</p>
-<h3 id="使用CAS实现线程安全计数器"><a href="#使用CAS实现线程安全计数器" class="headerlink" title="使用CAS实现线程安全计数器"></a>使用CAS实现线程安全计数器</h3><pre><code>package concurrency;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-public class Counter &#123;
-    private AtomicInteger atomicI = new AtomicInteger(0);
-    private int i = 0;
-    
-    public static void main(String[] args) &#123;
-        final Counter cas = new Counter();
-        List&lt;Thread&gt; ts = new ArrayList&lt;Thread&gt;(600);
-        long start = System.currentTimeMillis();
-        for(int j = 0; j &lt; 100; j++)&#123;
-            Thread t = new Thread(new Runnable()&#123;
-                @Override
-                public void run()&#123;
-                    for(int i = 0; i &lt; 10000; i++)&#123;
-                        cas.count();
-                        cas.safeCount();
-                    &#125;
-                &#125;
-            &#125;);
-            ts.add(t);
-        &#125;
-        for(Thread t : ts)&#123;
-            t.start();
-        &#125;
-        //等待所有线程执行完成
-        for(Thread t : ts)&#123;
-            try &#123;
-                t.join();
-            &#125; catch (InterruptedException e) &#123;
-                e.printStackTrace();
-            &#125;
-        &#125;
-        System.out.println(cas.i);
-        System.out.println(cas.atomicI.get());
-        System.out.println(System.currentTimeMillis() - start);
-    &#125;
-    
-    //使用CAS实现线程安全计数器
-    private void safeCount()&#123;
-        for(;;)&#123;
-            int i = atomicI.get();
-            boolean suc = atomicI.compareAndSet(i, ++i);
-            if(suc)&#123;
-                break;
-            &#125;
-        &#125;
-    &#125;
-    
-    //非线程安全计数器
-    private void count()&#123;
-        i++;
-    &#125;
-&#125;
-</code></pre>
-<h2 id="CAS实现原子操作的三大问题"><a href="#CAS实现原子操作的三大问题" class="headerlink" title="CAS实现原子操作的三大问题"></a>CAS实现原子操作的三大问题</h2><p>（1）ABA问题。可以使用版本号解决。JDK Atomic AtomicStampedReference可以解决ABA问题。<br>（2）循环时间长开销大。自旋CAS如果长时间不成功，会给CPU带来非常大的执行开销。<br>（3）只能保证一个共享变量的原子操作。对多个共享变量操作可以使用锁/将多个共享变量合并成一个共享变量来操作（两个共享变量i=2,j=a,合并以下ij=2a,然后采用CAS来操作）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" class="post-title-link" itemprop="url">并发 | 上下文切换和死锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-22 18:37:08 / 修改时间：18:59:57" itemprop="dateCreated datePublished" datetime="2022-05-22T18:37:08-08:00">2022-05-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" itemprop="url" rel="index"><span itemprop="name">上下文切换</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="上下文切换和死锁"><a href="#上下文切换和死锁" class="headerlink" title="上下文切换和死锁"></a>上下文切换和死锁</h1><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，再切换前会保存上一个任务的<br>状态，以便切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。频繁的上下文<br>切换会影响多线程的执行速度。</p>
-<h2 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h2><p>（1）无锁并发编程。多线程竞争锁时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁（如采用分段锁，不同的线程处理不同段的数据）<br>（2）CAS算法。<br>（3）使用最小线程。避免创建不需要的线程（任务很少，创建了很多线程，造成大量线程阻塞等待）</p>
-<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的条件"><a href="#死锁产生的条件" class="headerlink" title="死锁产生的条件"></a>死锁产生的条件</h3><p>（1）互斥。一个资源同一时刻只能被一个线程拥有。<br>（2）请求和保持。线程在请求新的资源时，不释放已经拥有的资源。<br>（3）不剥夺条件。进程所获得的资源在未使用完之前，不被其他的线程强行剥夺。<br>（4）循环等待。竞争资源的各个线程形成一个线程等待环路。</p>
-<h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><p>破坏产生死锁的条件：<br>（2）在进程开始执行时就申请他所需的全部资源<br>（3）一个进程不能获得所需要的全部资源时便处于等待状态，等待期间他占有的资源将被隐式的释放重新加入到系统的资源列表中<br>，可以被其他的进程使用，而等待的进程只有重新获得自己原有的资源以及新申请的资源才可以重新启动、执行。<br>（4）资源有序分配（银行家算法）</p>
-<h3 id="死锁Demo"><a href="#死锁Demo" class="headerlink" title="死锁Demo"></a>死锁Demo</h3><pre><code>package concurrency;
-
-public class DeadLockDemo &#123;
-    private static String A = &quot;A&quot;;
-    private static String B = &quot;B&quot;;
-    
-    public static void main(String[] args) &#123;
-        new DeadLockDemo().deadLock();
-    &#125;
-    
-    private void deadLock()&#123;
-        Thread t1 = new Thread(new Runnable()&#123;
-            @Override
-            public void run()&#123;
-                synchronized(A)&#123;
-                    try &#123;
-                        Thread.currentThread().sleep(2000);
-                    &#125; catch (InterruptedException e) &#123;
-                        e.printStackTrace();
-                    &#125;
-                    synchronized(B)&#123;
-                        System.out.println(&quot;1&quot;);
-                    &#125;
-                &#125;
-            &#125;
-        &#125;);
+          <h1 id="Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG"><a href="#Multimodal-Emotion-Recognition-Method-based-on-Facial-expressions-and-EEG" class="headerlink" title="Multimodal Emotion Recognition Method based on Facial expressions and EEG"></a>Multimodal Emotion Recognition Method based on Facial expressions and EEG</h1><h2 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h2><p>To solve the <strong>multimodal emtoion recognition</strong> problem, the emotion recognition results<br>were calculated using the <strong>Monte Carlo method</strong> to combine the recognition results of<br><strong>facical expressions</strong> and <strong>EEG</strong> in the multimodal emotion recognition.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/04/MultimodalEmotionRecognition/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        Thread t2 = new Thread(new Runnable()&#123;
-            @Override
-            public void run() &#123;
-                synchronized(B)&#123;
-                    synchronized(A)&#123;
-                        System.out.println(&quot;2&quot;);
-                    &#125;
-                &#125;
-            &#125;
-        &#125;);
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/04/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/" class="post-title-link" itemprop="url">期刊 | 脑电期刊</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-04 19:17:28 / 修改时间：19:21:52" itemprop="dateCreated datePublished" datetime="2022-01-04T19:17:28-08:00">2022-01-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/" itemprop="url" rel="index"><span itemprop="name">脑电期刊</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/%E8%84%91%E7%94%B5%E6%9C%9F%E5%88%8A/Biomedical-Signal-Processing-and-Control/" itemprop="url" rel="index"><span itemprop="name">Biomedical Signal Processing and Control</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="脑电期刊"><a href="#脑电期刊" class="headerlink" title="脑电期刊"></a>脑电期刊</h1><p>名称：Biomedical Siganl Processing and Control<br>网址：<a target="_blank" rel="noopener" href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a><br>SCI分区：2</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/16/%E6%9C%80%E6%96%B0SCI%E6%9C%9F%E5%88%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E6%8A%95%E7%A8%BF%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/16/%E6%9C%80%E6%96%B0SCI%E6%9C%9F%E5%88%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E6%8A%95%E7%A8%BF%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">最新SCI期刊查询及投稿分析系统</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-16 22:44:04 / 修改时间：22:53:02" itemprop="dateCreated datePublished" datetime="2021-12-16T22:44:04-08:00">2021-12-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/%E6%9C%80%E6%96%B0SCI%E6%9C%9F%E5%88%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E6%8A%95%E7%A8%BF%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">最新SCI期刊查询及投稿分析系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="最新SCI期刊查询及投稿分析系统"><a href="#最新SCI期刊查询及投稿分析系统" class="headerlink" title="最新SCI期刊查询及投稿分析系统"></a>最新SCI期刊查询及投稿分析系统</h1><p><a target="_blank" rel="noopener" href="https://www.letpub.com.cn/">最新SCI期刊查询及投稿分析系统</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/16/%E5%86%99%E8%AE%BA%E6%96%87%E7%A5%9E%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/16/%E5%86%99%E8%AE%BA%E6%96%87%E7%A5%9E%E5%99%A8/" class="post-title-link" itemprop="url">写论文神器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-16 22:35:39 / 修改时间：22:42:50" itemprop="dateCreated datePublished" datetime="2021-12-16T22:35:39-08:00">2021-12-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/CTeX%E5%86%99%E8%AE%BA%E6%96%87%E7%A5%9E%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">CTeX写论文神器</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="写论文神器-CTeX"><a href="#写论文神器-CTeX" class="headerlink" title="写论文神器-CTeX"></a>写论文神器-CTeX</h1><p><a target="_blank" rel="noopener" href="http://www.ctex.org/CTeX">CTeX下载地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhiqianghe.blog.csdn.net/article/details/102978653?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link">CTeX安装教程</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/29/EmotionalTendencyPredictionUsingLSTM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/29/EmotionalTendencyPredictionUsingLSTM/" class="post-title-link" itemprop="url">EmotionalTendencyPredictionUsingLSTM</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-29 04:48:49" itemprop="dateCreated datePublished" datetime="2021-11-29T04:48:49-08:00">2021-11-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/22/PILImageCrop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/22/PILImageCrop/" class="post-title-link" itemprop="url">PIL | PIL.Image.crop()</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-22 01:27:54 / 修改时间：01:31:23" itemprop="dateCreated datePublished" datetime="2021-11-22T01:27:54-08:00">2021-11-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/PIL/" itemprop="url" rel="index"><span itemprop="name">PIL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="PIL-Image-crop"><a href="#PIL-Image-crop" class="headerlink" title="PIL.Image.crop()"></a>PIL.Image.crop()</h1><p>程序使用PIL.Image.crop()将一张图片切割成9张小图片。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/22/PILImageCrop/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        t1.start();
-        t2.start();
-    &#125;
-&#125;
-</code></pre>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/21/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0pytorch%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/21/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0pytorch%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF/" class="post-title-link" itemprop="url">深度学习 | 深度学习pytorch训练代码模板</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-21 04:13:30 / 修改时间：04:15:17" itemprop="dateCreated datePublished" datetime="2021-11-21T04:13:30-08:00">2021-11-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="深度学习pytorch训练代码模板"><a href="#深度学习pytorch训练代码模板" class="headerlink" title="深度学习pytorch训练代码模板"></a>深度学习pytorch训练代码模板</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/396666255?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">查看模板！</a></p>
 
       
     </div>
@@ -448,7 +712,7 @@ public class DeadLockDemo &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -462,7 +726,7 @@ public class DeadLockDemo &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/22/Redis%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" class="post-title-link" itemprop="url">Redis | 面试题目</a>
+            <a href="/2021/11/21/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/" class="post-title-link" itemprop="url">RNN | LSTM输入输出格式</a>
         </h2>
 
         <div class="post-meta">
@@ -471,21 +735,43 @@ public class DeadLockDemo &#123;
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-05-22 01:32:20 / 修改时间：01:33:41" itemprop="dateCreated datePublished" datetime="2022-05-22T01:32:20-08:00">2022-05-22</time>
+              <time title="创建时间：2021-11-21 04:07:15" itemprop="dateCreated datePublished" datetime="2021-11-21T04:07:15-08:00">2021-11-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-11 06:45:20" itemprop="dateModified" datetime="2024-07-11T06:45:20-08:00">2024-07-11</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">面试题目</span></a>
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/" itemprop="url" rel="index"><span itemprop="name">RNN</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/LSTM/" itemprop="url" rel="index"><span itemprop="name">LSTM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/RNN/LSTM/LSTM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">LSTM输入输出格式</span></a>
                 </span>
             </span>
 
@@ -500,7 +786,7 @@ public class DeadLockDemo &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Redis面试题目"><a href="#Redis面试题目" class="headerlink" title="Redis面试题目"></a>Redis面试题目</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/3ln9VAB_heYTI7yvxnp2bw">参考资料</a></p>
+          <h1 id="LSTM模型结构的可视化"><a href="#LSTM模型结构的可视化" class="headerlink" title="LSTM模型结构的可视化"></a>LSTM模型结构的可视化</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139617364?utm_source=wechat_session&utm_medium=social&utm_oi=1006101315038175232&utm_campaign=shareopn">非常到位的LSTM解读！</a></p>
 
       
     </div>
@@ -520,7 +806,7 @@ public class DeadLockDemo &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/21/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -534,7 +820,7 @@ public class DeadLockDemo &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/21/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Redis | 缓存和数据库的一致性问题</a>
+            <a href="/2021/11/20/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/" class="post-title-link" itemprop="url">Computer Vision | 虚假名人照片生成</a>
         </h2>
 
         <div class="post-meta">
@@ -545,7 +831,7 @@ public class DeadLockDemo &#123;
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-21 20:15:47 / 修改时间：20:19:41" itemprop="dateCreated datePublished" datetime="2022-05-21T20:15:47-08:00">2022-05-21</time>
+              <time title="创建时间：2021-11-20 02:02:52 / 修改时间：04:14:26" itemprop="dateCreated datePublished" datetime="2021-11-20T02:02:52-08:00">2021-11-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -553,11 +839,19 @@ public class DeadLockDemo &#123;
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">缓存和数据库的一致性问题</span></a>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/%E8%99%9A%E5%81%87%E5%90%8D%E4%BA%BA%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">虚假名人照片生成</span></a>
                 </span>
             </span>
 
@@ -572,7 +866,9 @@ public class DeadLockDemo &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="缓存和数据库的一致性问题"><a href="#缓存和数据库的一致性问题" class="headerlink" title="缓存和数据库的一致性问题"></a>缓存和数据库的一致性问题</h1><p>1、想要提高应用的性能，可以引入「缓存」来解决<br>2、引入缓存后，需要考虑缓存和数据库一致性问题，可选的方案有：「更新数据库 + 更新缓存」、「更新数据库 + 删除缓存」<br>3、更新数据库 + 更新缓存方案，在「并发」场景下无法保证缓存和数据一致性，且存在「缓存资源浪费」和「机器性能浪费」的情况发生<br>4、在更新数据库 + 删除缓存的方案中，「先删除缓存，再更新数据库」在「并发」场景下依旧有数据不一致问题，解决方案是「延迟双删」，但这个延迟时间很难评估，所以推荐用「先更新数据库，再删除缓存」的方案<br>5、在「先更新数据库，再删除缓存」方案下，为了保证两步都成功执行，需配合「消息队列」或「订阅变更日志」的方案来做，本质是通过「重试」的方式保证数据一致性<br>6、在「先更新数据库，再删除缓存」方案下，「读写分离 + 主从库延迟」也会导致缓存和数据库不一致，缓解此问题的方案是「延迟双删」，凭借经验发送「延迟消息」到队列中，延迟删除缓存，同时也要控制主从库延迟，尽可能降低不一致发生的概率<br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIyOTYxNDI5OA==&mid=2247487312&idx=1&sn=fa19566f5729d6598155b5c676eee62d&chksm=e8beb8e5dfc931f3e35655da9da0b61c79f2843101c130cf38996446975014f958a6481aacf1&scene=178&cur_album_id=1699766580538032128#rd">参考资料</a></p>
+          <h1 id="虚假名人照片生成"><a href="#虚假名人照片生成" class="headerlink" title="虚假名人照片生成"></a>虚假名人照片生成</h1><h2 id="1-虚假照片生成有什么用？"><a href="#1-虚假照片生成有什么用？" class="headerlink" title="1. 虚假照片生成有什么用？"></a>1. 虚假照片生成有什么用？</h2><p>生成一些“并不存在的人”的照片<br>给定一系列真人照片，通过GAN技术生成一些类似的照片。但这些照片上的人并不真实存在。<br>这些照片可以用作一些影视作品中的“遗像”，这样，既保证了影视作品的真实性，又不需要使用真人照片。</p>
+<h2 id="2-数据集情况"><a href="#2-数据集情况" class="headerlink" title="2.数据集情况"></a>2.数据集情况</h2><p>CelebA（名人照片数据集）<br>网址：<a target="_blank" rel="noopener" href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html</a><br><strong>·</strong> 人脸照片，拥有超过200K张名人照片<br><strong>·</strong> 照片中人的姿态不一，背景杂乱</p>
+<h2 id="模型介绍"><a href="#模型介绍" class="headerlink" title="模型介绍"></a>模型介绍</h2><p>DCGAN generator</p>
 
       
     </div>
@@ -592,7 +888,7 @@ public class DeadLockDemo &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -606,7 +902,7 @@ public class DeadLockDemo &#123;
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">Redis | 集群搭建</a>
+            <a href="/2021/11/16/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">Computer Vision | 基于ResNet的CIFAER10图像分类</a>
         </h2>
 
         <div class="post-meta">
@@ -615,21 +911,35 @@ public class DeadLockDemo &#123;
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-05-20 20:19:56 / 修改时间：20:50:47" itemprop="dateCreated datePublished" datetime="2022-05-20T20:19:56-08:00">2022-05-20</time>
+              <time title="创建时间：2021-11-16 19:26:33" itemprop="dateCreated datePublished" datetime="2021-11-16T19:26:33-08:00">2021-11-16</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-20 01:51:10" itemprop="dateModified" datetime="2021-11-20T01:51:10-08:00">2021-11-20</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" itemprop="url" rel="index"><span itemprop="name">项目经历</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">集群搭建</span></a>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/Deep-Learning/Computer-Vision/%E5%9F%BA%E4%BA%8EResNet%E7%9A%84CIFAER-10%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基于ResNet的CIFAER-10图像分类</span></a>
                 </span>
             </span>
 
@@ -644,64 +954,7 @@ public class DeadLockDemo &#123;
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Redis集群搭建"><a href="#Redis集群搭建" class="headerlink" title="Redis集群搭建"></a>Redis集群搭建</h1><p>1.下载Redis并将redis放到linux目录/opt下<br>2.在opt下创建myRedis文件夹,并备份redis.conf到此处<br>3.安装ruby环境<br>（1）yum install ruby<br>（2）yum install rubygems<br>4.创建6个实例（此处使用相同主机的不同端口来模拟多个节点）<br>通过include引入备份文件redis.conf（redis.conf中需要修改配置：protected-mode no   daemonize yes   appendonly no）的内容并修改每个节点不同的信息<br>(1)redis6379.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6379.pid&quot;
-port 6379
-dbfilename &quot;dump6379.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6379.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(2)redis6380.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6380.pid&quot;
-port 6380
-dbfilename &quot;dump6380.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6380.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(3)redis6381.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6381.pid&quot;
-port 6381
-dbfilename &quot;dump6381.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6381.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(4)redis6389.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6389.pid&quot;
-port 6389
-dbfilename &quot;dump6389.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6389.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(5)redis6390.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6390.pid&quot;
-port 6390
-dbfilename &quot;dump6390.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6390.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>(6)redis6391.conf</p>
-<pre><code>include /opt/myRedis/redis.conf
-pidfile &quot;/var/run/redis6391.pid&quot;
-port 6391
-dbfilename &quot;dump6391.rdb&quot;
-cluster-enabled yes
-cluster-config-file nodes-6391.conf
-cluster-node-timeout 15000
-</code></pre>
-<p>5.启动所有redis实例，nodes-xxxx.conf文件都生成正常。<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/1.PNG"><br>6.将六个实例组合到一个集群当中</p>
-<pre><code>redis-cli --cluster create 192.168.1.108:6379 192.168.1.108:6380 192.168.1.108:6381 192.168.1.108:6389 192.168.1.108:6390 192.168.1.108:6391 --cluster-replicas 1
-</code></pre>
-<p>7.启动客户端并查看集群<br><img src="/2022/05/20/Redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/2.PNG"></p>
+          <h1 id="基于ResNet的CIFAER-10图像分类"><a href="#基于ResNet的CIFAER-10图像分类" class="headerlink" title="基于ResNet的CIFAER-10图像分类"></a>基于ResNet的CIFAER-10图像分类</h1><h2 id="CIFAR-10数据集"><a href="#CIFAR-10数据集" class="headerlink" title="CIFAR-10数据集"></a>CIFAR-10数据集</h2><p><strong>数据集规模</strong><br>60000张32×32的彩色图片，共有十个类别，每个类别6000张图片。共50000张训练集图片和10000测试集图片。<br><strong>数据集样本类别</strong><br>飞机、汽车、鸟、猫、鹿、狗、青蛙、马、船、卡车（汽车和卡车无重叠）—&gt; 10分类任务<br><strong>数据集网址</strong><br><a target="_blank" rel="noopener" href="http://www.cs.toronto.edu/~kriz/cifar.html">http://www.cs.toronto.edu/~kriz/cifar.html</a><br><strong>网络</strong><br>ResNet18</p>
 
       
     </div>
@@ -720,7 +973,7 @@ cluster-node-timeout 15000
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/23/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/25/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/23/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&hellip;</span><a class="page-number" href="/page/52/">52</a><a class="extend next" rel="next" href="/page/25/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -788,20 +1041,20 @@ cluster-node-timeout 15000
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">513</span>
+          <span class="site-state-item-count">516</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">441</span>
+        <span class="site-state-item-count">466</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">442</span>
+        <span class="site-state-item-count">454</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

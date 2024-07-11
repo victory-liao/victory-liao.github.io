@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/30/CountDownLatch/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/filter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,7 +204,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/30/CountDownLatch/" class="post-title-link" itemprop="url">并发 | CountDownLatch</a>
+            <a href="/2022/01/11/filter/" class="post-title-link" itemprop="url">JavaWeb项目开发 | filter</a>
         </h2>
 
         <div class="post-meta">
@@ -213,16 +213,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-05-30 18:01:48" itemprop="dateCreated datePublished" datetime="2022-05-30T18:01:48-08:00">2022-05-30</time>
+              <time title="创建时间：2022-01-11 02:20:47 / 修改时间：03:09:04" itemprop="dateCreated datePublished" datetime="2022-01-11T02:20:47-08:00">2022-01-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-07 05:17:45" itemprop="dateModified" datetime="2022-06-07T05:17:45-08:00">2022-06-07</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -233,11 +227,11 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/CountDownLatch/" itemprop="url" rel="index"><span itemprop="name">CountDownLatch</span></a>
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/filter/" itemprop="url" rel="index"><span itemprop="name">filter</span></a>
                 </span>
             </span>
 
@@ -252,13 +246,356 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><p>CountDownLatch允许一个或多个线程等待其他线程完成操作。<br>例如：</p>
-<pre><code>CountDownLatch c = new CountDownLatch(2)；
+          <h1 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h1><h2 id="filter-1"><a href="#filter-1" class="headerlink" title="filter"></a>filter</h2><ol>
+<li>filter是什么？<br>servlet2.3后增加的新功能,运行在服务器端的程序，先于与之相关的servlet或者jsp页面之前运行</li>
+<li>作用<br>过滤请求和相应</li>
+<li>应用场景<br>(1)自动登录<br>(2)统一编码<br>(3)过滤特殊符号或敏感词<h2 id="filter程序编写"><a href="#filter程序编写" class="headerlink" title="filter程序编写"></a>filter程序编写</h2></li>
+<li>编写一个类</li>
+<li>1 实现一个Filter接口</li>
+<li>2 重写接口所有的方法</li>
+<li>编写配置文件</li>
+<li>1 注册filter</li>
+<li>2 绑定路径</li>
+<li>2.1 完全匹配 例如：/demo1</li>
+<li>2.2 目录匹配 例如: /* 过滤所有请求<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2></li>
+<li>项目目录<br><img src="/2022/01/11/filter/1.PNG"></li>
+<li>代码</li>
+</ol>
+<p><strong>Demo1Filter</strong></p>
+<pre><code>package com.oracle.filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+public class Demo1Filter implements Filter&#123;
+
+    @Override
+    public void destroy() &#123;
+        // TODO Auto-generated method stub
+        
+    &#125;
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException &#123;
+        // TODO Auto-generated method stub
+        System.out.println(&quot;Demo1Filter过滤到请求.../demo1&quot;);
+        
+        //放行
+        chain.doFilter(request, response);
+    &#125;
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException &#123;
+        // TODO Auto-generated method stub
+        
+    &#125;
+
+&#125;
 </code></pre>
-<p>CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N.<br>当我们调用CountDownLatch的countDown方法时，N就会减1，CountDownLatch的await方法会阻塞当前<br>线程，直到N变为0。由于countDown方法可以用在任何地方，所以这里说的<strong>N个点，可以是N个线程，也可以<br>是1个线程里的N个步骤</strong>。<br><strong>注：CountDownLatch的计数器智能使用一次</strong></p>
+<p><strong>web.xml</strong><br><img src="/2022/01/11/filter/2.PNG"><br><strong>Demo1Servlet</strong></p>
+<pre><code>package com.oracle.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo1Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        System.out.println(&quot;Demo1Servlet接收到请求.../demo1&quot;);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2022/01/11/filter/3.PNG"></p>
+<p><img src="/2022/01/11/filter/4.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/11/session/" class="post-title-link" itemprop="url">JavaWeb项目开发 | session</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-11 01:53:44 / 修改时间：02:09:45" itemprop="dateCreated datePublished" datetime="2022-01-11T01:53:44-08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/session/" itemprop="url" rel="index"><span itemprop="name">session</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><h2 id="session-1"><a href="#session-1" class="headerlink" title="session"></a>session</h2><ol>
+<li>什么是session?<br>服务器端会话技术</li>
+<li>api</li>
+</ol>
+<p><strong>(1)session的获取</strong></p>
+<pre><code>HttpSession session=request.getSession()
+</code></pre>
+<p><strong>(2)session属性操作</strong></p>
+<pre><code>session.setAttribute(&quot;attr_name&quot;, attr_value);//设置属性
+session.getAttribute(attr_name);//获取属性
+</code></pre>
+<ol start="3">
+<li>作用范围<br>一次会话中<h2 id="session-测试（其他的servlet可以共享一次请求中的数据）"><a href="#session-测试（其他的servlet可以共享一次请求中的数据）" class="headerlink" title="session 测试（其他的servlet可以共享一次请求中的数据）"></a>session 测试（其他的servlet可以共享一次请求中的数据）</h2></li>
+<li>项目目录<br><img src="/2022/01/11/session/1.PNG"></li>
+<li>代码</li>
+</ol>
+<p><strong>a.html</strong></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href=&quot;/sessiontest/demo1&quot;&gt;访问demo1&lt;/a&gt;
+    &lt;a href=&quot;/sessiontest/demo2&quot;&gt;访问demo2&lt;/a&gt;
+    &lt;a href=&quot;/sessiontest/demo3&quot;&gt;访问demo3&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>Demo1Servlet</strong></p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo1Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        //request.setAttribute(&quot;username&quot;, &quot;zhangsan&quot;);
+        
+        //请求转发
+        //request.getRequestDispatcher(&quot;/demo2&quot;).forward(request, response);
+        
+        //创建session
+        HttpSession session = request.getSession();
+        System.out.println(&quot;Demo1Servlet增加username属性，值为lisi&quot;);
+        session.setAttribute(&quot;username&quot;, &quot;lisi&quot;);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Demo2Servlet</strong></p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo2Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        //String username = (String)request.getAttribute(&quot;username&quot;);
+        //System.out.println(username);//null 一次会话当中的第二次请求不能得到第一次请求的数据
+        
+        HttpSession session = request.getSession();
+        String username = (String)session.getAttribute(&quot;username&quot;);
+        System.out.println(&quot;Demo2Servlet:&quot; + username);
+        
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Demo3Servlet</strong></p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class Demo3Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        HttpSession session = request.getSession();
+        String username = (String)session.getAttribute(&quot;username&quot;);
+        System.out.println(&quot;Demo2Servlet:&quot; + username);
+    &#125;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2022/01/11/session/2.PNG"></p>
+<p><img src="/2022/01/11/session/3.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 注册功能实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-11 00:05:06 / 修改时间：00:32:35" itemprop="dateCreated datePublished" datetime="2022-01-11T00:05:06-08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">注册功能实现</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="注册功能实现"><a href="#注册功能实现" class="headerlink" title="注册功能实现"></a>注册功能实现</h1><ol>
+<li>实现原理<br>当用户输入完注册信息，点击提交，浏览器向服务器发出请求，然后由服务器中的servlet来处理请求，将前台用户输入的信息保存到数据库当中。<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/1.PNG"></li>
+<li>安装MySQL并创建需要的数据库和表(假设创建的数据库为test3，创建表user)，表结构如下图所示。<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/2.PNG"></li>
+<li>在eclipse中导入数据库配置文件<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/3.PNG"></li>
+<li>导入注册所需的jar包<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/4.PNG"></li>
+<li>导入DataSourceUtils.java<br><img src="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/6.PNG"></li></ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/05/30/CountDownLatch/#more" rel="contents">
+              <a class="btn" href="/2022/01/11/%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -282,7 +619,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -296,7 +633,711 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 线程池</a>
+            <a href="/2022/01/10/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">JavaWeb项目开发 | request域对象</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-10 04:56:14" itemprop="dateCreated datePublished" datetime="2022-01-10T04:56:14-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-11 00:07:09" itemprop="dateModified" datetime="2022-01-11T00:07:09-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/request%E5%9F%9F%E5%AF%B9%E8%B1%A1/" itemprop="url" rel="index"><span itemprop="name">request域对象</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="request域对象"><a href="#request域对象" class="headerlink" title="request域对象"></a>request域对象</h1><p><strong>场景</strong>：有时候我们发送一个请求然后由一个对应的servlet处理请求，接着我们需要将当前的request对象的一些信息传递到另一个servlet或者jsp页面。<br><strong>方法</strong>：</p>
+<ol>
+<li>请求转发<br>假设当前处理请求的是Demo2Servlet(/demo2)，需要传递信息到Demo3Servlet(/demo3)中。</li>
+</ol>
+<pre><code>request.getRequestDispatcher(&quot;/demo3&quot;).forward(request, response);
+</code></pre>
+<p>然后我们就可以在Demo3Servlet中获取request中的信息。</p>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Demo3Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        String username = request.getParameter(&quot;username&quot;);
+        System.out.println(username);
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+
+&#125;
+</code></pre>
+<ol start="2">
+<li>使用request域对象（使用request的setAttribute()方法设置其他信息并传递到Demo3Servlet中）</li>
+</ol>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Demo2Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        request.setAttribute(&quot;flag&quot;, 1);
+        request.getRequestDispatcher(&quot;/demo3&quot;).forward(request, response);
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>在Demo3Servlet中获取请求中的信息或者在Demo2Servlet中设置的新信息）</li>
+</ol>
+<pre><code>package com.oracle;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Demo3Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        String username = request.getParameter(&quot;username&quot;);
+        System.out.println(username);
+        
+        //request.removeAttribute(&quot;flag&quot;);//如果在获取设置的属性前将其删除，后面将获取不到该属性
+        Integer a = (Integer)request.getAttribute(&quot;flag&quot;);
+        System.out.println(a);
+    &#125;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">JavaWeb项目开发 | request获取各种形式的数据、请求转发</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-10 03:50:27" itemprop="dateCreated datePublished" datetime="2022-01-10T03:50:27-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-11 00:06:59" itemprop="dateModified" datetime="2022-01-11T00:06:59-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E3%80%81%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">request获取各种形式的数据、请求转发</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="request获取各种形式的数据"><a href="#request获取各种形式的数据" class="headerlink" title="request获取各种形式的数据"></a>request获取各种形式的数据</h1><ol>
+<li>新建form.html<br><img src="/2022/01/10/request%E8%8E%B7%E5%8F%96%E5%90%84%E7%A7%8D%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE/1.PNG"></li>
+<li>新建Demo2Servlet处理来自form表单的请求并通过request对象的集中常用方法获取各种形式的数据</li>
+</ol>
+<pre><code>package com.oracle;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class Demo2Servlet
+ */
+public class Demo2Servlet extends HttpServlet &#123;
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        //response.getWriter().append(&quot;Served at: &quot;).append(request.getContextPath());
+//        //获取前台传递的参数
+//        String username = request.getParameter(&quot;username&quot;);
+//        String password = request.getParameter(&quot;pwd&quot;);
+//        
+//        //获取单值
+//        System.out.println(username);
+//        System.out.println(password);
+//        
+//        //获取多值
+//        String[] vals = request.getParameterValues(&quot;hobby&quot;);
+//        for(String val:vals) &#123;
+//            System.out.println(val);
+//        &#125;
+        
+        //获取表单中的所有数据
+        Map&lt;String, String[]&gt; map = request.getParameterMap();
+        for(String s:map.keySet()) &#123;
+            String[] strs = map.get(s);
+            
+            for(String st:strs) &#123;
+                System.out.println(st);
+            &#125;
+        &#125;
+        
+        
+    &#125;
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    &#125;
+
+&#125;
+</code></pre>
+<ol start="3">
+<li>请求转发<br>假设我们刚刚处理的表单就是一个网站的注册页面，提交登录成功后，我们需要跳转到登录页面（从一个页面跳转到另一个页面）</li>
+</ol>
+<p><strong>解决办法：</strong><br>我们只需要在doGet方法的最后增加下面一行代码（假设1.html为登录页面）：</p>
+<pre><code>//请求转发到1.html页面
+request.getRequestDispatcher(&quot;/1.html&quot;).forward(request, response);
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/servlet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/servlet/" class="post-title-link" itemprop="url">JavaWeb项目开发 | servlet</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-10 01:00:20" itemprop="dateCreated datePublished" datetime="2022-01-10T01:00:20-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-11 00:06:49" itemprop="dateModified" datetime="2022-01-11T00:06:49-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAservlet%E6%8E%A5%E6%94%B6%E5%B9%B6%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82/" itemprop="url" rel="index"><span itemprop="name">创建servlet接收并处理请求</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><h2 id="创建servlet"><a href="#创建servlet" class="headerlink" title="创建servlet"></a>创建servlet</h2><ol>
+<li>在src下面新建一个包com.oracle(公司域名反写)</li>
+<li>在com.oracle下新建一个servlet(New–&gt;Other–&gt;Web–&gt;Servlet)<br>输入servlet的名称：<br><img src="/2022/01/10/servlet/1.PNG"><br>修改URL mappings:<br><img src="/2022/01/10/servlet/2.PNG"><br>去掉Constructors form superclass的勾选：<br><img src="/2022/01/10/servlet/3.PNG"><br>创建好的servlet:<br><img src="/2022/01/10/servlet/4.PNG"><h2 id="测试Demo1Servlet"><a href="#测试Demo1Servlet" class="headerlink" title="测试Demo1Servlet"></a>测试Demo1Servlet</h2></li>
+<li>创建demo1.html<br><img src="/2022/01/10/servlet/5.PNG"></li>
+<li>在Demo1Servlet.java中编写处理来自demo1.html的请求的Java代码<br><img src="/2022/01/10/servlet/6.PNG"></li>
+<li>在浏览器地址栏输入：localhost:8080/shop/demo1.html<br><img src="/2022/01/10/servlet/7.PNG"></li>
+<li>点击上图中的超链接向服务器发出请求<br>servelet处理来自浏览器的请求，执行在Demo1Servlet.java中编写的Java代码<br><img src="/2022/01/10/servlet/8.PNG"></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 创建web项目并添加到服务器中</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-10 00:33:13" itemprop="dateCreated datePublished" datetime="2022-01-10T00:33:13-08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-11 00:06:41" itemprop="dateModified" datetime="2022-01-11T00:06:41-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/" itemprop="url" rel="index"><span itemprop="name">创建web项目并添加到服务器中</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="创建web项目并添加到服务器中"><a href="#创建web项目并添加到服务器中" class="headerlink" title="创建web项目并添加到服务器中"></a>创建web项目并添加到服务器中</h1><h2 id="1-创建web项目"><a href="#1-创建web项目" class="headerlink" title="1.创建web项目"></a>1.创建web项目</h2><p>New –&gt; Web –&gt; dynamic web project,然后按照下图操作。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/1.PNG"><br>注意：Target runtime需选择与服务器对应的版本，dynamic web module version选择2.5.</p>
+<h2 id="2-将创建好的web项目加入到服务器中"><a href="#2-将创建好的web项目加入到服务器中" class="headerlink" title="2.将创建好的web项目加入到服务器中"></a>2.将创建好的web项目加入到服务器中</h2><p>在服务器上右键–&gt;add and remove,然后将对应的项目加入到服务器。<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/2.PNG"></p>
+<h2 id="3-访问服务器上的web信息"><a href="#3-访问服务器上的web信息" class="headerlink" title="3.访问服务器上的web信息"></a>3.访问服务器上的web信息</h2><p>1.在WebContent下面创建一个简单的页面（1.html）<br>2.在浏览器地址栏输入：localhot/8080/shop/1.html<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/3.PNG"><br>效果：<br><img src="/2022/01/10/%E5%88%9B%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD/4.PNG"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/09/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/09/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%A0%88/" class="post-title-link" itemprop="url">JavaWeb项目开发 | 项目技术栈</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-09 23:54:45" itemprop="dateCreated datePublished" datetime="2022-01-09T23:54:45-08:00">2022-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-11 00:07:15" itemprop="dateModified" datetime="2022-01-11T00:07:15-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%A0%88/" itemprop="url" rel="index"><span itemprop="name">项目技术栈</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="项目技术栈"><a href="#项目技术栈" class="headerlink" title="项目技术栈"></a>项目技术栈</h1><p>表格列出了开发网上购物商城所用到的技术。</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>html</td>
+<td>写静态页面</td>
+</tr>
+<tr>
+<td>css</td>
+<td>渲染页面</td>
+</tr>
+<tr>
+<td>js/jquery</td>
+<td>可以为html增加动画效果</td>
+</tr>
+<tr>
+<td>bootstrap</td>
+<td>前端框架</td>
+</tr>
+<tr>
+<td>Servlet</td>
+<td>接受请求,处理请求,生成动态的web资源</td>
+</tr>
+<tr>
+<td>Request</td>
+<td>请求</td>
+</tr>
+<tr>
+<td>session</td>
+<td>服务器端会话技术</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>过滤请求和响应</td>
+</tr>
+<tr>
+<td>jsp</td>
+<td>动态展示数据</td>
+</tr>
+<tr>
+<td>el和jstl</td>
+<td>el:jsp中的输出表达式 jstl:减少页面JAVA代码量 让结构更加清晰</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/" class="post-title-link" itemprop="url">JavaWeb项目开发 | web服务器tomcat和eclipse的集成</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-09 23:01:34" itemprop="dateCreated datePublished" datetime="2022-01-09T23:01:34-08:00">2022-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-11 00:06:30" itemprop="dateModified" datetime="2022-01-11T00:06:30-08:00">2022-01-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">JavaWeb项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaWeb%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">web服务器和eclipse的集成</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="web服务器tomcat和eclipse的集成"><a href="#web服务器tomcat和eclipse的集成" class="headerlink" title="web服务器tomcat和eclipse的集成"></a>web服务器tomcat和eclipse的集成</h1><h2 id="下载tomcat"><a href="#下载tomcat" class="headerlink" title="下载tomcat"></a>下载tomcat</h2><p><a target="_blank" rel="noopener" href="http://tomcat.apache.org/download-70.cgi">tomcat</a></p>
+<h2 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h2><p>将下载的后缀为.zip的压缩文件解压即可（本项目使用tomcat 7）<br>将文件解压到不包含中文文件名的路径下（例：D://tomcat//）</p>
+<h2 id="将tomcat服务器集成到eclipse中"><a href="#将tomcat服务器集成到eclipse中" class="headerlink" title="将tomcat服务器集成到eclipse中"></a>将tomcat服务器集成到eclipse中</h2><p>1.在eclipse菜单栏中点击window–&gt;preferences,然后按照下图所示顺序点击。<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/1.PNG"><br>2.按照下图所示步骤添加服务器，选择版本7<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/2.PNG"><br>3.选择下载并解压的tomcat服务器并选择jre<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/3.PNG"><br>4.在菜单栏选择windown–&gt;show view–&gt;Other..–&gt;Server–&gt;Servers来显示配置的tomcat服务器<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/4.PNG"><br>注：可以通过点击上图中的启动按钮和关闭按钮来关闭/停止服务器<br>5.双击上图中的服务器并按照下图将Deploy path修改为webapps<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/5.PNG"><br>6.通过浏览器访问该服务器<br>在浏览器地址栏输入localhost:8080来访问（先通过启动按钮启动服务器）<br><img src="/2022/01/09/web%E6%9C%8D%E5%8A%A1%E5%99%A8tomcat%E5%92%8Ceclipse%E7%9A%84%E9%9B%86%E6%88%90/6.PNG"><br>如果端口8080被占用，可以在tomcat目录下/conf/server.xml中修改端口号。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/" class="post-title-link" itemprop="url">Java | Java判断对象是否相等</a>
         </h2>
 
         <div class="post-meta">
@@ -307,7 +1348,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-29 00:44:53 / 修改时间：22:51:22" itemprop="dateCreated datePublished" datetime="2022-05-29T00:44:53-08:00">2022-05-29</time>
+              <time title="创建时间：2022-01-07 22:37:05 / 修改时间：23:48:34" itemprop="dateCreated datePublished" datetime="2022-01-07T22:37:05-08:00">2022-01-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -319,11 +1360,11 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">线程池</span></a>
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/" itemprop="url" rel="index"><span itemprop="name">判断两个对象是否相等</span></a>
                 </span>
             </span>
 
@@ -338,621 +1379,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>1.线程池的作用<br>对于服务器端的程序，如果服务端每接收到一个任务，创建一个线程，然后进行执行；这样的做法在面对成千上万的任务递交进服务器时，<br>那么会创建数以万记的线程，这样会时操作系统频繁的进行上下文切换，无故增加系统的负载，而线程的创建和小王都是需要好耗费<br>系统资源的，也无疑浪费了系统资源。线程池技术（通过使用固定或较为固定数目的线程来完成任务的执行）能够很好地解决这个问题，<br>消除频繁创建和消亡线程的系统资源开销。<br>2.线程池的本质<br>使用了一个线程安全的工作队列连接工作者线程和客户端线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作<br>队列取出工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了一个任务之后会通知任意一个工作者<br>线程，随着大量任务被提交，更多的工作者线程会被唤醒。<br>3.线程池示例<br><strong>ThreadPool.java</strong></p>
-<pre><code>package concurrency.threadPool;
-
-public interface ThreadPool&lt;Job extends Runnable&gt; &#123;
-    //执行一个Job，这个Job需要实现Runnable
-    void execute(Job job);
-    
-    //关闭线程池
-    void shutdown();
-    
-    //增加工作者线程
-    void addWorkers(int num);
-    
-    //减少工作者线程
-    void remvoeWorkers(int num);
-    
-    //得到正在等待执行的任务数量
-    int getJobSize();
-&#125;
-</code></pre>
-<p><strong>DefaultThreadPool.java</strong></p>
-<pre><code>package concurrency.threadPool;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
-public class DefaultThreadPool&lt;Job extends Runnable&gt; implements ThreadPool&lt;Job&gt; &#123;
-    //线程池最大数量
-    private static final int MAX_WORKER_NUMBERS = 10;
-    
-    //线程池默认数量
-    private static final int DEFAULT_WORKER_NUMBERS = 5;
-    
-    //线程池最小的数量
-    private static final int MIN_WORKER_NUMBERS = 1;
-    
-    //这是一个工作列表，将会向里面插入工作
-    private final LinkedList&lt;Job&gt; jobs = new LinkedList&lt;Job&gt;();
-    
-    //工作者列表
-    private final List&lt;Worker&gt; workers = Collections.synchronizedList(new ArrayList&lt;Worker&gt;());
-    
-    //工作者线程的数量
-    private int workerNum = DEFAULT_WORKER_NUMBERS;
-    
-    //线程编号的生成
-    private AtomicLong threadNum = new AtomicLong();
-    
-    //工作者，负责消费任务
-    class Worker implements Runnable&#123;
-        //是否工作
-        private volatile boolean running = true;
-        @Override
-        public void run()&#123;
-            while(running)&#123;
-                Job job = null;
-                synchronized(jobs)&#123;
-                    //如果工作者列表是空的，那么就wait
-                    while(jobs.isEmpty())&#123;
-                        try&#123;
-                            jobs.wait();
-                        &#125;catch(InterruptedException ex)&#123;
-                            //感知到外部对WorkerThread的中断操作，返回
-                            Thread.currentThread().interrupt();
-                            return;
-                        &#125;
-                    &#125;
-                    //取出一个Job
-                    job = jobs.removeFirst();
-                &#125;
-                if(job != null)&#123;
-                    try&#123;
-                        job.run();
-                    &#125;catch(Exception ex)&#123;
-                        //忽略Job执行中的Exception
-                    &#125;
-                &#125;
-            &#125;
-        &#125;
+          <h1 id="Java判断对象是否相等"><a href="#Java判断对象是否相等" class="headerlink" title="Java判断对象是否相等"></a>Java判断对象是否相等</h1><h2 id="1-类的创建"><a href="#1-类的创建" class="headerlink" title="1.类的创建"></a>1.类的创建</h2><p>要判断两个对象是否相等，我们首先得创建相应得类并由此类创建两个对象;此处我们定义一个Monkey类，该类<br>包含两个属性：name 和 age;同时我们为类中得实例变量添加了构造器、getter和setter方法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/07/Java%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        public void shutdown()&#123;
-            running = false;
-        &#125;
-    &#125;
-    
-    //初始化线程工作者
-    private void initializeWorkers(int num)&#123;
-        for(int i = 0; i &lt; num; i++)&#123;
-            Worker worker = new Worker();
-            workers.add(worker);
-            Thread thread = new Thread(worker, &quot;ThreadPool-Worker-&quot; + threadNum.incrementAndGet());
-            thread.start();
-        &#125;
-    &#125;
-    
-    public DefaultThreadPool()&#123;
-        initializeWorkers(DEFAULT_WORKER_NUMBERS);
-    &#125;
-    
-    public DefaultThreadPool(int num)&#123;
-        workerNum = num &gt; MAX_WORKER_NUMBERS ? MAX_WORKER_NUMBERS : num &lt; MIN_WORKER_NUMBERS ? MIN_WORKER_NUMBERS : num;
-        initializeWorkers(workerNum);
-    &#125;
-    
-    @Override
-    public void execute(Job job) &#123;
-        if(job != null)&#123;
-            //添加一个工作，然后进行通知
-            synchronized(jobs)&#123;
-                jobs.addLast(job);
-                jobs.notify();
-            &#125;
-        &#125;
-    &#125;
-
-    @Override
-    public void shutdown() &#123;
-        for(Worker worker : workers)&#123;
-            worker.shutdown();
-        &#125;
-    &#125;
-
-    @Override
-    public void addWorkers(int num) &#123;
-        synchronized(jobs)&#123;
-            //限制新增的Worker数量不能超过最大值
-            if(num + this.workerNum &gt; MAX_WORKER_NUMBERS)&#123;
-                num = MAX_WORKER_NUMBERS - this.workerNum;
-            &#125;
-            initializeWorkers(num);
-            this.workerNum += num;
-        &#125;
-    &#125;
-
-    @Override
-    public void remvoeWorkers(int num) &#123;
-        synchronized(jobs)&#123;
-            if(num &gt;= this.workerNum)&#123;
-                throw new IllegalArgumentException(&quot;beyond workNum&quot;);
-            &#125;
-            //按照给定的数量停止Worker
-            int count = 0;
-            while(count &lt; num)&#123;
-                Worker worker = workers.get(count);
-                if(workers.remove(worker))&#123;
-                    worker.shutdown();
-                    count++;
-                &#125;
-            &#125;
-            this.workerNum -= count;
-        &#125;
-    &#125;
-
-    @Override
-    public int getJobSize() &#123;
-        return jobs.size();
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/28/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">并发 | 等待/通知机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-28 23:37:56" itemprop="dateCreated datePublished" datetime="2022-05-28T23:37:56-08:00">2022-05-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-29 22:51:06" itemprop="dateModified" datetime="2022-05-29T22:51:06-08:00">2022-05-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">等待/通知机制</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="等待-通知机制"><a href="#等待-通知机制" class="headerlink" title="等待/通知机制"></a>等待/通知机制</h1><p>等待通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或着notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。<br><strong>示例代码</strong></p>
-<pre><code>package concurrency;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-public class WaitNotify &#123;
-    static boolean flag = true;
-    static Object lock = new Object();
-    
-    public static void main(String[] args) throws InterruptedException &#123;
-        Thread waitThread = new Thread(new Wait(), &quot;WaitThread&quot;);
-        waitThread.start();
-        TimeUnit.SECONDS.sleep(1);
-        Thread notifyThread = new Thread(new Notify(), &quot;NotifyThread&quot;);
-        notifyThread.start();
-    &#125;
-    
-    static class Wait implements Runnable&#123;
-        @Override
-        public void run()&#123;
-            //加锁，用于lock的Monitor
-            synchronized(lock)&#123;
-                //当条件不满足时，继续wait，同时释放了lock的锁
-                while(flag)&#123;
-                    try &#123;
-                        System.out.println(Thread.currentThread()+&quot; flag is true. wait@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                        lock.wait();
-                    &#125; catch (InterruptedException e) &#123;
-                    &#125;
-                &#125;
-                //条件满足时，完成工作
-                System.out.println(Thread.currentThread() + &quot;flag is false. running@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-            &#125;
-        &#125;
-    &#125;
-    
-    static class Notify implements Runnable&#123;
-        @Override
-        public void run() &#123;
-            synchronized(lock)&#123;
-                //获取lock的锁，然后进行通知，通知时不会释放lock的锁
-                //直到当前线程释放了lock后，WaitThread才能从wait方法中返回
-                System.out.println(Thread.currentThread() + &quot; hold lock. notify @ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                lock.notifyAll();
-                flag = false;
-                SleepUtils.second(5);
-            &#125;
-            
-            //再次加锁
-            synchronized(lock)&#123;
-                System.out.println(Thread.currentThread()+ &quot;hold lock again. sleep@ &quot; + new SimpleDateFormat(&quot;HH:mm:ss&quot;).format(new Date()));
-                SleepUtils.second(5);
-            &#125;
-            
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 等待超时模式构造简单的数据库连接池</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-28 23:33:57" itemprop="dateCreated datePublished" datetime="2022-05-28T23:33:57-08:00">2022-05-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-29 22:49:15" itemprop="dateModified" datetime="2022-05-29T22:49:15-08:00">2022-05-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">等待超时模式构造简单的数据库连接池</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p>
-<pre><code>package concurrency.connetionPool;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
-
-class ConnectionDriver&#123;
-    static class ConnectionHandler implements InvocationHandler&#123;
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
-            if(method.getName().equals(&quot;commit&quot;))&#123;
-                TimeUnit.MILLISECONDS.sleep(100);
-            &#125;
-            return null;
-        &#125;
-    &#125;
-    
-    //创建一个Connection的代理，在commit时休眠100毫秒
-    public static final Connection createConnection()&#123;
-        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());
-    &#125;
-&#125;
-
-public class ConnectionPool &#123;
-    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();
-    
-    public ConnectionPool(int initialSize)&#123;
-        if(initialSize &gt; 0)&#123;
-            for(int i = 0; i &lt; initialSize; i++)&#123;
-                pool.addLast(ConnectionDriver.createConnection());
-            &#125;
-        &#125;
-    &#125;
-    
-    public void releaseConnection(Connection connection)&#123;
-        if(connection != null)&#123;
-            synchronized(pool)&#123;
-                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接
-                pool.addLast(connection);
-                pool.notifyAll();
-            &#125;
-        &#125;
-    &#125;
-    
-    //在mills内无法获取到连接，将会返回null
-    public Connection fetchConnection(long mills) throws InterruptedException&#123;
-        synchronized(pool)&#123;
-            //完全超时
-            if(mills &lt; 0)&#123;
-                while(pool.isEmpty())&#123;
-                    pool.wait();
-                &#125;
-                return pool.removeFirst();//Removes and returns the first element from this list.
-            &#125;else&#123;
-                long future = System.currentTimeMillis() + mills;
-                long remaining = mills;
-                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;
-                    pool.wait(remaining);
-                    remaining = future - System.currentTimeMillis();
-                &#125;
-                Connection result = null;
-                if(!pool.isEmpty())&#123;
-                    result = pool.removeFirst();
-                &#125;
-                return result;
-            &#125;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p><strong>ConnectionPoolTest.java</strong></p>
-<pre><code>package concurrency.connetionPool;
-
-import java.sql.Connection;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
-
-public class ConnectionPoolTest &#123;
-    static ConnectionPool pool = new ConnectionPool(10);
-    
-    //保证所有ConnectionRunner能够同时开始
-    static CountDownLatch start = new CountDownLatch(1);
-    
-    //main线程将会等待所有ConnectionRunner结束后才能继续执行
-    static CountDownLatch end;
-    
-    public static void main(String[] args) throws InterruptedException&#123;
-        //线程数量，可以修改线程数量进行观察
-        int threadCount = 50;
-        end = new CountDownLatch(threadCount);
-        int count = 20;
-        AtomicInteger got = new AtomicInteger();
-        AtomicInteger notGot = new AtomicInteger();
-        for(int i = 0; i &lt; threadCount; i++)&#123;
-            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);
-            thread.start();
-        &#125;
-        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
-        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
-        System.out.println(&quot;total invoke: &quot; + (threadCount * count));
-        System.out.println(&quot;got connection: &quot; + got);
-        System.out.println(&quot;not got connection: &quot; + notGot);
-    &#125;
-    static class ConnectionRunner implements Runnable&#123;
-        int count;
-        AtomicInteger got;
-        AtomicInteger notGot;
-        
-        public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;
-            this.count = count;
-            this.got = got;
-            this.notGot = notGot;
-        &#125;
-        
-        public void run()&#123;
-            try&#123;
-                start.await();
-            &#125;catch(Exception ex)&#123;
-                
-            &#125;
-            while(count &gt; 0)&#123;
-                try&#123;
-                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null
-                    //分别统计连接获取的数量got和未获取到的数量notGot
-                    Connection connection = pool.fetchConnection(1000);
-                    if(connection != null)&#123;
-                        try&#123;
-                            connection.createStatement();
-                            connection.commit();
-                        &#125;finally&#123;
-                            pool.releaseConnection(connection);
-                            got.incrementAndGet();
-                        &#125;
-                    &#125;else&#123;
-                        notGot.incrementAndGet();
-                    &#125;
-                &#125;catch(Exception ex)&#123;
-                    
-                &#125;finally&#123;
-                    count--;
-                &#125;
-                
-            &#125;
-            end.countDown();
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">并发 | volatile写读的内存语义和锁的释放获取的内存语义</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-23 06:02:50 / 修改时间：17:02:03" itemprop="dateCreated datePublished" datetime="2022-05-23T06:02:50-08:00">2022-05-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/" itemprop="url" rel="index"><span itemprop="name">volatile写读的内存语义和锁的释放获取的内存语义</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="volatile写读的内存语义和锁的释放获取的内存语义"><a href="#volatile写读的内存语义和锁的释放获取的内存语义" class="headerlink" title="volatile写读的内存语义和锁的释放获取的内存语义"></a>volatile写读的内存语义和锁的释放获取的内存语义</h1><h2 id="volatile写、读的内存语义"><a href="#volatile写、读的内存语义" class="headerlink" title="volatile写、读的内存语义"></a>volatile写、读的内存语义</h2><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量值刷新到主存。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/1.PNG"><br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/2.PNG"></p>
-<h2 id="volatile内存语义的实现"><a href="#volatile内存语义的实现" class="headerlink" title="volatile内存语义的实现"></a>volatile内存语义的实现</h2><p>编译器生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。<br>JMM基于保守策略的JMM内存屏障插入策略如下：<br>（1）在每个volatile写操作的前面插入一个StoreStore屏障。<br>（2）在每个volatile写操作的后面插入一个StoreLoad屏障。<br>（3）在每个volatile读操作的后面插入一个LoadLoad屏障。<br>（4）在每个volatile读操作的后面插入一个LoadStore屏障。</p>
-<h2 id="锁的释放、获取的内存语义"><a href="#锁的释放、获取的内存语义" class="headerlink" title="锁的释放、获取的内存语义"></a>锁的释放、获取的内存语义</h2><p>当线程释放锁时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存中。<br>当线程获取锁时，JMM会把该线程对应的本地内存置为无效。从而使得被监视器保护的临界区代码必须从主内存中读取共享变量。<br>注：锁释放与volatile写有相同的内存语义；锁获取与volatile读具有相同的内存语义。</p>
-
       
     </div>
 
@@ -970,7 +1405,7 @@ public class ConnectionPoolTest &#123;
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/103/">103</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/52/">52</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1038,20 +1473,20 @@ public class ConnectionPoolTest &#123;
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">513</span>
+          <span class="site-state-item-count">516</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">441</span>
+        <span class="site-state-item-count">466</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">442</span>
+        <span class="site-state-item-count">454</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
