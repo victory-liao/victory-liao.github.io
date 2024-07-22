@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-07-19T15:34:11.360Z</updated>
+  <updated>2024-07-22T15:30:28.594Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,116 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>后端优化 | 循环优化</title>
+    <link href="http://example.com/2024/07/22/%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/"/>
+    <id>http://example.com/2024/07/22/%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/</id>
+    <published>2024-07-22T15:23:23.000Z</published>
+    <updated>2024-07-22T15:30:28.594Z</updated>
+    
+    <content type="html"><![CDATA[<p>采用深度学习编译器对深度学习代码进行编译时，在编译器后端会对IR代码进行后端优化，循环优化就包括在后端优化中，后端优化能够加速代码的运行效率。深度学习编译器编译流程如下图所示：</p><span id="more"></span><p><img src="/2024/07/22/%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B.png"></p><p>循环优化方式：</p><ul><li><p>循环融合（loop fusion）</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sayHello</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sayBye</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;bye&quot;</span>)</span><br><span class="line"><span class="comment"># 融合前</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>):</span><br><span class="line">    sayHello()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>):</span><br><span class="line">    sayBye()</span><br><span class="line"><span class="comment"># 融合后（将两个循环融合为一个）</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>):</span><br><span class="line">    sayHello()</span><br><span class="line">    sayBye()</span><br></pre></td></tr></table></figure></li><li><p>循环重新排序（loop reorder）</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重排序前</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="comment"># 重排序后（采用迭代次数较小的循环驱动内层迭代次数较大的循环能减少内存的消耗）</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></li><li><p>循环展开（loop unrolling）</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 展开前</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    sayHello()</span><br><span class="line"><span class="comment"># 展开后</span></span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br><span class="line">sayHello()</span><br></pre></td></tr></table></figure></li><li><p>循环分块（loop tiling）</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_2d_array</span>(<span class="params">n, A</span>):</span></span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="built_in">sum</span> += A[i][j]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_2d_array</span>(<span class="params">n, A</span>) &#123;</span></span><br><span class="line"><span class="function">    <span class="title">sum</span> = 0</span></span><br><span class="line"><span class="function">    <span class="title">block_size</span> = 8</span></span><br><span class="line"><span class="function">    <span class="title">for</span> <span class="title">i</span> <span class="title">in</span> <span class="title">range</span>(<span class="params"><span class="number">0</span>, n, block_size</span>):</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n, block_size):</span><br><span class="line">    <span class="keyword">for</span> bi <span class="keyword">in</span> <span class="built_in">range</span>(i, i + block_size):</span><br><span class="line">    <span class="keyword">for</span> bj <span class="keyword">in</span> <span class="built_in">range</span>(j, j + block_size):</span><br><span class="line">    <span class="built_in">sum</span> += A[bi][bj]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;采用深度学习编译器对深度学习代码进行编译时，在编译器后端会对IR代码进行后端优化，循环优化就包括在后端优化中，后端优化能够加速代码的运行效率。深度学习编译器编译流程如下图所示：&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="编译器" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+    <category term="深度学习编译器" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+    <category term="后端优化" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/"/>
+    
+    <category term="循环优化" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/"/>
+    
+    
+    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="编译器" scheme="http://example.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+    <category term="后端优化" scheme="http://example.com/tags/%E5%90%8E%E7%AB%AF%E4%BC%98%E5%8C%96/"/>
+    
+    <category term="循环优化" scheme="http://example.com/tags/%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/"/>
+    
+    <category term="循环融合" scheme="http://example.com/tags/%E5%BE%AA%E7%8E%AF%E8%9E%8D%E5%90%88/"/>
+    
+    <category term="循环重排序" scheme="http://example.com/tags/%E5%BE%AA%E7%8E%AF%E9%87%8D%E6%8E%92%E5%BA%8F/"/>
+    
+    <category term="循环展开" scheme="http://example.com/tags/%E5%BE%AA%E7%8E%AF%E5%B1%95%E5%BC%80/"/>
+    
+    <category term="循环分块" scheme="http://example.com/tags/%E5%BE%AA%E7%8E%AF%E5%88%86%E5%9D%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RDMA | IB与RoCEv2的对比</title>
+    <link href="http://example.com/2024/07/22/IB%E4%B8%8ERDMA%E7%9A%84%E5%AF%B9%E6%AF%94/"/>
+    <id>http://example.com/2024/07/22/IB%E4%B8%8ERDMA%E7%9A%84%E5%AF%B9%E6%AF%94/</id>
+    <published>2024-07-22T15:22:55.000Z</published>
+    <updated>2024-07-22T15:27:11.741Z</updated>
+    
+    <content type="html"><![CDATA[<p>Nvidia Infiniband 与 RoCEv2的对比：</p><p><img src="/2024/07/22/IB%E4%B8%8ERDMA%E7%9A%84%E5%AF%B9%E6%AF%94/IB%E4%B8%8ERDMA%E7%9A%84%E5%AF%B9%E6%AF%94.png"></p><p>参考链接：<a href="https://mp.weixin.qq.com/s/kzcrq9ycET_K7TrIQT_nSg">Infiniband和RoCEv2，以及RDMA技术的未来</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Nvidia Infiniband 与 RoCEv2的对比：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2024/07/22/IB%E4%B8%8ERDMA%E7%9A%84%E5%AF%B9%E6%AF%94/IB%E4%B8%8ERDMA%E7%9A%84%E5%AF%B9%</summary>
+      
+    
+    
+    
+    <category term="计算机基础" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
+    
+    <category term="计算机网络" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="RDMA" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/RDMA/"/>
+    
+    <category term="IB与RoCEv2的对比" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/RDMA/IB%E4%B8%8ERoCEv2%E7%9A%84%E5%AF%B9%E6%AF%94/"/>
+    
+    
+    <category term="IB" scheme="http://example.com/tags/IB/"/>
+    
+    <category term="RDMA" scheme="http://example.com/tags/RDMA/"/>
+    
+    <category term="RoCEv2" scheme="http://example.com/tags/RoCEv2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TVM | TVM介绍</title>
+    <link href="http://example.com/2024/07/22/TVM%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://example.com/2024/07/22/TVM%E4%BB%8B%E7%BB%8D/</id>
+    <published>2024-07-22T15:22:16.000Z</published>
+    <updated>2024-07-22T15:25:11.708Z</updated>
+    
+    <content type="html"><![CDATA[<p>参考文章：<a href="https://www.zhihu.com/question/532085071/answer/3154629417">(38 封私信 / 80 条消息) 深度学习编译器研发工程师的工作主要是集中于编译技术的前端、中端还是后端？ - 知乎 (zhihu.com)</a></p><p>参考视频：<a href="https://www.bilibili.com/video/BV1u6421M7jN/?spm_id_from=333.788&vd_source=0d5e0d352ee1cac3b12442c119f31bfc">【3rd-party】20240215 深度学习编译技术及TVM实践分享_哔哩哔哩_bilibili</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;参考文章：&lt;a href=&quot;https://www.zhihu.com/question/532085071/answer/3154629417&quot;&gt;(38 封私信 / 80 条消息) 深度学习编译器研发工程师的工作主要是集中于编译技术的前端、中端还是后端？ - 知乎 (zh</summary>
+      
+    
+    
+    
+    <category term="编译器" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+    <category term="深度学习编译器" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+    <category term="TVM" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/TVM/"/>
+    
+    <category term="TVM介绍" scheme="http://example.com/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/TVM/TVM%E4%BB%8B%E7%BB%8D/"/>
+    
+    
+    <category term="深度学习" scheme="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="编译器" scheme="http://example.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+    <category term="TVM" scheme="http://example.com/tags/TVM/"/>
+    
+  </entry>
   
   <entry>
     <title>CUDA | CUDA的新竞争者</title>
@@ -355,9 +465,9 @@
     <category term="GPU高速互联-PCIe与NVLink的对比" scheme="http://example.com/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/GPU/GPU%E9%AB%98%E9%80%9F%E4%BA%92%E8%81%94-PCIe%E4%B8%8ENVLink%E7%9A%84%E5%AF%B9%E6%AF%94/"/>
     
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
     <category term="AI" scheme="http://example.com/tags/AI/"/>
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="CPU" scheme="http://example.com/tags/CPU/"/>
     
@@ -406,9 +516,9 @@
     <category term="一种全新的软件开发模式-AI Native" scheme="http://example.com/categories/AI/AI-Native/%E4%B8%80%E7%A7%8D%E5%85%A8%E6%96%B0%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F-AI-Native/"/>
     
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
     <category term="AI" scheme="http://example.com/tags/AI/"/>
+    
+    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="模型" scheme="http://example.com/tags/%E6%A8%A1%E5%9E%8B/"/>
     
@@ -443,15 +553,15 @@
     
     <category term="AI" scheme="http://example.com/tags/AI/"/>
     
+    <category term="IB" scheme="http://example.com/tags/IB/"/>
+    
+    <category term="RDMA" scheme="http://example.com/tags/RDMA/"/>
+    
     <category term="iWARP" scheme="http://example.com/tags/iWARP/"/>
     
     <category term="RoCE" scheme="http://example.com/tags/RoCE/"/>
     
     <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
-    
-    <category term="RDMA" scheme="http://example.com/tags/RDMA/"/>
-    
-    <category term="IB" scheme="http://example.com/tags/IB/"/>
     
   </entry>
   
@@ -637,75 +747,6 @@
     
     
     <category term="数据结构" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>操作系统 | 操作系统测试</title>
-    <link href="http://example.com/2024/06/26/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B5%8B%E8%AF%95/"/>
-    <id>http://example.com/2024/06/26/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B5%8B%E8%AF%95/</id>
-    <published>2024-06-26T13:09:28.000Z</published>
-    <updated>2024-06-26T13:12:30.037Z</updated>
-    
-    
-    
-    
-    <category term="计算机基础" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="操作系统" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    <category term="操作系统测试" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B5%8B%E8%AF%95/"/>
-    
-    
-    <category term="操作系统" scheme="http://example.com/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    <category term="OS" scheme="http://example.com/tags/OS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计算机组成原理 | 计算机组成原理测试</title>
-    <link href="http://example.com/2024/06/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E6%B5%8B%E8%AF%95/"/>
-    <id>http://example.com/2024/06/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E6%B5%8B%E8%AF%95/</id>
-    <published>2024-06-26T13:09:19.000Z</published>
-    <updated>2024-06-26T13:11:51.178Z</updated>
-    
-    
-    
-    
-    <category term="计算机基础" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
-    
-    <category term="计算机组成原理" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="计算机组成原理测试" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E6%B5%8B%E8%AF%95/"/>
-    
-    
-    <category term="计算机组成原理" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Github | github个人主页美化</title>
-    <link href="http://example.com/2024/06/26/github%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5%E7%BE%8E%E5%8C%96/"/>
-    <id>http://example.com/2024/06/26/github%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5%E7%BE%8E%E5%8C%96/</id>
-    <published>2024-06-26T12:03:41.000Z</published>
-    <updated>2024-07-11T13:56:05.838Z</updated>
-    
-    <content type="html"><![CDATA[<p>如何美化github的个人主页？</p><span id="more"></span><p>github个人主页美化主要分为两步：</p><ol><li><p>创建名称与github用户名相同的仓库（public），并在仓库中创建README.md</p></li><li><p>自定义README.md中的内容，以达到美化个人主页的目的</p></li></ol><p>快速美化方式：</p><p>找到已美化的github个人主页，粘贴到自己仓库的README.md中并加以修改</p><p>推荐：<a href="https://github.com/lhccong">lhccong (聪ζ) (github.com)</a>，如有侵权请联系删除。</p><p>参考教程：</p><p><a href="https://blog.csdn.net/weixin_62651706/article/details/137957144">GitHub 个人主页的究极美化攻略：当一个外链战士（万字详述）_github的外链-CSDN博客</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;如何美化github的个人主页？&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="开发工具" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    
-    <category term="Github" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/Github/"/>
-    
-    <category term="github个人主页美化" scheme="http://example.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/Github/github%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5%E7%BE%8E%E5%8C%96/"/>
-    
-    
-    <category term="github" scheme="http://example.com/tags/github/"/>
     
   </entry>
   

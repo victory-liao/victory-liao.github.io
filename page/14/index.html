@@ -190,6 +190,453 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/28/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">并发 | 等待超时模式构造简单的数据库连接池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-28 23:33:57" itemprop="dateCreated datePublished" datetime="2022-05-28T23:33:57-08:00">2022-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-29 22:49:15" itemprop="dateModified" datetime="2022-05-29T22:49:15-08:00">2022-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/%E7%AD%89%E5%BE%85%E8%B6%85%E6%97%B6%E6%A8%A1%E5%BC%8F%E6%9E%84%E9%80%A0%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" itemprop="url" rel="index"><span itemprop="name">等待超时模式构造简单的数据库连接池</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="等待超时模式构造简单的数据库连接池"><a href="#等待超时模式构造简单的数据库连接池" class="headerlink" title="等待超时模式构造简单的数据库连接池"></a>等待超时模式构造简单的数据库连接池</h1><p><strong>ConnectionPool.java</strong></p>
+<pre><code>package concurrency.connetionPool;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
+
+class ConnectionDriver&#123;
+    static class ConnectionHandler implements InvocationHandler&#123;
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+            if(method.getName().equals(&quot;commit&quot;))&#123;
+                TimeUnit.MILLISECONDS.sleep(100);
+            &#125;
+            return null;
+        &#125;
+    &#125;
+    
+    //创建一个Connection的代理，在commit时休眠100毫秒
+    public static final Connection createConnection()&#123;
+        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(), new Class&lt;?&gt;[] &#123; Connection.class &#125;, new ConnectionHandler());
+    &#125;
+&#125;
+
+public class ConnectionPool &#123;
+    private LinkedList&lt;Connection&gt; pool = new LinkedList&lt;Connection&gt;();
+    
+    public ConnectionPool(int initialSize)&#123;
+        if(initialSize &gt; 0)&#123;
+            for(int i = 0; i &lt; initialSize; i++)&#123;
+                pool.addLast(ConnectionDriver.createConnection());
+            &#125;
+        &#125;
+    &#125;
+    
+    public void releaseConnection(Connection connection)&#123;
+        if(connection != null)&#123;
+            synchronized(pool)&#123;
+                //连接释放后需要进行通知，这样其他消费者能够感知到连接池中已经归还了一个连接
+                pool.addLast(connection);
+                pool.notifyAll();
+            &#125;
+        &#125;
+    &#125;
+    
+    //在mills内无法获取到连接，将会返回null
+    public Connection fetchConnection(long mills) throws InterruptedException&#123;
+        synchronized(pool)&#123;
+            //完全超时
+            if(mills &lt; 0)&#123;
+                while(pool.isEmpty())&#123;
+                    pool.wait();
+                &#125;
+                return pool.removeFirst();//Removes and returns the first element from this list.
+            &#125;else&#123;
+                long future = System.currentTimeMillis() + mills;
+                long remaining = mills;
+                while(pool.isEmpty() &amp;&amp; remaining &gt; 0)&#123;
+                    pool.wait(remaining);
+                    remaining = future - System.currentTimeMillis();
+                &#125;
+                Connection result = null;
+                if(!pool.isEmpty())&#123;
+                    result = pool.removeFirst();
+                &#125;
+                return result;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>ConnectionPoolTest.java</strong></p>
+<pre><code>package concurrency.connetionPool;
+
+import java.sql.Connection;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ConnectionPoolTest &#123;
+    static ConnectionPool pool = new ConnectionPool(10);
+    
+    //保证所有ConnectionRunner能够同时开始
+    static CountDownLatch start = new CountDownLatch(1);
+    
+    //main线程将会等待所有ConnectionRunner结束后才能继续执行
+    static CountDownLatch end;
+    
+    public static void main(String[] args) throws InterruptedException&#123;
+        //线程数量，可以修改线程数量进行观察
+        int threadCount = 50;
+        end = new CountDownLatch(threadCount);
+        int count = 20;
+        AtomicInteger got = new AtomicInteger();
+        AtomicInteger notGot = new AtomicInteger();
+        for(int i = 0; i &lt; threadCount; i++)&#123;
+            Thread thread = new Thread(new ConnectionRunner(count, got, notGot), &quot;ConnectionRunnerThread&quot;);
+            thread.start();
+        &#125;
+        start.countDown();//使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
+        end.await();//使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
+        System.out.println(&quot;total invoke: &quot; + (threadCount * count));
+        System.out.println(&quot;got connection: &quot; + got);
+        System.out.println(&quot;not got connection: &quot; + notGot);
+    &#125;
+    static class ConnectionRunner implements Runnable&#123;
+        int count;
+        AtomicInteger got;
+        AtomicInteger notGot;
+        
+        public ConnectionRunner(int count, AtomicInteger got, AtomicInteger notGot)&#123;
+            this.count = count;
+            this.got = got;
+            this.notGot = notGot;
+        &#125;
+        
+        public void run()&#123;
+            try&#123;
+                start.await();
+            &#125;catch(Exception ex)&#123;
+                
+            &#125;
+            while(count &gt; 0)&#123;
+                try&#123;
+                    //从线程池中获取连接，如果1000ms内无法获取到，将会返回null
+                    //分别统计连接获取的数量got和未获取到的数量notGot
+                    Connection connection = pool.fetchConnection(1000);
+                    if(connection != null)&#123;
+                        try&#123;
+                            connection.createStatement();
+                            connection.commit();
+                        &#125;finally&#123;
+                            pool.releaseConnection(connection);
+                            got.incrementAndGet();
+                        &#125;
+                    &#125;else&#123;
+                        notGot.incrementAndGet();
+                    &#125;
+                &#125;catch(Exception ex)&#123;
+                    
+                &#125;finally&#123;
+                    count--;
+                &#125;
+                
+            &#125;
+            end.countDown();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">并发 | volatile写读的内存语义和锁的释放获取的内存语义</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-23 06:02:50 / 修改时间：17:02:03" itemprop="dateCreated datePublished" datetime="2022-05-23T06:02:50-08:00">2022-05-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/" itemprop="url" rel="index"><span itemprop="name">volatile写读的内存语义和锁的释放获取的内存语义</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="volatile写读的内存语义和锁的释放获取的内存语义"><a href="#volatile写读的内存语义和锁的释放获取的内存语义" class="headerlink" title="volatile写读的内存语义和锁的释放获取的内存语义"></a>volatile写读的内存语义和锁的释放获取的内存语义</h1><h2 id="volatile写、读的内存语义"><a href="#volatile写、读的内存语义" class="headerlink" title="volatile写、读的内存语义"></a>volatile写、读的内存语义</h2><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量值刷新到主存。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/1.PNG"><br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。<br><img src="/2022/05/23/volatile%E5%86%99%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89%E5%92%8C%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%8E%B7%E5%8F%96%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89/2.PNG"></p>
+<h2 id="volatile内存语义的实现"><a href="#volatile内存语义的实现" class="headerlink" title="volatile内存语义的实现"></a>volatile内存语义的实现</h2><p>编译器生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。<br>JMM基于保守策略的JMM内存屏障插入策略如下：<br>（1）在每个volatile写操作的前面插入一个StoreStore屏障。<br>（2）在每个volatile写操作的后面插入一个StoreLoad屏障。<br>（3）在每个volatile读操作的后面插入一个LoadLoad屏障。<br>（4）在每个volatile读操作的后面插入一个LoadStore屏障。</p>
+<h2 id="锁的释放、获取的内存语义"><a href="#锁的释放、获取的内存语义" class="headerlink" title="锁的释放、获取的内存语义"></a>锁的释放、获取的内存语义</h2><p>当线程释放锁时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存中。<br>当线程获取锁时，JMM会把该线程对应的本地内存置为无效。从而使得被监视器保护的临界区代码必须从主内存中读取共享变量。<br>注：锁释放与volatile写有相同的内存语义；锁获取与volatile读具有相同的内存语义。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/22/volatile%E3%80%81synchronized%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">并发 | volatile、synchronized和原子操作</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-22 19:03:39 / 修改时间：19:57:47" itemprop="dateCreated datePublished" datetime="2022-05-22T19:03:39-08:00">2022-05-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="volatile、synchronized和原子操作"><a href="#volatile、synchronized和原子操作" class="headerlink" title="volatile、synchronized和原子操作"></a>volatile、synchronized和原子操作</h1><h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>volatile是轻量级的synchronized，它在多处理器并发中保证了<strong>共享变量的“可见性”</strong>。可见性是指当一个线程修改一个共享变量时<br>，另外一个线程能读到这个修改的值（Java内存模型确保所有线程看到这个变量的值是一致的）。</p>
+<h3 id="volatile的两条实现原则"><a href="#volatile的两条实现原则" class="headerlink" title="volatile的两条实现原则"></a>volatile的两条实现原则</h3><p>（1）Lock前缀指令会引起处理器缓存回写到内存。<br>（2）一个处理器的缓存回写到内存会导致其他处理器的缓存无效。</p>
+<h3 id="volatile的使用优化"><a href="#volatile的使用优化" class="headerlink" title="volatile的使用优化"></a>volatile的使用优化</h3><p>使用追加到64字节的方式来填满高速缓冲区的缓存行，避免头节点和尾节点加载到同一个缓存行，使头、尾节点在修改时不会互相锁定。</p>
+<h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>JVM基于进入和推出Monitor对象来实现方法同步和代码块同步，但两者实现细节不一样。<br>代码块同步使用monitorenter和monitorexit指令实现的。monitorenter指令在编译后插入到同步代码块的开始位置，而monitorexit是<br>插入到方法结束处和异常处，JVM要博爱正每个monitorenter必须有对应的monitorexit与之配对。任何对象都有一个monitor与之关联，<br>当且一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象monitor的所有权，即尝试获得对象的锁。</p>
+<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>java如何实现原子操作？<br>通过循环CAS的方式实现原子操作。JVM中CAS操作使用处理器提供的CMPXCHG指令实现。自旋CAS实现的基本思路就是循环及进行CAS操作指导成功为止。</p>
+<h3 id="使用CAS实现线程安全计数器"><a href="#使用CAS实现线程安全计数器" class="headerlink" title="使用CAS实现线程安全计数器"></a>使用CAS实现线程安全计数器</h3><pre><code>package concurrency;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Counter &#123;
+    private AtomicInteger atomicI = new AtomicInteger(0);
+    private int i = 0;
+    
+    public static void main(String[] args) &#123;
+        final Counter cas = new Counter();
+        List&lt;Thread&gt; ts = new ArrayList&lt;Thread&gt;(600);
+        long start = System.currentTimeMillis();
+        for(int j = 0; j &lt; 100; j++)&#123;
+            Thread t = new Thread(new Runnable()&#123;
+                @Override
+                public void run()&#123;
+                    for(int i = 0; i &lt; 10000; i++)&#123;
+                        cas.count();
+                        cas.safeCount();
+                    &#125;
+                &#125;
+            &#125;);
+            ts.add(t);
+        &#125;
+        for(Thread t : ts)&#123;
+            t.start();
+        &#125;
+        //等待所有线程执行完成
+        for(Thread t : ts)&#123;
+            try &#123;
+                t.join();
+            &#125; catch (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+        System.out.println(cas.i);
+        System.out.println(cas.atomicI.get());
+        System.out.println(System.currentTimeMillis() - start);
+    &#125;
+    
+    //使用CAS实现线程安全计数器
+    private void safeCount()&#123;
+        for(;;)&#123;
+            int i = atomicI.get();
+            boolean suc = atomicI.compareAndSet(i, ++i);
+            if(suc)&#123;
+                break;
+            &#125;
+        &#125;
+    &#125;
+    
+    //非线程安全计数器
+    private void count()&#123;
+        i++;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="CAS实现原子操作的三大问题"><a href="#CAS实现原子操作的三大问题" class="headerlink" title="CAS实现原子操作的三大问题"></a>CAS实现原子操作的三大问题</h2><p>（1）ABA问题。可以使用版本号解决。JDK Atomic AtomicStampedReference可以解决ABA问题。<br>（2）循环时间长开销大。自旋CAS如果长时间不成功，会给CPU带来非常大的执行开销。<br>（3）只能保证一个共享变量的原子操作。对多个共享变量操作可以使用锁/将多个共享变量合并成一个共享变量来操作（两个共享变量i=2,j=a,合并以下ij=2a,然后采用CAS来操作）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -823,263 +1270,6 @@ cluster-node-timeout 15000
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/09/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Redis | 持久化方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-09 05:45:48" itemprop="dateCreated datePublished" datetime="2022-05-09T05:45:48-08:00">2022-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-11 23:03:25" itemprop="dateModified" datetime="2022-05-11T23:03:25-08:00">2022-05-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">持久化方式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis持久化方式"><a href="#Redis持久化方式" class="headerlink" title="Redis持久化方式"></a>Redis持久化方式</h1><ol>
-<li>两个不同形式得持久化方式<br>RDB(Redis DataBase)<br>AOF(Append Of File)</li>
-<li>RDB</li>
-<li>1 RDB<br>在指定的时间间隔内将内存中的数据集快照(Snapshot)写入磁盘,恢复时将快照文件直接读到内存中。</li>
-<li>2 备份<br>Redis会单独创建（fork）一个子进程来进行持久化，会先将数据写入到一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO操作的，这就确保了极高的性能；</li>
-<li>3 适用<br>大规模数据的恢复且对于数据恢复的完整性不是非常敏感</li>
-<li>4 优点<br>1）节省磁盘空间<br>2）恢复速度快</li>
-<li>5 缺点<br>1）虽然Redis在fork时使用了写时拷贝技术,但是如果数据庞大时还是比较消耗性能。<br>2）在备份周期在一定间隔时间做一次备份，所以如果Redis意外down掉的话，就会丢失最后一次快照后的所有修改。</li>
-<li>AOF</li>
-<li>1 AOF<br>以日志的形式来记录每个写操作，将Redis执行过的所有写指令记录下来(读操作不记录)，只许追加文件但不可以改写文件，Redis启动之初会读取该文件重新构建数据，换言之，Redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</li>
-<li>2 AOF同步频率设置：<br>1）始终同步<br>2）每秒同步<br>3）不主动进行同步</li>
-<li>3 Rewrite:<br>AOF采用文件追加方式，文件会越来越大为避免出现此种情况，新增了重写机制,当AOF文件的大小超过所设定的阈值时，Redis就会启动AOF文件的内容压缩，只保留可以恢复数据的最小指令集.可以使用命令bgrewriteaof。</li>
-</ol>
-<p><strong>如何实现重写？</strong><br>AOF文件持续增长而过大时，会fork出一条新进程来将文件重写(也是先写临时文件最后再rename)，遍历新进程的内存中数据，每条记录有一条的Set语句。重写aof文件的操作，并没有读取旧的aof文件，而是<strong>将整个内存中的数据库内容用命令的方式重写了一个新的aof文件</strong>，这点和快照有点类似。<br><strong>何时重写</strong><br>系统载入时或者上次重写完毕时，Redis会记录此时AOF大小，设为base_size,如果Redis的AOF当前大小&gt;= base_size +base_size*100% (默认)或当前大小&gt;=64mb(默认)的情况下，Redis会对AOF进行重写。<br>3.4 AOF的优点：<br>1）备份机制更稳健，丢失数据概率更低。<br>2）可读的日志文本，通过操作AOF文件，可以处理误操作。<br>3.5 AOF的缺点：<br>1）比起RDB占用更多的磁盘空间。<br>2）恢复备份速度要慢。<br>3）每次读写都同步的话，有一定的性能压力。<br>4）存在个别Bug，造成不能恢复。<br><strong>注意：</strong><br>1）AOF和RDB同时开启，系统默认取AOF的数据<br>2）推荐AOF和RDB都使用<br>3）如果对数据不敏感，可以选单独用RDB<br>4）不建议单独用 AOF，因为可能会出现Bug<br>5）如果只是做纯内存缓存，可以都不用</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/07/%E7%A7%92%E6%9D%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/07/%E7%A7%92%E6%9D%80/" class="post-title-link" itemprop="url">Redis | 秒杀</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-07 04:14:29" itemprop="dateCreated datePublished" datetime="2022-05-07T04:14:29-08:00">2022-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-09 04:00:11" itemprop="dateModified" datetime="2022-05-09T04:00:11-08:00">2022-05-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E7%A7%92%E6%9D%80/" itemprop="url" rel="index"><span itemprop="name">秒杀</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="秒杀"><a href="#秒杀" class="headerlink" title="秒杀"></a>秒杀</h1><h2 id="秒杀需要解决的问题"><a href="#秒杀需要解决的问题" class="headerlink" title="秒杀需要解决的问题"></a>秒杀需要解决的问题</h2><p>解决商品库存计数器和秒杀成功的用户记录的事务操作</p>
-<h2 id="秒杀遇到的三个问题"><a href="#秒杀遇到的三个问题" class="headerlink" title="秒杀遇到的三个问题"></a>秒杀遇到的三个问题</h2><p>1.连接超时问题 —&gt; 使用Redis连接池<br>2.超卖（卖出的商品数量超过商品库存数量） —&gt; 使用事务<br>3.库存遗留问题（并发的请求中只有一个请求能够秒杀成功造成库存遗留） —&gt; 使用lua脚本</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/07/%E7%A7%92%E6%9D%80/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/07/%E4%BA%8B%E5%8A%A1-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/07/%E4%BA%8B%E5%8A%A1-2/" class="post-title-link" itemprop="url">Redis | 事务</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-07 04:03:15 / 修改时间：04:11:56" itemprop="dateCreated datePublished" datetime="2022-05-07T04:03:15-08:00">2022-05-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">事务</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="Redis中事务的定义"><a href="#Redis中事务的定义" class="headerlink" title="Redis中事务的定义"></a>Redis中事务的定义</h2><p>Redis事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行</strong>。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断<br>Redis事务的主要作用就是<strong>串联多个命令防止别的命令插队</strong>。</p>
-<h2 id="事务相关的命令-multi、exec、discard"><a href="#事务相关的命令-multi、exec、discard" class="headerlink" title="事务相关的命令(multi、exec、discard)"></a>事务相关的命令(multi、exec、discard)</h2><p>1.从输入Multi命令开始，输入的命令都会依次进入命令队列中，但不会执行，至到输入Exec后，Redis会将之前的命令队列中的命令依次执行。<br>2.组队的过程中可以通过discard来放弃组队。 </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/07/%E4%BA%8B%E5%8A%A1-2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1151,20 +1341,20 @@ cluster-node-timeout 15000
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">527</span>
+          <span class="site-state-item-count">530</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">502</span>
+        <span class="site-state-item-count">508</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">506</span>
+        <span class="site-state-item-count">515</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
