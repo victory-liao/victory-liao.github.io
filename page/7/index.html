@@ -190,6 +190,189 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/24/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/24/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">python | python是否支持多线程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-24 04:41:30 / 修改时间：04:44:17" itemprop="dateCreated datePublished" datetime="2024-01-24T04:41:30-08:00">2024-01-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/python%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%A4%9A%E7%BA%BF%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">python是否支持多线程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python是否支持多线程"><a href="#Python是否支持多线程" class="headerlink" title="Python是否支持多线程"></a>Python是否支持多线程</h1><ol>
+<li><p>多线程</p>
+<p><strong>线程在CPU上运行，是操作系统进行调度和执行的基本单位</strong>。</p>
+</li>
+</ol>
+<p>​    首先，要明确进程与线程的关系。一个进程可以包含多个线程，而每个线程都是进程中的一个执行流。可以把进程比作一个工厂，而线程就像是工厂里的工人，它们共同协作完成工作。</p>
+<p>​    其次，线程的创建和运行是在一个进程中进行的。当启动一个线程时（例如，通过调用<code>Thread.start()</code>方法），操作系统会为这个线程分配必要的资源，包括寄存器、栈等，并在CPU上执行该线程的代码。</p>
+<p>​    再者，在<strong>多核CPU</strong>系统中，<strong>不同的线程可以被分配到不同的核心上并行运行</strong>。而在<strong>单核CPU</strong>中，<strong>线程的运行会通过时间片轮转或优先级调度等方式进行切换</strong>，从而实现并发执行。</p>
+<p>​    最后，<strong>线程之间共享所属进程的内存空间</strong>，包括代码段、数据段、堆和栈。这意味着线程可以访问相同的变量和数据结构，但同时需要注意<strong>同步机制</strong>来避免数据竞争和不一致的问题。</p>
+<p>综上所述，线程是在CPU上运行的，它们利用进程中的资源和内存空间，按照操作系统的调度策略执行任务。</p>
+<ol>
+<li>python是否支持多线程？</li>
+</ol>
+<p>Python支持<strong>多线程</strong>，但由于全局解释器锁（GIL）的存在，在任意时刻只能有一个线程执行Python字节码。Python中的多线程是通过<strong>在一个进程中创建多个线程来实现的</strong>，每个线程可以执行不同的任务。然而，由于Python解释器（cpython，由c语言编写的python解释器库）的GIL限制，这些线程并不是真正意义上的并行执行。GIL确保了同一时间只有一个线程能够访问Python的对象和内存空间，这意味着即使在多核处理器上，Python的多线程也无法实现真正的并行计算。</p>
+<p>​    尽管如此，Python的多线程对于<strong>I/O密集型任务</strong>仍然非常有用，因为它们可以在等待I/O操作完成时释放GIL，从而允许其他线程执行。在这种情况下，多线程可以提高程序的效率，因为它们可以减少因等待I/O而浪费的时间。</p>
+<p>​    此外，如果需要执行<strong>CPU密集型任务</strong>，或者希望充分利用多核处理器的能力，可以考虑使用Python的<strong>多进程</strong>模块<code>multiprocessing</code>。多进程可以绕过GIL的限制，因为<strong>每个进程都有自己的Python解释器和内存空间</strong>，从而实现真正的并行执行。</p>
+<p>​    multiprocessing实现多进程并行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_cube</span>(<span class="params">num</span>):</span> </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Cube: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(num * num * num)) </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_square</span>(<span class="params">num</span>):</span> </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Square: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(num * num)) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>: </span><br><span class="line">    <span class="comment"># 创建进程</span></span><br><span class="line">    p1 = multiprocessing.Process(target=print_square, args=(<span class="number">10</span>, )) </span><br><span class="line">    p2 = multiprocessing.Process(target=print_cube, args=(<span class="number">10</span>, )) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 开启进程</span></span><br><span class="line">    p1.start() </span><br><span class="line">    p2.start() </span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 等待p1、p2线程都执行完</span></span><br><span class="line">    p1.join() </span><br><span class="line">    p2.join() </span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Done!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/14/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/14/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/" class="post-title-link" itemprop="url">Some Ideas | 回顾过去七年</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-14 05:05:29" itemprop="dateCreated datePublished" datetime="2024-01-14T05:05:29-08:00">2024-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-06-26 04:44:03" itemprop="dateModified" datetime="2024-06-26T04:44:03-08:00">2024-06-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/V-Life/" itemprop="url" rel="index"><span itemprop="name">V Life</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/V-Life/Some-Ideas/" itemprop="url" rel="index"><span itemprop="name">Some Ideas</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/V-Life/Some-Ideas/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/" itemprop="url" rel="index"><span itemprop="name">回顾过去七年</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          Here's something encrypted, password is required to continue reading.
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/14/%E5%9B%9E%E9%A1%BE%E8%BF%87%E5%8E%BB%E4%B8%83%E5%B9%B4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%89%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1039,194 +1222,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/15/%E6%88%91%E7%9A%84%E6%83%B3%E6%B3%9520230715/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/15/%E6%88%91%E7%9A%84%E6%83%B3%E6%B3%9520230715/" class="post-title-link" itemprop="url">Some Ideas | 我的想法 2023.7.15</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-15 05:04:03" itemprop="dateCreated datePublished" datetime="2023-07-15T05:04:03-08:00">2023-07-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-26 04:28:00" itemprop="dateModified" datetime="2024-06-26T04:28:00-08:00">2024-06-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/V-Life/" itemprop="url" rel="index"><span itemprop="name">V Life</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/V-Life/Some-Ideas/" itemprop="url" rel="index"><span itemprop="name">Some Ideas</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/V-Life/Some-Ideas/%E6%88%91%E7%9A%84%E6%83%B3%E6%B3%95-2023-7-15/" itemprop="url" rel="index"><span itemprop="name">我的想法 2023.7.15</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="我的想法-2023-7-15"><a href="#我的想法-2023-7-15" class="headerlink" title="我的想法 2023.7.15"></a>我的想法 2023.7.15</h1><ul>
-<li><p>Theme: 让技术有用</p>
-</li>
-<li><p>我的想法</p>
-<ul>
-<li><p>增加gitee的使用频率，系统学习某个技术并将学习过程或经验推送到gitee</p>
-</li>
-<li><p>时常维护自己的代码仓库以及个人博客</p>
-</li>
-<li><p>开发小工具/有用的功能，在gitee建立仓库</p>
-</li>
-<li><p>在建仓和维护仓库的同时，深入掌握git技术</p>
-</li>
-<li><p>希望在一年后能够有一个成熟的代码仓库（主题待定）</p>
-</li>
-<li><p>学习人工智能技术，并注意新技术的体验（例如yolo目标检测这样的技术）</p>
-</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/18/%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/18/%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/" class="post-title-link" itemprop="url">Chicken Soup | 淡定自若 孰能生巧</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-18 03:21:04" itemprop="dateCreated datePublished" datetime="2023-02-18T03:21:04-08:00">2023-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-26 04:29:34" itemprop="dateModified" datetime="2024-06-26T04:29:34-08:00">2024-06-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/V-Life/" itemprop="url" rel="index"><span itemprop="name">V Life</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/V-Life/Chicken-Soup/" itemprop="url" rel="index"><span itemprop="name">Chicken Soup</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/V-Life/Chicken-Soup/%E6%89%80%E6%9C%89%E7%9A%84%E6%B7%A1%E5%AE%9A%E8%87%AA%E8%8B%A5%EF%BC%8C%E8%83%8C%E5%90%8E%E4%B8%80%E5%AE%9A%E6%98%AF%E5%AD%B0%E8%83%BD%E7%94%9F%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">所有的淡定自若，背后一定是孰能生巧</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>“所有的淡定自若，背后一定是孰能生巧！”</strong></p>
-<p>2023/2/18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/53/">53</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/54/">54</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1294,20 +1293,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">530</span>
+          <span class="site-state-item-count">532</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">508</span>
+        <span class="site-state-item-count">510</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">515</span>
+        <span class="site-state-item-count">518</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
