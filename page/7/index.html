@@ -190,6 +190,271 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/29/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/29/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/" class="post-title-link" itemprop="url">pytest | 如何调用pytest</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-29 03:38:53 / 修改时间：03:42:48" itemprop="dateCreated datePublished" datetime="2024-02-29T03:38:53-08:00">2024-02-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">python测试框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/" itemprop="url" rel="index"><span itemprop="name">pytest</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/%E5%A6%82%E4%BD%95%E8%B0%83%E7%94%A8pytest/" itemprop="url" rel="index"><span itemprop="name">如何调用pytest</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="如何调用pytest"><a href="#如何调用pytest" class="headerlink" title="如何调用pytest"></a>如何调用pytest</h3><p>pytest支持命令行参数选择特定的tests去执行，以下是常见的一些选择方法。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> run tests <span class="keyword">in</span> a module</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行测试文件中的所有符合pytest测试发现规则的测试用例(测试文件中符合test_*()的函数、TestXxx类中的测试用例)</span></span><br><span class="line">pytest test_mod.py</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> run tests <span class="keyword">in</span> a directory</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行testing目录下的所有文件名符合test_*.py或*_test.py的测试文件中的测试用例</span></span><br><span class="line">pytest testing/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># run tests by keyword expressions</span></span><br><span class="line">pytest -k <span class="string">&quot;MyClass and not method&quot;</span></span><br><span class="line"><span class="comment"># 通过关键词表达式指定pytest运行的测试用例，pytest会在testpaths或者当前目录下找到类名为TestMyClass的类中的方法名不带method的方法去执行。如下示例，运行pytest -k &quot;MyClass and not method&quot;会执行test_a方法而不会运行test_method_add()方法</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编写测试文件test_keyword_exp.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestMyClass</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_a</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="string">&quot;a&quot;</span> == <span class="string">&quot;a&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_method_add</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> add(<span class="number">1</span>, <span class="number">2</span>) == <span class="number">3</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> run tests by collection arguments</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> To run a specific <span class="built_in">test</span> within a module</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的test_func测试用例</span></span><br><span class="line">pytest tests/test_mod.py::test_func</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> To run all tests <span class="keyword">in</span> a class:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的TestClass类中的测试用例</span></span><br><span class="line">pytest tests/test_mod.py::TestClass</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Specifying a specific <span class="built_in">test</span> method:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的TestClass类中的test_method测试用例</span></span><br><span class="line">pytest tests/test_mod.py::TestClass::test_method</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Specifying a specific parametrization of a <span class="built_in">test</span>:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行test_mod.py测试文件中的带参数的test_func测试用例</span></span><br><span class="line">pytest tests/test_mod.py::test_func[x1,y2]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Run tests by marker expressions</span></span><br><span class="line"><span class="comment"># 运行带有@pytest.mark.slow装饰器的测试</span></span><br><span class="line">pytest -m slow</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下示例中，pytest将运行test_a测试用例，而不会运行test_b测试用例</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestMarkDecoration</span>:</span></span><br><span class="line"><span class="meta">    @pytest.mark.slow</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_a</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="number">1</span> == <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.quick</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_b</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="number">2</span> == <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> run tests from packages</span></span><br><span class="line">pytest --pyargs pkg.testing</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这将导入pkg.testing，并使用其文件系统位置从中查找和运行测试</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/29/pytest%E6%B5%8B%E8%AF%95%E7%A4%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/29/pytest%E6%B5%8B%E8%AF%95%E7%A4%BA%E4%BE%8B/" class="post-title-link" itemprop="url">pytest | pytest使用规则及示例</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-02-29 03:10:36 / 修改时间：03:36:05" itemprop="dateCreated datePublished" datetime="2024-02-29T03:10:36-08:00">2024-02-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">python测试框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/" itemprop="url" rel="index"><span itemprop="name">pytest</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/python%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/pytest/pytest%E4%BD%BF%E7%94%A8%E8%A7%84%E5%88%99%E5%8F%8A%E7%A4%BA%E4%BE%8B/" itemprop="url" rel="index"><span itemprop="name">pytest使用规则及示例</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="pytest使用规则及示例"><a href="#pytest使用规则及示例" class="headerlink" title="pytest使用规则及示例"></a>pytest使用规则及示例</h3><p>Pytest是一个功能强大且易于使用的<code>python测试框架</code>，支持编写<code>单元测试</code>、<code>集成测试</code>和<code>功能测试</code>。</p>
+<p>Pytest使用规则：</p>
+<ol>
+<li>测试文件命名应符合<code>test_*.py</code>或<code>*_test.py</code></li>
+<li>若使用class对测试用例进行分组，测试类名应符合<code>TestXxx</code></li>
+<li>测试用例函数/方法名称应符合<code>test_*()</code></li>
+</ol>
+<p>另外，值得注意的是，pytest支持在测试类中定义<code>setup</code>和<code>teardown</code>方法，这写方法会<strong>在每个测试方法运行前后分别调用</strong>，用于设置测试环境和清理资源。<code>setup_class</code>和<code>teardown_class</code>方法在测试类中的<strong>所有测试方法之前和之后分别只运行一次</strong>。</p>
+<p>下面编写一个计算器类Calculator，并使用pytest进行测试。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_calculator.py 测试文件名称符合test_*.py</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义计算器类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Calculator</span>:</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a, b</span>):</span></span><br><span class="line">        <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sub</span>(<span class="params">a, b</span>):</span></span><br><span class="line">        <span class="keyword">return</span> a - b</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mul</span>(<span class="params">a, b</span>):</span></span><br><span class="line">        <span class="keyword">return</span> a * b</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">div</span>(<span class="params">a, b</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> a / b</span><br><span class="line">        <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;zero Division Error Exception&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义测试类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestCalc</span>:</span>  <span class="comment"># 测试类名符合TestXxx</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_calc_add</span>(<span class="params">self</span>):</span>  <span class="comment"># 测试用例方法名符合test_*()</span></span><br><span class="line">        <span class="keyword">assert</span> Calculator.add(<span class="number">1</span>, <span class="number">2</span>) == <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_calc_sub</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> Calculator.sub(<span class="number">3</span>, <span class="number">1</span>) == <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_calc_mul</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> Calculator.mul(<span class="number">2</span>, <span class="number">4</span>) == <span class="number">8</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_calc_div</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">assert</span> Calculator.div(<span class="number">8</span>, <span class="number">4</span>) == <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_calc_div_zero_div_exp</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">with</span> pytest.raises(ZeroDivisionError):</span><br><span class="line">            Calculator.div(<span class="number">3</span>, <span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/28/CI-CD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/28/CI-CD/" class="post-title-link" itemprop="url">DevOps | CI/CD</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-28 03:41:24" itemprop="dateCreated datePublished" datetime="2024-02-28T03:41:24-08:00">2024-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-06-26 04:13:39" itemprop="dateModified" datetime="2024-06-26T04:13:39-08:00">2024-06-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/DevOps/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/DevOps/CI-CD/" itemprop="url" rel="index"><span itemprop="name">CI/CD</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="CI-CD"><a href="#CI-CD" class="headerlink" title="CI/CD"></a>CI/CD</h3><p><strong>CI/CD</strong>:持续集成和持续交付/持续部署，是DevOps实践中的关键组成部分，包括<strong>代码的自动构建、测试和部署</strong>，以确保软件的快速和健壮开发。</p>
+<p><code>DevOps</code>是软件开发中的一种文化和实践，强调开发（Development），测试，运维（Operations）三个领域的合并，通过自动化软件交付和架构变更的流程，实现构建、测试、发布软件的快捷、频繁和可靠。</p>
+<p><a target="_blank" rel="noopener" href="https://www.redhat.com/zh/topics/devops/what-is-ci-cd">参考资料1：什么是 CI/CD？</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136843588">参考资料2：使用gitlab实现CI/CD</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/28/python%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -823,272 +1088,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/10/cpluspluslambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/10/cpluspluslambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title-link" itemprop="url">C++ | lambda表达式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-10-10 19:46:38 / 修改时间：19:48:09" itemprop="dateCreated datePublished" datetime="2023-10-10T19:46:38-08:00">2023-10-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">lambda表达式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h1><ol>
-<li><p>lambda表达式是什么？</p>
-<p>Lambda 表达式（通常称为 Lambda）是一种在被调用的位置或作为参数传递给函数的位置定义匿名函数对象（闭包）的简便方法。</p>
-</li>
-<li><p>lambda表达式的语法</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[capture list] (parameters) <span class="function"><span class="keyword">mutable</span> <span class="title">throw</span><span class="params">()</span> -&gt; <span class="keyword">return</span>-type </span>&#123;statement&#125;</span><br></pre></td></tr></table></figure></li></ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/10/cpluspluslambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/10/cplusplus%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/10/cplusplus%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">C++ | 二级指针</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-10-10 19:43:43 / 修改时间：19:44:51" itemprop="dateCreated datePublished" datetime="2023-10-10T19:43:43-08:00">2023-10-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/" itemprop="url" rel="index"><span itemprop="name">二级指针</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="c-二级指针"><a href="#c-二级指针" class="headerlink" title="c++二级指针"></a>c++二级指针</h1><ul>
-<li><p>普通变量作为形参</p>
-<p>在函数中采用普通变量接收实参传递的变量，对变量的操作是对实参拷贝值的操作，不会改变原有变量的值</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> a)</span></span>&#123;</span><br><span class="line">  a = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：before changed,a=10</span></span><br><span class="line">    <span class="built_in">change_value</span>(a);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：after changed,a=10</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>指针变量作为形参</p>
-<p>由上可知，普通变量作为形参时，对变量的操作其实是对拷贝值的操作，不会改变原来变量的值，若要改变原来变量的值，可采用指针变量作为形参。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> *p)</span></span>&#123;</span><br><span class="line">    *p = <span class="number">20</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：before changed,a=10</span></span><br><span class="line">    <span class="built_in">change_value</span>(&amp;a);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,a=&quot;</span> &lt;&lt; a &lt;&lt; endl;<span class="comment">//输出：after changed,a=20</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>二级指针作为形参</p>
-<p>以上是通过函数修改普通变量的值，若要对指针变量的指向进行修改，则需要使用二级指针来实现。</p>
-<p>首先在函数中，采用指针变量作为形参接收实参传递的指针，示例代码如下，由代码输出结果可知，用指针变量作为形参不能够修改原来指针的指向。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> *p)</span></span>&#123;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">20</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> *p = &amp;a;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,*p=&quot;</span> &lt;&lt; *p &lt;&lt; endl;<span class="comment">//before changed,*p=10</span></span><br><span class="line">    <span class="built_in">change_value</span>(p);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,*p=&quot;</span> &lt;&lt; *p &lt;&lt; endl;<span class="comment">//after changed,*p=10</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下代码是二级指针作为形参的示例代码，由代码输出可知，二级指针作为形参时可以修改原来指针变量的指向。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change_value</span><span class="params">(<span class="keyword">int</span> **p)</span></span>&#123;</span><br><span class="line">    *p = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">20</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> *p = &amp;a;</span><br><span class="line">    <span class="keyword">int</span> **pp = &amp;p;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,*p&quot;</span> &lt;&lt; *p &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">change_value</span>(pp);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;before changed,*p&quot;</span> &lt;&lt; *p &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;after changed,**pp&quot;</span> &lt;&lt; **pp &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>此外，二级指针还常与结构体、数组一起使用，二级指针搭配结构体/数组的使用将在后续补充 ！</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/09/C-%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/10/09/C-%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">C++ | 指针与引用的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-10-09 04:26:43 / 修改时间：04:40:06" itemprop="dateCreated datePublished" datetime="2023-10-09T04:26:43-08:00">2023-10-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">指针与引用</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="C-指针与引用"><a href="#C-指针与引用" class="headerlink" title="C++指针与引用"></a>C++指针与引用</h1><p>学习c++时，很容易混淆指针和引用的用法，以及对指针与引用的使用存在些许疑惑，下面通过示例代码说明指针和引用的区别。</p>
-<ul>
-<li>指针与引用的区别？</li>
-</ul>
-<ol>
-<li>定义和性质不同</li>
-</ol>
-<p>指针是一个变量，其存储的是一个地址，该地址指向内存的一个存储单元；举例，张三的身份证看做一个指针，这个指针指向了张三，张三的妈妈夸奖了身份证不等于张三的妈妈夸奖了张三。</p>
-<p>引用是一个变量的别名，跟原来的变量实质上是同一个东西，类似于日常生活中“小名”的意思，例如张三的小名叫毛蛋，张三与毛蛋都指的是张三这个人，张三的妈妈夸奖了张三等于张三的妈妈夸奖了毛蛋。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">996</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;a; <span class="comment">// p是指针, &amp;在此是求地址运算</span></span><br><span class="line"><span class="keyword">int</span> &amp;r = a; <span class="comment">// r是引用, &amp;在此起标识作用</span></span><br></pre></td></tr></table></figure>
-
-<p>上面定义了一个整型变量 a，p 是一个指针变量，p 的值是变量 a 的地址；</p>
-<p>而引用 r，是 a 的一个别名，在内存中 r 和 a 占有同一个存储单元。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/09/C-%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1160,20 +1159,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">535</span>
+          <span class="site-state-item-count">538</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">513</span>
+        <span class="site-state-item-count">519</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">523</span>
+        <span class="site-state-item-count">527</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
