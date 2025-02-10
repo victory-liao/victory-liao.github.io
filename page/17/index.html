@@ -190,6 +190,240 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/18/SSM-%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">SSM | 修改</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-18 17:07:54 / 修改时间：17:13:39" itemprop="dateCreated datePublished" datetime="2022-04-18T17:07:54-08:00">2022-04-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/" itemprop="url" rel="index"><span itemprop="name">SSM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%A1%86%E6%9E%B6/SSM/%E4%BF%AE%E6%94%B9/" itemprop="url" rel="index"><span itemprop="name">修改</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="修改员工信息"><a href="#修改员工信息" class="headerlink" title="修改员工信息"></a>修改员工信息</h1><p>1.list.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;展示员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;th&gt;EID&lt;/th&gt;
+            &lt;th&gt;ENAME&lt;/th&gt;
+            &lt;th&gt;AGE&lt;/th&gt;
+            &lt;th&gt;SEX&lt;/th&gt;
+            &lt;th&gt;DEPARTMENTNAME&lt;/th&gt;
+            &lt;th&gt;OPTIONS&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;c:forEach items=&quot;$&#123;empList&#125;&quot; var=&quot;emp&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;$&#123;emp.eid&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.ename&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.age&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.sex == 0 ? &#39;女&#39;:&#39;男&#39;&#125;&lt;/td&gt;
+                &lt;td&gt;$&#123;emp.dept.dname&#125;&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a href=&quot;emp&quot;&gt;删除&lt;/a&gt;
+                    &lt;a href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp/$&#123;emp.eid&#125;&quot;&gt;修改&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+        &lt;tr&gt;
+            &lt;td colspan=&quot;10&quot;&gt;
+                $&#123;page&#125;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>2.update.jsp</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@taglib uri=&quot;http://www.springframework.org/tags/form&quot; prefix=&quot;form&quot;%&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;修改员工信息&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;$&#123;pageContext.servletContext.contextPath&#125;/css/index_work.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form:form action=&quot;$&#123;pageContext.servletContext.contextPath&#125;/emp&quot; method=&quot;post&quot; modelAttribute=&quot;emp&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PUT&quot;/&gt;
+        &lt;form:hidden path=&quot;eid&quot;/&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th colspan=&quot;2&quot;&gt;UPDATE EMP INFO&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;ENAME&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;ename&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;AGE&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:input path=&quot;age&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;sex&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:radiobuttons path=&quot;sex&quot; items=&quot;$&#123;sex&#125;&quot;/&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;DEPARTMENT&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;form:select path=&quot;dept.did&quot; items=&quot;$&#123;deptList&#125;&quot; itemLabel=&quot;dname&quot; itemValue=&quot;did&quot;&gt;&lt;/form:select&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td colspan=&quot;2&quot;&gt;
+                    &lt;input type=&quot;submit&quot; value=&quot;修改&quot; /&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/form:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3.EmpController.java</p>
+<pre><code>@Controller
+public class EmpController &#123;
+
+    @Autowired
+    private EmpService service;
+    
+    @RequestMapping(value=&quot;/emp/&#123;eid&#125;&quot;, method=RequestMethod.GET)
+    public String toUpdate(@PathVariable(&quot;eid&quot;)String eid, Map&lt;String, Object&gt; map)&#123;
+        //要修改的员工信息
+        Emp emp = service.getEmpByEid(eid);
+        
+        //所有的部门信息
+        List&lt;Dept&gt; deptList = service.getAllDept();
+        
+        //获取存储性别的map集合
+        Map&lt;String, String&gt; sex = new HashMap&lt;&gt;();
+        sex.put(&quot;0&quot;, &quot;女&quot;);
+        sex.put(&quot;1&quot;, &quot;男&quot;);
+        
+        map.put(&quot;emp&quot;, emp);
+        map.put(&quot;deptList&quot;, deptList);
+        map.put(&quot;sex&quot;, sex);
+        
+        return &quot;update&quot;;
+    &#125;
+    
+    @RequestMapping(value=&quot;/emp&quot;, method=RequestMethod.PUT)
+    public String updateEmp(Emp emp)&#123;
+        service.updateEmp(emp);
+        return &quot;redirect:/emps/1&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.EmpService.java</p>
+<pre><code>public interface EmpService &#123;
+    ......
+    
+    List&lt;Dept&gt; getAllDept();
+&#125;
+</code></pre>
+<p>5.EmpServiceImpl.java</p>
+<pre><code>@Service
+public class EmpServiceImpl implements EmpService&#123;
+    @Autowired
+    private EmpMapper empMapper;
+    
+    @Autowired
+    private DeptMapper deptMapper;
+    
+    ......
+    
+    @Override
+    public List&lt;Dept&gt; getAllDept() &#123;
+        // TODO Auto-generated method stub
+        return deptMapper.getAllDept();
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/18/%E5%8F%8D%E5%B0%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1647,92 +1881,6 @@ Dept [did=3, dname=研发部]
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/05/%E7%BB%9F%E8%AE%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">python | 统计字符串中各个字符出现的次数并返回出现次数最多的字符</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-04-05 16:50:00 / 修改时间：17:04:22" itemprop="dateCreated datePublished" datetime="2022-04-05T16:50:00-08:00">2022-04-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E6%89%BE%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AD%97%E7%AC%A6/" itemprop="url" rel="index"><span itemprop="name">找出字符串中出现次数最多的字符</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="找出字符串中出现次数最多的字符"><a href="#找出字符串中出现次数最多的字符" class="headerlink" title="找出字符串中出现次数最多的字符"></a>找出字符串中出现次数最多的字符</h1><pre><code>string = &quot;abcdaab&quot;
-word_frequency = dict()
-for ch in string:
-    if ch not in word_frequency.keys():
-        word_frequency[ch] = 1
-    else:
-        word_frequency[ch] += 1
-print(word_frequency)
-print(max(word_frequency, key=word_frequency.get))
-</code></pre>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42444693/article/details/104203479?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&utm_relevant_index=1">参考资料</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1804,20 +1952,20 @@ print(max(word_frequency, key=word_frequency.get))
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">539</span>
+          <span class="site-state-item-count">540</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">520</span>
+        <span class="site-state-item-count">522</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">528</span>
+        <span class="site-state-item-count">530</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1857,7 +2005,7 @@ print(max(word_frequency, key=word_frequency.get))
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
