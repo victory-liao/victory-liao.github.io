@@ -190,6 +190,655 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/16/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/16/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" class="post-title-link" itemprop="url">python | 定时任务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-06-16 05:01:19 / 修改时间：05:04:58" itemprop="dateCreated datePublished" datetime="2025-06-16T05:01:19-08:00">2025-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">定时任务</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python定时任务调度"><a href="#Python定时任务调度" class="headerlink" title="Python定时任务调度"></a>Python定时任务调度</h1><p>定时任务调度（<strong>Scheduled Task Execution</strong>）是一种在预定时间或周期性地自动执行特定操作的机制。它广泛应用于自动化运维、数据处理、日志清理、监控告警、定时推送等场景。</p>
+<hr>
+<h3 id="🕰️-定时任务调度的核心概念"><a href="#🕰️-定时任务调度的核心概念" class="headerlink" title="🕰️ 定时任务调度的核心概念"></a>🕰️ 定时任务调度的核心概念</h3><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>任务（Task）</strong></td>
+<td>要执行的具体操作，通常是一个函数或命令。</td>
+</tr>
+<tr>
+<td><strong>调度器（Scheduler）</strong></td>
+<td>管理和触发任务执行的组件。</td>
+</tr>
+<tr>
+<td><strong>触发条件（Trigger）</strong></td>
+<td>决定任务何时执行的规则，如：固定间隔、延迟执行、cron 表达式等。</td>
+</tr>
+<tr>
+<td><strong>执行方式</strong></td>
+<td>可同步或异步执行任务。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="📌-定时任务的常见类型"><a href="#📌-定时任务的常见类型" class="headerlink" title="📌 定时任务的常见类型"></a>📌 定时任务的常见类型</h3><ol>
+<li><strong>一次性任务（One-time Task）</strong><ul>
+<li>执行一次后自动结束。</li>
+<li>示例：5 秒后发送一条通知。</li>
+</ul>
+</li>
+<li><strong>周期性任务（Recurring Task）</strong><ul>
+<li>按照固定间隔重复执行。</li>
+<li>示例：每 5 分钟检查服务器状态。</li>
+</ul>
+</li>
+<li><strong>延迟首次执行任务（Delayed First Execution）</strong><ul>
+<li>首次执行有延迟，之后按周期执行。</li>
+<li>示例：启动后等待 10 秒再开始心跳检测。</li>
+</ul>
+</li>
+<li><strong>基于时间表达式的任务（Cron-like Task）</strong><ul>
+<li>使用类似 <code>cron</code> 的语法定义执行时间点。</li>
+<li>示例：每天凌晨 2:00 执行数据库备份。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="✅-定时任务调度的应用场景"><a href="#✅-定时任务调度的应用场景" class="headerlink" title="✅ 定时任务调度的应用场景"></a>✅ 定时任务调度的应用场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据同步</td>
+<td>每小时从远程服务器拉取最新数据</td>
+</tr>
+<tr>
+<td>日志清理</td>
+<td>每天凌晨删除过期日志文件</td>
+</tr>
+<tr>
+<td>报表生成</td>
+<td>每月第一天自动生成统计报表</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>每隔一段时间检测服务可用性</td>
+</tr>
+<tr>
+<td>自动提醒</td>
+<td>每天上午9点推送待办事项</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🧩-定时任务调度的实现方式（Python-中）"><a href="#🧩-定时任务调度的实现方式（Python-中）" class="headerlink" title="🧩 定时任务调度的实现方式（Python 中）"></a>🧩 定时任务调度的实现方式（Python 中）</h3><h4 id="1-简单轮询-sleep"><a href="#1-简单轮询-sleep" class="headerlink" title="1. 简单轮询 + sleep"></a>1. <strong>简单轮询 + sleep</strong></h4><ul>
+<li>如你提供的 <a href="file://C:\Users\victory\Desktop\cron-job.py#L9-L105">SimpleCronJob</a> 类所示。</li>
+<li>利用 <code>while</code> 循环 + <code>time.sleep()</code> 实现秒级轮询。</li>
+<li>适用于轻量级任务。</li>
+</ul>
+<h4 id="2-使用第三方库"><a href="#2-使用第三方库" class="headerlink" title="2. 使用第三方库"></a>2. <strong>使用第三方库</strong></h4><ul>
+<li><strong>APScheduler</strong>：功能强大的任务调度器，支持 cron、日期、间隔三种触发器。</li>
+<li><strong>Celery Beat</strong>：分布式任务调度系统，适合大型项目。</li>
+<li><strong>schedule</strong>：简洁易用的库，适合脚本化任务。</li>
+</ul>
+<h4 id="3-操作系统级定时任务"><a href="#3-操作系统级定时任务" class="headerlink" title="3. 操作系统级定时任务"></a>3. <strong>操作系统级定时任务</strong></h4><ul>
+<li>Linux 下使用 <code>crontab</code>。</li>
+<li>Windows 下使用“任务计划程序”。</li>
+</ul>
+<hr>
+<h3 id="🔁-示例对比：不同方式实现每-5-秒打印一次"><a href="#🔁-示例对比：不同方式实现每-5-秒打印一次" class="headerlink" title="🔁 示例对比：不同方式实现每 5 秒打印一次"></a>🔁 示例对比：不同方式实现每 5 秒打印一次</h3><h4 id="方式一：原生-Python（当前类）"><a href="#方式一：原生-Python（当前类）" class="headerlink" title="方式一：原生 Python（当前类）"></a>方式一：原生 Python（当前类）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cron.add_task(<span class="string">&quot;periodic_task&quot;</span>, <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;🔁 周期性任务执行&quot;</span>), interval_seconds=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式二：使用-schedule-库"><a href="#方式二：使用-schedule-库" class="headerlink" title="方式二：使用 schedule 库"></a>方式二：使用 <code>schedule</code> 库</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> schedule</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">job</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Scheduled task executed&quot;</span>)</span><br><span class="line"></span><br><span class="line">schedule.every(<span class="number">5</span>).seconds.do(job)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    schedule.run_pending()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式三：使用-APScheduler"><a href="#方式三：使用-APScheduler" class="headerlink" title="方式三：使用 APScheduler"></a>方式三：使用 <code>APScheduler</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">job</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;APScheduled task executed&quot;</span>)</span><br><span class="line"></span><br><span class="line">sched = BlockingScheduler()</span><br><span class="line">sched.add_job(job, <span class="string">&#x27;interval&#x27;</span>, seconds=<span class="number">5</span>)</span><br><span class="line">sched.start()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧠-小结"><a href="#🧠-小结" class="headerlink" title="🧠 小结"></a>🧠 小结</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>当前类 <a href="file://C:\Users\victory\Desktop\cron-job.py#L9-L105">SimpleCronJob</a></th>
+<th>APScheduler</th>
+<th>Celery Beat</th>
+<th>crontab</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>易用性</td>
+<td>✅ 简单直接</td>
+<td>✅ 支持多种触发器</td>
+<td>⚠️ 分布式复杂</td>
+<td>✅ 系统级配置</td>
+</tr>
+<tr>
+<td>功能丰富度</td>
+<td>❌ 较基础</td>
+<td>✅ 强大</td>
+<td>✅ 极其强大</td>
+<td>⚠️ 仅基本调度</td>
+</tr>
+<tr>
+<td>多线程支持</td>
+<td>✅ 已封装</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+<td>❌ 单进程</td>
+</tr>
+<tr>
+<td>持久化</td>
+<td>❌ 不支持</td>
+<td>✅ 可持久化</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>本地测试、小型脚本</td>
+<td>中型应用</td>
+<td>大型分布式系统</td>
+<td>系统维护任务</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="📎-总结一句话："><a href="#📎-总结一句话：" class="headerlink" title="📎 总结一句话："></a>📎 总结一句话：</h3><blockquote>
+<p><strong>定时任务调度就是让程序在指定时间或条件下自动执行某些操作，从而实现自动化流程管理。</strong></p>
+</blockquote>
+<h1 id="python定时任务调度实现"><a href="#python定时任务调度实现" class="headerlink" title="python定时任务调度实现"></a>python定时任务调度实现</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Optional</span>, <span class="type">Callable</span>, <span class="type">Tuple</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleCronJob</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.tasks: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Tuple</span>[datetime.datetime, datetime.timedelta, <span class="built_in">bool</span>, <span class="built_in">bool</span>, <span class="type">Callable</span>]] = &#123;&#125;</span><br><span class="line">        self.lock = threading.Lock()</span><br><span class="line">        self.stop_flag = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_task</span>(<span class="params">self, task_id: <span class="built_in">str</span>, func: <span class="type">Callable</span>, delay_seconds: <span class="built_in">int</span> = <span class="number">0</span>, interval_seconds: <span class="built_in">int</span> = <span class="number">0</span>, once: <span class="built_in">bool</span> = <span class="literal">False</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        添加一个定时任务。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param task_id: 任务唯一标识符</span></span><br><span class="line"><span class="string">        :param func: 要执行的函数</span></span><br><span class="line"><span class="string">        :param delay_seconds: 首次执行延迟时间（秒）</span></span><br><span class="line"><span class="string">        :param interval_seconds: 周期执行间隔时间（秒）</span></span><br><span class="line"><span class="string">        :param once: 是否为一次性任务</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">with</span> self.lock:</span><br><span class="line">            self.tasks[task_id] = (</span><br><span class="line">                <span class="literal">None</span>,  <span class="comment"># last_time</span></span><br><span class="line">                datetime.timedelta(seconds=delay_seconds),</span><br><span class="line">                <span class="literal">False</span>,  <span class="comment"># first_executed</span></span><br><span class="line">                datetime.timedelta(seconds=interval_seconds),</span><br><span class="line">                once,</span><br><span class="line">                func</span><br><span class="line">            )</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;任务 <span class="subst">&#123;task_id&#125;</span> 已注册&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;开始执行定时任务服务...&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.stop_flag:</span><br><span class="line">            now = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">with</span> self.lock:</span><br><span class="line">                <span class="keyword">for</span> task_id, (last_time, delay_time, first_executed, interval_time, once, func) <span class="keyword">in</span> <span class="built_in">list</span>(self.tasks.items()):</span><br><span class="line">                    <span class="keyword">if</span> delay_time.total_seconds() &gt; <span class="number">0</span> <span class="keyword">and</span> <span class="keyword">not</span> first_executed:</span><br><span class="line">                        <span class="keyword">if</span> last_time <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                            self.tasks[task_id] = (now, delay_time, first_executed, interval_time, once, func)</span><br><span class="line">                            <span class="keyword">continue</span></span><br><span class="line">                        <span class="keyword">elif</span> (now - last_time) &lt; delay_time:</span><br><span class="line">                            <span class="keyword">continue</span></span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            self.tasks[task_id] = (now, delay_time, <span class="literal">True</span>, interval_time, once, func)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">elif</span> last_time <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                        self.tasks[task_id] = (now, delay_time, first_executed, interval_time, once, func)</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line">                    <span class="keyword">elif</span> (now - last_time) &lt; interval_time:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 执行任务</span></span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;执行任务 <span class="subst">&#123;task_id&#125;</span>&quot;</span>)</span><br><span class="line">                        func()</span><br><span class="line">                    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;任务 <span class="subst">&#123;task_id&#125;</span> 执行出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 更新最后执行时间</span></span><br><span class="line">                    self.tasks[task_id] = (now, delay_time, <span class="literal">True</span>, interval_time, once, func)</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 如果是一次性任务，执行后移除</span></span><br><span class="line">                    <span class="keyword">if</span> once:</span><br><span class="line">                        <span class="keyword">del</span> self.tasks[task_id]</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;任务 <span class="subst">&#123;task_id&#125;</span> 已完成并移除&quot;</span>)</span><br><span class="line"></span><br><span class="line">            time.sleep(<span class="number">1</span>)  <span class="comment"># 模拟 CRON_TIME_INTERVAL</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.stop_flag = <span class="literal">True</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;定时任务服务已停止&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例任务函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example_task</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;✅ 示例任务正在执行...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    cron = SimpleCronJob()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1. 周期性任务：每5秒执行一次</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;periodic_task&quot;</span>, <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;🔁 周期性任务执行&quot;</span>), interval_seconds=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 延迟性任务：首次延迟3秒后开始，之后每6秒执行一次</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;delayed_periodic_task&quot;</span>,</span><br><span class="line">                  <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;🕒 延迟+周期任务执行&quot;</span>),</span><br><span class="line">                  delay_seconds=<span class="number">3</span>,</span><br><span class="line">                  interval_seconds=<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 一次性任务：立即执行一次（无延迟）</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;one_time_task&quot;</span>,</span><br><span class="line">                  <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;📎 一次性任务执行&quot;</span>),</span><br><span class="line">                  once=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 一次性延迟任务：延迟5秒后执行一次</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;one_time_delayed_task&quot;</span>,</span><br><span class="line">                  <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;⏳ 一次性延迟任务执行&quot;</span>),</span><br><span class="line">                  delay_seconds=<span class="number">5</span>,</span><br><span class="line">                  once=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cron.start()</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        cron.stop()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/16/python%E5%8D%8F%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/16/python%E5%8D%8F%E7%A8%8B/" class="post-title-link" itemprop="url">python | 协程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-06-16 05:01:12 / 修改时间：05:05:52" itemprop="dateCreated datePublished" datetime="2025-06-16T05:01:12-08:00">2025-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%8D%8F%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">协程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="python协程"><a href="#python协程" class="headerlink" title="python协程"></a>python协程</h1><ol>
+<li><p>协程是什么？</p>
+<p>协程是一种<strong>用户级别的线程</strong>，由程序（而不是操作系统）调度。在Python种，由async def定义，使用await暂停和恢复执行。适合处理大量IO阻塞任务（如Redis、HTTP、文件、数据库等）。</p>
+</li>
+<li><p>为什么要用协程?<br>目前主流语言基本上都选择了多线程作为并发设施，与线程相关的概念就是抢占式多任务（Preemptive multitasking），而与协程相关的是协作式多任务。</p>
+<p>其实不管是进程还是线程，每次阻塞、切换都需要陷入系统调用(system call)，先让CPU跑操作系统的调度程序，然后再由调度程序决定该跑哪一个进程(线程)。<br>而且由于<strong>抢占式调度执行顺序无法确定</strong>的特点，使用线程时需要非常小心地处理同步问题，而协程完全不存在这个问题（事件驱动和异步程序也有同样的优点）。</p>
+<p>因为协程是用户自己来编写调度逻辑的，对于我们的CPU来说，协程其实是单线程，所以CPU不用去考虑怎么调度、切换上下文，这就省去了CPU的切换开销，所以协程在一定程度上又好于多线程。</p>
+</li>
+<li><p>简单协程示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">say_hello</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello ...&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;... World!&quot;</span>)</span><br><span class="line"></span><br><span class="line">asyncio.run(say_hello())</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行Redis订阅监听、HTTP并发请求、异步文件写入、异步数据库查询的协程驱动系统代码示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"><span class="keyword">import</span> aiofiles</span><br><span class="line"><span class="keyword">import</span> aiomysql</span><br><span class="line"><span class="keyword">import</span> redis.asyncio <span class="keyword">as</span> aioredis</span><br><span class="line"></span><br><span class="line"><span class="comment"># === Redis 订阅监听 ===</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">redis_listener</span>():</span></span><br><span class="line">    redis = aioredis.Redis()</span><br><span class="line">    pubsub = redis.pubsub()</span><br><span class="line">    <span class="keyword">await</span> pubsub.subscribe(<span class="string">&quot;demo&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[Redis] Subscribed to &#x27;demo&#x27;&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">for</span> msg <span class="keyword">in</span> pubsub.listen():</span><br><span class="line">        <span class="keyword">if</span> msg[<span class="string">&quot;type&quot;</span>] == <span class="string">&quot;message&quot;</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[Redis] Received: <span class="subst">&#123;msg[<span class="string">&#x27;data&#x27;</span>].decode()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># === 并发 HTTP 请求 ===</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">fetch</span>(<span class="params">session, url, i</span>):</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.get(url) <span class="keyword">as</span> resp:</span><br><span class="line">        text = <span class="keyword">await</span> resp.text()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;[HTTP] #<span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;<span class="built_in">len</span>(text)&#125;</span> bytes from <span class="subst">&#123;url&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">http_worker</span>():</span></span><br><span class="line">    urls = [<span class="string">&quot;https://example.com&quot;</span>] * <span class="number">3</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">        tasks = [fetch(session, url, i) <span class="keyword">for</span> i, url <span class="keyword">in</span> <span class="built_in">enumerate</span>(urls)]</span><br><span class="line">        <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"></span><br><span class="line"><span class="comment"># === 异步写文件 ===</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">file_writer</span>():</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> aiofiles.<span class="built_in">open</span>(<span class="string">f&quot;output_<span class="subst">&#123;i&#125;</span>.txt&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">await</span> f.write(<span class="string">f&quot;[File] Written by task <span class="subst">&#123;i&#125;</span>\n&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;[File] Written file <span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># === 异步 MySQL 查询 ===</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mysql_worker</span>():</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        conn = <span class="keyword">await</span> aiomysql.connect(</span><br><span class="line">            host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">3306</span>,</span><br><span class="line">            user=<span class="string">&#x27;your_user&#x27;</span>, password=<span class="string">&#x27;your_pass&#x27;</span>,</span><br><span class="line">            db=<span class="string">&#x27;your_db&#x27;</span>, autocommit=<span class="literal">True</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cur:</span><br><span class="line">            <span class="keyword">await</span> cur.execute(<span class="string">&quot;SELECT SLEEP(1), &#x27;Hello from DB&#x27;&quot;</span>)</span><br><span class="line">            result = <span class="keyword">await</span> cur.fetchone()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[MySQL] Result: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line">        conn.close()</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;[MySQL] Error:&quot;</span>, e)</span><br><span class="line"></span><br><span class="line"><span class="comment"># === 主函数：并发运行所有任务 ===</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(</span><br><span class="line">        redis_listener(),</span><br><span class="line">        http_worker(),</span><br><span class="line">        file_writer(),</span><br><span class="line">        mysql_worker(),</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/16/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%A4%9A%E8%BF%9B%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/16/python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%A4%9A%E8%BF%9B%E7%A8%8B/" class="post-title-link" itemprop="url">python | 多线程与多进程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-06-16 05:00:59 / 修改时间：05:03:33" itemprop="dateCreated datePublished" datetime="2025-06-16T05:00:59-08:00">2025-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/python%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%B9%B6%E8%A1%8C/" itemprop="url" rel="index"><span itemprop="name">python多进程实现并行</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python多进程与多线程"><a href="#Python多进程与多线程" class="headerlink" title="Python多进程与多线程"></a>Python多进程与多线程</h1><ol>
+<li><p>Python多进程是并行执行的吗？</p>
+<p>答：Python多线程不是并行执行的。由于CPython解释器中有一个全局解释器锁（GIL），它会导致：</p>
+<ul>
+<li>同一时间内只有一个县城能执行Python字节码</li>
+<li>对于CPU密集型任务，多线程不会并行执行，线程是轮流执行的</li>
+</ul>
+<p>结论：Python在CPU密集型任务（图像处理、大量计算等）中不能并行，但在I/O密集型任务（网络请求、文件读写、数据库访问等）中非常有效，可以“并发”运行多个任务。</p>
+</li>
+<li><p>那么在Python中如何实现真正的并行？</p>
+<p>可使用multiprocessing多进程实现多个任务的并行，每个进程有自己独立的Python解释器和内存空间，不会收到GIL的限制。</p>
+</li>
+<li><p>多线程、多进程Python示例</p>
+<p>3.1 多线程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[Thread] Start <span class="subst">&#123;n&#125;</span>&quot;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)  <span class="comment"># 模拟IO任务</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[Thread] Done <span class="subst">&#123;n&#125;</span> -&gt; <span class="subst">&#123;n * n&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">threads = []</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    t = threading.Thread(target=worker, args=(i,))</span><br><span class="line">    threads.append(t)</span><br><span class="line">    t.start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> threads:</span><br><span class="line">    t.join()</span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Threading total time: <span class="subst">&#123;end - start:<span class="number">.2</span>f&#125;</span> seconds&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>3.2 多进程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[Process <span class="subst">&#123;os.getpid()&#125;</span>] Start <span class="subst">&#123;n&#125;</span>&quot;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)  <span class="comment"># 模拟工作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[Process <span class="subst">&#123;os.getpid()&#125;</span>] Done <span class="subst">&#123;n&#125;</span> -&gt; <span class="subst">&#123;n * n&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">processes = []</span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    p = Process(target=worker, args=(i,))</span><br><span class="line">    processes.append(p)</span><br><span class="line">    p.start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> processes:</span><br><span class="line">    p.join()</span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Multiprocessing total time: <span class="subst">&#123;end - start:<span class="number">.2</span>f&#125;</span> seconds&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/16/Redis%E5%AE%9E%E7%8E%B0%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/16/Redis%E5%AE%9E%E7%8E%B0%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/" class="post-title-link" itemprop="url">python | Redis实现发布订阅</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-06-16 04:59:03 / 修改时间：05:00:07" itemprop="dateCreated datePublished" datetime="2025-06-16T04:59:03-08:00">2025-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/python-Redis%E5%AE%9E%E7%8E%B0%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/" itemprop="url" rel="index"><span itemprop="name">python Redis实现发布订阅</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python-Redis-发布订阅"><a href="#Python-Redis-发布订阅" class="headerlink" title="Python Redis 发布订阅"></a>Python Redis 发布订阅</h1><ol>
+<li>Redis发布/订阅是一种广播式消息系统：<ul>
+<li>发布者：向一个频道（channel）发送消息</li>
+<li>订阅者：订阅一个或多个频道，等待接受消息</li>
+<li>当有消息发布到一个频道，所有订阅该频道的客户端都会立即收到消息</li>
+</ul>
+</li>
+<li>应用场景示例<ul>
+<li>实时聊天系统：用户订阅频道，别人发言就能立刻收到</li>
+<li>消息推送/通知中心：后台发布消息，前端订阅实时显示</li>
+<li>分布式服务通信：多个服务通过Redis通信协调</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>高性能：消息实时传递</li>
+<li>非持久化：消息不会存储</li>
+<li>多对多支持：一个频道支持多个订阅者，一个客户端可订阅多个频道</li>
+<li>无确认机制：不想Kafka/RabbitMQ，由消息丢失风险</li>
+</ul>
+</li>
+<li>Redis 发布订阅Python类实现（redis_pubsub.py）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedisPubSub</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">6379</span>, db=<span class="number">0</span>, channel=<span class="string">&#x27;default&#x27;</span></span>):</span></span><br><span class="line">        self.channel = channel  <span class="comment"># 频道</span></span><br><span class="line">        self.redis = redis.Redis(host=host, port=port, db=db, decode_responses=<span class="literal">True</span>)  <span class="comment"># redis客户端</span></span><br><span class="line">        self.pubsub = self.redis.pubsub() <span class="comment"># redis发布订阅对象</span></span><br><span class="line">        self._running = <span class="literal">False</span>  <span class="comment"># 是否开启订阅</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 向self.channel频道发送消息message</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">publish</span>(<span class="params">self, message: <span class="built_in">str</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;发布消息&quot;&quot;&quot;</span></span><br><span class="line">        self.redis.publish(self.channel, message)</span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 订阅self.channel消息</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">subscribe</span>(<span class="params">self, callback</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        订阅并启动监听线程。</span></span><br><span class="line"><span class="string">        参数 callback: 接收一个函数，在收到消息时被调用。</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">listen</span>():</span></span><br><span class="line">            <span class="comment"># 订阅self.channel频道</span></span><br><span class="line">            self.pubsub.subscribe(self.channel)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Subscribed to <span class="subst">&#123;self.channel&#125;</span>&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 监听</span></span><br><span class="line">            <span class="keyword">for</span> message <span class="keyword">in</span> self.pubsub.listen():</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> self._running:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">if</span> message[<span class="string">&#x27;type&#x27;</span>] == <span class="string">&#x27;message&#x27;</span>:</span><br><span class="line">                    callback(message[<span class="string">&#x27;data&#x27;</span>])</span><br><span class="line">		</span><br><span class="line">        <span class="comment"># 开启订阅</span></span><br><span class="line">        self._running = <span class="literal">True</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 创建监听线程</span></span><br><span class="line">        self.listen_thread = threading.Thread(target=listen, daemon=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># 启动监听线程</span></span><br><span class="line">        self.listen_thread.start()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;停止订阅&quot;&quot;&quot;</span></span><br><span class="line">        self._running = <span class="literal">False</span></span><br><span class="line">        self.pubsub.unsubscribe()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Unsubscribed from <span class="subst">&#123;self.channel&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>发布端（publisher_demo.py）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> redis_pubsub <span class="keyword">import</span> RedisPubSub</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">pub = RedisPubSub(channel=<span class="string">&#x27;chat&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    pub.publish(<span class="string">f&quot;Message <span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Sent: Message <span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>订阅端（subscriber_demo.py）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> redis_pubsub <span class="keyword">import</span> RedisPubSub</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_message</span>(<span class="params">msg</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Received: <span class="subst">&#123;msg&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">sub = RedisPubSub(channel=<span class="string">&#x27;chat&#x27;</span>)</span><br><span class="line">sub.subscribe(callback=handle_message)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">    sub.stop()</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/16/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/16/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" class="post-title-link" itemprop="url">python | 守护进程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-06-16 04:54:21 / 修改时间：05:09:52" itemprop="dateCreated datePublished" datetime="2025-06-16T04:54:21-08:00">2025-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/python%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">python实现守护进程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>python第三方库/python-daemon/将当前进程变为守护进行</p>
+<ul>
+<li><p>守护进程</p>
+<ul>
+<li><p>什么是守护进程？</p>
+<p>守护进程是一种在后台运行的进程，通常用于执行周期性或长时间运行的任务。</p>
+</li>
+<li><p>特点：</p>
+<ul>
+<li>在后台运行的进程</li>
+<li>没有控制终端（不受键盘、tty影响）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>守护进程的原始实现</p>
+<ul>
+<li>守护进程实现核心步骤<ul>
+<li>fork() 一个子进程，父进程退出（脱离原始终端）</li>
+<li>setsid() 创建新会话，脱离控制终端</li>
+<li>第二次 fork() 防止重新获得终端</li>
+<li>chdir(‘/‘) 切换到根目录（避免锁定工作目录）</li>
+<li>umask(0) 重设文件权限掩码</li>
+<li>重定向 stdin、stdout、stderr 到 /dev/null</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>实现守护进程的方法</p>
+<ul>
+<li><p>方法1</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">daemonize</span>():</span></span><br><span class="line">    <span class="comment"># 第一次 fork</span></span><br><span class="line">    pid = os.fork()</span><br><span class="line">    <span class="keyword">if</span> pid &gt; <span class="number">0</span>:</span><br><span class="line">        sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 脱离终端，创建新会话</span></span><br><span class="line">    os.setsid()</span><br><span class="line">    os.umask(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 第二次 fork，避免重新打开终端</span></span><br><span class="line">    pid = os.fork()</span><br><span class="line">    <span class="keyword">if</span> pid &gt; <span class="number">0</span>:</span><br><span class="line">        sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 关闭标准文件描述符并重定向到 /dev/null</span></span><br><span class="line">    sys.stdout.flush()</span><br><span class="line">    sys.stderr.flush()</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/dev/null&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>, <span class="number">0</span>) <span class="keyword">as</span> f:</span><br><span class="line">        os.dup2(f.fileno(), sys.stdin.fileno())</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/dev/null&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="number">0</span>) <span class="keyword">as</span> f:</span><br><span class="line">        os.dup2(f.fileno(), sys.stdout.fileno())</span><br><span class="line">        os.dup2(f.fileno(), sys.stderr.fileno())</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法2（推荐使用）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> daemon</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span>():</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 你的后台任务代码</span></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> daemon.DaemonContext():</span><br><span class="line">    run()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法3：使用multiprocessing模块</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, current_process</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span>():</span></span><br><span class="line">    process = current_process()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Daemon process: <span class="subst">&#123;process.daemon&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    process = Process(target=task, daemon=<span class="literal">True</span>)</span><br><span class="line">  	process.start()</span><br><span class="line">    process.join()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> daemon</span><br><span class="line"><span class="keyword">from</span> daemon <span class="keyword">import</span> pidfile</span><br><span class="line"></span><br><span class="line">LOG_PATH = <span class="string">&quot;/tmp/my_daemon.log&quot;</span></span><br><span class="line">PID_PATH = <span class="string">&quot;/tmp/my_daemon.pid&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span>():</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(LOG_PATH, <span class="string">&quot;a&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(<span class="string">f&quot;[<span class="subst">&#123;time.strftime(<span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)&#125;</span>] Daemon is running...\n&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">with</span> daemon.DaemonContext(</span><br><span class="line">        working_directory=<span class="string">&quot;.&quot;</span>,</span><br><span class="line">        umask=<span class="number">0o002</span>,</span><br><span class="line">        pidfile=pidfile.TimeoutPIDLockFile(PID_PATH)</span><br><span class="line">    ):</span><br><span class="line">        run()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/13/transformer%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -627,451 +1276,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/29/CISC%E4%B8%8ERISC%E6%8C%87%E4%BB%A4%E9%9B%86%E7%9A%84%E6%AF%94%E8%BE%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/29/CISC%E4%B8%8ERISC%E6%8C%87%E4%BB%A4%E9%9B%86%E7%9A%84%E6%AF%94%E8%BE%83/" class="post-title-link" itemprop="url">指令集 | CISC与RISC指令集的比较</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-08-29 04:33:38 / 修改时间：04:40:06" itemprop="dateCreated datePublished" datetime="2024-08-29T04:33:38-08:00">2024-08-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" itemprop="url" rel="index"><span itemprop="name">AI基础设施</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/CPU/" itemprop="url" rel="index"><span itemprop="name">CPU</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/CPU/%E6%8C%87%E4%BB%A4%E9%9B%86/" itemprop="url" rel="index"><span itemprop="name">指令集</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/CPU/%E6%8C%87%E4%BB%A4%E9%9B%86/CISC%E4%B8%8ERISC%E6%8C%87%E4%BB%A4%E9%9B%86%E7%9A%84%E6%AF%94%E8%BE%83/" itemprop="url" rel="index"><span itemprop="name">CISC与RISC指令集的比较</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>指令集定义了CPU可以执行的指令集合。指令集从复杂度分类可分为CISC和RISC指令集。CISC指令集最常见的是X86，Intel与AMD两大CPU巨头生产的CPU以X86架构为主。RISC指令集有Arm、RISC-V、MIPS、Alpha等，Arm指令集主要应用于移动端、嵌入式计算芯片。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/08/29/CISC%E4%B8%8ERISC%E6%8C%87%E4%BB%A4%E9%9B%86%E7%9A%84%E6%AF%94%E8%BE%83/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/29/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/29/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F/" class="post-title-link" itemprop="url">AI模型轻量化 | 模型蒸馏</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-08-29 04:29:59 / 修改时间：04:33:05" itemprop="dateCreated datePublished" datetime="2024-08-29T04:29:59-08:00">2024-08-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E6%A8%A1%E5%9E%8B%E8%BD%BB%E9%87%8F%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">AI模型轻量化</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E6%A8%A1%E5%9E%8B%E8%BD%BB%E9%87%8F%E5%8C%96/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F/" itemprop="url" rel="index"><span itemprop="name">模型蒸馏</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><code>模型蒸馏</code>的核心思想是在保持较高预测性能的同时，通过知识迁移的方式，将一个复杂的大模型（<code>教师模型</code>）的知识传授给一个相对简单的小模型（<code>学生模型</code>），极大地降低了模型的复杂性和计算资源需求，实现了模型的轻量化和高效化。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/08/29/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">深度学习编译器 | 深度学习编译器与推理引擎的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-08-23 06:38:54" itemprop="dateCreated datePublished" datetime="2024-08-23T06:38:54-08:00">2024-08-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-29 04:17:17" itemprop="dateModified" datetime="2024-08-29T04:17:17-08:00">2024-08-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">编译器</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">深度学习编译器</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E%E7%9A%84%E5%8C%BA%E5%88%AB/" itemprop="url" rel="index"><span itemprop="name">深度学习编译器与推理引擎的区别</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>AI编译器与推理引擎的区别。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/08/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/23/SSLVPN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/23/SSLVPN/" class="post-title-link" itemprop="url">VPN | SSL VPN</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-08-23 06:33:17" itemprop="dateCreated datePublished" datetime="2024-08-23T06:33:17-08:00">2024-08-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-29 04:18:48" itemprop="dateModified" datetime="2024-08-29T04:18:48-08:00">2024-08-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">计算机基础</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/VPN/" itemprop="url" rel="index"><span itemprop="name">VPN</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/VPN/SSL-VPN/" itemprop="url" rel="index"><span itemprop="name">SSL VPN</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><code>SSL VPN</code>是以<code>SSL</code>加密技术为基础的<code>VPN</code>技术，利用<code>SSL</code>提供的安全机制，为用户<code>远程访问</code>公司内部网络提供了安全保证。</p>
-<p>SSL VPN的典型组网架构如下：</p>
-<p><img src="/2024/08/23/SSLVPN/1.png"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/08/23/SSLVPN/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/23/Scaleup%E5%92%8CScaleout%E7%BD%91%E7%BB%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/23/Scaleup%E5%92%8CScaleout%E7%BD%91%E7%BB%9C/" class="post-title-link" itemprop="url">智算网络 | Scale up和Scale out网络</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-08-23 06:29:48 / 修改时间：06:31:41" itemprop="dateCreated datePublished" datetime="2024-08-23T06:29:48-08:00">2024-08-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" itemprop="url" rel="index"><span itemprop="name">AI基础设施</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E6%99%BA%E7%AE%97%E4%B8%AD%E5%BF%83/" itemprop="url" rel="index"><span itemprop="name">智算中心</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E6%99%BA%E7%AE%97%E4%B8%AD%E5%BF%83/%E6%99%BA%E7%AE%97%E7%BD%91%E7%BB%9C%EF%BC%9AScale-up%E5%92%8CScale-out%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">智算网络：Scale up和Scale out网络</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>智算网络包含Scale-up网络和Scale-out网络两张网络。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/08/23/Scaleup%E5%92%8CScaleout%E7%BD%91%E7%BB%9C/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1143,20 +1347,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">542</span>
+          <span class="site-state-item-count">547</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">525</span>
+        <span class="site-state-item-count">531</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">532</span>
+        <span class="site-state-item-count">535</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

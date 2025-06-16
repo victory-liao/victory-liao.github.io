@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Python定时任务调度定时任务调度（Scheduled Task Execution）是一种在预定时间或周期性地自动执行特定操作的机制。它广泛应用于自动化运维、数据处理、日志清理、监控告警、定时推送等场景。  🕰️ 定时任务调度的核心概念   概念 说明    任务（Task） 要执行的具体操作，通常是一个函数或命令。   调度器（Scheduler） 管理和触发任务执行的组件。   触发条件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python | 定时任务">
+<meta property="og:url" content="http://example.com/2025/06/16/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/index.html">
+<meta property="og:site_name" content="victory的博客">
+<meta property="og:description" content="Python定时任务调度定时任务调度（Scheduled Task Execution）是一种在预定时间或周期性地自动执行特定操作的机制。它广泛应用于自动化运维、数据处理、日志清理、监控告警、定时推送等场景。  🕰️ 定时任务调度的核心概念   概念 说明    任务（Task） 要执行的具体操作，通常是一个函数或命令。   调度器（Scheduler） 管理和触发任务执行的组件。   触发条件">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-16T13:01:19.000Z">
+<meta property="article:modified_time" content="2025-06-16T13:04:58.314Z">
+<meta property="article:author" content="victory-liao">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="定时">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2025/06/16/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>python | 定时任务 | victory的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="victory的博客" type="application/atom+xml">
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+    <div class="headband"></div>
+	<a target="_blank" rel="noopener" href="https://github.com/victory-liao/" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">victory的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">长安一片月，万户捣衣声</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+    
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/16/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python | 定时任务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-06-16 05:01:19 / 修改时间：05:04:58" itemprop="dateCreated datePublished" datetime="2025-06-16T05:01:19-08:00">2025-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">项目开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">定时任务</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Python定时任务调度"><a href="#Python定时任务调度" class="headerlink" title="Python定时任务调度"></a>Python定时任务调度</h1><p>定时任务调度（<strong>Scheduled Task Execution</strong>）是一种在预定时间或周期性地自动执行特定操作的机制。它广泛应用于自动化运维、数据处理、日志清理、监控告警、定时推送等场景。</p>
+<hr>
+<h3 id="🕰️-定时任务调度的核心概念"><a href="#🕰️-定时任务调度的核心概念" class="headerlink" title="🕰️ 定时任务调度的核心概念"></a>🕰️ 定时任务调度的核心概念</h3><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>任务（Task）</strong></td>
+<td>要执行的具体操作，通常是一个函数或命令。</td>
+</tr>
+<tr>
+<td><strong>调度器（Scheduler）</strong></td>
+<td>管理和触发任务执行的组件。</td>
+</tr>
+<tr>
+<td><strong>触发条件（Trigger）</strong></td>
+<td>决定任务何时执行的规则，如：固定间隔、延迟执行、cron 表达式等。</td>
+</tr>
+<tr>
+<td><strong>执行方式</strong></td>
+<td>可同步或异步执行任务。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="📌-定时任务的常见类型"><a href="#📌-定时任务的常见类型" class="headerlink" title="📌 定时任务的常见类型"></a>📌 定时任务的常见类型</h3><ol>
+<li><strong>一次性任务（One-time Task）</strong><ul>
+<li>执行一次后自动结束。</li>
+<li>示例：5 秒后发送一条通知。</li>
+</ul>
+</li>
+<li><strong>周期性任务（Recurring Task）</strong><ul>
+<li>按照固定间隔重复执行。</li>
+<li>示例：每 5 分钟检查服务器状态。</li>
+</ul>
+</li>
+<li><strong>延迟首次执行任务（Delayed First Execution）</strong><ul>
+<li>首次执行有延迟，之后按周期执行。</li>
+<li>示例：启动后等待 10 秒再开始心跳检测。</li>
+</ul>
+</li>
+<li><strong>基于时间表达式的任务（Cron-like Task）</strong><ul>
+<li>使用类似 <code>cron</code> 的语法定义执行时间点。</li>
+<li>示例：每天凌晨 2:00 执行数据库备份。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="✅-定时任务调度的应用场景"><a href="#✅-定时任务调度的应用场景" class="headerlink" title="✅ 定时任务调度的应用场景"></a>✅ 定时任务调度的应用场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据同步</td>
+<td>每小时从远程服务器拉取最新数据</td>
+</tr>
+<tr>
+<td>日志清理</td>
+<td>每天凌晨删除过期日志文件</td>
+</tr>
+<tr>
+<td>报表生成</td>
+<td>每月第一天自动生成统计报表</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>每隔一段时间检测服务可用性</td>
+</tr>
+<tr>
+<td>自动提醒</td>
+<td>每天上午9点推送待办事项</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🧩-定时任务调度的实现方式（Python-中）"><a href="#🧩-定时任务调度的实现方式（Python-中）" class="headerlink" title="🧩 定时任务调度的实现方式（Python 中）"></a>🧩 定时任务调度的实现方式（Python 中）</h3><h4 id="1-简单轮询-sleep"><a href="#1-简单轮询-sleep" class="headerlink" title="1. 简单轮询 + sleep"></a>1. <strong>简单轮询 + sleep</strong></h4><ul>
+<li>如你提供的 <a href="file://C:\Users\victory\Desktop\cron-job.py#L9-L105">SimpleCronJob</a> 类所示。</li>
+<li>利用 <code>while</code> 循环 + <code>time.sleep()</code> 实现秒级轮询。</li>
+<li>适用于轻量级任务。</li>
+</ul>
+<h4 id="2-使用第三方库"><a href="#2-使用第三方库" class="headerlink" title="2. 使用第三方库"></a>2. <strong>使用第三方库</strong></h4><ul>
+<li><strong>APScheduler</strong>：功能强大的任务调度器，支持 cron、日期、间隔三种触发器。</li>
+<li><strong>Celery Beat</strong>：分布式任务调度系统，适合大型项目。</li>
+<li><strong>schedule</strong>：简洁易用的库，适合脚本化任务。</li>
+</ul>
+<h4 id="3-操作系统级定时任务"><a href="#3-操作系统级定时任务" class="headerlink" title="3. 操作系统级定时任务"></a>3. <strong>操作系统级定时任务</strong></h4><ul>
+<li>Linux 下使用 <code>crontab</code>。</li>
+<li>Windows 下使用“任务计划程序”。</li>
+</ul>
+<hr>
+<h3 id="🔁-示例对比：不同方式实现每-5-秒打印一次"><a href="#🔁-示例对比：不同方式实现每-5-秒打印一次" class="headerlink" title="🔁 示例对比：不同方式实现每 5 秒打印一次"></a>🔁 示例对比：不同方式实现每 5 秒打印一次</h3><h4 id="方式一：原生-Python（当前类）"><a href="#方式一：原生-Python（当前类）" class="headerlink" title="方式一：原生 Python（当前类）"></a>方式一：原生 Python（当前类）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cron.add_task(<span class="string">&quot;periodic_task&quot;</span>, <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;🔁 周期性任务执行&quot;</span>), interval_seconds=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式二：使用-schedule-库"><a href="#方式二：使用-schedule-库" class="headerlink" title="方式二：使用 schedule 库"></a>方式二：使用 <code>schedule</code> 库</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> schedule</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">job</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Scheduled task executed&quot;</span>)</span><br><span class="line"></span><br><span class="line">schedule.every(<span class="number">5</span>).seconds.do(job)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    schedule.run_pending()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式三：使用-APScheduler"><a href="#方式三：使用-APScheduler" class="headerlink" title="方式三：使用 APScheduler"></a>方式三：使用 <code>APScheduler</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">job</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;APScheduled task executed&quot;</span>)</span><br><span class="line"></span><br><span class="line">sched = BlockingScheduler()</span><br><span class="line">sched.add_job(job, <span class="string">&#x27;interval&#x27;</span>, seconds=<span class="number">5</span>)</span><br><span class="line">sched.start()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧠-小结"><a href="#🧠-小结" class="headerlink" title="🧠 小结"></a>🧠 小结</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>当前类 <a href="file://C:\Users\victory\Desktop\cron-job.py#L9-L105">SimpleCronJob</a></th>
+<th>APScheduler</th>
+<th>Celery Beat</th>
+<th>crontab</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>易用性</td>
+<td>✅ 简单直接</td>
+<td>✅ 支持多种触发器</td>
+<td>⚠️ 分布式复杂</td>
+<td>✅ 系统级配置</td>
+</tr>
+<tr>
+<td>功能丰富度</td>
+<td>❌ 较基础</td>
+<td>✅ 强大</td>
+<td>✅ 极其强大</td>
+<td>⚠️ 仅基本调度</td>
+</tr>
+<tr>
+<td>多线程支持</td>
+<td>✅ 已封装</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+<td>❌ 单进程</td>
+</tr>
+<tr>
+<td>持久化</td>
+<td>❌ 不支持</td>
+<td>✅ 可持久化</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>本地测试、小型脚本</td>
+<td>中型应用</td>
+<td>大型分布式系统</td>
+<td>系统维护任务</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="📎-总结一句话："><a href="#📎-总结一句话：" class="headerlink" title="📎 总结一句话："></a>📎 总结一句话：</h3><blockquote>
+<p><strong>定时任务调度就是让程序在指定时间或条件下自动执行某些操作，从而实现自动化流程管理。</strong></p>
+</blockquote>
+<h1 id="python定时任务调度实现"><a href="#python定时任务调度实现" class="headerlink" title="python定时任务调度实现"></a>python定时任务调度实现</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Optional</span>, <span class="type">Callable</span>, <span class="type">Tuple</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleCronJob</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.tasks: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Tuple</span>[datetime.datetime, datetime.timedelta, <span class="built_in">bool</span>, <span class="built_in">bool</span>, <span class="type">Callable</span>]] = &#123;&#125;</span><br><span class="line">        self.lock = threading.Lock()</span><br><span class="line">        self.stop_flag = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_task</span>(<span class="params">self, task_id: <span class="built_in">str</span>, func: <span class="type">Callable</span>, delay_seconds: <span class="built_in">int</span> = <span class="number">0</span>, interval_seconds: <span class="built_in">int</span> = <span class="number">0</span>, once: <span class="built_in">bool</span> = <span class="literal">False</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        添加一个定时任务。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param task_id: 任务唯一标识符</span></span><br><span class="line"><span class="string">        :param func: 要执行的函数</span></span><br><span class="line"><span class="string">        :param delay_seconds: 首次执行延迟时间（秒）</span></span><br><span class="line"><span class="string">        :param interval_seconds: 周期执行间隔时间（秒）</span></span><br><span class="line"><span class="string">        :param once: 是否为一次性任务</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">with</span> self.lock:</span><br><span class="line">            self.tasks[task_id] = (</span><br><span class="line">                <span class="literal">None</span>,  <span class="comment"># last_time</span></span><br><span class="line">                datetime.timedelta(seconds=delay_seconds),</span><br><span class="line">                <span class="literal">False</span>,  <span class="comment"># first_executed</span></span><br><span class="line">                datetime.timedelta(seconds=interval_seconds),</span><br><span class="line">                once,</span><br><span class="line">                func</span><br><span class="line">            )</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;任务 <span class="subst">&#123;task_id&#125;</span> 已注册&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;开始执行定时任务服务...&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.stop_flag:</span><br><span class="line">            now = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">with</span> self.lock:</span><br><span class="line">                <span class="keyword">for</span> task_id, (last_time, delay_time, first_executed, interval_time, once, func) <span class="keyword">in</span> <span class="built_in">list</span>(self.tasks.items()):</span><br><span class="line">                    <span class="keyword">if</span> delay_time.total_seconds() &gt; <span class="number">0</span> <span class="keyword">and</span> <span class="keyword">not</span> first_executed:</span><br><span class="line">                        <span class="keyword">if</span> last_time <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                            self.tasks[task_id] = (now, delay_time, first_executed, interval_time, once, func)</span><br><span class="line">                            <span class="keyword">continue</span></span><br><span class="line">                        <span class="keyword">elif</span> (now - last_time) &lt; delay_time:</span><br><span class="line">                            <span class="keyword">continue</span></span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            self.tasks[task_id] = (now, delay_time, <span class="literal">True</span>, interval_time, once, func)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">elif</span> last_time <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                        self.tasks[task_id] = (now, delay_time, first_executed, interval_time, once, func)</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line">                    <span class="keyword">elif</span> (now - last_time) &lt; interval_time:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 执行任务</span></span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;执行任务 <span class="subst">&#123;task_id&#125;</span>&quot;</span>)</span><br><span class="line">                        func()</span><br><span class="line">                    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;任务 <span class="subst">&#123;task_id&#125;</span> 执行出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 更新最后执行时间</span></span><br><span class="line">                    self.tasks[task_id] = (now, delay_time, <span class="literal">True</span>, interval_time, once, func)</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 如果是一次性任务，执行后移除</span></span><br><span class="line">                    <span class="keyword">if</span> once:</span><br><span class="line">                        <span class="keyword">del</span> self.tasks[task_id]</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;任务 <span class="subst">&#123;task_id&#125;</span> 已完成并移除&quot;</span>)</span><br><span class="line"></span><br><span class="line">            time.sleep(<span class="number">1</span>)  <span class="comment"># 模拟 CRON_TIME_INTERVAL</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.stop_flag = <span class="literal">True</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;定时任务服务已停止&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例任务函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example_task</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;✅ 示例任务正在执行...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    cron = SimpleCronJob()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1. 周期性任务：每5秒执行一次</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;periodic_task&quot;</span>, <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;🔁 周期性任务执行&quot;</span>), interval_seconds=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 延迟性任务：首次延迟3秒后开始，之后每6秒执行一次</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;delayed_periodic_task&quot;</span>,</span><br><span class="line">                  <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;🕒 延迟+周期任务执行&quot;</span>),</span><br><span class="line">                  delay_seconds=<span class="number">3</span>,</span><br><span class="line">                  interval_seconds=<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 一次性任务：立即执行一次（无延迟）</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;one_time_task&quot;</span>,</span><br><span class="line">                  <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;📎 一次性任务执行&quot;</span>),</span><br><span class="line">                  once=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 一次性延迟任务：延迟5秒后执行一次</span></span><br><span class="line">    cron.add_task(<span class="string">&quot;one_time_delayed_task&quot;</span>,</span><br><span class="line">                  <span class="keyword">lambda</span>: <span class="built_in">print</span>(<span class="string">&quot;⏳ 一次性延迟任务执行&quot;</span>),</span><br><span class="line">                  delay_seconds=<span class="number">5</span>,</span><br><span class="line">                  once=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cron.start()</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        cron.stop()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E5%AE%9A%E6%97%B6/" rel="tag"># 定时</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/16/python%E5%8D%8F%E7%A8%8B/" rel="prev" title="python | 协程">
+      <i class="fa fa-chevron-left"></i> python | 协程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">Python定时任务调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%95%B0%EF%B8%8F-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.0.1.</span> <span class="nav-text">🕰️ 定时任务调度的核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8C-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%B8%B8%E8%A7%81%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.0.2.</span> <span class="nav-text">📌 定时任务的常见类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.0.3.</span> <span class="nav-text">✅ 定时任务调度的应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A9-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%EF%BC%88Python-%E4%B8%AD%EF%BC%89"><span class="nav-number">1.0.4.</span> <span class="nav-text">🧩 定时任务调度的实现方式（Python 中）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%AE%80%E5%8D%95%E8%BD%AE%E8%AF%A2-sleep"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">1. 简单轮询 + sleep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">2. 使用第三方库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BA%A7%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.0.4.3.</span> <span class="nav-text">3. 操作系统级定时任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%81-%E7%A4%BA%E4%BE%8B%E5%AF%B9%E6%AF%94%EF%BC%9A%E4%B8%8D%E5%90%8C%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E6%AF%8F-5-%E7%A7%92%E6%89%93%E5%8D%B0%E4%B8%80%E6%AC%A1"><span class="nav-number">1.0.5.</span> <span class="nav-text">🔁 示例对比：不同方式实现每 5 秒打印一次</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E5%8E%9F%E7%94%9F-Python%EF%BC%88%E5%BD%93%E5%89%8D%E7%B1%BB%EF%BC%89"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">方式一：原生 Python（当前类）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E4%BD%BF%E7%94%A8-schedule-%E5%BA%93"><span class="nav-number">1.0.5.2.</span> <span class="nav-text">方式二：使用 schedule 库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%89%EF%BC%9A%E4%BD%BF%E7%94%A8-APScheduler"><span class="nav-number">1.0.5.3.</span> <span class="nav-text">方式三：使用 APScheduler</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A0-%E5%B0%8F%E7%BB%93"><span class="nav-number">1.0.6.</span> <span class="nav-text">🧠 小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8E-%E6%80%BB%E7%BB%93%E4%B8%80%E5%8F%A5%E8%AF%9D%EF%BC%9A"><span class="nav-number">1.0.7.</span> <span class="nav-text">📎 总结一句话：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">python定时任务调度实现</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="victory-liao"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">victory-liao</p>
+  <div class="site-description" itemprop="description">昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">547</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">531</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">535</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/victory-liao" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;victory-liao" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="E-Mail → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="WeChat → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://victory-liao.github.io/about/" title="QQ → https:&#x2F;&#x2F;victory-liao.github.io&#x2F;about&#x2F;" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">victory-liao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+
+</html>

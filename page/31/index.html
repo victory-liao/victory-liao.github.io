@@ -190,6 +190,476 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/06/%E7%88%AC%E5%8F%96%E7%B2%BE%E7%BE%8E%E5%A3%81%E7%BA%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/06/%E7%88%AC%E5%8F%96%E7%B2%BE%E7%BE%8E%E5%A3%81%E7%BA%B8/" class="post-title-link" itemprop="url">requests | 爬取精美壁纸</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-06 01:29:25 / 修改时间：01:32:06" itemprop="dateCreated datePublished" datetime="2021-11-06T01:29:25-08:00">2021-11-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/requests/" itemprop="url" rel="index"><span itemprop="name">requests</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="爬取精美壁纸"><a href="#爬取精美壁纸" class="headerlink" title="爬取精美壁纸"></a>爬取精美壁纸</h1><p><strong>爬取目标：</strong> Wallhaven网站中Toplist标签下前50页共1196张精美壁纸。<br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/BiJKm4SnL6qCLEK91xcDIQ">参考资料</a></p>
+<p><strong>代码：</strong></p>
+<pre><code># -*- coding:utf-8 -*-
+import os
+import requests
+from lxml import etree
+
+
+# 1.获取每页的html信息
+headers = &#123;
+    &#39;user-agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) &#39;
+                  &#39;Chrome/95.0.4638.54 Safari/537.36 &#39;
+&#125;
+
+
+# 定义获取每页html信息的函数
+def get_html_info(page):
+    url = f&#39;https://wallhaven.cc/toplist?page=&#123;page&#125;&#39;
+    resp = requests.get(url, headers=headers)
+    print(resp.text)
+    resp_html = etree.HTML(resp.text)
+    return resp_html
+
+
+# 2.解析url信息+下载图片
+def get_pic(resp_html):
+    pic_url_list = []
+    lis = resp_html.xpath(&#39;//*[@id=&quot;thumbs&quot;]/section[1]/ul/li&#39;)  # 获取该页所有缩略图包含的信息
+    for li in lis:
+        pic_url = li.xpath(&#39;./figure/a/@href&#39;)[0]  # 获取存放在缩略图信息中的缩略图原图网址
+        pic_url_list.append(pic_url)
+    for pic_url in pic_url_list:
+        resp2 = requests.get(pic_url, headers=headers)
+        r_html2 = etree.HTML(resp2.text)
+        pic_size = r_html2.xpath(&#39;//*[@id=&quot;showcase-sidebar&quot;]/div/div[1]/h3/text()&#39;)[0]  # 用照片分辨率作为名称一部分
+        final_url = r_html2.xpath(&#39;//*[@id=&quot;wallpaper&quot;]/@src&#39;)[0]  # 获取原图下载地址
+        pic = requests.get(url=final_url, headers=headers).content
+        if not os.path.exists(&#39;Wallhaven&#39;):
+            os.mkdir(&#39;Wallhaven&#39;)
+        with open(&#39;Wallhaven\\&#39; + pic_size + final_url[-10:], mode=&#39;wb&#39;) as f:
+            f.write(pic)  # 保存图片
+            print(pic_size + final_url[-10:] + &#39;，下载完毕，已下载&#123;&#125;张壁纸&#39;.format(len(os.listdir(&#39;Wallhaven&#39;))))
+
+
+# 3.构建main()函数运行程序
+def main():
+    page_range = range(1,51) # 爬取1-50页的壁纸
+    for i in page_range:
+        r = get_html_info(i)
+        get_pic(r)
+        print(f&#39;===============第&#123;i&#125;页下载完毕=============&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/05/%E5%A4%A7%E8%83%86%E6%96%B0%E5%A5%87%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/05/%E5%A4%A7%E8%83%86%E6%96%B0%E5%A5%87%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1/" class="post-title-link" itemprop="url">深度学习 | 大胆新奇的卷积神经网络设计</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-05 20:15:28" itemprop="dateCreated datePublished" datetime="2021-11-05T20:15:28-08:00">2021-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-11 06:44:05" itemprop="dateModified" datetime="2024-07-11T06:44:05-08:00">2024-07-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/CNN/" itemprop="url" rel="index"><span itemprop="name">CNN</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/CNN/%E5%A4%A7%E8%83%86%E6%96%B0%E5%A5%87%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">大胆新奇的卷积神经网络设计</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/6HbPBYQvLMU5okI-tIUBcg">大胆又新奇的卷积网络结构设计</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/05/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%A7%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/05/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%A7%88/" class="post-title-link" itemprop="url">深度学习基础 | 神经网络模型概览</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-05 20:15:08" itemprop="dateCreated datePublished" datetime="2021-11-05T20:15:08-08:00">2021-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-11 07:16:02" itemprop="dateModified" datetime="2024-07-11T07:16:02-08:00">2024-07-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">神经网络模型概览</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/ds5YWmyIZTHW55Tkdf3pww">一文概览神经网络模型</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/05/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/05/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">深度学习基础 | 一文看懂各种神经网络优化算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-05 20:14:51" itemprop="dateCreated datePublished" datetime="2021-11-05T20:14:51-08:00">2021-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-11 07:16:27" itemprop="dateModified" datetime="2024-07-11T07:16:27-08:00">2024-07-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E5%90%84%E7%A7%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">一文看懂各种神经网络优化算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一文看懂各种神经网络优化算法"><a href="#一文看懂各种神经网络优化算法" class="headerlink" title="一文看懂各种神经网络优化算法"></a>一文看懂各种神经网络优化算法</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/gRrZImMydyCDBNCTIgVYXw">一文看懂各种神经网络优化算法</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/05/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95%E5%88%86%E4%BA%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="victory-liao">
+      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="victory的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/05/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95%E5%88%86%E4%BA%AB/" class="post-title-link" itemprop="url">研究 | 科研方法分享</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-05 20:14:17" itemprop="dateCreated datePublished" datetime="2021-11-05T20:14:17-08:00">2021-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-16 22:51:08" itemprop="dateModified" datetime="2021-12-16T22:51:08-08:00">2021-12-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/" itemprop="url" rel="index"><span itemprop="name">Research and Paper</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Research-and-Paper/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">科研方法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="科研方法分享"><a href="#科研方法分享" class="headerlink" title="科研方法分享"></a>科研方法分享</h1><h2 id="科研基本流程"><a href="#科研基本流程" class="headerlink" title="科研基本流程"></a>科研基本流程</h2><p><strong>选题 –&gt; 模型/算法设计 –&gt; 实验验证 –&gt; 论文写作</strong></p>
+<p>论文=50% technique + 50% paper writing</p>
+<p>关注技术、工作的价值、insight.</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/n0Tl6dM7QCM07Ae01Edl4A">上海交大吴齐天的科研思考！</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/05/%E4%B8%80%E6%96%87%E6%B7%B1%E5%B1%82%E8%A7%A3%E5%86%B3%E6%A8%A1%E5%9E%8B%E8%BF%87%E6%8B%9F%E5%90%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -600,474 +1070,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/" class="post-title-link" itemprop="url">os | 批量新建文件夹</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-11-04 18:22:22 / 修改时间：18:24:08" itemprop="dateCreated datePublished" datetime="2021-11-04T18:22:22-08:00">2021-11-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">内置模块</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/os/" itemprop="url" rel="index"><span itemprop="name">os</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="批量新建文件夹"><a href="#批量新建文件夹" class="headerlink" title="批量新建文件夹"></a>批量新建文件夹</h1><p>程序实现在指定目录下批量生成文件夹。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/04/%E6%89%B9%E9%87%8F%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/" class="post-title-link" itemprop="url">pandas | 一键更新Excel中的图表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-01 19:41:37" itemprop="dateCreated datePublished" datetime="2021-11-01T19:41:37-08:00">2021-11-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-04 18:08:35" itemprop="dateModified" datetime="2021-11-04T18:08:35-08:00">2021-11-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">第三方库</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pandas/" itemprop="url" rel="index"><span itemprop="name">pandas</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="一键更新Excel中的图表"><a href="#一键更新Excel中的图表" class="headerlink" title="一键更新Excel中的图表"></a>一键更新Excel中的图表</h1><p><strong>场景：</strong> 小编每周都要更新最近12周的“生产订单周报”给老板，而且要对比最近两年相同周数的数据。主要是两张图，一张是“一周生产订单对比”，另一张是“各部门订单比例”。虽然在Excel表中建了数据透视表，但是每周都还是需要花时间进行一通凶猛的操作，才能搞定。可不可以每周一键更新，并得到这两张图呢？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/01/%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0Excel%E4%B8%AD%E7%9A%84%E5%9B%BE%E8%A1%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E5%B0%8F%E4%BA%8Emaxnum%E7%9A%84%E5%81%B6%E6%95%B0%E6%88%96%E5%A5%87%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E5%B0%8F%E4%BA%8Emaxnum%E7%9A%84%E5%81%B6%E6%95%B0%E6%88%96%E5%A5%87%E6%95%B0/" class="post-title-link" itemprop="url">生成器 | 生成器输出小于maxnum的偶数或奇数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-01 01:51:53" itemprop="dateCreated datePublished" datetime="2021-11-01T01:51:53-08:00">2021-11-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-08 18:48:33" itemprop="dateModified" datetime="2021-11-08T18:48:33-08:00">2021-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">生成器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="生成器输出小于max-num的偶数或奇数"><a href="#生成器输出小于max-num的偶数或奇数" class="headerlink" title="生成器输出小于max_num的偶数或奇数"></a>生成器输出小于max_num的偶数或奇数</h1><p>代码：</p>
-<pre><code># 1.输出小于max_num的偶数或奇数
-def odd(max_num):
-    
-    i = 1
-    while i &lt; max_num:
-        if i % 2 == 0:  # if % 2 == 1可生成奇数
-            yield i
-        i += 1
-
-g = odd(10)
-for n in g:
-    print(n)
-
-# 2.输出任意个偶数或奇数
-def odd():
-i = 2
-while i:
-    if i % 2 == 0:  # if % 2 == 1可生成奇数
-        yield i
-    i += 1
-g = odd()
-for i in range(100):
-    print(next(g))
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BAfibonacci%E6%95%B0%E5%88%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BAfibonacci%E6%95%B0%E5%88%97/" class="post-title-link" itemprop="url">生成器 | 生成器输出fibonacci数列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-01 01:47:51" itemprop="dateCreated datePublished" datetime="2021-11-01T01:47:51-08:00">2021-11-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-08 18:48:28" itemprop="dateModified" datetime="2021-11-08T18:48:28-08:00">2021-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">生成器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="生成器输出小于max-num的fibonacci数列"><a href="#生成器输出小于max-num的fibonacci数列" class="headerlink" title="生成器输出小于max_num的fibonacci数列"></a>生成器输出小于max_num的fibonacci数列</h1><p>代码：</p>
-<pre><code>def feb(max_num):
-    n_1 = 1
-    n_2 = 1
-    n = 0
-    while n &lt; max_num:
-        if n == 0 or n == 1:
-            yield 1
-            n += 1
-        else:
-            yield n_1 + n_2
-            new_n_2 = n_1
-            n_1 = n_1 + n_2
-            n_2 = new_n_2
-            n += 1
-
-g = feb(5)
-for n in g:
-    print(n)
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="victory-liao">
-      <meta itemprop="description" content="昨天是段历史，明天是个谜团，而今天是天赐的礼物，要像珍惜礼物一样珍惜今天！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="victory的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/" class="post-title-link" itemprop="url">生成器 | 生成器输出质数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-01 01:07:02" itemprop="dateCreated datePublished" datetime="2021-11-01T01:07:02-08:00">2021-11-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-08 18:48:21" itemprop="dateModified" datetime="2021-11-08T18:48:21-08:00">2021-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/%E5%9F%BA%E7%A1%80/%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">生成器</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="生成器输出小于max-num的质数"><a href="#生成器输出小于max-num的质数" class="headerlink" title="生成器输出小于max_num的质数"></a>生成器输出小于max_num的质数</h1><p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。<br>而且，创建一个包含成百上千完个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前<br>面几个元素，那后面绝大多数元素占用的空间都白白浪费了。生成器有效的解决了这个问题。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/01/%E7%94%9F%E6%88%90%E5%99%A8%E8%BE%93%E5%87%BA%E8%B4%A8%E6%95%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1139,20 +1141,20 @@ for n in g:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">542</span>
+          <span class="site-state-item-count">547</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">525</span>
+        <span class="site-state-item-count">531</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">532</span>
+        <span class="site-state-item-count">535</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
